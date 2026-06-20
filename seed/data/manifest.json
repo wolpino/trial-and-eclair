@@ -1,0 +1,15 @@
+{
+  "files": [
+    "text_sources.json",
+    "docx_inventory.json",
+    "post_ideas.json",
+    "wipwip.json",
+    "ideas_seed.json",
+    "references_seed.json"
+  ],
+  "counts": {
+    "ideas": 149,
+    "references": 37,
+    "docx_files": 0
+  }
+}
