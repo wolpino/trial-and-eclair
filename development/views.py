@@ -6,11 +6,12 @@ from rest_framework.response import Response
 
 from accounts.permissions import IsDeveloper
 
-from .models import DevelopmentRecipe, Idea, RecipeVersion, VersionIngredientLine
+from .models import DevelopmentRecipe, Idea, JournalEntry, RecipeVersion, VersionIngredientLine
 from .serializers import (
     DevelopmentRecipeCreateSerializer,
     DevelopmentRecipeSerializer,
     IdeaSerializer,
+    JournalEntrySerializer,
     PublishRecipeSerializer,
     RecipeVersionSerializer,
     SaveNewVersionSerializer,
@@ -170,3 +171,21 @@ class VersionIngredientLineViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance) -> None:
         self._ensure_current_version(instance.version)
         instance.delete()
+
+
+class JournalEntryViewSet(viewsets.ModelViewSet):
+    serializer_class = JournalEntrySerializer
+    permission_classes = [IsDeveloper]
+
+    def get_queryset(self):
+        queryset = JournalEntry.objects.filter(user=self.request.user).select_related(
+            "recipe",
+            "version_snapshot",
+        )
+        recipe_id = self.request.query_params.get("recipe")
+        if recipe_id:
+            queryset = queryset.filter(recipe_id=recipe_id)
+        return queryset
+
+    def perform_create(self, serializer) -> None:
+        serializer.save(user=self.request.user)

@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import DevelopmentRecipe, Idea, RecipeVersion, VersionIngredientLine
+from .models import DevelopmentRecipe, Idea, JournalEntry, RecipeVersion, VersionIngredientLine
 
 
 class IdeaSerializer(serializers.ModelSerializer):
@@ -110,6 +110,40 @@ class DevelopmentRecipeCreateSerializer(serializers.ModelSerializer):
 
 class SaveNewVersionSerializer(serializers.Serializer):
     version_notes = serializers.CharField(required=False, allow_blank=True, default="")
+
+
+class JournalEntrySerializer(serializers.ModelSerializer):
+    class Meta:
+        model = JournalEntry
+        fields = (
+            "id",
+            "recipe",
+            "version_snapshot",
+            "title",
+            "body",
+            "logged_at",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = ("id", "logged_at", "created_at", "updated_at")
+
+    def validate_recipe(self, recipe: DevelopmentRecipe) -> DevelopmentRecipe:
+        user = self.context["request"].user
+        if recipe.user_id != user.id:
+            raise serializers.ValidationError("Recipe not found.")
+        return recipe
+
+    def validate(self, attrs: dict) -> dict:
+        recipe = attrs.get("recipe") or getattr(self.instance, "recipe", None)
+        version = attrs.get(
+            "version_snapshot",
+            getattr(self.instance, "version_snapshot", None),
+        )
+        if version is not None and recipe is not None and version.recipe_id != recipe.id:
+            raise serializers.ValidationError(
+                {"version_snapshot": "Version must belong to the selected recipe."}
+            )
+        return attrs
 
 
 class PublishRecipeSerializer(serializers.Serializer):

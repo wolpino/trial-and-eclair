@@ -5,6 +5,7 @@ from .public_views import PublicRecipeView
 from .views import (
     DevelopmentRecipeViewSet,
     IdeaViewSet,
+    JournalEntryViewSet,
     RecipeVersionViewSet,
     VersionIngredientLineViewSet,
 )
@@ -12,6 +13,7 @@ from .views import (
 router = DefaultRouter()
 router.register("ideas", IdeaViewSet, basename="idea")
 router.register("recipes", DevelopmentRecipeViewSet, basename="recipe")
+router.register("journal", JournalEntryViewSet, basename="journal")
 
 urlpatterns = [
     path("", include(router.urls)),

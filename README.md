@@ -10,7 +10,7 @@ Recipe development and collection app — not a blog.
 
 ## Current status
 
-**MVP complete** (Phases 0–2). **Phase 3 in progress** on branch `phase-3-core` — version diff API shipped; cookbooks, home cook, journal, references next.
+**MVP complete** (Phases 0–2). **Phase 3 in progress** on branch `phase-3-core` — version diff + journal APIs shipped; cookbooks, home cook, references next.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -143,13 +143,24 @@ Developer-only. Query params: `left`, `right` (version UUIDs).
 
 Returns scalar field changes, version notes, and ingredient diff (`added`, `removed`, `changed`).
 
-**Remaining Phase 3:** cookbooks + public viewer, journal, home cook recipe box, reference library API, trial/subscription hooks.
+### Journal (`/api/v1/journal/`)
+
+Developer-only private timeline. Scoped to the authenticated user.
+
+| Endpoint | Methods | Notes |
+|----------|---------|-------|
+| `journal/` | GET, POST | Optional filter: `?recipe={uuid}` |
+| `journal/{id}/` | GET, PATCH, DELETE | Own entries only |
+
+POST body: `recipe` (required), `body` (required), optional `title`, `version_snapshot`.
+
+**Remaining Phase 3:** cookbooks + public viewer, home cook recipe box, reference library API, trial/subscription hooks.
 
 ## Tests
 
 ```bash
 source .venv/bin/activate
-python manage.py test accounts development   # 31 tests
+python manage.py test accounts development   # 39 tests
 cd frontend && npm run build                 # TypeScript + production bundle
 ```
 
