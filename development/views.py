@@ -1,7 +1,7 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
 
 from accounts.permissions import IsDeveloper
@@ -11,6 +11,7 @@ from .serializers import (
     DevelopmentRecipeCreateSerializer,
     DevelopmentRecipeSerializer,
     IdeaSerializer,
+    PublishRecipeSerializer,
     RecipeVersionSerializer,
     SaveNewVersionSerializer,
     VersionIngredientLineSerializer,
@@ -65,6 +66,36 @@ class DevelopmentRecipeViewSet(viewsets.ModelViewSet):
         return Response(
             RecipeVersionSerializer(new_version, context=self.get_serializer_context()).data,
             status=status.HTTP_201_CREATED,
+        )
+
+    @action(detail=True, methods=["post"])
+    def publish(self, request, pk=None) -> Response:
+        recipe = self.get_object()
+        serializer = PublishRecipeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        try:
+            recipe = services.publish_recipe(
+                recipe,
+                version_id=data.get("version_id"),
+                slug=data.get("slug", ""),
+                story=data.get("story") if "story" in data else None,
+                hero_image=data.get("hero_image"),
+            )
+        except ValueError as exc:
+            raise ValidationError(str(exc)) from exc
+        recipe.refresh_from_db()
+        return Response(
+            DevelopmentRecipeSerializer(recipe, context=self.get_serializer_context()).data
+        )
+
+    @action(detail=True, methods=["post"])
+    def unpublish(self, request, pk=None) -> Response:
+        recipe = self.get_object()
+        recipe = services.unpublish_recipe(recipe)
+        recipe.refresh_from_db()
+        return Response(
+            DevelopmentRecipeSerializer(recipe, context=self.get_serializer_context()).data
         )
 
 

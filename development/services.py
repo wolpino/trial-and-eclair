@@ -1,5 +1,7 @@
 from django.db import transaction
 from django.db.models import Max
+from django.utils import timezone
+from django.utils.text import slugify
 
 from .models import DevelopmentRecipe, RecipeVersion, VersionIngredientLine
 
@@ -74,3 +76,74 @@ def save_new_version(
     recipe.current_version = new_version
     recipe.save(update_fields=["current_version", "updated_at"])
     return new_version
+
+
+def _unique_recipe_slug(title: str, *, exclude_recipe_id=None) -> str:
+    base = slugify(title)[:240] or "recipe"
+    slug = base
+    counter = 2
+    queryset = DevelopmentRecipe.objects.filter(slug=slug)
+    if exclude_recipe_id is not None:
+        queryset = queryset.exclude(id=exclude_recipe_id)
+    while queryset.exists():
+        suffix = f"-{counter}"
+        slug = f"{base[: 255 - len(suffix)]}{suffix}"
+        queryset = DevelopmentRecipe.objects.filter(slug=slug)
+        if exclude_recipe_id is not None:
+            queryset = queryset.exclude(id=exclude_recipe_id)
+        counter += 1
+    return slug
+
+
+@transaction.atomic
+def publish_recipe(
+    recipe: DevelopmentRecipe,
+    *,
+    version_id=None,
+    slug: str = "",
+    story: str | None = None,
+    hero_image=None,
+) -> DevelopmentRecipe:
+    if version_id is not None:
+        version = recipe.versions.filter(pk=version_id).first()
+        if version is None:
+            raise ValueError("Version not found for this recipe.")
+    else:
+        version = recipe.current_version
+
+    if version is None:
+        raise ValueError("Recipe has no version to publish.")
+
+    update_fields: list[str] = []
+    if story is not None:
+        version.story = story
+        update_fields.append("story")
+    if hero_image is not None:
+        version.hero_image = hero_image
+        update_fields.append("hero_image")
+    if update_fields:
+        update_fields.append("updated_at")
+        version.save(update_fields=update_fields)
+
+    if slug:
+        recipe.slug = slugify(slug)[:255] or _unique_recipe_slug(
+            version.title,
+            exclude_recipe_id=recipe.id,
+        )
+    elif not recipe.slug:
+        recipe.slug = _unique_recipe_slug(version.title, exclude_recipe_id=recipe.id)
+
+    recipe.published_version = version
+    recipe.published_at = timezone.now()
+    recipe.status = "published"
+    recipe.save(
+        update_fields=["slug", "published_version", "published_at", "status", "updated_at"]
+    )
+    return recipe
+
+
+@transaction.atomic
+def unpublish_recipe(recipe: DevelopmentRecipe) -> DevelopmentRecipe:
+    recipe.status = "unpublished"
+    recipe.save(update_fields=["status", "updated_at"])
+    return recipe

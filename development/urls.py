@@ -1,6 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
+from .public_views import PublicRecipeView
 from .views import (
     DevelopmentRecipeViewSet,
     IdeaViewSet,
@@ -14,6 +15,11 @@ router.register("recipes", DevelopmentRecipeViewSet, basename="recipe")
 
 urlpatterns = [
     path("", include(router.urls)),
+    path(
+        "public/recipes/<slug:slug>/",
+        PublicRecipeView.as_view(),
+        name="public-recipe-detail",
+    ),
     path(
         "recipes/<uuid:recipe_pk>/versions/",
         RecipeVersionViewSet.as_view({"get": "list"}),

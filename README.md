@@ -6,6 +6,8 @@ Recipe development and collection app — not a blog.
 - **Developer (paid):** versioning, cookbooks, cork board ideas, publish + story/photo
 - **Viewer:** public published recipes and cookbooks
 
+**Documentation:** [Product Requirements (PRD)](docs/PRD.md)
+
 ## Stack
 
 - Django REST + Postgres (SQLite for local dev)
