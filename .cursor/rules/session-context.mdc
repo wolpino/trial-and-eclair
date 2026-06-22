@@ -1,0 +1,8 @@
+---
+description: Load recent session history for project continuity
+alwaysApply: true
+---
+
+At the start of substantive work, read `.cursor/session_log.mdc` (top 3 entries only).
+Do not load `.cursor/qa_log.mdc` unless the user asks about past Q&A.
+Honor **Do not redo** and **Resume with** from the latest `AGENT_CONTEXT` block.
