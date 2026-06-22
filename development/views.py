@@ -6,12 +6,25 @@ from rest_framework.response import Response
 
 from accounts.permissions import IsDeveloper
 
-from .models import DevelopmentRecipe, Idea, JournalEntry, RecipeVersion, VersionIngredientLine
+from .models import (
+    Cookbook,
+    CookbookRecipe,
+    DevelopmentRecipe,
+    Idea,
+    JournalEntry,
+    RecipeVersion,
+    VersionIngredientLine,
+)
 from .serializers import (
+    CookbookCreateSerializer,
+    CookbookRecipeCreateSerializer,
+    CookbookRecipeSerializer,
+    CookbookSerializer,
     DevelopmentRecipeCreateSerializer,
     DevelopmentRecipeSerializer,
     IdeaSerializer,
     JournalEntrySerializer,
+    PublishCookbookSerializer,
     PublishRecipeSerializer,
     RecipeVersionSerializer,
     SaveNewVersionSerializer,
@@ -189,3 +202,102 @@ class JournalEntryViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer) -> None:
         serializer.save(user=self.request.user)
+
+
+class CookbookViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsDeveloper]
+
+    def get_queryset(self):
+        return Cookbook.objects.filter(user=self.request.user).prefetch_related(
+            "entries__recipe",
+            "entries__snapshot_version",
+        )
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return CookbookCreateSerializer
+        return CookbookSerializer
+
+    def perform_create(self, serializer) -> None:
+        serializer.save(user=self.request.user)
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        cookbook = serializer.save(user=request.user)
+        output = CookbookSerializer(cookbook, context=self.get_serializer_context())
+        return Response(output.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=["post"])
+    def publish(self, request, pk=None) -> Response:
+        cookbook = self.get_object()
+        serializer = PublishCookbookSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        cookbook = services.publish_cookbook(
+            cookbook,
+            slug=serializer.validated_data.get("slug", ""),
+        )
+        return Response(
+            CookbookSerializer(cookbook, context=self.get_serializer_context()).data
+        )
+
+    @action(detail=True, methods=["post"])
+    def unpublish(self, request, pk=None) -> Response:
+        cookbook = self.get_object()
+        cookbook = services.unpublish_cookbook(cookbook)
+        return Response(
+            CookbookSerializer(cookbook, context=self.get_serializer_context()).data
+        )
+
+
+class CookbookEntryViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsDeveloper]
+    http_method_names = ["get", "post", "patch", "delete", "head", "options"]
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return CookbookRecipeCreateSerializer
+        return CookbookRecipeSerializer
+
+    def get_queryset(self):
+        return CookbookRecipe.objects.filter(
+            cookbook_id=self.kwargs["cookbook_pk"],
+            cookbook__user=self.request.user,
+        ).select_related("recipe", "snapshot_version")
+
+    def create(self, request, *args, **kwargs):
+        cookbook = get_object_or_404(
+            Cookbook,
+            pk=self.kwargs["cookbook_pk"],
+            user=request.user,
+        )
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
+        recipe = get_object_or_404(
+            DevelopmentRecipe,
+            pk=data["recipe"],
+            user=request.user,
+        )
+        try:
+            entry = services.add_cookbook_entry(
+                cookbook,
+                recipe,
+                version_id=data.get("version_id"),
+                sort_order=data.get("sort_order", 0),
+            )
+        except ValueError as exc:
+            raise ValidationError(str(exc)) from exc
+        output = CookbookRecipeSerializer(entry, context=self.get_serializer_context())
+        return Response(output.data, status=status.HTTP_201_CREATED)
+
+    def partial_update(self, request, *args, **kwargs) -> Response:
+        entry = self.get_object()
+        sort_order = request.data.get("sort_order")
+        if sort_order is None:
+            raise ValidationError({"sort_order": "This field is required for update."})
+        entry.sort_order = sort_order
+        entry.save(update_fields=["sort_order", "updated_at"])
+        return Response(
+            CookbookRecipeSerializer(entry, context=self.get_serializer_context()).data
+        )

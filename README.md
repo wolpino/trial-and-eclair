@@ -10,7 +10,7 @@ Recipe development and collection app — not a blog.
 
 ## Current status
 
-**MVP complete** (Phases 0–2). **Phase 3 in progress** on branch `phase-3-core` — version diff + journal APIs shipped; cookbooks, home cook, references next.
+**MVP complete** (Phases 0–2). **Phase 3 in progress** on branch `phase-3-core` — version diff, journal, and cookbooks shipped; home cook + references next.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -131,7 +131,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173/r/your-recipe-slug after publishing via the API.
+Open http://localhost:5173/r/your-recipe-slug or `/c/your-cookbook-slug` after publishing.
 
 Session cookies use `credentials: "include"` for future authenticated routes.
 
@@ -154,13 +154,29 @@ Developer-only private timeline. Scoped to the authenticated user.
 
 POST body: `recipe` (required), `body` (required), optional `title`, `version_snapshot`.
 
-**Remaining Phase 3:** cookbooks + public viewer, home cook recipe box, reference library API, trial/subscription hooks.
+### Cookbooks (`/api/v1/cookbooks/`)
+
+Developer-only. Entries freeze a `snapshot_version` at add time; unpublishing a recipe keeps the entry but drops the public recipe link.
+
+| Endpoint | Methods | Notes |
+|----------|---------|-------|
+| `cookbooks/` | GET, POST | Create/list cookbooks |
+| `cookbooks/{id}/` | GET, PATCH, DELETE | Own cookbooks only |
+| `cookbooks/{id}/publish/` | POST | Optional `slug` |
+| `cookbooks/{id}/unpublish/` | POST | Hides public page |
+| `cookbooks/{id}/entries/` | GET, POST | POST: `recipe`, optional `version_id`, `sort_order` |
+| `cookbooks/{id}/entries/{id}/` | GET, PATCH, DELETE | PATCH: `sort_order` only |
+| `GET /api/v1/public/cookbooks/{slug}/` | GET | No auth; frozen recipe list |
+
+Public PWA: **`/c/:slug`** (links to `/r/{slug}` when recipe still published).
+
+**Remaining Phase 3:** home cook recipe box, reference library API, trial/subscription hooks.
 
 ## Tests
 
 ```bash
 source .venv/bin/activate
-python manage.py test accounts development   # 39 tests
+python manage.py test accounts development   # 45 tests
 cd frontend && npm run build                 # TypeScript + production bundle
 ```
 

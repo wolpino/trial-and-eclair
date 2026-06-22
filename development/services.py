@@ -235,3 +235,81 @@ def unpublish_recipe(recipe: DevelopmentRecipe) -> DevelopmentRecipe:
     recipe.status = "unpublished"
     recipe.save(update_fields=["status", "updated_at"])
     return recipe
+
+
+def _unique_cookbook_slug(title: str, *, exclude_cookbook_id=None) -> str:
+    from .models import Cookbook
+
+    base = slugify(title)[:240] or "cookbook"
+    slug = base
+    counter = 2
+    queryset = Cookbook.objects.filter(slug=slug)
+    if exclude_cookbook_id is not None:
+        queryset = queryset.exclude(id=exclude_cookbook_id)
+    while queryset.exists():
+        suffix = f"-{counter}"
+        slug = f"{base[: 255 - len(suffix)]}{suffix}"
+        queryset = Cookbook.objects.filter(slug=slug)
+        if exclude_cookbook_id is not None:
+            queryset = queryset.exclude(id=exclude_cookbook_id)
+        counter += 1
+    return slug
+
+
+@transaction.atomic
+def add_cookbook_entry(
+    cookbook,
+    recipe: DevelopmentRecipe,
+    *,
+    version_id=None,
+    sort_order: int = 0,
+):
+    from .models import CookbookRecipe
+
+    if cookbook.user_id != recipe.user_id:
+        raise ValueError("Recipe not found.")
+
+    if version_id is not None:
+        version = recipe.versions.filter(pk=version_id).first()
+        if version is None:
+            raise ValueError("Version not found for this recipe.")
+    else:
+        version = recipe.published_version or recipe.current_version
+
+    if version is None:
+        raise ValueError("No version available to snapshot.")
+
+    return CookbookRecipe.objects.create(
+        cookbook=cookbook,
+        recipe=recipe,
+        snapshot_version=version,
+        sort_order=sort_order,
+    )
+
+
+@transaction.atomic
+def publish_cookbook(cookbook, *, slug: str = ""):
+    if slug:
+        cookbook.slug = slugify(slug)[:255] or _unique_cookbook_slug(
+            cookbook.title,
+            exclude_cookbook_id=cookbook.id,
+        )
+    elif not cookbook.slug:
+        cookbook.slug = _unique_cookbook_slug(
+            cookbook.title,
+            exclude_cookbook_id=cookbook.id,
+        )
+
+    cookbook.status = "published"
+    cookbook.published_at = timezone.now()
+    cookbook.save(
+        update_fields=["slug", "status", "published_at", "updated_at"]
+    )
+    return cookbook
+
+
+@transaction.atomic
+def unpublish_cookbook(cookbook) -> None:
+    cookbook.status = "unpublished"
+    cookbook.save(update_fields=["status", "updated_at"])
+    return cookbook

@@ -124,3 +124,16 @@ a {
 .status-message {
   text-align: center;
 }
+
+.cookbook-recipe-list {
+  padding-left: 1.25rem;
+}
+
+.cookbook-recipe-list li + li {
+  margin-top: 1rem;
+}
+
+.cookbook-recipe-description {
+  margin: 0.25rem 0 0;
+  color: #5c5347;
+}

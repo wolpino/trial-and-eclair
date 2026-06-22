@@ -2,8 +2,8 @@ from rest_framework.exceptions import NotFound
 from rest_framework.generics import RetrieveAPIView
 from rest_framework.permissions import AllowAny
 
-from .models import DevelopmentRecipe
-from .serializers import PublicRecipeSerializer
+from .models import Cookbook, DevelopmentRecipe
+from .serializers import PublicCookbookSerializer, PublicRecipeSerializer
 
 
 def build_public_recipe_payload(recipe: DevelopmentRecipe) -> dict:
@@ -63,3 +63,49 @@ class PublicRecipeView(RetrieveAPIView):
         if recipe is None:
             raise NotFound("Recipe not found.")
         return build_public_recipe_payload(recipe)
+
+
+def build_public_cookbook_payload(cookbook: Cookbook) -> dict:
+    if cookbook.status != "published":
+        raise NotFound("Cookbook not found.")
+
+    recipes = []
+    for entry in cookbook.entries.select_related("recipe", "snapshot_version").order_by(
+        "sort_order"
+    ):
+        snapshot = entry.snapshot_version
+        recipe = entry.recipe
+        recipes.append(
+            {
+                "title": snapshot.title,
+                "description": snapshot.description,
+                "sort_order": entry.sort_order,
+                "recipe_slug": recipe.slug if recipe.status == "published" else None,
+            }
+        )
+
+    return {
+        "slug": cookbook.slug,
+        "title": cookbook.title,
+        "description": cookbook.description,
+        "author": cookbook.user.username,
+        "published_at": cookbook.published_at,
+        "recipes": recipes,
+    }
+
+
+class PublicCookbookView(RetrieveAPIView):
+    permission_classes = [AllowAny]
+    serializer_class = PublicCookbookSerializer
+    lookup_field = "slug"
+
+    def get_object(self) -> dict:
+        cookbook = (
+            Cookbook.objects.filter(slug=self.kwargs["slug"], status="published")
+            .select_related("user")
+            .prefetch_related("entries__recipe", "entries__snapshot_version")
+            .first()
+        )
+        if cookbook is None:
+            raise NotFound("Cookbook not found.")
+        return build_public_cookbook_payload(cookbook)

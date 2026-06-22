@@ -258,7 +258,8 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 
 - `GET /api/v1/recipes/{id}/compare-versions/?left=&right=` — ingredient + field diff between two versions
 - `GET/POST/PATCH/DELETE /api/v1/journal/` — private journal entries; filter by `?recipe=`
-- **Remaining:** cookbooks, home cook recipe box, reference library API, trial/subscription hooks, developer UI
+- Cookbooks API + `GET /api/v1/public/cookbooks/{slug}/`; PWA `/c/:slug` — frozen `snapshot_version` per entry
+- **Remaining:** home cook recipe box, reference library API, trial/subscription hooks, developer UI
 
 **Not yet shipped:** developer UI (cork board, lab), version diff UI, cookbooks, home cook recipe box, journal UI, test sessions UI, reference library UI, fork buttons on public pages, R2 media in production.
 

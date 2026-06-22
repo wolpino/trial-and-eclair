@@ -1,3 +1,19 @@
+export interface PublicCookbookEntry {
+  title: string;
+  description: string;
+  sort_order: number;
+  recipe_slug: string | null;
+}
+
+export interface PublicCookbook {
+  slug: string;
+  title: string;
+  description: string;
+  author: string;
+  published_at: string;
+  recipes: PublicCookbookEntry[];
+}
+
 export interface PublicIngredientLine {
   ingredient_name: string;
   quantity: string;
@@ -68,6 +84,10 @@ export async function apiFetch<T>(
 
 export function fetchPublicRecipe(slug: string): Promise<PublicRecipe> {
   return apiFetch<PublicRecipe>(`/api/v1/public/recipes/${slug}/`);
+}
+
+export function fetchPublicCookbook(slug: string): Promise<PublicCookbook> {
+  return apiFetch<PublicCookbook>(`/api/v1/public/cookbooks/${slug}/`);
 }
 
 export function mediaUrl(path: string | null): string | null {

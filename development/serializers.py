@@ -1,6 +1,14 @@
 from rest_framework import serializers
 
-from .models import DevelopmentRecipe, Idea, JournalEntry, RecipeVersion, VersionIngredientLine
+from .models import (
+    Cookbook,
+    CookbookRecipe,
+    DevelopmentRecipe,
+    Idea,
+    JournalEntry,
+    RecipeVersion,
+    VersionIngredientLine,
+)
 
 
 class IdeaSerializer(serializers.ModelSerializer):
@@ -151,6 +159,87 @@ class PublishRecipeSerializer(serializers.Serializer):
     slug = serializers.SlugField(required=False, allow_blank=True, max_length=255)
     story = serializers.CharField(required=False, allow_blank=True)
     hero_image = serializers.ImageField(required=False)
+
+
+class PublishCookbookSerializer(serializers.Serializer):
+    slug = serializers.SlugField(required=False, allow_blank=True, max_length=255)
+
+
+class CookbookRecipeSerializer(serializers.ModelSerializer):
+    snapshot_version = RecipeVersionSerializer(read_only=True)
+
+    class Meta:
+        model = CookbookRecipe
+        fields = (
+            "id",
+            "recipe",
+            "snapshot_version",
+            "sort_order",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = ("id", "snapshot_version", "created_at", "updated_at")
+
+    def validate_recipe(self, recipe: DevelopmentRecipe) -> DevelopmentRecipe:
+        user = self.context["request"].user
+        if recipe.user_id != user.id:
+            raise serializers.ValidationError("Recipe not found.")
+        return recipe
+
+
+class CookbookRecipeCreateSerializer(serializers.Serializer):
+    recipe = serializers.UUIDField()
+    version_id = serializers.UUIDField(required=False)
+    sort_order = serializers.IntegerField(required=False, min_value=0, default=0)
+
+
+class CookbookSerializer(serializers.ModelSerializer):
+    entries = CookbookRecipeSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = Cookbook
+        fields = (
+            "id",
+            "title",
+            "slug",
+            "description",
+            "status",
+            "published_at",
+            "entries",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = (
+            "id",
+            "slug",
+            "status",
+            "published_at",
+            "entries",
+            "created_at",
+            "updated_at",
+        )
+
+
+class CookbookCreateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Cookbook
+        fields = ("title", "description")
+
+
+class PublicCookbookEntrySerializer(serializers.Serializer):
+    title = serializers.CharField()
+    description = serializers.CharField()
+    sort_order = serializers.IntegerField()
+    recipe_slug = serializers.CharField(allow_null=True)
+
+
+class PublicCookbookSerializer(serializers.Serializer):
+    slug = serializers.CharField()
+    title = serializers.CharField()
+    description = serializers.CharField()
+    author = serializers.CharField()
+    published_at = serializers.DateTimeField()
+    recipes = PublicCookbookEntrySerializer(many=True)
 
 
 class PublicRecipeStepSerializer(serializers.Serializer):
