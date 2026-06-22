@@ -15,6 +15,94 @@ _VERSION_SCALAR_FIELDS = (
     "story",
 )
 
+_LINE_COMPARE_FIELDS = (
+    "quantity",
+    "unit",
+    "custom_unit",
+    "prep_note",
+    "substitution_note",
+    "sort_order",
+)
+
+
+def _line_key(line: VersionIngredientLine) -> tuple:
+    return (line.ingredient_id, line.sort_order)
+
+
+def _serialize_ingredient_line(line: VersionIngredientLine) -> dict:
+    return {
+        "ingredient_id": str(line.ingredient_id),
+        "ingredient_name": line.ingredient.name,
+        "quantity": str(line.quantity),
+        "unit": line.unit,
+        "custom_unit": line.custom_unit,
+        "prep_note": line.prep_note,
+        "substitution_note": line.substitution_note,
+        "sort_order": line.sort_order,
+    }
+
+
+def compare_versions(left: RecipeVersion, right: RecipeVersion) -> dict:
+    if left.recipe_id != right.recipe_id:
+        raise ValueError("Versions must belong to the same recipe.")
+
+    field_changes = [
+        {"field": field, "left": getattr(left, field), "right": getattr(right, field)}
+        for field in _VERSION_SCALAR_FIELDS
+        if getattr(left, field) != getattr(right, field)
+    ]
+
+    left_lines = list(
+        left.ingredient_lines.select_related("ingredient").order_by("sort_order", "created_at")
+    )
+    right_lines = list(
+        right.ingredient_lines.select_related("ingredient").order_by("sort_order", "created_at")
+    )
+    left_map = {_line_key(line): line for line in left_lines}
+    right_map = {_line_key(line): line for line in right_lines}
+
+    added = [_serialize_ingredient_line(right_map[key]) for key in sorted(set(right_map) - set(left_map))]
+    removed = [_serialize_ingredient_line(left_map[key]) for key in sorted(set(left_map) - set(right_map))]
+
+    changed = []
+    for key in sorted(set(left_map) & set(right_map)):
+        left_line = left_map[key]
+        right_line = right_map[key]
+        differing_fields = [
+            field
+            for field in _LINE_COMPARE_FIELDS
+            if getattr(left_line, field) != getattr(right_line, field)
+        ]
+        if differing_fields:
+            changed.append(
+                {
+                    "ingredient_name": left_line.ingredient.name,
+                    "fields": differing_fields,
+                    "left": _serialize_ingredient_line(left_line),
+                    "right": _serialize_ingredient_line(right_line),
+                }
+            )
+
+    return {
+        "left_version": {
+            "id": str(left.id),
+            "version_number": left.version_number,
+            "version_notes": left.version_notes,
+        },
+        "right_version": {
+            "id": str(right.id),
+            "version_number": right.version_number,
+            "version_notes": right.version_notes,
+        },
+        "field_changes": field_changes,
+        "ingredient_changes": {
+            "added": added,
+            "removed": removed,
+            "changed": changed,
+        },
+    }
+
+
 _LINE_COPY_FIELDS = (
     "ingredient",
     "quantity",

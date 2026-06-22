@@ -10,7 +10,7 @@ Recipe development and collection app — not a blog.
 
 ## Current status
 
-**MVP complete** (Phases 0–2). **Next: Phase 3** — version diff, cookbooks, home cook tier, journal, reference UI.
+**MVP complete** (Phases 0–2). **Phase 3 in progress** on branch `phase-3-core` — version diff API shipped; cookbooks, home cook, journal, references next.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -135,11 +135,21 @@ Open http://localhost:5173/r/your-recipe-slug after publishing via the API.
 
 Session cookies use `credentials: "include"` for future authenticated routes.
 
+## Phase 3 — Diff, cookbooks, home cook (in progress)
+
+### Version diff (`/api/v1/recipes/{id}/compare-versions/`)
+
+Developer-only. Query params: `left`, `right` (version UUIDs).
+
+Returns scalar field changes, version notes, and ingredient diff (`added`, `removed`, `changed`).
+
+**Remaining Phase 3:** cookbooks + public viewer, journal, home cook recipe box, reference library API, trial/subscription hooks.
+
 ## Tests
 
 ```bash
 source .venv/bin/activate
-python manage.py test accounts development   # 28 tests
+python manage.py test accounts development   # 31 tests
 cd frontend && npm run build                 # TypeScript + production bundle
 ```
 
@@ -175,7 +185,7 @@ recipes/      Original notes, sheets links, docx recipes
 | **0** | Schema + seed | Complete |
 | **1** | Developer core API: auth, ideas, recipes, versions, ingredient lines | Complete |
 | **2** | Publish + public viewer + PWA shell | Complete |
-| **3** | Version diff, cookbooks, home cook tier, reference library UI | Next |
+| **3** | Version diff, cookbooks, home cook tier, reference library UI | In progress |
 | **4** | URL/scan import pipelines | Planned |
 | **5** | AI, polish | Planned |
 
