@@ -10,7 +10,7 @@ Recipe development and collection app — not a blog.
 
 ## Current status
 
-**MVP complete** (Phases 0–2). **Phase 3 in progress** on branch `phase-3-core` — version diff, journal, cookbooks, and home cook recipe box shipped; references + trial hooks next.
+**MVP complete** (Phases 0–2). **Phase 3 in progress** on branch `phase-3-core` — reference library shipped; trial/subscription hooks next to close Phase 3.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -183,13 +183,24 @@ Any authenticated user (home cook or developer). Single-version recipes, sorted 
 
 Register defaults to `home_cook`; promote to `developer` in admin for lab features.
 
-**Remaining Phase 3:** reference library API, trial/subscription hooks.
+### Reference library (`/api/v1/references/`)
+
+Any authenticated user (home cook or developer). Personal research shelf — cookbooks owned, blogs, chefs, tools.
+
+| Endpoint | Methods | Notes |
+|----------|---------|-------|
+| `references/` | GET, POST | Optional filter: `?ref_type=blog` |
+| `references/{id}/` | GET, PATCH, DELETE | Own references only |
+| `references/{id}/links/` | GET, POST | Link to `idea` or `recipe_version` (developer targets) |
+| `references/{id}/links/{id}/` | GET, PATCH, DELETE | |
+
+**Remaining Phase 3:** trial/subscription enforcement hooks (no Stripe yet).
 
 ## Tests
 
 ```bash
 source .venv/bin/activate
-python manage.py test accounts development collection   # 52 tests
+python manage.py test accounts development collection library   # 59 tests
 cd frontend && npm run build                 # TypeScript + production bundle
 ```
 

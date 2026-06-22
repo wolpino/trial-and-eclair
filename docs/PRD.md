@@ -260,7 +260,8 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 - `GET/POST/PATCH/DELETE /api/v1/journal/` — private journal entries; filter by `?recipe=`
 - Cookbooks API + `GET /api/v1/public/cookbooks/{slug}/`; PWA `/c/:slug` — frozen `snapshot_version` per entry
 - Home cook recipe box: `/api/v1/recipe-box/` — `CollectionRecipe` + A–Z `RecipeBoxItem`; any authenticated user
-- **Remaining:** reference library API, trial/subscription hooks, developer UI
+- Reference library: `/api/v1/references/` + `/links/` to ideas or recipe versions (developer)
+- **Remaining:** trial/subscription enforcement hooks, developer UI
 
 **Not yet shipped:** developer UI (cork board, lab), version diff UI, cookbooks, home cook recipe box, journal UI, test sessions UI, reference library UI, fork buttons on public pages, R2 media in production.
 
