@@ -10,7 +10,7 @@ Recipe development and collection app — not a blog.
 
 ## Current status
 
-**MVP complete** (Phases 0–2). **Phase 3 in progress** on branch `phase-3-core` — version diff, journal, and cookbooks shipped; home cook + references next.
+**MVP complete** (Phases 0–2). **Phase 3 in progress** on branch `phase-3-core` — version diff, journal, cookbooks, and home cook recipe box shipped; references + trial hooks next.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -170,13 +170,26 @@ Developer-only. Entries freeze a `snapshot_version` at add time; unpublishing a 
 
 Public PWA: **`/c/:slug`** (links to `/r/{slug}` when recipe still published).
 
-**Remaining Phase 3:** home cook recipe box, reference library API, trial/subscription hooks.
+### Home cook recipe box (`/api/v1/recipe-box/`)
+
+Any authenticated user (home cook or developer). Single-version recipes, sorted A–Z by title. No publish or versioning.
+
+| Endpoint | Methods | Notes |
+|----------|---------|-------|
+| `recipe-box/` | GET, POST | List (A–Z) / create |
+| `recipe-box/{id}/` | GET, PATCH, DELETE | Own recipes only |
+| `recipe-box/{id}/ingredient-lines/` | GET, POST | Ingredient lines |
+| `recipe-box/{id}/ingredient-lines/{id}/` | GET, PATCH, DELETE | |
+
+Register defaults to `home_cook`; promote to `developer` in admin for lab features.
+
+**Remaining Phase 3:** reference library API, trial/subscription hooks.
 
 ## Tests
 
 ```bash
 source .venv/bin/activate
-python manage.py test accounts development   # 45 tests
+python manage.py test accounts development collection   # 52 tests
 cd frontend && npm run build                 # TypeScript + production bundle
 ```
 
