@@ -98,6 +98,22 @@ class DevelopmentRecipeViewSet(viewsets.ModelViewSet):
             DevelopmentRecipeSerializer(recipe, context=self.get_serializer_context()).data
         )
 
+    @action(detail=True, methods=["get"], url_path="compare-versions")
+    def compare_versions(self, request, pk=None) -> Response:
+        recipe = self.get_object()
+        left_id = request.query_params.get("left")
+        right_id = request.query_params.get("right")
+        if not left_id or not right_id:
+            raise ValidationError("Query params 'left' and 'right' are required.")
+
+        left = get_object_or_404(recipe.versions, pk=left_id)
+        right = get_object_or_404(recipe.versions, pk=right_id)
+        try:
+            diff = services.compare_versions(left, right)
+        except ValueError as exc:
+            raise ValidationError(str(exc)) from exc
+        return Response(diff)
+
 
 class RecipeVersionViewSet(viewsets.ModelViewSet):
     serializer_class = RecipeVersionSerializer

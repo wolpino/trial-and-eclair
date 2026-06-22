@@ -1,7 +1,7 @@
 # Trial and Eclair — Product Requirements Document
 
 **Version:** 1.1  
-**Status:** Approved — **MVP complete** (Phases 0–2 shipped; Phase 3 next)  
+**Status:** Approved — MVP complete (Phases 0–2); **Phase 3 in progress**  
 **Last updated:** June 2026
 
 > **Doc maintenance:** At the end of each phase, update this file and [README.md](../README.md): phase status table, shipped scope, API/frontend notes, and open items.
@@ -231,7 +231,7 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | **0** | Full schema, seed export, README | **Complete** |
 | **1** | Developer API: auth, ideas, recipes, versions, ingredient lines | **Complete** |
 | **2** | Publish + public viewer + React PWA shell | **Complete** |
-| **3** | Version diff, cookbooks, home cook tier, journal, reference UI, trial/subscription | **Next** |
+| **3** | Version diff, cookbooks, home cook tier, journal, reference UI, trial/subscription | **In progress** |
 | **4** | URL/scan import, equipment notes, fork buttons on public pages | Planned |
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 
@@ -254,7 +254,12 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 - React PWA (`frontend/`): Vite + React Router, public page at `/r/:slug`, ingredients-left layout
 - Fork lineage on public pages respects author `show_forks`
 
-**Not yet shipped (Phase 3+):** developer UI (cork board, lab), version diff UI, cookbooks, home cook recipe box, journal, test sessions UI, reference library UI, fork buttons on public pages, R2 media in production.
+**Phase 3 — in progress**
+
+- `GET /api/v1/recipes/{id}/compare-versions/?left=&right=` — ingredient + field diff between two versions
+- **Remaining:** cookbooks, home cook recipe box, journal, reference library API, trial/subscription hooks, developer UI
+
+**Not yet shipped:** developer UI (cork board, lab), version diff UI, cookbooks, home cook recipe box, journal UI, test sessions UI, reference library UI, fork buttons on public pages, R2 media in production.
 
 ---
 
