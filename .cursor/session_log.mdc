@@ -10,7 +10,45 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
-## 2026-06-20 · session-log-skill-setup
+## 2026-06-22 · phase-1-developer-api-wrap-up
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-22T12:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Complete Phase 1 developer core backend on branch `phase-1-developer-core`: auth, ideas CRUD, recipes/versions/ingredient lines, then wrap up with docs and merge checklist.
+
+### Summary
+Shipped three reviewable commits on `phase-1-developer-core`: session auth API (`/api/v1/auth/`), developer-only ideas cork board, and development recipes with explicit `save-new-version` plus ingredient lines. Business logic for recipe creation and versioning lives in `development/services.py`. Updated README with Phase 1 API reference, test commands, and pre-merge checklist; added `media/` to `.gitignore`. All 22 tests pass.
+
+### Decisions
+- **Session auth over tokens for Phase 1** — matches DRF settings and future PWA with credentials
+- **Current version only for writes** — PATCH version and ingredient-line CRUD locked to `current_version`
+- **Ingredient lines at `/versions/{id}/ingredient-lines/`** — avoids 3-level nesting under recipes
+
+### Changes
+- `accounts/` — auth serializers, views, urls, permissions, tests
+- `development/` — ideas + recipes API, services, serializers, views, urls, tests
+- `config/urls.py` — `/api/v1/` routing
+- `README.md` — Phase 1 API docs and merge checklist
+- `.gitignore` — ignore `media/`
+
+### Open threads
+- Merge PR `phase-1-developer-core` → `main`
+- Phase 2: publish flow, public viewer, R2 media, React PWA
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phase-1, auth-api, ideas, recipes, save-new-version, developer-core
+**Files:** accounts/, development/services.py, development/views.py, README.md, config/urls.py
+**Do not redo:** three-commit split (auth, ideas, recipes); session auth; current-version write lock
+**Resume with:** merge Phase 1 PR; start Phase 2 publish + public viewer
+<!-- AGENT_CONTEXT_END -->
+
+---
 
 | Field | Value |
 |-------|-------|
