@@ -1,3 +1,125 @@
-from django.shortcuts import render
+from django.shortcuts import get_object_or_404
+from rest_framework import status, viewsets
+from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
+from rest_framework.response import Response
 
-# Create your views here.
+from accounts.permissions import IsDeveloper
+
+from .models import DevelopmentRecipe, Idea, RecipeVersion, VersionIngredientLine
+from .serializers import (
+    DevelopmentRecipeCreateSerializer,
+    DevelopmentRecipeSerializer,
+    IdeaSerializer,
+    RecipeVersionSerializer,
+    SaveNewVersionSerializer,
+    VersionIngredientLineSerializer,
+)
+from . import services
+
+
+class IdeaViewSet(viewsets.ModelViewSet):
+    serializer_class = IdeaSerializer
+    permission_classes = [IsDeveloper]
+
+    def get_queryset(self):
+        return Idea.objects.filter(user=self.request.user)
+
+    def perform_create(self, serializer) -> None:
+        serializer.save(user=self.request.user)
+
+
+class DevelopmentRecipeViewSet(viewsets.ModelViewSet):
+    permission_classes = [IsDeveloper]
+
+    def get_queryset(self):
+        return DevelopmentRecipe.objects.filter(user=self.request.user).select_related(
+            "current_version",
+            "published_version",
+        )
+
+    def get_serializer_class(self):
+        if self.action == "create":
+            return DevelopmentRecipeCreateSerializer
+        return DevelopmentRecipeSerializer
+
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        recipe = services.create_development_recipe(
+            request.user,
+            title=serializer.validated_data["title"],
+        )
+        output = DevelopmentRecipeSerializer(recipe, context=self.get_serializer_context())
+        return Response(output.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=["post"], url_path="save-new-version")
+    def save_new_version(self, request, pk=None) -> Response:
+        recipe = self.get_object()
+        serializer = SaveNewVersionSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        new_version = services.save_new_version(
+            recipe,
+            version_notes=serializer.validated_data.get("version_notes", ""),
+        )
+        return Response(
+            RecipeVersionSerializer(new_version, context=self.get_serializer_context()).data,
+            status=status.HTTP_201_CREATED,
+        )
+
+
+class RecipeVersionViewSet(viewsets.ModelViewSet):
+    serializer_class = RecipeVersionSerializer
+    permission_classes = [IsDeveloper]
+    http_method_names = ["get", "patch", "head", "options"]
+
+    def get_queryset(self):
+        return (
+            RecipeVersion.objects.filter(
+                recipe_id=self.kwargs["recipe_pk"],
+                recipe__user=self.request.user,
+            )
+            .prefetch_related("ingredient_lines__ingredient")
+            .order_by("version_number")
+        )
+
+    def partial_update(self, request, *args, **kwargs) -> Response:
+        version = self.get_object()
+        if version.id != version.recipe.current_version_id:
+            raise PermissionDenied("Only the current version can be edited.")
+        return super().partial_update(request, *args, **kwargs)
+
+
+class VersionIngredientLineViewSet(viewsets.ModelViewSet):
+    serializer_class = VersionIngredientLineSerializer
+    permission_classes = [IsDeveloper]
+
+    def _get_version(self) -> RecipeVersion:
+        return get_object_or_404(
+            RecipeVersion.objects.select_related("recipe"),
+            pk=self.kwargs["version_pk"],
+            recipe__user=self.request.user,
+        )
+
+    def _ensure_current_version(self, version: RecipeVersion) -> None:
+        if version.id != version.recipe.current_version_id:
+            raise PermissionDenied("Only the current version can be edited.")
+
+    def get_queryset(self):
+        return VersionIngredientLine.objects.filter(
+            version_id=self.kwargs["version_pk"],
+            version__recipe__user=self.request.user,
+        ).select_related("ingredient")
+
+    def perform_create(self, serializer) -> None:
+        version = self._get_version()
+        self._ensure_current_version(version)
+        serializer.save(version=version)
+
+    def perform_update(self, serializer) -> None:
+        self._ensure_current_version(serializer.instance.version)
+        serializer.save()
+
+    def perform_destroy(self, instance) -> None:
+        self._ensure_current_version(instance.version)
+        instance.delete()
