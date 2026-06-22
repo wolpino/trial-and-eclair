@@ -2,6 +2,7 @@ import uuid
 
 from django.contrib.auth.models import AbstractUser
 from django.db import models
+from django.utils import timezone
 
 
 class UserRole(models.TextChoices):
@@ -51,3 +52,16 @@ class User(AbstractUser):
 
     def is_home_cook(self):
         return self.role == UserRole.HOME_COOK
+
+    def has_developer_access(self) -> bool:
+        if not self.is_developer():
+            return False
+        if self.subscription_status in (
+            SubscriptionStatus.EXPIRED,
+            SubscriptionStatus.CANCELLED,
+        ):
+            return False
+        if self.subscription_status == SubscriptionStatus.TRIAL and self.trial_ends_at:
+            if timezone.now() >= self.trial_ends_at:
+                return False
+        return True

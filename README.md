@@ -10,7 +10,7 @@ Recipe development and collection app — not a blog.
 
 ## Current status
 
-**MVP complete** (Phases 0–2). **Phase 3 in progress** on branch `phase-3-core` — version diff API shipped; cookbooks, home cook, journal, references next.
+**Phases 0–3 complete** on branch `phase-3-core`. **Next: Phase 4** — URL/scan import, fork buttons on public pages.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -131,11 +131,11 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173/r/your-recipe-slug after publishing via the API.
+Open http://localhost:5173/r/your-recipe-slug or `/c/your-cookbook-slug` after publishing.
 
 Session cookies use `credentials: "include"` for future authenticated routes.
 
-## Phase 3 — Diff, cookbooks, home cook (in progress)
+## Phase 3 — Diff, cookbooks, home cook
 
 ### Version diff (`/api/v1/recipes/{id}/compare-versions/`)
 
@@ -143,13 +143,76 @@ Developer-only. Query params: `left`, `right` (version UUIDs).
 
 Returns scalar field changes, version notes, and ingredient diff (`added`, `removed`, `changed`).
 
-**Remaining Phase 3:** cookbooks + public viewer, journal, home cook recipe box, reference library API, trial/subscription hooks.
+### Journal (`/api/v1/journal/`)
+
+Developer-only private timeline. Scoped to the authenticated user.
+
+| Endpoint | Methods | Notes |
+|----------|---------|-------|
+| `journal/` | GET, POST | Optional filter: `?recipe={uuid}` |
+| `journal/{id}/` | GET, PATCH, DELETE | Own entries only |
+
+POST body: `recipe` (required), `body` (required), optional `title`, `version_snapshot`.
+
+### Cookbooks (`/api/v1/cookbooks/`)
+
+Developer-only. Entries freeze a `snapshot_version` at add time; unpublishing a recipe keeps the entry but drops the public recipe link.
+
+| Endpoint | Methods | Notes |
+|----------|---------|-------|
+| `cookbooks/` | GET, POST | Create/list cookbooks |
+| `cookbooks/{id}/` | GET, PATCH, DELETE | Own cookbooks only |
+| `cookbooks/{id}/publish/` | POST | Optional `slug` |
+| `cookbooks/{id}/unpublish/` | POST | Hides public page |
+| `cookbooks/{id}/entries/` | GET, POST | POST: `recipe`, optional `version_id`, `sort_order` |
+| `cookbooks/{id}/entries/{id}/` | GET, PATCH, DELETE | PATCH: `sort_order` only |
+| `GET /api/v1/public/cookbooks/{slug}/` | GET | No auth; frozen recipe list |
+
+Public PWA: **`/c/:slug`** (links to `/r/{slug}` when recipe still published).
+
+### Home cook recipe box (`/api/v1/recipe-box/`)
+
+Any authenticated user (home cook or developer). Single-version recipes, sorted A–Z by title. No publish or versioning.
+
+| Endpoint | Methods | Notes |
+|----------|---------|-------|
+| `recipe-box/` | GET, POST | List (A–Z) / create |
+| `recipe-box/{id}/` | GET, PATCH, DELETE | Own recipes only |
+| `recipe-box/{id}/ingredient-lines/` | GET, POST | Ingredient lines |
+| `recipe-box/{id}/ingredient-lines/{id}/` | GET, PATCH, DELETE | |
+
+Register defaults to `home_cook`; promote to `developer` in admin for lab features.
+
+### Reference library (`/api/v1/references/`)
+
+Any authenticated user (home cook or developer). Personal research shelf — cookbooks owned, blogs, chefs, tools.
+
+| Endpoint | Methods | Notes |
+|----------|---------|-------|
+| `references/` | GET, POST | Optional filter: `?ref_type=blog` |
+| `references/{id}/` | GET, PATCH, DELETE | Own references only |
+| `references/{id}/links/` | GET, POST | Link to `idea` or `recipe_version` (developer targets) |
+| `references/{id}/links/{id}/` | GET, PATCH, DELETE | |
+
+### Developer subscription gates
+
+Developer endpoints (`ideas`, `recipes`, `journal`, `cookbooks`, etc.) require `User.has_developer_access()`:
+
+| Status | Access |
+|--------|--------|
+| `active` | Allowed |
+| `trial` (before `trial_ends_at`) | Allowed |
+| `none` | Allowed (admin-promoted devs until Stripe) |
+| `trial` (past `trial_ends_at`) | Blocked (403) |
+| `expired`, `cancelled` | Blocked (403) |
+
+Set `role`, `subscription_status`, and `trial_ends_at` in Django admin. Stripe integration is Phase 4+.
 
 ## Tests
 
 ```bash
 source .venv/bin/activate
-python manage.py test accounts development   # 31 tests
+python manage.py test accounts development collection library   # 66 tests
 cd frontend && npm run build                 # TypeScript + production bundle
 ```
 
@@ -185,8 +248,8 @@ recipes/      Original notes, sheets links, docx recipes
 | **0** | Schema + seed | Complete |
 | **1** | Developer core API: auth, ideas, recipes, versions, ingredient lines | Complete |
 | **2** | Publish + public viewer + PWA shell | Complete |
-| **3** | Version diff, cookbooks, home cook tier, reference library UI | In progress |
-| **4** | URL/scan import pipelines | Planned |
+| **3** | Version diff, cookbooks, home cook tier, reference library UI | Complete |
+| **4** | URL/scan import pipelines | Next |
 | **5** | AI, polish | Planned |
 
 Full scope and user stories: [docs/PRD.md](docs/PRD.md).

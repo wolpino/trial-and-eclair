@@ -1,7 +1,7 @@
 # Trial and Eclair — Product Requirements Document
 
-**Version:** 1.1  
-**Status:** Approved — MVP complete (Phases 0–2); **Phase 3 in progress**  
+**Version:** 1.2  
+**Status:** Approved — Phases 0–3 complete; **Phase 4 next**  
 **Last updated:** June 2026
 
 > **Doc maintenance:** At the end of each phase, update this file and [README.md](../README.md): phase status table, shipped scope, API/frontend notes, and open items.
@@ -231,8 +231,8 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | **0** | Full schema, seed export, README | **Complete** |
 | **1** | Developer API: auth, ideas, recipes, versions, ingredient lines | **Complete** |
 | **2** | Publish + public viewer + React PWA shell | **Complete** |
-| **3** | Version diff, cookbooks, home cook tier, journal, reference UI, trial/subscription | **In progress** |
-| **4** | URL/scan import, equipment notes, fork buttons on public pages | Planned |
+| **3** | Version diff, cookbooks, home cook tier, journal, reference UI, trial/subscription | **Complete** |
+| **4** | URL/scan import, equipment notes, fork buttons on public pages | **Next** |
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 
 **MVP (first shippable product):** Phases 0 + 1 + 2 — **complete**. A developer can iterate, publish, and share; a viewer can read published recipes at `/r/{slug}`. Home cook tier and cookbooks are Phase 3+.
@@ -254,12 +254,16 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 - React PWA (`frontend/`): Vite + React Router, public page at `/r/:slug`, ingredients-left layout
 - Fork lineage on public pages respects author `show_forks`
 
-**Phase 3 — in progress**
+**Phase 3 — complete**
 
 - `GET /api/v1/recipes/{id}/compare-versions/?left=&right=` — ingredient + field diff between two versions
-- **Remaining:** cookbooks, home cook recipe box, journal, reference library API, trial/subscription hooks, developer UI
+- `GET/POST/PATCH/DELETE /api/v1/journal/` — private journal entries; filter by `?recipe=`
+- Cookbooks API + `GET /api/v1/public/cookbooks/{slug}/`; PWA `/c/:slug` — frozen `snapshot_version` per entry
+- Home cook recipe box: `/api/v1/recipe-box/` — `CollectionRecipe` + A–Z `RecipeBoxItem`; any authenticated user
+- Reference library: `/api/v1/references/` + `/links/` to ideas or recipe versions (developer)
+- Developer access gated by `User.has_developer_access()` — active/trial subscription; expired trial and expired/cancelled status blocked (`subscription_status=none` allowed for admin-promoted devs until Stripe)
 
-**Not yet shipped:** developer UI (cork board, lab), version diff UI, cookbooks, home cook recipe box, journal UI, test sessions UI, reference library UI, fork buttons on public pages, R2 media in production.
+**Not yet shipped:** developer UI (cork board, lab), version diff UI, journal UI, test sessions UI, reference library UI, fork buttons on public pages, idea promote flow, Stripe billing, R2 media in production.
 
 ---
 
