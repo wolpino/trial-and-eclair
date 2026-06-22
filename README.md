@@ -8,12 +8,18 @@ Recipe development and collection app — not a blog.
 
 **Documentation:** [Product Requirements (PRD)](docs/PRD.md)
 
+## Current status
+
+**MVP complete** (Phases 0–2). **Next: Phase 3** — version diff, cookbooks, home cook tier, journal, reference UI.
+
+At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
+
 ## Stack
 
 - Django REST + Postgres (SQLite for local dev)
 - Session auth (cookie-based, CORS-enabled for local PWA dev)
-- React/TypeScript PWA (Phase 2+ frontend)
-- Object storage for media (Phase 2+ production; local `media/` in dev)
+- React/TypeScript PWA (`frontend/`)
+- Object storage for media in production (R2/S3 — Phase 3+; local `media/` in dev)
 
 ## Local setup
 
@@ -93,11 +99,48 @@ Ingredient lines reference `catalog.Ingredient` by UUID (`quantity`, `unit` or `
 
 **Version workflow:** edit the current version in place → `POST .../save-new-version/` when ready to snapshot → repeat.
 
-### Run tests
+## Phase 2 — Publish + public viewer
+
+### Publish (`/api/v1/recipes/{id}/`)
+
+| Endpoint | Method | Body (optional) |
+|----------|--------|-----------------|
+| `publish/` | POST | `version_id`, `slug`, `story`, `hero_image` |
+| `unpublish/` | POST | — |
+
+Publishes `current_version` by default. Unpublish hides the public page but keeps `published_version` for cookbook snapshots.
+
+### Public API (no auth)
+
+| Endpoint | Purpose |
+|----------|---------|
+| `GET /api/v1/public/recipes/{slug}/` | Published recipe: ingredients, steps, story, hero, fork lineage |
+
+### Frontend PWA (`frontend/`)
+
+Vite + React Router. Public recipe viewer at **`/r/:slug`**.
+
+```bash
+# Terminal 1 — API
+source .venv/bin/activate
+python manage.py runserver
+
+# Terminal 2 — PWA (proxies /api and /media to :8000)
+cd frontend
+npm install
+npm run dev
+```
+
+Open http://localhost:5173/r/your-recipe-slug after publishing via the API.
+
+Session cookies use `credentials: "include"` for future authenticated routes.
+
+## Tests
 
 ```bash
 source .venv/bin/activate
-python manage.py test accounts development
+python manage.py test accounts development   # 28 tests
+cd frontend && npm run build                 # TypeScript + production bundle
 ```
 
 ### Quick API smoke test
@@ -120,35 +163,20 @@ development/  Ideas, dev recipes, versions, journal, cookbooks, forks
 collection/   Home cook recipe box
 library/      References, URL imports, source documents
 config/       Django settings
+frontend/     React/TS PWA (public viewer + future dev UI)
 seed/data/    Exported seed JSON (generated)
 recipes/      Original notes, sheets links, docx recipes
 ```
 
 ## MVP roadmap
 
-| Phase | Scope |
-|-------|--------|
-| **0** | Schema + seed |
-| **1** | Developer core API: auth, ideas, recipes, versions, ingredient lines |
-| **2** | Publish + public viewer + PWA shell |
-| **3** | Version diff, cookbooks, home cook tier, reference library UI |
-| **4** | URL/scan import pipelines |
-| **5** | AI, polish |
+| Phase | Scope | Status |
+|-------|--------|--------|
+| **0** | Schema + seed | Complete |
+| **1** | Developer core API: auth, ideas, recipes, versions, ingredient lines | Complete |
+| **2** | Publish + public viewer + PWA shell | Complete |
+| **3** | Version diff, cookbooks, home cook tier, reference library UI | Next |
+| **4** | URL/scan import pipelines | Planned |
+| **5** | AI, polish | Planned |
 
-## Merging Phase 1
-
-Branch: `phase-1-developer-core` → `main`
-
-**Pre-merge checklist**
-
-- [ ] `python manage.py test accounts development` passes
-- [ ] Three commits on branch: auth, ideas, recipes/versions
-- [ ] Promote a test user to `developer` in admin before exercising ideas/recipes
-- [ ] No `media/`, `.env`, or local IDE files in the PR
-
-**Suggested PR title:** Phase 1 — Developer core API
-
-**After merge**
-
-- React PWA can wire to `/api/v1/` with session cookies
-- Phase 2: publish flow, public viewer, R2 media storage
+Full scope and user stories: [docs/PRD.md](docs/PRD.md).

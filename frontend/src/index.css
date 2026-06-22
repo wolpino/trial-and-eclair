@@ -1,0 +1,126 @@
+:root {
+  color: #2c2416;
+  background: #faf8f4;
+  font-family: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
+  line-height: 1.6;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+}
+
+a {
+  color: #6b4f2a;
+}
+
+.app-shell {
+  min-height: 100vh;
+}
+
+.home-page,
+.status-message,
+.recipe-viewer {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+.home-page h1,
+.recipe-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 600;
+}
+
+.home-note {
+  color: #5c5347;
+}
+
+.recipe-meta,
+.fork-lineage,
+.recipe-description {
+  color: #5c5347;
+}
+
+.recipe-description {
+  font-size: 1.1rem;
+}
+
+.hero-image {
+  margin: 1.5rem 0 2rem;
+}
+
+.hero-image img {
+  display: block;
+  width: 100%;
+  max-height: 420px;
+  object-fit: cover;
+  border-radius: 8px;
+}
+
+.recipe-body {
+  display: grid;
+  gap: 2rem;
+}
+
+@media (min-width: 768px) {
+  .recipe-body {
+    grid-template-columns: minmax(220px, 280px) 1fr;
+    align-items: start;
+  }
+}
+
+.ingredients-panel,
+.directions-panel h2 {
+  margin-top: 0;
+}
+
+.ingredients-panel {
+  padding: 1.25rem;
+  background: #f3eee4;
+  border-radius: 8px;
+}
+
+.equipment-notes {
+  font-size: 0.95rem;
+  color: #5c5347;
+}
+
+.ingredient-list {
+  list-style: none;
+  padding: 0;
+  margin: 1rem 0 0;
+}
+
+.ingredient-list li + li {
+  margin-top: 0.75rem;
+}
+
+.ingredient-qty {
+  font-weight: 600;
+}
+
+.ingredient-note {
+  color: #5c5347;
+}
+
+.recipe-story,
+.recipe-steps {
+  margin-bottom: 2rem;
+}
+
+.recipe-steps ol {
+  padding-left: 1.25rem;
+}
+
+.recipe-steps li + li {
+  margin-top: 0.75rem;
+}
+
+.status-message {
+  text-align: center;
+}

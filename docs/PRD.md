@@ -1,8 +1,10 @@
 # Trial and Eclair — Product Requirements Document
 
-**Version:** 1.0  
-**Status:** Approved (Phase 0 complete; Phase 1 in progress)  
+**Version:** 1.1  
+**Status:** Approved — **MVP complete** (Phases 0–2 shipped; Phase 3 next)  
 **Last updated:** June 2026
+
+> **Doc maintenance:** At the end of each phase, update this file and [README.md](../README.md): phase status table, shipped scope, API/frontend notes, and open items.
 
 ---
 
@@ -112,7 +114,7 @@ Two layers:
 | Scan import | Photo/PDF → OCR → editable draft (user-owned) |
 | Equipment / substitutions | Per ingredient line + optional version-level equipment notes (Phase 4–5) |
 | Free tier limits | None for now |
-| Payment pricing | TBD before first paid developer signup (~Phase 2 end) |
+| Payment pricing | TBD before first paid developer signup (~Phase 3) |
 
 ---
 
@@ -227,13 +229,32 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | Phase | Scope | Status |
 |-------|--------|--------|
 | **0** | Full schema, seed export, README | **Complete** |
-| **1** | Developer API: auth, ideas, recipes, versions, ingredient lines | **In progress** |
-| **2** | Publish + public viewer + React PWA shell | Planned |
-| **3** | Version diff, cookbooks, home cook tier, journal, reference UI, trial/subscription | Planned |
+| **1** | Developer API: auth, ideas, recipes, versions, ingredient lines | **Complete** |
+| **2** | Publish + public viewer + React PWA shell | **Complete** |
+| **3** | Version diff, cookbooks, home cook tier, journal, reference UI, trial/subscription | **Next** |
 | **4** | URL/scan import, equipment notes, fork buttons on public pages | Planned |
-| **5** | PWA offline, AI tools, challenges/glossaries | Planned |
+| **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 
-**MVP (first shippable product):** Phases 0 + 1 + 2 — developer can iterate, publish, share; viewer can read. Home cook is Phase 3+.
+**MVP (first shippable product):** Phases 0 + 1 + 2 — **complete**. A developer can iterate, publish, and share; a viewer can read published recipes at `/r/{slug}`. Home cook tier and cookbooks are Phase 3+.
+
+### Shipped per phase
+
+**Phase 1 — Developer API**
+
+- Session auth: register, login, logout, `me` (role, trial, subscription fields)
+- Ideas CRUD (developer-only, owner-scoped)
+- Development recipes: create → v1, edit current version, `save-new-version`, ingredient lines
+- Writes locked to `current_version` only
+
+**Phase 2 — Publish + viewer**
+
+- `POST /api/v1/recipes/{id}/publish/` — optional `version_id`, `slug`, `story`, `hero_image`
+- `POST /api/v1/recipes/{id}/unpublish/` — hides public page; keeps `published_version` for cookbook snapshots
+- `GET /api/v1/public/recipes/{slug}/` — no auth; ingredients, steps, story, hero, fork lineage
+- React PWA (`frontend/`): Vite + React Router, public page at `/r/:slug`, ingredients-left layout
+- Fork lineage on public pages respects author `show_forks`
+
+**Not yet shipped (Phase 3+):** developer UI (cork board, lab), version diff UI, cookbooks, home cook recipe box, journal, test sessions UI, reference library UI, fork buttons on public pages, R2 media in production.
 
 ---
 
@@ -256,7 +277,7 @@ Export command: `python manage.py export_recipe_seed` → `seed/data/`
 
 | Item | When to decide |
 |------|----------------|
-| Payment pricing | Before first paid developer signup (~Phase 2) |
+| Payment pricing | Before first paid developer signup (~Phase 3) |
 | Home cook photo limit | Phase 3 (likely 1) |
 | Free tier usage caps | When needed; schema supports plan gates |
 | Voice control | Roadmap |
