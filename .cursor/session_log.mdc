@@ -1,0 +1,58 @@
+---
+description: Chronological agent session history (newest first). Read top entries for continuity; do not treat as auto-applied rules.
+---
+
+# Session Log
+
+Prepended entries from Cursor agent sessions. **Newest at top.**
+
+For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` HTML comments for structured fields.
+
+---
+
+## 2026-06-20 · session-log-skill-setup
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-20T01:07:36Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Implement session logging infrastructure: skill, dual log files, hooks, rule cleanup, and alwaysApply adjustments discussed in prior Ask-mode planning.
+
+### Summary
+Created the `session-log` skill with dual-file logging (`session_log.mdc` for substantive sessions, `qa_log.mdc` for trivial Q&A). Added `session-context.mdc` rule and `hooks.json` with `sessionStart` (read top 3 entries) and `stop` (write log) prompt hooks. Deleted duplicate `database-migrations.mdc`, kept `migration-safety.mdc` with `alwaysApply: false`. Flipped `anti-overeng.mdc` to always-on; scoped `django.mdc` and `api-design.mdc` to globs-only. Clarified Django data-migration guidance to require separate files from DDL.
+
+### Decisions
+- **Two committed log files** — `session_log.mdc` for agent continuity, `qa_log.mdc` for trivial Q&A archive
+- **UTC timestamps** — `YYYY-MM-DDTHH:MM:SSZ` throughout
+- **Prompt hooks on sessionStart + stop** — reliable logging without custom scripts
+- **Keep migration-safety.mdc, delete database-migrations.mdc** — exact duplicates
+- **anti-overeng always on; migration/api/django glob-scoped** — reduce standing context cost
+
+### Changes
+- `.cursor/skills/session-log/SKILL.md` — session-log skill
+- `.cursor/session_log.mdc` — session log (with this entry)
+- `.cursor/qa_log.mdc` — Q&A log header
+- `.cursor/rules/session-context.mdc` — continuity rule (alwaysApply)
+- `.cursor/hooks.json` — sessionStart + stop hooks
+- `.cursor/rules/anti-overeng.mdc` — alwaysApply: true
+- `.cursor/rules/migration-safety.mdc` — alwaysApply: false
+- `.cursor/rules/api-design.mdc` — narrower globs, alwaysApply: false
+- `.cursor/rules/django.mdc` — alwaysApply: false, RunPython clarification
+- `.cursor/rules/database-migrations.mdc` — deleted (duplicate)
+
+### Open threads
+- Verify hooks fire in Cursor Hooks tab after reload/restart
+- First trivial Q&A session will populate `qa_log.mdc`
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** session-log, hooks, qa_log, cursor-rules, migration-dedup, alwaysApply
+**Files:** .cursor/skills/session-log/SKILL.md, .cursor/session_log.mdc, .cursor/qa_log.mdc, .cursor/hooks.json, .cursor/rules/session-context.mdc
+**Do not redo:** two-file split; UTC timestamps; commit both logs; migration-safety not database-migrations; anti-overeng always on
+**Resume with:** normal development — hooks should auto-log future sessions
+<!-- AGENT_CONTEXT_END -->
+
+---

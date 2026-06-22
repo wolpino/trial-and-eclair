@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "hooks": {
+    "sessionStart": [
+      {
+        "type": "prompt",
+        "prompt": "At session start: if .cursor/session_log.mdc exists, read the top 3 entries for continuity. Honor Do not redo and Resume with from the latest AGENT_CONTEXT block. Do not load .cursor/qa_log.mdc unless the user asks about past Q&A.",
+        "timeout": 5
+      }
+    ],
+    "stop": [
+      {
+        "type": "prompt",
+        "prompt": "Before ending: apply the session-log skill (.cursor/skills/session-log/SKILL.md). If this was trivial one-off Q&A with no repo impact, prepend an entry to .cursor/qa_log.mdc; otherwise prepend to .cursor/session_log.mdc. Use UTC timestamps (YYYY-MM-DDTHH:MM:SSZ). Do not skip logging.",
+        "timeout": 10
+      }
+    ]
+  }
+}
