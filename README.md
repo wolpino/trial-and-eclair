@@ -10,7 +10,7 @@ Recipe development and collection app — not a blog.
 
 ## Current status
 
-**Phases 0–3 complete** on branch `phase-3-core`. **Next: Phase 4** — URL/scan import, fork buttons on public pages.
+**Phases 0–3 complete** (backend + functional UI shell). **Phase UI in progress** — metaphor SPA (lab notebook, in-place recipe box, theming, cookbooks/references, cork board). **Phase 4 next** (backend) — URL/scan import, fork buttons on public pages.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -18,7 +18,7 @@ At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (s
 
 - Django REST + Postgres (SQLite for local dev)
 - Session auth (cookie-based, CORS-enabled for local PWA dev)
-- React/TypeScript PWA (`frontend/`)
+- React/TypeScript PWA (`frontend/`) — CSS semantic tokens, user theme/font presets (Phase UI)
 - Object storage for media in production (R2/S3 — Phase 3+; local `media/` in dev)
 
 ## Local setup
@@ -53,6 +53,14 @@ python manage.py export_recipe_seed
 ```
 
 Output: `seed/data/` (`ideas_seed.json`, `references_seed.json`, workbook exports, etc.)
+
+Load into the database for local dev (creates a `dev` developer user if needed):
+
+```bash
+python manage.py load_recipe_seed
+# Log in at http://localhost:5173/login as dev / devpass123
+# Re-seed: python manage.py load_recipe_seed --force
+```
 
 ## Phase 1 — Developer API
 
@@ -133,7 +141,41 @@ npm run dev
 
 Open http://localhost:5173/r/your-recipe-slug or `/c/your-cookbook-slug` after publishing.
 
-Session cookies use `credentials: "include"` for future authenticated routes.
+### Authenticated UI
+
+**Shipped:** auth shell, routes below, form/list editors (being replaced by Phase UI).
+
+**Phase UI** (order: C1 → C3 → C4 → C6 → C5 → C2) — see [PRD Appendix A](docs/PRD.md#appendix-a-ui-surface-design):
+
+| Surface | Target UX |
+|---------|-----------|
+| **Lab** | Composition notebook spread; ingredients left / steps right; version margin; journal, compare, publish as overlays. **New recipe** without an idea. |
+| **Recipe box** | Wooden box + A–Z index cards; **in-place edit** on the card (no separate editor page). **Add card** without an idea. |
+| **Cookbooks / references** | Binder + shelf metaphors |
+| **Cork board** | Pinned notes grid (last); optional promote-to-lab |
+| **Theming** | User-selectable color theme + font via CSS tokens |
+
+| Route | Access | Purpose |
+|-------|--------|---------|
+| `/login`, `/register` | Guest | Session auth |
+| `/developer` | Developer | Cork board (ideas) |
+| `/developer/lab`, `/developer/lab/:id` | Developer | Lab — recipe shelf + notebook editor |
+| `/developer/cookbooks`, `/developer/cookbooks/:id` | Developer | Cookbook manager |
+| `/recipe-box` | Authenticated | Home cook recipe box (A–Z; `:id` deep-link → focused card) |
+| `/references` | Authenticated | Reference library |
+
+Recipes can be created **without an idea** in both lab (`POST /recipes/`) and recipe box (`POST /recipe-box/`). Idea promote is optional (Phase UI C2/C6).
+
+Session cookies use `credentials: "include"`. CSRF token is sent on mutating requests.
+
+### Ingredients (`/api/v1/ingredients/`)
+
+Authenticated search + get-or-create by name (for ingredient lines in lab and recipe box):
+
+| Endpoint | Method | Purpose |
+|----------|--------|---------|
+| `ingredients/?search=` | GET | Search catalog |
+| `ingredients/` | POST | `{ "name": "..." }` get or create |
 
 ## Phase 3 — Diff, cookbooks, home cook
 
@@ -236,20 +278,22 @@ development/  Ideas, dev recipes, versions, journal, cookbooks, forks
 collection/   Home cook recipe box
 library/      References, URL imports, source documents
 config/       Django settings
-frontend/     React/TS PWA (public viewer + future dev UI)
+frontend/     React/TS PWA (public viewer + authenticated metaphor UI)
 seed/data/    Exported seed JSON (generated)
 recipes/      Original notes, sheets links, docx recipes
 ```
 
-## MVP roadmap
+## Roadmap
 
 | Phase | Scope | Status |
 |-------|--------|--------|
 | **0** | Schema + seed | Complete |
 | **1** | Developer core API: auth, ideas, recipes, versions, ingredient lines | Complete |
 | **2** | Publish + public viewer + PWA shell | Complete |
-| **3** | Version diff, cookbooks, home cook tier, reference library UI | Complete |
-| **4** | URL/scan import pipelines | Next |
-| **5** | AI, polish | Planned |
+| **3** | Version diff, cookbooks, home cook tier, reference library API | Complete |
+| **UI** | Metaphor SPA: theming, lab notebook, recipe box, API UI gaps, cookbooks/references, cork board | In progress |
+| **4** | URL/scan import, fork buttons (backend) | Next |
+| **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
+| **UI+** | Freeform cork-board canvas (drag layout) | Planned |
 
-Full scope and user stories: [docs/PRD.md](docs/PRD.md).
+Full scope, UI design, and user stories: [docs/PRD.md](docs/PRD.md) (v1.3).

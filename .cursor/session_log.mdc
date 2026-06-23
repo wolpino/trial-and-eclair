@@ -10,6 +10,131 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-06-22 · phase-ui-c1-design-system
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-23T00:30:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Implement Phase UI chunk C1: semantic design tokens, theme/font presets, ThemeProvider, settings UI in AppLayout, and metaphor component scaffolds.
+
+### Summary
+Created `phase-ui-metaphor` branch and shipped C1 design system. Migrated all `index.css` hex values to semantic CSS custom properties; palette lives in `styles/themes/default.css`, fonts in `styles/fonts/default.css`. Added `ThemeProvider` + `useTheme()` with `localStorage` persistence and `data-theme`/`data-font` on `<html>`. AppLayout now has theme swatch + font dropdown (one preset each, extensible). Scaffolded `IndexCard`, `NotebookSpread`, and `PinnedNote` components with token-only CSS. `npm run build` passes; no hex in changed frontend files outside theme/font CSS.
+
+### Decisions
+- **Skipped Framer Motion** — optional C1 item; avoided new dependency for route transitions
+- **Theme before Auth in provider tree** — appearance applies even on login/register pages
+- **Inline flash-prevention script in index.html** — reads localStorage before React mount
+
+### Changes
+- `frontend/src/styles/` — `tokens.css`, `themes/default.css`, `fonts/default.css`
+- `frontend/src/theme/ThemeProvider.tsx` — theme context + presets
+- `frontend/src/index.css` — token imports, all colors via `var(--*)`
+- `frontend/src/components/AppLayout.tsx` — appearance settings UI
+- `frontend/src/components/{recipe-box,lab,corkboard}/` — scaffolds + barrel exports
+- `frontend/src/main.tsx`, `frontend/index.html` — provider wiring + early theme apply
+
+### Open threads
+- C3 lab notebook spread (uses `components/lab/*`)
+- C4 recipe box in-place index cards (uses `components/recipe-box/*`)
+- C6 API gaps, C5 cookbooks/refs, C2 cork board grid last
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phase-ui, c1, design-system, theming, tokens, ThemeProvider, IndexCard, NotebookSpread, PinnedNote
+**Files:** frontend/src/styles/, frontend/src/theme/ThemeProvider.tsx, frontend/src/components/{AppLayout,recipe-box,lab,corkboard}/
+**Do not redo:** token migration in index.css; ThemeProvider localStorage keys (`te-theme`, `te-font`); auth shell pattern
+**Resume with:** C3 lab notebook on `phase-ui-metaphor` (parallel with C4 after C1 merge)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-06-22 · phase-ui-auth-shell
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-22T23:58:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | partial |
+
+### Intent
+Start Phase UI on branch `phase-ui` from merged `phase-3-core`: authenticated PWA shell before developer lab and home-cook screens.
+
+### Summary
+Added frontend auth shell after Phase 3 backend merged (PR #13). `AuthContext` loads `/api/v1/auth/me/` on mount; login/register pages post with credentials; `ProtectedRoute` and `GuestRoute` gate routes; `AppLayout` shows role-aware nav (developer vs home cook). Stub pages for `/developer` and `/recipe-box`; public `/r/:slug` and `/c/:slug` unchanged. Extended `api/client.ts` with auth helpers.
+
+### Decisions
+- **Session cookies via `credentials: "include"`** — matches backend session auth from Phase 1
+- **`requireDeveloper` on protected routes** — developer lab separate from home-cook recipe box
+- **Placeholder pages for lab and recipe box** — auth shell first, feature screens next
+
+### Changes
+- `frontend/src/auth/` — `AuthContext.tsx`, `access.ts`
+- `frontend/src/components/` — `AppLayout`, `ProtectedRoute`, `GuestRoute`
+- `frontend/src/pages/` — `LoginPage`, `RegisterPage`, updated `HomePage`; stubs for developer/recipe box
+- `frontend/src/api/client.ts` — auth API helpers
+- `frontend/src/App.tsx` — routed layout with protected/guest routes
+
+### Open threads
+- Developer cork board + lab (ideas, recipes, versions, publish)
+- Recipe box CRUD UI wired to `/api/v1/recipe-box/`
+- Cookbooks manager, version diff UI (optional)
+- Phase 4 backend still paused (import, fork, Stripe, R2)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phase-ui, auth-shell, session-context, protected-routes, react-pwa
+**Files:** frontend/src/auth/, frontend/src/components/AppLayout.tsx, frontend/src/api/client.ts, frontend/src/App.tsx
+**Do not redo:** session auth pattern; public routes outside AppLayout; stub pages until feature work
+**Resume with:** developer cork board + lab screens on `phase-ui`
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-06-22 · phase-3-backend-complete
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-22T22:30:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Ship Phase 3 backend on `phase-3-core` in reviewable chunks: version diff, journal, cookbooks, home cook recipe box, reference library, trial/subscription gates; update docs; pause Phase 4 and hand off to Phase UI.
+
+### Summary
+Delivered six commits on `phase-3-core`: compare-versions endpoint, developer journal CRUD, cookbooks API plus public cookbook viewer, home cook recipe box (`collection/`), reference library with links (`library/`), and trial/subscription enforcement via `User.has_developer_access()` and `IsDeveloper`. Merged via PRs #12 and #13. Updated `docs/PRD.md` (v1.2) and README — Phases 0–3 marked complete. All 66 tests pass (`accounts`, `development`, `collection`, `library`). User chose to skip Phase 4 backend for now and start Phase UI in a new chat.
+
+### Decisions
+- **Subscription rules** — `active`, valid `trial`, and admin `none` allowed; expired trial date, `expired`, `cancelled` → 403
+- **Phase 4 paused** — URL/scan import, fork buttons, Stripe, R2 deferred
+- **Small commits per chunk** — same review workflow as Phases 1–2
+
+### Changes
+- `development/` — journal, cookbooks, compare-versions, public cookbook views
+- `collection/` — recipe box API
+- `library/` — references + links API
+- `accounts/models.py`, `accounts/permissions.py` — developer access gates
+- `docs/PRD.md`, `README.md` — Phase 3 completion docs
+- `frontend/` — public cookbook route `/c/:slug` (Phase 2 scaffold extended)
+
+### Open threads
+- Phase UI: auth shell then authenticated screens (started on `phase-ui`)
+- Phase 4 backend when resumed: import, fork, Stripe, R2
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phase-3, compare-versions, journal, cookbooks, recipe-box, references, trial-gates
+**Files:** development/, collection/, library/, accounts/models.py, docs/PRD.md, README.md
+**Do not redo:** Phase 3 API shapes; six-chunk commit split; subscription gate logic
+**Resume with:** Phase UI on `phase-ui` — auth shell then developer lab (Phase 4 backend paused)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-06-22 · phase-1-developer-api-wrap-up
 
 | Field | Value |

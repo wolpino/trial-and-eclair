@@ -9,6 +9,7 @@ urlpatterns = [
     path("api/v1/", include("development.urls")),
     path("api/v1/", include("collection.urls")),
     path("api/v1/", include("library.urls")),
+    path("api/v1/", include("catalog.urls")),
 ]
 
 if settings.DEBUG:

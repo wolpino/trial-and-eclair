@@ -1,11 +1,18 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="default" data-font="default">
   <head>
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <meta name="theme-color" content="#2c2416" />
     <title>Trial and Eclair</title>
+    <script>
+      (function () {
+        var theme = localStorage.getItem("te-theme") || "default";
+        var font = localStorage.getItem("te-font") || "default";
+        document.documentElement.dataset.theme = theme;
+        document.documentElement.dataset.font = font;
+      })();
+    </script>
   </head>
   <body>
     <div id="root"></div>

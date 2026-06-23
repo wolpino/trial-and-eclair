@@ -4,11 +4,14 @@ from .models import CollectionIngredientLine, CollectionRecipe
 
 
 class CollectionIngredientLineSerializer(serializers.ModelSerializer):
+    ingredient_name = serializers.CharField(source="ingredient.name", read_only=True)
+
     class Meta:
         model = CollectionIngredientLine
         fields = (
             "id",
             "ingredient",
+            "ingredient_name",
             "quantity",
             "unit",
             "custom_unit",

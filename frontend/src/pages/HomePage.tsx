@@ -22,12 +22,17 @@ export function HomePage() {
           </p>
           <p className="home-actions">
             {hasDeveloperAccess ? (
-              <Link to="/developer">Go to cork board</Link>
+              <>
+                <Link to="/developer">Cork board</Link> ·{" "}
+                <Link to="/developer/lab">Lab</Link> ·{" "}
+                <Link to="/developer/cookbooks">Cookbooks</Link>
+              </>
             ) : null}
-            {user.role === "home_cook" ? (
+            {user ? (
               <>
                 {hasDeveloperAccess ? " · " : null}
-                <Link to="/recipe-box">Go to recipe box</Link>
+                <Link to="/recipe-box">Recipe box</Link> ·{" "}
+                <Link to="/references">References</Link>
               </>
             ) : null}
           </p>
