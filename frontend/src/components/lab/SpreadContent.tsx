@@ -1,6 +1,7 @@
 import { FormEvent } from "react";
 
 import { AddIngredientLineForm } from "../AddIngredientLineForm";
+import { RecipeStepsEditor } from "../RecipeStepsEditor";
 import type { RecipeVersion } from "../../api/development";
 import { displayUnit, formatQuantity } from "../../lib/recipeFormat";
 import type { PublicIngredientLine } from "../../api/client";
@@ -64,16 +65,32 @@ export function SpreadIngredients({
 
 type SpreadStepsProps = {
   version: RecipeVersion;
+  editable: boolean;
+  onAdd: (data: { order: number; body: string }) => Promise<unknown>;
+  onUpdate: (stepId: string, data: { body: string }) => Promise<unknown>;
+  onDelete: (stepId: string) => Promise<unknown>;
+  onChanged: () => void;
 };
 
-export function SpreadSteps({ version }: SpreadStepsProps) {
-  void version;
+export function SpreadSteps({
+  version,
+  editable,
+  onAdd,
+  onUpdate,
+  onDelete,
+  onChanged,
+}: SpreadStepsProps) {
   return (
     <section className="lab-spread-column" aria-label="Steps">
       <h3 className="lab-column-heading">Steps</h3>
-      <p className="lab-steps-placeholder">
-        Step editor wiring lands in C6. Use version notes and journal for now.
-      </p>
+      <RecipeStepsEditor
+        steps={version.steps ?? []}
+        editable={editable}
+        onAdd={onAdd}
+        onUpdate={onUpdate}
+        onDelete={onDelete}
+        onChanged={onChanged}
+      />
     </section>
   );
 }

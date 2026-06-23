@@ -1,5 +1,5 @@
 import { apiFetch } from "./client";
-import type { IngredientLine } from "./development";
+import type { IngredientLine, RecipeStep } from "./development";
 
 export interface CollectionRecipe {
   id: string;
@@ -10,6 +10,7 @@ export interface CollectionRecipe {
   cook_minutes: number | null;
   hero_image: string | null;
   ingredient_lines: IngredientLine[];
+  steps: RecipeStep[];
   created_at: string;
   updated_at: string;
 }
@@ -85,4 +86,36 @@ export function deleteBoxIngredientLine(
     `/api/v1/recipe-box/${recipeId}/ingredient-lines/${lineId}/`,
     { method: "DELETE" },
   );
+}
+
+export function createBoxStep(
+  recipeId: string,
+  data: { order: number; body: string },
+): Promise<RecipeStep> {
+  return apiFetch<RecipeStep>(`/api/v1/recipe-box/${recipeId}/steps/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+}
+
+export function patchBoxStep(
+  recipeId: string,
+  stepId: string,
+  data: Partial<Pick<RecipeStep, "order" | "body">>,
+): Promise<RecipeStep> {
+  return apiFetch<RecipeStep>(
+    `/api/v1/recipe-box/${recipeId}/steps/${stepId}/`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    },
+  );
+}
+
+export function deleteBoxStep(recipeId: string, stepId: string): Promise<void> {
+  return apiFetch<void>(`/api/v1/recipe-box/${recipeId}/steps/${stepId}/`, {
+    method: "DELETE",
+  });
 }

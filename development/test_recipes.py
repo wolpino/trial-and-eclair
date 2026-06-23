@@ -7,7 +7,7 @@ from rest_framework.test import APIClient
 
 from catalog.models import Ingredient
 
-from .models import DevelopmentRecipe, RecipeVersion, VersionIngredientLine
+from .models import DevelopmentRecipe, RecipeStep, RecipeVersion, VersionIngredientLine
 
 User = get_user_model()
 
@@ -192,6 +192,67 @@ class RecipeAPITests(TestCase):
                 "quantity": "2.000",
                 "unit": "cup",
             },
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_step_crud_on_current_version(self) -> None:
+        recipe = self._create_recipe()
+        version = recipe.current_version
+        steps_url = f"/api/v1/versions/{version.id}/steps/"
+        self.client.force_login(self.developer)
+
+        create_response = self.client.post(
+            steps_url,
+            {"order": 1, "body": "Mix dry ingredients."},
+            format="json",
+        )
+        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
+        step_id = create_response.data["id"]
+
+        patch_response = self.client.patch(
+            f"{steps_url}{step_id}/",
+            {"body": "Mix and sift dry ingredients."},
+            format="json",
+        )
+        self.assertEqual(patch_response.status_code, status.HTTP_200_OK)
+        self.assertEqual(patch_response.data["body"], "Mix and sift dry ingredients.")
+
+        delete_response = self.client.delete(f"{steps_url}{step_id}/")
+        self.assertEqual(delete_response.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_save_new_version_copies_steps(self) -> None:
+        recipe = self._create_recipe()
+        version = recipe.current_version
+        RecipeStep.objects.create(version=version, order=1, body="Bake at 350°F.")
+        self.client.force_login(self.developer)
+
+        response = self.client.post(
+            f"{self.recipes_url}{recipe.id}/save-new-version/",
+            {},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(len(response.data["steps"]), 1)
+        self.assertEqual(response.data["steps"][0]["body"], "Bake at 350°F.")
+
+    def test_cannot_edit_steps_on_old_version(self) -> None:
+        recipe = self._create_recipe()
+        old_version = recipe.current_version
+        RecipeStep.objects.create(version=old_version, order=1, body="Old step.")
+        self.client.force_login(self.developer)
+        self.client.post(
+            f"{self.recipes_url}{recipe.id}/save-new-version/",
+            {},
+            format="json",
+        )
+        steps_url = f"/api/v1/versions/{old_version.id}/steps/"
+
+        response = self.client.post(
+            steps_url,
+            {"order": 2, "body": "New step on old version."},
             format="json",
         )
 

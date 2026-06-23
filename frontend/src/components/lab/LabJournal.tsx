@@ -1,4 +1,4 @@
-import { FormEvent } from "react";
+import { FormEvent, type ReactNode } from "react";
 
 import type { JournalEntry } from "../../api/development";
 
@@ -10,6 +10,7 @@ type LabJournalProps = {
   onBodyChange: (value: string) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
   onDelete: (entryId: string) => void;
+  testSessions?: ReactNode;
 };
 
 export function LabJournal({
@@ -20,6 +21,7 @@ export function LabJournal({
   onBodyChange,
   onSubmit,
   onDelete,
+  testSessions,
 }: LabJournalProps) {
   return (
     <section className="lab-journal" aria-label="Test log">
@@ -28,6 +30,8 @@ export function LabJournal({
         <span aria-hidden="true">{open ? "↑" : "↓"}</span>
       </button>
       <div className={open ? "lab-journal__body" : "lab-journal__body lab-journal__body--collapsed"}>
+        {testSessions}
+        <p className="lab-column-heading">Journal</p>
         {entries.length === 0 ? (
           <p className="lab-page__note">No journal entries yet.</p>
         ) : (

@@ -32,6 +32,14 @@ export interface IngredientLine {
   sort_order: number;
 }
 
+export interface RecipeStep {
+  id: string;
+  order: number;
+  body: string;
+  created_at: string;
+  updated_at: string;
+}
+
 export interface RecipeVersion {
   id: string;
   version_number: number;
@@ -44,6 +52,7 @@ export interface RecipeVersion {
   hero_image: string | null;
   story: string;
   ingredient_lines: IngredientLine[];
+  steps: RecipeStep[];
   created_at: string;
   updated_at: string;
 }
@@ -87,6 +96,24 @@ export interface JournalEntry {
   updated_at: string;
 }
 
+export interface TestSessionPhoto {
+  id: string;
+  image: string;
+  caption: string;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface TestSession {
+  id: string;
+  notes: string;
+  outcome: string;
+  tested_at: string;
+  photos: TestSessionPhoto[];
+  created_at: string;
+  updated_at: string;
+}
+
 export interface CookbookEntry {
   id: string;
   recipe: string;
@@ -119,6 +146,14 @@ export function createIdea(input: CreateIdeaInput): Promise<Idea> {
     body.append("image", input.image);
   }
   return apiFetch<Idea>("/api/v1/ideas/", { method: "POST", body });
+}
+
+export function promoteIdea(id: string, title?: string): Promise<Idea> {
+  return apiFetch<Idea>(`/api/v1/ideas/${id}/promote/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(title ? { title } : {}),
+  });
 }
 
 export function fetchDevelopmentRecipes(): Promise<DevelopmentRecipe[]> {
@@ -223,6 +258,97 @@ export function deleteVersionIngredientLine(
 ): Promise<void> {
   return apiFetch<void>(
     `/api/v1/versions/${versionId}/ingredient-lines/${lineId}/`,
+    { method: "DELETE" },
+  );
+}
+
+export function createVersionStep(
+  versionId: string,
+  data: { order: number; body: string },
+): Promise<RecipeStep> {
+  return apiFetch<RecipeStep>(`/api/v1/versions/${versionId}/steps/`, {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+}
+
+export function patchVersionStep(
+  versionId: string,
+  stepId: string,
+  data: Partial<Pick<RecipeStep, "order" | "body">>,
+): Promise<RecipeStep> {
+  return apiFetch<RecipeStep>(
+    `/api/v1/versions/${versionId}/steps/${stepId}/`,
+    {
+      method: "PATCH",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    },
+  );
+}
+
+export function deleteVersionStep(
+  versionId: string,
+  stepId: string,
+): Promise<void> {
+  return apiFetch<void>(`/api/v1/versions/${versionId}/steps/${stepId}/`, {
+    method: "DELETE",
+  });
+}
+
+export function fetchTestSessions(versionId: string): Promise<TestSession[]> {
+  return apiFetch<TestSession[]>(
+    `/api/v1/versions/${versionId}/test-sessions/`,
+  );
+}
+
+export function createTestSession(
+  versionId: string,
+  data: { notes?: string; outcome?: string },
+): Promise<TestSession> {
+  return apiFetch<TestSession>(
+    `/api/v1/versions/${versionId}/test-sessions/`,
+    {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify(data),
+    },
+  );
+}
+
+export function deleteTestSession(
+  versionId: string,
+  sessionId: string,
+): Promise<void> {
+  return apiFetch<void>(
+    `/api/v1/versions/${versionId}/test-sessions/${sessionId}/`,
+    { method: "DELETE" },
+  );
+}
+
+export function uploadTestSessionPhoto(
+  sessionId: string,
+  file: File,
+  caption = "",
+): Promise<TestSessionPhoto> {
+  const body = new FormData();
+  body.append("image", file);
+  if (caption) {
+    body.append("caption", caption);
+  }
+  return apiFetch<TestSessionPhoto>(
+    `/api/v1/test-sessions/${sessionId}/photos/`,
+    { method: "POST", body },
+  );
+}
+
+export function deleteTestSessionPhoto(
+  sessionId: string,
+  photoId: string,
+): Promise<void> {
+  return apiFetch<void>(
+    `/api/v1/test-sessions/${sessionId}/photos/${photoId}/`,
     { method: "DELETE" },
   );
 }

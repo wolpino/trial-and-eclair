@@ -4,6 +4,7 @@ import { Link, useParams } from "react-router-dom";
 import { ApiError } from "../api/client";
 import { ComparePanel } from "../components/lab/ComparePanel";
 import { LabJournal } from "../components/lab/LabJournal";
+import { LabTestSessions } from "../components/lab/LabTestSessions";
 import { MarginTools } from "../components/lab/MarginTools";
 import { NotebookMargin } from "../components/lab/NotebookMargin";
 import { NotebookOverlay } from "../components/lab/NotebookOverlay";
@@ -20,19 +21,28 @@ import { VersionFlip } from "../components/lab/VersionFlip";
 import {
   compareVersions,
   createJournalEntry,
+  createTestSession,
   createVersionIngredientLine,
+  createVersionStep,
   deleteJournalEntry,
+  deleteTestSession,
+  deleteTestSessionPhoto,
   deleteVersionIngredientLine,
+  deleteVersionStep,
   fetchDevelopmentRecipe,
   fetchJournal,
   fetchRecipeVersions,
+  fetchTestSessions,
   patchRecipeVersion,
+  patchVersionStep,
   publishRecipe,
   saveNewVersion,
   unpublishRecipe,
+  uploadTestSessionPhoto,
   type DevelopmentRecipe,
   type JournalEntry,
   type RecipeVersion,
+  type TestSession,
   type VersionDiff,
 } from "../api/development";
 import "../styles/lab.css";
@@ -42,6 +52,7 @@ export function DeveloperRecipePage() {
   const [recipe, setRecipe] = useState<DevelopmentRecipe | null>(null);
   const [versions, setVersions] = useState<RecipeVersion[]>([]);
   const [journal, setJournal] = useState<JournalEntry[]>([]);
+  const [testSessions, setTestSessions] = useState<TestSession[]>([]);
   const [activeVersionId, setActiveVersionId] = useState("");
   const [draftVersion, setDraftVersion] = useState<RecipeVersion | null>(null);
   const [diff, setDiff] = useState<VersionDiff | null>(null);
@@ -56,6 +67,10 @@ export function DeveloperRecipePage() {
   const [publishOpen, setPublishOpen] = useState(false);
   const [publishSlug, setPublishSlug] = useState("");
   const [publishStory, setPublishStory] = useState("");
+  const [publishHeroImage, setPublishHeroImage] = useState<File | null>(null);
+  const [sessionNotes, setSessionNotes] = useState("");
+  const [sessionOutcome, setSessionOutcome] = useState("");
+  const [sessionPhotos, setSessionPhotos] = useState<File[]>([]);
 
   useEffect(() => {
     if (!recipeId) {
@@ -68,12 +83,15 @@ export function DeveloperRecipePage() {
       fetchRecipeVersions(recipeId),
       fetchJournal(recipeId),
     ])
-      .then(([recipeData, versionData, journalData]) => {
+      .then(async ([recipeData, versionData, journalData]) => {
         setRecipe(recipeData);
         setVersions(versionData);
         setJournal(journalData);
         setActiveVersionId(recipeData.current_version.id);
         setDraftVersion(recipeData.current_version);
+        setTestSessions(
+          await fetchTestSessions(recipeData.current_version.id),
+        );
         if (versionData.length > 0) {
           setLeftVersion(versionData[0].id);
         }
@@ -112,6 +130,17 @@ export function DeveloperRecipePage() {
     setJournal(journalData);
     setActiveVersionId(recipeData.current_version.id);
     setDraftVersion(recipeData.current_version);
+    const versionId =
+      activeVersionId === recipeData.current_version.id
+        ? recipeData.current_version.id
+        : activeVersionId;
+    if (versionId) {
+      setTestSessions(await fetchTestSessions(versionId));
+    }
+  }
+
+  async function reloadTestSessions(versionId: string) {
+    setTestSessions(await fetchTestSessions(versionId));
   }
 
   function selectVersion(versionId: string) {
@@ -119,6 +148,7 @@ export function DeveloperRecipePage() {
     if (versionId === currentVersionId && recipe && activeVersionId !== currentVersionId) {
       setDraftVersion(recipe.current_version);
     }
+    void reloadTestSessions(versionId);
   }
 
   function updateDraftField<K extends keyof RecipeVersion>(
@@ -203,9 +233,11 @@ export function DeveloperRecipePage() {
       await publishRecipe(recipe.id, {
         slug: publishSlug || undefined,
         story: publishStory || undefined,
+        hero_image: publishHeroImage ?? undefined,
       });
       await reload();
       setPublishOpen(false);
+      setPublishHeroImage(null);
       setError(null);
     } catch (err: unknown) {
       setError(err instanceof ApiError ? err.message : "Could not publish.");
@@ -227,6 +259,30 @@ export function DeveloperRecipePage() {
       setError(err instanceof ApiError ? err.message : "Could not unpublish.");
     } finally {
       setSaving(false);
+    }
+  }
+
+  async function handleAddTestSession(event: FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    if (!displayedVersion) {
+      return;
+    }
+    try {
+      const session = await createTestSession(displayedVersion.id, {
+        notes: sessionNotes,
+        outcome: sessionOutcome,
+      });
+      for (const photo of sessionPhotos) {
+        await uploadTestSessionPhoto(session.id, photo);
+      }
+      setSessionNotes("");
+      setSessionOutcome("");
+      setSessionPhotos([]);
+      await reloadTestSessions(displayedVersion.id);
+      setJournalOpen(true);
+      setError(null);
+    } catch (err: unknown) {
+      setError(err instanceof ApiError ? err.message : "Could not log bake session.");
     }
   }
 
@@ -339,7 +395,16 @@ export function DeveloperRecipePage() {
               onAddLine={(data) => createVersionIngredientLine(displayedVersion.id, data)}
               onAdded={() => void reload()}
             />
-            <SpreadSteps version={displayedVersion} />
+            <SpreadSteps
+              version={displayedVersion}
+              editable={isCurrentVersion}
+              onAdd={(data) => createVersionStep(displayedVersion.id, data)}
+              onUpdate={(stepId, data) =>
+                patchVersionStep(displayedVersion.id, stepId, data)
+              }
+              onDelete={(stepId) => deleteVersionStep(displayedVersion.id, stepId)}
+              onChanged={() => void reload()}
+            />
           </NotebookSpread>
         </div>
 
@@ -367,6 +432,29 @@ export function DeveloperRecipePage() {
           void deleteJournalEntry(entryId).then(() =>
             recipeId ? fetchJournal(recipeId).then(setJournal) : undefined,
           )
+        }
+        testSessions={
+          <LabTestSessions
+            sessions={testSessions}
+            editable={isCurrentVersion}
+            notes={sessionNotes}
+            outcome={sessionOutcome}
+            photos={sessionPhotos}
+            onNotesChange={setSessionNotes}
+            onOutcomeChange={setSessionOutcome}
+            onPhotosChange={setSessionPhotos}
+            onSubmit={(event) => void handleAddTestSession(event)}
+            onDelete={(sessionId) =>
+              void deleteTestSession(displayedVersion.id, sessionId).then(() =>
+                reloadTestSessions(displayedVersion.id),
+              )
+            }
+            onDeletePhoto={(sessionId, photoId) =>
+              void deleteTestSessionPhoto(sessionId, photoId).then(() =>
+                reloadTestSessions(displayedVersion.id),
+              )
+            }
+          />
         }
       />
 
@@ -396,9 +484,11 @@ export function DeveloperRecipePage() {
           version={displayedVersion}
           slug={publishSlug}
           story={publishStory}
+          heroImage={publishHeroImage}
           saving={saving}
           onSlugChange={setPublishSlug}
           onStoryChange={setPublishStory}
+          onHeroImageChange={setPublishHeroImage}
           onPublish={(event) => void handlePublish(event)}
           onUnpublish={() => void handleUnpublish()}
         />

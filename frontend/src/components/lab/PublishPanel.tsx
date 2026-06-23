@@ -9,9 +9,11 @@ type PublishPanelProps = {
   version: RecipeVersion;
   slug: string;
   story: string;
+  heroImage: File | null;
   saving: boolean;
   onSlugChange: (value: string) => void;
   onStoryChange: (value: string) => void;
+  onHeroImageChange: (file: File | null) => void;
   onPublish: (event: FormEvent<HTMLFormElement>) => void;
   onUnpublish: () => void;
 };
@@ -21,9 +23,11 @@ export function PublishPanel({
   version,
   slug,
   story,
+  heroImage,
   saving,
   onSlugChange,
   onStoryChange,
+  onHeroImageChange,
   onPublish,
   onUnpublish,
 }: PublishPanelProps) {
@@ -62,13 +66,25 @@ export function PublishPanel({
             Story (optional)
             <textarea rows={4} value={story} onChange={(event) => onStoryChange(event.target.value)} />
           </label>
+          <label>
+            Hero image (optional)
+            <input
+              accept="image/*"
+              type="file"
+              onChange={(event) =>
+                onHeroImageChange(event.target.files?.[0] ?? null)
+              }
+            />
+          </label>
+          {heroImage ? (
+            <p className="lab-page__note">Selected: {heroImage.name}</p>
+          ) : null}
           <button className="lab-btn" disabled={saving} type="submit">
             Publish
           </button>
         </form>
       )}
       {heroUrl ? <img alt="" className="lab-publish-hero" src={heroUrl} /> : null}
-      <p className="lab-page__note">Hero image upload arrives in C6.</p>
     </div>
   );
 }

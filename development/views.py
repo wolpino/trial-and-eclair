@@ -12,7 +12,10 @@ from .models import (
     DevelopmentRecipe,
     Idea,
     JournalEntry,
+    RecipeStep,
     RecipeVersion,
+    TestSession,
+    TestSessionPhoto,
     VersionIngredientLine,
 )
 from .serializers import (
@@ -24,10 +27,14 @@ from .serializers import (
     DevelopmentRecipeSerializer,
     IdeaSerializer,
     JournalEntrySerializer,
+    PromoteIdeaSerializer,
     PublishCookbookSerializer,
     PublishRecipeSerializer,
+    RecipeStepSerializer,
     RecipeVersionSerializer,
     SaveNewVersionSerializer,
+    TestSessionPhotoSerializer,
+    TestSessionSerializer,
     VersionIngredientLineSerializer,
 )
 from . import services
@@ -42,6 +49,22 @@ class IdeaViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer) -> None:
         serializer.save(user=self.request.user)
+
+    @action(detail=True, methods=["post"])
+    def promote(self, request, pk=None) -> Response:
+        idea = self.get_object()
+        serializer = PromoteIdeaSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        title = serializer.validated_data.get("title", "").strip()
+        try:
+            services.promote_idea(idea, title=title or None)
+        except ValueError as exc:
+            raise ValidationError(str(exc)) from exc
+        idea.refresh_from_db()
+        return Response(
+            IdeaSerializer(idea, context=self.get_serializer_context()).data,
+            status=status.HTTP_200_OK,
+        )
 
 
 class DevelopmentRecipeViewSet(viewsets.ModelViewSet):
@@ -140,7 +163,7 @@ class RecipeVersionViewSet(viewsets.ModelViewSet):
                 recipe_id=self.kwargs["recipe_pk"],
                 recipe__user=self.request.user,
             )
-            .prefetch_related("ingredient_lines__ingredient")
+            .prefetch_related("ingredient_lines__ingredient", "steps")
             .order_by("version_number")
         )
 
@@ -184,6 +207,91 @@ class VersionIngredientLineViewSet(viewsets.ModelViewSet):
     def perform_destroy(self, instance) -> None:
         self._ensure_current_version(instance.version)
         instance.delete()
+
+
+class VersionRecipeStepViewSet(viewsets.ModelViewSet):
+    serializer_class = RecipeStepSerializer
+    permission_classes = [IsDeveloper]
+
+    def _get_version(self) -> RecipeVersion:
+        return get_object_or_404(
+            RecipeVersion.objects.select_related("recipe"),
+            pk=self.kwargs["version_pk"],
+            recipe__user=self.request.user,
+        )
+
+    def _ensure_current_version(self, version: RecipeVersion) -> None:
+        if version.id != version.recipe.current_version_id:
+            raise PermissionDenied("Only the current version can be edited.")
+
+    def get_queryset(self):
+        return RecipeStep.objects.filter(
+            version_id=self.kwargs["version_pk"],
+            version__recipe__user=self.request.user,
+        )
+
+    def perform_create(self, serializer) -> None:
+        version = self._get_version()
+        self._ensure_current_version(version)
+        serializer.save(version=version)
+
+    def perform_update(self, serializer) -> None:
+        self._ensure_current_version(serializer.instance.version)
+        serializer.save()
+
+    def perform_destroy(self, instance) -> None:
+        self._ensure_current_version(instance.version)
+        instance.delete()
+
+
+MAX_TEST_SESSION_PHOTOS = 5
+
+
+class TestSessionViewSet(viewsets.ModelViewSet):
+    serializer_class = TestSessionSerializer
+    permission_classes = [IsDeveloper]
+    http_method_names = ["get", "post", "patch", "delete", "head", "options"]
+
+    def _get_version(self) -> RecipeVersion:
+        return get_object_or_404(
+            RecipeVersion.objects.select_related("recipe"),
+            pk=self.kwargs["version_pk"],
+            recipe__user=self.request.user,
+        )
+
+    def get_queryset(self):
+        return TestSession.objects.filter(
+            version_id=self.kwargs["version_pk"],
+            version__recipe__user=self.request.user,
+        ).prefetch_related("photos")
+
+    def perform_create(self, serializer) -> None:
+        serializer.save(version=self._get_version())
+
+
+class TestSessionPhotoViewSet(viewsets.ModelViewSet):
+    serializer_class = TestSessionPhotoSerializer
+    permission_classes = [IsDeveloper]
+    http_method_names = ["get", "post", "delete", "head", "options"]
+
+    def _get_session(self) -> TestSession:
+        return get_object_or_404(
+            TestSession.objects.select_related("version__recipe"),
+            pk=self.kwargs["session_pk"],
+            version__recipe__user=self.request.user,
+        )
+
+    def get_queryset(self):
+        return TestSessionPhoto.objects.filter(
+            session_id=self.kwargs["session_pk"],
+            session__version__recipe__user=self.request.user,
+        )
+
+    def perform_create(self, serializer) -> None:
+        session = self._get_session()
+        if session.photos.count() >= MAX_TEST_SESSION_PHOTOS:
+            raise ValidationError(f"A test session may have at most {MAX_TEST_SESSION_PHOTOS} photos.")
+        serializer.save(session=session)
 
 
 class JournalEntryViewSet(viewsets.ModelViewSet):

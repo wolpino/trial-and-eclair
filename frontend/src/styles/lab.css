@@ -364,6 +364,95 @@
   font-style: italic;
 }
 
+.lab-step-list,
+.recipe-box-card__steps {
+  list-style: decimal;
+  padding-left: 1.25rem;
+  margin: 0 0 1rem;
+  color: var(--color-text);
+}
+
+.lab-step-list li,
+.recipe-box-card__steps li {
+  margin-bottom: 0.75rem;
+}
+
+.lab-step-body {
+  width: 100%;
+  font: inherit;
+  padding: 0.35rem 0.5rem;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-sm);
+  background: var(--color-input-bg);
+  color: var(--color-text);
+  resize: vertical;
+}
+
+.lab-step-form,
+.lab-test-session-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.lab-step-form label,
+.lab-test-session-form label {
+  display: grid;
+  gap: 0.35rem;
+  color: var(--color-text-muted);
+}
+
+.lab-step-form textarea,
+.lab-test-session-form textarea,
+.lab-test-session-form input[type="file"] {
+  font: inherit;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-input-bg);
+  color: var(--color-text);
+}
+
+.lab-test-sessions {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-border-card);
+}
+
+.lab-test-session-list {
+  list-style: none;
+  padding: 0;
+  margin: 0 0 1rem;
+}
+
+.lab-test-session-list li {
+  padding: 0.75rem 0;
+  border-bottom: 1px solid var(--color-border-card);
+}
+
+.lab-test-session__outcome {
+  margin: 0.25rem 0;
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+.lab-test-session-photos {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0.5rem 0 0;
+}
+
+.lab-test-session-photos img {
+  display: block;
+  width: 4.5rem;
+  height: 4.5rem;
+  object-fit: cover;
+  border-radius: var(--radius-sm);
+  border: 1px solid var(--color-border);
+}
+
 .lab-version-notes {
   width: 100%;
   min-height: 6rem;

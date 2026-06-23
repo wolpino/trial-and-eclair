@@ -1,6 +1,15 @@
 from rest_framework import serializers
 
+from development.models import RecipeStep
+
 from .models import CollectionIngredientLine, CollectionRecipe
+
+
+class CollectionRecipeStepSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecipeStep
+        fields = ("id", "order", "body", "created_at", "updated_at")
+        read_only_fields = ("id", "created_at", "updated_at")
 
 
 class CollectionIngredientLineSerializer(serializers.ModelSerializer):
@@ -38,6 +47,7 @@ class CollectionIngredientLineSerializer(serializers.ModelSerializer):
 
 class CollectionRecipeSerializer(serializers.ModelSerializer):
     ingredient_lines = CollectionIngredientLineSerializer(many=True, read_only=True)
+    steps = CollectionRecipeStepSerializer(many=True, read_only=True)
 
     class Meta:
         model = CollectionRecipe
@@ -50,6 +60,7 @@ class CollectionRecipeSerializer(serializers.ModelSerializer):
             "cook_minutes",
             "hero_image",
             "ingredient_lines",
+            "steps",
             "created_at",
             "updated_at",
         )
