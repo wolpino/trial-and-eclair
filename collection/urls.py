@@ -1,7 +1,11 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .views import CollectionIngredientLineViewSet, RecipeBoxViewSet
+from .views import (
+    CollectionIngredientLineViewSet,
+    CollectionRecipeStepViewSet,
+    RecipeBoxViewSet,
+)
 
 router = DefaultRouter()
 router.register("recipe-box", RecipeBoxViewSet, basename="recipe-box")
@@ -23,5 +27,21 @@ urlpatterns = [
             }
         ),
         name="recipe-box-ingredient-line-detail",
+    ),
+    path(
+        "recipe-box/<uuid:recipe_pk>/steps/",
+        CollectionRecipeStepViewSet.as_view({"get": "list", "post": "create"}),
+        name="recipe-box-step-list",
+    ),
+    path(
+        "recipe-box/<uuid:recipe_pk>/steps/<uuid:pk>/",
+        CollectionRecipeStepViewSet.as_view(
+            {
+                "get": "retrieve",
+                "patch": "partial_update",
+                "delete": "destroy",
+            }
+        ),
+        name="recipe-box-step-detail",
     ),
 ]

@@ -106,3 +106,19 @@ class RecipeBoxAPITests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
         self.assertFalse(CollectionRecipe.objects.filter(id=recipe.id).exists())
+
+    def test_home_cook_manages_steps(self) -> None:
+        recipe = services.create_box_recipe(self.home_cook, title="Corn muffin")
+        steps_url = f"{self.box_url}{recipe.id}/steps/"
+        self.client.force_login(self.home_cook)
+
+        create_response = self.client.post(
+            steps_url,
+            {"order": 1, "body": "Preheat oven."},
+            format="json",
+        )
+        self.assertEqual(create_response.status_code, status.HTTP_201_CREATED)
+
+        detail_response = self.client.get(f"{self.box_url}{recipe.id}/")
+        self.assertEqual(len(detail_response.data["steps"]), 1)
+        self.assertEqual(detail_response.data["steps"][0]["body"], "Preheat oven.")

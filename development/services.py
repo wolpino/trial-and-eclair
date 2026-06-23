@@ -3,7 +3,7 @@ from django.db.models import Max
 from django.utils import timezone
 from django.utils.text import slugify
 
-from .models import DevelopmentRecipe, RecipeVersion, VersionIngredientLine
+from .models import DevelopmentRecipe, Idea, RecipeStep, RecipeVersion, VersionIngredientLine
 
 _VERSION_SCALAR_FIELDS = (
     "title",
@@ -161,6 +161,13 @@ def save_new_version(
             **{field: getattr(line, field) for field in _LINE_COPY_FIELDS},
         )
 
+    for step in current.steps.all():
+        RecipeStep.objects.create(
+            version=new_version,
+            order=step.order,
+            body=step.body,
+        )
+
     recipe.current_version = new_version
     recipe.save(update_fields=["current_version", "updated_at"])
     return new_version
@@ -313,3 +320,15 @@ def unpublish_cookbook(cookbook) -> None:
     cookbook.status = "unpublished"
     cookbook.save(update_fields=["status", "updated_at"])
     return cookbook
+
+
+@transaction.atomic
+def promote_idea(idea: Idea, *, title: str | None = None) -> DevelopmentRecipe:
+    if idea.promoted_recipe_id is not None:
+        raise ValueError("Idea already promoted to a recipe.")
+
+    recipe_title = (title or idea.title).strip() or idea.title
+    recipe = create_development_recipe(idea.user, title=recipe_title)
+    idea.promoted_recipe = recipe
+    idea.save(update_fields=["promoted_recipe", "updated_at"])
+    return recipe

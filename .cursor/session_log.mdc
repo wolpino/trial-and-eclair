@@ -47,7 +47,45 @@ Committed `phase-ui-c4-box` (recipe box in-place index cards + removed `RecipeBo
 
 ---
 
-## 2026-06-22 · phase-ui-c4-box
+## 2026-06-22 · phase-ui-c6-api
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-23T02:30:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Implement Phase UI C6: wire missing API flows (steps, hero upload, autocomplete, test sessions, idea promotion) for lab + recipe box editors.
+
+### Summary
+Added developer steps CRUD on `/api/v1/versions/{id}/steps/` (current version only) and collection box steps on `/api/v1/recipe-box/{id}/steps/`. Steps copy on save-new-version. Test session + photo APIs (max 5 photos). `POST /api/v1/ideas/{id}/promote/` creates/links `DevelopmentRecipe`. Frontend: editable steps in lab spread and recipe box cards, hero image on publish overlay, ingredient search-as-you-type, bake sessions in test log alongside journal. All 54 Django tests and `npm run build` pass on branch `phase-ui-c6-api`.
+
+### Decisions
+- **Shared `RecipeStepsEditor`** — one component for lab spread + recipe box index cards
+- **Test log = bake sessions + journal** — same collapsible; sessions filtered by active version
+- **Profile theme sync deferred** — C1 localStorage remains; optional `color_theme`/`font_preset` skipped for scope
+
+### Changes
+- `development/views.py`, `serializers.py`, `urls.py`, `services.py` — steps, test sessions, promote
+- `collection/views.py`, `serializers.py`, `urls.py` — box steps
+- `development/test_*.py`, `collection/tests.py` — new coverage
+- `frontend/src/api/development.ts`, `collection.ts` — client methods
+- `frontend/src/components/RecipeStepsEditor.tsx`, `AddIngredientLineForm.tsx`, lab + recipe-box UI
+
+### Open threads
+- Merge `phase-ui-c6-api` → `phase-ui-metaphor` / main
+- **C5** cookbooks/refs polish next; **C2** cork board last (uses promote API)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phase-ui, c6, steps-crud, test-sessions, hero-upload, autocomplete, promote-idea
+**Files:** development/views.py, collection/views.py, frontend/src/components/lab/*, RecipeStepsEditor.tsx, AddIngredientLineForm.tsx
+**Do not redo:** C3/C4 layout metaphors; steps placeholder stub
+**Resume with:** C5 cookbooks binder + reference shelf on phase-ui-metaphor
+<!-- AGENT_CONTEXT_END -->
+
+---
 
 | Field | Value |
 |-------|-------|

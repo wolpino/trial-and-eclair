@@ -1,7 +1,7 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useEffect, useRef, useState } from "react";
 
 import { ApiError } from "../api/client";
-import { resolveIngredient } from "../api/catalog";
+import { resolveIngredient, searchIngredients, type Ingredient } from "../api/catalog";
 import { STANDARD_UNITS } from "../lib/constants";
 
 interface AddIngredientLineFormProps {
@@ -27,6 +27,45 @@ export function AddIngredientLineForm({
   const [prepNote, setPrepNote] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [suggestions, setSuggestions] = useState<Ingredient[]>([]);
+  const [suggestionsOpen, setSuggestionsOpen] = useState(false);
+  const blurTimer = useRef<number | null>(null);
+
+  useEffect(() => {
+    const query = ingredientName.trim();
+    if (query.length < 2) {
+      setSuggestions([]);
+      return;
+    }
+
+    const timer = window.setTimeout(() => {
+      void searchIngredients(query)
+        .then(setSuggestions)
+        .catch(() => setSuggestions([]));
+    }, 250);
+
+    return () => window.clearTimeout(timer);
+  }, [ingredientName]);
+
+  function selectSuggestion(ingredient: Ingredient) {
+    setIngredientName(ingredient.name);
+    if (ingredient.default_unit) {
+      setUnit(ingredient.default_unit);
+    }
+    setSuggestions([]);
+    setSuggestionsOpen(false);
+  }
+
+  function handleIngredientBlur() {
+    blurTimer.current = window.setTimeout(() => setSuggestionsOpen(false), 150);
+  }
+
+  function handleIngredientFocus() {
+    if (blurTimer.current !== null) {
+      window.clearTimeout(blurTimer.current);
+    }
+    setSuggestionsOpen(true);
+  }
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -45,6 +84,7 @@ export function AddIngredientLineForm({
       setQuantity("");
       setUnit("");
       setPrepNote("");
+      setSuggestions([]);
       onAdded();
     } catch (err: unknown) {
       if (err instanceof ApiError) {
@@ -61,12 +101,35 @@ export function AddIngredientLineForm({
     <form className="inline-form" onSubmit={(event) => void handleSubmit(event)}>
       {error ? <p className="form-error">{error}</p> : null}
       <div className="inline-form-row">
-        <input
-          placeholder="Ingredient"
-          required
-          value={ingredientName}
-          onChange={(event) => setIngredientName(event.target.value)}
-        />
+        <div className="ingredient-autocomplete">
+          <input
+            placeholder="Ingredient"
+            required
+            value={ingredientName}
+            autoComplete="off"
+            onBlur={handleIngredientBlur}
+            onFocus={handleIngredientFocus}
+            onChange={(event) => {
+              setIngredientName(event.target.value);
+              setSuggestionsOpen(true);
+            }}
+          />
+          {suggestionsOpen && suggestions.length > 0 ? (
+            <ul className="ingredient-autocomplete__list" role="listbox">
+              {suggestions.map((ingredient) => (
+                <li key={ingredient.id}>
+                  <button
+                    type="button"
+                    onMouseDown={(event) => event.preventDefault()}
+                    onClick={() => selectSuggestion(ingredient)}
+                  >
+                    {ingredient.name}
+                  </button>
+                </li>
+              ))}
+            </ul>
+          ) : null}
+        </div>
         <input
           placeholder="Qty"
           required

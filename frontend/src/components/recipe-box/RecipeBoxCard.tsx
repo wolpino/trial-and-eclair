@@ -4,13 +4,17 @@ import { ApiError } from "../../api/client";
 import type { PublicIngredientLine } from "../../api/client";
 import {
   createBoxIngredientLine,
+  createBoxStep,
   deleteBoxIngredientLine,
+  deleteBoxStep,
   fetchRecipeBoxRecipe,
+  patchBoxStep,
   patchRecipeBoxRecipe,
   type CollectionRecipe,
 } from "../../api/collection";
 import { displayUnit, formatQuantity } from "../../lib/recipeFormat";
 import { AddIngredientLineForm } from "../AddIngredientLineForm";
+import { RecipeStepsEditor } from "../RecipeStepsEditor";
 import { IndexCard } from "./IndexCard";
 import { IndexCardField } from "./IndexCardField";
 
@@ -142,6 +146,18 @@ export function RecipeBoxCard({
               onAdd={(data) => createBoxIngredientLine(draft.id, data)}
             />
           </div>
+        </IndexCardField>
+
+        <IndexCardField label="Steps">
+          <RecipeStepsEditor
+            steps={draft.steps ?? []}
+            editable
+            listClassName="recipe-box-card__steps"
+            onAdd={(data) => createBoxStep(draft.id, data)}
+            onUpdate={(stepId, data) => patchBoxStep(draft.id, stepId, data)}
+            onDelete={(stepId) => deleteBoxStep(draft.id, stepId)}
+            onChanged={() => void refreshRecipe()}
+          />
         </IndexCardField>
 
         <div className="recipe-box-card__toolbar">

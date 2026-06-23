@@ -3,11 +3,14 @@ from rest_framework import status, viewsets
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
+from development.models import RecipeStep
+
 from .models import CollectionIngredientLine, CollectionRecipe
 from .serializers import (
     CollectionIngredientLineSerializer,
     CollectionRecipeCreateSerializer,
     CollectionRecipeSerializer,
+    CollectionRecipeStepSerializer,
 )
 from . import services
 
@@ -21,7 +24,7 @@ class RecipeBoxViewSet(viewsets.ModelViewSet):
                 user=self.request.user,
                 box_item__isnull=False,
             )
-            .prefetch_related("ingredient_lines__ingredient")
+            .prefetch_related("ingredient_lines__ingredient", "steps")
             .order_by("title")
         )
 
@@ -61,3 +64,25 @@ class CollectionIngredientLineViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer) -> None:
         serializer.save(recipe=self._get_recipe())
+
+
+class CollectionRecipeStepViewSet(viewsets.ModelViewSet):
+    serializer_class = CollectionRecipeStepSerializer
+    permission_classes = [IsAuthenticated]
+
+    def _get_recipe(self) -> CollectionRecipe:
+        return get_object_or_404(
+            CollectionRecipe,
+            pk=self.kwargs["recipe_pk"],
+            user=self.request.user,
+            box_item__isnull=False,
+        )
+
+    def get_queryset(self):
+        return RecipeStep.objects.filter(
+            collection_recipe_id=self.kwargs["recipe_pk"],
+            collection_recipe__user=self.request.user,
+        )
+
+    def perform_create(self, serializer) -> None:
+        serializer.save(collection_recipe=self._get_recipe())

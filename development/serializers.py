@@ -6,7 +6,10 @@ from .models import (
     DevelopmentRecipe,
     Idea,
     JournalEntry,
+    RecipeStep,
     RecipeVersion,
+    TestSession,
+    TestSessionPhoto,
     VersionIngredientLine,
 )
 
@@ -62,8 +65,16 @@ class VersionIngredientLineSerializer(serializers.ModelSerializer):
         return attrs
 
 
+class RecipeStepSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = RecipeStep
+        fields = ("id", "order", "body", "created_at", "updated_at")
+        read_only_fields = ("id", "created_at", "updated_at")
+
+
 class RecipeVersionSerializer(serializers.ModelSerializer):
     ingredient_lines = VersionIngredientLineSerializer(many=True, read_only=True)
+    steps = RecipeStepSerializer(many=True, read_only=True)
 
     class Meta:
         model = RecipeVersion
@@ -79,6 +90,7 @@ class RecipeVersionSerializer(serializers.ModelSerializer):
             "hero_image",
             "story",
             "ingredient_lines",
+            "steps",
             "created_at",
             "updated_at",
         )
@@ -121,6 +133,34 @@ class DevelopmentRecipeCreateSerializer(serializers.ModelSerializer):
 
 class SaveNewVersionSerializer(serializers.Serializer):
     version_notes = serializers.CharField(required=False, allow_blank=True, default="")
+
+
+class TestSessionPhotoSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = TestSessionPhoto
+        fields = ("id", "image", "caption", "created_at", "updated_at")
+        read_only_fields = ("id", "created_at", "updated_at")
+
+
+class TestSessionSerializer(serializers.ModelSerializer):
+    photos = TestSessionPhotoSerializer(many=True, read_only=True)
+
+    class Meta:
+        model = TestSession
+        fields = (
+            "id",
+            "notes",
+            "outcome",
+            "tested_at",
+            "photos",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = ("id", "tested_at", "created_at", "updated_at")
+
+
+class PromoteIdeaSerializer(serializers.Serializer):
+    title = serializers.CharField(required=False, allow_blank=True, max_length=255)
 
 
 class JournalEntrySerializer(serializers.ModelSerializer):

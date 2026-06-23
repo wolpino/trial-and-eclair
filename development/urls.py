@@ -9,7 +9,10 @@ from .views import (
     IdeaViewSet,
     JournalEntryViewSet,
     RecipeVersionViewSet,
+    TestSessionPhotoViewSet,
+    TestSessionViewSet,
     VersionIngredientLineViewSet,
+    VersionRecipeStepViewSet,
 )
 
 router = DefaultRouter()
@@ -67,5 +70,47 @@ urlpatterns = [
             }
         ),
         name="version-ingredient-line-detail",
+    ),
+    path(
+        "versions/<uuid:version_pk>/steps/",
+        VersionRecipeStepViewSet.as_view({"get": "list", "post": "create"}),
+        name="version-step-list",
+    ),
+    path(
+        "versions/<uuid:version_pk>/steps/<uuid:pk>/",
+        VersionRecipeStepViewSet.as_view(
+            {
+                "get": "retrieve",
+                "patch": "partial_update",
+                "delete": "destroy",
+            }
+        ),
+        name="version-step-detail",
+    ),
+    path(
+        "versions/<uuid:version_pk>/test-sessions/",
+        TestSessionViewSet.as_view({"get": "list", "post": "create"}),
+        name="version-test-session-list",
+    ),
+    path(
+        "versions/<uuid:version_pk>/test-sessions/<uuid:pk>/",
+        TestSessionViewSet.as_view(
+            {
+                "get": "retrieve",
+                "patch": "partial_update",
+                "delete": "destroy",
+            }
+        ),
+        name="version-test-session-detail",
+    ),
+    path(
+        "test-sessions/<uuid:session_pk>/photos/",
+        TestSessionPhotoViewSet.as_view({"get": "list", "post": "create"}),
+        name="test-session-photo-list",
+    ),
+    path(
+        "test-sessions/<uuid:session_pk>/photos/<uuid:pk>/",
+        TestSessionPhotoViewSet.as_view({"get": "retrieve", "delete": "destroy"}),
+        name="test-session-photo-detail",
     ),
 ]

@@ -467,6 +467,49 @@ a {
   align-items: center;
 }
 
+.ingredient-autocomplete {
+  position: relative;
+  flex: 1 1 10rem;
+  min-width: 8rem;
+}
+
+.ingredient-autocomplete input {
+  width: 100%;
+}
+
+.ingredient-autocomplete__list {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.15rem);
+  left: 0;
+  right: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+  max-height: 12rem;
+  overflow-y: auto;
+}
+
+.ingredient-autocomplete__list li button {
+  display: block;
+  width: 100%;
+  padding: 0.45rem 0.65rem;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.ingredient-autocomplete__list li button:hover {
+  background: var(--color-surface);
+}
+
 .inline-form-row input,
 .inline-form-row select,
 .editor-form input,
