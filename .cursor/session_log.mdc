@@ -10,6 +10,42 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-06-22 · phase-ui-complete-next-polish
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-23T05:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Ask / planning |
+| **Outcome** | completed |
+
+### Intent
+Close out Phase UI integration and record what Ari wants to tackle next.
+
+### Summary
+Phase UI is **complete on `main`**: PR #17 merged C6 (steps, hero upload, autocomplete, test sessions, promote API), PR #18 merged C5 + C2 (cookbooks binder, reference shelf, public OG polish, cork board grid). Confirmed `phase-ui-metaphor` is optional — direct merge to `main` was sufficient. Ari’s **next priority is lots of UI polish** (metaphor surfaces still feel form-heavy in places; C6 wiring used minimal functional CSS). Phase 4 backend (URL import, public fork buttons) remains PRD “next” but is **not** the immediate focus.
+
+### Decisions
+- **Next work = UI polish pass** — not Phase 4, not freeform cork canvas
+- **Polish scope TBD** — likely lab spread, recipe box cards, steps/test log forms, shared inline forms; token-only CSS; no layout metaphor rewrites unless needed
+
+### Changes
+- `.cursor/session_log.mdc` — this entry only
+
+### Open threads
+- UI polish pass across developer + home-cook surfaces (user priority)
+- PRD still says “Phase UI in progress” — update when polish pass starts or Phase UI declared shippable
+- Deferred: profile theme sync, freeform cork canvas, Phase 4 backend
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phase-ui, complete, ui-polish, main, pr-17, pr-18
+**Files:** frontend/src/components/{lab,recipe-box,corkboard,cookbooks}/*, frontend/src/styles/*
+**Do not redo:** Phase UI C1–C2 feature scope; merge-to-metaphor workflow
+**Resume with:** UI polish pass — start with surfaces Ari dislikes most (lab steps/test log, recipe box, shared forms); token-only CSS
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-06-22 · phase-ui-c2
 
 | Field | Value |
@@ -36,17 +72,19 @@ Rebuilt `DeveloperHomePage` with full-bleed cork texture, status/tag filters, an
 - Deleted `IdeaCard.tsx`, `CreateIdeaForm.tsx`
 
 ### Open threads
-- Merge `phase-ui-c2` → `phase-ui-metaphor` / main (includes C5/C6)
+- ~~Merge `phase-ui-c2` → main~~ — done (PR #18)
 - Freeform cork canvas deferred per `corkboard_freeform_canvas.plan.md`
 
 <!-- AGENT_CONTEXT_START -->
 **Keywords:** phase-ui, c2, cork-board, PinnedNote, promote-to-lab, pin-fab
 **Files:** frontend/src/components/corkboard/*, DeveloperHomePage.tsx
 **Do not redo:** C3/C4/C5/C6 surfaces; freeform canvas
-**Resume with:** merge Phase UI branches; optional C6 visual polish if desired
+**Resume with:** see `phase-ui-complete-next-polish` — UI polish is next
 <!-- AGENT_CONTEXT_END -->
 
 ---
+
+## 2026-06-22 · phase-ui-c5
 
 | Field | Value |
 |-------|-------|
