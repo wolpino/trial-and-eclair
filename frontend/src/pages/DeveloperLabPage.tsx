@@ -1,5 +1,5 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 import { ApiError } from "../api/client";
 import {
@@ -7,8 +7,11 @@ import {
   fetchDevelopmentRecipes,
   type DevelopmentRecipe,
 } from "../api/development";
+import { RecipeShelf } from "../components/lab/RecipeShelf";
+import "../styles/lab.css";
 
 export function DeveloperLabPage() {
+  const navigate = useNavigate();
   const [recipes, setRecipes] = useState<DevelopmentRecipe[]>([]);
   const [title, setTitle] = useState("");
   const [error, setError] = useState<string | null>(null);
@@ -38,7 +41,7 @@ export function DeveloperLabPage() {
     try {
       const recipe = await createDevelopmentRecipe(title);
       setTitle("");
-      setRecipes((current) => [recipe, ...current]);
+      navigate(`/developer/lab/${recipe.id}`);
     } catch (err: unknown) {
       setError(err instanceof ApiError ? err.message : "Could not create recipe.");
     } finally {
@@ -47,51 +50,34 @@ export function DeveloperLabPage() {
   }
 
   return (
-    <main className="page-shell">
-      <header className="section-header">
+    <main className="lab-page">
+      <header className="lab-page__header">
         <h1>Lab</h1>
-        <p className="page-note">Development recipes with version history.</p>
+        <p className="lab-page__note">
+          Open a notebook from the shelf or start a new recipe — no idea required.
+        </p>
       </header>
 
-      <section className="panel">
+      <section className="lab-new-recipe" aria-label="New recipe">
         <h2>New recipe</h2>
-        <form className="inline-form" onSubmit={(event) => void handleCreate(event)}>
-          {error ? <p className="form-error">{error}</p> : null}
-          <div className="inline-form-row">
-            <input
-              placeholder="Recipe title"
-              required
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-            />
-            <button disabled={submitting} type="submit">
-              Create
-            </button>
-          </div>
+        <form className="lab-new-recipe-form" onSubmit={(event) => void handleCreate(event)}>
+          {error ? <p className="lab-form-error">{error}</p> : null}
+          <input
+            placeholder="Recipe title"
+            required
+            value={title}
+            onChange={(event) => setTitle(event.target.value)}
+          />
+          <button className="lab-btn" disabled={submitting} type="submit">
+            {submitting ? "Creating…" : "Open notebook"}
+          </button>
         </form>
       </section>
 
       {loading ? (
-        <p className="page-note">Loading recipes…</p>
-      ) : recipes.length === 0 ? (
-        <p className="page-note">No recipes yet.</p>
+        <p className="lab-page__note">Loading shelf…</p>
       ) : (
-        <ul className="item-list">
-          {recipes.map((recipe) => (
-            <li key={recipe.id}>
-              <Link to={`/developer/lab/${recipe.id}`}>{recipe.title}</Link>
-              <span className="item-meta">
-                v{recipe.current_version.version_number} · {recipe.status}
-                {recipe.slug ? (
-                  <>
-                    {" "}
-                    · <Link to={`/r/${recipe.slug}`}>public</Link>
-                  </>
-                ) : null}
-              </span>
-            </li>
-          ))}
-        </ul>
+        <RecipeShelf recipes={recipes} />
       )}
     </main>
   );

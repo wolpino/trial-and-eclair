@@ -1,8 +1,22 @@
-import { FormEvent, useEffect, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { ApiError, mediaUrl } from "../api/client";
-import { AddIngredientLineForm } from "../components/AddIngredientLineForm";
+import { ApiError } from "../api/client";
+import { ComparePanel } from "../components/lab/ComparePanel";
+import { LabJournal } from "../components/lab/LabJournal";
+import { MarginTools } from "../components/lab/MarginTools";
+import { NotebookMargin } from "../components/lab/NotebookMargin";
+import { NotebookOverlay } from "../components/lab/NotebookOverlay";
+import { NotebookSpread } from "../components/lab/NotebookSpread";
+import { PublishPanel } from "../components/lab/PublishPanel";
+import {
+  SpreadActions,
+  SpreadHeader,
+  SpreadIngredients,
+  SpreadSteps,
+  VersionNotes,
+} from "../components/lab/SpreadContent";
+import { VersionFlip } from "../components/lab/VersionFlip";
 import {
   compareVersions,
   createJournalEntry,
@@ -21,14 +35,15 @@ import {
   type RecipeVersion,
   type VersionDiff,
 } from "../api/development";
-import { displayUnit, formatQuantity } from "../lib/recipeFormat";
-import type { PublicIngredientLine } from "../api/client";
+import "../styles/lab.css";
 
 export function DeveloperRecipePage() {
   const { recipeId } = useParams<{ recipeId: string }>();
   const [recipe, setRecipe] = useState<DevelopmentRecipe | null>(null);
   const [versions, setVersions] = useState<RecipeVersion[]>([]);
   const [journal, setJournal] = useState<JournalEntry[]>([]);
+  const [activeVersionId, setActiveVersionId] = useState("");
+  const [draftVersion, setDraftVersion] = useState<RecipeVersion | null>(null);
   const [diff, setDiff] = useState<VersionDiff | null>(null);
   const [leftVersion, setLeftVersion] = useState("");
   const [rightVersion, setRightVersion] = useState("");
@@ -36,6 +51,9 @@ export function DeveloperRecipePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [journalBody, setJournalBody] = useState("");
+  const [journalOpen, setJournalOpen] = useState(false);
+  const [compareOpen, setCompareOpen] = useState(false);
+  const [publishOpen, setPublishOpen] = useState(false);
   const [publishSlug, setPublishSlug] = useState("");
   const [publishStory, setPublishStory] = useState("");
 
@@ -54,13 +72,13 @@ export function DeveloperRecipePage() {
         setRecipe(recipeData);
         setVersions(versionData);
         setJournal(journalData);
+        setActiveVersionId(recipeData.current_version.id);
+        setDraftVersion(recipeData.current_version);
         if (versionData.length > 0) {
-          setLeftVersion((current) => current || versionData[0].id);
+          setLeftVersion(versionData[0].id);
         }
         if (versionData.length > 1) {
-          setRightVersion(
-            (current) => current || versionData[versionData.length - 1].id,
-          );
+          setRightVersion(versionData[versionData.length - 1].id);
         }
         setError(null);
       })
@@ -69,6 +87,16 @@ export function DeveloperRecipePage() {
       })
       .finally(() => setLoading(false));
   }, [recipeId]);
+
+  const currentVersionId = recipe?.current_version.id ?? "";
+  const isCurrentVersion = activeVersionId === currentVersionId;
+
+  const displayedVersion = useMemo(() => {
+    if (isCurrentVersion && draftVersion) {
+      return draftVersion;
+    }
+    return versions.find((version) => version.id === activeVersionId) ?? draftVersion;
+  }, [activeVersionId, draftVersion, isCurrentVersion, versions]);
 
   async function reload() {
     if (!recipeId) {
@@ -82,38 +110,45 @@ export function DeveloperRecipePage() {
     setRecipe(recipeData);
     setVersions(versionData);
     setJournal(journalData);
+    setActiveVersionId(recipeData.current_version.id);
+    setDraftVersion(recipeData.current_version);
   }
 
-  if (loading) {
-    return <p className="status-message">Loading recipe…</p>;
+  function selectVersion(versionId: string) {
+    setActiveVersionId(versionId);
+    if (versionId === currentVersionId && recipe && activeVersionId !== currentVersionId) {
+      setDraftVersion(recipe.current_version);
+    }
   }
 
-  if (error || !recipe) {
-    return (
-      <main className="page-shell">
-        <p className="form-error">{error ?? "Recipe not found."}</p>
-        <Link to="/developer/lab">Back to lab</Link>
-      </main>
-    );
+  function updateDraftField<K extends keyof RecipeVersion>(
+    field: K,
+    value: RecipeVersion[K],
+  ) {
+    if (!draftVersion) {
+      return;
+    }
+    setDraftVersion({ ...draftVersion, [field]: value });
   }
-
-  const version = recipe.current_version;
 
   async function handleSaveVersion(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    const v = recipe!.current_version;
+    if (!recipe || !draftVersion || !isCurrentVersion) {
+      return;
+    }
     setSaving(true);
     try {
-      await patchRecipeVersion(recipe!.id, v.id, {
-        title: v.title,
-        description: v.description,
-        version_notes: v.version_notes,
-        equipment_notes: v.equipment_notes,
-        prep_minutes: v.prep_minutes,
-        cook_minutes: v.cook_minutes,
-        story: v.story,
+      await patchRecipeVersion(recipe.id, draftVersion.id, {
+        title: draftVersion.title,
+        description: draftVersion.description,
+        version_notes: draftVersion.version_notes,
+        equipment_notes: draftVersion.equipment_notes,
+        prep_minutes: draftVersion.prep_minutes,
+        cook_minutes: draftVersion.cook_minutes,
+        story: draftVersion.story,
       });
       await reload();
+      setError(null);
     } catch (err: unknown) {
       setError(err instanceof ApiError ? err.message : "Could not save.");
     } finally {
@@ -122,10 +157,23 @@ export function DeveloperRecipePage() {
   }
 
   async function handleSaveNewVersion() {
+    if (!recipe || !draftVersion || !isCurrentVersion) {
+      return;
+    }
     setSaving(true);
     try {
-      await saveNewVersion(recipe!.id, version.version_notes);
+      await patchRecipeVersion(recipe.id, draftVersion.id, {
+        title: draftVersion.title,
+        description: draftVersion.description,
+        version_notes: draftVersion.version_notes,
+        equipment_notes: draftVersion.equipment_notes,
+        prep_minutes: draftVersion.prep_minutes,
+        cook_minutes: draftVersion.cook_minutes,
+        story: draftVersion.story,
+      });
+      await saveNewVersion(recipe.id, draftVersion.version_notes);
       await reload();
+      setError(null);
     } catch (err: unknown) {
       setError(err instanceof ApiError ? err.message : "Could not save version.");
     } finally {
@@ -134,11 +182,12 @@ export function DeveloperRecipePage() {
   }
 
   async function handleCompare() {
-    if (!leftVersion || !rightVersion) {
+    if (!recipe || !leftVersion || !rightVersion) {
       return;
     }
     try {
-      setDiff(await compareVersions(recipe!.id, leftVersion, rightVersion));
+      setDiff(await compareVersions(recipe.id, leftVersion, rightVersion));
+      setError(null);
     } catch (err: unknown) {
       setError(err instanceof ApiError ? err.message : "Could not compare.");
     }
@@ -146,14 +195,18 @@ export function DeveloperRecipePage() {
 
   async function handlePublish(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!recipe) {
+      return;
+    }
     setSaving(true);
     try {
-      const updated = await publishRecipe(recipe!.id, {
+      await publishRecipe(recipe.id, {
         slug: publishSlug || undefined,
         story: publishStory || undefined,
       });
-      setRecipe(updated);
       await reload();
+      setPublishOpen(false);
+      setError(null);
     } catch (err: unknown) {
       setError(err instanceof ApiError ? err.message : "Could not publish.");
     } finally {
@@ -162,10 +215,14 @@ export function DeveloperRecipePage() {
   }
 
   async function handleUnpublish() {
+    if (!recipe) {
+      return;
+    }
     setSaving(true);
     try {
-      const updated = await unpublishRecipe(recipe!.id);
-      setRecipe(updated);
+      await unpublishRecipe(recipe.id);
+      await reload();
+      setError(null);
     } catch (err: unknown) {
       setError(err instanceof ApiError ? err.message : "Could not unpublish.");
     } finally {
@@ -175,292 +232,177 @@ export function DeveloperRecipePage() {
 
   async function handleAddJournal(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    if (!recipe || !displayedVersion) {
+      return;
+    }
     try {
       await createJournalEntry({
-        recipe: recipe!.id,
+        recipe: recipe.id,
         body: journalBody,
-        version_snapshot: version.id,
+        version_snapshot: displayedVersion.id,
       });
       setJournalBody("");
-      setJournal(await fetchJournal(recipe!.id));
+      setJournal(await fetchJournal(recipe.id));
+      setJournalOpen(true);
+      setError(null);
     } catch (err: unknown) {
       setError(err instanceof ApiError ? err.message : "Could not save journal entry.");
     }
   }
 
-  function updateVersionField<K extends keyof RecipeVersion>(
-    field: K,
-    value: RecipeVersion[K],
-  ) {
-    setRecipe({
-      ...recipe!,
-      current_version: { ...version, [field]: value },
-    });
+  if (loading) {
+    return <p className="status-message">Loading notebook…</p>;
   }
 
-  const heroUrl = mediaUrl(version.hero_image);
+  if (error && !recipe) {
+    return (
+      <main className="lab-page">
+        <p className="lab-form-error">{error}</p>
+        <Link className="lab-back-link" to="/developer/lab">
+          Back to lab
+        </Link>
+      </main>
+    );
+  }
+
+  if (!recipe || !displayedVersion) {
+    return (
+      <main className="lab-page">
+        <p className="lab-form-error">Recipe not found.</p>
+        <Link className="lab-back-link" to="/developer/lab">
+          Back to lab
+        </Link>
+      </main>
+    );
+  }
 
   return (
-    <main className="page-shell recipe-editor">
-      <p>
-        <Link to="/developer/lab">← Lab</Link>
-      </p>
-      <header className="section-header">
-        <h1>{recipe.title}</h1>
-        <p className="item-meta">
-          Version {version.version_number} · {recipe.status}
-          {recipe.slug ? (
-            <>
-              {" "}
-              · <Link to={`/r/${recipe.slug}`}>View public</Link>
-            </>
-          ) : null}
-        </p>
-      </header>
+    <main className="lab-page">
+      <Link className="lab-back-link" to="/developer/lab">
+        ← Lab shelf
+      </Link>
 
-      {error ? <p className="form-error">{error}</p> : null}
+      <div className="lab-status-bar">
+        <span>{recipe.status}</span>
+        {recipe.slug ? (
+          <Link to={`/r/${recipe.slug}`}>Public page</Link>
+        ) : null}
+        {!isCurrentVersion ? (
+          <span className="lab-readonly-badge">
+            Viewing v{displayedVersion.version_number} (read-only)
+          </span>
+        ) : null}
+      </div>
 
-      <form className="editor-form panel" onSubmit={(event) => void handleSaveVersion(event)}>
-        <h2>Current version</h2>
-        <label>
-          Title
-          <input
-            value={version.title}
-            onChange={(event) => updateVersionField("title", event.target.value)}
+      {error ? <p className="lab-form-error">{error}</p> : null}
+
+      <div className="lab-notebook lab-notebook--marbled">
+        <NotebookMargin side="left">
+          <VersionFlip
+            versions={versions}
+            activeVersionId={activeVersionId}
+            currentVersionId={currentVersionId}
+            onSelect={selectVersion}
           />
-        </label>
-        <label>
-          Description
-          <textarea
-            rows={3}
-            value={version.description}
-            onChange={(event) =>
-              updateVersionField("description", event.target.value)
+          <MarginTools
+            journalOpen={journalOpen}
+            onCompare={() => setCompareOpen(true)}
+            onPublish={() => setPublishOpen(true)}
+            onToggleJournal={() => setJournalOpen((open) => !open)}
+          />
+        </NotebookMargin>
+
+        <div className="lab-notebook__center">
+          <NotebookSpread
+            header={
+              <>
+                <SpreadHeader
+                  version={displayedVersion}
+                  editable={isCurrentVersion}
+                  onFieldChange={updateDraftField}
+                />
+                <SpreadActions
+                  editable={isCurrentVersion}
+                  saving={saving}
+                  onSave={(event) => void handleSaveVersion(event)}
+                  onSaveNewVersion={() => void handleSaveNewVersion()}
+                />
+              </>
             }
-          />
-        </label>
-        <label>
-          Version notes
-          <textarea
-            rows={2}
-            value={version.version_notes}
-            onChange={(event) =>
-              updateVersionField("version_notes", event.target.value)
-            }
-          />
-        </label>
-        <label>
-          Equipment notes
-          <textarea
-            rows={2}
-            value={version.equipment_notes}
-            onChange={(event) =>
-              updateVersionField("equipment_notes", event.target.value)
-            }
-          />
-        </label>
-        <div className="inline-form-row">
-          <label>
-            Prep (min)
-            <input
-              type="number"
-              min={0}
-              value={version.prep_minutes ?? ""}
-              onChange={(event) =>
-                updateVersionField(
-                  "prep_minutes",
-                  event.target.value ? Number(event.target.value) : null,
-                )
-              }
-            />
-          </label>
-          <label>
-            Cook (min)
-            <input
-              type="number"
-              min={0}
-              value={version.cook_minutes ?? ""}
-              onChange={(event) =>
-                updateVersionField(
-                  "cook_minutes",
-                  event.target.value ? Number(event.target.value) : null,
-                )
-              }
-            />
-          </label>
-        </div>
-        <div className="button-row">
-          <button disabled={saving} type="submit">
-            Save changes
-          </button>
-          <button
-            disabled={saving}
-            type="button"
-            onClick={() => void handleSaveNewVersion()}
           >
-            Save new version
-          </button>
+            <SpreadIngredients
+              version={displayedVersion}
+              editable={isCurrentVersion}
+              onRemoveLine={(lineId) =>
+                void deleteVersionIngredientLine(displayedVersion.id, lineId).then(reload)
+              }
+              onAddLine={(data) => createVersionIngredientLine(displayedVersion.id, data)}
+              onAdded={() => void reload()}
+            />
+            <SpreadSteps version={displayedVersion} />
+          </NotebookSpread>
         </div>
-      </form>
 
-      <section className="panel">
-        <h2>Ingredients</h2>
-        <ul className="ingredient-edit-list">
-          {version.ingredient_lines.map((line) => (
-            <li key={line.id}>
-              <span className="ingredient-qty">
-                {formatQuantity(line.quantity)}{" "}
-                {displayUnit(line as PublicIngredientLine)}
-              </span>{" "}
-              {line.ingredient_name}
-              {line.prep_note ? (
-                <span className="ingredient-note"> ({line.prep_note})</span>
-              ) : null}
-              <button
-                className="text-button"
-                type="button"
-                onClick={() =>
-                  void deleteVersionIngredientLine(version.id, line.id).then(reload)
-                }
-              >
-                Remove
-              </button>
-            </li>
-          ))}
-        </ul>
-        <AddIngredientLineForm
-          sortOrder={version.ingredient_lines.length}
-          onAdded={() => void reload()}
-          onAdd={(data) => createVersionIngredientLine(version.id, data)}
+        <NotebookMargin side="right">
+          <VersionNotes
+            value={
+              isCurrentVersion && draftVersion
+                ? draftVersion.version_notes
+                : displayedVersion.version_notes
+            }
+            editable={isCurrentVersion}
+            onChange={(value) => updateDraftField("version_notes", value)}
+          />
+        </NotebookMargin>
+      </div>
+
+      <LabJournal
+        entries={journal}
+        open={journalOpen}
+        onToggle={() => setJournalOpen((open) => !open)}
+        body={journalBody}
+        onBodyChange={setJournalBody}
+        onSubmit={(event) => void handleAddJournal(event)}
+        onDelete={(entryId) =>
+          void deleteJournalEntry(entryId).then(() =>
+            recipeId ? fetchJournal(recipeId).then(setJournal) : undefined,
+          )
+        }
+      />
+
+      <NotebookOverlay
+        title="Compare versions"
+        open={compareOpen}
+        onClose={() => setCompareOpen(false)}
+      >
+        <ComparePanel
+          versions={versions}
+          leftVersion={leftVersion}
+          rightVersion={rightVersion}
+          diff={diff}
+          onLeftChange={setLeftVersion}
+          onRightChange={setRightVersion}
+          onCompare={() => void handleCompare()}
         />
-      </section>
+      </NotebookOverlay>
 
-      <section className="panel">
-        <h2>Compare versions</h2>
-        <div className="inline-form-row">
-          <select
-            value={leftVersion}
-            onChange={(event) => setLeftVersion(event.target.value)}
-          >
-            {versions.map((v) => (
-              <option key={v.id} value={v.id}>
-                v{v.version_number}
-              </option>
-            ))}
-          </select>
-          <select
-            value={rightVersion}
-            onChange={(event) => setRightVersion(event.target.value)}
-          >
-            {versions.map((v) => (
-              <option key={v.id} value={v.id}>
-                v{v.version_number}
-              </option>
-            ))}
-          </select>
-          <button type="button" onClick={() => void handleCompare()}>
-            Compare
-          </button>
-        </div>
-        {diff ? (
-          <div className="diff-panel">
-            {diff.field_changes.length > 0 ? (
-              <ul>
-                {diff.field_changes.map((change) => (
-                  <li key={change.field}>
-                    <strong>{change.field}</strong>: {String(change.left)} →{" "}
-                    {String(change.right)}
-                  </li>
-                ))}
-              </ul>
-            ) : (
-              <p className="page-note">No field changes.</p>
-            )}
-            {diff.ingredient_changes.added.length > 0 ? (
-              <p>Added: {diff.ingredient_changes.added.map((l) => l.ingredient_name).join(", ")}</p>
-            ) : null}
-            {diff.ingredient_changes.removed.length > 0 ? (
-              <p>
-                Removed:{" "}
-                {diff.ingredient_changes.removed.map((l) => l.ingredient_name).join(", ")}
-              </p>
-            ) : null}
-          </div>
-        ) : null}
-      </section>
-
-      <section className="panel">
-        <h2>Publish</h2>
-        {recipe.status === "published" ? (
-          <div className="button-row">
-            {recipe.slug ? (
-              <Link to={`/r/${recipe.slug}`}>Open public page</Link>
-            ) : null}
-            <button disabled={saving} type="button" onClick={() => void handleUnpublish()}>
-              Unpublish
-            </button>
-          </div>
-        ) : (
-          <form className="editor-form" onSubmit={(event) => void handlePublish(event)}>
-            <label>
-              Slug (optional)
-              <input
-                value={publishSlug}
-                onChange={(event) => setPublishSlug(event.target.value)}
-              />
-            </label>
-            <label>
-              Story (optional)
-              <textarea
-                rows={3}
-                value={publishStory}
-                onChange={(event) => setPublishStory(event.target.value)}
-              />
-            </label>
-            <button disabled={saving} type="submit">
-              Publish
-            </button>
-          </form>
-        )}
-        {heroUrl ? (
-          <img alt="" className="editor-hero" src={heroUrl} />
-        ) : null}
-      </section>
-
-      <section className="panel">
-        <h2>Journal</h2>
-        <ul className="journal-list">
-          {journal.map((entry) => (
-            <li key={entry.id}>
-              <p>{entry.body}</p>
-              <span className="item-meta">{new Date(entry.logged_at).toLocaleString()}</span>
-              <button
-                className="text-button"
-                type="button"
-                onClick={() =>
-                  void deleteJournalEntry(entry.id).then(() =>
-                    fetchJournal(recipe!.id).then(setJournal),
-                  )
-                }
-              >
-                Delete
-              </button>
-            </li>
-          ))}
-        </ul>
-        <form className="editor-form" onSubmit={(event) => void handleAddJournal(event)}>
-          <label>
-            New entry
-            <textarea
-              required
-              rows={3}
-              value={journalBody}
-              onChange={(event) => setJournalBody(event.target.value)}
-            />
-          </label>
-          <button type="submit">Log entry</button>
-        </form>
-      </section>
+      <NotebookOverlay
+        title="Publish"
+        open={publishOpen}
+        onClose={() => setPublishOpen(false)}
+      >
+        <PublishPanel
+          recipe={recipe}
+          version={displayedVersion}
+          slug={publishSlug}
+          story={publishStory}
+          saving={saving}
+          onSlugChange={setPublishSlug}
+          onStoryChange={setPublishStory}
+          onPublish={(event) => void handlePublish(event)}
+          onUnpublish={() => void handleUnpublish()}
+        />
+      </NotebookOverlay>
     </main>
   );
 }

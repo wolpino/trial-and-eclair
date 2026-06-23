@@ -1,5 +1,5 @@
-import { FormEvent, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
+import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { useNavigate, useParams } from "react-router-dom";
 
 import { ApiError } from "../api/client";
 import {
@@ -7,91 +7,157 @@ import {
   fetchRecipeBox,
   type CollectionRecipe,
 } from "../api/collection";
+import { AlphabetRail } from "../components/recipe-box/AlphabetRail";
+import { RecipeBoxCard } from "../components/recipe-box/RecipeBoxCard";
+import { RecipeBoxFrame } from "../components/recipe-box/RecipeBoxFrame";
+import "../styles/recipe-box.css";
+
+function sortRecipes(recipes: CollectionRecipe[]): CollectionRecipe[] {
+  return [...recipes].sort((a, b) => a.title.localeCompare(b.title));
+}
+
+function groupByLetter(recipes: CollectionRecipe[]): Record<string, CollectionRecipe[]> {
+  return recipes.reduce<Record<string, CollectionRecipe[]>>((acc, recipe) => {
+    const letter = recipe.title.charAt(0).toUpperCase() || "#";
+    acc[letter] = acc[letter] ?? [];
+    acc[letter].push(recipe);
+    return acc;
+  }, {});
+}
 
 export function RecipeBoxPage() {
+  const { recipeId } = useParams<{ recipeId?: string }>();
+  const navigate = useNavigate();
+  const focusedRef = useRef<HTMLDivElement | null>(null);
+
   const [recipes, setRecipes] = useState<CollectionRecipe[]>([]);
-  const [title, setTitle] = useState("");
+  const [newTitle, setNewTitle] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
+  const [adding, setAdding] = useState(false);
+
+  const grouped = useMemo(() => groupByLetter(recipes), [recipes]);
+  const activeLetters = useMemo(() => new Set(Object.keys(grouped)), [grouped]);
+  const letters = useMemo(() => Object.keys(grouped).sort(), [grouped]);
 
   useEffect(() => {
     fetchRecipeBox()
-      .then(setRecipes)
+      .then((items) => setRecipes(sortRecipes(items)))
       .catch((err: unknown) => {
         setError(err instanceof ApiError ? err.message : "Could not load recipe box.");
       })
       .finally(() => setLoading(false));
   }, []);
 
-  async function handleCreate(event: FormEvent<HTMLFormElement>) {
+  useEffect(() => {
+    if (recipeId && focusedRef.current) {
+      focusedRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    }
+  }, [recipeId, loading]);
+
+  function upsertRecipe(updated: CollectionRecipe) {
+    setRecipes((current) => sortRecipes([...current.filter((r) => r.id !== updated.id), updated]));
+  }
+
+  function focusCard(id: string) {
+    navigate(`/recipe-box/${id}`);
+  }
+
+  function collapseCard() {
+    navigate("/recipe-box");
+  }
+
+  function scrollToLetter(letter: string) {
+    document.getElementById(`letter-${letter}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  }
+
+  async function handleAddCard(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
+    setAdding(true);
+    setError(null);
     try {
-      const recipe = await createRecipeBoxRecipe(title);
-      setRecipes((current) => [...current, recipe].sort((a, b) => a.title.localeCompare(b.title)));
-      setTitle("");
+      const recipe = await createRecipeBoxRecipe(newTitle.trim() || "Untitled recipe");
+      setRecipes((current) => sortRecipes([...current, recipe]));
+      setNewTitle("");
+      navigate(`/recipe-box/${recipe.id}`);
     } catch (err: unknown) {
-      setError(err instanceof ApiError ? err.message : "Could not create recipe.");
+      setError(err instanceof ApiError ? err.message : "Could not add card.");
+    } finally {
+      setAdding(false);
     }
   }
 
-  const grouped = recipes.reduce<Record<string, CollectionRecipe[]>>((acc, recipe) => {
-    const letter = recipe.title.charAt(0).toUpperCase() || "#";
-    acc[letter] = acc[letter] ?? [];
-    acc[letter].push(recipe);
-    return acc;
-  }, {});
-
   return (
-    <main className="page-shell recipe-box">
-      <header className="section-header">
+    <main className="recipe-box-page">
+      <header className="recipe-box-page__header">
         <h1>Recipe box</h1>
-        <p className="page-note">Your personal recipes, sorted A–Z.</p>
+        <p className="recipe-box-page__note">
+          Index cards in your box — tap a card to edit in place. No idea required.
+        </p>
       </header>
 
-      <section className="panel">
-        <form className="inline-form" onSubmit={(event) => void handleCreate(event)}>
-          {error ? <p className="form-error">{error}</p> : null}
-          <div className="inline-form-row">
-            <input
-              placeholder="New recipe title"
-              required
-              value={title}
-              onChange={(event) => setTitle(event.target.value)}
-            />
-            <button type="submit">Add</button>
-          </div>
+      <RecipeBoxFrame rail={<AlphabetRail activeLetters={activeLetters} onLetterClick={scrollToLetter} />}>
+        <form className="recipe-box-add" onSubmit={(event) => void handleAddCard(event)}>
+          {error ? <p className="recipe-box-form-error">{error}</p> : null}
+          <input
+            placeholder="Card title (optional)"
+            value={newTitle}
+            onChange={(event) => setNewTitle(event.target.value)}
+          />
+          <button className="recipe-box-btn" disabled={adding} type="submit">
+            {adding ? "Adding…" : "Add card"}
+          </button>
         </form>
-      </section>
 
-      {loading ? (
-        <p className="page-note">Loading…</p>
-      ) : recipes.length === 0 ? (
-        <p className="page-note">Your recipe box is empty.</p>
-      ) : (
-        Object.keys(grouped)
-          .sort()
-          .map((letter) => (
-            <section key={letter} className="recipe-box-section">
-              <h2 className="recipe-box-letter">{letter}</h2>
+        {loading ? (
+          <p className="recipe-box-page__note">Loading…</p>
+        ) : recipes.length === 0 ? (
+          <p className="recipe-box-empty">Your recipe box is empty — add a card above.</p>
+        ) : (
+          letters.map((letter) => (
+            <section key={letter} className="recipe-box-section" id={`letter-${letter}`}>
+              <h2 className="recipe-box-section__letter">{letter}</h2>
               <div className="recipe-box-grid">
-                {grouped[letter].map((recipe) => (
-                  <Link
-                    key={recipe.id}
-                    className="index-card"
-                    to={`/recipe-box/${recipe.id}`}
-                  >
-                    <h3>{recipe.title}</h3>
-                    {recipe.description ? (
-                      <p>{recipe.description}</p>
-                    ) : (
-                      <p className="index-card-empty">No description yet</p>
-                    )}
-                  </Link>
-                ))}
+                {grouped[letter].map((recipe) => {
+                  const expanded = recipeId === recipe.id;
+                  return (
+                    <div
+                      key={recipe.id}
+                      className={
+                        expanded
+                          ? "recipe-box-card-slot recipe-box-card-slot--expanded"
+                          : "recipe-box-card-slot"
+                      }
+                      ref={expanded ? focusedRef : undefined}
+                      id={`recipe-${recipe.id}`}
+                      role={expanded ? undefined : "button"}
+                      tabIndex={expanded ? undefined : 0}
+                      onClick={expanded ? undefined : () => focusCard(recipe.id)}
+                      onKeyDown={
+                        expanded
+                          ? undefined
+                          : (event) => {
+                              if (event.key === "Enter" || event.key === " ") {
+                                event.preventDefault();
+                                focusCard(recipe.id);
+                              }
+                            }
+                      }
+                    >
+                      <RecipeBoxCard
+                        expanded={expanded}
+                        recipe={recipe}
+                        onCollapse={collapseCard}
+                        onSaved={upsertRecipe}
+                      />
+                    </div>
+                  );
+                })}
               </div>
             </section>
           ))
-      )}
+        )}
+      </RecipeBoxFrame>
     </main>
   );
 }

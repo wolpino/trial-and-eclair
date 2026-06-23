@@ -13,7 +13,6 @@ import { LoginPage } from "./pages/LoginPage";
 import { PublicCookbookPage } from "./pages/PublicCookbookPage";
 import { PublicRecipePage } from "./pages/PublicRecipePage";
 import { RecipeBoxPage } from "./pages/RecipeBoxPage";
-import { RecipeBoxRecipePage } from "./pages/RecipeBoxRecipePage";
 import { ReferencesPage } from "./pages/ReferencesPage";
 import { RegisterPage } from "./pages/RegisterPage";
 import "./index.css";
@@ -43,7 +42,7 @@ export function App() {
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/recipe-box" element={<RecipeBoxPage />} />
-            <Route path="/recipe-box/:recipeId" element={<RecipeBoxRecipePage />} />
+            <Route path="/recipe-box/:recipeId" element={<RecipeBoxPage />} />
             <Route path="/references" element={<ReferencesPage />} />
           </Route>
         </Route>
