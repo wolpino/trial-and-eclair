@@ -10,7 +10,7 @@ Recipe development and collection app — not a blog.
 
 ## Current status
 
-**Phases 0–3 complete** (backend + functional UI shell). **Phase UI in progress** — metaphor SPA (lab notebook, in-place recipe box, theming, cookbooks/references, cork board). **Phase 4 next** (backend) — URL/scan import, fork buttons on public pages.
+**Phases 0–3 complete** (backend + functional UI shell). **Phase UI complete** on `main`. **UI polish in progress** — sun & floral default theme, on-paper forms, surface-specific metaphor polish. **Phase 4 next** (backend) — URL/scan import, fork buttons on public pages.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -59,6 +59,7 @@ Load into the database for local dev (creates a `dev` developer user if needed):
 ```bash
 python manage.py load_recipe_seed
 # Log in at http://localhost:5173/login as dev / devpass123
+# Recipes only (Ari's blog posts): python manage.py load_recipe_seed --recipes-only
 # Re-seed: python manage.py load_recipe_seed --force
 ```
 
@@ -291,7 +292,8 @@ recipes/      Original notes, sheets links, docx recipes
 | **1** | Developer core API: auth, ideas, recipes, versions, ingredient lines | Complete |
 | **2** | Publish + public viewer + PWA shell | Complete |
 | **3** | Version diff, cookbooks, home cook tier, reference library API | Complete |
-| **UI** | Metaphor SPA: theming, lab notebook, recipe box, API UI gaps, cookbooks/references, cork board | In progress |
+| **UI** | Metaphor SPA: theming, lab notebook, recipe box, API UI gaps, cookbooks/references, cork board | Complete |
+| **UI polish** | Sun & floral theme, on-paper forms, index cards, dot-grid lab, cork decoration | In progress |
 | **4** | URL/scan import, fork buttons (backend) | Next |
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout) | Planned |

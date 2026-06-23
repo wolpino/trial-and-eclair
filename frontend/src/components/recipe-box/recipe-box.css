@@ -28,7 +28,7 @@
   border: 6px solid var(--surface-wood);
   border-radius: var(--radius-lg);
   background: var(--surface-paper);
-  box-shadow: var(--shadow-card);
+  box-shadow: var(--shadow-card), inset 0 0 0 1px color-mix(in srgb, var(--surface-wood) 40%, transparent);
   overflow: hidden;
 }
 
@@ -41,7 +41,7 @@
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
-  align-items: center;
+  align-items: flex-end;
   margin-bottom: 1.5rem;
   padding-bottom: 1.25rem;
   border-bottom: 1px solid var(--color-border);
@@ -50,38 +50,10 @@
 .recipe-box-add input {
   flex: 1 1 12rem;
   min-width: 0;
-  font: inherit;
-  padding: 0.5rem 0.65rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--color-input-bg);
-  color: var(--color-text);
-}
-
-.recipe-box-btn {
-  font: inherit;
-  padding: 0.5rem 1rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--color-accent);
-  color: var(--color-accent-text);
-  cursor: pointer;
-}
-
-.recipe-box-btn:disabled {
-  opacity: 0.6;
-  cursor: not-allowed;
-}
-
-.recipe-box-btn--ghost {
-  background: transparent;
-  color: var(--color-accent);
 }
 
 .recipe-box-form-error {
   flex: 1 1 100%;
-  margin: 0;
-  color: var(--color-error);
 }
 
 .recipe-box-rail {
@@ -189,16 +161,9 @@
 .recipe-box-card__input,
 .recipe-box-card__textarea {
   width: 100%;
-  font: inherit;
-  padding: 0.4rem 0.5rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--color-input-bg);
-  color: var(--color-text);
 }
 
 .recipe-box-card__textarea {
-  resize: vertical;
   min-height: 4rem;
 }
 

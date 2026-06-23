@@ -108,6 +108,23 @@
   color: var(--color-text);
 }
 
+.pinned-note:nth-child(3n) {
+  background: var(--surface-kraft);
+}
+
+.pinned-note::after {
+  content: "";
+  position: absolute;
+  top: -0.1rem;
+  right: 0.5rem;
+  width: 1.75rem;
+  height: 0.55rem;
+  background: var(--tape-cream);
+  transform: rotate(5deg);
+  opacity: 0.9;
+  pointer-events: none;
+}
+
 .pinned-note--interactive {
   cursor: pointer;
   transition: transform 0.15s ease, box-shadow 0.15s ease;
@@ -126,7 +143,7 @@
   height: 14px;
   margin-left: -7px;
   border-radius: 50%;
-  background: var(--color-accent);
+  background: var(--color-accent-floral);
   box-shadow: var(--shadow-pin);
 }
 

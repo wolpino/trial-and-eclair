@@ -102,7 +102,7 @@ export function RecipeStepsEditor({
         ))}
       </ol>
       {editable ? (
-        <form className="lab-step-form" onSubmit={(event) => void handleAdd(event)}>
+        <form className="lab-step-form paper-form" onSubmit={(event) => void handleAdd(event)}>
           <label>
             New step
             <textarea

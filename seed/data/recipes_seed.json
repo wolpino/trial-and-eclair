@@ -1,0 +1,138 @@
+[
+  {
+    "title": "Raisin Bran Muffins",
+    "description": "The taste of raisin bran cereal in the texture of a muffin.",
+    "source_url": "https://ariellawolpin.wixsite.com/ariella-wolpin/post/raisin-bran-muffins",
+    "source_attribution": "Based on the original from Pinch of Yum",
+    "prep_minutes": 30,
+    "cook_minutes": 20,
+    "ingredients": [
+      {"name": "Raisin bran cereal", "quantity": "4", "unit": "cup"},
+      {"name": "Milk", "quantity": "1.5", "unit": "cup"},
+      {"name": "Neutral oil", "quantity": "0.25", "unit": "cup"},
+      {"name": "Yogurt", "quantity": "0.25", "unit": "cup"},
+      {"name": "Applesauce", "quantity": "0.5", "unit": "cup"},
+      {"name": "Egg", "quantity": "2", "unit": "whole"},
+      {"name": "Raisins", "quantity": "0.5", "unit": "cup", "prep_note": "optional"},
+      {"name": "All-purpose flour", "quantity": "1", "unit": "cup"},
+      {"name": "Whole wheat flour", "quantity": "0.75", "unit": "cup"},
+      {"name": "Baking soda", "quantity": "2", "unit": "teaspoon"},
+      {"name": "Salt", "quantity": "1", "unit": "teaspoon"},
+      {"name": "Brown sugar", "quantity": "1", "unit": "tablespoon", "prep_note": "for topping"}
+    ],
+    "steps": [
+      "Whisk milk, oil, yogurt, and applesauce in a medium bowl.",
+      "Add cereal and mix until fully coated and mostly submerged.",
+      "Let sit for 20 minutes (collect other ingredients and tools).",
+      "Preheat oven to 400°F.",
+      "Grease a 12-cup muffin tin.",
+      "Fully mix in eggs.",
+      "Mix in raisins if using.",
+      "Gently sprinkle flours across the top of the batter to make a dry layer, then sprinkle baking soda and salt over the flours.",
+      "Fold until just combined.",
+      "Distribute batter between muffin cups with an ice cream scoop for good tops.",
+      "Sprinkle a little brown sugar on top of each muffin.",
+      "Bake 20 minutes, until a tester comes out clean.",
+      "Cool in the pan 10 minutes, then remove and cool completely."
+    ]
+  },
+  {
+    "title": "Ginger Bran Muffins with Citrus",
+    "description": "Ginger-forward bran muffins with a citrus slice baked into each muffin. Adapted from Billie's Gingerbread Cake (Ruth Reichl's Delicious) and Smitten Kitchen sour cream bran muffins.",
+    "source_url": "https://aseattlekitchen.wordpress.com/2016/05/10/ginger-bran-muffins-with-orange-filling/",
+    "prep_minutes": 45,
+    "cook_minutes": 17,
+    "ingredients": [
+      {"name": "Whole peppercorns", "quantity": "1", "unit": "teaspoon"},
+      {"name": "Whole cloves", "quantity": "1", "unit": "teaspoon"},
+      {"name": "Cardamom seeds", "quantity": "1", "unit": "teaspoon"},
+      {"name": "Cinnamon stick", "quantity": "1", "unit": "whole"},
+      {"name": "Whole wheat pastry flour", "quantity": "1", "unit": "cup"},
+      {"name": "Wheat bran", "quantity": "1", "unit": "cup"},
+      {"name": "Baking soda", "quantity": "1", "unit": "teaspoon"},
+      {"name": "Salt", "quantity": "0.25", "unit": "teaspoon"},
+      {"name": "Unsalted butter", "quantity": "0.5", "unit": "cup", "prep_note": "softened"},
+      {"name": "Brown sugar", "quantity": "0.25", "unit": "cup"},
+      {"name": "Honey", "quantity": "0.125", "unit": "cup"},
+      {"name": "Egg", "quantity": "1", "unit": "whole", "prep_note": "lightly beaten"},
+      {"name": "Yogurt", "quantity": "1", "unit": "cup"},
+      {"name": "Orange zest", "quantity": "1", "unit": "whole", "prep_note": "from one orange"},
+      {"name": "Fresh ginger", "quantity": "0.25", "unit": "cup", "prep_note": "grated"},
+      {"name": "Orange", "quantity": "3", "unit": "whole", "prep_note": "small, peeled and sliced ⅛–¼ inch for filling"}
+    ],
+    "steps": [
+      "Grind peppercorns, cloves, cardamom, and cinnamon individually; measure ½ tsp peppercorns, ½ tsp cloves, ½ tsp cardamom, and ¾ tsp cinnamon into a medium bowl.",
+      "Peel and grate ginger. Zest citrus, then peel and slice oranges into ⅛–¼ inch rounds.",
+      "Butter or spray a muffin tin. Preheat oven to 400°F.",
+      "Beat butter with brown sugar until fluffy. Add honey, then egg, then yogurt, scraping the bowl between additions. Mix in zest and ginger.",
+      "Add pastry flour, bran, baking soda, and salt to the spice bowl; whisk and add to the wet mixture. Mix until just combined.",
+      "Fill each cup about a quarter full with batter. Add a citrus slice and press gently. Add another layer of batter and a second citrus slice on top.",
+      "Bake at 400°F for 12 minutes. Gently press top citrus slices back into muffins and test with a toothpick; bake 5 minutes more if needed.",
+      "Cool 5 minutes in the pan, then turn out gently (inner citrus slice can make them fragile)."
+    ]
+  },
+  {
+    "title": "English Muffins: Whole Wheat",
+    "description": "Hearty whole-wheat English muffins adapted from NYT. Griddled then finished in the oven.",
+    "source_url": "https://aseattlekitchen.wordpress.com/2016/05/08/english-muffins-whole-wheat/",
+    "prep_minutes": 120,
+    "cook_minutes": 25,
+    "ingredients": [
+      {"name": "Active dry yeast", "quantity": "2", "unit": "teaspoon"},
+      {"name": "Olive oil", "quantity": "2", "unit": "tablespoon"},
+      {"name": "Greek yogurt", "quantity": "0.5", "unit": "cup"},
+      {"name": "Milk", "quantity": "0.5", "unit": "cup"},
+      {"name": "Maple syrup", "quantity": "0.5", "unit": "tablespoon"},
+      {"name": "Fine sea salt", "quantity": "1", "unit": "teaspoon"},
+      {"name": "Whole-wheat pastry flour", "quantity": "1.5", "unit": "cup"},
+      {"name": "Whole wheat flour", "quantity": "0.5", "unit": "cup"},
+      {"name": "Baking soda", "quantity": "0.5", "unit": "teaspoon"},
+      {"name": "Cornmeal", "quantity": "0.25", "unit": "cup", "prep_note": "coarse, for dusting"}
+    ],
+    "steps": [
+      "Pour ⅓ cup warm (not hot) water over yeast; stir and let sit 5+ minutes until fragrant.",
+      "Mix yogurt, milk, olive oil, maple syrup, and salt until combined.",
+      "Sift together flours and baking soda.",
+      "Stir yeast mixture into wet ingredients, then add dry ingredients. Mix with a wooden spoon (or hands) until flour is incorporated.",
+      "Cover and rise about 1½ hours until doubled and airy.",
+      "Preheat oven to 350°F. Line a baking sheet with parchment and cornmeal.",
+      "Heat a cast-iron skillet over medium. Oil a ¼-cup measure and fingers.",
+      "Scoop dough portions into the skillet, spread gently into disks, cover, and cook 1 minute on medium-high then 3 minutes on medium-low. Flip and repeat.",
+      "Transfer griddled muffins to the prepared sheet. Repeat until you have about 10 muffins.",
+      "Bake 10 minutes at 350°F. Cool at least 5 minutes before splitting and toasting."
+    ]
+  },
+  {
+    "title": "Pistachio Shortbread with Rose Buttercream",
+    "description": "Pistachio shortbread with cocoa nibs and lemon zest, topped with rose buttercream. A farewell cookie for Callie — pale green shortbread with pink roses was the goal.",
+    "source_url": "https://aseattlekitchen.wordpress.com/2016/05/09/callies-cookie-pistachio-shortbread-with-rose-buttercream/",
+    "prep_minutes": 45,
+    "cook_minutes": 12,
+    "story": "Callie offhandedly mentioned loving shortbread with cacao nibs — this cookie pairs creamy butter, bitter nibs, and rose buttercream.",
+    "ingredients": [
+      {"name": "Shelled pistachios", "quantity": "0.5", "unit": "cup", "prep_note": "toasted"},
+      {"name": "All-purpose flour", "quantity": "1", "unit": "cup"},
+      {"name": "Unsalted butter", "quantity": "0.5", "unit": "cup", "prep_note": "softened"},
+      {"name": "Confectioners' sugar", "quantity": "0.333", "unit": "cup"},
+      {"name": "Vanilla extract", "quantity": "1", "unit": "teaspoon"},
+      {"name": "Salt", "quantity": "0.5", "unit": "teaspoon"},
+      {"name": "Baking powder", "quantity": "0.5", "unit": "teaspoon"},
+      {"name": "Cocoa nibs", "quantity": "0.25", "unit": "cup", "prep_note": "chopped to peppercorn size"},
+      {"name": "Lemon", "quantity": "1", "unit": "whole", "prep_note": "zest, finely chopped"},
+      {"name": "Confectioners' sugar", "quantity": "2", "unit": "cup", "prep_note": "for buttercream"},
+      {"name": "Unsalted butter", "quantity": "0.5", "unit": "cup", "prep_note": "softened, for buttercream"},
+      {"name": "Milk", "quantity": "2", "unit": "tablespoon", "prep_note": "for buttercream"},
+      {"name": "Rosewater", "quantity": "1", "unit": "teaspoon"},
+      {"name": "Red food coloring", "quantity": "3", "custom_unit": "drops", "prep_note": "optional"}
+    ],
+    "steps": [
+      "Toast pistachios at 350°F until fragrant, 6–9 minutes; cool. Grind with ¼ cup flour in a food processor.",
+      "Beat butter and sugar until creamy. Add vanilla. Sift remaining flour, salt, and baking powder; mix until just combined.",
+      "Stir in nut mixture, nibs, and lemon zest. Form a disk, wrap, and chill at least 3 hours.",
+      "For rose buttercream: whip butter, add 1 tbsp milk, rosewater, and coloring. Add powdered sugar until frosting consistency; chill 10 minutes before piping.",
+      "Heat oven to 325°F. Roll dough to ⅛ inch (squares) or shape 1-inch disks (rounds). Space on parchment.",
+      "Bake about 12 minutes, rotating trays halfway, until lightly browned. Cool on a rack.",
+      "Pipe rose buttercream on cooled cookies if using."
+    ]
+  }
+]

@@ -1,4 +1,5 @@
 .index-card-scaffold {
+  position: relative;
   display: flex;
   flex-direction: column;
   gap: 0.65rem;
@@ -12,9 +13,34 @@
   transition: transform 0.2s ease, box-shadow 0.2s ease;
 }
 
+/* Washi tape corners — recipecardandlab.jpg */
+.index-card-scaffold::before,
+.index-card-scaffold::after {
+  content: "";
+  position: absolute;
+  top: -0.15rem;
+  width: 2.25rem;
+  height: 0.6rem;
+  opacity: 0.88;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.index-card-scaffold::before {
+  left: 0.65rem;
+  background: var(--tape-rose);
+  transform: rotate(-5deg);
+}
+
+.index-card-scaffold::after {
+  right: 0.65rem;
+  background: var(--tape-cream);
+  transform: rotate(4deg);
+}
+
 .index-card-scaffold--focused {
-  transform: scale(1.03);
-  box-shadow: var(--shadow-card), 0 0 0 2px var(--color-accent);
+  transform: scale(1.02);
+  box-shadow: var(--shadow-lifted);
 }
 
 .index-card-field {

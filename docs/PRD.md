@@ -1,7 +1,7 @@
 # Trial and Eclair — Product Requirements Document
 
 **Version:** 1.3  
-**Status:** Approved — Phases 0–3 complete; **Phase UI (metaphor SPA) in progress**; Phase 4 backend next  
+**Status:** Approved — Phases 0–3 complete; **Phase UI (metaphor SPA) complete**; **UI polish in progress**; Phase 4 backend next  
 **Last updated:** June 2026
 
 > **Doc maintenance:** At the end of each phase, update this file and [README.md](../README.md): phase status table, shipped scope, API/frontend notes, and open items.
@@ -238,7 +238,8 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | **1** | Developer API: auth, ideas, recipes, versions, ingredient lines | **Complete** |
 | **2** | Publish + public viewer + React PWA shell | **Complete** |
 | **3** | Version diff, cookbooks, home cook tier, journal, reference API, trial/subscription | **Complete** |
-| **UI** | Metaphor SPA: theming, lab notebook, recipe box, API UI gaps, cookbooks/references, cork board | **In progress** |
+| **UI** | Metaphor SPA: theming, lab notebook, recipe box, API UI gaps, cookbooks/references, cork board | **Complete** |
+| **UI polish** | Sun & floral default theme, on-paper forms, surface metaphor polish (see `recipes/` refs) | **In progress** |
 | **4** | URL/scan import, equipment notes, fork buttons on public pages | **Next** (backend) |
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout, optional string links) | Planned (post–Phase UI) |
@@ -271,9 +272,11 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 - Reference library: `/api/v1/references/` + `/links/` to ideas or recipe versions (developer)
 - Developer access gated by `User.has_developer_access()` — active/trial subscription; expired trial and expired/cancelled status blocked (`subscription_status=none` allowed for admin-promoted devs until Stripe)
 
-**Phase UI — metaphor SPA (in progress)**
+**Phase UI — metaphor SPA (complete)**
 
-Implementation order: **C1 → C3 → C4 → C6 → C5 → C2**. C3 and C4 may run in parallel after C1. Detailed plan: `.cursor/plans/dynamic_spa_ux_ce72f925.plan.md`.
+Implementation order: **C1 → C3 → C4 → C6 → C5 → C2**. All chunks merged to `main` (PR #17, #18).
+
+**UI polish (in progress)** — sun & floral kitchen theme replacing Warm kitchen default; light decorative patterns; on-paper shared forms. Reference photos in `recipes/`. Plan: `.cursor/plans/ui_polish_pass_615f67b2.plan.md`.
 
 | Chunk | Scope |
 |-------|--------|
@@ -318,7 +321,7 @@ Export command: `python manage.py export_recipe_seed` → `seed/data/`
 
 ## Appendix A: UI surface design
 
-Visual references: `recipes/` screenshots (cork board, recipe box, science notebook).
+Visual references: `recipes/` screenshots and photographs — cork board, recipe box, science notebook, **sun & floral kitchen** (windowsill, handwritten cards, dot-grid lab journals).
 
 ### Two editing surfaces (do not conflate)
 

@@ -1,25 +1,48 @@
+/* Sun & floral — distinct from the old Warm kitchen (dark brown #6b4f2a, olive wood #8b6914) */
+
+:root,
 [data-theme="default"] {
-  --color-text: #2c2416;
-  --color-text-muted: #5c5347;
-  --color-text-label: #7a6b55;
-  --color-bg: #faf8f4;
-  --color-surface: #f3eee4;
-  --color-surface-elevated: #fffdf9;
-  --color-border: #e8e0d4;
-  --color-border-strong: #c9b99a;
-  --color-border-card: #e0d5c4;
-  --color-accent: #6b4f2a;
-  --color-accent-text: #faf8f4;
-  --color-error: #8b2e2e;
-  --color-input-bg: #ffffff;
+  /* Ink */
+  --color-text: #2b2620;
+  --color-text-muted: #5a5348;
+  --color-text-label: #6d6558;
 
-  --surface-cork: #c4a574;
-  --surface-wood: #8b6914;
-  --surface-paper: #f3eee4;
+  /* Sunny kitchen sill — golden cream, not neutral beige */
+  --color-bg: #fff6e5;
+  --color-surface: #fff0d4;
+  --color-surface-elevated: #fffdf8;
+  --color-border: #ecd9b8;
+  --color-border-strong: #d4b88a;
+  --color-border-card: #e8d4b0;
+
+  /* Poppy orange + sea-glass teal + floral magenta */
+  --color-accent: #e8861a;
+  --color-accent-secondary: #289494;
+  --color-accent-floral: #c93d72;
+  --color-accent-text: #fffdf8;
+  --color-error: #a83232;
+  --color-input-bg: transparent;
+
+  /* Metaphor surfaces */
+  --surface-cork: #e2c48a;
+  --surface-wood: #e0ad5a;
+  --surface-paper: #fff9ef;
   --surface-card: #fffdf9;
-  --surface-notebook: #faf8f4;
-  --surface-notebook-border: #6b4f2a;
+  --surface-notebook: #fffbf2;
+  --surface-notebook-border: #289494;
+  --surface-field-line: #d4b88a;
+  --surface-dot-grid: #dcc9a8;
+  --surface-kraft: #f0e4c8;
 
-  --shadow-card-color: #d4c4a8;
-  --shadow-pin-color: #a89070;
+  --tape-rose: #d4566a;
+  --tape-cream: #f2e0b8;
+
+  --pattern-frosted-fan: color-mix(in srgb, var(--color-accent-secondary) 14%, transparent);
+  --pattern-botanical-edge: color-mix(in srgb, #2a5c42 10%, transparent);
+  --pattern-sun-wash: color-mix(in srgb, var(--color-accent) 16%, transparent);
+  --color-sun-glow: color-mix(in srgb, var(--color-accent) 28%, transparent);
+
+  --shadow-card-color: #e0c898;
+  --shadow-pin-color: #c9a870;
+  --shadow-lifted: 0 4px 24px var(--color-sun-glow), var(--shadow-card);
 }

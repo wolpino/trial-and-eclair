@@ -242,16 +242,6 @@
   }
 }
 
-.lab-spread-meta input,
-.lab-spread-meta textarea {
-  font: inherit;
-  padding: 0.35rem 0.5rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--color-input-bg);
-  color: var(--color-text);
-}
-
 .lab-spread-meta input:disabled,
 .lab-spread-meta textarea:disabled {
   opacity: 0.75;
@@ -299,34 +289,8 @@
   border-top: 1px solid var(--color-border);
 }
 
-.lab-btn {
-  font: inherit;
-  padding: 0.45rem 0.85rem;
-  border: none;
-  border-radius: var(--radius-sm);
-  background: var(--color-accent);
-  color: var(--color-accent-text);
-  cursor: pointer;
-}
-
 .lab-btn:disabled {
-  opacity: 0.65;
   cursor: wait;
-}
-
-.lab-btn--ghost {
-  border: 1px solid var(--color-border-strong);
-  background: transparent;
-  color: var(--color-accent);
-}
-
-.lab-btn--text {
-  padding: 0;
-  border: none;
-  background: none;
-  color: var(--color-error);
-  text-decoration: underline;
-  cursor: pointer;
 }
 
 .lab-ingredient-list {
@@ -379,37 +343,6 @@
 
 .lab-step-body {
   width: 100%;
-  font: inherit;
-  padding: 0.35rem 0.5rem;
-  border: 1px solid var(--color-border);
-  border-radius: var(--radius-sm);
-  background: var(--color-input-bg);
-  color: var(--color-text);
-  resize: vertical;
-}
-
-.lab-step-form,
-.lab-test-session-form {
-  display: grid;
-  gap: 0.75rem;
-}
-
-.lab-step-form label,
-.lab-test-session-form label {
-  display: grid;
-  gap: 0.35rem;
-  color: var(--color-text-muted);
-}
-
-.lab-step-form textarea,
-.lab-test-session-form textarea,
-.lab-test-session-form input[type="file"] {
-  font: inherit;
-  padding: 0.5rem 0.65rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--color-input-bg);
-  color: var(--color-text);
 }
 
 .lab-test-sessions {
@@ -527,36 +460,12 @@
   color: var(--color-text-muted);
 }
 
-.lab-journal-form label {
-  display: grid;
-  gap: 0.35rem;
-  color: var(--color-text-muted);
-}
-
-.lab-journal-form textarea {
-  font: inherit;
-  padding: 0.5rem 0.65rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--color-input-bg);
-  color: var(--color-text);
-}
-
 .lab-compare-form {
   display: flex;
   flex-wrap: wrap;
   gap: 0.5rem;
   align-items: center;
   margin-bottom: 1rem;
-}
-
-.lab-compare-form select {
-  font: inherit;
-  padding: 0.4rem 0.55rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--color-input-bg);
-  color: var(--color-text);
 }
 
 .lab-diff-list {
@@ -570,32 +479,11 @@
   gap: 1rem;
 }
 
-.lab-publish-form label {
-  display: grid;
-  gap: 0.35rem;
-  color: var(--color-text-muted);
-}
-
-.lab-publish-form input,
-.lab-publish-form textarea {
-  font: inherit;
-  padding: 0.5rem 0.65rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--color-input-bg);
-  color: var(--color-text);
-}
-
 .lab-publish-hero {
   display: block;
   max-width: 100%;
   margin-top: 0.75rem;
   border-radius: var(--radius-md);
-}
-
-.lab-form-error {
-  margin: 0 0 0.75rem;
-  color: var(--color-error);
 }
 
 @media (max-width: 768px) {

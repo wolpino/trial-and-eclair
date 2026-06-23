@@ -12,8 +12,8 @@ export default defineConfig({
         name: "Trial and Eclair",
         short_name: "Trial&Eclair",
         description: "Recipe development and collection",
-        theme_color: "#2c2416",
-        background_color: "#faf8f4",
+        theme_color: "#289494",
+        background_color: "#fff6e5",
         display: "standalone",
         start_url: "/",
         icons: [

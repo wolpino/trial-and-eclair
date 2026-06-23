@@ -1,0 +1,201 @@
+/* Shared on-paper form controls — lab, recipe box, auth */
+
+.form-error,
+.lab-form-error,
+.recipe-box-form-error,
+.cookbooks-form-error,
+.references-form-error {
+  margin: 0 0 0.5rem;
+  color: var(--color-error);
+  font-size: 0.9rem;
+}
+
+.paper-field,
+.recipe-box-add input,
+.inline-form-row input,
+.inline-form-row select,
+.editor-form input,
+.editor-form select,
+.editor-form textarea,
+.lab-step-form textarea,
+textarea.lab-step-body,
+.lab-spread-title,
+.lab-spread-description,
+.lab-spread-meta input,
+.lab-spread-meta textarea,
+.recipe-box-card__input,
+.recipe-box-card__textarea,
+.lab-test-session-form textarea,
+.lab-test-session-form input[type="file"],
+.lab-journal-form textarea,
+.lab-publish-form input,
+.lab-publish-form textarea,
+.lab-compare-form select {
+  font: inherit;
+  padding: 0.4rem 0.15rem;
+  border: none;
+  border-bottom: 1px solid var(--surface-field-line);
+  border-radius: 0;
+  background: var(--color-input-bg);
+  color: var(--color-text);
+}
+
+.paper-field:focus,
+.inline-form-row input:focus,
+.inline-form-row select:focus,
+.editor-form input:focus,
+.editor-form select:focus,
+.editor-form textarea:focus,
+.lab-step-form textarea:focus,
+textarea.lab-step-body:focus,
+.recipe-box-card__input:focus,
+.recipe-box-card__textarea:focus {
+  border-bottom-color: var(--color-accent);
+  outline: none;
+}
+
+.paper-field::placeholder,
+.inline-form-row input::placeholder,
+.lab-step-form textarea::placeholder {
+  color: var(--color-text-muted);
+  opacity: 0.75;
+}
+
+.paper-field--textarea,
+textarea.lab-step-body,
+.lab-step-form textarea,
+.recipe-box-card__textarea,
+.editor-form textarea {
+  resize: vertical;
+  min-height: 2.5rem;
+  line-height: var(--line-height-body);
+}
+
+.paper-form label,
+.lab-step-form label,
+.editor-form label,
+.lab-test-session-form label,
+.lab-journal-form label,
+.lab-publish-form label {
+  display: grid;
+  gap: 0.35rem;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-label);
+}
+
+.paper-form,
+.lab-step-form,
+.lab-test-session-form,
+.lab-journal-form {
+  display: grid;
+  gap: 0.75rem;
+}
+
+.inline-form-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  align-items: flex-end;
+}
+
+.ingredient-autocomplete {
+  position: relative;
+  flex: 1 1 10rem;
+  min-width: 8rem;
+}
+
+.ingredient-autocomplete input {
+  width: 100%;
+}
+
+.ingredient-autocomplete__list {
+  position: absolute;
+  z-index: 20;
+  top: calc(100% + 0.15rem);
+  left: 0;
+  right: 0;
+  list-style: none;
+  margin: 0;
+  padding: 0.25rem 0;
+  border: 1px solid var(--color-border-card);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-card);
+  max-height: 12rem;
+  overflow-y: auto;
+}
+
+.ingredient-autocomplete__list li button {
+  display: block;
+  width: 100%;
+  padding: 0.45rem 0.65rem;
+  border: none;
+  background: none;
+  font: inherit;
+  text-align: left;
+  color: var(--color-text);
+  cursor: pointer;
+}
+
+.ingredient-autocomplete__list li button:hover {
+  background: var(--color-surface);
+}
+
+.paper-btn,
+.lab-btn,
+.recipe-box-btn,
+.inline-form-row button,
+.editor-form button:not(.text-button),
+.lab-step-form button,
+.lab-test-session-form button,
+.lab-journal-form button,
+.lab-publish-form button {
+  font: inherit;
+  padding: 0.45rem 0.9rem;
+  border: none;
+  border-radius: var(--radius-sm);
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+  cursor: pointer;
+}
+
+.paper-btn:disabled,
+.lab-btn:disabled,
+.recipe-box-btn:disabled,
+.inline-form-row button:disabled {
+  opacity: 0.65;
+  cursor: not-allowed;
+}
+
+.paper-btn--ghost,
+.lab-btn--ghost,
+.recipe-box-btn--ghost {
+  border: 1px solid var(--color-border-strong);
+  background: transparent;
+  color: var(--color-accent);
+}
+
+.paper-btn--text,
+.lab-btn--text {
+  padding: 0;
+  border: none;
+  background: none;
+  color: var(--color-accent-secondary);
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+.paper-btn--text:hover,
+.lab-btn--text:hover {
+  color: var(--color-accent-floral);
+}
+
+.editor-form {
+  display: grid;
+  gap: 1rem;
+}

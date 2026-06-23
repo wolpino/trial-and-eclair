@@ -17,17 +17,32 @@
 }
 
 .notebook-spread__body {
+  position: relative;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 1.5rem;
   padding: 1.25rem;
-  background: linear-gradient(
+  background-color: var(--surface-notebook);
+  background-image: radial-gradient(circle, var(--surface-dot-grid) 1px, transparent 1px);
+  background-size: 1.125rem 1.125rem;
+}
+
+/* Spiral binding gutter — recipecookie.jpg */
+.notebook-spread__body::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 50%;
+  width: 3px;
+  margin-left: -1.5px;
+  background: repeating-linear-gradient(
     to bottom,
-    transparent calc(var(--line-height-body) * 1em - 1px),
-    var(--color-border) calc(var(--line-height-body) * 1em - 1px),
-    var(--color-border) calc(var(--line-height-body) * 1em)
+    var(--surface-notebook-border) 0 6px,
+    transparent 6px 14px
   );
-  background-size: 100% calc(var(--line-height-body) * 1em);
+  opacity: 0.35;
+  pointer-events: none;
 }
 
 .notebook-margin {
