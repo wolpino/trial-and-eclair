@@ -1,12 +1,13 @@
 import { FormEvent, useEffect, useState } from "react";
-import { Link } from "react-router-dom";
 
 import { ApiError } from "../api/client";
+import { CookbookSpine } from "../components/cookbooks";
 import {
   createCookbook,
   fetchCookbooks,
   type Cookbook,
 } from "../api/development";
+import "../styles/cookbooks.css";
 
 export function CookbooksPage() {
   const [cookbooks, setCookbooks] = useState<Cookbook[]>([]);
@@ -31,18 +32,25 @@ export function CookbooksPage() {
       setCookbooks((current) => [cookbook, ...current]);
       setTitle("");
       setDescription("");
+      setError(null);
     } catch (err: unknown) {
       setError(err instanceof ApiError ? err.message : "Could not create cookbook.");
     }
   }
 
   return (
-    <main className="page-shell">
-      <h1>Cookbooks</h1>
-      <section className="panel">
-        <h2>New cookbook</h2>
-        <form className="editor-form" onSubmit={(event) => void handleCreate(event)}>
-          {error ? <p className="form-error">{error}</p> : null}
+    <main className="cookbooks-page">
+      <header className="cookbooks-page__header">
+        <h1>Cookbooks</h1>
+        <p className="cookbooks-page__note">
+          Virtual binders of published recipes — share a collection link when ready.
+        </p>
+      </header>
+
+      <section className="cookbooks-create">
+        <h2>New binder</h2>
+        <form className="cookbooks-create-form" onSubmit={(event) => void handleCreate(event)}>
+          {error ? <p className="cookbooks-form-error">{error}</p> : null}
           <label>
             Title
             <input required value={title} onChange={(e) => setTitle(e.target.value)} />
@@ -55,29 +63,24 @@ export function CookbooksPage() {
               onChange={(e) => setDescription(e.target.value)}
             />
           </label>
-          <button type="submit">Create</button>
+          <div className="cookbooks-create-form__row">
+            <button className="cookbooks-btn" type="submit">
+              Create binder
+            </button>
+          </div>
         </form>
       </section>
 
       {loading ? (
-        <p className="page-note">Loading…</p>
+        <p className="cookbooks-page__note">Loading binders…</p>
+      ) : cookbooks.length === 0 ? (
+        <p className="cookbooks-rack-empty">No binders on the rack yet.</p>
       ) : (
-        <ul className="item-list">
+        <div className="cookbooks-rack" role="list" aria-label="Cookbook binders">
           {cookbooks.map((cookbook) => (
-            <li key={cookbook.id}>
-              <Link to={`/developer/cookbooks/${cookbook.id}`}>{cookbook.title}</Link>
-              <span className="item-meta">
-                {cookbook.entries.length} recipes · {cookbook.status}
-                {cookbook.slug ? (
-                  <>
-                    {" "}
-                    · <Link to={`/c/${cookbook.slug}`}>public</Link>
-                  </>
-                ) : null}
-              </span>
-            </li>
+            <CookbookSpine key={cookbook.id} cookbook={cookbook} />
           ))}
-        </ul>
+        </div>
       )}
     </main>
   );

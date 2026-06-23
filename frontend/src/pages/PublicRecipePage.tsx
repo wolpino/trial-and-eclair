@@ -1,8 +1,15 @@
 import { useEffect, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
-import { ApiError, fetchPublicRecipe, type PublicRecipe } from "../api/client";
+import {
+  ApiError,
+  fetchPublicRecipe,
+  mediaUrl,
+  type PublicRecipe,
+} from "../api/client";
 import { RecipeViewer } from "../components/RecipeViewer";
+import { useDocumentMeta } from "../lib/useDocumentMeta";
+import "../styles/public.css";
 
 export function PublicRecipePage() {
   const { slug } = useParams<{ slug: string }>();
@@ -47,6 +54,14 @@ export function PublicRecipePage() {
     };
   }, [slug]);
 
+  const heroAbsolute = recipe?.hero_image ? mediaUrl(recipe.hero_image) ?? undefined : undefined;
+
+  useDocumentMeta({
+    title: recipe ? `${recipe.title} · Trial and Eclair` : "Trial and Eclair",
+    description: recipe?.description || recipe?.story || undefined,
+    image: heroAbsolute,
+  });
+
   if (loading) {
     return <p className="status-message">Loading recipe…</p>;
   }
@@ -60,5 +75,9 @@ export function PublicRecipePage() {
     );
   }
 
-  return <RecipeViewer recipe={recipe} />;
+  return (
+    <div className="public-page">
+      <RecipeViewer recipe={recipe} />
+    </div>
+  );
 }

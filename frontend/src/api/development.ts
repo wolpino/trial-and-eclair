@@ -20,6 +20,14 @@ export interface CreateIdeaInput {
   image?: File;
 }
 
+export interface PatchIdeaInput {
+  title?: string;
+  notes?: string;
+  category_tag?: string;
+  status?: IdeaStatus;
+  image?: File;
+}
+
 export interface IngredientLine {
   id: string;
   ingredient: string;
@@ -154,6 +162,35 @@ export function promoteIdea(id: string, title?: string): Promise<Idea> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(title ? { title } : {}),
   });
+}
+
+export function patchIdea(id: string, input: PatchIdeaInput): Promise<Idea> {
+  if (input.image) {
+    const body = new FormData();
+    if (input.title !== undefined) {
+      body.append("title", input.title);
+    }
+    if (input.notes !== undefined) {
+      body.append("notes", input.notes);
+    }
+    if (input.category_tag !== undefined) {
+      body.append("category_tag", input.category_tag);
+    }
+    if (input.status !== undefined) {
+      body.append("status", input.status);
+    }
+    body.append("image", input.image);
+    return apiFetch<Idea>(`/api/v1/ideas/${id}/`, { method: "PATCH", body });
+  }
+  return apiFetch<Idea>(`/api/v1/ideas/${id}/`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+}
+
+export function deleteIdea(id: string): Promise<void> {
+  return apiFetch<void>(`/api/v1/ideas/${id}/`, { method: "DELETE" });
 }
 
 export function fetchDevelopmentRecipes(): Promise<DevelopmentRecipe[]> {
@@ -431,6 +468,16 @@ export function addCookbookEntry(
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ recipe: recipeId }),
     },
+  );
+}
+
+export function deleteCookbookEntry(
+  cookbookId: string,
+  entryId: string,
+): Promise<void> {
+  return apiFetch<void>(
+    `/api/v1/cookbooks/${cookbookId}/entries/${entryId}/`,
+    { method: "DELETE" },
   );
 }
 
