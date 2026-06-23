@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 
-import { ApiError, fetchIdeas, type Idea } from "../api/client";
+import { ApiError } from "../api/client";
+import { fetchIdeas, type Idea } from "../api/development";
 import { CreateIdeaForm } from "../components/CreateIdeaForm";
 import { IdeaCard } from "../components/IdeaCard";
 

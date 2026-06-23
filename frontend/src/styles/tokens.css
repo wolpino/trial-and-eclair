@@ -1,0 +1,23 @@
+/*
+ * Semantic design tokens — components use var(--token) only.
+ * Color values live in styles/themes/*.css; font stacks in styles/fonts/*.css.
+ *
+ * Core:        --color-text, --color-text-muted, --color-bg, --color-surface,
+ *              --color-border, --color-border-strong, --color-accent,
+ *              --color-accent-text, --color-error, --color-input-bg
+ * Surfaces:    --surface-cork, --surface-wood, --surface-paper, --surface-card,
+ *              --surface-notebook, --surface-notebook-border
+ * Typography:  --font-body, --font-heading, --font-label, --line-height-body
+ * Chrome:      --radius-sm, --radius-md, --radius-lg, --shadow-card, --shadow-pin
+ */
+
+:root {
+  --line-height-body: 1.6;
+
+  --radius-sm: 4px;
+  --radius-md: 6px;
+  --radius-lg: 8px;
+
+  --shadow-card: 2px 3px 0 var(--shadow-card-color);
+  --shadow-pin: 1px 2px 0 var(--shadow-pin-color);
+}

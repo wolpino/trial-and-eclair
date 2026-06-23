@@ -1,4 +1,4 @@
-import type { Idea, IdeaStatus } from "../api/client";
+import type { Idea, IdeaStatus } from "../api/development";
 import { mediaUrl } from "../api/client";
 
 const STATUS_LABELS: Record<IdeaStatus, string> = {

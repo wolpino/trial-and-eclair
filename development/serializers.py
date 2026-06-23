@@ -30,11 +30,14 @@ class IdeaSerializer(serializers.ModelSerializer):
 
 
 class VersionIngredientLineSerializer(serializers.ModelSerializer):
+    ingredient_name = serializers.CharField(source="ingredient.name", read_only=True)
+
     class Meta:
         model = VersionIngredientLine
         fields = (
             "id",
             "ingredient",
+            "ingredient_name",
             "quantity",
             "unit",
             "custom_unit",

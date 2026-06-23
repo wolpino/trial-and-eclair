@@ -10,6 +10,48 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-06-22 · phase-ui-c1-design-system
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-23T00:30:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Implement Phase UI chunk C1: semantic design tokens, theme/font presets, ThemeProvider, settings UI in AppLayout, and metaphor component scaffolds.
+
+### Summary
+Created `phase-ui-metaphor` branch and shipped C1 design system. Migrated all `index.css` hex values to semantic CSS custom properties; palette lives in `styles/themes/default.css`, fonts in `styles/fonts/default.css`. Added `ThemeProvider` + `useTheme()` with `localStorage` persistence and `data-theme`/`data-font` on `<html>`. AppLayout now has theme swatch + font dropdown (one preset each, extensible). Scaffolded `IndexCard`, `NotebookSpread`, and `PinnedNote` components with token-only CSS. `npm run build` passes; no hex in changed frontend files outside theme/font CSS.
+
+### Decisions
+- **Skipped Framer Motion** — optional C1 item; avoided new dependency for route transitions
+- **Theme before Auth in provider tree** — appearance applies even on login/register pages
+- **Inline flash-prevention script in index.html** — reads localStorage before React mount
+
+### Changes
+- `frontend/src/styles/` — `tokens.css`, `themes/default.css`, `fonts/default.css`
+- `frontend/src/theme/ThemeProvider.tsx` — theme context + presets
+- `frontend/src/index.css` — token imports, all colors via `var(--*)`
+- `frontend/src/components/AppLayout.tsx` — appearance settings UI
+- `frontend/src/components/{recipe-box,lab,corkboard}/` — scaffolds + barrel exports
+- `frontend/src/main.tsx`, `frontend/index.html` — provider wiring + early theme apply
+
+### Open threads
+- C3 lab notebook spread (uses `components/lab/*`)
+- C4 recipe box in-place index cards (uses `components/recipe-box/*`)
+- C6 API gaps, C5 cookbooks/refs, C2 cork board grid last
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phase-ui, c1, design-system, theming, tokens, ThemeProvider, IndexCard, NotebookSpread, PinnedNote
+**Files:** frontend/src/styles/, frontend/src/theme/ThemeProvider.tsx, frontend/src/components/{AppLayout,recipe-box,lab,corkboard}/
+**Do not redo:** token migration in index.css; ThemeProvider localStorage keys (`te-theme`, `te-font`); auth shell pattern
+**Resume with:** C3 lab notebook on `phase-ui-metaphor` (parallel with C4 after C1 merge)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-06-22 · phase-ui-auth-shell
 
 | Field | Value |

@@ -1,0 +1,37 @@
+.index-card-scaffold {
+  display: flex;
+  flex-direction: column;
+  gap: 0.65rem;
+  padding: 1rem;
+  min-height: 120px;
+  background: var(--surface-card);
+  border: 1px solid var(--color-border-card);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  color: var(--color-text);
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.index-card-scaffold--focused {
+  transform: scale(1.03);
+  box-shadow: var(--shadow-card), 0 0 0 2px var(--color-accent);
+}
+
+.index-card-field {
+  display: grid;
+  gap: 0.2rem;
+}
+
+.index-card-field__label {
+  font-family: var(--font-label);
+  font-size: 0.7rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-label);
+}
+
+.index-card-field__value {
+  font-size: 0.95rem;
+  color: var(--color-text);
+}

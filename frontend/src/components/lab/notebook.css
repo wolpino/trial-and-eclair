@@ -1,0 +1,106 @@
+.notebook-spread {
+  display: grid;
+  grid-template-rows: auto 1fr;
+  min-height: 480px;
+  background: var(--surface-notebook);
+  border: 3px solid var(--surface-notebook-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+  overflow: hidden;
+}
+
+.notebook-spread__header {
+  padding: 1rem 1.25rem 0.5rem;
+  border-bottom: 1px solid var(--color-border);
+  font-family: var(--font-heading);
+  color: var(--color-text);
+}
+
+.notebook-spread__body {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  padding: 1.25rem;
+  background: linear-gradient(
+    to bottom,
+    transparent calc(var(--line-height-body) * 1em - 1px),
+    var(--color-border) calc(var(--line-height-body) * 1em - 1px),
+    var(--color-border) calc(var(--line-height-body) * 1em)
+  );
+  background-size: 100% calc(var(--line-height-body) * 1em);
+}
+
+.notebook-margin {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  padding: 0.75rem;
+  font-size: 0.85rem;
+  color: var(--color-text-muted);
+}
+
+.notebook-margin--left {
+  border-right: 1px dashed var(--color-border);
+}
+
+.notebook-margin--right {
+  border-left: 1px dashed var(--color-border);
+}
+
+.notebook-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 100;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.notebook-overlay__backdrop {
+  position: absolute;
+  inset: 0;
+  background: color-mix(in srgb, var(--color-text) 30%, transparent);
+}
+
+.notebook-overlay__panel {
+  position: relative;
+  width: min(640px, 100%);
+  max-height: 85vh;
+  overflow: auto;
+  background: var(--surface-notebook);
+  border: 2px solid var(--surface-notebook-border);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.notebook-overlay__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.notebook-overlay__title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-family: var(--font-heading);
+  color: var(--color-text);
+}
+
+.notebook-overlay__close {
+  font: inherit;
+  padding: 0.35rem 0.65rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-sm);
+  background: transparent;
+  color: var(--color-accent);
+  cursor: pointer;
+}
+
+.notebook-overlay__body {
+  padding: 1.25rem;
+  color: var(--color-text);
+}
