@@ -51,6 +51,43 @@ export interface PublicRecipe {
   fork_lineage: PublicForkLineage | null;
 }
 
+export type UserRole = "home_cook" | "developer";
+
+export type SubscriptionStatus =
+  | "none"
+  | "trial"
+  | "active"
+  | "expired"
+  | "cancelled";
+
+export type MeasurementPreference = "original" | "metric" | "imperial";
+
+export interface User {
+  id: string;
+  username: string;
+  email: string;
+  first_name: string;
+  last_name: string;
+  role: UserRole;
+  subscription_status: SubscriptionStatus;
+  trial_ends_at: string | null;
+  measurement_preference: MeasurementPreference;
+  show_forks: boolean;
+  date_joined: string;
+}
+
+export interface RegisterInput {
+  username: string;
+  email?: string;
+  password: string;
+  password_confirm: string;
+}
+
+export interface LoginInput {
+  username: string;
+  password: string;
+}
+
 export class ApiError extends Error {
   status: number;
 
@@ -61,6 +98,37 @@ export class ApiError extends Error {
 }
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
+
+async function parseApiErrorMessage(response: Response): Promise<string> {
+  try {
+    const data: unknown = await response.json();
+    if (typeof data === "string") {
+      return data;
+    }
+    if (Array.isArray(data)) {
+      return data.map(String).join(" ");
+    }
+    if (data && typeof data === "object") {
+      const parts: string[] = [];
+      for (const [key, value] of Object.entries(data)) {
+        if (key === "detail") {
+          parts.push(typeof value === "string" ? value : String(value));
+        } else if (Array.isArray(value)) {
+          const label = key === "non_field_errors" ? "" : `${key}: `;
+          parts.push(`${label}${value.map(String).join(" ")}`);
+        } else if (typeof value === "string") {
+          parts.push(value);
+        }
+      }
+      if (parts.length > 0) {
+        return parts.join(" ");
+      }
+    }
+  } catch {
+    // Response body was not JSON.
+  }
+  return response.statusText;
+}
 
 export async function apiFetch<T>(
   path: string,
@@ -76,7 +144,12 @@ export async function apiFetch<T>(
   });
 
   if (!response.ok) {
-    throw new ApiError(response.status, response.statusText);
+    const message = await parseApiErrorMessage(response);
+    throw new ApiError(response.status, message);
+  }
+
+  if (response.status === 204) {
+    return undefined as T;
   }
 
   return response.json() as Promise<T>;
@@ -88,6 +161,30 @@ export function fetchPublicRecipe(slug: string): Promise<PublicRecipe> {
 
 export function fetchPublicCookbook(slug: string): Promise<PublicCookbook> {
   return apiFetch<PublicCookbook>(`/api/v1/public/cookbooks/${slug}/`);
+}
+
+export function fetchCurrentUser(): Promise<User> {
+  return apiFetch<User>("/api/v1/auth/me/");
+}
+
+export function registerUser(input: RegisterInput): Promise<User> {
+  return apiFetch<User>("/api/v1/auth/register/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+}
+
+export function loginUser(input: LoginInput): Promise<User> {
+  return apiFetch<User>("/api/v1/auth/login/", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(input),
+  });
+}
+
+export function logoutUser(): Promise<void> {
+  return apiFetch<void>("/api/v1/auth/logout/", { method: "POST" });
 }
 
 export function mediaUrl(path: string | null): string | null {
