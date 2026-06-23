@@ -265,3 +265,114 @@ a {
   margin-top: 1.5rem;
   color: #5c5347;
 }
+
+.cork-board-header {
+  margin-bottom: 2rem;
+}
+
+.create-idea-panel {
+  margin-bottom: 2.5rem;
+  padding: 1.25rem;
+  background: #f3eee4;
+  border-radius: 8px;
+}
+
+.create-idea-panel h2 {
+  margin: 0 0 1rem;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.create-idea-form {
+  display: grid;
+  gap: 1rem;
+  max-width: 28rem;
+}
+
+.create-idea-form label {
+  display: grid;
+  gap: 0.35rem;
+}
+
+.create-idea-form input[type="text"],
+.create-idea-form input:not([type="file"]) {
+  font: inherit;
+  padding: 0.5rem 0.65rem;
+  border: 1px solid #c9b99a;
+  border-radius: 4px;
+  background: #fff;
+}
+
+.create-idea-form input[type="file"] {
+  font: inherit;
+}
+
+.create-idea-form button {
+  justify-self: start;
+  font: inherit;
+  padding: 0.5rem 1rem;
+  border: none;
+  border-radius: 4px;
+  background: #6b4f2a;
+  color: #faf8f4;
+  cursor: pointer;
+}
+
+.create-idea-form button:disabled {
+  opacity: 0.7;
+  cursor: wait;
+}
+
+.cork-board-empty {
+  color: #5c5347;
+  font-style: italic;
+}
+
+.cork-board-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+  gap: 1.25rem;
+}
+
+.idea-card {
+  display: flex;
+  flex-direction: column;
+  min-height: 160px;
+  background: #fffdf9;
+  border: 1px solid #e0d5c4;
+  border-radius: 6px;
+  box-shadow: 2px 3px 0 #d4c4a8;
+  overflow: hidden;
+}
+
+.idea-card-image img {
+  display: block;
+  width: 100%;
+  height: 140px;
+  object-fit: cover;
+}
+
+.idea-card-body {
+  padding: 1rem;
+}
+
+.idea-card-status {
+  margin: 0 0 0.35rem;
+  font-size: 0.8rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: #7a6b55;
+}
+
+.idea-card-title {
+  margin: 0;
+  font-size: 1.15rem;
+  font-weight: 600;
+  line-height: 1.3;
+}
+
+.idea-card-tag {
+  margin: 0.5rem 0 0;
+  font-size: 0.9rem;
+  color: #5c5347;
+}

@@ -136,6 +136,16 @@ CORS_ALLOWED_ORIGINS = [
 
 CORS_ALLOW_CREDENTIALS = True
 
+# Required for session-auth POSTs from the Vite dev server (Origin != Host).
+CSRF_TRUSTED_ORIGINS = [
+    origin.strip()
+    for origin in os.environ.get(
+        "CSRF_TRUSTED_ORIGINS",
+        "http://localhost:5173,http://127.0.0.1:5173",
+    ).split(",")
+    if origin.strip()
+]
+
 # Image limits (enforced in API layer in later phases)
 IDEA_IMAGE_LIMIT = 1
 TEST_SESSION_PHOTO_LIMIT = 5

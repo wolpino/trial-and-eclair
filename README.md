@@ -54,6 +54,14 @@ python manage.py export_recipe_seed
 
 Output: `seed/data/` (`ideas_seed.json`, `references_seed.json`, workbook exports, etc.)
 
+Load into the database for local dev (creates a `dev` developer user if needed):
+
+```bash
+python manage.py load_recipe_seed
+# Log in at http://localhost:5173/login as dev / devpass123
+# Re-seed: python manage.py load_recipe_seed --force
+```
+
 ## Phase 1 — Developer API
 
 Base path: `/api/v1/`. All endpoints require an authenticated session unless noted.

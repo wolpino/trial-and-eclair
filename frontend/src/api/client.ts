@@ -99,6 +99,15 @@ export class ApiError extends Error {
 
 const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
 
+function getCsrfToken(): string | null {
+  const match = document.cookie.match(/(?:^|;\s*)csrftoken=([^;]+)/);
+  return match ? decodeURIComponent(match[1]) : null;
+}
+
+function isMutatingMethod(method: string): boolean {
+  return !["GET", "HEAD", "OPTIONS"].includes(method.toUpperCase());
+}
+
 async function parseApiErrorMessage(response: Response): Promise<string> {
   try {
     const data: unknown = await response.json();
@@ -134,13 +143,21 @@ export async function apiFetch<T>(
   path: string,
   init: RequestInit = {},
 ): Promise<T> {
+  const method = (init.method ?? "GET").toUpperCase();
+  const headers = new Headers(init.headers);
+  if (!headers.has("Accept")) {
+    headers.set("Accept", "application/json");
+  }
+  const csrfToken = getCsrfToken();
+  if (csrfToken && isMutatingMethod(method)) {
+    headers.set("X-CSRFToken", csrfToken);
+  }
+
   const response = await fetch(`${API_BASE}${path}`, {
     credentials: "include",
-    headers: {
-      Accept: "application/json",
-      ...(init.headers ?? {}),
-    },
     ...init,
+    method,
+    headers,
   });
 
   if (!response.ok) {
@@ -185,6 +202,39 @@ export function loginUser(input: LoginInput): Promise<User> {
 
 export function logoutUser(): Promise<void> {
   return apiFetch<void>("/api/v1/auth/logout/", { method: "POST" });
+}
+
+export type IdeaStatus = "researching" | "testing" | "ready" | "archived";
+
+export interface Idea {
+  id: string;
+  title: string;
+  notes: string;
+  category_tag: string;
+  status: IdeaStatus;
+  is_pinned: boolean;
+  image: string | null;
+  promoted_recipe: string | null;
+  created_at: string;
+  updated_at: string;
+}
+
+export interface CreateIdeaInput {
+  title: string;
+  image?: File;
+}
+
+export function fetchIdeas(): Promise<Idea[]> {
+  return apiFetch<Idea[]>("/api/v1/ideas/");
+}
+
+export function createIdea(input: CreateIdeaInput): Promise<Idea> {
+  const body = new FormData();
+  body.append("title", input.title);
+  if (input.image) {
+    body.append("image", input.image);
+  }
+  return apiFetch<Idea>("/api/v1/ideas/", { method: "POST", body });
 }
 
 export function mediaUrl(path: string | null): string | null {

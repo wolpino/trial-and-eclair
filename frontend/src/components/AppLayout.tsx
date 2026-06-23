@@ -1,12 +1,14 @@
-import { Link, NavLink, Outlet } from "react-router-dom";
+import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthContext";
 
 export function AppLayout() {
   const { user, hasDeveloperAccess, logout } = useAuth();
+  const navigate = useNavigate();
 
   async function handleLogout() {
     await logout();
+    navigate("/", { replace: true });
   }
 
   return (
