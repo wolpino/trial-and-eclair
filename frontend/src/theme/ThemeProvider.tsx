@@ -11,7 +11,7 @@ import {
 const THEME_STORAGE_KEY = "te-theme";
 const FONT_STORAGE_KEY = "te-font";
 
-export const THEME_PRESETS = [{ id: "default", label: "Warm kitchen" }] as const;
+export const THEME_PRESETS = [{ id: "default", label: "Sun & floral" }] as const;
 export const FONT_PRESETS = [{ id: "default", label: "Serif (Iowan)" }] as const;
 
 export type ThemePresetId = (typeof THEME_PRESETS)[number]["id"];

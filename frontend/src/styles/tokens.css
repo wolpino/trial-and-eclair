@@ -4,11 +4,16 @@
  *
  * Core:        --color-text, --color-text-muted, --color-bg, --color-surface,
  *              --color-border, --color-border-strong, --color-accent,
+ *              --color-accent-secondary, --color-accent-floral,
  *              --color-accent-text, --color-error, --color-input-bg
  * Surfaces:    --surface-cork, --surface-wood, --surface-paper, --surface-card,
- *              --surface-notebook, --surface-notebook-border
+ *              --surface-notebook, --surface-notebook-border, --surface-field-line,
+ *              --surface-dot-grid
+ * Decorative:  --pattern-frosted-fan, --pattern-botanical-edge, --pattern-sun-wash,
+ *              --tape-rose, --tape-cream
  * Typography:  --font-body, --font-heading, --font-label, --line-height-body
- * Chrome:      --radius-sm, --radius-md, --radius-lg, --shadow-card, --shadow-pin
+ * Chrome:      --radius-sm, --radius-md, --radius-lg, --shadow-card, --shadow-pin,
+ *              --shadow-lifted
  */
 
 :root {

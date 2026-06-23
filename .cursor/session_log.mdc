@@ -10,6 +10,45 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-06-23 · ui-polish-p0-sun-floral
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-23T20:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | partial |
+
+### Intent
+Execute UI polish plan — start with sun & floral theme and shared on-paper forms.
+
+### Summary
+Replaced Warm kitchen default with **sun & floral** palette (amber, teal, floral magenta accents) in `themes/default.css`. Added shell frosted-fan + botanical-edge background patterns, new tokens, and shared [`forms.css`](frontend/src/styles/forms.css) for ruled-line inputs/buttons across lab and recipe box. Updated ThemeProvider label, README/PRD status (Phase UI complete, polish in progress). Also shipped early P1–P3 CSS: washi tape on index cards + cork notes, dot-grid lab spread with spiral gutter, honey wood frame depth, cork frosted overlay. `npm run build` passes.
+
+### Decisions
+- **Replace default theme** — no Warm kitchen alternate (per Ari)
+- **Light decoration** — CSS patterns only, no raster assets
+
+### Changes
+- `frontend/src/styles/{themes/default.css,tokens.css,forms.css}`, `index.css`, `lab.css`, `recipe-box/*`, `corkboard/corkboard.css`, `lab/notebook.css`
+- `frontend/src/theme/ThemeProvider.tsx`, `RecipeStepsEditor.tsx`
+- `README.md`, `docs/PRD.md`, `.cursor/session_log.mdc`
+
+### Open threads
+- P1 remainder: two-column ingredients on cards, script header band
+- P2 remainder: margin date/version metadata, journal/test log dot-grid pages
+- P3 remainder: cabinet-door frame, idea drawer as note sheet
+- P4: cookbooks, references, public, auth shell
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** ui-polish, sun-floral, forms.css, dot-grid, washi-tape
+**Files:** frontend/src/styles/*, frontend/src/components/{recipe-box,corkboard,lab}/*
+**Do not redo:** theme replace-default decision; light decoration not bold wallpaper
+**Resume with:** P1 recipe box card template (two-column ingredients, script title) or P2 lab margin metadata
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-06-22 · phase-ui-complete-next-polish
 
 | Field | Value |
