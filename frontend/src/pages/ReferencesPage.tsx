@@ -1,6 +1,7 @@
 import { FormEvent, useEffect, useState } from "react";
 
 import { ApiError } from "../api/client";
+import { ReferenceShelf } from "../components/references/ReferenceShelf";
 import {
   createReference,
   deleteReference,
@@ -9,6 +10,7 @@ import {
   type ReferenceType,
 } from "../api/library";
 import { REFERENCE_TYPE_LABELS } from "../lib/constants";
+import "../styles/references.css";
 
 const REF_TYPES: ReferenceType[] = [
   "cookbook",
@@ -25,6 +27,7 @@ export function ReferencesPage() {
   const [refType, setRefType] = useState<ReferenceType>("blog");
   const [url, setUrl] = useState("");
   const [error, setError] = useState<string | null>(null);
+  const [loading, setLoading] = useState(true);
 
   async function loadReferences(type: ReferenceType | "all") {
     const data = await fetchReferences(type === "all" ? undefined : type);
@@ -32,9 +35,12 @@ export function ReferencesPage() {
   }
 
   useEffect(() => {
-    loadReferences(filter).catch((err: unknown) => {
-      setError(err instanceof ApiError ? err.message : "Could not load references.");
-    });
+    setLoading(true);
+    loadReferences(filter)
+      .catch((err: unknown) => {
+        setError(err instanceof ApiError ? err.message : "Could not load references.");
+      })
+      .finally(() => setLoading(false));
   }, [filter]);
 
   async function handleCreate(event: FormEvent<HTMLFormElement>) {
@@ -44,20 +50,26 @@ export function ReferencesPage() {
       setTitle("");
       setUrl("");
       await loadReferences(filter);
+      setError(null);
     } catch (err: unknown) {
       setError(err instanceof ApiError ? err.message : "Could not create reference.");
     }
   }
 
   return (
-    <main className="page-shell">
-      <h1>Reference library</h1>
-      <p className="page-note">Cookbooks, blogs, chefs, and tools you follow.</p>
-      {error ? <p className="form-error">{error}</p> : null}
+    <main className="references-page">
+      <header className="references-page__header">
+        <h1>Reference shelf</h1>
+        <p className="references-page__note">
+          Cookbooks you own, blogs, chefs, and tools — your research shelf.
+        </p>
+      </header>
 
-      <div className="filter-tabs">
+      {error ? <p className="references-form-error">{error}</p> : null}
+
+      <div className="reference-filter-rail" role="tablist" aria-label="Reference types">
         <button
-          className={filter === "all" ? "filter-tab-active" : "filter-tab"}
+          aria-pressed={filter === "all"}
           type="button"
           onClick={() => setFilter("all")}
         >
@@ -66,7 +78,7 @@ export function ReferencesPage() {
         {REF_TYPES.map((type) => (
           <button
             key={type}
-            className={filter === type ? "filter-tab-active" : "filter-tab"}
+            aria-pressed={filter === type}
             type="button"
             onClick={() => setFilter(type)}
           >
@@ -75,9 +87,28 @@ export function ReferencesPage() {
         ))}
       </div>
 
-      <section className="panel">
-        <h2>Add reference</h2>
-        <form className="editor-form" onSubmit={(event) => void handleCreate(event)}>
+      <div className="reference-shelf-wrap">
+        {loading ? (
+          <p className="references-page__note">Loading shelf…</p>
+        ) : (
+          <ReferenceShelf
+            references={references}
+            onDelete={(id) =>
+              void deleteReference(id)
+                .then(() => loadReferences(filter))
+                .catch((err: unknown) => {
+                  setError(
+                    err instanceof ApiError ? err.message : "Could not delete reference.",
+                  );
+                })
+            }
+          />
+        )}
+      </div>
+
+      <section className="references-add">
+        <h2>Pin to shelf</h2>
+        <form className="references-add-form" onSubmit={(event) => void handleCreate(event)}>
           <label>
             Type
             <select
@@ -99,36 +130,11 @@ export function ReferencesPage() {
             URL <span className="label-optional">(optional)</span>
             <input type="url" value={url} onChange={(e) => setUrl(e.target.value)} />
           </label>
-          <button type="submit">Add</button>
+          <button className="cookbooks-btn" type="submit">
+            Add to shelf
+          </button>
         </form>
       </section>
-
-      <ul className="item-list">
-        {references.map((ref) => (
-          <li key={ref.id}>
-            <strong>{ref.title}</strong>
-            <span className="item-meta"> {REFERENCE_TYPE_LABELS[ref.ref_type]}</span>
-            {ref.url ? (
-              <>
-                {" "}
-                ·{" "}
-                <a href={ref.url} rel="noreferrer" target="_blank">
-                  link
-                </a>
-              </>
-            ) : null}
-            <button
-              className="text-button"
-              type="button"
-              onClick={() =>
-                void deleteReference(ref.id).then(() => loadReferences(filter))
-              }
-            >
-              Delete
-            </button>
-          </li>
-        ))}
-      </ul>
     </main>
   );
 }

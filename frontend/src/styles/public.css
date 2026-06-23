@@ -1,0 +1,133 @@
+.public-page {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 2rem 1.25rem 4rem;
+}
+
+.public-page .recipe-viewer,
+.public-page .cookbook-viewer {
+  max-width: none;
+  margin: 0;
+  padding: 0;
+}
+
+.public-recipe-header,
+.public-cookbook-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1.25rem;
+  border-bottom: 1px solid var(--color-border);
+}
+
+.public-recipe-header h1,
+.public-cookbook-header h1 {
+  margin: 0 0 0.5rem;
+  font-size: clamp(2rem, 5vw, 3rem);
+  font-weight: 600;
+  font-family: var(--font-heading);
+  line-height: 1.15;
+}
+
+.public-meta {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.public-meta time {
+  font-style: italic;
+}
+
+.public-description {
+  margin: 0.75rem 0 0;
+  font-size: 1.1rem;
+  color: var(--color-text-muted);
+  line-height: 1.5;
+}
+
+.public-cookbook-entries {
+  display: grid;
+  gap: 1rem;
+}
+
+@media (min-width: 640px) {
+  .public-cookbook-entries {
+    grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  }
+}
+
+.public-cookbook-entry {
+  padding: 1.25rem;
+  background: var(--surface-paper);
+  border: 1px solid var(--color-border-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.public-cookbook-entry h2 {
+  margin: 0 0 0.35rem;
+  font-size: 1.15rem;
+}
+
+.public-cookbook-entry h2 a {
+  text-decoration: none;
+  color: var(--color-text);
+}
+
+.public-cookbook-entry h2 a:hover {
+  color: var(--color-accent);
+  text-decoration: underline;
+}
+
+.public-cookbook-entry p {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.95rem;
+}
+
+.public-cookbook-entry__order {
+  display: block;
+  margin-bottom: 0.35rem;
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  color: var(--color-text-label);
+}
+
+.public-hero {
+  margin: 1.5rem 0 2rem;
+}
+
+.public-hero img {
+  display: block;
+  width: 100%;
+  max-height: 480px;
+  object-fit: cover;
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
+}
+
+.public-ingredients-panel {
+  padding: 1.25rem;
+  background: var(--surface-paper);
+  border: 1px solid var(--color-border-card);
+  border-radius: var(--radius-lg);
+}
+
+.public-directions-panel {
+  padding-top: 0.25rem;
+}
+
+.public-site-mark {
+  display: inline-block;
+  margin-bottom: 1.5rem;
+  font-size: 0.85rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--color-text-label);
+  text-decoration: none;
+}
+
+.public-site-mark:hover {
+  color: var(--color-accent);
+}

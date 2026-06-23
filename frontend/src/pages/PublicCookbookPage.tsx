@@ -3,6 +3,8 @@ import { Link, useParams } from "react-router-dom";
 
 import { ApiError, fetchPublicCookbook, type PublicCookbook } from "../api/client";
 import { CookbookViewer } from "../components/CookbookViewer";
+import { useDocumentMeta } from "../lib/useDocumentMeta";
+import "../styles/public.css";
 
 export function PublicCookbookPage() {
   const { slug } = useParams<{ slug: string }>();
@@ -47,6 +49,11 @@ export function PublicCookbookPage() {
     };
   }, [slug]);
 
+  useDocumentMeta({
+    title: cookbook ? `${cookbook.title} · Trial and Eclair` : "Trial and Eclair",
+    description: cookbook?.description || undefined,
+  });
+
   if (loading) {
     return <p className="status-message">Loading cookbook…</p>;
   }
@@ -60,5 +67,9 @@ export function PublicCookbookPage() {
     );
   }
 
-  return <CookbookViewer cookbook={cookbook} />;
+  return (
+    <div className="public-page">
+      <CookbookViewer cookbook={cookbook} />
+    </div>
+  );
 }

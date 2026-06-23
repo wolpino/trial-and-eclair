@@ -10,7 +10,81 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
-## 2026-06-22 · phase-ui-c3-c4-merge
+## 2026-06-22 · phase-ui-c2
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-23T04:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Implement Phase UI C2 — cork board grid (final Phase UI chunk): PinnedNote, filters, edit drawer, promote-to-lab, pin FAB.
+
+### Summary
+Rebuilt `DeveloperHomePage` with full-bleed cork texture, status/tag filters, and CSS grid of `PinnedNoteCard` components with rotation seeded from idea id. Click opens slide-over `IdeaEditDrawer` (title, notes, status, tag, image, delete). `PinIdeaFab` replaces top create panel. Promote uses C6 `promoteIdea` API and navigates to lab spread. Removed `IdeaCard`, `CreateIdeaForm`, legacy cork styles from `index.css`. Token-only CSS in `components/corkboard/corkboard.css`. `npm run build` passes on `phase-ui-c2`.
+
+### Decisions
+- **Slide-over drawer in corkboard/** — not lab `NotebookOverlay`; keeps metaphors separate
+- **Rotation via id hash** — deterministic -3°…+3°, no persisted layout (freeform deferred)
+- **Tag filter dropdown** — populated from distinct `category_tag` values on loaded ideas
+
+### Changes
+- `frontend/src/components/corkboard/*`, `DeveloperHomePage.tsx`
+- `frontend/src/lib/ideaRotation.ts`, `api/development.ts` (`patchIdea`, `deleteIdea`)
+- Deleted `IdeaCard.tsx`, `CreateIdeaForm.tsx`
+
+### Open threads
+- Merge `phase-ui-c2` → `phase-ui-metaphor` / main (includes C5/C6)
+- Freeform cork canvas deferred per `corkboard_freeform_canvas.plan.md`
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phase-ui, c2, cork-board, PinnedNote, promote-to-lab, pin-fab
+**Files:** frontend/src/components/corkboard/*, DeveloperHomePage.tsx
+**Do not redo:** C3/C4/C5/C6 surfaces; freeform canvas
+**Resume with:** merge Phase UI branches; optional C6 visual polish if desired
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-23T03:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Continue Phase UI plan after C6 — implement C5 cookbooks binder, reference shelf, public OG polish.
+
+### Summary
+Rebuilt cookbooks as a binder metaphor: spine rack on index, ring-bound detail view with entry cards, add/remove published recipes, publish panel. References page uses horizontal shelf spines with type filter rail and per-type styling. Public `/r/:slug` and `/c/:slug` get `useDocumentMeta` (og:title, description, image) plus layout polish in `public.css`. Token-only CSS in new `cookbooks.css`, `references.css`, `public.css`. Build and Django tests pass on `phase-ui-c5`.
+
+### Decisions
+- **Reuse lab spine pattern** — cookbooks/references share vertical-rl spine layout with wood shelf border
+- **Entry cards show snapshot version** — frozen v# badge; link to public recipe when slug known
+- **OG meta via client hook** — no SSR; sufficient for share previews when crawlers execute JS
+
+### Changes
+- `frontend/src/components/cookbooks/*`, `references/*`
+- `frontend/src/pages/CookbooksPage.tsx`, `CookbookDetailPage.tsx`, `ReferencesPage.tsx`
+- `frontend/src/pages/PublicRecipePage.tsx`, `PublicCookbookPage.tsx`
+- `frontend/src/components/RecipeViewer.tsx`, `CookbookViewer.tsx`
+- `frontend/src/lib/useDocumentMeta.ts`, `frontend/src/styles/{cookbooks,references,public}.css`
+
+### Open threads
+- **C2** cork board grid last (promote button uses C6 API)
+- Optional visual polish pass on C6 form-heavy areas (user deferred)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phase-ui, c5, cookbook-binder, reference-shelf, og-meta, public-polish
+**Files:** frontend/src/components/cookbooks/*, references/*, styles/cookbooks.css, public.css
+**Do not redo:** C3/C4/C6 layout and API wiring
+**Resume with:** C2 cork board on phase-ui-metaphor merge branch
+<!-- AGENT_CONTEXT_END -->
+
+---
 
 | Field | Value |
 |-------|-------|

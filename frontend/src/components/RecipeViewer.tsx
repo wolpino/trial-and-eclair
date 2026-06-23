@@ -15,13 +15,24 @@ interface RecipeViewerProps {
 export function RecipeViewer({ recipe }: RecipeViewerProps) {
   const heroUrl = mediaUrl(recipe.hero_image);
   const timing = formatTiming(recipe.prep_minutes, recipe.cook_minutes);
+  const publishedDate = new Date(recipe.published_at).toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
 
   return (
     <article className="recipe-viewer">
-      <header className="recipe-header">
-        <p className="recipe-meta">
+      <Link className="public-site-mark" to="/">
+        Trial &amp; Eclair
+      </Link>
+
+      <header className="public-recipe-header">
+        <p className="public-meta">
           by {recipe.author}
           {timing ? ` · ${timing}` : null}
+          {" · "}
+          <time dateTime={recipe.published_at}>{publishedDate}</time>
         </p>
         <h1>{recipe.title}</h1>
         {recipe.fork_lineage ? (
@@ -38,18 +49,18 @@ export function RecipeViewer({ recipe }: RecipeViewerProps) {
           </p>
         ) : null}
         {recipe.description ? (
-          <p className="recipe-description">{recipe.description}</p>
+          <p className="public-description">{recipe.description}</p>
         ) : null}
       </header>
 
       {heroUrl ? (
-        <figure className="hero-image">
+        <figure className="public-hero">
           <img src={heroUrl} alt={recipe.title} />
         </figure>
       ) : null}
 
       <div className="recipe-body">
-        <aside className="ingredients-panel">
+        <aside className="ingredients-panel public-ingredients-panel">
           <h2>Ingredients</h2>
           {recipe.equipment_notes ? (
             <p className="equipment-notes">{recipe.equipment_notes}</p>
@@ -70,7 +81,7 @@ export function RecipeViewer({ recipe }: RecipeViewerProps) {
           </ul>
         </aside>
 
-        <section className="directions-panel">
+        <section className="directions-panel public-directions-panel">
           {recipe.story ? (
             <div className="recipe-story">
               <h2>Story</h2>

@@ -7,32 +7,44 @@ interface CookbookViewerProps {
 }
 
 export function CookbookViewer({ cookbook }: CookbookViewerProps) {
+  const publishedDate = new Date(cookbook.published_at).toLocaleDateString(undefined, {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+  });
+
   return (
     <article className="cookbook-viewer">
-      <header className="recipe-header">
-        <p className="recipe-meta">by {cookbook.author}</p>
+      <Link className="public-site-mark" to="/">
+        Trial &amp; Eclair
+      </Link>
+
+      <header className="public-cookbook-header">
+        <p className="public-meta">
+          by {cookbook.author}
+          {" · "}
+          <time dateTime={cookbook.published_at}>{publishedDate}</time>
+        </p>
         <h1>{cookbook.title}</h1>
         {cookbook.description ? (
-          <p className="recipe-description">{cookbook.description}</p>
+          <p className="public-description">{cookbook.description}</p>
         ) : null}
       </header>
 
-      <section className="cookbook-recipes">
-        <h2>Recipes</h2>
-        <ol className="cookbook-recipe-list">
-          {cookbook.recipes.map((entry) => (
-            <li key={`${entry.sort_order}-${entry.title}`}>
+      <section className="public-cookbook-entries" aria-label="Recipes in cookbook">
+        {cookbook.recipes.map((entry) => (
+          <article key={`${entry.sort_order}-${entry.title}`} className="public-cookbook-entry">
+            <span className="public-cookbook-entry__order">Recipe {entry.sort_order}</span>
+            <h2>
               {entry.recipe_slug ? (
                 <Link to={`/r/${entry.recipe_slug}`}>{entry.title}</Link>
               ) : (
-                <span>{entry.title}</span>
+                entry.title
               )}
-              {entry.description ? (
-                <p className="cookbook-recipe-description">{entry.description}</p>
-              ) : null}
-            </li>
-          ))}
-        </ol>
+            </h2>
+            {entry.description ? <p>{entry.description}</p> : null}
+          </article>
+        ))}
       </section>
     </article>
   );
