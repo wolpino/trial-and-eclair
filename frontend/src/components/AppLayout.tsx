@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthContext";
+import { HistoryNav } from "./HistoryNav";
 import {
   FONT_PRESETS,
   THEME_PRESETS,
@@ -64,9 +65,12 @@ export function AppLayout() {
     <div className="app-shell">
       <header className="app-header">
         <div className="app-header-inner">
-          <Link className="app-brand" to="/">
-            Trial and Eclair
-          </Link>
+          <div className="app-brand-row">
+            <HistoryNav />
+            <Link className="app-brand" to="/">
+              Trial and Eclair
+            </Link>
+          </div>
           <nav className="app-nav" aria-label="Main">
             {user && hasDeveloperAccess ? (
               <>

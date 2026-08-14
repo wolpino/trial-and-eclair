@@ -171,6 +171,17 @@ a {
   padding: 0.75rem 1.25rem;
 }
 
+.app-brand-row {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.history-nav {
+  display: flex;
+  gap: 0.35rem;
+}
+
 .app-brand {
   font-weight: 600;
   text-decoration: none;
@@ -218,6 +229,15 @@ a {
 
 .nav-button:hover {
   background: color-mix(in srgb, var(--color-accent-secondary) 10%, transparent);
+}
+
+.nav-button:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.nav-button:disabled:hover {
+  background: transparent;
 }
 
 .app-settings {
