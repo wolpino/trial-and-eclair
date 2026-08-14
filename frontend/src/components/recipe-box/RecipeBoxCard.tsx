@@ -23,7 +23,12 @@ type RecipeBoxCardProps = {
   expanded: boolean;
   onCollapse: () => void;
   onSaved: (recipe: CollectionRecipe) => void;
+  onDelete: () => void;
 };
+
+function confirmDelete(title: string): boolean {
+  return window.confirm(`Delete "${title}" from your recipe box? This cannot be undone.`);
+}
 
 function parseOptionalMinutes(value: string): number | null {
   const trimmed = value.trim();
@@ -39,6 +44,7 @@ export function RecipeBoxCard({
   expanded,
   onCollapse,
   onSaved,
+  onDelete,
 }: RecipeBoxCardProps) {
   const [draft, setDraft] = useState(recipe);
   const [error, setError] = useState<string | null>(null);
@@ -227,6 +233,17 @@ export function RecipeBoxCard({
           </button>
           <button className="recipe-box-btn recipe-box-btn--ghost" type="button" onClick={onCollapse}>
             Close
+          </button>
+          <button
+            className="recipe-box-card__remove"
+            type="button"
+            onClick={() => {
+              if (confirmDelete(recipe.title)) {
+                onDelete();
+              }
+            }}
+          >
+            Delete card
           </button>
         </div>
       </form>

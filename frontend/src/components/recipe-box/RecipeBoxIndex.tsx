@@ -9,7 +9,12 @@ type RecipeBoxIndexProps = {
   selectedRecipeId?: string;
   onLetterSelect: (letter: string) => void;
   onRecipeSelect: (id: string) => void;
+  onDelete: (id: string) => void;
 };
+
+function confirmDelete(title: string): boolean {
+  return window.confirm(`Delete "${title}" from your recipe box? This cannot be undone.`);
+}
 
 const TABS_PER_ROW = 8;
 
@@ -38,6 +43,7 @@ export function RecipeBoxIndex({
   selectedRecipeId,
   onLetterSelect,
   onRecipeSelect,
+  onDelete,
 }: RecipeBoxIndexProps) {
   const activeRecipes = grouped[activeLetter] ?? [];
 
@@ -105,7 +111,7 @@ export function RecipeBoxIndex({
               const timing = formatTiming(recipe);
               const selected = recipe.id === selectedRecipeId;
               return (
-                <li key={recipe.id}>
+                <li key={recipe.id} className="recipe-box-index__item">
                   <button
                     type="button"
                     className={
@@ -119,6 +125,18 @@ export function RecipeBoxIndex({
                     {timing ? (
                       <span className="recipe-box-index__row-meta">{timing}</span>
                     ) : null}
+                  </button>
+                  <button
+                    className="recipe-box-index__delete"
+                    type="button"
+                    aria-label={`Delete ${recipe.title}`}
+                    onClick={() => {
+                      if (confirmDelete(recipe.title)) {
+                        onDelete(recipe.id);
+                      }
+                    }}
+                  >
+                    Delete
                   </button>
                 </li>
               );

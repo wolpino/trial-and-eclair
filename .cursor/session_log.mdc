@@ -10,6 +10,46 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-08-14 · recipe-box-delete-ui
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-08-14T03:55:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Add recipe-box delete UI using the existing `deleteRecipeBoxRecipe` API.
+
+### Summary
+Wired DELETE into the box lid toolbar and A–Z index, matching the lab shelf confirm-then-remove pattern. Deleting the open card collapses the lid. No new dependencies. Frontend build passed. Not committed.
+
+### Decisions
+- **Lid + index delete** — both surfaces, not lid-only
+- **OCR ≠ MCP** — scan OCR is Django vision/OCR later; MCP is not a substitute
+- **Prioritize PR after this** — OCR and mobile polish wait
+
+### Changes
+- `frontend/src/pages/RecipeBoxPage.tsx` — `handleDelete` + lid collapse
+- `frontend/src/components/recipe-box/RecipeBoxCard.tsx` — Delete card in toolbar
+- `frontend/src/components/recipe-box/RecipeBoxIndex.tsx` — row Delete control
+- `frontend/src/components/recipe-box/recipe-box.css` — index item + delete styles
+
+### Open threads
+- Open PR `polishpolish` → `main` (includes this uncommitted delete UI)
+- Scan OCR/vision API (needs approved dep; not MCP)
+- Stripe, production deploy, freeform cork
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** recipe-box, delete, polishpolish
+**Files:** frontend/src/pages/RecipeBoxPage.tsx, frontend/src/components/recipe-box/RecipeBoxCard.tsx, frontend/src/components/recipe-box/RecipeBoxIndex.tsx
+**Do not redo:** mini card grid in recipe-box well; AlphabetRail; Warm kitchen theme; measurement conversion UI
+**Resume with:** commit box delete if Ari wants, then open PR polishpolish → main
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-08-14 · agent-full-app-campaign
 
 | Field | Value |

@@ -4,6 +4,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { ApiError } from "../api/client";
 import {
   createRecipeBoxRecipe,
+  deleteRecipeBoxRecipe,
   fetchRecipeBox,
   type CollectionRecipe,
 } from "../api/collection";
@@ -86,6 +87,19 @@ export function RecipeBoxPage() {
     navigate("/recipe-box");
   }
 
+  async function handleDelete(id: string) {
+    try {
+      await deleteRecipeBoxRecipe(id);
+      setRecipes((current) => current.filter((recipe) => recipe.id !== id));
+      setError(null);
+      if (recipeId === id) {
+        navigate("/recipe-box");
+      }
+    } catch (err: unknown) {
+      setError(err instanceof ApiError ? err.message : "Could not delete card.");
+    }
+  }
+
   async function handleAddCard(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setAdding(true);
@@ -109,6 +123,7 @@ export function RecipeBoxPage() {
       recipe={focusedRecipe}
       onCollapse={collapseCard}
       onSaved={upsertRecipe}
+      onDelete={() => void handleDelete(focusedRecipe.id)}
     />
   ) : (
     <div className="recipe-box-lid__empty">
@@ -151,6 +166,7 @@ export function RecipeBoxPage() {
             selectedRecipeId={recipeId}
             onLetterSelect={setActiveLetter}
             onRecipeSelect={focusCard}
+            onDelete={(id) => void handleDelete(id)}
           />
         )}
       </RecipeBoxFrame>
