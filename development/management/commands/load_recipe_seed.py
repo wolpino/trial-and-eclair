@@ -152,10 +152,7 @@ class Command(BaseCommand):
         if user.role != role:
             user.role = role
             updated.append("role")
-        if role == UserRole.DEVELOPER and user.subscription_status not in (
-            SubscriptionStatus.TRIAL,
-            SubscriptionStatus.ACTIVE,
-        ):
+        if role == UserRole.DEVELOPER and not user.has_developer_access():
             user.subscription_status = SubscriptionStatus.TRIAL
             user.trial_ends_at = timezone.now() + timedelta(days=14)
             updated.extend(["subscription_status", "trial_ends_at"])
