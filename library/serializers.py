@@ -1,6 +1,8 @@
 from rest_framework import serializers
 
-from .models import Reference, ReferenceLink, ReferenceType
+from development.models import ForkType
+
+from .models import Reference, ReferenceLink, ReferenceType, SourceDocument, UrlRecipeImport
 
 
 class ReferenceLinkSerializer(serializers.ModelSerializer):
@@ -58,3 +60,52 @@ class ReferenceSerializer(serializers.ModelSerializer):
         if value not in ReferenceType.values:
             raise serializers.ValidationError("Invalid reference type.")
         return value
+
+
+class UrlImportCreateSerializer(serializers.Serializer):
+    url = serializers.URLField(max_length=2048)
+
+
+class UrlRecipeImportSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = UrlRecipeImport
+        fields = (
+            "id",
+            "normalized_url",
+            "source_title",
+            "source_author",
+            "source_site",
+            "parsed_data",
+            "last_fetched_at",
+            "fetch_error",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = fields
+
+
+class UrlImportSaveSerializer(serializers.Serializer):
+    fork_type = serializers.ChoiceField(choices=ForkType.choices)
+
+
+class ScanImportSerializer(serializers.Serializer):
+    file = serializers.FileField()
+    destination = serializers.ChoiceField(
+        choices=("box", "lab"),
+        required=False,
+        default="box",
+    )
+
+
+class SourceDocumentSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = SourceDocument
+        fields = (
+            "id",
+            "original_filename",
+            "mime_type",
+            "extracted_text",
+            "created_at",
+            "updated_at",
+        )
+        read_only_fields = fields

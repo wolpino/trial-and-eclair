@@ -1,9 +1,23 @@
+from dataclasses import dataclass, field
+from decimal import Decimal
+
 from django.db import transaction
 from django.db.models import Max
 from django.utils import timezone
 from django.utils.text import slugify
 
-from .models import DevelopmentRecipe, Idea, RecipeStep, RecipeVersion, VersionIngredientLine
+from collection.models import CollectionIngredientLine, CollectionRecipe
+from collection.services import create_box_recipe
+
+from .models import (
+    DevelopmentRecipe,
+    ForkType,
+    Idea,
+    RecipeFork,
+    RecipeStep,
+    RecipeVersion,
+    VersionIngredientLine,
+)
 
 _VERSION_SCALAR_FIELDS = (
     "title",
@@ -331,4 +345,199 @@ def promote_idea(idea: Idea, *, title: str | None = None) -> DevelopmentRecipe:
     recipe = create_development_recipe(idea.user, title=recipe_title)
     idea.promoted_recipe = recipe
     idea.save(update_fields=["promoted_recipe", "updated_at"])
+    return recipe
+
+
+@dataclass
+class IngredientLineCopy:
+    name: str
+    quantity: Decimal
+    unit: str = ""
+    custom_unit: str = ""
+    prep_note: str = ""
+    substitution_note: str = ""
+    sort_order: int = 0
+    ingredient: object | None = None
+
+
+@dataclass
+class RecipeCopyPayload:
+    title: str
+    description: str = ""
+    equipment_notes: str = ""
+    prep_minutes: int | None = None
+    cook_minutes: int | None = None
+    story: str = ""
+    version_notes: str = ""
+    ingredient_lines: list[IngredientLineCopy] = field(default_factory=list)
+    step_bodies: list[str] = field(default_factory=list)
+
+
+def payload_from_version(version: RecipeVersion) -> RecipeCopyPayload:
+    lines = [
+        IngredientLineCopy(
+            name=line.ingredient.name,
+            quantity=line.quantity,
+            unit=line.unit,
+            custom_unit=line.custom_unit,
+            prep_note=line.prep_note,
+            substitution_note=line.substitution_note,
+            sort_order=line.sort_order,
+            ingredient=line.ingredient,
+        )
+        for line in version.ingredient_lines.select_related("ingredient").order_by(
+            "sort_order", "created_at"
+        )
+    ]
+    step_bodies = list(version.steps.order_by("order").values_list("body", flat=True))
+    return RecipeCopyPayload(
+        title=version.title,
+        description=version.description,
+        equipment_notes=version.equipment_notes,
+        prep_minutes=version.prep_minutes,
+        cook_minutes=version.cook_minutes,
+        story=version.story,
+        version_notes=version.version_notes,
+        ingredient_lines=lines,
+        step_bodies=step_bodies,
+    )
+
+
+def _resolve_ingredient(line: IngredientLineCopy):
+    from catalog.models import Ingredient
+
+    if line.ingredient is not None:
+        return line.ingredient
+    name = (line.name or "ingredient").strip()[:255] or "ingredient"
+    ingredient, _ = Ingredient.objects.get_or_create(name=name)
+    return ingredient
+
+
+def _copy_payload_steps(
+    bodies: list[str],
+    *,
+    version: RecipeVersion | None = None,
+    collection_recipe: CollectionRecipe | None = None,
+) -> None:
+    order = 1
+    for body in bodies:
+        text = (body or "").strip()
+        if not text:
+            continue
+        RecipeStep.objects.create(
+            version=version,
+            collection_recipe=collection_recipe,
+            order=order,
+            body=text,
+        )
+        order += 1
+
+
+def _copy_payload_lines_to_box(
+    recipe: CollectionRecipe,
+    lines: list[IngredientLineCopy],
+) -> None:
+    for sort_order, line in enumerate(lines):
+        CollectionIngredientLine.objects.create(
+            recipe=recipe,
+            ingredient=_resolve_ingredient(line),
+            quantity=line.quantity,
+            unit=line.unit,
+            custom_unit=line.custom_unit,
+            prep_note=line.prep_note,
+            substitution_note=line.substitution_note,
+            sort_order=line.sort_order if line.sort_order else sort_order,
+        )
+
+
+def _copy_payload_lines_to_version(
+    version: RecipeVersion,
+    lines: list[IngredientLineCopy],
+) -> None:
+    for sort_order, line in enumerate(lines):
+        VersionIngredientLine.objects.create(
+            version=version,
+            ingredient=_resolve_ingredient(line),
+            quantity=line.quantity,
+            unit=line.unit,
+            custom_unit=line.custom_unit,
+            prep_note=line.prep_note,
+            substitution_note=line.substitution_note,
+            sort_order=line.sort_order if line.sort_order else sort_order,
+        )
+
+
+@transaction.atomic
+def copy_payload_to_box(user, payload: RecipeCopyPayload, **extra_fields) -> CollectionRecipe:
+    recipe = create_box_recipe(
+        user,
+        title=payload.title,
+        description=payload.description,
+        equipment_notes=payload.equipment_notes,
+        prep_minutes=payload.prep_minutes,
+        cook_minutes=payload.cook_minutes,
+        **extra_fields,
+    )
+    _copy_payload_lines_to_box(recipe, payload.ingredient_lines)
+    _copy_payload_steps(payload.step_bodies, collection_recipe=recipe)
+    return recipe
+
+
+@transaction.atomic
+def copy_payload_to_lab(
+    user,
+    payload: RecipeCopyPayload,
+    *,
+    title: str | None = None,
+) -> DevelopmentRecipe:
+    recipe_title = (title or payload.title).strip() or payload.title
+    recipe = create_development_recipe(user, title=recipe_title)
+    current = recipe.current_version
+    if current is None:
+        raise ValueError("Recipe has no current version.")
+    current.title = recipe_title
+    current.description = payload.description
+    current.equipment_notes = payload.equipment_notes
+    current.prep_minutes = payload.prep_minutes
+    current.cook_minutes = payload.cook_minutes
+    current.story = payload.story
+    current.version_notes = payload.version_notes
+    current.save()
+    _copy_payload_lines_to_version(current, payload.ingredient_lines)
+    _copy_payload_steps(payload.step_bodies, version=current)
+    return recipe
+
+
+@transaction.atomic
+def fork_to_box(user, version: RecipeVersion, source_user) -> CollectionRecipe:
+    fork = RecipeFork.objects.create(
+        user=user,
+        forked_from_version=version,
+        forked_from_user=source_user,
+        fork_type=ForkType.SAVE_TO_BOX,
+    )
+    return copy_payload_to_box(user, payload_from_version(version), fork_record=fork)
+
+
+@transaction.atomic
+def fork_to_lab(
+    user,
+    version: RecipeVersion,
+    source_user,
+    *,
+    title: str | None = None,
+    story: str | None = None,
+) -> DevelopmentRecipe:
+    payload = payload_from_version(version)
+    if story is not None:
+        payload.story = story
+    fork = RecipeFork.objects.create(
+        user=user,
+        forked_from_version=version,
+        forked_from_user=source_user,
+        fork_type=ForkType.REWORK,
+    )
+    recipe = copy_payload_to_lab(user, payload, title=title)
+    recipe.fork_record = fork
+    recipe.save(update_fields=["fork_record", "updated_at"])
     return recipe

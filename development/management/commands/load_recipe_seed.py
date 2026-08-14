@@ -39,6 +39,8 @@ from development.models import (
 from development.services import (
     add_cookbook_entry,
     create_development_recipe,
+    fork_to_box,
+    fork_to_lab,
     promote_idea,
     publish_cookbook,
     publish_recipe,
@@ -459,89 +461,21 @@ class Command(BaseCommand):
                 raise CommandError(f"No version to fork for {row['from_title']!r}")
             dest = users[row["to_user"]]
             if row["fork_type"] == ForkType.SAVE_TO_BOX:
-                self._fork_to_box(dest, version, source.user)
+                fork_to_box(dest, version, source.user)
             else:
-                self._fork_to_lab(dest, version, source.user, row)
-
-    def _fork_to_box(self, user: Any, version: RecipeVersion, source_user: Any) -> None:
-        fork = RecipeFork.objects.create(
-            user=user,
-            forked_from_version=version,
-            forked_from_user=source_user,
-            fork_type=ForkType.SAVE_TO_BOX,
-        )
-        recipe = create_box_recipe(
-            user,
-            title=version.title,
-            description=version.description,
-            equipment_notes=version.equipment_notes,
-            prep_minutes=version.prep_minutes,
-            cook_minutes=version.cook_minutes,
-        )
-        recipe.fork_record = fork
-        recipe.save(update_fields=["fork_record", "updated_at"])
-        self._copy_lines_to_box(version, recipe)
-        self._add_steps(
-            collection_recipe=recipe,
-            bodies=list(version.steps.values_list("body", flat=True)),
-        )
-
-    def _fork_to_lab(
-        self,
-        user: Any,
-        version: RecipeVersion,
-        source_user: Any,
-        row: dict[str, Any],
-    ) -> None:
-        fork = RecipeFork.objects.create(
-            user=user,
-            forked_from_version=version,
-            forked_from_user=source_user,
-            fork_type=ForkType.REWORK,
-        )
-        title = row.get("rework_title") or version.title
-        recipe = create_development_recipe(user, title=title)
-        recipe.fork_record = fork
-        recipe.save(update_fields=["fork_record", "updated_at"])
-        current = recipe.current_version
-        assert current is not None
-        current.title = title
-        current.description = version.description
-        current.equipment_notes = version.equipment_notes
-        current.prep_minutes = version.prep_minutes
-        current.cook_minutes = version.cook_minutes
-        current.story = row.get("story", "")
-        current.save()
-        for sort_order, line in enumerate(version.ingredient_lines.all()):
-            VersionIngredientLine.objects.create(
-                version=current,
-                ingredient=line.ingredient,
-                quantity=line.quantity,
-                unit=line.unit,
-                custom_unit=line.custom_unit,
-                prep_note=line.prep_note,
-                substitution_note=line.substitution_note,
-                sort_order=sort_order,
-            )
-        self._add_steps(
-            version=current,
-            bodies=list(version.steps.values_list("body", flat=True)),
-        )
-        if row.get("publish_slug"):
-            publish_recipe(recipe, slug=row["publish_slug"], story=row.get("story", ""))
-
-    def _copy_lines_to_box(self, version: RecipeVersion, recipe: CollectionRecipe) -> None:
-        for sort_order, line in enumerate(version.ingredient_lines.all()):
-            CollectionIngredientLine.objects.create(
-                recipe=recipe,
-                ingredient=line.ingredient,
-                quantity=line.quantity,
-                unit=line.unit,
-                custom_unit=line.custom_unit,
-                prep_note=line.prep_note,
-                substitution_note=line.substitution_note,
-                sort_order=sort_order,
-            )
+                recipe = fork_to_lab(
+                    dest,
+                    version,
+                    source.user,
+                    title=row.get("rework_title"),
+                    story=row.get("story", ""),
+                )
+                if row.get("publish_slug"):
+                    publish_recipe(
+                        recipe,
+                        slug=row["publish_slug"],
+                        story=row.get("story", ""),
+                    )
 
     def _dev_recipe(self, user: Any, title: str) -> DevelopmentRecipe:
         recipe = DevelopmentRecipe.objects.filter(user=user, title=title).first()

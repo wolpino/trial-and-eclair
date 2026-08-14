@@ -1,7 +1,7 @@
 from django.urls import include, path
 from rest_framework.routers import DefaultRouter
 
-from .public_views import PublicCookbookView, PublicRecipeView
+from .public_views import ForkPublicRecipeView, PublicCookbookView, PublicRecipeView
 from .views import (
     CookbookEntryViewSet,
     CookbookViewSet,
@@ -27,6 +27,11 @@ urlpatterns = [
         "public/recipes/<slug:slug>/",
         PublicRecipeView.as_view(),
         name="public-recipe-detail",
+    ),
+    path(
+        "public/recipes/<slug:slug>/fork/",
+        ForkPublicRecipeView.as_view(),
+        name="public-recipe-fork",
     ),
     path(
         "public/cookbooks/<slug:slug>/",
