@@ -1,4 +1,4 @@
-from unittest.mock import patch
+from unittest.mock import MagicMock, patch
 
 from django.contrib.auth import get_user_model
 from django.core.files.uploadedfile import SimpleUploadedFile
@@ -10,7 +10,7 @@ from collection.models import CollectionRecipe
 from development.models import DevelopmentRecipe, ForkType
 
 from .models import SourceDocument, UrlRecipeImport
-from .services import SCAN_DRAFT_NOTE
+from .scan import SCAN_DRAFT_NOTE
 
 User = get_user_model()
 
@@ -198,6 +198,18 @@ class UrlImportAPITests(TestCase):
         self.assertEqual(mock_urlopen.call_count, calls_after_first)
 
 
+RECIPE_TEXT = """Grandma Cookies
+
+Ingredients
+2 cups flour
+1 cup sugar
+
+Directions
+Mix dry ingredients.
+Bake until golden.
+"""
+
+
 class ScanImportAPITests(TestCase):
     def setUp(self) -> None:
         self.client = APIClient(enforce_csrf_checks=False)
@@ -216,7 +228,7 @@ class ScanImportAPITests(TestCase):
         self.client.force_login(self.home_cook)
         upload = SimpleUploadedFile(
             "grandma-cookies.txt",
-            b"scan-bytes",
+            RECIPE_TEXT.encode(),
             content_type="text/plain",
         )
 
@@ -231,13 +243,64 @@ class ScanImportAPITests(TestCase):
         document = SourceDocument.objects.get(id=response.data["source_document"]["id"])
         self.assertEqual(document.user, self.home_cook)
         self.assertEqual(document.original_filename, "grandma-cookies.txt")
+        self.assertIn("2 cups flour", document.extracted_text)
+        recipe = CollectionRecipe.objects.get(id=response.data["recipe"]["id"])
+        self.assertEqual(recipe.title, "Grandma Cookies")
+        self.assertEqual(recipe.source_document_id, document.id)
+        self.assertEqual(recipe.ingredient_lines.count(), 2)
+        self.assertEqual(recipe.steps.count(), 2)
+
+    @patch("library.scan.shutil.which", return_value=None)
+    def test_image_without_tesseract_opens_empty_draft(self, _mock_which) -> None:
+        self.client.force_login(self.home_cook)
+        upload = SimpleUploadedFile(
+            "card.jpg",
+            b"fake-image",
+            content_type="image/jpeg",
+        )
+
+        response = self.client.post(
+            "/api/v1/imports/scan/",
+            {"file": upload},
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        document = SourceDocument.objects.get(id=response.data["source_document"]["id"])
         self.assertEqual(document.extracted_text, "")
         recipe = CollectionRecipe.objects.get(id=response.data["recipe"]["id"])
-        self.assertEqual(recipe.title, "grandma-cookies")
+        self.assertEqual(recipe.title, "card")
         self.assertEqual(recipe.description, SCAN_DRAFT_NOTE)
-        self.assertEqual(recipe.source_document_id, document.id)
         self.assertEqual(recipe.ingredient_lines.count(), 0)
-        self.assertEqual(recipe.steps.count(), 0)
+
+    @patch("library.scan.subprocess.run")
+    @patch("library.scan.shutil.which", return_value="/usr/bin/tesseract")
+    def test_image_ocr_fills_extracted_text_and_lines(self, _mock_which, mock_run) -> None:
+        mock_run.return_value = MagicMock(returncode=0, stdout=RECIPE_TEXT.encode())
+        self.client.force_login(self.home_cook)
+        upload = SimpleUploadedFile(
+            "card.jpg",
+            b"fake-image",
+            content_type="image/jpeg",
+        )
+
+        response = self.client.post(
+            "/api/v1/imports/scan/",
+            {"file": upload},
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        document = SourceDocument.objects.get(id=response.data["source_document"]["id"])
+        self.assertIn("Grandma Cookies", document.extracted_text)
+        recipe = CollectionRecipe.objects.get(id=response.data["recipe"]["id"])
+        self.assertEqual(recipe.title, "Grandma Cookies")
+        self.assertEqual(recipe.ingredient_lines.count(), 2)
+        self.assertEqual(recipe.steps.count(), 2)
+        mock_run.assert_called_once()
+        args = mock_run.call_args.args[0]
+        self.assertEqual(args[0], "/usr/bin/tesseract")
+        self.assertIn("stdout", args)
 
     def test_home_cook_cannot_scan_to_lab(self) -> None:
         self.client.force_login(self.home_cook)
@@ -252,7 +315,8 @@ class ScanImportAPITests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
         self.assertFalse(DevelopmentRecipe.objects.filter(user=self.home_cook).exists())
 
-    def test_developer_scan_to_lab_uses_version_notes(self) -> None:
+    @patch("library.scan.shutil.which", return_value=None)
+    def test_developer_scan_to_lab_uses_version_notes(self, _mock_which) -> None:
         self.client.force_login(self.developer)
         upload = SimpleUploadedFile(
             "lab-scan.jpg",
