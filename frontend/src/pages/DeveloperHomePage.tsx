@@ -108,23 +108,31 @@ export function DeveloperHomePage() {
         onTagChange={setTagFilter}
       />
 
-      {filteredIdeas.length === 0 ? (
-        <p className="cork-board-empty">
-          {ideas.length === 0
-            ? "No ideas yet — tap Pin note to add your first one."
-            : "No ideas match these filters."}
-        </p>
-      ) : (
-        <section aria-label="Pinned ideas" className="cork-board-grid">
-          {filteredIdeas.map((idea) => (
-            <PinnedNoteCard
-              key={idea.id}
-              idea={idea}
-              onSelect={setSelectedIdea}
-            />
-          ))}
-        </section>
-      )}
+      <div className="cork-cabinet">
+        <div className="cork-cabinet__door">
+          <span className="cork-cabinet__hinge cork-cabinet__hinge--top" aria-hidden="true" />
+          <span className="cork-cabinet__hinge cork-cabinet__hinge--bottom" aria-hidden="true" />
+          <div className="cork-cabinet__panel">
+            {filteredIdeas.length === 0 ? (
+              <p className="cork-board-empty">
+                {ideas.length === 0
+                  ? "No ideas yet — tap Pin note to add your first one."
+                  : "No ideas match these filters."}
+              </p>
+            ) : (
+              <section aria-label="Pinned ideas" className="cork-board-grid">
+                {filteredIdeas.map((idea) => (
+                  <PinnedNoteCard
+                    key={idea.id}
+                    idea={idea}
+                    onSelect={setSelectedIdea}
+                  />
+                ))}
+              </section>
+            )}
+          </div>
+        </div>
+      </div>
 
       <PinIdeaFab onCreated={handleCreated} />
 

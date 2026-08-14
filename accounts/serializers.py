@@ -24,6 +24,12 @@ class UserSerializer(serializers.ModelSerializer):
         read_only_fields = fields
 
 
+class MeUpdateSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = User
+        fields = ("show_forks",)
+
+
 class RegisterSerializer(serializers.Serializer):
     username = serializers.CharField(max_length=150)
     email = serializers.EmailField(required=False, allow_blank=True, default="")

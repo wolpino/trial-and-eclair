@@ -10,7 +10,7 @@ Recipe development and collection app — not a blog.
 
 ## Current status
 
-**Phases 0–3 complete** (backend + functional UI shell). **Phase UI complete** on `main`. **UI polish in progress** — sun & floral default theme, on-paper forms, surface-specific metaphor polish. **Phase 4 next** (backend) — URL/scan import, fork buttons on public pages.
+**Phases 0–4 complete** (backend + metaphor UI + polish). Walkthrough seed fills every screen. Stripe, production deploy, OCR, and freeform cork canvas are still later.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -57,11 +57,18 @@ Output: `seed/data/` (`ideas_seed.json`, `references_seed.json`, workbook export
 Load into the database for local dev (creates a `dev` developer user if needed):
 
 ```bash
-python manage.py load_recipe_seed
-# Log in at http://localhost:5173/login as dev / devpass123
-# Recipes only (Ari's blog posts): python manage.py load_recipe_seed --recipes-only
-# Re-seed: python manage.py load_recipe_seed --force
+python manage.py load_recipe_seed --force
 ```
+
+| User | Password | Role |
+|------|----------|------|
+| `dev` | `devpass123` | Developer (cork, lab, cookbooks) |
+| `cook` | `cookpass123` | Home cook (recipe box) |
+| `baker` | `bakerpass123` | Second developer (public fork source) |
+
+Guest: `/r/raisin-bran-muffins`, `/r/brown-butter-blondies`, `/c/brunch-notes`.
+
+`--force` replaces walkthrough records. Expired local `dev` trials are refreshed on load.
 
 ## Phase 1 — Developer API
 
@@ -76,7 +83,7 @@ Base path: `/api/v1/`. All endpoints require an authenticated session unless not
 | `register/` | POST | Public | Create account (defaults to `home_cook`), auto-login |
 | `login/` | POST | Public | Session login |
 | `logout/` | POST | Required | Clear session |
-| `me/` | GET | Required | Current user profile |
+| `me/` | GET, PATCH | Required | Profile; PATCH `show_forks` |
 
 `me` returns `role`, `subscription_status`, `trial_ends_at`, `measurement_preference`, and `show_forks`.
 
@@ -249,13 +256,25 @@ Developer endpoints (`ideas`, `recipes`, `journal`, `cookbooks`, etc.) require `
 | `trial` (past `trial_ends_at`) | Blocked (403) |
 | `expired`, `cancelled` | Blocked (403) |
 
-Set `role`, `subscription_status`, and `trial_ends_at` in Django admin. Stripe integration is Phase 4+.
+Set `role`, `subscription_status`, and `trial_ends_at` in Django admin. Stripe integration is later.
+
+## Phase 4 — Fork + import
+
+| Endpoint | Method | Notes |
+|----------|--------|-------|
+| `POST /api/v1/public/recipes/{slug}/fork/` | Auth | `{ "fork_type": "save_to_box" \| "rework" }`. Home cooks: save to box only. |
+| `POST /api/v1/imports/url/` | Auth | Fetch URL, parse JSON-LD Recipe, SSRF-safe. |
+| `GET /api/v1/imports/url/{id}/` | Auth | Read-only cached import. |
+| `POST /api/v1/imports/url/{id}/save/` | Auth | Copy into box or lab. Never publish directly. |
+| `POST /api/v1/imports/scan/` | Auth | Multipart file → `SourceDocument` + draft. OCR later fills `extracted_text`. |
+
+Public UI: **Save to box** / **Rework** on `/r/:slug`. Box and lab have URL preview + scan upload.
 
 ## Tests
 
 ```bash
 source .venv/bin/activate
-python manage.py test accounts development collection library   # 66 tests
+python manage.py test accounts development collection library catalog   # 90 tests
 cd frontend && npm run build                 # TypeScript + production bundle
 ```
 
@@ -293,8 +312,8 @@ recipes/      Original notes, sheets links, docx recipes
 | **2** | Publish + public viewer + PWA shell | Complete |
 | **3** | Version diff, cookbooks, home cook tier, reference library API | Complete |
 | **UI** | Metaphor SPA: theming, lab notebook, recipe box, API UI gaps, cookbooks/references, cork board | Complete |
-| **UI polish** | Sun & floral theme, on-paper forms, index cards, dot-grid lab, cork decoration | In progress |
-| **4** | URL/scan import, fork buttons (backend) | Next |
+| **UI polish** | Sun & floral theme, on-paper forms, index cards, dot-grid lab, cork cabinet | Complete |
+| **4** | URL/scan import, fork buttons | Complete |
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout) | Planned |
 

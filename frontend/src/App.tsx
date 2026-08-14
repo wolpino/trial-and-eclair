@@ -21,10 +21,9 @@ export function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="/r/:slug" element={<PublicRecipePage />} />
-        <Route path="/c/:slug" element={<PublicCookbookPage />} />
-
         <Route element={<AppLayout />}>
+          <Route path="/r/:slug" element={<PublicRecipePage />} />
+          <Route path="/c/:slug" element={<PublicCookbookPage />} />
           <Route path="/" element={<HomePage />} />
           <Route element={<GuestRoute />}>
             <Route path="/login" element={<LoginPage />} />

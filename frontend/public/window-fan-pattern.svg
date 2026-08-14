@@ -1,0 +1,49 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="120" height="104" viewBox="0 0 120 104" fill="none">
+  <defs>
+    <pattern id="fanCell" width="60" height="52" patternUnits="userSpaceOnUse">
+      <!-- scalloped teardrop outline -->
+      <path
+        d="M30 46 L30 14 C30 14 18 22 14 34 C10 42 16 48 30 46 C44 48 50 42 46 34 C42 22 30 14 30 14 Z"
+        stroke="#289494"
+        stroke-width="0.55"
+        opacity="0.13"
+        fill="none"
+      />
+      <!-- central rib -->
+      <path d="M30 44 L30 16" stroke="#289494" stroke-width="0.75" opacity="0.15" />
+      <!-- side ribs -->
+      <path
+        d="M30 18 C24 26 20 34 22 42 M30 18 C36 26 40 34 38 42"
+        stroke="#289494"
+        stroke-width="0.5"
+        opacity="0.12"
+      />
+      <!-- inner scallop highlight -->
+      <path
+        d="M30 40 C26 38 22 36 20 32 C18 28 22 24 30 22 C38 24 42 28 40 32 C38 36 34 38 30 40 Z"
+        stroke="#289494"
+        stroke-width="0.35"
+        opacity="0.08"
+        fill="none"
+      />
+    </pattern>
+    <pattern id="fanCellOffset" width="60" height="52" patternUnits="userSpaceOnUse" x="30" y="26">
+      <path
+        d="M30 46 L30 14 C30 14 18 22 14 34 C10 42 16 48 30 46 C44 48 50 42 46 34 C42 22 30 14 30 14 Z"
+        stroke="#289494"
+        stroke-width="0.55"
+        opacity="0.11"
+        fill="none"
+      />
+      <path d="M30 44 L30 16" stroke="#289494" stroke-width="0.75" opacity="0.13" />
+      <path
+        d="M30 18 C24 26 20 34 22 42 M30 18 C36 26 40 34 38 42"
+        stroke="#289494"
+        stroke-width="0.5"
+        opacity="0.10"
+      />
+    </pattern>
+  </defs>
+  <rect width="120" height="104" fill="url(#fanCell)" />
+  <rect width="120" height="104" fill="url(#fanCellOffset)" />
+</svg>

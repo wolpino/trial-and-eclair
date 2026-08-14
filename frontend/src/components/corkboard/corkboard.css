@@ -1,12 +1,12 @@
 .cork-board-page {
   min-height: calc(100vh - 3.5rem);
   padding: 1.5rem 1.25rem 5rem;
-  background-color: var(--surface-cork);
-  background-image:
-    radial-gradient(circle at 15% 20%, var(--shadow-pin-color) 0.6px, transparent 1.2px),
-    radial-gradient(circle at 85% 75%, var(--shadow-pin-color) 0.5px, transparent 1px),
-    radial-gradient(circle at 45% 55%, var(--shadow-card-color) 0.4px, transparent 0.9px);
-  background-size: 18px 18px, 22px 22px, 14px 14px;
+  background-color: var(--color-bg);
+  background-image: radial-gradient(
+    ellipse 80% 42% at 50% -8%,
+    var(--pattern-sun-wash),
+    transparent 70%
+  );
 }
 
 .cork-board-page__header {
@@ -75,20 +75,89 @@
   color: var(--color-text);
 }
 
+.cork-cabinet {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.55rem;
+  background: var(--surface-box);
+  border-radius: var(--radius-lg);
+  box-shadow:
+    var(--shadow-card),
+    inset 0 1px 0 color-mix(in srgb, var(--surface-paper) 18%, transparent);
+}
+
+.cork-cabinet__door {
+  position: relative;
+  padding: 1.2rem 1.45rem;
+  background-color: var(--surface-wood);
+  background-image:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 8px,
+      color-mix(in srgb, var(--surface-box-edge) 32%, transparent) 9px,
+      transparent 11px
+    ),
+    linear-gradient(
+      180deg,
+      color-mix(in srgb, var(--surface-wood) 88%, var(--surface-paper)) 0%,
+      var(--surface-wood) 45%,
+      color-mix(in srgb, var(--surface-wood) 80%, var(--surface-box-edge)) 100%
+    );
+  border: 3px solid var(--surface-box-edge);
+  border-radius: var(--radius-md);
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--surface-paper) 28%, transparent),
+    inset 0 -2px 0 color-mix(in srgb, var(--surface-box) 35%, transparent);
+}
+
+.cork-cabinet__hinge {
+  position: absolute;
+  left: -0.45rem;
+  z-index: 1;
+  width: 0.72rem;
+  height: 1.4rem;
+  border-radius: 2px;
+  background: color-mix(in srgb, var(--surface-box-edge) 42%, var(--color-text));
+  box-shadow:
+    inset 0 1px 0 color-mix(in srgb, var(--surface-paper) 22%, transparent),
+    0 1px 0 color-mix(in srgb, var(--color-text) 20%, transparent);
+  pointer-events: none;
+}
+
+.cork-cabinet__hinge--top {
+  top: 1.75rem;
+}
+
+.cork-cabinet__hinge--bottom {
+  bottom: 1.75rem;
+}
+
+.cork-cabinet__panel {
+  min-height: 16rem;
+  padding: 1.35rem 1.1rem 1.6rem;
+  background-color: var(--surface-cork);
+  background-image:
+    radial-gradient(circle at 15% 20%, var(--shadow-pin-color) 0.6px, transparent 1.2px),
+    radial-gradient(circle at 85% 75%, var(--shadow-pin-color) 0.5px, transparent 1px),
+    radial-gradient(circle at 45% 55%, var(--shadow-card-color) 0.4px, transparent 0.9px);
+  background-size: 18px 18px, 22px 22px, 14px 14px;
+  border-radius: 2px;
+  box-shadow: inset 0 2px 14px color-mix(in srgb, var(--shadow-pin-color) 55%, transparent);
+}
+
 .cork-board-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
   gap: 1.5rem 1.25rem;
-  max-width: 1100px;
-  margin: 0 auto;
-  padding-top: 0.5rem;
+  padding-top: 0.35rem;
 }
 
 .cork-board-empty {
-  max-width: 1100px;
-  margin: 0 auto;
+  margin: 2.5rem 0.5rem;
   color: var(--color-text-muted);
   font-style: italic;
+  text-align: center;
 }
 
 .pinned-note {
@@ -193,7 +262,9 @@
   inset: 0;
   z-index: 100;
   display: flex;
-  justify-content: flex-end;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem 1.25rem;
 }
 
 .cork-drawer__backdrop {
@@ -207,11 +278,42 @@
   z-index: 1;
   display: flex;
   flex-direction: column;
-  width: min(100%, 24rem);
-  max-height: 100%;
+  width: min(100%, 26rem);
+  max-height: min(92vh, 42rem);
   background: var(--surface-paper);
-  border-left: 1px solid var(--color-border-strong);
-  box-shadow: var(--shadow-card);
+  border: 1px solid var(--color-border-card);
+  border-radius: 2px;
+  box-shadow: var(--shadow-lifted);
+  transform: rotate(-1.15deg);
+}
+
+.cork-drawer__panel::before,
+.cork-drawer__panel::after {
+  content: "";
+  position: absolute;
+  top: -0.4rem;
+  z-index: 2;
+  width: 2.75rem;
+  height: 0.7rem;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.cork-drawer__panel::before {
+  left: 1.15rem;
+  background: var(--tape-rose);
+  transform: rotate(-8deg);
+}
+
+.cork-drawer__panel::after {
+  right: 1.35rem;
+  background: var(--tape-cream);
+  transform: rotate(6deg);
+}
+
+.cork-note-sheet .pinned-note__pin {
+  top: -0.45rem;
+  z-index: 3;
 }
 
 .cork-drawer__header {
@@ -219,14 +321,15 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
-  padding: 1rem 1.25rem;
-  border-bottom: 1px solid var(--color-border);
+  padding: 1.35rem 1.35rem 0.65rem;
 }
 
 .cork-drawer__header h2 {
   margin: 0;
-  font-size: 1.15rem;
+  font-size: 1.35rem;
   font-weight: 600;
+  font-family: var(--font-heading);
+  color: var(--color-text);
 }
 
 .cork-drawer__close {
@@ -234,6 +337,7 @@
   border: none;
   background: none;
   font: inherit;
+  font-size: 0.9rem;
   color: var(--color-accent);
   cursor: pointer;
   text-decoration: underline;
@@ -241,26 +345,62 @@
 
 .cork-drawer__form {
   display: grid;
-  gap: 1rem;
-  padding: 1.25rem;
+  gap: 0.9rem;
+  padding: 0.35rem 1.35rem 1.4rem;
   overflow-y: auto;
 }
 
 .cork-drawer__form label {
   display: grid;
-  gap: 0.35rem;
-  color: var(--color-text-muted);
+  gap: 0.3rem;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-label);
 }
 
 .cork-drawer__form input,
 .cork-drawer__form textarea,
 .cork-drawer__form select {
   font: inherit;
-  padding: 0.5rem 0.65rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
-  background: var(--color-input-bg);
+  font-size: 1rem;
+  font-weight: 400;
+  letter-spacing: 0;
+  text-transform: none;
+  padding: 0.4rem 0.15rem;
+  border: none;
+  border-bottom: 1px solid var(--surface-field-line);
+  border-radius: 0;
+  background: transparent;
   color: var(--color-text);
+}
+
+.cork-drawer__form input:focus,
+.cork-drawer__form textarea:focus,
+.cork-drawer__form select:focus {
+  border-bottom-color: var(--color-accent);
+  outline: none;
+}
+
+.cork-drawer__form textarea {
+  resize: vertical;
+  min-height: 5.5rem;
+  line-height: var(--line-height-body);
+  background-image: repeating-linear-gradient(
+    transparent,
+    transparent calc(var(--line-height-body) * 1em - 1px),
+    var(--surface-field-line) calc(var(--line-height-body) * 1em - 1px),
+    var(--surface-field-line) calc(var(--line-height-body) * 1em)
+  );
+  background-attachment: local;
+  border-bottom: none;
+}
+
+.cork-drawer__form input[type="file"] {
+  border-bottom: none;
+  padding-left: 0;
 }
 
 .cork-drawer__preview {
@@ -268,7 +408,8 @@
   width: 100%;
   max-height: 160px;
   object-fit: cover;
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
+  box-shadow: var(--shadow-pin);
 }
 
 .cork-drawer__error {
@@ -330,16 +471,55 @@
 
 .cork-drawer--fab .cork-drawer__panel {
   width: min(100%, 22rem);
+  transform: rotate(1.1deg);
 }
 
 @media (max-width: 640px) {
+  .cork-cabinet {
+    padding: 0.2rem;
+    border-radius: var(--radius-md);
+  }
+
+  .cork-cabinet__door {
+    padding: 0.4rem 0.45rem;
+    border-width: 2px;
+  }
+
+  .cork-cabinet__hinge {
+    display: none;
+  }
+
+  .cork-cabinet__panel {
+    padding: 1rem 0.75rem 1.15rem;
+    min-height: 12rem;
+  }
+
   .cork-board-grid {
     grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
     gap: 1.25rem 1rem;
   }
 
+  .cork-drawer {
+    padding: 0.75rem;
+    align-items: flex-end;
+  }
+
+  .cork-drawer__panel,
+  .cork-drawer--fab .cork-drawer__panel {
+    width: 100%;
+    max-height: min(88vh, 40rem);
+    transform: none;
+  }
+
   .pin-idea-fab {
     right: 1rem;
     bottom: 1rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cork-drawer__panel,
+  .cork-drawer--fab .cork-drawer__panel {
+    transform: none;
   }
 }

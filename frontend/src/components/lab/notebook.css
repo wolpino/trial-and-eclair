@@ -48,18 +48,41 @@
 .notebook-margin {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.75rem;
+  gap: 1rem;
+  min-width: 8.5rem;
+  max-width: 11rem;
+  padding: 0.75rem 0.85rem;
   font-size: 0.85rem;
   color: var(--color-text-muted);
 }
 
 .notebook-margin--left {
-  border-right: 1px dashed var(--color-border);
+  border-right: 1px solid color-mix(in srgb, var(--color-accent-floral) 40%, transparent);
 }
 
 .notebook-margin--right {
   border-left: 1px dashed var(--color-border);
+}
+
+.notebook-spread--log {
+  min-height: 360px;
+}
+
+.notebook-spread--log .notebook-spread__header {
+  background: color-mix(in srgb, var(--tape-cream) 70%, var(--surface-notebook));
+}
+
+.lab-log-spread__title {
+  margin: 0;
+  font-family: var(--font-script);
+  font-size: 1.15rem;
+  color: var(--color-text);
+}
+
+.lab-log-page {
+  display: flex;
+  flex-direction: column;
+  min-height: 16rem;
 }
 
 .notebook-overlay {
@@ -118,4 +141,22 @@
 .notebook-overlay__body {
   padding: 1.25rem;
   color: var(--color-text);
+}
+
+@media (max-width: 768px) {
+  .notebook-margin {
+    min-width: 0;
+    max-width: none;
+  }
+
+  .notebook-spread__body::before {
+    content: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .notebook-spread,
+  .notebook-spread__body {
+    transform: none;
+  }
 }

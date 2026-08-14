@@ -1,9 +1,20 @@
-from rest_framework.exceptions import NotFound
+from rest_framework import status
+from rest_framework.exceptions import NotFound, PermissionDenied
 from rest_framework.generics import RetrieveAPIView
-from rest_framework.permissions import AllowAny
+from rest_framework.permissions import AllowAny, IsAuthenticated
+from rest_framework.response import Response
+from rest_framework.views import APIView
 
-from .models import Cookbook, DevelopmentRecipe
-from .serializers import PublicCookbookSerializer, PublicRecipeSerializer
+from collection.serializers import CollectionRecipeSerializer
+
+from .models import Cookbook, DevelopmentRecipe, ForkType
+from .serializers import (
+    DevelopmentRecipeSerializer,
+    ForkRecipeSerializer,
+    PublicCookbookSerializer,
+    PublicRecipeSerializer,
+)
+from . import services
 
 
 def build_public_recipe_payload(recipe: DevelopmentRecipe) -> dict:
@@ -92,6 +103,50 @@ def build_public_cookbook_payload(cookbook: Cookbook) -> dict:
         "published_at": cookbook.published_at,
         "recipes": recipes,
     }
+
+
+class ForkPublicRecipeView(APIView):
+    permission_classes = [IsAuthenticated]
+
+    def post(self, request, slug: str) -> Response:
+        serializer = ForkRecipeSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        fork_type = serializer.validated_data["fork_type"]
+        if fork_type == ForkType.REWORK and not request.user.has_developer_access():
+            raise PermissionDenied("Rework requires developer access.")
+
+        recipe = (
+            DevelopmentRecipe.objects.filter(slug=slug, status="published")
+            .select_related("user", "published_version")
+            .prefetch_related(
+                "published_version__ingredient_lines__ingredient",
+                "published_version__steps",
+            )
+            .first()
+        )
+        if recipe is None or recipe.published_version_id is None:
+            raise NotFound("Recipe not found.")
+
+        version = recipe.published_version
+        if fork_type == ForkType.SAVE_TO_BOX:
+            created = services.fork_to_box(request.user, version, recipe.user)
+            body = {
+                "fork_type": fork_type,
+                "fork_id": str(created.fork_record_id),
+                "recipe": CollectionRecipeSerializer(
+                    created, context={"request": request}
+                ).data,
+            }
+        else:
+            created = services.fork_to_lab(request.user, version, recipe.user)
+            body = {
+                "fork_type": fork_type,
+                "fork_id": str(created.fork_record_id),
+                "recipe": DevelopmentRecipeSerializer(
+                    created, context={"request": request}
+                ).data,
+            }
+        return Response(body, status=status.HTTP_201_CREATED)
 
 
 class PublicCookbookView(RetrieveAPIView):

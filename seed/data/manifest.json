@@ -6,12 +6,14 @@
     "wipwip.json",
     "ideas_seed.json",
     "references_seed.json",
-    "recipes_seed.json"
+    "recipes_seed.json",
+    "walkthrough.json"
   ],
   "counts": {
     "ideas": 149,
     "references": 37,
     "recipes": 4,
-    "docx_files": 0
+    "docx_files": 0,
+    "walkthrough": true
   }
 }

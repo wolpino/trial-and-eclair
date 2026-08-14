@@ -43,12 +43,13 @@ export function RegisterPage() {
     <main className="page-shell auth-page">
       <h1>Create account</h1>
       <p className="auth-note">New accounts start as home cooks (free).</p>
-      <form className="auth-form" onSubmit={(event) => void handleSubmit(event)}>
+      <form className="auth-form paper-form" onSubmit={(event) => void handleSubmit(event)}>
         {error ? <p className="form-error">{error}</p> : null}
         <label>
           Username
           <input
             autoComplete="username"
+            className="paper-field"
             name="username"
             required
             value={username}
@@ -59,6 +60,7 @@ export function RegisterPage() {
           Email <span className="label-optional">(optional)</span>
           <input
             autoComplete="email"
+            className="paper-field"
             name="email"
             type="email"
             value={email}
@@ -69,6 +71,7 @@ export function RegisterPage() {
           Password
           <input
             autoComplete="new-password"
+            className="paper-field"
             minLength={8}
             name="password"
             required
@@ -81,6 +84,7 @@ export function RegisterPage() {
           Confirm password
           <input
             autoComplete="new-password"
+            className="paper-field"
             minLength={8}
             name="password_confirm"
             required
@@ -89,7 +93,7 @@ export function RegisterPage() {
             onChange={(event) => setPasswordConfirm(event.target.value)}
           />
         </label>
-        <button disabled={submitting} type="submit">
+        <button className="paper-btn" disabled={submitting} type="submit">
           {submitting ? "Creating account…" : "Register"}
         </button>
       </form>

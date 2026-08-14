@@ -148,8 +148,9 @@ export function CookbookDetailPage() {
           )}
         </div>
 
-        <form className="cookbook-add-entry" onSubmit={(event) => void handleAddEntry(event)}>
+        <form className="cookbook-add-entry paper-form" onSubmit={(event) => void handleAddEntry(event)}>
           <select
+            className="paper-field"
             required
             value={selectedRecipe}
             onChange={(event) => setSelectedRecipe(event.target.value)}
@@ -161,7 +162,7 @@ export function CookbookDetailPage() {
               </option>
             ))}
           </select>
-          <button className="cookbooks-btn" type="submit">
+          <button className="paper-btn" type="submit">
             Add card
           </button>
         </form>
@@ -171,12 +172,12 @@ export function CookbookDetailPage() {
           {cookbook.status === "published" ? (
             <div className="cookbooks-create-form__row">
               {cookbook.slug ? (
-                <Link className="cookbooks-btn cookbooks-btn--ghost" to={`/c/${cookbook.slug}`}>
+                <Link className="paper-btn paper-btn--ghost" to={`/c/${cookbook.slug}`}>
                   View public binder
                 </Link>
               ) : null}
               <button
-                className="cookbooks-btn"
+                className="paper-btn"
                 type="button"
                 onClick={() =>
                   void unpublishCookbook(cookbook.id)
@@ -192,13 +193,14 @@ export function CookbookDetailPage() {
               </button>
             </div>
           ) : (
-            <form className="cookbook-publish-form" onSubmit={(event) => void handlePublish(event)}>
+            <form className="cookbook-publish-form paper-form" onSubmit={(event) => void handlePublish(event)}>
               <input
+                className="paper-field"
                 placeholder="Slug (optional)"
                 value={slug}
                 onChange={(event) => setSlug(event.target.value)}
               />
-              <button className="cookbooks-btn" type="submit">
+              <button className="paper-btn" type="submit">
                 Publish binder
               </button>
             </form>

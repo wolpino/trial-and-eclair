@@ -1,15 +1,17 @@
-import { FormEvent, useEffect, useMemo, useRef, useState } from "react";
+import { FormEvent, useEffect, useMemo, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
 import { ApiError } from "../api/client";
 import {
   createRecipeBoxRecipe,
+  deleteRecipeBoxRecipe,
   fetchRecipeBox,
   type CollectionRecipe,
 } from "../api/collection";
-import { AlphabetRail } from "../components/recipe-box/AlphabetRail";
 import { RecipeBoxCard } from "../components/recipe-box/RecipeBoxCard";
 import { RecipeBoxFrame } from "../components/recipe-box/RecipeBoxFrame";
+import { RecipeBoxIndex } from "../components/recipe-box/RecipeBoxIndex";
+import { RecipeImportPanel } from "../components/RecipeImportPanel";
 import "../styles/recipe-box.css";
 
 function sortRecipes(recipes: CollectionRecipe[]): CollectionRecipe[] {
@@ -25,20 +27,27 @@ function groupByLetter(recipes: CollectionRecipe[]): Record<string, CollectionRe
   }, {});
 }
 
+function letterForRecipe(recipe: CollectionRecipe): string {
+  return recipe.title.charAt(0).toUpperCase() || "#";
+}
+
 export function RecipeBoxPage() {
   const { recipeId } = useParams<{ recipeId?: string }>();
   const navigate = useNavigate();
-  const focusedRef = useRef<HTMLDivElement | null>(null);
 
   const [recipes, setRecipes] = useState<CollectionRecipe[]>([]);
   const [newTitle, setNewTitle] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
+  const [activeLetter, setActiveLetter] = useState("");
 
   const grouped = useMemo(() => groupByLetter(recipes), [recipes]);
-  const activeLetters = useMemo(() => new Set(Object.keys(grouped)), [grouped]);
   const letters = useMemo(() => Object.keys(grouped).sort(), [grouped]);
+  const focusedRecipe = useMemo(
+    () => (recipeId ? recipes.find((recipe) => recipe.id === recipeId) : undefined),
+    [recipeId, recipes],
+  );
 
   useEffect(() => {
     fetchRecipeBox()
@@ -50,13 +59,24 @@ export function RecipeBoxPage() {
   }, []);
 
   useEffect(() => {
-    if (recipeId && focusedRef.current) {
-      focusedRef.current.scrollIntoView({ behavior: "smooth", block: "nearest" });
+    if (letters.length === 0) {
+      return;
     }
-  }, [recipeId, loading]);
+    if (focusedRecipe) {
+      const letter = letterForRecipe(focusedRecipe);
+      if (letters.includes(letter)) {
+        setActiveLetter(letter);
+      }
+      return;
+    }
+    if (!activeLetter || !letters.includes(activeLetter)) {
+      setActiveLetter(letters[0]!);
+    }
+  }, [letters, focusedRecipe, activeLetter]);
 
   function upsertRecipe(updated: CollectionRecipe) {
     setRecipes((current) => sortRecipes([...current.filter((r) => r.id !== updated.id), updated]));
+    setActiveLetter(letterForRecipe(updated));
   }
 
   function focusCard(id: string) {
@@ -67,8 +87,17 @@ export function RecipeBoxPage() {
     navigate("/recipe-box");
   }
 
-  function scrollToLetter(letter: string) {
-    document.getElementById(`letter-${letter}`)?.scrollIntoView({ behavior: "smooth", block: "start" });
+  async function handleDelete(id: string) {
+    try {
+      await deleteRecipeBoxRecipe(id);
+      setRecipes((current) => current.filter((recipe) => recipe.id !== id));
+      setError(null);
+      if (recipeId === id) {
+        navigate("/recipe-box");
+      }
+    } catch (err: unknown) {
+      setError(err instanceof ApiError ? err.message : "Could not delete card.");
+    }
   }
 
   async function handleAddCard(event: FormEvent<HTMLFormElement>) {
@@ -79,6 +108,7 @@ export function RecipeBoxPage() {
       const recipe = await createRecipeBoxRecipe(newTitle.trim() || "Untitled recipe");
       setRecipes((current) => sortRecipes([...current, recipe]));
       setNewTitle("");
+      setActiveLetter(letterForRecipe(recipe));
       navigate(`/recipe-box/${recipe.id}`);
     } catch (err: unknown) {
       setError(err instanceof ApiError ? err.message : "Could not add card.");
@@ -87,20 +117,32 @@ export function RecipeBoxPage() {
     }
   }
 
+  const lidContent = focusedRecipe ? (
+    <RecipeBoxCard
+      expanded
+      recipe={focusedRecipe}
+      onCollapse={collapseCard}
+      onSaved={upsertRecipe}
+      onDelete={() => void handleDelete(focusedRecipe.id)}
+    />
+  ) : (
+    <div className="recipe-box-lid__empty">
+      <p className="recipe-box-lid__empty-title">Open your recipe box</p>
+      <p className="recipe-box-lid__empty-note">Pick a card below to read and edit it here in the lid.</p>
+    </div>
+  );
+
   return (
     <main className="recipe-box-page">
       <header className="recipe-box-page__header">
         <h1>Recipe box</h1>
         <p className="recipe-box-page__note">
-          Index cards in your box — tap a card to edit in place. No idea required.
+          The lid holds the card you are working on; the box below is your A–Z collection.
         </p>
-      </header>
-
-      <RecipeBoxFrame rail={<AlphabetRail activeLetters={activeLetters} onLetterClick={scrollToLetter} />}>
         <form className="recipe-box-add" onSubmit={(event) => void handleAddCard(event)}>
           {error ? <p className="recipe-box-form-error">{error}</p> : null}
           <input
-            placeholder="Card title (optional)"
+            placeholder="New card title (optional)"
             value={newTitle}
             onChange={(event) => setNewTitle(event.target.value)}
           />
@@ -108,54 +150,24 @@ export function RecipeBoxPage() {
             {adding ? "Adding…" : "Add card"}
           </button>
         </form>
+        <RecipeImportPanel destination="box" />
+      </header>
 
+      <RecipeBoxFrame lid={lidContent}>
         {loading ? (
           <p className="recipe-box-page__note">Loading…</p>
         ) : recipes.length === 0 ? (
           <p className="recipe-box-empty">Your recipe box is empty — add a card above.</p>
         ) : (
-          letters.map((letter) => (
-            <section key={letter} className="recipe-box-section" id={`letter-${letter}`}>
-              <h2 className="recipe-box-section__letter">{letter}</h2>
-              <div className="recipe-box-grid">
-                {grouped[letter].map((recipe) => {
-                  const expanded = recipeId === recipe.id;
-                  return (
-                    <div
-                      key={recipe.id}
-                      className={
-                        expanded
-                          ? "recipe-box-card-slot recipe-box-card-slot--expanded"
-                          : "recipe-box-card-slot"
-                      }
-                      ref={expanded ? focusedRef : undefined}
-                      id={`recipe-${recipe.id}`}
-                      role={expanded ? undefined : "button"}
-                      tabIndex={expanded ? undefined : 0}
-                      onClick={expanded ? undefined : () => focusCard(recipe.id)}
-                      onKeyDown={
-                        expanded
-                          ? undefined
-                          : (event) => {
-                              if (event.key === "Enter" || event.key === " ") {
-                                event.preventDefault();
-                                focusCard(recipe.id);
-                              }
-                            }
-                      }
-                    >
-                      <RecipeBoxCard
-                        expanded={expanded}
-                        recipe={recipe}
-                        onCollapse={collapseCard}
-                        onSaved={upsertRecipe}
-                      />
-                    </div>
-                  );
-                })}
-              </div>
-            </section>
-          ))
+          <RecipeBoxIndex
+            activeLetter={activeLetter}
+            grouped={grouped}
+            letters={letters}
+            selectedRecipeId={recipeId}
+            onLetterSelect={setActiveLetter}
+            onRecipeSelect={focusCard}
+            onDelete={(id) => void handleDelete(id)}
+          />
         )}
       </RecipeBoxFrame>
     </main>

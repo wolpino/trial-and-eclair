@@ -49,22 +49,28 @@ export function CookbooksPage() {
 
       <section className="cookbooks-create">
         <h2>New binder</h2>
-        <form className="cookbooks-create-form" onSubmit={(event) => void handleCreate(event)}>
+        <form className="paper-form cookbooks-create-form" onSubmit={(event) => void handleCreate(event)}>
           {error ? <p className="cookbooks-form-error">{error}</p> : null}
           <label>
             Title
-            <input required value={title} onChange={(e) => setTitle(e.target.value)} />
+            <input
+              className="paper-field"
+              required
+              value={title}
+              onChange={(e) => setTitle(e.target.value)}
+            />
           </label>
           <label>
             Description
             <textarea
+              className="paper-field paper-field--textarea"
               rows={2}
               value={description}
               onChange={(e) => setDescription(e.target.value)}
             />
           </label>
           <div className="cookbooks-create-form__row">
-            <button className="cookbooks-btn" type="submit">
+            <button className="paper-btn" type="submit">
               Create binder
             </button>
           </div>

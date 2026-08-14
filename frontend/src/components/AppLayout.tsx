@@ -1,6 +1,7 @@
 import { Link, NavLink, Outlet, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthContext";
+import { HistoryNav } from "./HistoryNav";
 import {
   FONT_PRESETS,
   THEME_PRESETS,
@@ -51,6 +52,26 @@ function ThemeSettings() {
   );
 }
 
+function ForkVisibilitySetting() {
+  const { user, updateProfile } = useAuth();
+  if (!user) {
+    return null;
+  }
+
+  return (
+    <label className="app-settings-label">
+      <input
+        type="checkbox"
+        checked={user.show_forks}
+        onChange={(event) => {
+          void updateProfile({ show_forks: event.target.checked });
+        }}
+      />
+      Show forks
+    </label>
+  );
+}
+
 export function AppLayout() {
   const { user, hasDeveloperAccess, logout } = useAuth();
   const navigate = useNavigate();
@@ -64,9 +85,12 @@ export function AppLayout() {
     <div className="app-shell">
       <header className="app-header">
         <div className="app-header-inner">
-          <Link className="app-brand" to="/">
-            Trial and Eclair
-          </Link>
+          <div className="app-brand-row">
+            <HistoryNav />
+            <Link className="app-brand" to="/">
+              Trial and Eclair
+            </Link>
+          </div>
           <nav className="app-nav" aria-label="Main">
             {user && hasDeveloperAccess ? (
               <>
@@ -117,6 +141,7 @@ export function AppLayout() {
               </NavLink>
             ) : null}
             <ThemeSettings />
+            {user ? <ForkVisibilitySetting /> : null}
             {user ? (
               <>
                 <span className="nav-user">{user.username}</span>

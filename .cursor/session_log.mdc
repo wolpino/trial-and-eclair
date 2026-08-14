@@ -10,6 +10,263 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-08-14 · recipe-box-delete-ui
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-08-14T03:55:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Add recipe-box delete UI using the existing `deleteRecipeBoxRecipe` API.
+
+### Summary
+Wired DELETE into the box lid toolbar and A–Z index, matching the lab shelf confirm-then-remove pattern. Deleting the open card collapses the lid. No new dependencies. Frontend build passed. Not committed.
+
+### Decisions
+- **Lid + index delete** — both surfaces, not lid-only
+- **OCR ≠ MCP** — scan OCR is Django vision/OCR later; MCP is not a substitute
+- **Prioritize PR after this** — OCR and mobile polish wait
+
+### Changes
+- `frontend/src/pages/RecipeBoxPage.tsx` — `handleDelete` + lid collapse
+- `frontend/src/components/recipe-box/RecipeBoxCard.tsx` — Delete card in toolbar
+- `frontend/src/components/recipe-box/RecipeBoxIndex.tsx` — row Delete control
+- `frontend/src/components/recipe-box/recipe-box.css` — index item + delete styles
+
+### Open threads
+- Open PR `polishpolish` → `main` (includes this uncommitted delete UI)
+- Scan OCR/vision API (needs approved dep; not MCP)
+- Stripe, production deploy, freeform cork
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** recipe-box, delete, polishpolish
+**Files:** frontend/src/pages/RecipeBoxPage.tsx, frontend/src/components/recipe-box/RecipeBoxCard.tsx, frontend/src/components/recipe-box/RecipeBoxIndex.tsx
+**Do not redo:** mini card grid in recipe-box well; AlphabetRail; Warm kitchen theme; measurement conversion UI
+**Resume with:** commit box delete if Ari wants, then open PR polishpolish → main
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-08-14 · agent-full-app-campaign
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-08-14T02:40:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Finish the full app on the existing repo: walkthrough seed, metaphor polish, Phase 4 fork/import, then close-out docs.
+
+### Summary
+Extended Trial and Eclair rather than rebuilding. Committed recipe-box lid/index, walkthrough seed (`dev`/`cook`/`baker`), lab/cork/shelf polish, fork + URL/scan APIs (89 then 90 tests), public Save to box / Rework, box/lab import panels, and `show_forks` on `PATCH /me/`. Scan import is a file+draft stub. OCR, Stripe, and freeform cork remain out of scope.
+
+### Decisions
+- **Extend existing app** — do not greenfield rebuild
+- **Walkthrough seed early** — click-through fixtures before polish
+- **Scan is plumbing** — store file, open draft; OCR fills `extracted_text` later
+
+### Changes
+- Recipe box open-box UI, walkthrough seed, HistoryNav
+- Lab margin + log pages, cork cabinet, shelf/public/auth polish
+- Fork/import APIs and UI, `show_forks` setting, README/PRD v1.4
+
+### Open threads
+- OCR for scan import (needs a dependency)
+- Stripe, production deploy, extra theme presets
+- Recipe-box delete UI still deferred
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** walkthrough-seed, ui-polish, phase-4, fork, import
+**Files:** frontend/src/components/ForkActions.tsx, development/services.py, seed/data/walkthrough.json
+**Do not redo:** mini card grid in recipe-box well; AlphabetRail; Warm kitchen theme; measurement conversion UI
+**Resume with:** optional OCR dep for scan, or recipe-box delete
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-08-14T02:10:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Implement Phase 4 backend APIs: fork a published recipe, SSRF-safe URL import (JSON-LD), and scan-upload plumbing stub. No new dependencies, no OCR.
+
+### Summary
+Extracted seed fork-copy logic into `development/services.py` (`fork_to_box` / `fork_to_lab` plus shared `RecipeCopyPayload` helpers) and reused it from the public fork API, URL-import save, and the seed command. Added authenticated `POST /api/v1/public/recipes/{slug}/fork/`, URL import create/detail/save, and scan upload that creates a `SourceDocument` plus a box or lab draft. Home cooks are limited to save-to-box; developers with access can rework. Django tests for accounts/development/collection/library/catalog: 89 passed.
+
+### Decisions
+- **Shared copy payload** — one implementation for published forks and JSON-LD imports; RecipeFork only when there is a published version.
+- **SSRF** — resolve host, reject private/loopback/link-local/multicast IPs, validate redirects; robots.txt fail-open.
+- **Scan stub** — store file with blank `extracted_text`; later OCR fills that field rather than adding an endpoint. Lab provenance goes in `version_notes`.
+
+### Changes
+- `development/services.py` — copy payload + fork helpers
+- `development/public_views.py`, `urls.py`, `serializers.py` — fork API
+- `development/management/commands/load_recipe_seed.py` — reuse fork helpers
+- `library/services.py`, `views.py`, `urls.py`, `serializers.py` — URL + scan import
+- `development/test_fork.py`, `library/test_imports.py` — new tests
+
+### Open threads
+- OCR: fill `SourceDocument.extracted_text` then parse into lines (no new endpoint)
+- Frontend fork/import buttons not in this wave
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phase4, fork, url-import, scan-import, json-ld, ssrf
+**Files:** development/services.py, development/public_views.py, library/services.py, library/views.py, development/test_fork.py, library/test_imports.py
+**Do not redo:** equipment notes APIs; OCR; pypdf/new dependencies; RecipeFork on URL imports
+**Resume with:** frontend fork/import UI or OCR fill of extracted_text
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-08-14 · wave-1-shelf-visual-finish
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-08-14T02:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Wave 1 visual finish for cookbooks binder, reference shelf, public recipe/cookbook pages, and auth forms — same sun & floral language. Add reference PATCH/edit.
+
+### Summary
+Deepened the existing binder and shelf metaphors (wood rack, cloth spines, ringed binder, type-colored spines) without replacing them with tables. Public `/r` and `/c` pages now read as a printed card and open binder spread. Auth uses on-paper fields. Added `patchReference` plus a desk-card editor (title/url/notes/type). Token-only CSS; forms reuse `paper-field` / `paper-btn`. Did not restyle the app header or add fork buttons.
+
+### Decisions
+- **Spine click opens edit, URL lives on the desk card** — keeps the shelf metaphor; external links no longer navigate away on spine click
+- **Public cookbook reuses CookbookBinder** — same ringed spread as the developer detail view
+
+### Changes
+- `frontend/src/api/library.ts` — `patchReference`
+- `frontend/src/components/references/*` — select + edit card
+- `frontend/src/components/cookbooks/*`, `cookbooks.css`, `references.css`, `public.css`
+- `frontend/src/pages/{Cookbooks,CookbookDetail,References,Login,Register}Page.tsx`
+- `frontend/src/components/{Recipe,Cookbook}Viewer.tsx`
+- `frontend/src/index.css` — `.auth-page` / `.auth-form` paper card only
+
+### Open threads
+- Wave 3 fork buttons on public pages
+- Reference links UI (ideas/versions) still later
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** wave-1, shelf, cookbooks-binder, reference-edit, public-print-card, auth-paper
+**Files:** frontend/src/styles/cookbooks.css, frontend/src/styles/references.css, frontend/src/styles/public.css, frontend/src/api/library.ts
+**Do not redo:** table layouts for cookbooks/references; app header restyle; fork buttons; second theme
+**Resume with:** visual QA on rack, shelf edit, /c/brunch-notes, /login
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-06-23 · ui-polish-p1-recipe-box-index
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-23T24:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Recipe box well + background redesign: staggered A–Z tabs, text recipe list, lid-only full card, richer frosted-window background.
+
+### Summary
+Replaced well card grid with `RecipeBoxIndex` — staggered letter tab band + plain title list (prep/cook teaser). Click letter → list; click recipe → full `RecipeBoxCard` in lid. Add-card form moved to page header. Well perspective strengthened (~30deg). Enhanced `window-fan-pattern.svg` (fish-scale fans) + layered sun/sill/vignette CSS on `.recipe-box-page`. Build passes.
+
+### Changes
+- `frontend/src/components/recipe-box/RecipeBoxIndex.tsx` (new)
+- `frontend/src/pages/RecipeBoxPage.tsx`, `recipe-box.css`, `index.ts`
+- `frontend/public/window-fan-pattern.svg`
+
+### Open threads
+- P2 lab margin metadata, journal/test log pages
+- P3 cork cabinet frame, idea drawer
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** ui-polish, p1, recipe-box, index-band, text-list, window-pattern
+**Files:** frontend/src/components/recipe-box/RecipeBoxIndex.tsx, frontend/src/pages/RecipeBoxPage.tsx
+**Do not redo:** mini card grid in well; hover slide-up preview
+**Resume with:** P2 lab margin metadata + journal/test log pages
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-06-23 · ui-polish-p1-open-recipe-box
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-23T23:30:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Redesign recipe box to match physical open-box photos: active recipe in lid, bird's-eye card grid with letter dividers, sun-through-frosted-window background.
+
+### Summary
+Restructured `/recipe-box` into open wooden box layout via `RecipeBoxFrame` (label + tilted lid + perspective well). Selected recipe renders full edit card in lid; well shows collapsed index cards grouped A–Z with staggered kraft divider tabs (replaced side AlphabetRail). Page background uses radial sun wash + subtle repeating teal fan SVG (`window-fan-pattern.svg`) inspired by kitchen window photos. Added `--surface-box` / `--surface-box-edge` theme tokens. Build passes.
+
+### Changes
+- `frontend/src/pages/RecipeBoxPage.tsx`, `RecipeBoxFrame.tsx`, `recipe-box.css`
+- `frontend/public/window-fan-pattern.svg`, `frontend/src/styles/themes/default.css`
+
+### Open threads
+- P2 lab margin metadata, journal/test log dot-grid pages
+- P3 cork cabinet frame, idea drawer
+- Mobile/reduced-motion polish on recipe box perspective if needed
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** ui-polish, p1, recipe-box, open-box, window-pattern, lid-well
+**Files:** frontend/src/pages/RecipeBoxPage.tsx, frontend/src/components/recipe-box/*
+**Do not redo:** side AlphabetRail on recipe box page; full tiled frosted-fan on app shell
+**Resume with:** P2 lab margin metadata + journal/test log pages
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-06-23 · ui-polish-p1-recipe-box
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-06-23T22:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+P1 recipe box index-card template polish (next phase after P0 theme/forms).
+
+### Summary
+Expanded recipe box cards to match handwritten index-card refs: script **recipes** banner (`--font-script`), name + prep/cook metadata row, **ingredients left / directions right** two-column spread when expanded, ruled ingredient lines, dashed blank-card **Add card** slot. Collapsed cards show script label + timing teaser. Removed repeating shell background tile (prior turn). Build passes.
+
+### Changes
+- `frontend/src/components/recipe-box/{RecipeBoxCard.tsx,index-card.css,recipe-box.css}`
+- `frontend/src/styles/fonts/default.css`, `tokens.css`
+- `frontend/src/index.css` (shell bg simplification)
+
+### Open threads
+- P2 lab margin metadata, journal/test log dot-grid pages
+- P3 cork cabinet frame, idea drawer
+- P4 cookbooks, references, public pages
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** ui-polish, p1, recipe-box, index-card, two-column
+**Files:** frontend/src/components/recipe-box/*
+**Do not redo:** P0 theme replace-default; two-column only on expanded card
+**Resume with:** P2 lab margin metadata + journal/test log pages
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-06-23 · ui-polish-p0-sun-floral
 
 | Field | Value |

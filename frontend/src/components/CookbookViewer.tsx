@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
 import type { PublicCookbook } from "../api/client";
+import { CookbookBinder } from "./cookbooks/CookbookBinder";
+import "../styles/cookbooks.css";
 
 interface CookbookViewerProps {
   cookbook: PublicCookbook;
@@ -14,11 +16,7 @@ export function CookbookViewer({ cookbook }: CookbookViewerProps) {
   });
 
   return (
-    <article className="cookbook-viewer">
-      <Link className="public-site-mark" to="/">
-        Trial &amp; Eclair
-      </Link>
-
+    <CookbookBinder className="cookbook-viewer">
       <header className="public-cookbook-header">
         <p className="public-meta">
           by {cookbook.author}
@@ -46,6 +44,10 @@ export function CookbookViewer({ cookbook }: CookbookViewerProps) {
           </article>
         ))}
       </section>
-    </article>
+
+      <footer className="public-colophon">
+        <Link to="/">Trial &amp; Eclair</Link>
+      </footer>
+    </CookbookBinder>
   );
 }

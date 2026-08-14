@@ -1,0 +1,286 @@
+{
+  "idea_enrichment": [
+    {
+      "title": "Blondies",
+      "status": "testing",
+      "is_pinned": true,
+      "notes": "Brown the butter. Want a chewier middle and a paper-thin top crust.",
+      "image": "idea-cookie.jpg"
+    },
+    {
+      "title": "Praline topped Blondies",
+      "status": "researching",
+      "is_pinned": true,
+      "notes": "Pecan praline poured on while the bars are still hot."
+    },
+    {
+      "title": "Easy Bagel",
+      "status": "ready",
+      "is_pinned": true,
+      "notes": "Two-ingredient dough is fine for weekday. Egg wash + everything seasoning."
+    },
+    {
+      "title": "favorite pie crust",
+      "status": "testing",
+      "is_pinned": true,
+      "notes": "Vodka + butter. Promote this one into the lab.",
+      "promote": true
+    },
+    {
+      "title": "Tahini Blondies",
+      "status": "researching",
+      "is_pinned": true,
+      "notes": "Salt on top is non-negotiable. Maybe sesame crunch."
+    },
+    {
+      "title": "Rye Brownies with Bay and almonds",
+      "status": "archived",
+      "is_pinned": false,
+      "notes": "Bay was too perfume-y. Revisit without the steep."
+    },
+    {
+      "title": "corn muffin",
+      "status": "researching",
+      "is_pinned": false,
+      "notes": "Savory, not cake. Scallion + cheddar variant later."
+    },
+    {
+      "title": "Pink Grapefuit Cream Pie",
+      "status": "ready",
+      "is_pinned": true,
+      "notes": "Need a less weepy curd. Italian meringue?"
+    }
+  ],
+  "lab": {
+    "publish": [
+      {
+        "title": "Raisin Bran Muffins",
+        "slug": "raisin-bran-muffins",
+        "story": "Saturday muffins. The batter sits while the kettle boils; the tops sugar-crackle in a hot oven.",
+        "hero": "hero-cake.jpg"
+      },
+      {
+        "title": "English Muffins: Whole Wheat",
+        "slug": "whole-wheat-english-muffins",
+        "story": "Griddled first, then finished in the oven so the nooks actually nook."
+      }
+    ],
+    "unpublish_after_publish": ["Ginger Bran Muffins with Citrus"],
+    "extra_version": {
+      "title": "Pistachio Shortbread with Rose Buttercream",
+      "version_notes": "Cut rosewater in half and chill the dough overnight. Edges browned more evenly."
+    },
+    "journal": [
+      {
+        "recipe": "Pistachio Shortbread with Rose Buttercream",
+        "title": "Rose was shouting",
+        "body": "First bake tasted like soap. Next round: half the rosewater, longer chill, pipe the buttercream colder."
+      },
+      {
+        "recipe": "Raisin Bran Muffins",
+        "title": "Soak time",
+        "body": "Twenty minutes is the floor. Thirty is better if the bran is very dry."
+      }
+    ],
+    "test_sessions": [
+      {
+        "recipe": "Pistachio Shortbread with Rose Buttercream",
+        "notes": "325°F, 12 minutes, rotated trays.",
+        "outcome": "Spread a little. Next time: colder dough, 11 minutes."
+      },
+      {
+        "recipe": "Raisin Bran Muffins",
+        "notes": "400°F, ice cream scoop, sugar on top.",
+        "outcome": "Domes good. One tray paler — oven hot spot."
+      }
+    ]
+  },
+  "baker_recipe": {
+    "title": "Brown Butter Blondies",
+    "description": "Chewy blondies with a walnut crunch and a flaky salt finish.",
+    "prep_minutes": 20,
+    "cook_minutes": 28,
+    "equipment_notes": "8-inch square pan, parchment sling.",
+    "story": "The batch I bring to potlucks. Brown the butter until it smells like toasted hazelnuts, then don't overbake.",
+    "slug": "brown-butter-blondies",
+    "ingredients": [
+      {"name": "Unsalted butter", "quantity": "0.75", "unit": "cup"},
+      {"name": "Brown sugar", "quantity": "1.25", "unit": "cup"},
+      {"name": "Egg", "quantity": "2", "unit": "whole"},
+      {"name": "Vanilla extract", "quantity": "2", "unit": "teaspoon"},
+      {"name": "All-purpose flour", "quantity": "1.25", "unit": "cup"},
+      {"name": "Salt", "quantity": "0.75", "unit": "teaspoon"},
+      {"name": "Walnuts", "quantity": "0.75", "unit": "cup", "prep_note": "toasted, chopped"},
+      {"name": "Flaky salt", "quantity": "1", "unit": "teaspoon", "prep_note": "for finishing"}
+    ],
+    "steps": [
+      "Heat oven to 350°F. Line an 8-inch pan with parchment.",
+      "Brown the butter; cool 5 minutes.",
+      "Whisk in brown sugar, then eggs and vanilla.",
+      "Fold in flour and salt, then walnuts.",
+      "Spread in the pan, scatter flaky salt, bake 26–30 minutes until just set.",
+      "Cool completely before cutting."
+    ]
+  },
+  "cookbooks": [
+    {
+      "title": "Summer tests",
+      "description": "Loose binder for whatever is on the counter.",
+      "status": "draft",
+      "entries": ["Pistachio Shortbread with Rose Buttercream"]
+    },
+    {
+      "title": "Brunch notes",
+      "description": "The two recipes I actually make when people sleep over.",
+      "status": "published",
+      "slug": "brunch-notes",
+      "entries": ["Raisin Bran Muffins", "English Muffins: Whole Wheat"]
+    }
+  ],
+  "recipe_box": [
+    {
+      "title": "Almond Biscotti",
+      "description": "Twice-baked, for dunking.",
+      "prep_minutes": 25,
+      "cook_minutes": 45,
+      "ingredients": [
+        {"name": "All-purpose flour", "quantity": "2", "unit": "cup"},
+        {"name": "Sugar", "quantity": "0.75", "unit": "cup"},
+        {"name": "Almonds", "quantity": "1", "unit": "cup", "prep_note": "whole, toasted"},
+        {"name": "Egg", "quantity": "2", "unit": "whole"}
+      ],
+      "steps": [
+        "Shape two logs. Bake 25 minutes at 350°F.",
+        "Slice, bake cut-side down 10 minutes per side."
+      ]
+    },
+    {
+      "title": "Confetti Cookies",
+      "description": "Birthday cake in a cookie.",
+      "prep_minutes": 15,
+      "cook_minutes": 12
+    },
+    {
+      "title": "Focaccia",
+      "description": "Overnight cold ferment, lots of olive oil.",
+      "prep_minutes": 30,
+      "cook_minutes": 25
+    },
+    {
+      "title": "Granola",
+      "description": "Olive oil, maple, salt. Clumpy on purpose.",
+      "prep_minutes": 10,
+      "cook_minutes": 40
+    },
+    {
+      "title": "Lemon Bars",
+      "description": "Shortbread base, tart curd, powdered sugar.",
+      "prep_minutes": 20,
+      "cook_minutes": 35,
+      "ingredients": [
+        {"name": "All-purpose flour", "quantity": "1", "unit": "cup"},
+        {"name": "Unsalted butter", "quantity": "0.5", "unit": "cup"},
+        {"name": "Lemon juice", "quantity": "0.5", "unit": "cup"},
+        {"name": "Sugar", "quantity": "1", "unit": "cup"}
+      ],
+      "steps": [
+        "Bake the crust until pale gold.",
+        "Pour curd, bake until just set, chill."
+      ]
+    },
+    {
+      "title": "Overnight Oats",
+      "description": "Jar breakfast. Yogurt keeps it from going gluey.",
+      "prep_minutes": 5,
+      "cook_minutes": 0
+    },
+    {
+      "title": "Peach Crisp",
+      "description": "Oat topping, not too much sugar.",
+      "prep_minutes": 15,
+      "cook_minutes": 40
+    },
+    {
+      "title": "Pancakes",
+      "description": "Buttermilk, rest the batter 10 minutes.",
+      "prep_minutes": 10,
+      "cook_minutes": 15
+    },
+    {
+      "title": "Rosemary Shortbread",
+      "description": "From the lab journal — the version that worked.",
+      "prep_minutes": 20,
+      "cook_minutes": 18,
+      "equipment_notes": "Half-sheet, parchment.",
+      "ingredients": [
+        {"name": "Unsalted butter", "quantity": "1", "unit": "cup", "prep_note": "softened"},
+        {"name": "Sugar", "quantity": "0.5", "unit": "cup"},
+        {"name": "All-purpose flour", "quantity": "2", "unit": "cup"},
+        {"name": "Fresh rosemary", "quantity": "1", "unit": "tablespoon", "prep_note": "minced"}
+      ],
+      "steps": [
+        "Cream butter and sugar. Mix in flour and rosemary.",
+        "Chill 30 minutes. Bake 350°F until the edges just color."
+      ]
+    },
+    {
+      "title": "Tomato Galette",
+      "description": "Salt the tomatoes first so the crust stays crisp.",
+      "prep_minutes": 40,
+      "cook_minutes": 45
+    },
+    {
+      "title": "Vanilla Pound Cake",
+      "description": "Loaf pan, lots of vanilla.",
+      "prep_minutes": 20,
+      "cook_minutes": 60
+    },
+    {
+      "title": "Weeknight Pasta",
+      "description": "Garlic, chili, pasta water, parsley.",
+      "prep_minutes": 5,
+      "cook_minutes": 15
+    },
+    {
+      "title": "Yogurt Cake",
+      "description": "One bowl. Olive oil instead of butter.",
+      "prep_minutes": 10,
+      "cook_minutes": 40
+    },
+    {
+      "title": "Zucchini Bread",
+      "description": "Squeeze the zucchini or it bakes gummy.",
+      "prep_minutes": 20,
+      "cook_minutes": 55
+    }
+  ],
+  "reference_urls": [
+    {"title": "The Perfect Loaf", "url": "https://www.theperfectloaf.com/"},
+    {"title": "Eat this Poem", "url": "https://www.eatthispoem.com/"},
+    {"title": "The Vanilla Bean Blog", "url": "https://www.thevanillabeanblog.com/"}
+  ],
+  "reference_links": [
+    {
+      "reference": "The Perfect Loaf",
+      "idea": "Easy Bagel",
+      "note": "Steam + bake method to steal from."
+    }
+  ],
+  "forks": [
+    {
+      "from_user": "baker",
+      "from_title": "Brown Butter Blondies",
+      "to_user": "cook",
+      "fork_type": "save_to_box"
+    },
+    {
+      "from_user": "baker",
+      "from_title": "Brown Butter Blondies",
+      "to_user": "dev",
+      "fork_type": "rework",
+      "rework_title": "Brown Butter Blondies (lab)",
+      "publish_slug": "brown-butter-blondies-lab",
+      "story": "Forked from baker's potluck batch. Trying brown sugar one notch darker."
+    }
+  ]
+}

@@ -195,6 +195,78 @@ textarea.lab-step-body,
   color: var(--color-accent-floral);
 }
 
+.recipe-import {
+  margin: 1.25rem 0 2rem;
+  padding: 1rem 1.1rem 1.1rem;
+  background: var(--surface-paper);
+  border: 1px dashed var(--color-border);
+  border-radius: var(--radius-md);
+}
+
+.recipe-import__heading {
+  margin: 0 0 0.75rem;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-label);
+}
+
+.recipe-import__row {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: end;
+  gap: 0.65rem;
+  margin-bottom: 0.75rem;
+}
+
+.recipe-import__row label {
+  display: grid;
+  gap: 0.25rem;
+  flex: 1 1 14rem;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+  color: var(--color-text-label);
+}
+
+.recipe-import__row input[type="url"],
+.recipe-import__row input[type="file"] {
+  font: inherit;
+  padding: 0.4rem 0.15rem;
+  border: none;
+  border-bottom: 1px solid var(--surface-field-line);
+  border-radius: 0;
+  background: var(--color-input-bg);
+  color: var(--color-text);
+}
+
+.recipe-import__preview {
+  margin: 0 0 0.85rem;
+  padding: 0.75rem 0.85rem;
+  background: var(--surface-kraft);
+  border-radius: var(--radius-sm);
+}
+
+.recipe-import__preview-title {
+  margin: 0 0 0.25rem;
+  font-family: var(--font-heading);
+}
+
+.recipe-import__preview-meta,
+.recipe-import__note {
+  margin: 0;
+  color: var(--color-text-muted);
+  font-size: 0.9rem;
+}
+
+.recipe-import__note {
+  margin-top: 0.25rem;
+}
+
 .editor-form {
   display: grid;
   gap: 1rem;

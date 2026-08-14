@@ -2,4 +2,5 @@
   --font-body: "Iowan Old Style", "Palatino Linotype", Palatino, Georgia, serif;
   --font-heading: var(--font-body);
   --font-label: var(--font-body);
+  --font-script: "Snell Roundhand", "Segoe Script", "Brush Script MT", cursive;
 }

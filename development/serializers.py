@@ -4,6 +4,7 @@ from .models import (
     Cookbook,
     CookbookRecipe,
     DevelopmentRecipe,
+    ForkType,
     Idea,
     JournalEntry,
     RecipeStep,
@@ -304,6 +305,10 @@ class PublicForkLineageSerializer(serializers.Serializer):
     title = serializers.CharField()
     author = serializers.CharField()
     slug = serializers.CharField(allow_null=True)
+
+
+class ForkRecipeSerializer(serializers.Serializer):
+    fork_type = serializers.ChoiceField(choices=ForkType.choices)
 
 
 class PublicRecipeSerializer(serializers.Serializer):

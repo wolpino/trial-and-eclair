@@ -1,20 +1,62 @@
 import type { RecipeVersion } from "../../api/development";
+import { formatLabDate } from "./labDates";
 
 type VersionFlipProps = {
   versions: RecipeVersion[];
   activeVersionId: string;
   currentVersionId: string;
+  createdAt: string;
+  updatedAt: string;
   onSelect: (versionId: string) => void;
 };
+
+function VersionStamp({
+  currentNumber,
+  viewingNumber,
+  createdAt,
+  updatedAt,
+}: {
+  currentNumber: number | null;
+  viewingNumber: number | null;
+  createdAt: string;
+  updatedAt: string;
+}) {
+  const viewingOther =
+    currentNumber != null && viewingNumber != null && viewingNumber !== currentNumber;
+
+  return (
+    <div className="lab-version-stamp">
+      {currentNumber != null ? (
+        <p className="lab-version-stamp__number">v{currentNumber}</p>
+      ) : null}
+      <p className="lab-version-stamp__date">Opened {formatLabDate(createdAt)}</p>
+      <p className="lab-version-stamp__date">Updated {formatLabDate(updatedAt)}</p>
+      {viewingOther ? (
+        <p className="lab-version-stamp__viewing">Viewing v{viewingNumber} (read-only)</p>
+      ) : null}
+    </div>
+  );
+}
 
 export function VersionFlip({
   versions,
   activeVersionId,
   currentVersionId,
+  createdAt,
+  updatedAt,
   onSelect,
 }: VersionFlipProps) {
+  const current = versions.find((version) => version.id === currentVersionId);
+  const active = versions.find((version) => version.id === activeVersionId);
+
   return (
     <nav className="lab-version-flip" aria-label="Version pages">
+      <VersionStamp
+        currentNumber={current?.version_number ?? null}
+        viewingNumber={active?.version_number ?? null}
+        createdAt={createdAt}
+        updatedAt={updatedAt}
+      />
       <p className="lab-column-heading">Pages</p>
       <ul className="lab-version-flip__list">
         {versions.map((version) => {
