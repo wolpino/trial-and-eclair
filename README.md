@@ -10,7 +10,7 @@ Recipe development and collection app — not a blog.
 
 ## Current status
 
-**Phases 0–4 complete** (backend + metaphor UI + polish). Walkthrough seed fills every screen. Stripe, production deploy, OCR, and freeform cork canvas are still later.
+**Phases 0–4 complete** (backend + metaphor UI + polish). Walkthrough seed fills every screen. Scan import reads text and OCR (Tesseract on PATH). Stripe, production deploy, and freeform cork canvas are still later.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -32,6 +32,8 @@ python manage.py migrate
 python manage.py createsuperuser
 python manage.py runserver
 ```
+
+Photo scan OCR (optional): install [Tesseract](https://github.com/tesseract-ocr/tesseract) so `tesseract` is on your `PATH` (`brew install tesseract` on macOS). Without it, scans still open a draft; typed `.txt` uploads are parsed either way. Digital PDFs use `pdftotext` if present.
 
 Admin: http://127.0.0.1:8000/admin/
 
@@ -266,7 +268,7 @@ Set `role`, `subscription_status`, and `trial_ends_at` in Django admin. Stripe i
 | `POST /api/v1/imports/url/` | Auth | Fetch URL, parse JSON-LD Recipe, SSRF-safe. |
 | `GET /api/v1/imports/url/{id}/` | Auth | Read-only cached import. |
 | `POST /api/v1/imports/url/{id}/save/` | Auth | Copy into box or lab. Never publish directly. |
-| `POST /api/v1/imports/scan/` | Auth | Multipart file → `SourceDocument` + draft. OCR later fills `extracted_text`. |
+| `POST /api/v1/imports/scan/` | Auth | Multipart file → `SourceDocument` + draft. Fills `extracted_text` (text files, Tesseract OCR, or `pdftotext`) and parses Ingredients/Directions into lines. |
 
 Public UI: **Save to box** / **Rework** on `/r/:slug`. Box and lab have URL preview + scan upload.
 
@@ -274,7 +276,7 @@ Public UI: **Save to box** / **Rework** on `/r/:slug`. Box and lab have URL prev
 
 ```bash
 source .venv/bin/activate
-python manage.py test accounts development collection library catalog   # 90 tests
+python manage.py test accounts development collection library catalog   # 95 tests
 cd frontend && npm run build                 # TypeScript + production bundle
 ```
 

@@ -10,6 +10,81 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-08-14 · scan-ocr-import
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-08-14T04:08:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Complete the scan import story: fill `extracted_text` and parse into an editable draft. No new pip/npm deps.
+
+### Summary
+Scan upload now extracts text (plain `.txt`, Tesseract CLI for photos, `pdftotext` for digital PDFs), stores it on `SourceDocument`, and parses Ingredients/Directions into box/lab drafts via existing copy helpers. Empty OCR still opens a filename draft. 95 tests passed; frontend build passed. Work is on branch `scan-ocr`, not committed.
+
+### Decisions
+- **No pip OCR package** — call `tesseract` / `pdftotext` on PATH via subprocess (list args, no shell)
+- **Sync on upload** — no Celery; timeout 30s
+- **Section headers** — unlabeled body stays in description
+
+### Changes
+- `library/scan.py` — extract + parse
+- `library/services.py` — `create_scan_import` fills text and lines
+- `library/test_scan.py`, `library/test_imports.py` — parser and API coverage
+- Import panel copy; README/PRD
+
+### Open threads
+- `brew install tesseract` for photo OCR on this machine (not installed)
+- Stripe, production deploy, freeform cork
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** scan, ocr, tesseract, import
+**Files:** library/scan.py, library/services.py, frontend/src/components/RecipeImportPanel.tsx
+**Do not redo:** mini card grid in recipe-box well; AlphabetRail; Warm kitchen theme; measurement conversion UI; new OCR pip package
+**Resume with:** commit/PR `scan-ocr` if Ari wants; otherwise Stripe or deploy
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-08-14 · merge-polishpolish-pr
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-08-14T03:51:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Commit recipe-box delete, open PR `polishpolish` → `main`, approve and merge.
+
+### Summary
+Committed box delete as `cb41f24`, opened [PR #20](https://github.com/wolpino/trial-and-eclair/pull/20), and merged to `main` (`4e072e1`). GitHub blocked self-approve (`Review Can not approve your own pull request`). Local checkout is now `main`. `polishpolish` was deleted after merge.
+
+### Decisions
+- **Could not self-approve** — GitHub forbids approving your own PR; merge proceeded without a review
+- **Left uncommitted** — `.DS_Store`, `.vscode/`, `.cursor/plans/`, `docs/agent-interview-prep-handoff.md`, `.cursor/qa_log.mdc`
+
+### Changes
+- `frontend/src/pages/RecipeBoxPage.tsx` and recipe-box components — delete UI (in merge)
+- PR #20 merged
+
+### Open threads
+- Scan OCR/vision API (needs approved dep; not MCP)
+- Stripe, production deploy, freeform cork, leftover mobile polish
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** pr-20, merge, recipe-box-delete
+**Files:** frontend/src/pages/RecipeBoxPage.tsx, frontend/src/components/recipe-box/RecipeBoxCard.tsx
+**Do not redo:** mini card grid in recipe-box well; AlphabetRail; Warm kitchen theme; measurement conversion UI
+**Resume with:** OCR/vision only after Ari picks a dependency; otherwise Stripe/deploy or mobile polish if something breaks
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-08-14 · recipe-box-delete-ui
 
 | Field | Value |

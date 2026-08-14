@@ -15,25 +15,21 @@ from urllib.robotparser import RobotFileParser
 from django.db import transaction
 from django.utils import timezone
 
-from collection.services import create_box_recipe
-from development.models import DevelopmentRecipe, ForkType
+from development.models import ForkType
 from development.services import (
     IngredientLineCopy,
     RecipeCopyPayload,
     copy_payload_to_box,
     copy_payload_to_lab,
-    create_development_recipe,
 )
 
 from .models import SourceDocument, UrlRecipeImport
+from .scan import extract_document_text, parse_recipe_text
 
 FETCH_TIMEOUT_SECONDS = 8
 ROBOTS_TIMEOUT_SECONDS = 3
 MAX_FETCH_BYTES = 1_048_576
 USER_AGENT = "TrialAndEclairBot/1.0"
-SCAN_DRAFT_NOTE = (
-    "Imported from a scan. Ingredients and steps still need to be added."
-)
 _ISO_DURATION = re.compile(
     r"^P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$"
 )
@@ -367,7 +363,6 @@ def save_url_import(user, url_import: UrlRecipeImport, *, fork_type: str):
 
 
 def apply_extracted_text(document: SourceDocument, text: str) -> SourceDocument:
-    """Later OCR fills extracted_text here, then parses into ingredient lines."""
     document.extracted_text = text
     document.save(update_fields=["extracted_text", "updated_at"])
     return document
@@ -389,24 +384,13 @@ def create_scan_import(user, uploaded_file, *, destination: str = "box"):
         mime_type=mime_type[:100],
         extracted_text="",
     )
-    title = _title_from_filename(filename)
-    if destination == "lab":
-        return document, _scan_to_lab(user, title)
-    recipe = create_box_recipe(
-        user,
-        title=title,
-        description=SCAN_DRAFT_NOTE,
-        source_document=document,
+    text = extract_document_text(document)
+    apply_extracted_text(document, text)
+    payload = parse_recipe_text(
+        text,
+        fallback_title=_title_from_filename(filename),
     )
+    if destination == "lab":
+        return document, copy_payload_to_lab(user, payload)
+    recipe = copy_payload_to_box(user, payload, source_document=document)
     return document, recipe
-
-
-def _scan_to_lab(user, title: str) -> DevelopmentRecipe:
-    recipe = create_development_recipe(user, title=title)
-    current = recipe.current_version
-    if current is None:
-        raise ValueError("Recipe has no current version.")
-    current.version_notes = SCAN_DRAFT_NOTE
-    current.description = SCAN_DRAFT_NOTE
-    current.save(update_fields=["version_notes", "description", "updated_at"])
-    return recipe

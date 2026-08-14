@@ -179,7 +179,7 @@ Legacy C# models in `recipes/c# modeling/` informed naming and relationships.
 
 ### Scan import
 
-Photo/PDF → OCR → editable draft owned by user. No shared cache.
+Photo/PDF → extract text (Tesseract OCR, `pdftotext`, or plain text) → parse labeled Ingredients/Directions → editable draft owned by user. No shared cache.
 
 ### Forking
 
@@ -240,7 +240,7 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | **3** | Version diff, cookbooks, home cook tier, journal, reference API, trial/subscription | **Complete** |
 | **UI** | Metaphor SPA: theming, lab notebook, recipe box, API UI gaps, cookbooks/references, cork board | **Complete** |
 | **UI polish** | Sun & floral default theme, on-paper forms, surface metaphor polish (see `recipes/` refs) | **Complete** |
-| **4** | URL/scan import, equipment notes, fork buttons on public pages | **Complete** (scan is a file+draft stub; OCR later) |
+| **4** | URL/scan import, equipment notes, fork buttons on public pages | **Complete** |
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout, optional string links) | Planned (post–Phase UI) |
 
@@ -291,11 +291,11 @@ Implementation order: **C1 → C3 → C4 → C6 → C5 → C2**. All chunks merg
 
 - `POST /api/v1/public/recipes/{slug}/fork/` — `save_to_box` or `rework`; home cooks cannot rework
 - URL import: JSON-LD Recipe parse, SSRF guards, save to box/lab (never publish the cache)
-- Scan import stub: store `SourceDocument`, open a draft; OCR later fills `extracted_text`
+- Scan import: store `SourceDocument`, fill `extracted_text` (plain text, Tesseract OCR, or `pdftotext`), parse labeled sections into an editable draft
 - Public **Save to box** / **Rework**; box and lab import panels
 - `PATCH /api/v1/auth/me/` — `show_forks`
 
-**Not yet shipped:** Stripe billing, R2 media in production, OCR, freeform cork canvas, measurement conversion.
+**Not yet shipped:** Stripe billing, R2 media in production, freeform cork canvas, measurement conversion.
 
 ---
 

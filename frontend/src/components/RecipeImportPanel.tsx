@@ -139,11 +139,12 @@ export function RecipeImportPanel({ destination }: RecipeImportPanelProps) {
           <input accept="image/*,.pdf,application/pdf" name="scan" type="file" />
         </label>
         <button className="paper-btn paper-btn--ghost" disabled={scanning} type="submit">
-          {scanning ? "Uploading…" : "Upload scan"}
+          {scanning ? "Reading scan…" : "Upload scan"}
         </button>
       </form>
       <p className="recipe-import__note">
-        Scans open a draft titled from the filename. Ingredients and steps still need to be added.
+        We pull text from the file when we can. Labeled Ingredients and Directions
+        sections become an editable draft.
       </p>
     </section>
   );
