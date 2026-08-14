@@ -52,6 +52,26 @@ function ThemeSettings() {
   );
 }
 
+function ForkVisibilitySetting() {
+  const { user, updateProfile } = useAuth();
+  if (!user) {
+    return null;
+  }
+
+  return (
+    <label className="app-settings-label">
+      <input
+        type="checkbox"
+        checked={user.show_forks}
+        onChange={(event) => {
+          void updateProfile({ show_forks: event.target.checked });
+        }}
+      />
+      Show forks
+    </label>
+  );
+}
+
 export function AppLayout() {
   const { user, hasDeveloperAccess, logout } = useAuth();
   const navigate = useNavigate();
@@ -121,6 +141,7 @@ export function AppLayout() {
               </NavLink>
             ) : null}
             <ThemeSettings />
+            {user ? <ForkVisibilitySetting /> : null}
             {user ? (
               <>
                 <span className="nav-user">{user.username}</span>

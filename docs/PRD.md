@@ -1,8 +1,8 @@
 # Trial and Eclair — Product Requirements Document
 
-**Version:** 1.3  
-**Status:** Approved — Phases 0–3 complete; **Phase UI (metaphor SPA) complete**; **UI polish in progress**; Phase 4 backend next  
-**Last updated:** June 2026
+**Version:** 1.4  
+**Status:** Approved — Phases 0–4 complete; **Phase UI complete**; **UI polish complete**  
+**Last updated:** August 2026
 
 > **Doc maintenance:** At the end of each phase, update this file and [README.md](../README.md): phase status table, shipped scope, API/frontend notes, and open items.
 
@@ -239,8 +239,8 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | **2** | Publish + public viewer + React PWA shell | **Complete** |
 | **3** | Version diff, cookbooks, home cook tier, journal, reference API, trial/subscription | **Complete** |
 | **UI** | Metaphor SPA: theming, lab notebook, recipe box, API UI gaps, cookbooks/references, cork board | **Complete** |
-| **UI polish** | Sun & floral default theme, on-paper forms, surface metaphor polish (see `recipes/` refs) | **In progress** |
-| **4** | URL/scan import, equipment notes, fork buttons on public pages | **Next** (backend) |
+| **UI polish** | Sun & floral default theme, on-paper forms, surface metaphor polish (see `recipes/` refs) | **Complete** |
+| **4** | URL/scan import, equipment notes, fork buttons on public pages | **Complete** (scan is a file+draft stub; OCR later) |
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout, optional string links) | Planned (post–Phase UI) |
 
@@ -276,7 +276,7 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 
 Implementation order: **C1 → C3 → C4 → C6 → C5 → C2**. All chunks merged to `main` (PR #17, #18).
 
-**UI polish (in progress)** — sun & floral kitchen theme replacing Warm kitchen default; light decorative patterns; on-paper shared forms. Reference photos in `recipes/`. Plan: `.cursor/plans/ui_polish_pass_615f67b2.plan.md`.
+**UI polish (complete)** — sun & floral kitchen theme; on-paper forms; lab margin metadata and log pages; cork cabinet + note sheet; recipe box lid + A–Z text index; cookbook/reference/public polish.
 
 | Chunk | Scope |
 |-------|--------|
@@ -287,7 +287,15 @@ Implementation order: **C1 → C3 → C4 → C6 → C5 → C2**. All chunks merg
 | **C5** | Cookbook binder, reference shelf, public page polish |
 | **C2** | Cork board grid (last): pinned notes, filters, edit drawer, optional promote-to-lab |
 
-**Not yet shipped:** metaphor UI chunks above (partial auth shell only), fork buttons on public pages, Stripe billing, R2 media in production, freeform cork canvas.
+**Phase 4 — complete**
+
+- `POST /api/v1/public/recipes/{slug}/fork/` — `save_to_box` or `rework`; home cooks cannot rework
+- URL import: JSON-LD Recipe parse, SSRF guards, save to box/lab (never publish the cache)
+- Scan import stub: store `SourceDocument`, open a draft; OCR later fills `extracted_text`
+- Public **Save to box** / **Rework**; box and lab import panels
+- `PATCH /api/v1/auth/me/` — `show_forks`
+
+**Not yet shipped:** Stripe billing, R2 media in production, OCR, freeform cork canvas, measurement conversion.
 
 ---
 
@@ -327,7 +335,7 @@ Visual references: `recipes/` screenshots and photographs — cork board, recipe
 
 | Surface | Metaphor | Interaction |
 |---------|----------|-------------|
-| **Recipe box** | Index card in a wooden box | Card **expands in place** in the A–Z grid; fields on the card template; box context stays visible |
+| **Recipe box** | Index card in a wooden box | Working card in the **lid**; A–Z letter tabs + title list in the well |
 | **Lab** | Composition notebook page | Full **spread** — ingredients left, steps right; version flip in margin; journal, compare, publish as margin tools or overlays (not tabs) |
 
 Lab never uses index-card dimensions. Recipe box never uses notebook spread layout.
@@ -347,7 +355,7 @@ Lab never uses index-card dimensions. Recipe box never uses notebook spread layo
 | Surface | Direct create | Optional idea path |
 |---------|---------------|-------------------|
 | **Lab** | New recipe on lab shelf → blank notebook spread (v1) | Promote from cork board |
-| **Recipe box** | Add card → new index card in grid | Fork public recipe (Phase 4) |
+| **Recipe box** | Add card → new index card, or import URL/scan | Fork public recipe (**Save to box**) |
 
 ### Theming
 

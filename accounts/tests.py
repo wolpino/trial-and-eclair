@@ -109,3 +109,18 @@ class AuthAPITests(TestCase):
 
         me_response = self.client.get(self.me_url)
         self.assertEqual(me_response.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_me_patches_show_forks(self) -> None:
+        user = User.objects.create_user(username="dev", password="strong-pass-1")
+        self.client.force_login(user)
+
+        response = self.client.patch(
+            self.me_url,
+            {"show_forks": False},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertFalse(response.data["show_forks"])
+        user.refresh_from_db()
+        self.assertFalse(user.show_forks)

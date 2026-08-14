@@ -7,7 +7,7 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .serializers import LoginSerializer, RegisterSerializer, UserSerializer
+from .serializers import LoginSerializer, MeUpdateSerializer, RegisterSerializer, UserSerializer
 
 
 @method_decorator(ensure_csrf_cookie, name="dispatch")
@@ -46,4 +46,14 @@ class LogoutView(APIView):
 @method_decorator(ensure_csrf_cookie, name="dispatch")
 class MeView(APIView):
     def get(self, request: Request) -> Response:
+        return Response(UserSerializer(request.user).data)
+
+    def patch(self, request: Request) -> Response:
+        serializer = MeUpdateSerializer(
+            request.user,
+            data=request.data,
+            partial=True,
+        )
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
         return Response(UserSerializer(request.user).data)

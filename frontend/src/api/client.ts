@@ -204,6 +204,14 @@ export function logoutUser(): Promise<void> {
   return apiFetch<void>("/api/v1/auth/logout/", { method: "POST" });
 }
 
+export function patchCurrentUser(data: Pick<User, "show_forks">): Promise<User> {
+  return apiFetch<User>("/api/v1/auth/me/", {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+}
+
 export function mediaUrl(path: string | null): string | null {
   if (!path) {
     return null;

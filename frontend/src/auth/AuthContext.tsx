@@ -13,6 +13,7 @@ import {
   fetchCurrentUser,
   loginUser,
   logoutUser,
+  patchCurrentUser,
   registerUser,
   type LoginInput,
   type RegisterInput,
@@ -27,6 +28,7 @@ interface AuthContextValue {
   login: (input: LoginInput) => Promise<User>;
   register: (input: RegisterInput) => Promise<User>;
   logout: () => Promise<void>;
+  updateProfile: (data: Pick<User, "show_forks">) => Promise<User>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -77,6 +79,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     setUser(null);
   }, []);
 
+  const updateProfile = useCallback(async (data: Pick<User, "show_forks">) => {
+    const updated = await patchCurrentUser(data);
+    setUser(updated);
+    return updated;
+  }, []);
+
   const value = useMemo(
     () => ({
       user,
@@ -85,8 +93,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       login,
       register,
       logout,
+      updateProfile,
     }),
-    [user, loading, login, register, logout],
+    [user, loading, login, register, logout, updateProfile],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;
