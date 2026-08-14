@@ -42,7 +42,10 @@ export function RegisterPage() {
   return (
     <main className="page-shell auth-page">
       <h1>Create account</h1>
-      <p className="auth-note">New accounts start as home cooks (free).</p>
+      <p className="auth-note">
+        New accounts start as home cooks (free). You can start a 14-day developer
+        trial from the home page anytime.
+      </p>
       <form className="auth-form paper-form" onSubmit={(event) => void handleSubmit(event)}>
         {error ? <p className="form-error">{error}</p> : null}
         <label>

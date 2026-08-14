@@ -10,6 +10,43 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-08-14 · developer-trial-endpoint
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-08-14T05:10:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Merge scan OCR, then do the next product hole. Stripe needs a paid account and a new package, so ship in-app 14-day developer trial instead.
+
+### Summary
+Merged [PR #21](https://github.com/wolpino/trial-and-eclair/pull/21) (`scan-ocr`). Added `POST /api/v1/auth/start-trial/` so a home cook can become a developer for 14 days without Django admin. Expired trials cannot restart. Home page and developer gate show the CTA. 98 tests passed; frontend build passed.
+
+### Decisions
+- **Trial before Stripe** — no new pip dep; paid billing still later
+- **One trial per account** — `trial_ends_at` already set blocks restart
+
+### Changes
+- `accounts/services.py`, `accounts/views.py`, `accounts/urls.py`, `accounts/test_subscription.py`
+- `frontend/src/components/StartTrialCallout.tsx`, HomePage, ProtectedRoute, AuthContext
+- README/PRD
+
+### Open threads
+- Stripe checkout (needs approved `stripe` package + keys)
+- Production deploy, R2, freeform cork
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** trial, start-trial, billing, stripe
+**Files:** accounts/services.py, frontend/src/components/StartTrialCallout.tsx
+**Do not redo:** mini card grid in recipe-box well; AlphabetRail; Warm kitchen theme; measurement conversion UI; Tesseract pip package
+**Resume with:** Stripe only after Ari approves the stripe package and has keys; otherwise freeform cork
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-08-14 · scan-ocr-import
 
 | Field | Value |

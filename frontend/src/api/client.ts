@@ -212,6 +212,10 @@ export function patchCurrentUser(data: Pick<User, "show_forks">): Promise<User> 
   });
 }
 
+export function startDeveloperTrial(): Promise<User> {
+  return apiFetch<User>("/api/v1/auth/start-trial/", { method: "POST" });
+}
+
 export function mediaUrl(path: string | null): string | null {
   if (!path) {
     return null;
