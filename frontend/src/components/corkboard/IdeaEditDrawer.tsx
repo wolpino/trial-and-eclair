@@ -114,13 +114,19 @@ export function IdeaEditDrawer({
   }
 
   return (
-    <div className="cork-drawer" role="dialog" aria-modal="true" aria-labelledby="cork-drawer-title">
+    <div
+      className="cork-drawer cork-drawer--sheet"
+      role="dialog"
+      aria-modal="true"
+      aria-labelledby="cork-drawer-title"
+    >
       <div className="cork-drawer__backdrop" onClick={onClose} aria-hidden="true" />
-      <div className="cork-drawer__panel">
+      <div className="cork-drawer__panel cork-note-sheet">
+        <div className="pinned-note__pin" aria-hidden="true" />
         <header className="cork-drawer__header">
-          <h2 id="cork-drawer-title">Edit note</h2>
+          <h2 id="cork-drawer-title">Note</h2>
           <button className="cork-drawer__close" type="button" onClick={onClose}>
-            Close
+            Put back
           </button>
         </header>
         <form className="cork-drawer__form" onSubmit={(event) => void handleSave(event)}>

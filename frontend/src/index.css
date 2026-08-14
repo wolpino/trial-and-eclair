@@ -311,30 +311,87 @@ a {
   margin: 1.25rem 0;
 }
 
+.auth-page {
+  position: relative;
+  max-width: 28rem;
+  overflow: hidden;
+  background: var(--surface-paper);
+  border: 1px solid var(--color-border-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lifted);
+  padding: 2rem 1.75rem 2.25rem;
+}
+
+.auth-page::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0.42rem;
+  background: linear-gradient(
+    180deg,
+    var(--color-accent-floral) 0%,
+    var(--color-accent-secondary) 52%,
+    var(--color-accent) 100%
+  );
+}
+
+.auth-page::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 4.5rem;
+  height: 4.5rem;
+  background: radial-gradient(
+    circle at 100% 0%,
+    var(--pattern-botanical-edge) 0%,
+    transparent 70%
+  );
+  pointer-events: none;
+}
+
 .auth-form {
   display: grid;
   gap: 1rem;
-  max-width: 28rem;
-  margin-top: 1.5rem;
+  max-width: none;
+  margin-top: 1.25rem;
 }
 
 .auth-form label {
   display: grid;
   gap: 0.35rem;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  color: var(--color-text-label);
 }
 
-.auth-form input {
+.auth-form input,
+.auth-page .paper-field {
   font: inherit;
-  padding: 0.5rem 0.65rem;
-  border: 1px solid var(--color-border-strong);
-  border-radius: var(--radius-sm);
+  padding: 0.4rem 0.15rem;
+  border: none;
+  border-bottom: 1px solid var(--surface-field-line);
+  border-radius: 0;
   background: var(--color-input-bg);
+  color: var(--color-text);
 }
 
-.auth-form button {
+.auth-form input:focus,
+.auth-page .paper-field:focus {
+  border-bottom-color: var(--color-accent);
+  outline: none;
+}
+
+.auth-form button,
+.auth-page .paper-btn {
   justify-self: start;
   font: inherit;
-  padding: 0.5rem 1rem;
+  padding: 0.45rem 0.9rem;
   border: none;
   border-radius: var(--radius-sm);
   background: var(--color-accent);
@@ -342,7 +399,8 @@ a {
   cursor: pointer;
 }
 
-.auth-form button:disabled {
+.auth-form button:disabled,
+.auth-page .paper-btn:disabled {
   opacity: 0.7;
   cursor: wait;
 }

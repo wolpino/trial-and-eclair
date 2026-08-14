@@ -35,6 +35,17 @@ export function createReference(data: {
   });
 }
 
+export function patchReference(
+  id: string,
+  data: Partial<Pick<Reference, "ref_type" | "title" | "url" | "notes">>,
+): Promise<Reference> {
+  return apiFetch<Reference>(`/api/v1/references/${id}/`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify(data),
+  });
+}
+
 export function deleteReference(id: string): Promise<void> {
   return apiFetch<void>(`/api/v1/references/${id}/`, { method: "DELETE" });
 }

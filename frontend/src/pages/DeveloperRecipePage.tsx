@@ -62,7 +62,7 @@ export function DeveloperRecipePage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [journalBody, setJournalBody] = useState("");
-  const [journalOpen, setJournalOpen] = useState(false);
+  const [journalOpen, setJournalOpen] = useState(true);
   const [compareOpen, setCompareOpen] = useState(false);
   const [publishOpen, setPublishOpen] = useState(false);
   const [publishSlug, setPublishSlug] = useState("");
@@ -338,18 +338,6 @@ export function DeveloperRecipePage() {
         ← Lab shelf
       </Link>
 
-      <div className="lab-status-bar">
-        <span>{recipe.status}</span>
-        {recipe.slug ? (
-          <Link to={`/r/${recipe.slug}`}>Public page</Link>
-        ) : null}
-        {!isCurrentVersion ? (
-          <span className="lab-readonly-badge">
-            Viewing v{displayedVersion.version_number} (read-only)
-          </span>
-        ) : null}
-      </div>
-
       {error ? <p className="lab-form-error">{error}</p> : null}
 
       <div className="lab-notebook lab-notebook--marbled">
@@ -358,9 +346,13 @@ export function DeveloperRecipePage() {
             versions={versions}
             activeVersionId={activeVersionId}
             currentVersionId={currentVersionId}
+            createdAt={recipe.created_at}
+            updatedAt={recipe.updated_at}
             onSelect={selectVersion}
           />
           <MarginTools
+            status={recipe.status}
+            slug={recipe.slug}
             journalOpen={journalOpen}
             onCompare={() => setCompareOpen(true)}
             onPublish={() => setPublishOpen(true)}
@@ -406,6 +398,47 @@ export function DeveloperRecipePage() {
               onChanged={() => void reload()}
             />
           </NotebookSpread>
+          {journalOpen ? (
+            <div id="lab-log-pages" className="lab-log-spread-wrap">
+              <NotebookSpread
+                className="notebook-spread--log"
+                header={<p className="lab-log-spread__title">Log pages</p>}
+              >
+                <LabJournal
+                  entries={journal}
+                  body={journalBody}
+                  onBodyChange={setJournalBody}
+                  onSubmit={(event) => void handleAddJournal(event)}
+                  onDelete={(entryId) =>
+                    void deleteJournalEntry(entryId).then(() =>
+                      recipeId ? fetchJournal(recipeId).then(setJournal) : undefined,
+                    )
+                  }
+                />
+                <LabTestSessions
+                  sessions={testSessions}
+                  editable={isCurrentVersion}
+                  notes={sessionNotes}
+                  outcome={sessionOutcome}
+                  photos={sessionPhotos}
+                  onNotesChange={setSessionNotes}
+                  onOutcomeChange={setSessionOutcome}
+                  onPhotosChange={setSessionPhotos}
+                  onSubmit={(event) => void handleAddTestSession(event)}
+                  onDelete={(sessionId) =>
+                    void deleteTestSession(displayedVersion.id, sessionId).then(() =>
+                      reloadTestSessions(displayedVersion.id),
+                    )
+                  }
+                  onDeletePhoto={(sessionId, photoId) =>
+                    void deleteTestSessionPhoto(sessionId, photoId).then(() =>
+                      reloadTestSessions(displayedVersion.id),
+                    )
+                  }
+                />
+              </NotebookSpread>
+            </div>
+          ) : null}
         </div>
 
         <NotebookMargin side="right">
@@ -420,43 +453,6 @@ export function DeveloperRecipePage() {
           />
         </NotebookMargin>
       </div>
-
-      <LabJournal
-        entries={journal}
-        open={journalOpen}
-        onToggle={() => setJournalOpen((open) => !open)}
-        body={journalBody}
-        onBodyChange={setJournalBody}
-        onSubmit={(event) => void handleAddJournal(event)}
-        onDelete={(entryId) =>
-          void deleteJournalEntry(entryId).then(() =>
-            recipeId ? fetchJournal(recipeId).then(setJournal) : undefined,
-          )
-        }
-        testSessions={
-          <LabTestSessions
-            sessions={testSessions}
-            editable={isCurrentVersion}
-            notes={sessionNotes}
-            outcome={sessionOutcome}
-            photos={sessionPhotos}
-            onNotesChange={setSessionNotes}
-            onOutcomeChange={setSessionOutcome}
-            onPhotosChange={setSessionPhotos}
-            onSubmit={(event) => void handleAddTestSession(event)}
-            onDelete={(sessionId) =>
-              void deleteTestSession(displayedVersion.id, sessionId).then(() =>
-                reloadTestSessions(displayedVersion.id),
-              )
-            }
-            onDeletePhoto={(sessionId, photoId) =>
-              void deleteTestSessionPhoto(sessionId, photoId).then(() =>
-                reloadTestSessions(displayedVersion.id),
-              )
-            }
-          />
-        }
-      />
 
       <NotebookOverlay
         title="Compare versions"

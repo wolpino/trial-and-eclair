@@ -14,7 +14,7 @@ export function NotebookMargin({
   return (
     <aside
       className={`notebook-margin notebook-margin--${side} ${className}`.trim()}
-      aria-label="Notebook tools"
+      aria-label={side === "left" ? "Notebook index" : "Notebook notes"}
     >
       {children}
     </aside>

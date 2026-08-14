@@ -39,12 +39,13 @@ export function LoginPage() {
   return (
     <main className="page-shell auth-page">
       <h1>Log in</h1>
-      <form className="auth-form" onSubmit={(event) => void handleSubmit(event)}>
+      <form className="auth-form paper-form" onSubmit={(event) => void handleSubmit(event)}>
         {error ? <p className="form-error">{error}</p> : null}
         <label>
           Username
           <input
             autoComplete="username"
+            className="paper-field"
             name="username"
             required
             value={username}
@@ -55,6 +56,7 @@ export function LoginPage() {
           Password
           <input
             autoComplete="current-password"
+            className="paper-field"
             name="password"
             required
             type="password"
@@ -62,7 +64,7 @@ export function LoginPage() {
             onChange={(event) => setPassword(event.target.value)}
           />
         </label>
-        <button disabled={submitting} type="submit">
+        <button className="paper-btn" disabled={submitting} type="submit">
           {submitting ? "Logging in…" : "Log in"}
         </button>
       </form>

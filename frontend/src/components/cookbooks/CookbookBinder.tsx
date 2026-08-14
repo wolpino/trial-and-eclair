@@ -8,10 +8,13 @@ type CookbookBinderProps = {
 export function CookbookBinder({ children, className = "" }: CookbookBinderProps) {
   return (
     <div className={`cookbook-binder ${className}`.trim()}>
-      <div aria-hidden="true" className="cookbook-binder__rings">
-        <span />
-        <span />
-        <span />
+      <div aria-hidden="true" className="cookbook-binder__spine">
+        <span className="cookbook-binder__spine-label">Binder</span>
+        <div className="cookbook-binder__rings">
+          <span />
+          <span />
+          <span />
+        </div>
       </div>
       <div className="cookbook-binder__body">{children}</div>
     </div>

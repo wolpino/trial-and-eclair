@@ -33,7 +33,7 @@ export function CookbookEntryCard({
           <span className="cookbook-entry-card__muted">Not on public web</span>
         )}
         {onRemove ? (
-          <button className="cookbook-entry-card__remove" type="button" onClick={onRemove}>
+          <button className="paper-btn paper-btn--text cookbook-entry-card__remove" type="button" onClick={onRemove}>
             Remove
           </button>
         ) : null}

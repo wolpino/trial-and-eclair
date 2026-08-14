@@ -2,20 +2,57 @@
   max-width: 1100px;
   margin: 0 auto;
   padding: 2rem 1.25rem 4rem;
+  background-image:
+    radial-gradient(
+      ellipse 50% 30% at 96% 4%,
+      var(--pattern-botanical-edge) 0%,
+      transparent 62%
+    ),
+    radial-gradient(
+      ellipse 90% 40% at 50% -6%,
+      var(--pattern-sun-wash) 0%,
+      transparent 60%
+    );
+  background-repeat: no-repeat;
 }
 
-.public-page .recipe-viewer,
-.public-page .cookbook-viewer {
+.public-page .recipe-viewer {
+  position: relative;
   max-width: none;
   margin: 0;
-  padding: 0;
+  padding: 1.75rem 1.6rem 2rem;
+  overflow: hidden;
+  background: var(--surface-paper);
+  border: 1px solid var(--color-border-card);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-lifted);
+}
+
+.public-page .recipe-viewer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  width: 0.42rem;
+  background: linear-gradient(
+    180deg,
+    var(--color-accent-floral) 0%,
+    var(--color-accent-secondary) 52%,
+    var(--color-accent) 100%
+  );
+}
+
+.public-page .cookbook-viewer.cookbook-binder {
+  max-width: none;
+  margin: 0;
 }
 
 .public-recipe-header,
 .public-cookbook-header {
-  margin-bottom: 1.5rem;
-  padding-bottom: 1.25rem;
-  border-bottom: 1px solid var(--color-border);
+  margin-bottom: 1.35rem;
+  padding-bottom: 1.1rem;
+  border-bottom: 1px dashed var(--color-border);
 }
 
 .public-recipe-header h1,
@@ -28,7 +65,7 @@
 }
 
 .public-meta {
-  margin: 0;
+  margin: 0 0 0.35rem;
   color: var(--color-text-muted);
   font-size: 0.95rem;
 }
@@ -46,7 +83,7 @@
 
 .public-cookbook-entries {
   display: grid;
-  gap: 1rem;
+  gap: 1.15rem;
 }
 
 @media (min-width: 640px) {
@@ -56,16 +93,31 @@
 }
 
 .public-cookbook-entry {
-  padding: 1.25rem;
-  background: var(--surface-paper);
+  position: relative;
+  padding: 1.3rem 1.2rem 1.15rem;
+  background: var(--surface-card);
   border: 1px solid var(--color-border-card);
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-card);
 }
 
+.public-cookbook-entry::before {
+  content: "";
+  position: absolute;
+  top: -0.12rem;
+  left: 0.7rem;
+  width: 2.1rem;
+  height: 0.55rem;
+  background: var(--tape-rose);
+  transform: rotate(-6deg);
+  opacity: 0.88;
+  pointer-events: none;
+}
+
 .public-cookbook-entry h2 {
   margin: 0 0 0.35rem;
   font-size: 1.15rem;
+  font-family: var(--font-heading);
 }
 
 .public-cookbook-entry h2 a {
@@ -76,6 +128,7 @@
 .public-cookbook-entry h2 a:hover {
   color: var(--color-accent);
   text-decoration: underline;
+  text-decoration-color: var(--color-accent-floral);
 }
 
 .public-cookbook-entry p {
@@ -87,14 +140,17 @@
 .public-cookbook-entry__order {
   display: block;
   margin-bottom: 0.35rem;
-  font-size: 0.75rem;
+  font-family: var(--font-label);
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  letter-spacing: 0.05em;
   color: var(--color-text-label);
 }
 
 .public-hero {
-  margin: 1.5rem 0 2rem;
+  position: relative;
+  margin: 1.25rem 0 1.75rem;
 }
 
 .public-hero img {
@@ -106,28 +162,67 @@
   box-shadow: var(--shadow-card);
 }
 
+.public-hero::before,
+.public-hero::after {
+  content: "";
+  position: absolute;
+  top: -0.15rem;
+  z-index: 1;
+  width: 2.4rem;
+  height: 0.6rem;
+  opacity: 0.9;
+  pointer-events: none;
+}
+
+.public-hero::before {
+  left: 0.85rem;
+  background: var(--tape-rose);
+  transform: rotate(-6deg);
+}
+
+.public-hero::after {
+  right: 0.85rem;
+  background: var(--tape-cream);
+  transform: rotate(5deg);
+}
+
 .public-ingredients-panel {
-  padding: 1.25rem;
-  background: var(--surface-paper);
+  padding: 1.2rem 1.15rem;
+  background-color: var(--surface-paper);
+  background-image: repeating-linear-gradient(
+    transparent 0,
+    transparent calc(1.5rem - 1px),
+    color-mix(in srgb, var(--surface-field-line) 55%, transparent) calc(1.5rem - 1px),
+    color-mix(in srgb, var(--surface-field-line) 55%, transparent) 1.5rem
+  );
   border: 1px solid var(--color-border-card);
   border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-card);
 }
 
 .public-directions-panel {
-  padding-top: 0.25rem;
+  padding-top: 0.15rem;
 }
 
-.public-site-mark {
-  display: inline-block;
-  margin-bottom: 1.5rem;
-  font-size: 0.85rem;
-  font-weight: 600;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: var(--color-text-label);
+.public-colophon {
+  margin: 2rem 0 0;
+  padding-top: 1rem;
+  border-top: 1px dashed var(--color-border);
+  font-family: var(--font-script);
+  font-size: 1.05rem;
+  color: var(--color-text-muted);
+}
+
+.public-colophon a {
+  color: var(--color-accent-secondary);
   text-decoration: none;
 }
 
-.public-site-mark:hover {
-  color: var(--color-accent);
+.public-colophon a:hover {
+  color: var(--color-accent-floral);
+}
+
+.public-page .fork-lineage {
+  margin: 0.4rem 0 0;
+  font-size: 0.95rem;
 }

@@ -23,10 +23,6 @@ export function RecipeViewer({ recipe }: RecipeViewerProps) {
 
   return (
     <article className="recipe-viewer">
-      <Link className="public-site-mark" to="/">
-        Trial &amp; Eclair
-      </Link>
-
       <header className="public-recipe-header">
         <p className="public-meta">
           by {recipe.author}
@@ -101,6 +97,10 @@ export function RecipeViewer({ recipe }: RecipeViewerProps) {
           ) : null}
         </section>
       </div>
+
+      <footer className="public-colophon">
+        <Link to="/">Trial &amp; Eclair</Link>
+      </footer>
     </article>
   );
 }

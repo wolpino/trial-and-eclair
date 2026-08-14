@@ -4,6 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { ApiError } from "../api/client";
 import {
   createDevelopmentRecipe,
+  deleteDevelopmentRecipe,
   fetchDevelopmentRecipes,
   type DevelopmentRecipe,
 } from "../api/development";
@@ -33,6 +34,16 @@ export function DeveloperLabPage() {
   useEffect(() => {
     void loadRecipes();
   }, []);
+
+  async function handleDelete(id: string) {
+    try {
+      await deleteDevelopmentRecipe(id);
+      setRecipes((current) => current.filter((recipe) => recipe.id !== id));
+      setError(null);
+    } catch (err: unknown) {
+      setError(err instanceof ApiError ? err.message : "Could not delete recipe.");
+    }
+  }
 
   async function handleCreate(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -77,7 +88,7 @@ export function DeveloperLabPage() {
       {loading ? (
         <p className="lab-page__note">Loading shelf…</p>
       ) : (
-        <RecipeShelf recipes={recipes} />
+        <RecipeShelf recipes={recipes} onDelete={(id) => void handleDelete(id)} />
       )}
     </main>
   );

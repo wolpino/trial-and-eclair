@@ -1,60 +1,41 @@
-import type { Reference, ReferenceType } from "../../api/library";
+import type { Reference } from "../../api/library";
 import { REFERENCE_TYPE_LABELS } from "../../lib/constants";
 
 type ReferenceSpineProps = {
   reference: Reference;
+  selected?: boolean;
+  onSelect: () => void;
   onDelete: () => void;
 };
 
-export function ReferenceSpine({ reference, onDelete }: ReferenceSpineProps) {
-  const content = (
-    <>
-      <p className="reference-spine__title">{reference.title}</p>
-      <span className="reference-spine__type">
-        {REFERENCE_TYPE_LABELS[reference.ref_type]}
-      </span>
-    </>
-  );
-
-  if (reference.url) {
-    return (
-      <div className="reference-spine-wrap" data-ref-type={reference.ref_type}>
-        <a
-          className="reference-spine"
-          href={reference.url}
-          rel="noreferrer"
-          target="_blank"
-          title={reference.title}
-        >
-          {content}
-        </a>
-        <button
-          className="reference-spine__delete"
-          type="button"
-          onClick={onDelete}
-        >
-          Remove
-        </button>
-      </div>
-    );
-  }
-
+export function ReferenceSpine({
+  reference,
+  selected = false,
+  onSelect,
+  onDelete,
+}: ReferenceSpineProps) {
   return (
     <div
-      className="reference-spine reference-spine--static"
+      className="reference-spine-wrap"
       data-ref-type={reference.ref_type}
-      title={reference.title}
+      data-selected={selected ? "true" : undefined}
     >
-      {content}
       <button
-        className="reference-spine__delete"
+        aria-pressed={selected}
+        className="reference-spine"
+        title={reference.title}
         type="button"
-        onClick={onDelete}
+        onClick={onSelect}
       >
+        <span className="reference-spine__band" aria-hidden="true" />
+        <p className="reference-spine__title">{reference.title}</p>
+        <span className="reference-spine__type">
+          {REFERENCE_TYPE_LABELS[reference.ref_type]}
+        </span>
+      </button>
+      <button className="reference-spine__delete" type="button" onClick={onDelete}>
         Remove
       </button>
     </div>
   );
 }
-
-export type { ReferenceType };

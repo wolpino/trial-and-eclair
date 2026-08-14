@@ -3,10 +3,17 @@ import { ReferenceSpine } from "./ReferenceSpine";
 
 type ReferenceShelfProps = {
   references: Reference[];
+  selectedId?: string | null;
+  onSelect: (id: string) => void;
   onDelete: (id: string) => void;
 };
 
-export function ReferenceShelf({ references, onDelete }: ReferenceShelfProps) {
+export function ReferenceShelf({
+  references,
+  selectedId = null,
+  onSelect,
+  onDelete,
+}: ReferenceShelfProps) {
   if (references.length === 0) {
     return (
       <p className="reference-shelf-empty">
@@ -21,6 +28,8 @@ export function ReferenceShelf({ references, onDelete }: ReferenceShelfProps) {
         <ReferenceSpine
           key={reference.id}
           reference={reference}
+          selected={reference.id === selectedId}
+          onSelect={() => onSelect(reference.id)}
           onDelete={() => onDelete(reference.id)}
         />
       ))}
