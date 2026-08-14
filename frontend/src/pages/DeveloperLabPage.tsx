@@ -9,6 +9,7 @@ import {
   type DevelopmentRecipe,
 } from "../api/development";
 import { RecipeShelf } from "../components/lab/RecipeShelf";
+import { RecipeImportPanel } from "../components/RecipeImportPanel";
 import "../styles/lab.css";
 
 export function DeveloperLabPage() {
@@ -84,6 +85,8 @@ export function DeveloperLabPage() {
           </button>
         </form>
       </section>
+
+      <RecipeImportPanel destination="lab" />
 
       {loading ? (
         <p className="lab-page__note">Loading shelf…</p>

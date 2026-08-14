@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 
 import type { PublicRecipe } from "../api/client";
@@ -10,9 +11,10 @@ import {
 
 interface RecipeViewerProps {
   recipe: PublicRecipe;
+  actions?: ReactNode;
 }
 
-export function RecipeViewer({ recipe }: RecipeViewerProps) {
+export function RecipeViewer({ recipe, actions }: RecipeViewerProps) {
   const heroUrl = mediaUrl(recipe.hero_image);
   const timing = formatTiming(recipe.prep_minutes, recipe.cook_minutes);
   const publishedDate = new Date(recipe.published_at).toLocaleDateString(undefined, {
@@ -47,6 +49,7 @@ export function RecipeViewer({ recipe }: RecipeViewerProps) {
         {recipe.description ? (
           <p className="public-description">{recipe.description}</p>
         ) : null}
+        {actions}
       </header>
 
       {heroUrl ? (

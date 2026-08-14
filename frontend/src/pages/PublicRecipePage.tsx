@@ -8,6 +8,7 @@ import {
   type PublicRecipe,
 } from "../api/client";
 import { RecipeViewer } from "../components/RecipeViewer";
+import { ForkActions } from "../components/ForkActions";
 import { useDocumentMeta } from "../lib/useDocumentMeta";
 import "../styles/public.css";
 
@@ -77,7 +78,7 @@ export function PublicRecipePage() {
 
   return (
     <div className="public-page">
-      <RecipeViewer recipe={recipe} />
+      <RecipeViewer recipe={recipe} actions={<ForkActions slug={recipe.slug} />} />
     </div>
   );
 }

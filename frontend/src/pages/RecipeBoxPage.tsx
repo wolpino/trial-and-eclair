@@ -10,6 +10,7 @@ import {
 import { RecipeBoxCard } from "../components/recipe-box/RecipeBoxCard";
 import { RecipeBoxFrame } from "../components/recipe-box/RecipeBoxFrame";
 import { RecipeBoxIndex } from "../components/recipe-box/RecipeBoxIndex";
+import { RecipeImportPanel } from "../components/RecipeImportPanel";
 import "../styles/recipe-box.css";
 
 function sortRecipes(recipes: CollectionRecipe[]): CollectionRecipe[] {
@@ -134,6 +135,7 @@ export function RecipeBoxPage() {
             {adding ? "Adding…" : "Add card"}
           </button>
         </form>
+        <RecipeImportPanel destination="box" />
       </header>
 
       <RecipeBoxFrame lid={lidContent}>

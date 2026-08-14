@@ -81,6 +81,14 @@
   line-height: 1.5;
 }
 
+.public-fork-actions {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.5rem 0.65rem;
+  margin-top: 1rem;
+}
+
 .public-cookbook-entries {
   display: grid;
   gap: 1.15rem;
