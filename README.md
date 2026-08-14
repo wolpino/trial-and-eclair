@@ -86,10 +86,11 @@ Base path: `/api/v1/`. All endpoints require an authenticated session unless not
 | `login/` | POST | Public | Session login |
 | `logout/` | POST | Required | Clear session |
 | `me/` | GET, PATCH | Required | Profile; PATCH `show_forks` |
+| `start-trial/` | POST | Required | Home cook → 14-day developer trial (once) |
 
 `me` returns `role`, `subscription_status`, `trial_ends_at`, `measurement_preference`, and `show_forks`.
 
-Developer endpoints require `role=developer`. Promote a user in Django admin (`Accounts → Users → role`).
+Developer endpoints require `role=developer` plus an active trial or subscription. Home cooks can `POST /api/v1/auth/start-trial/` once. Expired trials cannot restart until Stripe exists. Admin can still set `role` and `subscription_status` directly.
 
 ### Ideas — cork board (`/api/v1/ideas/`)
 
@@ -233,7 +234,7 @@ Any authenticated user (home cook or developer). Single-version recipes, sorted 
 | `recipe-box/{id}/ingredient-lines/` | GET, POST | Ingredient lines |
 | `recipe-box/{id}/ingredient-lines/{id}/` | GET, PATCH, DELETE | |
 
-Register defaults to `home_cook`; promote to `developer` in admin for lab features.
+Register defaults to `home_cook`. Start a 14-day developer trial from the home page (`POST /api/v1/auth/start-trial/`), or set `role` in admin.
 
 ### Reference library (`/api/v1/references/`)
 
@@ -276,17 +277,19 @@ Public UI: **Save to box** / **Rework** on `/r/:slug`. Box and lab have URL prev
 
 ```bash
 source .venv/bin/activate
-python manage.py test accounts development collection library catalog   # 95 tests
+python manage.py test accounts development collection library catalog   # 98 tests
 cd frontend && npm run build                 # TypeScript + production bundle
 ```
 
 ### Quick API smoke test
 
 ```bash
-# Register + create an idea (requires developer role — set in admin first, or register then promote)
+# Register + start a developer trial, then create an idea
 curl -c cookies.txt -X POST http://127.0.0.1:8000/api/v1/auth/register/ \
   -H "Content-Type: application/json" \
   -d '{"username":"dev1","password":"strong-pass-1","password_confirm":"strong-pass-1"}'
+
+curl -b cookies.txt -c cookies.txt -X POST http://127.0.0.1:8000/api/v1/auth/start-trial/
 
 curl -b cookies.txt http://127.0.0.1:8000/api/v1/auth/me/
 ```

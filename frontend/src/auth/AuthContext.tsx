@@ -15,6 +15,7 @@ import {
   logoutUser,
   patchCurrentUser,
   registerUser,
+  startDeveloperTrial,
   type LoginInput,
   type RegisterInput,
   type User,
@@ -29,6 +30,7 @@ interface AuthContextValue {
   register: (input: RegisterInput) => Promise<User>;
   logout: () => Promise<void>;
   updateProfile: (data: Pick<User, "show_forks">) => Promise<User>;
+  startTrial: () => Promise<User>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -85,6 +87,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return updated;
   }, []);
 
+  const startTrial = useCallback(async () => {
+    const updated = await startDeveloperTrial();
+    setUser(updated);
+    return updated;
+  }, []);
+
   const value = useMemo(
     () => ({
       user,
@@ -94,8 +102,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       register,
       logout,
       updateProfile,
+      startTrial,
     }),
-    [user, loading, login, register, logout, updateProfile],
+    [user, loading, login, register, logout, updateProfile, startTrial],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

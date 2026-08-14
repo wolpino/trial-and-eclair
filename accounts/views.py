@@ -8,6 +8,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from .serializers import LoginSerializer, MeUpdateSerializer, RegisterSerializer, UserSerializer
+from .services import TrialUnavailable, start_developer_trial
 
 
 @method_decorator(ensure_csrf_cookie, name="dispatch")
@@ -57,3 +58,12 @@ class MeView(APIView):
         serializer.is_valid(raise_exception=True)
         serializer.save()
         return Response(UserSerializer(request.user).data)
+
+
+class StartTrialView(APIView):
+    def post(self, request: Request) -> Response:
+        try:
+            user = start_developer_trial(request.user)
+        except TrialUnavailable as exc:
+            return Response({"detail": str(exc)}, status=status.HTTP_400_BAD_REQUEST)
+        return Response(UserSerializer(user).data)

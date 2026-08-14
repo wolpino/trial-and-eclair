@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
+import { canStartDeveloperTrial } from "../auth/access";
 import { useAuth } from "../auth/AuthContext";
+import { StartTrialCallout } from "../components/StartTrialCallout";
 
 export function HomePage() {
   const { user, loading, hasDeveloperAccess } = useAuth();
@@ -36,10 +38,10 @@ export function HomePage() {
               </>
             ) : null}
           </p>
-          {!hasDeveloperAccess && user.role === "developer" ? (
+          {canStartDeveloperTrial(user) ? <StartTrialCallout /> : null}
+          {!hasDeveloperAccess && user.role === "developer" && !canStartDeveloperTrial(user) ? (
             <p className="home-note">
-              Developer tools need an active trial or subscription. Update your
-              account in Django admin.
+              Your developer trial has ended. Paid billing is not available yet.
             </p>
           ) : null}
         </>

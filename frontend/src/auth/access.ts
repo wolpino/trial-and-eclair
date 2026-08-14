@@ -18,6 +18,16 @@ export function hasDeveloperAccess(user: User): boolean {
   return true;
 }
 
+export function canStartDeveloperTrial(user: User): boolean {
+  if (hasDeveloperAccess(user)) {
+    return false;
+  }
+  if (BLOCKED_SUBSCRIPTION.has(user.subscription_status)) {
+    return false;
+  }
+  return user.trial_ends_at === null;
+}
+
 export function defaultRouteForUser(user: User): string {
   if (user.role === "developer" && hasDeveloperAccess(user)) {
     return "/developer";

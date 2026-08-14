@@ -95,3 +95,61 @@ class DeveloperSubscriptionTests(TestCase):
 
         self.assertTrue(active.has_developer_access())
         self.assertFalse(expired_trial.has_developer_access())
+
+
+class StartDeveloperTrialTests(TestCase):
+    def setUp(self) -> None:
+        self.client = APIClient(enforce_csrf_checks=False)
+        self.url = "/api/v1/auth/start-trial/"
+        self.ideas_url = "/api/v1/ideas/"
+
+    def test_home_cook_starts_fourteen_day_trial(self) -> None:
+        user = User.objects.create_user(
+            username="cook",
+            password="strong-pass-1",
+            role=UserRole.HOME_COOK,
+        )
+        self.client.force_login(user)
+
+        response = self.client.post(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data["role"], UserRole.DEVELOPER)
+        self.assertEqual(response.data["subscription_status"], SubscriptionStatus.TRIAL)
+        self.assertIsNotNone(response.data["trial_ends_at"])
+        user.refresh_from_db()
+        self.assertTrue(user.has_developer_access())
+        ideas = self.client.get(self.ideas_url)
+        self.assertEqual(ideas.status_code, status.HTTP_200_OK)
+
+    def test_active_developer_cannot_start_trial(self) -> None:
+        user = self._active_developer()
+        self.client.force_login(user)
+
+        response = self.client.post(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_expired_trial_cannot_restart(self) -> None:
+        user = User.objects.create_user(
+            username="expired",
+            password="strong-pass-1",
+            role=UserRole.DEVELOPER,
+            subscription_status=SubscriptionStatus.TRIAL,
+            trial_ends_at=timezone.now() - timedelta(days=1),
+        )
+        self.client.force_login(user)
+
+        response = self.client.post(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("billing", response.data["detail"].lower())
+
+    def _active_developer(self) -> User:
+        return User.objects.create_user(
+            username="dev",
+            password="strong-pass-1",
+            role=UserRole.DEVELOPER,
+            subscription_status=SubscriptionStatus.ACTIVE,
+            trial_ends_at=None,
+        )

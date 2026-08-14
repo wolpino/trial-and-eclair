@@ -56,7 +56,7 @@ Two layers:
 
 **Upgrade:** Same account; recipe box recipes stay; user gains developer features without forced migration.
 
-**Trial:** 14-day free developer trial. Stripe (or similar) before first paid signup in production. Schema: `trial_ends_at`, `subscription_status`.
+**Trial:** 14-day free developer trial via `POST /api/v1/auth/start-trial/` (once per account). Stripe (or similar) before first paid signup in production. Schema: `trial_ends_at`, `subscription_status`.
 
 ---
 
@@ -271,6 +271,7 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 - Home cook recipe box: `/api/v1/recipe-box/` — `CollectionRecipe` + A–Z `RecipeBoxItem`; any authenticated user
 - Reference library: `/api/v1/references/` + `/links/` to ideas or recipe versions (developer)
 - Developer access gated by `User.has_developer_access()` — active/trial subscription; expired trial and expired/cancelled status blocked (`subscription_status=none` allowed for admin-promoted devs until Stripe)
+- `POST /api/v1/auth/start-trial/` — home cook starts a 14-day developer trial (once)
 
 **Phase UI — metaphor SPA (complete)**
 
