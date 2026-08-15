@@ -1,0 +1,14 @@
+.git
+.venv
+.env
+.cursor
+.vscode
+.DS_Store
+**/__pycache__
+**/*.pyc
+frontend/node_modules
+frontend/dist
+media
+staticfiles
+db.sqlite3
+docs/agent-interview-prep-handoff.md

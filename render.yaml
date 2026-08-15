@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: trial-and-eclair
+    runtime: docker
+    plan: free
+    healthCheckPath: /healthz
+    envVars:
+      - key: DEBUG
+        value: "False"
+      - key: SECRET_KEY
+        generateValue: true
+      - key: DATABASE_URL
+        fromDatabase:
+          name: trial-and-eclair-db
+          property: connectionString
+      - key: SERVE_MEDIA
+        value: "True"
+      - key: WEB_CONCURRENCY
+        value: "2"
+
+databases:
+  - name: trial-and-eclair-db
+    databaseName: trial_eclair
+    user: trial_eclair
+    plan: free
