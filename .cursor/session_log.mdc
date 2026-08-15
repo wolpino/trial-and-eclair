@@ -10,6 +10,75 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-08-14 · render-staging-plumbing
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-08-14T23:55:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Ready the repo for a Render staging deploy with gunicorn and WhiteNoise.
+
+### Summary
+Added same-origin staging plumbing: gunicorn, WhiteNoise, `/healthz`, SPA fallback, secure cookies when `DEBUG=False`, Docker image, and `render.yaml` (free web + free Postgres). 100 tests passed; `check --deploy` is clean aside from a short local SECRET_KEY. Not committed. Do not walkthrough-seed a public URL.
+
+### Decisions
+- **Render + Docker** — Node build then Python image so the PWA is in the same origin
+- **gunicorn + whitenoise approved** — added to requirements.txt
+- **Vercel unused** — session cookies stay first-party
+
+### Changes
+- `requirements.txt`, `config/settings.py`, `config/urls.py`, `config/health.py`, `config/spa.py`
+- `Dockerfile`, `entrypoint.sh`, `render.yaml`, `.dockerignore`
+- README/PRD staging notes; `accounts/test_deploy.py`
+
+### Open threads
+- Ari creates a Render Blueprint from this branch and a superuser
+- Stripe, R2, freeform cork still later
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** render, gunicorn, whitenoise, staging, docker
+**Files:** render.yaml, Dockerfile, config/settings.py, config/spa.py
+**Do not redo:** Django on Vercel; split Vercel PWA + remote API; walkthrough seed on a public URL
+**Resume with:** commit/PR if Ari wants, then Blueprint deploy on Render
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-08-14 · staging-deploy-plan
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-08-14T05:20:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Plan |
+| **Outcome** | exploratory |
+
+### Intent
+Plan staging deploy given a Vercel account; include a default go-live checklist.
+
+### Summary
+Vercel cannot run Django + Postgres + session cookies. Recommended staging is same-origin on Render or Fly (gunicorn serves API + Vite `dist`). Vercel stays unused for this pass. Code still needed: gunicorn, WhiteNoise, secure cookies, SPA fallback, `/healthz`. Do not seed public URLs with walkthrough passwords.
+
+### Decisions
+- **Same-origin staging** — do not split Vercel PWA + remote API (third-party cookies)
+- **Skip for staging** — Stripe, R2, Tesseract, freeform cork
+
+### Open threads
+- Ari picks Render vs Fly and approves gunicorn + whitenoise
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** staging, deploy, vercel, render, gunicorn, whitenoise
+**Files:** config/settings.py, frontend/vite.config.ts
+**Do not redo:** mini card grid; AlphabetRail; Warm kitchen; measurement conversion; Django on Vercel
+**Resume with:** after Ari picks Render/Fly and approves gunicorn+whitenoise, add production settings and SPA serving
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-08-14 · developer-trial-endpoint
 
 | Field | Value |

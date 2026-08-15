@@ -3,24 +3,52 @@ Django settings for Trial and Eclair.
 """
 
 import os
+import urllib.parse
 from pathlib import Path
 
+from django.core.exceptions import ImproperlyConfigured
 from dotenv import load_dotenv
 
 load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent
+FRONTEND_DIST = BASE_DIR / "frontend" / "dist"
+_DEV_SECRET = "django-insecure-dev-only-change-in-production"
 
-SECRET_KEY = os.environ.get(
-    "SECRET_KEY",
-    "django-insecure-dev-only-change-in-production",
-)
-DEBUG = os.environ.get("DEBUG", "True").lower() in ("true", "1", "yes")
-ALLOWED_HOSTS = [
-    h.strip()
-    for h in os.environ.get("ALLOWED_HOSTS", "localhost,127.0.0.1").split(",")
-    if h.strip()
-]
+
+def _csv(name: str, default: str) -> list[str]:
+    return [part.strip() for part in os.environ.get(name, default).split(",") if part.strip()]
+
+
+def _flag(name: str, default: str) -> bool:
+    return os.environ.get(name, default).lower() in ("true", "1", "yes")
+
+
+def _postgres_config(url: str) -> dict:
+    parsed = urllib.parse.urlparse(url)
+    sslmode = urllib.parse.parse_qs(parsed.query).get("sslmode", [""])[0]
+    config: dict = {
+        "ENGINE": "django.db.backends.postgresql",
+        "NAME": parsed.path.lstrip("/"),
+        "USER": parsed.username or "",
+        "PASSWORD": urllib.parse.unquote(parsed.password or ""),
+        "HOST": parsed.hostname or "",
+        "PORT": parsed.port or 5432,
+    }
+    if sslmode:
+        config["OPTIONS"] = {"sslmode": sslmode}
+    return config
+
+
+DEBUG = _flag("DEBUG", "True")
+SECRET_KEY = os.environ.get("SECRET_KEY", _DEV_SECRET)
+if not DEBUG and SECRET_KEY == _DEV_SECRET:
+    raise ImproperlyConfigured("Set SECRET_KEY when DEBUG is False.")
+
+ALLOWED_HOSTS = _csv("ALLOWED_HOSTS", "localhost,127.0.0.1")
+_render_host = os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip()
+if _render_host and _render_host not in ALLOWED_HOSTS:
+    ALLOWED_HOSTS.append(_render_host)
 
 INSTALLED_APPS = [
     "django.contrib.admin",
@@ -40,6 +68,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "whitenoise.middleware.WhiteNoiseMiddleware",
     "corsheaders.middleware.CorsMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
@@ -78,19 +107,7 @@ if DATABASE_URL.startswith("sqlite"):
         }
     }
 elif DATABASE_URL.startswith("postgres"):
-    import urllib.parse
-
-    parsed = urllib.parse.urlparse(DATABASE_URL)
-    DATABASES = {
-        "default": {
-            "ENGINE": "django.db.backends.postgresql",
-            "NAME": parsed.path.lstrip("/"),
-            "USER": parsed.username,
-            "PASSWORD": parsed.password,
-            "HOST": parsed.hostname,
-            "PORT": parsed.port or 5432,
-        }
-    }
+    DATABASES = {"default": _postgres_config(DATABASE_URL)}
 else:
     raise ValueError(f"Unsupported DATABASE_URL: {DATABASE_URL}")
 
@@ -110,9 +127,20 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "staticfiles"
+STATIC_ROOT.mkdir(exist_ok=True)
+STORAGES = {
+    "default": {
+        "BACKEND": "django.core.files.storage.FileSystemStorage",
+    },
+    "staticfiles": {
+        "BACKEND": "whitenoise.storage.CompressedStaticFilesStorage",
+    },
+}
+WHITENOISE_ROOT = FRONTEND_DIST
 
 MEDIA_URL = "media/"
 MEDIA_ROOT = BASE_DIR / "media"
+SERVE_MEDIA = _flag("SERVE_MEDIA", "True")
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
@@ -125,28 +153,39 @@ REST_FRAMEWORK = {
     ],
 }
 
-CORS_ALLOWED_ORIGINS = [
-    origin.strip()
-    for origin in os.environ.get(
-        "CORS_ALLOWED_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173",
-    ).split(",")
-    if origin.strip()
-]
-
+CORS_ALLOWED_ORIGINS = _csv(
+    "CORS_ALLOWED_ORIGINS",
+    "http://localhost:5173,http://127.0.0.1:5173",
+)
 CORS_ALLOW_CREDENTIALS = True
 
-# Required for session-auth POSTs from the Vite dev server (Origin != Host).
-CSRF_TRUSTED_ORIGINS = [
-    origin.strip()
-    for origin in os.environ.get(
-        "CSRF_TRUSTED_ORIGINS",
-        "http://localhost:5173,http://127.0.0.1:5173",
-    ).split(",")
-    if origin.strip()
-]
+CSRF_TRUSTED_ORIGINS = _csv(
+    "CSRF_TRUSTED_ORIGINS",
+    "http://localhost:5173,http://127.0.0.1:5173",
+)
+if _render_host:
+    _render_origin = f"https://{_render_host}"
+    if _render_origin not in CSRF_TRUSTED_ORIGINS:
+        CSRF_TRUSTED_ORIGINS.append(_render_origin)
 
-# Image limits (enforced in API layer in later phases)
+if not DEBUG:
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_SSL_REDIRECT = _flag("SECURE_SSL_REDIRECT", "True")
+    SECURE_HSTS_SECONDS = int(os.environ.get("SECURE_HSTS_SECONDS", "31536000"))
+    SECURE_HSTS_INCLUDE_SUBDOMAINS = True
+    SECURE_HSTS_PRELOAD = True
+    SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "handlers": {
+        "console": {"class": "logging.StreamHandler"},
+    },
+    "root": {"handlers": ["console"], "level": os.environ.get("LOG_LEVEL", "INFO")},
+}
+
 IDEA_IMAGE_LIMIT = 1
 TEST_SESSION_PHOTO_LIMIT = 5
 PUBLISHED_HERO_IMAGE_LIMIT = 1

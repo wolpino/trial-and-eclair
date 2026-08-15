@@ -226,6 +226,7 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | Database | Postgres (SQLite local dev) |
 | Media | S3 / Cloudflare R2 (local `media/` in dev) |
 | Auth | Session cookies + role permissions; Stripe later |
+| Staging | Render: gunicorn + WhiteNoise, Postgres, Django serves the Vite PWA (same origin) |
 | Jobs | Celery or Django-Q for URL fetch + OCR (Phase 4+) |
 
 ---
@@ -297,6 +298,8 @@ Implementation order: **C1 → C3 → C4 → C6 → C5 → C2**. All chunks merg
 - `PATCH /api/v1/auth/me/` — `show_forks`
 
 **Not yet shipped:** Stripe billing, R2 media in production, freeform cork canvas, measurement conversion.
+
+**Staging deploy (plumbing):** `render.yaml` + Docker image. gunicorn, WhiteNoise, `/healthz`, SPA fallback, secure cookies when `DEBUG=False`. Media on local disk (ephemeral on Render). Do not load walkthrough seed on a public URL.
 
 ---
 

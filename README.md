@@ -10,7 +10,7 @@ Recipe development and collection app — not a blog.
 
 ## Current status
 
-**Phases 0–4 complete** (backend + metaphor UI + polish). Walkthrough seed fills every screen. Scan import reads text and OCR (Tesseract on PATH). Stripe, production deploy, and freeform cork canvas are still later.
+**Phases 0–4 complete** (backend + metaphor UI + polish). Walkthrough seed fills every screen. Scan import reads text and OCR (Tesseract on PATH). Staging deploy is Render (gunicorn + WhiteNoise, same-origin SPA). Stripe, R2, and freeform cork canvas are still later.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -44,6 +44,27 @@ docker compose up -d db
 # Set in .env:
 # DATABASE_URL=postgres://trial_eclair:trial_eclair@localhost:5432/trial_eclair
 python manage.py migrate
+```
+
+## Staging (Render)
+
+Same origin: gunicorn serves the API, admin, media, and the Vite build. Do **not** put the PWA on Vercel against this API (session cookies would be third-party).
+
+1. Push this repo to GitHub.
+2. In Render: **New → Blueprint** and select the repo (`render.yaml`).
+3. Render creates a free web service plus a Postgres instance. Free Postgres expires; upgrade or recreate if the blueprint fails on the DB plan.
+4. After the first deploy, open `/healthz`, then `/` (the PWA), then `/admin/`.
+5. Create a superuser from the Render shell: `python manage.py createsuperuser`.
+
+Do **not** run `load_recipe_seed --force` on a URL you will share — `dev` / `cook` / `baker` passwords are in this README. Uploaded photos live on ephemeral disk and can vanish on restart.
+
+Local production-shaped run (after `cd frontend && npm run build`):
+
+```bash
+source .venv/bin/activate
+pip install -r requirements.txt
+DEBUG=False SECRET_KEY=dev-only-not-for-render python manage.py collectstatic --noinput
+DEBUG=False SECRET_KEY=dev-only-not-for-render SECURE_SSL_REDIRECT=False gunicorn config.wsgi:application
 ```
 
 ## Phase 0 — seed data
@@ -277,7 +298,7 @@ Public UI: **Save to box** / **Rework** on `/r/:slug`. Box and lab have URL prev
 
 ```bash
 source .venv/bin/activate
-python manage.py test accounts development collection library catalog   # 98 tests
+python manage.py test accounts development collection library catalog   # 100 tests
 cd frontend && npm run build                 # TypeScript + production bundle
 ```
 
