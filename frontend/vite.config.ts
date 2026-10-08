@@ -7,6 +7,15 @@ export default defineConfig({
     react(),
     VitePWA({
       registerType: "autoUpdate",
+      workbox: {
+        navigateFallbackDenylist: [
+          /^\/admin/,
+          /^\/healthz/,
+          /^\/api\//,
+          /^\/static\//,
+          /^\/media\//,
+        ],
+      },
       includeAssets: ["favicon.svg"],
       manifest: {
         name: "Trial and Eclair",

@@ -20,5 +20,8 @@ if settings.SERVE_MEDIA:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 urlpatterns += [
-    re_path(r"^(?!api/|admin/|static/|media/|healthz).*$", spa_index),
+    re_path(
+        r"^(?!api/|admin(?:/|$)|static/|media/|healthz(?:/|$)).*$",
+        spa_index,
+    ),
 ]

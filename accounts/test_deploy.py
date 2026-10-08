@@ -9,6 +9,12 @@ class DeploySurfaceTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_200_OK)
         self.assertEqual(response.json(), {"status": "ok"})
 
+    def test_admin_is_not_the_spa(self) -> None:
+        response = self.client.get("/admin")
+
+        self.assertEqual(response.status_code, status.HTTP_301_MOVED_PERMANENTLY)
+        self.assertEqual(response.headers["Location"], "/admin/")
+
     def test_unknown_api_path_is_not_spa(self) -> None:
         response = self.client.get("/api/v1/does-not-exist/")
 
