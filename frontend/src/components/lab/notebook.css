@@ -143,7 +143,15 @@
   color: var(--color-text);
 }
 
-@media (max-width: 768px) {
+.notebook-spread--single .notebook-spread__body {
+  grid-template-columns: 1fr;
+}
+
+.notebook-spread--single .notebook-spread__body::before {
+  content: none;
+}
+
+@media (max-width: 767px) {
   .notebook-margin {
     min-width: 0;
     max-width: none;
