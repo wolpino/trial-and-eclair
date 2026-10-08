@@ -1,9 +1,11 @@
 import { FormEvent, useState } from "react";
-import { Link, useNavigate } from "react-router-dom";
+
+import { useNavigate } from "react-router-dom";
 
 import { ApiError } from "../api/client";
 import { defaultRouteForUser } from "../auth/access";
 import { useAuth } from "../auth/AuthContext";
+import { AuthCard } from "../components/AuthCard";
 
 export function RegisterPage() {
   const { register } = useAuth();
@@ -40,12 +42,13 @@ export function RegisterPage() {
   }
 
   return (
-    <main className="page-shell auth-page">
-      <h1>Create account</h1>
-      <p className="auth-note">
-        New accounts start as home cooks (free). You can start a 14-day developer
-        trial from the home page anytime.
-      </p>
+    <AuthCard
+      title="Create account"
+      note="New accounts start as home cooks (free). You can start a 14-day developer trial from the home page anytime."
+      switchPrompt="Already have an account?"
+      switchTo="/login"
+      switchLabel="Log in"
+    >
       <form className="auth-form paper-form" onSubmit={(event) => void handleSubmit(event)}>
         {error ? <p className="form-error">{error}</p> : null}
         <label>
@@ -100,9 +103,6 @@ export function RegisterPage() {
           {submitting ? "Creating account…" : "Register"}
         </button>
       </form>
-      <p className="auth-switch">
-        Already have an account? <Link to="/login">Log in</Link>
-      </p>
-    </main>
+    </AuthCard>
   );
 }

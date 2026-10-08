@@ -287,19 +287,29 @@ a {
   color: var(--color-text);
 }
 
-.page-shell,
-.auth-page {
+.page-shell {
   max-width: 1100px;
   margin: 0 auto;
   padding: 2rem 1.25rem 4rem;
 }
 
 .page-shell h1,
-.auth-page h1 {
+.auth-card h1 {
   margin: 0 0 0.75rem;
   font-size: clamp(1.75rem, 4vw, 2.5rem);
   font-weight: 600;
   font-family: var(--font-heading);
+}
+
+.auth-stage {
+  width: min(100%, 28rem);
+  margin: 0 auto;
+  padding: 1.25rem 1rem 3rem;
+}
+
+.auth-card.index-card-scaffold {
+  width: 100%;
+  padding: 1.5rem 1.25rem 1.35rem;
 }
 
 .page-note,
@@ -318,45 +328,10 @@ a {
   margin: 1rem 0 1.5rem;
 }
 
-.auth-page {
-  position: relative;
-  max-width: 28rem;
-  overflow: hidden;
-  background: var(--surface-paper);
-  border: 1px solid var(--color-border-card);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-lifted);
-  padding: 2rem 1.75rem 2.25rem;
-}
-
-.auth-page::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  width: 0.42rem;
-  background: linear-gradient(
-    180deg,
-    var(--color-accent-floral) 0%,
-    var(--color-accent-secondary) 52%,
-    var(--color-accent) 100%
-  );
-}
-
-.auth-page::after {
-  content: "";
-  position: absolute;
-  top: 0;
-  right: 0;
-  width: 4.5rem;
-  height: 4.5rem;
-  background: radial-gradient(
-    circle at 100% 0%,
-    var(--pattern-botanical-edge) 0%,
-    transparent 70%
-  );
-  pointer-events: none;
+@media (min-width: 768px) {
+  .auth-stage {
+    padding-top: 3rem;
+  }
 }
 
 .auth-form {
@@ -378,8 +353,9 @@ a {
 }
 
 .auth-form input,
-.auth-page .paper-field {
+.auth-card .paper-field {
   font: inherit;
+  min-height: 44px;
   padding: 0.4rem 0.15rem;
   border: none;
   border-bottom: 1px solid var(--surface-field-line);
@@ -389,14 +365,15 @@ a {
 }
 
 .auth-form input:focus,
-.auth-page .paper-field:focus {
+.auth-card .paper-field:focus {
   border-bottom-color: var(--color-accent);
   outline: none;
 }
 
 .auth-form button,
-.auth-page .paper-btn {
+.auth-card .paper-btn {
   justify-self: start;
+  min-height: 44px;
   font: inherit;
   padding: 0.45rem 0.9rem;
   border: none;
@@ -407,7 +384,7 @@ a {
 }
 
 .auth-form button:disabled,
-.auth-page .paper-btn:disabled {
+.auth-card .paper-btn:disabled {
   opacity: 0.7;
   cursor: wait;
 }
