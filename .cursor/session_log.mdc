@@ -10,6 +10,188 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-08 · split milestones into prs
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-08T17:35:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Commit the uncommitted milestone work as small commits and open pull requests.
+
+### Summary
+Split the working tree into six pull requests against `staging-render`. Two are stacked: frame nav on the recipe-card auth branch, and the phone notebook on the phone recipe-box branch. Left `.DS_Store` and the empty `.vscode/settings.json` untracked. A backup ref is `refs/backup/pre-split-1791480668`.
+
+### Decisions
+- **PRs target `staging-render`** — that is the branch this work was built on
+- **Frame nav stacks on auth, notebook stacks on the phone box** — they share `index.css` and `usePhoneLayout`
+
+### Changes
+- Pull requests #26–#31 on `wolpino/trial-and-eclair`
+
+### Open threads
+- Merge auth (#28) before frame nav (#29), and the phone box (#30) before the notebook (#31)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** pull requests, stacked PRs, staging-render, frame nav, phone notebook
+**Files:** .cursor/session_log.mdc
+**Do not redo:** one squashed commit for milestones 1 and 2; committing .DS_Store
+**Resume with:** Merge the stacked PRs in order: #28 then #29, and #30 then #31
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-08 · milestones 1 and 2
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-08T16:59:48Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Build the 2.0 frame: recipe-card auth, in-frame navigation, and the phone box and notebook layouts from the milestone plan.
+
+### Summary
+Login and register are one recipe card, and a logged-out `/` shows that card. Every account now lands on `/recipe-box`. The website header is gone; signed-in places live in `FrameNav` (Box and Lab on the phone, the rest under More, Account for theme and logout). Public `/r` and `/c` keep the brand only. Under 768px the box is a title list or a full-screen card, with URL and photo/PDF import on the list. A home-cook add creates the card, then one ingredient line or one step. The lab shows one notebook page on a phone and both columns from 768px up. Frontend build passed. The Django suite (101 tests) passed; pytest is not installed.
+
+### Decisions
+- **Phone breakpoint is under 768px** — `max-width: 767px`, so 768px keeps the wide box and the two-column notebook
+- **Home-cook ingredient line uses quantity 1** — the API requires a decimal; the form only asks for a name
+- **Public reading pages hide the frame even when signed in** — no place switcher on `/r` or `/c`
+
+### Changes
+- `frontend/src/components/AuthCard.tsx`, `FrameNav.tsx`, `AppLayout.tsx` — card and frame
+- `frontend/src/pages/LoginPage.tsx`, `RegisterPage.tsx`, `HomePage.tsx`, `auth/access.ts` — guest card and `/recipe-box` home
+- `frontend/src/pages/RecipeBoxPage.tsx`, `DeveloperRecipePage.tsx` — phone list/card and one notebook page
+- `frontend/src/index.css`, `styles/lab.css`, recipe-box and notebook CSS — tokens only
+
+### Open threads
+- Milestone 3 seed fixtures and Playwright, Milestone 4 showable staging, still later
+- Local dev servers were left running on :8000 and :5173
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** FrameNav, recipe card login, phone recipe box, phone notebook, home-cook add
+**Files:** frontend/src/components/FrameNav.tsx, frontend/src/components/AuthCard.tsx, frontend/src/pages/RecipeBoxPage.tsx, frontend/src/pages/DeveloperRecipePage.tsx, frontend/src/auth/access.ts
+**Do not redo:** kitchen illustration; schema change for the card rule; Tailwind; Playwright; walkthrough seed on a public URL; Django on Vercel
+**Resume with:** Milestone 3 when asked — seed fixtures and a short Playwright pass
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-08 · 2.0 frame spec
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-08T16:45:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Turn the 2.0 conversation into a PRD update and a buildable plan for the next two milestones, plus a prompt for the next agent.
+
+### Summary
+Locked the frame: recipe-card login, both roles land in the recipe box, text navigation inside the app frame, no kitchen picture on the phone. Cookbooks stay the frozen collections; a published recipe does not need one. Wrote the Milestone 1 and 2 technical plan and updated the PRD to 1.5. No application code.
+
+### Decisions
+- **No kitchen art in these milestones** — phone is the box list or one card; lab is one page at a time
+- **Home is `/recipe-box` for every account** — lab, board, and cookbooks stay developer places in the frame
+- **Home-cook minimum is a UI sequence** — create, then one ingredient or step; API stays title-first
+- **Re-release, `updated_at`, prod Render service** — later
+
+### Changes
+- `docs/PRD.md` — v1.5, cookbooks, phone, open items
+- `docs/milestone-1-2-technical-plan.md` — build spec and next-agent prompt
+- `README.md` — roadmap row
+
+### Open threads
+- Build Milestones 1 and 2 from the technical plan
+- Milestone 3 seed and Playwright, Milestone 4 showable staging, still later
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** 2.0 frame, recipe card login, FrameNav, phone notebook, cookbooks
+**Files:** docs/PRD.md, docs/milestone-1-2-technical-plan.md, README.md
+**Do not redo:** notebook as login; kitchen illustration in M1/M2; schema change for the card rule; walkthrough seed on a public URL; Django on Vercel
+**Resume with:** Build Milestones 1 and 2 from docs/milestone-1-2-technical-plan.md
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-08 · exempt-django-from-pwa
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-08T02:07:55Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Healthz and admin looked empty after a successful Render deploy.
+
+### Summary
+The service worker's navigation fallback returned `index.html` for every browser navigation, including `/healthz` and `/admin`. React has no routes there, so the page was blank. Render's health check bypasses the service worker, which is why the deploy still went live. Added a Workbox denylist for admin, healthz, api, static, and media. `/admin` without a slash now redirects to `/admin/` instead of the SPA. Deploy tests passed. Not committed.
+
+### Decisions
+- **Denylist on the service worker** — Django must answer those paths; the SPA shell must not
+
+### Changes
+- `frontend/vite.config.ts` — `navigateFallbackDenylist`
+- `config/urls.py` — bare `/admin` is not the SPA
+- `accounts/test_deploy.py` — redirect assertion
+
+### Open threads
+- Commit and push so Render rebuilds; hard-refresh once so the old service worker drops
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** service worker, healthz, admin, navigateFallbackDenylist, pwa
+**Files:** frontend/vite.config.ts, config/urls.py, accounts/test_deploy.py
+**Do not redo:** letting the service worker own /admin or /healthz; walkthrough seed on a public URL
+**Resume with:** commit and push the PWA denylist, then hard-refresh /healthz and /admin
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-08 · track-frontend-src-lib
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-08T01:55:41Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Fix the Render Docker build, which failed `tsc` because `frontend/src/lib` was missing from the Git checkout.
+
+### Summary
+The Python gitignore pattern `lib/` also ignored `frontend/src/lib`, so constants, recipe formatting, idea rotation, and document meta never reached Render. Local typecheck passed because the files were on disk. Narrowed the rule to `/lib/` and committed the four modules on `staging-render` (`48c9806`). Not pushed.
+
+### Decisions
+- **`/lib/` not a negation rule** — only a repo-root Python `lib/` should stay ignored
+
+### Changes
+- `.gitignore` — `lib/` became `/lib/`
+- `frontend/src/lib/*.ts` — now tracked
+
+### Open threads
+- Push `staging-render` so Render rebuilds
+- Unrelated dirty docs (PRD wording, qa_log) left uncommitted
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** gitignore, frontend/src/lib, render, tsc, docker build
+**Files:** .gitignore, frontend/src/lib/constants.ts, frontend/src/lib/recipeFormat.ts, frontend/src/lib/ideaRotation.ts, frontend/src/lib/useDocumentMeta.ts
+**Do not redo:** Django on Vercel; walkthrough seed on a public URL; broadening lib/ ignore again
+**Resume with:** push staging-render and rerun the Render deploy
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-08-14 · render-staging-plumbing
 
 | Field | Value |
