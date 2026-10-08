@@ -340,7 +340,8 @@ recipes/      Original notes, sheets links, docx recipes
 | **UI** | Metaphor SPA: theming, lab notebook, recipe box, API UI gaps, cookbooks/references, cork board | Complete |
 | **UI polish** | Sun & floral theme, on-paper forms, index cards, dot-grid lab, cork cabinet | Complete |
 | **4** | URL/scan import, fork buttons | Complete |
+| **2.0 frame** | Recipe-card login, in-frame navigation, phone list and one notebook page | Specified — [docs/milestone-1-2-technical-plan.md](docs/milestone-1-2-technical-plan.md) |
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout) | Planned |
 
-Full scope, UI design, and user stories: [docs/PRD.md](docs/PRD.md) (v1.3).
+Full scope, UI design, and user stories: [docs/PRD.md](docs/PRD.md) (v1.5).
