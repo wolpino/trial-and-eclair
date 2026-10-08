@@ -1,8 +1,8 @@
 # Trial and Eclair — Product Requirements Document
 
-**Version:** 1.4  
-**Status:** Approved — Phases 0–4 complete; **Phase UI complete**; **UI polish complete**  
-**Last updated:** August 2026
+**Version:** 1.5  
+**Status:** Approved — Phases 0–4 complete; **Phase UI complete**; **UI polish complete**; **2.0 frame specified, not built**  
+**Last updated:** October 2026
 
 > **Doc maintenance:** At the end of each phase, update this file and [README.md](../README.md): phase status table, shipped scope, API/frontend notes, and open items.
 
@@ -10,15 +10,14 @@
 
 ## 1. Product vision
 
-**Trial and Eclair** is a recipe **development and collection** app for mobile and desktop web. It is **not a blog**.
+**Trial and Eclair** is a recipe **development and collection** app for mobile and desktop web.
 
-Users iterate on recipes with tracked versions, publish finished work, optionally attach a short story and photo, and organize recipes into shareable virtual cookbooks (developers) or a personal recipe box (home cooks). Viewers read published content without an account.
+Users iterate on recipes with tracked versions, publish finished work, optionally attach a short story and photo, and organize published recipes into shareable cookbooks. Cookbooks are the collections: each entry keeps the version it was given until someone re-releases it. A personal recipe box holds home-cook cards and is also available to developers. Viewers read published content without an account. A published recipe has its own `/r/{slug}` link and does not need a cookbook.
 
 ### Design principles
 
 - **Usability first** — easy to edit, enjoyable to use; physical metaphors (cork board, index cards, lab notebook)
 - **Mobile + desktop** — responsive; important views include recipe card and full-screen landscape on tablet
-- **Not a blog** — stories attach to recipes; no scheduling, RSS, or comment threads
 - **Iterative build** — ship in phases; no rush to production
 - **Theme-ready UI** — color themes and fonts are user-configurable; components use CSS semantic tokens only (no hardcoded palette in UI code)
 
@@ -70,7 +69,7 @@ Two layers:
 4. **Save a new version** when adjusting ingredients (prior versions preserved)
 5. Compare two versions side-by-side (ingredient diff + notes)
 6. Publish a version; get a shareable link
-7. Add optional **story and hero photo** on publish (not a blog post)
+7. Add optional **story and hero photo** on publish 
 8. Group published recipes into a **cookbook** and share the cookbook link
 9. Log private **journal entries** (chronological; snapshot at log time; edit/delete)
 10. Record **test sessions** with notes and up to 5 photos per session
@@ -194,7 +193,7 @@ Original never modified. UI: “Based on [Title] by [Author]”.
 
 ## 7. Reference library
 
-Personal **research shelf** — not recipes, not cookbooks, not a blog reader.
+Personal **research shelf** — not recipes, not cookbooks,
 
 Examples: cookbooks you own, blogs you follow, pastry chefs, articles/tools (Kitchn Baking School, etc.).
 
@@ -226,7 +225,7 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | Database | Postgres (SQLite local dev) |
 | Media | S3 / Cloudflare R2 (local `media/` in dev) |
 | Auth | Session cookies + role permissions; Stripe later |
-| Staging | Render: gunicorn + WhiteNoise, Postgres, Django serves the Vite PWA (same origin) |
+| Staging | Render: one service from `render.yaml`, branch `staging`, `ENVIRONMENT=staging` shows a small label. `main` gets a second service and database only when there is a public URL. Never load the walkthrough seed on either URL |
 | Jobs | Celery or Django-Q for URL fetch + OCR (Phase 4+) |
 
 ---
@@ -244,6 +243,7 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | **4** | URL/scan import, equipment notes, fork buttons on public pages | **Complete** |
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout, optional string links) | Planned (post–Phase UI) |
+| **2.0 frame** | Recipe-card login, in-frame navigation, phone list and one notebook page | **Specified** — [milestone plan](milestone-1-2-technical-plan.md) |
 
 **MVP (first shippable product):** Phases 0 + 1 + 2 — **complete**. A developer can iterate, publish, and share; a viewer can read published recipes at `/r/{slug}`. Home cook tier and cookbooks are Phase 3+.
 
@@ -328,6 +328,11 @@ Export command: `python manage.py export_recipe_seed` → `seed/data/`
 | Voice control | Roadmap |
 | Freeform cork-board canvas | Post–Phase UI; `.cursor/plans/corkboard_freeform_canvas.plan.md` |
 | Additional color/font presets | After Phase UI C1 token architecture |
+| Cookbook re-release (point an entry at a newer version) | Later. Entries stay frozen. Sort order is the only edit today |
+| `User.updated_at` | Later. `date_joined` and `last_login` exist |
+| Kitchen illustration as the signed-in home | Later. Not part of the 2.0 frame milestones |
+| Second Render service for production (`main`) | When there is a public URL. `staging` uses the current service |
+| Voice / dictation | Roadmap |
 
 ---
 
@@ -343,6 +348,8 @@ Visual references: `recipes/` screenshots and photographs — cork board, recipe
 | **Lab** | Composition notebook page | Full **spread** — ingredients left, steps right; version flip in margin; journal, compare, publish as margin tools or overlays (not tabs) |
 
 Lab never uses index-card dimensions. Recipe box never uses notebook spread layout.
+
+On a phone, the lab shows **one notebook page at a time** (ingredients, or steps). The two-page spread is the wide-screen layout. The phone has no kitchen picture. The recipe box is a title list, then one card filling the screen. Wide screens keep the existing box, cork, binder, and shelf pictures. Login and signup are one recipe card for every persona. A developer’s title-only note is an idea on the cork board. A home-cook box card needs a title and at least one ingredient or step. Implementation: [milestone-1-2-technical-plan.md](milestone-1-2-technical-plan.md).
 
 ### Lab margin tools
 
