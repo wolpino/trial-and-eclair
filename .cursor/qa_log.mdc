@@ -7,3 +7,25 @@ description: Lightweight log of trivial one-off Q&A (newest first). Reference on
 Short questions and answers with no project impact. **Newest at top.**
 
 ---
+
+### `2026-10-08T02:33:00Z` · virtualenv-name
+
+**Question:** whats the virtualenv called
+**Answer:** `.venv` at the repo root. Activate it with `source .venv/bin/activate`.
+**Tags:** virtualenv, local-setup
+
+---
+
+### `2026-08-14T04:47:00Z` · need-tesseract
+
+**Question:** do I need to install tesseract? are there any reasons I wouldn't want to?
+**Answer:** Only for photo OCR. URL import, .txt scans, and empty photo drafts work without it. Skip it if the cards are handwritten (Tesseract is weak there), you don't want a system package on every machine/server, or you plan to use a vision API later.
+**Tags:** scan-import, tesseract, ocr
+
+---
+
+### `2026-08-14T03:00:00Z` · what-is-ocr
+
+**Question:** what is ocr
+**Answer:** Optical Character Recognition — software that reads text from a photo or PDF of a page so you can edit it as real text. In this app it would turn a scanned recipe card into ingredients/steps; today we only store the file.
+**Tags:** scan-import, ocr
