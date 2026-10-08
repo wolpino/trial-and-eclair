@@ -1,9 +1,11 @@
 import { FormEvent, useState } from "react";
-import { Link, useLocation, useNavigate } from "react-router-dom";
+
+import { useLocation, useNavigate } from "react-router-dom";
 
 import { ApiError } from "../api/client";
 import { defaultRouteForUser } from "../auth/access";
 import { useAuth } from "../auth/AuthContext";
+import { AuthCard } from "../components/AuthCard";
 
 export function LoginPage() {
   const { login } = useAuth();
@@ -37,8 +39,12 @@ export function LoginPage() {
   }
 
   return (
-    <main className="page-shell auth-page">
-      <h1>Log in</h1>
+    <AuthCard
+      title="Log in"
+      switchPrompt="No account?"
+      switchTo="/register"
+      switchLabel="Register"
+    >
       <form className="auth-form paper-form" onSubmit={(event) => void handleSubmit(event)}>
         {error ? <p className="form-error">{error}</p> : null}
         <label>
@@ -68,9 +74,6 @@ export function LoginPage() {
           {submitting ? "Logging in…" : "Log in"}
         </button>
       </form>
-      <p className="auth-switch">
-        No account? <Link to="/register">Register</Link>
-      </p>
-    </main>
+    </AuthCard>
   );
 }

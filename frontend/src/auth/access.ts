@@ -28,12 +28,6 @@ export function canStartDeveloperTrial(user: User): boolean {
   return user.trial_ends_at === null;
 }
 
-export function defaultRouteForUser(user: User): string {
-  if (user.role === "developer" && hasDeveloperAccess(user)) {
-    return "/developer";
-  }
-  if (user.role === "home_cook") {
-    return "/recipe-box";
-  }
-  return "/";
+export function defaultRouteForUser(_user: User): string {
+  return "/recipe-box";
 }
