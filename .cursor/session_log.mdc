@@ -10,6 +10,40 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-08 · split milestones into prs
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-08T17:35:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Commit the uncommitted milestone work as small commits and open pull requests.
+
+### Summary
+Split the working tree into six pull requests against `staging-render`. Two are stacked: frame nav on the recipe-card auth branch, and the phone notebook on the phone recipe-box branch. Left `.DS_Store` and the empty `.vscode/settings.json` untracked. A backup ref is `refs/backup/pre-split-1791480668`.
+
+### Decisions
+- **PRs target `staging-render`** — that is the branch this work was built on
+- **Frame nav stacks on auth, notebook stacks on the phone box** — they share `index.css` and `usePhoneLayout`
+
+### Changes
+- Pull requests #26–#31 on `wolpino/trial-and-eclair`
+
+### Open threads
+- Merge auth (#28) before frame nav (#29), and the phone box (#30) before the notebook (#31)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** pull requests, stacked PRs, staging-render, frame nav, phone notebook
+**Files:** .cursor/session_log.mdc
+**Do not redo:** one squashed commit for milestones 1 and 2; committing .DS_Store
+**Resume with:** Merge the stacked PRs in order: #28 then #29, and #30 then #31
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-08 · milestones 1 and 2
 
 | Field | Value |
