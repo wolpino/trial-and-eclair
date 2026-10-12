@@ -8,6 +8,14 @@ Short questions and answers with no project impact. **Newest at top.**
 
 ---
 
+### `2026-10-12T16:53:00Z` · stacked-pr-merge
+
+**Question:** how was I supposed to merge the PRs? did i do it right
+**Answer:** #26, #27, #28, and #30 merged into `staging-render`. #29 and #31 merged into `feat/recipe-card-auth` and `feat/phone-recipe-box`, so frame nav and the phone notebook are not on staging. After each base merged, retarget the stacked PR onto `staging-render`, then merge it.
+**Tags:** pull-requests, staging-render
+
+---
+
 ### `2026-10-08T02:33:00Z` · virtualenv-name
 
 **Question:** whats the virtualenv called

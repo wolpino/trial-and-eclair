@@ -1,7 +1,7 @@
 # Trial and Eclair — Product Requirements Document
 
 **Version:** 1.5  
-**Status:** Approved — Phases 0–4 complete; **Phase UI complete**; **UI polish complete**; **2.0 frame specified, not built**  
+**Status:** Approved — Phases 0–4 complete; **Phase UI complete**; **UI polish complete**; **2.0 frame milestones 1–3 built on `staging-render`**  
 **Last updated:** October 2026
 
 > **Doc maintenance:** At the end of each phase, update this file and [README.md](../README.md): phase status table, shipped scope, API/frontend notes, and open items.
@@ -243,7 +243,7 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | **4** | URL/scan import, equipment notes, fork buttons on public pages | **Complete** |
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout, optional string links) | Planned (post–Phase UI) |
-| **2.0 frame** | Recipe-card login, in-frame navigation, phone list and one notebook page | **Specified** — [milestone plan](milestone-1-2-technical-plan.md) |
+| **2.0 frame** | Recipe-card login, in-frame navigation, phone list and one notebook page, local walkthrough fixtures, short Playwright pass | **Milestones 1–3** — [milestone plan](milestone-1-2-technical-plan.md) |
 
 **MVP (first shippable product):** Phases 0 + 1 + 2 — **complete**. A developer can iterate, publish, and share; a viewer can read published recipes at `/r/{slug}`. Home cook tier and cookbooks are Phase 3+.
 
@@ -299,7 +299,7 @@ Implementation order: **C1 → C3 → C4 → C6 → C5 → C2**. All chunks merg
 
 **Not yet shipped:** Stripe billing, R2 media in production, freeform cork canvas, measurement conversion.
 
-**Staging deploy (plumbing):** `render.yaml` + Docker image. gunicorn, WhiteNoise, `/healthz`, SPA fallback, secure cookies when `DEBUG=False`. Media on local disk (ephemeral on Render). Do not load walkthrough seed on a public URL.
+**Staging deploy (plumbing):** `render.yaml` + Docker image. gunicorn, WhiteNoise, `/healthz`, SPA fallback, secure cookies when `DEBUG=False`. Media on local disk (ephemeral on Render). Do not load walkthrough seed on a public URL. `load_recipe_seed` refuses when the host is public.
 
 ---
 

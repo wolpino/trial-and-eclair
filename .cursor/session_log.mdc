@@ -10,6 +10,80 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-12 · commit milestone 3
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-12T18:26:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Commit, push, and merge the Milestone 3 walkthrough work.
+
+### Summary
+Committed the local walkthrough fixtures, host guard, empty-box test, and phone Playwright pass on `feat/milestone-3-fixtures`, then merged that branch into `staging-render`. `main` was not touched. Left `.DS_Store`, the empty `.vscode/settings.json`, three unreferenced `recipes/mockup-*.jpg` files, and the `trial-and-eclair- visuals/` photo folder untracked.
+
+### Decisions
+- **Merge target is `staging-render`** — that is where Milestones 1–3 already live
+- **Personal visuals stay out of git** — the Desktop-style photo folder is not product code
+
+### Changes
+- Milestone 3 files listed in the entry below — committed and merged to `staging-render`
+
+### Open threads
+- Milestone 4 (showable staging login, durable media) is still later
+- Do not merge `staging-render` into `main` unless asked
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** milestone 3, commit, staging-render, playwright
+**Files:** development/management/commands/load_recipe_seed.py, seed/data/walkthrough.json, frontend/e2e/walkthrough.spec.ts
+**Do not redo:** merging staging-render into main; committing the visuals folder or .DS_Store
+**Resume with:** start Milestone 4 only when asked
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-12 · milestone 3 fixtures
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-12T17:34:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Agent |
+| **Outcome** | completed |
+
+### Intent
+Build Milestone 3 on `origin/staging-render`: local walkthrough fixtures and a short Playwright pass.
+
+### Summary
+Branched `feat/milestone-3-fixtures` from `origin/staging-render`. The walkthrough load now caches an olive-oil-cake URL import, a soda-bread scan draft, two pistachio test-session photos, and a Perfect Loaf link to the raisin bran version. `load_recipe_seed` refuses a public host. Expired trial, hidden forks, and an empty box stayed separate tests. Playwright signs in on the recipe card, opens Almond Biscotti, and reads `/r/raisin-bran-muffins` at 390px. Django suite is 105 tests. Playwright: 2 passed. `main` was not touched.
+
+### Decisions
+- **Walkthrough seed refuses a public host** — `RENDER_EXTERNAL_HOSTNAME` or a non-local `ALLOWED_HOSTS` entry
+- **Edge cases stay out of the walkthrough users** — expired trial and hidden forks already had tests; empty box is its own list check
+- **Playwright uses one phone viewport** — 390×844, against a throwaway sqlite file on 127.0.0.1:8010
+
+### Changes
+- `seed/data/walkthrough.json`, `development/management/commands/load_recipe_seed.py` — fixtures and host guard
+- `development/test_walkthrough_seed.py`, `collection/tests.py` — fixture load and empty box
+- `frontend/e2e/walkthrough.spec.ts`, `scripts/e2e_server.sh` — phone pass
+- `docs/PRD.md`, `README.md` — milestone 3 status
+
+### Open threads
+- Committed and merged to `staging-render`. Milestone 4 is still later
+- Do not merge `staging-render` into `main` unless asked
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** milestone 3, walkthrough seed, Playwright, URL import, scan draft, public host
+**Files:** development/management/commands/load_recipe_seed.py, seed/data/walkthrough.json, frontend/e2e/walkthrough.spec.ts, scripts/e2e_server.sh
+**Do not redo:** kitchen illustration; schema redesign; Stripe; R2; second Render service; walkthrough seed on a public URL; merging staging-render into main
+**Resume with:** start Milestone 4 only when asked
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-08 · split milestones into prs
 
 | Field | Value |

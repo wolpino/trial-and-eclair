@@ -56,7 +56,7 @@ Same origin: gunicorn serves the API, admin, media, and the Vite build. Do **not
 4. After the first deploy, open `/healthz`, then `/` (the PWA), then `/admin/`.
 5. Create a superuser from the Render shell: `python manage.py createsuperuser`.
 
-Do **not** run `load_recipe_seed --force` on a URL you will share — `dev` / `cook` / `baker` passwords are in this README. Uploaded photos live on ephemeral disk and can vanish on restart.
+Do **not** run `load_recipe_seed --force` on a URL you will share — `dev` / `cook` / `baker` passwords are in this README. The command refuses when `RENDER_EXTERNAL_HOSTNAME` is set or `ALLOWED_HOSTS` is not only localhost. Uploaded photos live on ephemeral disk and can vanish on restart.
 
 Local production-shaped run (after `cd frontend && npm run build`):
 
@@ -91,7 +91,7 @@ python manage.py load_recipe_seed --force
 
 Guest: `/r/raisin-bran-muffins`, `/r/brown-butter-blondies`, `/c/brunch-notes`.
 
-`--force` replaces walkthrough records. Expired local `dev` trials are refreshed on load.
+`--force` replaces walkthrough records. Expired local `dev` trials are refreshed on load. The same load adds a cached URL import (olive oil cake, saved into the cook's box), a soda-bread scan draft, photos on the pistachio test session, and a shelf link from The Perfect Loaf to the raisin bran version. An expired trial, hidden forks, and an empty box are separate tests, not walkthrough users.
 
 ## Phase 1 — Developer API
 
@@ -298,8 +298,9 @@ Public UI: **Save to box** / **Rework** on `/r/:slug`. Box and lab have URL prev
 
 ```bash
 source .venv/bin/activate
-python manage.py test accounts development collection library catalog   # 100 tests
+python manage.py test accounts development collection library catalog
 cd frontend && npm run build                 # TypeScript + production bundle
+cd frontend && npm run test:e2e              # phone Playwright pass; local seed only
 ```
 
 ### Quick API smoke test
@@ -340,7 +341,7 @@ recipes/      Original notes, sheets links, docx recipes
 | **UI** | Metaphor SPA: theming, lab notebook, recipe box, API UI gaps, cookbooks/references, cork board | Complete |
 | **UI polish** | Sun & floral theme, on-paper forms, index cards, dot-grid lab, cork cabinet | Complete |
 | **4** | URL/scan import, fork buttons | Complete |
-| **2.0 frame** | Recipe-card login, in-frame navigation, phone list and one notebook page | Specified — [docs/milestone-1-2-technical-plan.md](docs/milestone-1-2-technical-plan.md) |
+| **2.0 frame** | Recipe-card login, in-frame navigation, phone list and one notebook page, local walkthrough fixtures, short Playwright pass | Milestones 1–3 on `staging-render` — [docs/milestone-1-2-technical-plan.md](docs/milestone-1-2-technical-plan.md) |
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout) | Planned |
 
