@@ -6,6 +6,7 @@ from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
+from catalog.models import Ingredient
 from collection.models import CollectionRecipe
 from development.models import DevelopmentRecipe, ForkType
 
@@ -141,6 +142,7 @@ class UrlImportAPITests(TestCase):
             format="json",
         )
         import_id = created.data["id"]
+        catalog_count = Ingredient.objects.count()
 
         response = self.client.post(
             f"/api/v1/imports/url/{import_id}/save/",
@@ -150,6 +152,14 @@ class UrlImportAPITests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         recipe = CollectionRecipe.objects.get(id=response.data["recipe"]["id"])
+        self.assertEqual(recipe.source_type, "web")
+        self.assertEqual(Ingredient.objects.count(), catalog_count)
+        self.assertEqual(
+            [line.raw_text for line in recipe.ingredient_lines.all()],
+            ["2 cups flour", "1 cup sugar"],
+        )
+        self.assertTrue(all(line.ingredient_id is None for line in recipe.ingredient_lines.all()))
+        self.assertTrue(all(line.quantity is None for line in recipe.ingredient_lines.all()))
         self.assertEqual(recipe.title, "Test Cookies")
         self.assertEqual(str(recipe.url_import_id), str(import_id))
         self.assertIsNone(recipe.fork_record_id)
@@ -231,6 +241,7 @@ class ScanImportAPITests(TestCase):
             RECIPE_TEXT.encode(),
             content_type="text/plain",
         )
+        catalog_count = Ingredient.objects.count()
 
         response = self.client.post(
             "/api/v1/imports/scan/",
@@ -240,6 +251,14 @@ class ScanImportAPITests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_201_CREATED)
         self.assertEqual(response.data["destination"], "box")
+        scanned = CollectionRecipe.objects.get(id=response.data["recipe"]["id"])
+        self.assertEqual(scanned.source_type, "scan")
+        self.assertEqual(Ingredient.objects.count(), catalog_count)
+        self.assertEqual(
+            [line.raw_text for line in scanned.ingredient_lines.all()],
+            ["2 cups flour", "1 cup sugar"],
+        )
+        self.assertTrue(all(line.ingredient_id is None for line in scanned.ingredient_lines.all()))
         document = SourceDocument.objects.get(id=response.data["source_document"]["id"])
         self.assertEqual(document.user, self.home_cook)
         self.assertEqual(document.original_filename, "grandma-cookies.txt")

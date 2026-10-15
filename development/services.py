@@ -351,13 +351,14 @@ def promote_idea(idea: Idea, *, title: str | None = None) -> DevelopmentRecipe:
 @dataclass
 class IngredientLineCopy:
     name: str
-    quantity: Decimal
+    quantity: Decimal | None
     unit: str = ""
     custom_unit: str = ""
     prep_note: str = ""
     substitution_note: str = ""
     sort_order: int = 0
     ingredient: object | None = None
+    raw_text: str = ""
 
 
 @dataclass
@@ -438,10 +439,13 @@ def _copy_payload_lines_to_box(
     lines: list[IngredientLineCopy],
 ) -> None:
     for sort_order, line in enumerate(lines):
+        # Imported lines keep their text as written; no catalog row is created.
+        keep_raw = bool(line.raw_text) and line.ingredient is None
         CollectionIngredientLine.objects.create(
             recipe=recipe,
-            ingredient=_resolve_ingredient(line),
-            quantity=line.quantity,
+            ingredient=None if keep_raw else _resolve_ingredient(line),
+            raw_text=line.raw_text,
+            quantity=None if keep_raw else line.quantity,
             unit=line.unit,
             custom_unit=line.custom_unit,
             prep_note=line.prep_note,

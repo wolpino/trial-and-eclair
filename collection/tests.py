@@ -98,6 +98,67 @@ class RecipeBoxAPITests(TestCase):
         list_response = self.client.get(f"{self.box_url}{recipe.id}/")
         self.assertEqual(len(list_response.data["ingredient_lines"]), 1)
 
+    def test_card_saves_and_returns_servings(self) -> None:
+        self.client.force_login(self.home_cook)
+
+        response = self.client.post(
+            self.box_url, {"title": "Corn muffin", "servings": 12}, format="json"
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["servings"], 12)
+        detail = self.client.get(f"{self.box_url}{response.data['id']}/")
+        self.assertEqual(detail.data["servings"], 12)
+
+    def test_line_with_only_raw_text_saves(self) -> None:
+        recipe = services.create_box_recipe(self.home_cook, title="Corn muffin")
+        self.client.force_login(self.home_cook)
+
+        response = self.client.post(
+            f"{self.box_url}{recipe.id}/ingredient-lines/",
+            {"raw_text": "salt to taste"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["raw_text"], "salt to taste")
+        self.assertIsNone(response.data["ingredient"])
+        self.assertIsNone(response.data["ingredient_name"])
+        self.assertIsNone(response.data["quantity"])
+
+    def test_line_needs_raw_text_or_ingredient(self) -> None:
+        recipe = services.create_box_recipe(self.home_cook, title="Corn muffin")
+        self.client.force_login(self.home_cook)
+
+        response = self.client.post(
+            f"{self.box_url}{recipe.id}/ingredient-lines/",
+            {"unit": "cup"},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_manual_card_defaults_to_typed_and_patch_changes_source_type(self) -> None:
+        self.client.force_login(self.home_cook)
+        created = self.client.post(self.box_url, {"title": "Corn muffin"}, format="json")
+        self.assertEqual(created.data["source_type"], "typed")
+
+        for value in ("handwritten", "recipe_card", "cookbook", "web", "scan", "typed"):
+            response = self.client.patch(
+                f"{self.box_url}{created.data['id']}/",
+                {"source_type": value},
+                format="json",
+            )
+            self.assertEqual(response.status_code, status.HTTP_200_OK)
+            self.assertEqual(response.data["source_type"], value)
+
+        bad = self.client.patch(
+            f"{self.box_url}{created.data['id']}/",
+            {"source_type": "carrier_pigeon"},
+            format="json",
+        )
+        self.assertEqual(bad.status_code, status.HTTP_400_BAD_REQUEST)
+
     def test_user_cannot_access_other_users_recipe(self) -> None:
         recipe = services.create_box_recipe(self.other_cook, title="Secret stew")
         self.client.force_login(self.home_cook)

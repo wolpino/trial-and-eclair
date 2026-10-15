@@ -255,6 +255,8 @@ Any authenticated user (home cook or developer). Single-version recipes, sorted 
 | `recipe-box/{id}/ingredient-lines/` | GET, POST | Ingredient lines |
 | `recipe-box/{id}/ingredient-lines/{id}/` | GET, PATCH, DELETE | |
 
+Card fields: `servings` (nullable positive integer) and `source_type` (`typed` default, `handwritten`, `recipe_card`, `cookbook`, `web`, `scan`). Ingredient lines take `raw_text` (the line as written); `ingredient` and `quantity` are nullable, but a line needs `raw_text` or an `ingredient`. URL and scan imports saved to the box set `source_type` to `web` / `scan`, store each line in `raw_text`, and do not create catalog ingredients.
+
 Register defaults to `home_cook`. Start a 14-day developer trial from the home page (`POST /api/v1/auth/start-trial/`), or set `role` in admin.
 
 ### Reference library (`/api/v1/references/`)

@@ -15,6 +15,7 @@ from urllib.robotparser import RobotFileParser
 from django.db import transaction
 from django.utils import timezone
 
+from collection.models import RecipeSourceType
 from development.models import ForkType
 from development.services import (
     IngredientLineCopy,
@@ -307,6 +308,7 @@ def payload_from_parsed_data(
         IngredientLineCopy(
             name=str(raw).strip()[:255] or "ingredient",
             quantity=Decimal("1"),
+            raw_text=str(raw).strip(),
             sort_order=index,
         )
         for index, raw in enumerate(_as_list(parsed_data.get("recipeIngredient")))
@@ -358,7 +360,12 @@ def save_url_import(user, url_import: UrlRecipeImport, *, fork_type: str):
         version_notes=notes,
     )
     if fork_type == ForkType.SAVE_TO_BOX:
-        return copy_payload_to_box(user, payload, url_import=url_import)
+        return copy_payload_to_box(
+            user,
+            payload,
+            url_import=url_import,
+            source_type=RecipeSourceType.WEB,
+        )
     return copy_payload_to_lab(user, payload)
 
 
@@ -392,5 +399,10 @@ def create_scan_import(user, uploaded_file, *, destination: str = "box"):
     )
     if destination == "lab":
         return document, copy_payload_to_lab(user, payload)
-    recipe = copy_payload_to_box(user, payload, source_document=document)
+    recipe = copy_payload_to_box(
+        user,
+        payload,
+        source_document=document,
+        source_type=RecipeSourceType.SCAN,
+    )
     return document, recipe
