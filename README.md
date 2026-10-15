@@ -103,13 +103,14 @@ Base path: `/api/v1/`. All endpoints require an authenticated session unless not
 
 | Endpoint | Method | Auth | Purpose |
 |----------|--------|------|---------|
-| `register/` | POST | Public | Create account (defaults to `home_cook`), auto-login |
+| `guest/` | POST | Public | Create a passwordless guest (`is_guest=true`, `home_cook`) and log in; returns the current user if already signed in. Guests keep up to 5 box cards (403 `guest_card_limit` past that); no `start-trial/`, `rework`, or `PATCH me/` |
+| `register/` | POST | Public | Create account (defaults to `home_cook`), auto-login. When signed in as a guest, upgrades that same user (sets username and password, clears `is_guest`, keeps cards, rotates the session) |
 | `login/` | POST | Public | Session login |
 | `logout/` | POST | Required | Clear session |
 | `me/` | GET, PATCH | Required | Profile; PATCH `show_forks` |
 | `start-trial/` | POST | Required | Home cook → 14-day developer trial (once) |
 
-`me` returns `role`, `subscription_status`, `trial_ends_at`, `measurement_preference`, and `show_forks`.
+`me` returns `role`, `subscription_status`, `trial_ends_at`, `measurement_preference`, `show_forks`, and `is_guest`.
 
 Developer endpoints require `role=developer` plus an active trial or subscription. Home cooks can `POST /api/v1/auth/start-trial/` once. Expired trials cannot restart until Stripe exists. Admin can still set `role` and `subscription_status` directly.
 

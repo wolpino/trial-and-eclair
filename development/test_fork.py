@@ -76,6 +76,38 @@ class ForkAPITests(TestCase):
         recipe.refresh_from_db()
         return recipe
 
+    def test_guest_at_limit_cannot_save_to_box(self) -> None:
+        from collection import services
+
+        self._publish_source()
+        guest = User.objects.create_user(username="guest-x", is_guest=True)
+        for i in range(services.GUEST_CARD_LIMIT):
+            services.create_box_recipe(guest, title=f"Card {i}")
+        self.client.force_login(guest)
+
+        response = self.client.post(
+            "/api/v1/public/recipes/corn-muffin/fork/",
+            {"fork_type": ForkType.SAVE_TO_BOX},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data["code"], "guest_card_limit")
+        self.assertEqual(guest.recipe_box_items.count(), services.GUEST_CARD_LIMIT)
+
+    def test_guest_cannot_rework(self) -> None:
+        self._publish_source()
+        guest = User.objects.create_user(username="guest-x", is_guest=True)
+        self.client.force_login(guest)
+
+        response = self.client.post(
+            "/api/v1/public/recipes/corn-muffin/fork/",
+            {"fork_type": ForkType.REWORK},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+
     def test_home_cook_forks_to_box_and_copies_lines_and_steps(self) -> None:
         source = self._publish_source()
         original_line_count = source.published_version.ingredient_lines.count()

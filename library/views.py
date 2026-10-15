@@ -19,6 +19,8 @@ from .serializers import (
     UrlImportSaveSerializer,
     UrlRecipeImportSerializer,
 )
+from collection.services import assert_can_add_card
+
 from . import services
 
 
@@ -109,6 +111,8 @@ class UrlImportSaveView(APIView):
         serializer.is_valid(raise_exception=True)
         fork_type = serializer.validated_data["fork_type"]
         _rework_denied_if_needed(request.user, fork_type)
+        if fork_type == ForkType.SAVE_TO_BOX:
+            assert_can_add_card(request.user)
         recipe = services.save_url_import(
             request.user,
             record,
@@ -132,6 +136,8 @@ class ScanImportView(APIView):
         destination = serializer.validated_data.get("destination") or "box"
         if destination == "lab" and not request.user.has_developer_access():
             raise PermissionDenied("Lab import requires developer access.")
+        if destination == "box":
+            assert_can_add_card(request.user)
         document, recipe = services.create_scan_import(
             request.user,
             serializer.validated_data["file"],

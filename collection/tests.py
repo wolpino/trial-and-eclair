@@ -191,3 +191,56 @@ class RecipeBoxAPITests(TestCase):
         detail_response = self.client.get(f"{self.box_url}{recipe.id}/")
         self.assertEqual(len(detail_response.data["steps"]), 1)
         self.assertEqual(detail_response.data["steps"][0]["body"], "Preheat oven.")
+
+
+class GuestCardLimitTests(TestCase):
+    def setUp(self) -> None:
+        self.client = APIClient(enforce_csrf_checks=False)
+        self.box_url = "/api/v1/recipe-box/"
+        self.guest = User.objects.create_user(username="guest-x", is_guest=True)
+        self.client.force_login(self.guest)
+
+    def _fill(self, count: int = services.GUEST_CARD_LIMIT):
+        return [
+            services.create_box_recipe(self.guest, title=f"Card {i}")
+            for i in range(count)
+        ]
+
+    def test_guest_can_add_up_to_limit_then_gets_403_with_code(self) -> None:
+        self._fill(services.GUEST_CARD_LIMIT - 1)
+
+        ok = self.client.post(self.box_url, {"title": "Last"}, format="json")
+        blocked = self.client.post(self.box_url, {"title": "Sixth"}, format="json")
+
+        self.assertEqual(ok.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(blocked.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(blocked.data["code"], "guest_card_limit")
+        self.assertEqual(self.guest.recipe_box_items.count(), 5)
+
+    def test_deleting_a_card_allows_one_more(self) -> None:
+        cards = self._fill()
+
+        self.client.delete(f"{self.box_url}{cards[0].id}/")
+        again = self.client.post(self.box_url, {"title": "New"}, format="json")
+        blocked = self.client.post(self.box_url, {"title": "Extra"}, format="json")
+
+        self.assertEqual(again.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(blocked.status_code, status.HTTP_403_FORBIDDEN)
+
+    def test_guest_at_limit_can_patch_and_delete_own_cards(self) -> None:
+        cards = self._fill()
+
+        patch = self.client.patch(
+            f"{self.box_url}{cards[0].id}/", {"title": "Renamed"}, format="json"
+        )
+        delete = self.client.delete(f"{self.box_url}{cards[1].id}/")
+
+        self.assertEqual(patch.status_code, status.HTTP_200_OK)
+        self.assertEqual(delete.status_code, status.HTTP_204_NO_CONTENT)
+
+    def test_signed_up_user_has_no_limit(self) -> None:
+        cook = User.objects.create_user(username="cook", password="strong-pass-1")
+        for i in range(services.GUEST_CARD_LIMIT + 2):
+            services.create_box_recipe(cook, title=f"Card {i}")
+
+        self.assertEqual(cook.recipe_box_items.count(), services.GUEST_CARD_LIMIT + 2)

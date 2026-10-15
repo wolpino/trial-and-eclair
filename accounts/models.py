@@ -47,6 +47,11 @@ class User(AbstractUser):
         help_text="When False, fork lineage is hidden on your public recipes.",
     )
 
+    is_guest = models.BooleanField(
+        default=False,
+        help_text="Passwordless account created on first save; upgraded by registering.",
+    )
+
     def is_developer(self):
         return self.role == UserRole.DEVELOPER
 
