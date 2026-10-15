@@ -110,7 +110,12 @@ def _payload_from_body(lines: list[str], *, title: str) -> RecipeCopyPayload:
 
 def _ingredient_copies(names: Sequence[str]) -> list[IngredientLineCopy]:
     return [
-        IngredientLineCopy(name=name[:255], quantity=Decimal("1"), sort_order=index)
+        IngredientLineCopy(
+            name=name[:255],
+            quantity=Decimal("1"),
+            raw_text=name,
+            sort_order=index,
+        )
         for index, name in enumerate(names)
     ]
 

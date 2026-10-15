@@ -13,7 +13,7 @@ class CollectionRecipeStepSerializer(serializers.ModelSerializer):
 
 
 class CollectionIngredientLineSerializer(serializers.ModelSerializer):
-    ingredient_name = serializers.CharField(source="ingredient.name", read_only=True)
+    ingredient_name = serializers.SerializerMethodField()
 
     class Meta:
         model = CollectionIngredientLine
@@ -21,6 +21,7 @@ class CollectionIngredientLineSerializer(serializers.ModelSerializer):
             "id",
             "ingredient",
             "ingredient_name",
+            "raw_text",
             "quantity",
             "unit",
             "custom_unit",
@@ -32,7 +33,16 @@ class CollectionIngredientLineSerializer(serializers.ModelSerializer):
         )
         read_only_fields = ("id", "created_at", "updated_at")
 
+    def get_ingredient_name(self, obj) -> str | None:
+        return obj.ingredient.name if obj.ingredient_id else None
+
     def validate(self, attrs: dict) -> dict:
+        ingredient = attrs.get("ingredient", getattr(self.instance, "ingredient", None))
+        raw_text = attrs.get("raw_text", getattr(self.instance, "raw_text", ""))
+        if ingredient is None and not (raw_text or "").strip():
+            raise serializers.ValidationError(
+                "A line needs raw_text or an ingredient."
+            )
         unit = attrs.get("unit", getattr(self.instance, "unit", ""))
         custom_unit = attrs.get(
             "custom_unit",
@@ -58,6 +68,8 @@ class CollectionRecipeSerializer(serializers.ModelSerializer):
             "equipment_notes",
             "prep_minutes",
             "cook_minutes",
+            "servings",
+            "source_type",
             "hero_image",
             "ingredient_lines",
             "steps",
@@ -70,4 +82,12 @@ class CollectionRecipeSerializer(serializers.ModelSerializer):
 class CollectionRecipeCreateSerializer(serializers.ModelSerializer):
     class Meta:
         model = CollectionRecipe
-        fields = ("title", "description", "equipment_notes", "prep_minutes", "cook_minutes")
+        fields = (
+            "title",
+            "description",
+            "equipment_notes",
+            "prep_minutes",
+            "cook_minutes",
+            "servings",
+            "source_type",
+        )
