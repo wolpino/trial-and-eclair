@@ -16,6 +16,14 @@ export interface IngredientLine {
   sort_order: number;
 }
 
+export type RecipeSourceType =
+  | "typed"
+  | "handwritten"
+  | "recipe_card"
+  | "cookbook"
+  | "web"
+  | "scan";
+
 export interface CollectionRecipe {
   id: string;
   title: string;
@@ -23,6 +31,8 @@ export interface CollectionRecipe {
   equipment_notes: string;
   prep_minutes: number | null;
   cook_minutes: number | null;
+  servings: number | null;
+  source_type: RecipeSourceType;
   hero_image: string | null;
   ingredient_lines: IngredientLine[];
   steps: RecipeStep[];

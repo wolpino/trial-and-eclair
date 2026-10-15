@@ -1,0 +1,352 @@
+/* Recipe Box phone view (Tidy look). Semantic tokens only; sizes are local tokens. */
+
+.recipe-box-page--phone-box {
+  --phone-box-tap: 3rem;
+  --phone-box-gap: 0.5rem;
+  --phone-box-lid-height: max(14rem, 42dvh);
+  --phone-box-ease: cubic-bezier(0.2, 0.9, 0.3, 1.1);
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+.phone-box-toolbar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--phone-box-gap);
+  align-items: center;
+  margin-bottom: var(--phone-box-gap);
+}
+
+.phone-box-toolbar h1 {
+  flex: 1 1 100%;
+  margin: 0;
+}
+
+.phone-box-segment {
+  display: inline-flex;
+  overflow: hidden;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-lg);
+}
+
+.phone-box-segment .phone-box-btn {
+  border: 0;
+  border-radius: 0;
+}
+
+.phone-box-segment .phone-box-btn[aria-pressed="true"] {
+  background: var(--color-accent-secondary);
+  color: var(--color-accent-text);
+}
+
+.phone-box-btn {
+  min-height: 2.75rem;
+  padding: 0 0.875rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.phone-box-btn--primary {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+.phone-box-btn:focus-visible,
+.phone-box-tab:focus-visible,
+.phone-box-fan__card:focus-visible {
+  outline: 3px solid var(--color-accent-secondary);
+  outline-offset: 2px;
+}
+
+.phone-box-add {
+  margin-bottom: var(--phone-box-gap);
+}
+
+/* Card (shared by the lid and Card View) */
+
+.phone-box-card {
+  background: var(--surface-card);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: var(--line-height-body);
+}
+
+.phone-box-card__title {
+  margin: 0;
+  font-family: var(--font-heading);
+  font-size: 1.3rem;
+  line-height: 1.25;
+  overflow-wrap: anywhere;
+}
+
+.phone-box-card__meta {
+  margin: 0.125rem 0 0;
+  color: var(--color-text-muted);
+  font-size: 0.85rem;
+}
+
+.phone-box-card__label {
+  margin: 0.5rem 0 0;
+  color: var(--color-text-label);
+  font-family: var(--font-label);
+  font-size: 0.75rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.phone-box-card__list {
+  margin: 0;
+  padding-left: 1.25rem;
+  font-size: 0.95rem;
+}
+
+.phone-box-card__empty {
+  color: var(--color-text-muted);
+  font-style: italic;
+}
+
+/* Lid: the open lid of the box, holding the selected card */
+
+.phone-box-lid {
+  display: flex;
+  height: var(--phone-box-lid-height);
+  padding: 0.75rem 0.75rem 0;
+  border: 5px solid var(--surface-box-edge);
+  border-bottom: 0;
+  border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+  background: var(--surface-box);
+}
+
+.phone-box-lid__card {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  padding: 0.75rem 1rem 3.75rem;
+  border-radius: var(--radius-sm) var(--radius-sm) 0 0;
+  box-shadow: var(--shadow-card);
+  cursor: pointer;
+  animation: phone-box-rise 0.42s var(--phone-box-ease) both;
+}
+
+.phone-box-lid__card::after {
+  content: "";
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 4rem;
+  background: linear-gradient(transparent, var(--surface-card) 70%);
+  pointer-events: none;
+}
+
+.phone-box-lid__open {
+  position: absolute;
+  z-index: 1;
+  right: 0.75rem;
+  bottom: 0.75rem;
+}
+
+.phone-box-lid__card--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding-bottom: 0.75rem;
+  cursor: default;
+}
+
+.phone-box-lid__card--empty::after {
+  content: none;
+}
+
+/* Box front: A–Z divider tabs, the fan, and the wooden panel */
+
+.phone-box-front {
+  position: relative;
+  padding: 0.5rem 0.5rem 0;
+  border: 5px solid var(--surface-box-edge);
+  border-top: 0;
+  background: var(--surface-box);
+}
+
+.phone-box-tabs {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: 2px;
+}
+
+.phone-box-tab {
+  min-width: 0;
+  min-height: var(--phone-box-tap);
+  padding: 0;
+  border: 1px solid var(--color-border-card);
+  border-bottom: 0;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--surface-kraft);
+  color: var(--color-text);
+  font-family: var(--font-label);
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition:
+    transform 0.25s var(--phone-box-ease),
+    background-color 0.2s ease;
+}
+
+.phone-box-tab[aria-expanded="true"] {
+  transform: translateY(-0.375rem);
+  background: var(--surface-card);
+  color: var(--color-accent);
+}
+
+.phone-box-tab:disabled {
+  opacity: 0.4;
+  cursor: default;
+}
+
+.phone-box-front__panel {
+  margin: 0 -0.5rem;
+  padding: 0.75rem;
+  border-top: 3px solid var(--surface-box-edge);
+  background: var(--surface-wood);
+  color: var(--color-text-label);
+  font-family: var(--font-script);
+  font-size: 1.25rem;
+  text-align: center;
+}
+
+.phone-box-fan {
+  position: absolute;
+  z-index: 2;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  display: flex;
+  gap: var(--phone-box-gap);
+  margin: 0;
+  padding: 0.75rem;
+  overflow-x: auto;
+  list-style: none;
+  scroll-snap-type: x proximity;
+  background: color-mix(in srgb, var(--surface-box) 85%, transparent);
+}
+
+.phone-box-fan li {
+  flex: 0 0 8.5rem;
+  scroll-snap-align: start;
+  animation: phone-box-rise 0.32s var(--phone-box-ease) both;
+  animation-delay: calc(var(--i, 0) * 40ms);
+}
+
+.phone-box-fan__card {
+  width: 100%;
+  min-height: var(--phone-box-tap);
+  height: 100%;
+  padding: 0.5rem 0.625rem;
+  border: 1px solid var(--color-border-card);
+  border-radius: var(--radius-sm);
+  background: var(--surface-card);
+  box-shadow: var(--shadow-card);
+  color: var(--color-text);
+  font-family: var(--font-heading);
+  font-size: 0.95rem;
+  font-weight: 600;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.phone-box-fan__card[aria-current="true"] {
+  border-color: var(--color-accent-secondary);
+}
+
+/* Card View: full-screen card with front and back */
+
+.phone-box-cardview {
+  position: fixed;
+  z-index: 50;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--phone-box-gap);
+  padding: 1rem;
+  overflow-y: auto;
+  background: var(--surface-card);
+  color: var(--color-text);
+  font-family: var(--font-body);
+  line-height: var(--line-height-body);
+  perspective: 60rem;
+}
+
+.phone-box-cardview__head {
+  display: flex;
+  gap: var(--phone-box-gap);
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.phone-box-cardview__face {
+  flex: 1;
+  padding-top: 0.5rem;
+  border-top: 2px solid var(--color-accent-floral);
+  animation: phone-box-flip 0.35s var(--phone-box-ease) both;
+}
+
+.phone-box-cardview__tools {
+  position: sticky;
+  bottom: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--phone-box-gap);
+  align-items: center;
+  justify-content: flex-end;
+  padding-top: var(--phone-box-gap);
+  background: var(--surface-card);
+}
+
+.phone-box-cardview__tools .phone-box-card__meta {
+  margin-right: auto;
+}
+
+@keyframes phone-box-rise {
+  from {
+    opacity: 0;
+    transform: translateY(2rem);
+  }
+}
+
+@keyframes phone-box-flip {
+  from {
+    opacity: 0.4;
+    transform: rotateY(90deg);
+  }
+}
+
+@keyframes phone-box-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .phone-box-lid__card,
+  .phone-box-fan li,
+  .phone-box-cardview__face {
+    animation-name: phone-box-fade;
+    animation-delay: 0s;
+  }
+
+  .phone-box-tab {
+    transition: background-color 0.2s ease;
+  }
+
+  .phone-box-tab[aria-expanded="true"] {
+    transform: none;
+  }
+}

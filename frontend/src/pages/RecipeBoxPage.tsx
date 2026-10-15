@@ -16,6 +16,7 @@ import { useAuth } from "../auth/AuthContext";
 import { RecipeBoxCard } from "../components/recipe-box/RecipeBoxCard";
 import { RecipeBoxFrame } from "../components/recipe-box/RecipeBoxFrame";
 import { RecipeBoxIndex } from "../components/recipe-box/RecipeBoxIndex";
+import { PhoneRecipeBox } from "../components/recipe-box/phone/PhoneRecipeBox";
 import { RecipeImportPanel } from "../components/RecipeImportPanel";
 import { usePhoneLayout } from "../lib/usePhoneLayout";
 import "../styles/recipe-box.css";
@@ -72,6 +73,9 @@ export function RecipeBoxPage() {
   const [loading, setLoading] = useState(true);
   const [adding, setAdding] = useState(false);
   const [activeLetter, setActiveLetter] = useState("");
+  const [phoneView, setPhoneView] = useState<"box" | "list">("box");
+  const [phoneSelectedId, setPhoneSelectedId] = useState<string | null>(null);
+  const [phoneAddOpen, setPhoneAddOpen] = useState(false);
 
   const grouped = useMemo(() => groupByLetter(recipes), [recipes]);
   const letters = useMemo(() => Object.keys(grouped).sort(), [grouped]);
@@ -88,6 +92,12 @@ export function RecipeBoxPage() {
       })
       .finally(() => setLoading(false));
   }, []);
+
+  useEffect(() => {
+    if (recipeId) {
+      setPhoneSelectedId(recipeId);
+    }
+  }, [recipeId]);
 
   useEffect(() => {
     if (letters.length === 0) {
@@ -248,7 +258,7 @@ export function RecipeBoxPage() {
     return (
       <main className="recipe-box-page recipe-box-page--phone recipe-box-page--phone-card">
         <Link className="recipe-box-back" to="/recipe-box">
-          Back to list
+          {phoneView === "box" ? "Back to box" : "Back to list"}
         </Link>
         {error ? <p className="recipe-box-form-error">{error}</p> : null}
         {focusedRecipe ? (
@@ -269,14 +279,78 @@ export function RecipeBoxPage() {
   }
 
   if (isPhone) {
+    const viewToggle = (
+      <div aria-label="View" className="phone-box-segment" role="group">
+        <button
+          aria-pressed={phoneView === "box"}
+          className="phone-box-btn"
+          type="button"
+          onClick={() => setPhoneView("box")}
+        >
+          Box
+        </button>
+        <button
+          aria-pressed={phoneView === "list"}
+          className="phone-box-btn"
+          type="button"
+          onClick={() => setPhoneView("list")}
+        >
+          Simple list
+        </button>
+      </div>
+    );
+
+    if (phoneView === "list") {
+      return (
+        <main className="recipe-box-page recipe-box-page--phone recipe-box-page--phone-box">
+          <header className="recipe-box-page__header">
+            <div className="phone-box-toolbar">
+              <h1>Recipe box</h1>
+              {viewToggle}
+            </div>
+            <RecipeImportPanel destination="box" />
+            {addForm}
+          </header>
+          {collection}
+        </main>
+      );
+    }
+
+    const selected =
+      recipes.find((recipe) => recipe.id === phoneSelectedId) ?? recipes[0];
     return (
-      <main className="recipe-box-page recipe-box-page--phone">
-        <header className="recipe-box-page__header">
+      <main className="recipe-box-page recipe-box-page--phone recipe-box-page--phone-box">
+        <div className="phone-box-toolbar">
           <h1>Recipe box</h1>
-          <RecipeImportPanel destination="box" />
-          {addForm}
-        </header>
-        {collection}
+          {viewToggle}
+          <button
+            aria-expanded={phoneAddOpen}
+            className="phone-box-btn"
+            type="button"
+            onClick={() => setPhoneAddOpen(!phoneAddOpen)}
+          >
+            Add recipe
+          </button>
+        </div>
+        {phoneAddOpen ? (
+          <div className="phone-box-add">
+            {addForm}
+            <RecipeImportPanel destination="box" />
+          </div>
+        ) : error ? (
+          <p className="recipe-box-form-error">{error}</p>
+        ) : null}
+        {loading ? (
+          <p className="recipe-box-page__note">Loading…</p>
+        ) : (
+          <PhoneRecipeBox
+            recipes={recipes}
+            selected={selected}
+            onSelect={setPhoneSelectedId}
+            onEdit={focusCard}
+            onAddFirst={() => setPhoneAddOpen(true)}
+          />
+        )}
       </main>
     );
   }
