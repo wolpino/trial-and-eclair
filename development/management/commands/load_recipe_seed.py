@@ -5,6 +5,7 @@ Load seed/data/*.json into the database for local development.
 from __future__ import annotations
 
 import json
+import os
 from datetime import timedelta
 from decimal import Decimal, InvalidOperation
 from pathlib import Path
@@ -34,10 +35,12 @@ from development.models import (
     RecipeStep,
     RecipeVersion,
     TestSession,
+    TestSessionPhoto,
     VersionIngredientLine,
 )
 from development.services import (
     add_cookbook_entry,
+    copy_payload_to_box,
     create_development_recipe,
     fork_to_box,
     fork_to_lab,
@@ -47,7 +50,9 @@ from development.services import (
     save_new_version,
     unpublish_recipe,
 )
-from library.models import Reference, ReferenceLink
+from library.models import Reference, ReferenceLink, SourceDocument, UrlRecipeImport
+from library.scan import parse_recipe_text
+from library.services import normalize_url, payload_from_parsed_data
 
 SEED_DIR = Path(settings.BASE_DIR) / "seed" / "data"
 MEDIA_DIR = SEED_DIR / "photos"
@@ -59,6 +64,22 @@ WALKTHROUGH_USERS = (
     ("cook", "cookpass123", UserRole.HOME_COOK),
     ("baker", "bakerpass123", UserRole.DEVELOPER),
 )
+_LOCAL_HOSTS = frozenset({"localhost", "127.0.0.1", "::1", "[::1]", "testserver"})
+
+
+def _host_name(host: str) -> str:
+    return host.split(":")[0].strip().lower()
+
+
+def assert_local_seed_host() -> None:
+    """Walkthrough passwords stay on a machine, never on a shared URL."""
+    if os.environ.get("RENDER_EXTERNAL_HOSTNAME", "").strip():
+        raise CommandError("Refusing to load the walkthrough seed on a public host.")
+    public = [
+        host for host in settings.ALLOWED_HOSTS if _host_name(host) not in _LOCAL_HOSTS
+    ]
+    if public:
+        raise CommandError("Refusing to load the walkthrough seed on a public host.")
 
 
 class Command(BaseCommand):
@@ -103,6 +124,7 @@ class Command(BaseCommand):
 
         if ideas_only and recipes_only:
             raise CommandError("Use at most one of --ideas-only and --recipes-only.")
+        assert_local_seed_host()
 
         user = self._ensure_user(username, password, role=UserRole.DEVELOPER)
         ideas_created = 0
@@ -175,7 +197,9 @@ class Command(BaseCommand):
             CollectionRecipe.objects.filter(user=user).delete()
             Idea.objects.filter(user=user).delete()
             Reference.objects.filter(user=user).delete()
+            SourceDocument.objects.filter(user=user).delete()
             self.stdout.write(f"Cleared walkthrough records for {user.username}")
+        self._clear_walkthrough_url_import()
 
     def _load_ideas(self, user: Any, *, force: bool) -> int:
         path = SEED_DIR / "ideas_seed.json"
@@ -311,10 +335,7 @@ class Command(BaseCommand):
             )
 
     def _load_walkthrough(self, users: dict[str, Any]) -> None:
-        path = SEED_DIR / "walkthrough.json"
-        if not path.exists():
-            raise CommandError(f"Missing {path}.")
-        data = json.loads(path.read_text(encoding="utf-8"))
+        data = self._walkthrough_data()
         self._enrich_ideas(users["dev"], data.get("idea_enrichment") or [])
         self._shape_lab(users["dev"], data.get("lab") or {})
         baker_recipe = self._create_recipe_from_row(users["baker"], data["baker_recipe"])
@@ -327,6 +348,8 @@ class Command(BaseCommand):
         self._load_recipe_box(users["cook"], data.get("recipe_box") or [])
         self._enrich_references(users["dev"], data)
         self._load_forks(users, data.get("forks") or [])
+        self._load_url_import(users, data.get("url_import") or {})
+        self._load_scan_draft(users, data.get("scan_draft") or {})
         self.stdout.write(
             "Walkthrough ready — logins: dev/devpass123, cook/cookpass123, baker/bakerpass123"
         )
@@ -380,11 +403,12 @@ class Command(BaseCommand):
             recipe = self._dev_recipe(user, item["recipe"])
             version = recipe.current_version
             assert version is not None
-            TestSession.objects.create(
+            session = TestSession.objects.create(
                 version=version,
                 notes=item.get("notes", ""),
                 outcome=item.get("outcome", ""),
             )
+            self._attach_session_photos(session, item.get("photos") or [])
 
     def _load_cookbooks(self, user: Any, rows: list[dict[str, Any]]) -> None:
         for row in rows:
@@ -449,6 +473,7 @@ class Command(BaseCommand):
                 idea=idea,
                 defaults={"note": row.get("note", "")},
             )
+        self._link_reference_versions(user, data.get("reference_version_links") or [])
 
     def _load_forks(self, users: dict[str, Any], rows: list[dict[str, Any]]) -> None:
         for row in rows:
@@ -473,6 +498,86 @@ class Command(BaseCommand):
                         slug=row["publish_slug"],
                         story=row.get("story", ""),
                     )
+
+    def _clear_walkthrough_url_import(self) -> None:
+        row = self._walkthrough_data().get("url_import") or {}
+        url = (row.get("url") or "").strip()
+        if not url:
+            return
+        UrlRecipeImport.objects.filter(normalized_url=normalize_url(url)).delete()
+
+    def _walkthrough_data(self) -> dict[str, Any]:
+        path = SEED_DIR / "walkthrough.json"
+        if not path.exists():
+            raise CommandError(f"Missing {path}.")
+        loaded = json.loads(path.read_text(encoding="utf-8"))
+        if not isinstance(loaded, dict):
+            raise CommandError(f"{path} must be a JSON object.")
+        return loaded
+
+    def _attach_session_photos(self, session: TestSession, photos: list[dict[str, Any]]) -> None:
+        for photo in photos:
+            filename = (photo.get("file") or "").strip()
+            if not filename:
+                continue
+            picture = TestSessionPhoto(session=session, caption=photo.get("caption", ""))
+            self._attach_image(picture.image, filename)
+
+    def _link_reference_versions(self, user: Any, rows: list[dict[str, Any]]) -> None:
+        for row in rows:
+            reference = Reference.objects.filter(user=user, title=row["reference"]).first()
+            if reference is None:
+                raise CommandError(f"Missing reference {row['reference']!r}")
+            recipe = self._dev_recipe(user, row["recipe"])
+            version = recipe.published_version or recipe.current_version
+            if version is None:
+                raise CommandError(f"No version to link for {row['recipe']!r}")
+            ReferenceLink.objects.get_or_create(
+                reference=reference,
+                recipe_version=version,
+                defaults={"note": row.get("note", "")},
+            )
+
+    def _load_url_import(self, users: dict[str, Any], row: dict[str, Any]) -> None:
+        url = (row.get("url") or "").strip()
+        if not url:
+            return
+        record, _created = UrlRecipeImport.objects.update_or_create(
+            normalized_url=normalize_url(url),
+            defaults={
+                "source_title": row.get("source_title", ""),
+                "source_author": row.get("source_author", ""),
+                "source_site": row.get("source_site", ""),
+                "parsed_data": row.get("parsed_data") or {},
+                "last_fetched_at": timezone.now(),
+                "fetch_error": "",
+            },
+        )
+        save_to = row.get("save_to")
+        if not save_to:
+            return
+        payload = payload_from_parsed_data(
+            record.parsed_data,
+            fallback_title=record.source_title,
+            version_notes=f"Imported from {record.normalized_url}.",
+        )
+        copy_payload_to_box(users[save_to], payload, url_import=record)
+
+    def _load_scan_draft(self, users: dict[str, Any], row: dict[str, Any]) -> None:
+        text = (row.get("text") or "").strip()
+        filename = (row.get("filename") or "").strip()
+        if not text or not filename:
+            return
+        user = users[row.get("user") or "cook"]
+        document = SourceDocument(
+            user=user,
+            original_filename=filename[:255],
+            mime_type=(row.get("mime_type") or "text/plain")[:100],
+            extracted_text=text,
+        )
+        document.file.save(filename, ContentFile(text.encode()), save=True)
+        payload = parse_recipe_text(text, fallback_title=Path(filename).stem)
+        copy_payload_to_box(user, payload, source_document=document)
 
     def _dev_recipe(self, user: Any, title: str) -> DevelopmentRecipe:
         recipe = DevelopmentRecipe.objects.filter(user=user, title=title).first()

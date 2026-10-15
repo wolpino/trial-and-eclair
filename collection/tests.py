@@ -34,6 +34,14 @@ class RecipeBoxAPITests(TestCase):
         )
         self.flour = Ingredient.objects.create(name="All-purpose flour")
 
+    def test_empty_box_lists_no_cards(self) -> None:
+        self.client.force_login(self.home_cook)
+
+        response = self.client.get(self.box_url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual(response.data, [])
+
     def test_unauthenticated_user_cannot_access_recipe_box(self) -> None:
         response = self.client.get(self.box_url)
 

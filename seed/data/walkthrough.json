@@ -86,7 +86,11 @@
       {
         "recipe": "Pistachio Shortbread with Rose Buttercream",
         "notes": "325°F, 12 minutes, rotated trays.",
-        "outcome": "Spread a little. Next time: colder dough, 11 minutes."
+        "outcome": "Spread a little. Next time: colder dough, 11 minutes.",
+        "photos": [
+          {"file": "idea-cookie.jpg", "caption": "Edges after 12 minutes"},
+          {"file": "hero-cake.jpg", "caption": "Cooled tray, rose still loud"}
+        ]
       },
       {
         "recipe": "Raisin Bran Muffins",
@@ -266,6 +270,37 @@
       "note": "Steam + bake method to steal from."
     }
   ],
+  "reference_version_links": [
+    {
+      "reference": "The Perfect Loaf",
+      "recipe": "Raisin Bran Muffins",
+      "note": "Bran soak timing, borrowed from the loaf notes."
+    }
+  ],
+  "url_import": {
+    "url": "https://example.com/recipes/olive-oil-cake",
+    "source_title": "Olive Oil Cake",
+    "source_author": "Example Kitchen",
+    "source_site": "example.com",
+    "save_to": "cook",
+    "parsed_data": {
+      "name": "Olive Oil Cake",
+      "author": "Example Kitchen",
+      "description": "A loaf cake for the week. Cached locally so the import does not fetch.",
+      "recipeIngredient": ["1 cup olive oil", "1 cup sugar", "3 eggs"],
+      "recipeInstructions": [
+        "Whisk the oil, sugar, and eggs.",
+        "Fold in the flour.",
+        "Bake until the top springs back."
+      ]
+    }
+  },
+  "scan_draft": {
+    "user": "cook",
+    "filename": "weekday-soda-bread.txt",
+    "mime_type": "text/plain",
+    "text": "Weekday Soda Bread\n\nIngredients\n2 cups all-purpose flour\n1 teaspoon salt\n1 teaspoon baking soda\n1 cup buttermilk\n\nDirections\nMix to a soft dough.\nShape a round and cut a cross.\nBake at 425°F until the crust is brown."
+  },
   "forks": [
     {
       "from_user": "baker",

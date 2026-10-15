@@ -95,7 +95,7 @@ No browser automation is in this repo. Check the widths above in the browser (or
 
 ## After these two
 
-Milestone 3 is seed fixtures and a short Playwright pass. Milestone 4 is a showable staging login and durable media. Production is a second Render service on `main` with its own database and `ENVIRONMENT=production`. None of that starts inside Milestone 1 or 2.
+Milestone 3 (local walkthrough fixtures and a short Playwright pass) is in the seed loader and `frontend/e2e`. Milestone 4 is a showable staging login and durable media. Production is a second Render service on `main` with its own database and `ENVIRONMENT=production`. None of that starts inside Milestone 1 or 2.
 
 ## Prompt for the next agent
 
