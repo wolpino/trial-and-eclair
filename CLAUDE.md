@@ -2,8 +2,10 @@
 
 Recipe development and collection app (not a blog). Django REST API + React/TypeScript PWA, served same-origin.
 
-- **Notebook** (existing `frontend/`): developer tools for tablet/monitor — ideas, versioned recipes, test bakes, publish, cookbooks.
-- **Recipe Box** (planned, mobile first): A–Z box, recipe cards, cook mode. Same Django API and database, same domain. See `docs/recipe-box/README.md`.
+One app, one `frontend/`:
+
+- **Wide screens:** notebook, cork board, cookbooks, references, and the wooden recipe box.
+- **Recipe Box** is the phone view of the recipe box (in progress). It is part of this app, not a separate one: same `frontend/`, API, database and login. See `docs/recipe-box/README.md` and `docs/decisions/001-recipe-box-in-frontend.md`.
 
 ## Read first
 

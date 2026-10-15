@@ -12,6 +12,8 @@ Recipe development and collection app — not a blog.
 
 **Phases 0–4 complete** (backend + metaphor UI + polish). Walkthrough seed fills every screen. Scan import reads text and OCR (Tesseract on PATH). Staging deploy is Render (gunicorn + WhiteNoise, same-origin SPA). Stripe, R2, and freeform cork canvas are still later.
 
+**Recipe Box** (in progress) is the phone view of the recipe box inside this app, not a separate project: see [`docs/recipe-box/README.md`](docs/recipe-box/README.md). Guest accounts with a 5-card limit are on the API; starter cards, throttles and the phone view are next.
+
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
 ## Stack

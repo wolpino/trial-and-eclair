@@ -1,5 +1,7 @@
 # Recipe Box: Technical specification (web app)
 
+> **Historical.** Written on 2026-10-14 for a standalone app (the `wolpino/recipe-box` repo, Supabase). Recipe Box is now part of Trial and Eclair: it is the phone view of the recipe box inside `frontend/`, on the Django API. Read [README.md](README.md), [gap-list.md](gap-list.md) and decisions [001](../decisions/001-recipe-box-in-frontend.md) and [002](../decisions/002-guest-mode.md) first; where they disagree with this file, they win. The product and look-and-feel sections still guide the design.
+
 ## 1. Platform decision: web app first
 
 Build an installable, mobile-first web app first. It is faster to ship and cheaper to run than separate iOS and Android apps, and it fits sharing by link naturally. A store-listed app stays possible later without a rewrite.
