@@ -1,6 +1,9 @@
 import type { PublicIngredientLine } from "../api/client";
 
-export function formatQuantity(quantity: string): string {
+export function formatQuantity(quantity: string | null): string {
+  if (quantity === null) {
+    return "";
+  }
   const value = Number.parseFloat(quantity);
   if (Number.isNaN(value)) {
     return quantity;

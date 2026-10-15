@@ -10,6 +10,43 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-15 · Claude workflow fix
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-15` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code |
+| **Outcome** | completed |
+
+### Intent
+Stop `@claude` runs starting on their own, let the Action run tests before pushing, and fix blank ingredient rows on imported box cards.
+
+### Summary
+The five Task issues (#41–#45) had "@claude" in their Budget line, so the `issues: opened` trigger started all of them at once, `draft` label or not. In Actions, Claude had no Python or npm, so it pushed untested code. `claude.yml` now triggers only on comments and reviews, skips anything labelled `draft`, installs Python 3.12, the npm packages and Playwright Chromium, and allows `python manage.py`, the build and e2e scripts, and read-only git plus `git ls-remote` and `git switch`, with up to 60 turns. The action always creates a new `claude/issue-N-*` branch and its push wrapper takes only `origin <branch>`, so continuing an old branch requires `git switch`. CLAUDE.md now says to continue the newest existing branch and run the tests before pushing. Removed "@claude" from the Task template's Budget line and from #42–#45. Box cards show `raw_text` when a line has no ingredient. `IngredientLine` in `collection.ts` is now box-only (nullable ingredient and quantity), and the Notebook type is unchanged.
+
+### Decisions
+- **No `issues` trigger**: an @claude run starts only from a comment or review
+- **`git switch` and `git ls-remote` allowed in Actions**: needed to continue an existing branch; pushing still goes through the action's wrapper
+
+### Changes
+- `.github/workflows/claude.yml`, `.github/ISSUE_TEMPLATE/task.md`, `CLAUDE.md`
+- `frontend/src/api/collection.ts`, `frontend/src/lib/recipeFormat.ts`, `frontend/src/components/recipe-box/RecipeBoxCard.tsx`
+
+### Open threads
+- After this merges: PR from `claude/issue-42-20261015-2146` into `staging-render`, fix CI within #42's Owned paths
+- Ask the owner before deleting `claude/issue-42-20261015-2158` and `claude/issue-45-20261015-2159`
+- #43 and #44 wait on #42; #45 can be rerun
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** claude action, workflow trigger, draft label, allowedTools, raw_text, ingredient lines
+**Files:** .github/workflows/claude.yml, .github/ISSUE_TEMPLATE/task.md, CLAUDE.md, frontend/src/components/recipe-box/RecipeBoxCard.tsx
+**Do not redo:** removing the issues trigger; editing #42–#45 Budget lines
+**Resume with:** once this PR merges, open the #42 PR from claude/issue-42-20261015-2146
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-15 · Recipe Box gap list
 
 | Field | Value |
