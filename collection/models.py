@@ -106,3 +106,48 @@ class RecipeBoxItem(TimestampedModel):
 
     class Meta:
         ordering = ["recipe__title"]
+
+
+class StarterRecipe(TimestampedModel):
+    """One shared, read-only set of cards shown in every box. No owner."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255, unique=True)
+    servings = models.PositiveIntegerField(null=True, blank=True)
+    prep_minutes = models.PositiveIntegerField(null=True, blank=True)
+    cook_minutes = models.PositiveIntegerField(null=True, blank=True)
+    source_type = models.CharField(
+        max_length=16,
+        choices=RecipeSourceType.choices,
+        default=RecipeSourceType.TYPED,
+    )
+    ingredient_lines = models.JSONField(default=list, blank=True)
+    steps = models.JSONField(default=list, blank=True)
+    sort_order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["sort_order", "title"]
+
+    def __str__(self):
+        return self.title
+
+
+class HiddenStarterRecipe(TimestampedModel):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="hidden_starter_recipes",
+    )
+    starter = models.ForeignKey(
+        StarterRecipe,
+        on_delete=models.CASCADE,
+        related_name="hidden_by",
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "starter"], name="unique_hidden_starter_per_user"
+            )
+        ]
