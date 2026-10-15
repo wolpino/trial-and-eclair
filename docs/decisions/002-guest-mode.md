@@ -30,7 +30,12 @@ Today every API call needs a session from `register/` or `login/` (`accounts/vie
 - The trial needs a real account (`POST /auth/start-trial/` stays sign-in only). Guests can't rework a recipe into the lab.
 
 **Starter recipes**
-- A new fixture of a few starter box cards (recipe content only: no users, no passwords) is copied into each new account. Because it creates no users, it's safe on a public URL. It's separate from the walkthrough seed and from `load_recipe_seed`.
+- A small fixture of starter cards (recipe content only: no users, no passwords). Because it creates no users, it's safe on a public URL. It's separate from the walkthrough seed and from `load_recipe_seed`.
+- Starter cards appear in every box, including a visitor's box before their first save. They're one shared set, not copied into each account.
+- They're read-only for everyone and never editable.
+- They don't count toward the 5-card limit.
+- Forking a starter card makes the person's own editable copy. A guest needs a free slot to fork, because the copy is a card they added.
+- Once signed up, a person can remove a starter card from their box. That hides it for them only. Guests can't remove them.
 - The owner picks the starter recipes and can change them later. The first version ships with placeholders.
 
 **Cleanup**
@@ -48,13 +53,8 @@ Today every API call needs a session from `register/` or `login/` (`accounts/vie
 
 - `accounts/` gains a guest flag, a guest-create path and an upgrade path. The sign-up endpoint changes.
 - The card-creating endpoints in `collection/`, `library/` and `development/public_views.py` share one limit check.
-- A new starter-recipes fixture and a copy step on account creation.
+- A starter-recipes fixture, a read-only endpoint for it, and a per-user "hidden" record so signed-up people can remove a starter card.
 - A scheduled cleanup job on Render.
-
-## Open
-
-- Do starter cards count toward the 5-card limit? Default: no. Only cards the guest adds count.
-- Do guests get the starter cards, or only people who sign up? Default: guests too, so the box isn't empty on first use. Before the first save, the app shows them read-only from a public endpoint. They're copied into the account when the guest is created.
 
 ## Revisit when
 

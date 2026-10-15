@@ -42,7 +42,7 @@ Decided since: [001](../decisions/001-recipe-box-in-frontend.md) (Recipe Box rep
 | Rate limits on import and save (spec §4, §7) | No DRF throttles configured. **→ 002** lists which | `config/settings.py` |
 | Guest account and upgrade (→ 002) | No guest flag, guest-create or upgrade path | `accounts/models.py`, `accounts/views.py` |
 | 5-card guest limit (→ 002) | No limit check on the card-creating endpoints | `collection/views.py`, `library/views.py`, `development/public_views.py` |
-| Starter recipes on new accounts (→ 002) | Only the walkthrough seed exists, and it can't run on a public URL | `development/management/commands/load_recipe_seed.py` |
+| Shared read-only starter cards (→ 002) | Only the walkthrough seed exists, and it can't run on a public URL. No public starter endpoint, fork-from-starter or per-user hide | `development/management/commands/load_recipe_seed.py`, `collection/` |
 | Guest cleanup job (→ 002) | No command or schedule | `development/management/commands/`, `render.yaml` |
 | Durable media for originals and photos | Media is on ephemeral Render disk; R2 is "not yet shipped" | `docs/PRD.md` §10, `README.md` (Staging) |
 

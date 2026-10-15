@@ -33,14 +33,14 @@ Compare the Recipe Box PRD/spec (written for Supabase) with the Django API and l
 
 ### Open threads
 - Owner picks the starter recipes
-- 002 open: do starter cards count toward the limit; do guests get them
+- Starter cards settled: shared, read-only, forkable, don't count; signed-up people can hide them
 - Next: 3–5 tickets from the gap list
 
 <!-- AGENT_CONTEXT_START -->
 **Keywords:** recipe box, gap list, supabase, django api, mobile
 **Files:** docs/recipe-box/gap-list.md, docs/decisions/001-recipe-box-in-frontend.md, docs/decisions/002-guest-mode.md
 **Do not redo:** the gap list or decisions 001–002; merging staging-render into main
-**Resume with:** settle 002's open questions, then write 3–5 tickets from the gap list
+**Resume with:** open the docs PR to staging-render, then write 3–5 tickets from the gap list
 <!-- AGENT_CONTEXT_END -->
 
 ---
