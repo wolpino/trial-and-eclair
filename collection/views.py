@@ -1,16 +1,29 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
-from rest_framework.permissions import IsAuthenticated
+from rest_framework.decorators import action
+from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.response import Response
 
+from accounts.permissions import IsNotGuest
 from development.models import RecipeStep
+from development.services import (
+    IngredientLineCopy,
+    RecipeCopyPayload,
+    copy_payload_to_box,
+)
 
-from .models import CollectionIngredientLine, CollectionRecipe
+from .models import (
+    CollectionIngredientLine,
+    CollectionRecipe,
+    HiddenStarterRecipe,
+    StarterRecipe,
+)
 from .serializers import (
     CollectionIngredientLineSerializer,
     CollectionRecipeCreateSerializer,
     CollectionRecipeSerializer,
     CollectionRecipeStepSerializer,
+    StarterRecipeSerializer,
 )
 from . import services
 
@@ -42,6 +55,54 @@ class RecipeBoxViewSet(viewsets.ModelViewSet):
         )
         output = CollectionRecipeSerializer(recipe, context=self.get_serializer_context())
         return Response(output.data, status=status.HTTP_201_CREATED)
+
+
+class StarterRecipeViewSet(viewsets.ReadOnlyModelViewSet):
+    """Shared starter cards: readable by anyone, never edited, forkable, hideable."""
+
+    serializer_class = StarterRecipeSerializer
+
+    def get_permissions(self):
+        if self.action == "fork":
+            return [IsAuthenticated()]
+        if self.action == "hide":
+            return [IsNotGuest()]
+        return [AllowAny()]
+
+    def get_queryset(self):
+        queryset = StarterRecipe.objects.filter(is_active=True)
+        user = self.request.user
+        if self.action in ("list", "retrieve") and user.is_authenticated:
+            queryset = queryset.exclude(hidden_by__user=user)
+        return queryset
+
+    @action(detail=True, methods=["post"])
+    def fork(self, request, pk=None):
+        starter = self.get_object()
+        payload = RecipeCopyPayload(
+            title=starter.title,
+            prep_minutes=starter.prep_minutes,
+            cook_minutes=starter.cook_minutes,
+            ingredient_lines=[
+                IngredientLineCopy(name="", quantity=None, raw_text=text)
+                for text in starter.ingredient_lines
+            ],
+            step_bodies=list(starter.steps),
+        )
+        recipe = copy_payload_to_box(
+            request.user,
+            payload,
+            servings=starter.servings,
+            source_type=starter.source_type,
+        )
+        output = CollectionRecipeSerializer(recipe, context=self.get_serializer_context())
+        return Response(output.data, status=status.HTTP_201_CREATED)
+
+    @action(detail=True, methods=["post"])
+    def hide(self, request, pk=None):
+        starter = self.get_object()
+        HiddenStarterRecipe.objects.get_or_create(user=request.user, starter=starter)
+        return Response(status=status.HTTP_204_NO_CONTENT)
 
 
 class CollectionIngredientLineViewSet(viewsets.ModelViewSet):

@@ -1,13 +1,16 @@
+import os
 from decimal import Decimal
+from unittest.mock import patch
 
 from django.contrib.auth import get_user_model
+from django.core.management import call_command
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from catalog.models import Ingredient
 
-from .models import CollectionRecipe, RecipeBoxItem
+from .models import CollectionRecipe, HiddenStarterRecipe, RecipeBoxItem, StarterRecipe
 from . import services
 
 User = get_user_model()
@@ -244,3 +247,116 @@ class GuestCardLimitTests(TestCase):
             services.create_box_recipe(cook, title=f"Card {i}")
 
         self.assertEqual(cook.recipe_box_items.count(), services.GUEST_CARD_LIMIT + 2)
+
+
+class StarterRecipeTests(TestCase):
+    url = "/api/v1/starter-recipes/"
+
+    def setUp(self) -> None:
+        self.client = APIClient(enforce_csrf_checks=False)
+        self.starter = StarterRecipe.objects.create(
+            title="Placeholder pancakes",
+            servings=4,
+            prep_minutes=10,
+            cook_minutes=15,
+            ingredient_lines=["1 cup flour", "1 egg"],
+            steps=["Mix.", "Cook."],
+            sort_order=1,
+        )
+        StarterRecipe.objects.create(title="Retired", is_active=False)
+        self.cook = User.objects.create_user(username="cook", password="strong-pass-1")
+        self.guest = User.objects.create_user(username="guest-x", is_guest=True)
+
+    def test_list_works_without_session_in_box_card_shape(self) -> None:
+        services.create_box_recipe(self.cook, title="Mine")
+        self.client.force_login(self.cook)
+        box_card = self.client.get("/api/v1/recipe-box/").data[0]
+        self.client.logout()
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertEqual([c["title"] for c in response.data], ["Placeholder pancakes"])
+        card = response.data[0]
+        self.assertTrue(card["is_starter"])
+        self.assertEqual(set(card) - {"is_starter"}, set(box_card))
+        self.assertEqual(card["servings"], 4)
+        self.assertEqual(
+            [line["raw_text"] for line in card["ingredient_lines"]],
+            ["1 cup flour", "1 egg"],
+        )
+        self.assertEqual([step["body"] for step in card["steps"]], ["Mix.", "Cook."])
+
+    def test_starters_cannot_be_edited_or_deleted(self) -> None:
+        self.client.force_login(self.cook)
+        detail = f"{self.url}{self.starter.id}/"
+
+        patch_response = self.client.patch(detail, {"title": "X"}, format="json")
+        delete_response = self.client.delete(detail)
+
+        self.assertIn(patch_response.status_code, (404, 405))
+        self.assertIn(delete_response.status_code, (404, 405))
+        self.starter.refresh_from_db()
+        self.assertEqual(self.starter.title, "Placeholder pancakes")
+
+    def test_fork_copies_starter_into_box_as_normal_card(self) -> None:
+        self.client.force_login(self.cook)
+
+        response = self.client.post(f"{self.url}{self.starter.id}/fork/")
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertNotIn("is_starter", response.data)
+        recipe = CollectionRecipe.objects.get(id=response.data["id"])
+        self.assertEqual(recipe.user, self.cook)
+        self.assertTrue(RecipeBoxItem.objects.filter(recipe=recipe).exists())
+        self.assertEqual(recipe.servings, 4)
+        self.assertEqual(
+            [line.raw_text for line in recipe.ingredient_lines.all()],
+            ["1 cup flour", "1 egg"],
+        )
+        self.assertEqual([s.body for s in recipe.steps.order_by("order")], ["Mix.", "Cook."])
+
+    def test_guest_at_limit_cannot_fork(self) -> None:
+        for i in range(services.GUEST_CARD_LIMIT):
+            services.create_box_recipe(self.guest, title=f"Card {i}")
+        self.client.force_login(self.guest)
+
+        response = self.client.post(f"{self.url}{self.starter.id}/fork/")
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data["code"], "guest_card_limit")
+
+    def test_hide_is_per_user_and_signed_up_only(self) -> None:
+        self.client.force_login(self.guest)
+        guest_hide = self.client.post(f"{self.url}{self.starter.id}/hide/")
+        self.assertEqual(guest_hide.status_code, status.HTTP_403_FORBIDDEN)
+
+        self.client.force_login(self.cook)
+        hide = self.client.post(f"{self.url}{self.starter.id}/hide/")
+        self.assertEqual(hide.status_code, status.HTTP_204_NO_CONTENT)
+        again = self.client.post(f"{self.url}{self.starter.id}/hide/")
+        self.assertEqual(again.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertEqual(self.client.get(self.url).data, [])
+        self.assertEqual(HiddenStarterRecipe.objects.count(), 1)
+
+        self.client.force_login(self.guest)
+        self.assertEqual(len(self.client.get(self.url).data), 1)
+        self.client.logout()
+        self.assertEqual(len(self.client.get(self.url).data), 1)
+
+
+class LoadStarterRecipesTests(TestCase):
+    def test_idempotent_creates_no_users_and_runs_on_public_host(self) -> None:
+        users_before = User.objects.count()
+        with patch.dict(os.environ, {"RENDER_EXTERNAL_HOSTNAME": "app.onrender.com"}):
+            call_command("load_starter_recipes")
+            first = list(StarterRecipe.objects.order_by("sort_order").values_list("id", "title"))
+            call_command("load_starter_recipes")
+
+        self.assertEqual(len(first), 3)
+        self.assertEqual(
+            list(StarterRecipe.objects.order_by("sort_order").values_list("id", "title")),
+            first,
+        )
+        self.assertEqual(StarterRecipe.objects.filter(is_active=True).count(), 3)
+        self.assertEqual(User.objects.count(), users_before)

@@ -12,7 +12,7 @@ Recipe development and collection app — not a blog.
 
 **Phases 0–4 complete** (backend + metaphor UI + polish). Walkthrough seed fills every screen. Scan import reads text and OCR (Tesseract on PATH). Staging deploy is Render (gunicorn + WhiteNoise, same-origin SPA). Stripe, R2, and freeform cork canvas are still later.
 
-**Recipe Box** (in progress) is the phone view of the recipe box inside this app, not a separate project: see [`docs/recipe-box/README.md`](docs/recipe-box/README.md). Guest accounts with a 5-card limit are on the API; starter cards, throttles and the phone view are next.
+**Recipe Box** (in progress) is the phone view of the recipe box inside this app, not a separate project: see [`docs/recipe-box/README.md`](docs/recipe-box/README.md). Guest accounts with a 5-card limit and shared starter cards are on the API; throttles and the phone view are next.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -59,6 +59,8 @@ Same origin: gunicorn serves the API, admin, media, and the Vite build. Do **not
 5. Create a superuser from the Render shell: `python manage.py createsuperuser`.
 
 Do **not** run `load_recipe_seed --force` on a URL you will share — `dev` / `cook` / `baker` passwords are in this README. The command refuses when `RENDER_EXTERNAL_HOSTNAME` is set or `ALLOWED_HOSTS` is not only localhost. Uploaded photos live on ephemeral disk and can vanish on restart.
+
+`python manage.py load_starter_recipes` is safe to run on a shared URL (recipe content only, no users).
 
 Local production-shaped run (after `cd frontend && npm run build`):
 
@@ -259,6 +261,19 @@ Any authenticated user (home cook or developer). Single-version recipes, sorted 
 | `recipe-box/{id}/ingredient-lines/{id}/` | GET, PATCH, DELETE | |
 
 Card fields: `servings` (nullable positive integer) and `source_type` (`typed` default, `handwritten`, `recipe_card`, `cookbook`, `web`, `scan`). Ingredient lines take `raw_text` (the line as written); `ingredient` and `quantity` are nullable, but a line needs `raw_text` or an `ingredient`. URL and scan imports saved to the box set `source_type` to `web` / `scan`, store each line in `raw_text`, and do not create catalog ingredients.
+
+### Starter cards (`/api/v1/starter-recipes/`)
+
+One shared, read-only set of cards shown in every box (client merges them with `recipe-box/`). They don't count toward the guest 5-card limit.
+
+| Endpoint | Methods | Notes |
+|----------|---------|-------|
+| `starter-recipes/` | GET | No session needed. Same card shape as `recipe-box/` plus `is_starter: true`. Hides the caller's hidden starters |
+| `starter-recipes/{id}/` | GET | No PATCH/DELETE (405) |
+| `starter-recipes/{id}/fork/` | POST | Signed in or guest. Copies into the caller's box as a normal card (201); counts toward the guest limit (`guest_card_limit` 403) |
+| `starter-recipes/{id}/hide/` | POST | Signed-up only (guests 403). Hides it for that user (204, idempotent) |
+
+Load or refresh them with `python manage.py load_starter_recipes` (reads `seed/data/starter_recipes.json`, currently placeholders). It creates no users or passwords, so it is **safe on public URLs** such as Render. It is idempotent: it updates by title, and starters removed from the file are marked inactive.
 
 Register defaults to `home_cook`. Start a 14-day developer trial from the home page (`POST /api/v1/auth/start-trial/`), or set `role` in admin.
 
