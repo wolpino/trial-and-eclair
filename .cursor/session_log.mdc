@@ -10,6 +10,41 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-15 · Recipe Box gap list
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-15` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code |
+| **Outcome** | completed |
+
+### Intent
+Compare the Recipe Box PRD/spec (written for Supabase) with the Django API and list what's covered, missing, or conflicting. No code.
+
+### Summary
+`feat/milestone-3-fixtures` was already merged (wolpino/trial-and-eclair#36). Moved the untracked `.DS_Store`, `.vscode/`, `recipes/mockup-*.jpg` and `trial-and-eclair- visuals/` to the macOS Trash at the user's request. Branched `docs/recipe-box-merge` from `main`, wrote `docs/recipe-box/gap-list.md`, and committed the `docs/recipe-box/` folder. Then recorded decisions 001 (Recipe Box replaces the phone view in `frontend/`, A–Z only, no revisions or share links for home cooks) and 002 (guest mode: 5-card limit, locked developer preview, starter recipes, 30-day cleanup, throttles), and marked the settled rows in the gap list. Not pushed; no PR.
+
+### Decisions
+- **PR flow is `docs/recipe-box-merge` → `staging-render` → `main`**
+- **Spec's Supabase backend is superseded by `/api/v1/`**
+- **A–Z only; Recipe Box lives in `frontend/`** — `docs/decisions/001-recipe-box-in-frontend.md`
+- **Guest mode with a 5-card limit** — `docs/decisions/002-guest-mode.md`
+
+### Open threads
+- Owner picks the starter recipes
+- 002 open: do starter cards count toward the limit; do guests get them
+- Next: 3–5 tickets from the gap list
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** recipe box, gap list, supabase, django api, mobile
+**Files:** docs/recipe-box/gap-list.md, docs/decisions/001-recipe-box-in-frontend.md, docs/decisions/002-guest-mode.md
+**Do not redo:** the gap list or decisions 001–002; merging staging-render into main
+**Resume with:** settle 002's open questions, then write 3–5 tickets from the gap list
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-12 · commit milestone 3
 
 | Field | Value |
