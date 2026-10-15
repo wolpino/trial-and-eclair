@@ -8,6 +8,7 @@ from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny, IsAuthenticated
 from rest_framework.request import Request
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle
 from rest_framework.views import APIView
 
 from .models import User, UserRole
@@ -16,9 +17,18 @@ from .serializers import LoginSerializer, MeUpdateSerializer, RegisterSerializer
 from .services import TrialUnavailable, start_developer_trial
 
 
+class IPScopedRateThrottle(ScopedRateThrottle):
+    """Scoped throttle keyed by client IP even when the caller is signed in."""
+
+    def get_cache_key(self, request: Request, view) -> str:
+        return self.cache_format % {"scope": self.scope, "ident": self.get_ident(request)}
+
+
 @method_decorator(ensure_csrf_cookie, name="dispatch")
 class RegisterView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [IPScopedRateThrottle]
+    throttle_scope = "register"
 
     def post(self, request: Request) -> Response:
         current = request.user
@@ -36,6 +46,8 @@ class RegisterView(APIView):
 @method_decorator(ensure_csrf_cookie, name="dispatch")
 class GuestView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [IPScopedRateThrottle]
+    throttle_scope = "guest_create"
 
     def post(self, request: Request) -> Response:
         if request.user.is_authenticated:
@@ -54,6 +66,8 @@ class GuestView(APIView):
 @method_decorator(ensure_csrf_cookie, name="dispatch")
 class LoginView(APIView):
     permission_classes = [AllowAny]
+    throttle_classes = [IPScopedRateThrottle]
+    throttle_scope = "login"
 
     def post(self, request: Request) -> Response:
         serializer = LoginSerializer(data=request.data)

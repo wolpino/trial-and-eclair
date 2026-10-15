@@ -1,8 +1,9 @@
 from django.shortcuts import get_object_or_404
 from rest_framework import status, viewsets
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle, SimpleRateThrottle
 from rest_framework.views import APIView
 
 from collection.serializers import CollectionRecipeSerializer
@@ -22,6 +23,19 @@ from .serializers import (
 from collection.services import assert_can_add_card
 
 from . import services
+from .scan import UnsupportedScanUpload, validate_scan_upload
+
+
+class GuestAwareScopedRateThrottle(ScopedRateThrottle):
+    """Per-user scoped throttle; guests use the `<scope>_guest` rate."""
+
+    def allow_request(self, request, view) -> bool:
+        if not getattr(request.user, "is_guest", False):
+            return super().allow_request(request, view)
+        self.scope = f"{view.throttle_scope}_guest"
+        self.rate = self.get_rate()
+        self.num_requests, self.duration = self.parse_rate(self.rate)
+        return SimpleRateThrottle.allow_request(self, request, view)
 
 
 class ReferenceViewSet(viewsets.ModelViewSet):
@@ -77,6 +91,8 @@ def _imported_recipe_payload(request, recipe) -> dict:
 
 class UrlImportCreateView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes = [GuestAwareScopedRateThrottle]
+    throttle_scope = "url_import"
 
     def post(self, request) -> Response:
         serializer = UrlImportCreateSerializer(data=request.data)
@@ -129,10 +145,16 @@ class UrlImportSaveView(APIView):
 
 class ScanImportView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes = [GuestAwareScopedRateThrottle]
+    throttle_scope = "scan_import"
 
     def post(self, request) -> Response:
         serializer = ScanImportSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        try:
+            validate_scan_upload(serializer.validated_data["file"])
+        except UnsupportedScanUpload as exc:
+            raise ValidationError({"file": [str(exc)]}) from exc
         destination = serializer.validated_data.get("destination") or "box"
         if destination == "lab" and not request.user.has_developer_access():
             raise PermissionDenied("Lab import requires developer access.")

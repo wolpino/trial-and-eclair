@@ -163,6 +163,22 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    # Scoped throttles (see README). Counts live in the default cache, so each
+    # gunicorn worker keeps its own count until a shared cache is added.
+    "DEFAULT_THROTTLE_RATES": {
+        "guest_create": "10/hour",
+        "register": "10/hour",
+        "login": "20/hour",
+        "url_import": "30/day",
+        "url_import_guest": "10/day",
+        "scan_import": "20/day",
+        "scan_import_guest": "5/day",
+    },
+    # Proxies in front of the app; DRF uses it to pick the client IP from
+    # X-Forwarded-For. Unset means the whole header is used as the key.
+    "NUM_PROXIES": (
+        int(os.environ["THROTTLE_NUM_PROXIES"]) if os.environ.get("THROTTLE_NUM_PROXIES") else None
+    ),
 }
 
 CORS_ALLOWED_ORIGINS = _csv(
@@ -201,3 +217,4 @@ LOGGING = {
 IDEA_IMAGE_LIMIT = 1
 TEST_SESSION_PHOTO_LIMIT = 5
 PUBLISHED_HERO_IMAGE_LIMIT = 1
+SCAN_UPLOAD_MAX_BYTES = 10 * 1024 * 1024
