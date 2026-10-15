@@ -311,7 +311,7 @@ DRF scoped throttles; rates live in `REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]` i
 | `url_import` / `url_import_guest` | `POST /api/v1/imports/url/` | 30/day (guest 10/day) | User |
 | `scan_import` / `scan_import_guest` | `POST /api/v1/imports/scan/` | 20/day (guest 5/day) | User |
 
-Counts live in Django's default cache (local memory), so each gunicorn worker keeps its own count and a restart resets them. A shared cache is not set up yet. Behind a proxy, set `THROTTLE_NUM_PROXIES` to the number of proxies in front of the app so the client IP is read from `X-Forwarded-For` correctly.
+Counts live in Django's default cache (local memory), so each gunicorn worker keeps its own count and a restart resets them. A shared cache is not set up yet. Behind a proxy, set `THROTTLE_NUM_PROXIES` to the number of proxies in front of the app so the client IP is read from `X-Forwarded-For` correctly. On Render it is `3` (measured on staging, 2026-10-15); a wrong value either lets clients fake their IP or makes many users share one limit.
 
 ### Guest cleanup
 
