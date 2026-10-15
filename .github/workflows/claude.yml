@@ -1,7 +1,8 @@
 name: Claude
 
 # Mention @claude in an issue, issue comment, PR comment or review to hand it the task.
-# Only people with write access can trigger it. Needs the ANTHROPIC_API_KEY secret.
+# Only people with write access can trigger it. Uses the CLAUDE_CODE_OAUTH_TOKEN secret,
+# so runs count against the Claude plan's usage limits instead of per-token API billing.
 on:
   issues:
     types: [opened, assigned]
@@ -12,6 +13,11 @@ on:
   pull_request_review:
     types: [submitted]
 
+# One run at a time per issue or PR; a new mention waits instead of running in parallel.
+concurrency:
+  group: claude-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
 jobs:
   claude:
     if: |
@@ -20,6 +26,7 @@ jobs:
       (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
       (github.event_name == 'pull_request_review' && contains(github.event.review.body, '@claude'))
     runs-on: ubuntu-latest
+    timeout-minutes: 30
     permissions:
       contents: write
       pull-requests: write
@@ -32,5 +39,6 @@ jobs:
           fetch-depth: 1
       - uses: anthropics/claude-code-action@v1
         with:
-          anthropic_api_key: ${{ secrets.ANTHROPIC_API_KEY }}
+          claude_code_oauth_token: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
           base_branch: staging-render
+          claude_args: --max-turns 40

@@ -311,8 +311,7 @@ cd frontend && npm run test:e2e              # phone Playwright pass; local seed
 | Frontend typecheck + build, then the Playwright pass | Same | `.github/workflows/ci.yml` |
 | CodeQL (Python, TypeScript) | Same, plus weekly | `.github/workflows/codeql.yml` |
 | Dependabot (pip, npm, Actions) into `staging-render` | Weekly | `.github/dependabot.yml` |
-| `@claude` in an issue or PR comment hands it the task; its PRs target `staging-render` | On mention, write access only | `.github/workflows/claude.yml` |
-| Claude review comment | PRs into `staging-render`, once on open | `.github/workflows/claude-review.yml` |
+| `@claude` in an issue or PR comment hands it the task; its PRs target `staging-render`. Capped at 40 turns and 30 minutes, one run per issue or PR at a time | On mention, write access only | `.github/workflows/claude.yml` |
 
 PRs go into `staging-render`, then `staging-render` into `main`. Write tasks with the **Task** issue template, which has a "Done when" section.
 
