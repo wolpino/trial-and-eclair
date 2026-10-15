@@ -6,6 +6,7 @@ from rest_framework.response import Response
 from rest_framework.views import APIView
 
 from collection.serializers import CollectionRecipeSerializer
+from collection.services import assert_can_add_card
 
 from .models import Cookbook, DevelopmentRecipe, ForkType
 from .serializers import (
@@ -129,6 +130,7 @@ class ForkPublicRecipeView(APIView):
 
         version = recipe.published_version
         if fork_type == ForkType.SAVE_TO_BOX:
+            assert_can_add_card(request.user)
             created = services.fork_to_box(request.user, version, recipe.user)
             body = {
                 "fork_type": fork_type,

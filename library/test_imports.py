@@ -131,6 +131,50 @@ class UrlImportAPITests(TestCase):
         self.assertEqual(detail.status_code, status.HTTP_200_OK)
         self.assertEqual(detail.data["source_title"], "Test Cookies")
 
+    def _guest_at_limit(self):
+        from collection import services as box_services
+
+        guest = User.objects.create_user(username="guest-x", is_guest=True)
+        for i in range(box_services.GUEST_CARD_LIMIT):
+            box_services.create_box_recipe(guest, title=f"Card {i}")
+        return guest
+
+    @patch("library.services._assert_host_public")
+    @patch("library.services._urlopen", side_effect=_fake_urlopen)
+    def test_guest_at_limit_cannot_save_url_import_to_box(self, _mock_urlopen, _mock_host) -> None:
+        guest = self._guest_at_limit()
+        self.client.force_login(guest)
+        created = self.client.post(
+            "/api/v1/imports/url/",
+            {"url": "https://example.com/cookies"},
+            format="json",
+        )
+
+        response = self.client.post(
+            f"/api/v1/imports/url/{created.data['id']}/save/",
+            {"fork_type": ForkType.SAVE_TO_BOX},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data["code"], "guest_card_limit")
+        self.assertEqual(guest.recipe_box_items.count(), 5)
+
+    def test_guest_at_limit_cannot_scan_to_box(self) -> None:
+        guest = self._guest_at_limit()
+        self.client.force_login(guest)
+        upload = SimpleUploadedFile("card.txt", b"Cookies\n2 cups flour", content_type="text/plain")
+
+        response = self.client.post(
+            "/api/v1/imports/scan/",
+            {"file": upload},
+            format="multipart",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(response.data["code"], "guest_card_limit")
+        self.assertFalse(SourceDocument.objects.exists())
+
     @patch("library.services._assert_host_public")
     @patch("library.services._urlopen", side_effect=_fake_urlopen)
     def test_save_url_import_to_box_sets_fk_without_fork(self, _mock_urlopen, _mock_host) -> None:

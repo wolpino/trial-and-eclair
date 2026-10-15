@@ -124,3 +124,88 @@ class AuthAPITests(TestCase):
         self.assertFalse(response.data["show_forks"])
         user.refresh_from_db()
         self.assertFalse(user.show_forks)
+
+
+class GuestAPITests(TestCase):
+    def setUp(self) -> None:
+        self.client = APIClient(enforce_csrf_checks=False)
+        self.guest_url = "/api/v1/auth/guest/"
+        self.me_url = "/api/v1/auth/me/"
+        self.register_payload = {
+            "username": "cook",
+            "password": "strong-pass-1",
+            "password_confirm": "strong-pass-1",
+        }
+
+    def test_guest_creates_passwordless_home_cook_and_logs_in(self) -> None:
+        response = self.client.post(self.guest_url)
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertTrue(response.data["is_guest"])
+        self.assertEqual(response.data["role"], UserRole.HOME_COOK)
+        user = User.objects.get(id=response.data["id"])
+        self.assertFalse(user.has_usable_password())
+        me = self.client.get(self.me_url)
+        self.assertEqual(me.status_code, status.HTTP_200_OK)
+        self.assertEqual(me.data["id"], response.data["id"])
+        self.assertTrue(me.data["is_guest"])
+
+    def test_guest_again_while_signed_in_returns_same_user(self) -> None:
+        first = self.client.post(self.guest_url)
+        second = self.client.post(self.guest_url)
+
+        self.assertEqual(second.status_code, status.HTTP_200_OK)
+        self.assertEqual(second.data["id"], first.data["id"])
+        self.assertEqual(User.objects.filter(is_guest=True).count(), 1)
+
+    def test_me_reports_registered_user_is_not_guest(self) -> None:
+        user = User.objects.create_user(username="cook", password="strong-pass-1")
+        self.client.force_login(user)
+
+        self.assertFalse(self.client.get(self.me_url).data["is_guest"])
+
+    def test_register_upgrades_signed_in_guest_in_place(self) -> None:
+        from collection import services
+
+        guest_id = self.client.post(self.guest_url).data["id"]
+        guest = User.objects.get(id=guest_id)
+        services.create_box_recipe(guest, title="Corn muffin")
+        old_session_key = self.client.session.session_key
+
+        response = self.client.post(
+            "/api/v1/auth/register/",
+            self.register_payload,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.data["id"], guest_id)
+        self.assertFalse(response.data["is_guest"])
+        self.assertEqual(response.data["username"], "cook")
+        guest.refresh_from_db()
+        self.assertTrue(guest.check_password("strong-pass-1"))
+        self.assertEqual(guest.recipe_box_items.count(), 1)
+        self.assertNotEqual(self.client.session.session_key, old_session_key)
+        self.assertEqual(User.objects.count(), 1)
+
+    def test_register_upgrade_rejects_taken_username(self) -> None:
+        User.objects.create_user(username="cook", password="strong-pass-1")
+        self.client.post(self.guest_url)
+
+        response = self.client.post(
+            "/api/v1/auth/register/",
+            self.register_payload,
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertTrue(self.client.get(self.me_url).data["is_guest"])
+
+    def test_guest_blocked_from_start_trial_and_patch_me(self) -> None:
+        self.client.post(self.guest_url)
+
+        trial = self.client.post("/api/v1/auth/start-trial/")
+        patch = self.client.patch(self.me_url, {"show_forks": False}, format="json")
+
+        self.assertEqual(trial.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(patch.status_code, status.HTTP_403_FORBIDDEN)

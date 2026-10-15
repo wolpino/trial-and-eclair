@@ -19,6 +19,7 @@ class UserSerializer(serializers.ModelSerializer):
             "trial_ends_at",
             "measurement_preference",
             "show_forks",
+            "is_guest",
             "date_joined",
         )
         read_only_fields = fields
@@ -37,7 +38,11 @@ class RegisterSerializer(serializers.Serializer):
     password_confirm = serializers.CharField(write_only=True, min_length=8)
 
     def validate_username(self, value: str) -> str:
-        if User.objects.filter(username__iexact=value).exists():
+        taken = User.objects.filter(username__iexact=value)
+        guest = self.context.get("guest")
+        if guest is not None:
+            taken = taken.exclude(pk=guest.pk)
+        if taken.exists():
             raise serializers.ValidationError("A user with that username already exists.")
         return value
 
@@ -50,6 +55,14 @@ class RegisterSerializer(serializers.Serializer):
         return attrs
 
     def create(self, validated_data: dict) -> User:
+        guest = self.context.get("guest")
+        if guest is not None:
+            guest.username = validated_data["username"]
+            guest.email = validated_data.get("email", "")
+            guest.set_password(validated_data["password"])
+            guest.is_guest = False
+            guest.save(update_fields=["username", "email", "password", "is_guest"])
+            return guest
         return User.objects.create_user(
             username=validated_data["username"],
             email=validated_data.get("email", ""),
