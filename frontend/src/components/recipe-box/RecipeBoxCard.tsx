@@ -179,8 +179,14 @@ export function RecipeBoxCard({
                 {draft.ingredient_lines.map((line) => (
                   <li key={line.id}>
                     <span>
-                      {formatQuantity(line.quantity)}{" "}
-                      {displayUnit(line as PublicIngredientLine)} {line.ingredient_name}
+                      {line.ingredient ? (
+                        <>
+                          {formatQuantity(line.quantity)}{" "}
+                          {displayUnit(line as PublicIngredientLine)} {line.ingredient_name}
+                        </>
+                      ) : (
+                        line.raw_text
+                      )}
                     </span>
                     <button
                       className="recipe-box-card__remove"

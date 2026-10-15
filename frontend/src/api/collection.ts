@@ -1,5 +1,20 @@
 import { apiFetch } from "./client";
-import type { IngredientLine, RecipeStep } from "./development";
+import type { RecipeStep } from "./development";
+
+// Box lines differ from Notebook lines: imports leave ingredient and quantity
+// null and keep the original text in raw_text.
+export interface IngredientLine {
+  id: string;
+  ingredient: string | null;
+  ingredient_name: string | null;
+  raw_text: string;
+  quantity: string | null;
+  unit: string;
+  custom_unit: string;
+  prep_note: string;
+  substitution_note: string;
+  sort_order: number;
+}
 
 export interface CollectionRecipe {
   id: string;

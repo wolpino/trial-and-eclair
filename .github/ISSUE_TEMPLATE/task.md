@@ -37,6 +37,6 @@ labels: task
 
 ## Budget
 
-One session or one @claude run. Stop and comment with what is left if tests still fail after three fix attempts, or if the task needs files outside Owned paths.
+One session or one Claude run. Stop and comment with what is left if tests still fail after three fix attempts, or if the task needs files outside Owned paths.
 
 <!-- To hand this to Claude, comment "@claude" once the task is ready. -->
