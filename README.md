@@ -303,6 +303,20 @@ cd frontend && npm run build                 # TypeScript + production bundle
 cd frontend && npm run test:e2e              # phone Playwright pass; local seed only
 ```
 
+### CI and automation
+
+| What | When | File |
+|------|------|------|
+| Django check, migrations check, tests (Postgres 16) | Every PR; pushes to `main` and `staging-render` | `.github/workflows/ci.yml` |
+| Frontend typecheck + build, then the Playwright pass | Same | `.github/workflows/ci.yml` |
+| CodeQL (Python, TypeScript) | Same, plus weekly | `.github/workflows/codeql.yml` |
+| Dependabot (pip, npm, Actions) into `staging-render` | Weekly | `.github/dependabot.yml` |
+| `@claude` in an issue or PR comment hands it the task; its PRs target `staging-render`. Capped at 40 turns and 30 minutes, one run per issue or PR at a time | On mention, write access only | `.github/workflows/claude.yml` |
+
+PRs go into `staging-render`, then `staging-render` into `main`. Write tasks with the **Task** issue template, which has a "Done when" section.
+
+Claude Code sessions load the top of `.cursor/session_log.mdc` at start (`.claude/hooks/session-context.sh`) and share the session-log skill with Cursor (`.claude/skills/session-log` links to `.cursor/skills/session-log`).
+
 ### Quick API smoke test
 
 ```bash
