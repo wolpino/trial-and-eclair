@@ -60,12 +60,18 @@ cover/
 local_settings.py
 db.sqlite3
 db.sqlite3-journal
+e2e.sqlite3
+e2e.sqlite3-journal
+/tmp*
 media/
 staticfiles/
 
 # Node / frontend
 node_modules/
 frontend/dist/
+frontend/test-results/
+frontend/playwright-report/
+frontend/blob-report/
 
 # Flask stuff:
 instance/

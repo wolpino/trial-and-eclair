@@ -1,6 +1,8 @@
 import { FormEvent, useEffect, useMemo, useState } from "react";
 import { Link, useParams } from "react-router-dom";
 
+import { usePhoneLayout } from "../lib/usePhoneLayout";
+
 import { ApiError } from "../api/client";
 import { ComparePanel } from "../components/lab/ComparePanel";
 import { LabJournal } from "../components/lab/LabJournal";
@@ -47,6 +49,8 @@ import {
 } from "../api/development";
 import "../styles/lab.css";
 
+type PhoneNotebookPage = "ingredients" | "steps";
+
 export function DeveloperRecipePage() {
   const { recipeId } = useParams<{ recipeId: string }>();
   const [recipe, setRecipe] = useState<DevelopmentRecipe | null>(null);
@@ -71,6 +75,8 @@ export function DeveloperRecipePage() {
   const [sessionNotes, setSessionNotes] = useState("");
   const [sessionOutcome, setSessionOutcome] = useState("");
   const [sessionPhotos, setSessionPhotos] = useState<File[]>([]);
+  const [phonePage, setPhonePage] = useState<PhoneNotebookPage>("ingredients");
+  const isPhone = usePhoneLayout();
 
   useEffect(() => {
     if (!recipeId) {
@@ -332,6 +338,121 @@ export function DeveloperRecipePage() {
     );
   }
 
+  const spreadHeader = (
+    <>
+      <SpreadHeader
+        version={displayedVersion}
+        editable={isCurrentVersion}
+        onFieldChange={updateDraftField}
+      />
+      <SpreadActions
+        editable={isCurrentVersion}
+        saving={saving}
+        onSave={(event) => void handleSaveVersion(event)}
+        onSaveNewVersion={() => void handleSaveNewVersion()}
+      />
+    </>
+  );
+
+  const ingredientsPage = (
+    <SpreadIngredients
+      version={displayedVersion}
+      editable={isCurrentVersion}
+      onRemoveLine={(lineId) =>
+        void deleteVersionIngredientLine(displayedVersion.id, lineId).then(reload)
+      }
+      onAddLine={(data) => createVersionIngredientLine(displayedVersion.id, data)}
+      onAdded={() => void reload()}
+    />
+  );
+
+  const stepsPage = (
+    <SpreadSteps
+      version={displayedVersion}
+      editable={isCurrentVersion}
+      onAdd={(data) => createVersionStep(displayedVersion.id, data)}
+      onUpdate={(stepId, data) => patchVersionStep(displayedVersion.id, stepId, data)}
+      onDelete={(stepId) => deleteVersionStep(displayedVersion.id, stepId)}
+      onChanged={() => void reload()}
+    />
+  );
+
+  const versionFlip = (
+    <VersionFlip
+      versions={versions}
+      activeVersionId={activeVersionId}
+      currentVersionId={currentVersionId}
+      createdAt={recipe.created_at}
+      updatedAt={recipe.updated_at}
+      onSelect={selectVersion}
+    />
+  );
+
+  const marginTools = (
+    <MarginTools
+      status={recipe.status}
+      slug={recipe.slug}
+      journalOpen={journalOpen}
+      onCompare={() => setCompareOpen(true)}
+      onPublish={() => setPublishOpen(true)}
+      onToggleJournal={() => setJournalOpen((open) => !open)}
+    />
+  );
+
+  const versionNotes = (
+    <VersionNotes
+      value={
+        isCurrentVersion && draftVersion
+          ? draftVersion.version_notes
+          : displayedVersion.version_notes
+      }
+      editable={isCurrentVersion}
+      onChange={(value) => updateDraftField("version_notes", value)}
+    />
+  );
+
+  const logPages = journalOpen ? (
+    <div id="lab-log-pages" className="lab-log-spread-wrap">
+      <NotebookSpread
+        className="notebook-spread--log"
+        header={<p className="lab-log-spread__title">Log pages</p>}
+      >
+        <LabJournal
+          entries={journal}
+          body={journalBody}
+          onBodyChange={setJournalBody}
+          onSubmit={(event) => void handleAddJournal(event)}
+          onDelete={(entryId) =>
+            void deleteJournalEntry(entryId).then(() =>
+              recipeId ? fetchJournal(recipeId).then(setJournal) : undefined,
+            )
+          }
+        />
+        <LabTestSessions
+          sessions={testSessions}
+          editable={isCurrentVersion}
+          notes={sessionNotes}
+          outcome={sessionOutcome}
+          photos={sessionPhotos}
+          onNotesChange={setSessionNotes}
+          onOutcomeChange={setSessionOutcome}
+          onPhotosChange={setSessionPhotos}
+          onSubmit={(event) => void handleAddTestSession(event)}
+          onDelete={(sessionId) =>
+            void deleteTestSession(displayedVersion.id, sessionId).then(() =>
+              reloadTestSessions(displayedVersion.id),
+            )
+          }
+          onDeletePhoto={(sessionId, photoId) =>
+            void deleteTestSessionPhoto(sessionId, photoId).then(() =>
+              reloadTestSessions(displayedVersion.id),
+            )
+          }
+        />
+      </NotebookSpread>
+    </div>
+  ) : null;
+
   return (
     <main className="lab-page">
       <Link className="lab-back-link" to="/developer/lab">
@@ -340,119 +461,65 @@ export function DeveloperRecipePage() {
 
       {error ? <p className="lab-form-error">{error}</p> : null}
 
-      <div className="lab-notebook lab-notebook--marbled">
-        <NotebookMargin side="left">
-          <VersionFlip
-            versions={versions}
-            activeVersionId={activeVersionId}
-            currentVersionId={currentVersionId}
-            createdAt={recipe.created_at}
-            updatedAt={recipe.updated_at}
-            onSelect={selectVersion}
-          />
-          <MarginTools
-            status={recipe.status}
-            slug={recipe.slug}
-            journalOpen={journalOpen}
-            onCompare={() => setCompareOpen(true)}
-            onPublish={() => setPublishOpen(true)}
-            onToggleJournal={() => setJournalOpen((open) => !open)}
-          />
-        </NotebookMargin>
-
-        <div className="lab-notebook__center">
-          <NotebookSpread
-            header={
-              <>
-                <SpreadHeader
-                  version={displayedVersion}
-                  editable={isCurrentVersion}
-                  onFieldChange={updateDraftField}
-                />
-                <SpreadActions
-                  editable={isCurrentVersion}
-                  saving={saving}
-                  onSave={(event) => void handleSaveVersion(event)}
-                  onSaveNewVersion={() => void handleSaveNewVersion()}
-                />
-              </>
-            }
-          >
-            <SpreadIngredients
-              version={displayedVersion}
-              editable={isCurrentVersion}
-              onRemoveLine={(lineId) =>
-                void deleteVersionIngredientLine(displayedVersion.id, lineId).then(reload)
-              }
-              onAddLine={(data) => createVersionIngredientLine(displayedVersion.id, data)}
-              onAdded={() => void reload()}
-            />
-            <SpreadSteps
-              version={displayedVersion}
-              editable={isCurrentVersion}
-              onAdd={(data) => createVersionStep(displayedVersion.id, data)}
-              onUpdate={(stepId, data) =>
-                patchVersionStep(displayedVersion.id, stepId, data)
-              }
-              onDelete={(stepId) => deleteVersionStep(displayedVersion.id, stepId)}
-              onChanged={() => void reload()}
-            />
-          </NotebookSpread>
-          {journalOpen ? (
-            <div id="lab-log-pages" className="lab-log-spread-wrap">
-              <NotebookSpread
-                className="notebook-spread--log"
-                header={<p className="lab-log-spread__title">Log pages</p>}
-              >
-                <LabJournal
-                  entries={journal}
-                  body={journalBody}
-                  onBodyChange={setJournalBody}
-                  onSubmit={(event) => void handleAddJournal(event)}
-                  onDelete={(entryId) =>
-                    void deleteJournalEntry(entryId).then(() =>
-                      recipeId ? fetchJournal(recipeId).then(setJournal) : undefined,
-                    )
+      {isPhone ? (
+        <div className="lab-notebook lab-notebook--marbled lab-notebook--phone">
+          <NotebookSpread className="notebook-spread--single" header={spreadHeader}>
+            <div className="lab-phone-sheet">
+              <div className="lab-phone-pages" role="group" aria-label="Notebook page">
+                <button
+                  type="button"
+                  className={
+                    phonePage === "ingredients"
+                      ? "lab-btn lab-phone-pages__btn"
+                      : "lab-btn lab-btn--ghost lab-phone-pages__btn"
                   }
-                />
-                <LabTestSessions
-                  sessions={testSessions}
-                  editable={isCurrentVersion}
-                  notes={sessionNotes}
-                  outcome={sessionOutcome}
-                  photos={sessionPhotos}
-                  onNotesChange={setSessionNotes}
-                  onOutcomeChange={setSessionOutcome}
-                  onPhotosChange={setSessionPhotos}
-                  onSubmit={(event) => void handleAddTestSession(event)}
-                  onDelete={(sessionId) =>
-                    void deleteTestSession(displayedVersion.id, sessionId).then(() =>
-                      reloadTestSessions(displayedVersion.id),
-                    )
+                  aria-pressed={phonePage === "ingredients"}
+                  onClick={() => setPhonePage("ingredients")}
+                >
+                  Ingredients
+                </button>
+                <button
+                  type="button"
+                  className={
+                    phonePage === "steps"
+                      ? "lab-btn lab-phone-pages__btn"
+                      : "lab-btn lab-btn--ghost lab-phone-pages__btn"
                   }
-                  onDeletePhoto={(sessionId, photoId) =>
-                    void deleteTestSessionPhoto(sessionId, photoId).then(() =>
-                      reloadTestSessions(displayedVersion.id),
-                    )
-                  }
-                />
-              </NotebookSpread>
+                  aria-pressed={phonePage === "steps"}
+                  onClick={() => setPhonePage("steps")}
+                >
+                  Steps
+                </button>
+              </div>
+              {phonePage === "ingredients" ? ingredientsPage : stepsPage}
+              <details className="lab-phone-tools">
+                <summary>Tools</summary>
+                <div className="lab-phone-tools__body">
+                  {versionFlip}
+                  {marginTools}
+                  {versionNotes}
+                </div>
+              </details>
             </div>
-          ) : null}
+          </NotebookSpread>
+          {logPages}
         </div>
-
-        <NotebookMargin side="right">
-          <VersionNotes
-            value={
-              isCurrentVersion && draftVersion
-                ? draftVersion.version_notes
-                : displayedVersion.version_notes
-            }
-            editable={isCurrentVersion}
-            onChange={(value) => updateDraftField("version_notes", value)}
-          />
-        </NotebookMargin>
-      </div>
+      ) : (
+        <div className="lab-notebook lab-notebook--marbled">
+          <NotebookMargin side="left">
+            {versionFlip}
+            {marginTools}
+          </NotebookMargin>
+          <div className="lab-notebook__center">
+            <NotebookSpread header={spreadHeader}>
+              {ingredientsPage}
+              {stepsPage}
+            </NotebookSpread>
+            {logPages}
+          </div>
+          <NotebookMargin side="right">{versionNotes}</NotebookMargin>
+        </div>
+      )}
 
       <NotebookOverlay
         title="Compare versions"

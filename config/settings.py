@@ -97,13 +97,25 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "config.wsgi.application"
 
+def _sqlite_name(url: str) -> str:
+    prefix = "sqlite:///"
+    if not url.startswith(prefix):
+        return str(BASE_DIR / "db.sqlite3")
+    path = url[len(prefix) :]
+    if path in {"", ":memory:"}:
+        return ":memory:" if path == ":memory:" else str(BASE_DIR / "db.sqlite3")
+    if path.startswith("/"):
+        return path
+    return str(BASE_DIR / path)
+
+
 DATABASE_URL = os.environ.get("DATABASE_URL", f"sqlite:///{BASE_DIR / 'db.sqlite3'}")
 
 if DATABASE_URL.startswith("sqlite"):
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.sqlite3",
-            "NAME": BASE_DIR / "db.sqlite3",
+            "NAME": _sqlite_name(DATABASE_URL),
         }
     }
 elif DATABASE_URL.startswith("postgres"):
