@@ -1,17 +1,15 @@
-# Recipe Box (mobile front end for Trial & Eclair)
+# Recipe Box (part of Trial and Eclair)
 
-Copied from the `recipe-box` repo on 2026-10-15. The PRD, spec and prototype were written on 2026-10-14.
+**Recipe Box is not a separate app.** It is the phone view of Trial and Eclair's home-cook recipe box, built in `frontend/` on the same Django API, database and login ([decision 001](../decisions/001-recipe-box-in-frontend.md)). Guest mode and starter cards come from [decision 002](../decisions/002-guest-mode.md).
 
-## Direction
+| Screen width | `/recipe-box` shows |
+| --- | --- |
+| Phone (below 768px) | Recipe Box: card in the lid, A–Z tabs, fan, full-screen Card View (#45) |
+| Tablet, monitor | The existing wooden box with index cards |
 
-One Django API and database, two front ends:
+The rest of Trial and Eclair (notebook, cork board, cookbooks, references) is unchanged.
 
-| Front end | Device | Does |
-| --- | --- | --- |
-| Notebook (existing `frontend/`) | Tablet, monitor | Ideas, versions, test bakes, publish, cookbooks |
-| Recipe Box (new) | Phone first | A–Z box, recipe cards, cook mode, quick import |
-
-Recipe Box is served from the same domain as the API so session login works unchanged.
+The files below were copied from the old standalone `wolpino/recipe-box` repo on 2026-10-15. The PRD, spec and prototype were written on 2026-10-14, before the merge.
 
 ## What's here
 

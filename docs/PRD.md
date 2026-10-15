@@ -120,6 +120,8 @@ Two layers:
 | **Recipe box UI** | In-place index-card editing within the box grid — not a separate editor page |
 | **Theming** | CSS custom properties + `ThemeProvider`; user picks color theme + font preset; `localStorage` in Phase UI C1; optional profile sync in C6 |
 | **Cork board UI** | Grid of pinned notes (Phase UI C2, last chunk); freeform drag-and-drop canvas deferred (roadmap) |
+| **Recipe Box** | The phone view of the home-cook recipe box, inside `frontend/`; still A–Z only ([decision 001](decisions/001-recipe-box-in-frontend.md)). It was a standalone plan until 2026-10-15 |
+| **Guest mode** | Save up to 5 box cards before signing up; shared read-only starter cards; developer tier shown as a locked preview ([decision 002](decisions/002-guest-mode.md)) |
 
 ---
 
@@ -244,6 +246,7 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout, optional string links) | Planned (post–Phase UI) |
 | **2.0 frame** | Recipe-card login, in-frame navigation, phone list and one notebook page, local walkthrough fixtures, short Playwright pass | **Milestones 1–3** — [milestone plan](milestone-1-2-technical-plan.md) |
+| **Recipe Box** | Phone recipe box (lid, A–Z tabs, fan, Card View), guest mode, starter cards, throttles. Plan: [docs/recipe-box/](recipe-box/README.md) | In progress: box card fields (#41) and guest accounts (#42) shipped; #43–#45 next |
 
 **MVP (first shippable product):** Phases 0 + 1 + 2 — **complete**. A developer can iterate, publish, and share; a viewer can read published recipes at `/r/{slug}`. Home cook tier and cookbooks are Phase 3+.
 
@@ -349,7 +352,7 @@ Visual references: `recipes/` screenshots and photographs — cork board, recipe
 
 Lab never uses index-card dimensions. Recipe box never uses notebook spread layout.
 
-On a phone, the lab shows **one notebook page at a time** (ingredients, or steps). The two-page spread is the wide-screen layout. The phone has no kitchen picture. The recipe box is a title list, then one card filling the screen. Wide screens keep the existing box, cork, binder, and shelf pictures. Login and signup are one recipe card for every persona. A developer’s title-only note is an idea on the cork board. A home-cook box card needs a title and at least one ingredient or step. Implementation: [milestone-1-2-technical-plan.md](milestone-1-2-technical-plan.md).
+On a phone, the lab shows **one notebook page at a time** (ingredients, or steps). The two-page spread is the wide-screen layout. The phone has no kitchen picture. The recipe box is a title list, then one card filling the screen; the Recipe Box view (#45) replaces this phone layout. Wide screens keep the existing box, cork, binder, and shelf pictures. Login and signup are one recipe card for every persona. A developer’s title-only note is an idea on the cork board. A home-cook box card needs a title and at least one ingredient or step. Implementation: [milestone-1-2-technical-plan.md](milestone-1-2-technical-plan.md).
 
 ### Lab margin tools
 
