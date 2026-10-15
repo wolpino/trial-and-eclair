@@ -4,10 +4,12 @@ from django.contrib import admin
 from django.urls import include, path, re_path
 
 from config.health import healthz
+from config.ipcheck import ipcheck
 from config.spa import spa_index
 
 urlpatterns = [
     path("healthz", healthz),
+    path("api/v1/ipcheck/", ipcheck),  # TEMPORARY, see config/ipcheck.py
     path("admin/", admin.site.urls),
     path("api/v1/auth/", include("accounts.urls")),
     path("api/v1/", include("development.urls")),
