@@ -49,20 +49,17 @@ _SNIFF_BYTES = 8192
 ALLOWED_SCAN_TYPES = "JPEG, PNG, HEIC, PDF or plain text"
 
 
-class UnsupportedScanUpload(ValueError):
-    pass
-
-
-def validate_scan_upload(uploaded_file) -> None:
-    """Reject uploads over the size cap or whose content is not an allowed type."""
+def scan_upload_error(uploaded_file) -> str | None:
+    """Return a message for the user if the upload is over the size cap or not an allowed type."""
     if uploaded_file.size > settings.SCAN_UPLOAD_MAX_BYTES:
         limit_mb = settings.SCAN_UPLOAD_MAX_BYTES // (1024 * 1024)
-        raise UnsupportedScanUpload(f"Scans must be {limit_mb} MB or smaller.")
+        return f"Scans must be {limit_mb} MB or smaller."
     uploaded_file.seek(0)
     head = uploaded_file.read(_SNIFF_BYTES)
     uploaded_file.seek(0)
     if not _is_allowed_content(head):
-        raise UnsupportedScanUpload(f"Upload a {ALLOWED_SCAN_TYPES} file.")
+        return f"Upload a {ALLOWED_SCAN_TYPES} file."
+    return None
 
 
 def _is_allowed_content(head: bytes) -> bool:

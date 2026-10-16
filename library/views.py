@@ -23,7 +23,7 @@ from .serializers import (
 from collection.services import assert_can_add_card
 
 from . import services
-from .scan import UnsupportedScanUpload, validate_scan_upload
+from .scan import scan_upload_error
 
 
 class GuestAwareScopedRateThrottle(ScopedRateThrottle):
@@ -151,10 +151,9 @@ class ScanImportView(APIView):
     def post(self, request) -> Response:
         serializer = ScanImportSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
-        try:
-            validate_scan_upload(serializer.validated_data["file"])
-        except UnsupportedScanUpload as exc:
-            raise ValidationError({"file": [str(exc)]}) from exc
+        upload_error = scan_upload_error(serializer.validated_data["file"])
+        if upload_error:
+            raise ValidationError({"file": [upload_error]})
         destination = serializer.validated_data.get("destination") or "box"
         if destination == "lab" and not request.user.has_developer_access():
             raise PermissionDenied("Lab import requires developer access.")
