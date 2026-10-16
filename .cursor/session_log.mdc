@@ -10,6 +10,38 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-16 · Phone box design pass (#63), cloud session
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-16` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (cloud) |
+| **Outcome** | completed |
+
+### Intent
+Continue #63 from WIP commit 7d002b5 in a cloud session, get e2e green, and open the PR.
+
+### Summary
+The one failing e2e test ("tapping anywhere on the lid card opens Card View") wasn't a layout bug. At rest, `elementFromPoint` 20px in from the card's lower-right corner is the card. On load the card plays the prototype's slide-up (`translateY(70px) scale(0.96)`, 0.42s). With the shared-cookie login the test measured it mid-animation, when its box overlapped the tab row, so the click hit a tab. The test now waits for the card's animations to finish before measuring. Backend, build and e2e (31) are green. Light and dark screenshots at 390×844 match the prototype's lid, hinge, card edges, latch and label.
+
+### Decisions
+- **Fixed the test, not the layout**: the resting layout is correct and matches the prototype
+
+### Open threads
+- With an even number of letters, the staggered front row ends one slot short of the right edge (the prototype's formula does the same; its demo uses 27 tabs). Ask the owner whether to stretch it
+- #63 and #71 both edit `frontend/e2e/recipe-box-phone.spec.ts`; whichever merges second needs a merge
+- #64 waits on #63 merging; #56 waits on #63 and the owner's OK (draft)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phone recipe box, lid card animation, e2e, staggered tabs
+**Files:** frontend/e2e/recipe-box-phone.spec.ts, frontend/src/components/recipe-box/phone/phone-box.css
+**Do not redo:** the hit-test investigation for the lid card click
+**Resume with:** after #63 merges, start #64 (Card View) from staging-render
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-16 · Phone recipe box design decisions (003)
 
 | Field | Value |

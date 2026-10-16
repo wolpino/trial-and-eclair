@@ -224,6 +224,8 @@ test("tapping anywhere on the lid card opens Card View; no Open recipe button", 
   await expect(page.getByRole("button", { name: "Open recipe" })).toHaveCount(0);
 
   const card = page.locator(".phone-box-lid__card");
+  // The card slides up into the lid; measure it once it has come to rest.
+  await card.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
   const box = (await card.boundingBox())!;
   await page.mouse.click(box.x + box.width - 20, box.y + box.height - 20);
   const cardView = page.getByRole("dialog", { name: "Almond Biscotti" });
