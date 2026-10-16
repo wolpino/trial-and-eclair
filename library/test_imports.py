@@ -1,8 +1,12 @@
+import tempfile
+from pathlib import Path
 from unittest.mock import MagicMock, patch
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from rest_framework import status
 from rest_framework.test import APIClient
 
@@ -14,6 +18,8 @@ from .models import SourceDocument, UrlRecipeImport
 from .scan import SCAN_DRAFT_NOTE
 
 User = get_user_model()
+
+FAKE_JPEG = b"\xff\xd8\xff\xe0fake-image"
 
 JSONLD_HTML = """
 <html>
@@ -69,6 +75,7 @@ def _fake_urlopen(request, timeout: float = 8):
 
 class UrlImportAPITests(TestCase):
     def setUp(self) -> None:
+        cache.clear()
         self.client = APIClient(enforce_csrf_checks=False)
         self.home_cook = User.objects.create_user(
             username="cook",
@@ -266,6 +273,7 @@ Bake until golden.
 
 class ScanImportAPITests(TestCase):
     def setUp(self) -> None:
+        cache.clear()
         self.client = APIClient(enforce_csrf_checks=False)
         self.home_cook = User.objects.create_user(
             username="cook",
@@ -318,7 +326,7 @@ class ScanImportAPITests(TestCase):
         self.client.force_login(self.home_cook)
         upload = SimpleUploadedFile(
             "card.jpg",
-            b"fake-image",
+            FAKE_JPEG,
             content_type="image/jpeg",
         )
 
@@ -343,7 +351,7 @@ class ScanImportAPITests(TestCase):
         self.client.force_login(self.home_cook)
         upload = SimpleUploadedFile(
             "card.jpg",
-            b"fake-image",
+            FAKE_JPEG,
             content_type="image/jpeg",
         )
 
@@ -383,7 +391,7 @@ class ScanImportAPITests(TestCase):
         self.client.force_login(self.developer)
         upload = SimpleUploadedFile(
             "lab-scan.jpg",
-            b"fake-image",
+            FAKE_JPEG,
             content_type="image/jpeg",
         )
 
@@ -398,3 +406,116 @@ class ScanImportAPITests(TestCase):
         self.assertEqual(recipe.title, "lab-scan")
         self.assertEqual(recipe.current_version.version_notes, SCAN_DRAFT_NOTE)
         self.assertTrue(SourceDocument.objects.filter(user=self.developer).exists())
+
+
+def _rate_count(scope: str) -> int:
+    return int(settings.REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"][scope].split("/")[0])
+
+
+class ImportThrottleTests(TestCase):
+    def setUp(self) -> None:
+        cache.clear()
+        self.addCleanup(cache.clear)
+        self.cook = User.objects.create_user(username="cook", password="strong-pass-1")
+        self.guest = User.objects.create_user(username="guest-1", is_guest=True)
+
+    def _client(self, user) -> APIClient:
+        client = APIClient()
+        client.force_login(user)
+        return client
+
+    def _exhaust(self, client: APIClient, url: str, times: int) -> None:
+        for _ in range(times):
+            response = client.post(url, {}, format="json")
+            self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def _assert_throttled(self, response) -> None:
+        self.assertEqual(response.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
+        self.assertIn("Retry-After", response.headers)
+
+    def test_url_import_is_throttled_per_user(self) -> None:
+        url = "/api/v1/imports/url/"
+        client = self._client(self.cook)
+        self._exhaust(client, url, _rate_count("url_import"))
+
+        self._assert_throttled(client.post(url, {}, format="json"))
+        other = User.objects.create_user(username="other", password="strong-pass-1")
+        self.assertEqual(
+            self._client(other).post(url, {}, format="json").status_code,
+            status.HTTP_400_BAD_REQUEST,
+        )
+
+    def test_scan_import_is_throttled_per_user(self) -> None:
+        url = "/api/v1/imports/scan/"
+        client = self._client(self.cook)
+        self._exhaust(client, url, _rate_count("scan_import"))
+
+        self._assert_throttled(client.post(url, {}, format="json"))
+
+    def test_guests_hit_a_lower_import_rate(self) -> None:
+        for scope, url in (("url_import", "/api/v1/imports/url/"), ("scan_import", "/api/v1/imports/scan/")):
+            guest_limit = _rate_count(f"{scope}_guest")
+            self.assertLess(guest_limit, _rate_count(scope))
+            guest_client = self._client(self.guest)
+            cook_client = self._client(self.cook)
+            self._exhaust(guest_client, url, guest_limit)
+            self._exhaust(cook_client, url, guest_limit)
+
+            self._assert_throttled(guest_client.post(url, {}, format="json"))
+            self.assertEqual(
+                cook_client.post(url, {}, format="json").status_code,
+                status.HTTP_400_BAD_REQUEST,
+            )
+
+
+class ScanUploadLimitTests(TestCase):
+    def setUp(self) -> None:
+        cache.clear()
+        media = tempfile.TemporaryDirectory()
+        self.addCleanup(media.cleanup)
+        self.media_root = Path(media.name)
+        override = override_settings(MEDIA_ROOT=self.media_root)
+        override.enable()
+        self.addCleanup(override.disable)
+        self.client = APIClient()
+        self.client.force_login(User.objects.create_user(username="cook", password="strong-pass-1"))
+
+    def _post(self, upload):
+        return self.client.post("/api/v1/imports/scan/", {"file": upload}, format="multipart")
+
+    def _assert_rejected(self, response) -> None:
+        self.assertEqual(response.status_code, status.HTTP_400_BAD_REQUEST)
+        self.assertIn("file", response.data)
+        self.assertFalse(SourceDocument.objects.exists())
+        self.assertFalse(CollectionRecipe.objects.exists())
+        self.assertEqual([p for p in self.media_root.rglob("*") if p.is_file()], [])
+
+    def test_upload_over_size_cap_is_rejected(self) -> None:
+        size = settings.SCAN_UPLOAD_MAX_BYTES + 1
+        upload = SimpleUploadedFile("big.txt", b"a" * size, content_type="text/plain")
+
+        self._assert_rejected(self._post(upload))
+
+    def test_unsupported_type_is_rejected(self) -> None:
+        upload = SimpleUploadedFile("card.gif", b"GIF89a\x01\x00\x01\x00\x00\x00", content_type="image/gif")
+
+        self._assert_rejected(self._post(upload))
+
+    def test_content_that_does_not_match_an_allowed_type_is_rejected(self) -> None:
+        upload = SimpleUploadedFile("card.jpg", b"MZ\x90\x00\x03\x00\x00\x00", content_type="image/jpeg")
+
+        self._assert_rejected(self._post(upload))
+
+    @patch("library.scan.shutil.which", return_value=None)
+    def test_allowed_types_are_accepted(self, _mock_which) -> None:
+        uploads = [
+            ("card.jpg", FAKE_JPEG, "image/jpeg"),
+            ("card.png", b"\x89PNG\r\n\x1a\n\x00\x00", "image/png"),
+            ("card.heic", b"\x00\x00\x00\x18ftypheic\x00\x00\x00\x00", "image/heic"),
+            ("card.pdf", b"%PDF-1.7\n", "application/pdf"),
+            ("card.txt", b"Cookies\n2 cups flour", "text/plain"),
+        ]
+        for name, body, content_type in uploads:
+            with self.subTest(name=name):
+                response = self._post(SimpleUploadedFile(name, body, content_type=content_type))
+                self.assertEqual(response.status_code, status.HTTP_201_CREATED)

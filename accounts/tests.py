@@ -1,6 +1,8 @@
 from datetime import timedelta
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
+from django.core.cache import cache
 from django.test import TestCase
 from django.utils import timezone
 from rest_framework import status
@@ -13,6 +15,7 @@ User = get_user_model()
 
 class AuthAPITests(TestCase):
     def setUp(self) -> None:
+        cache.clear()
         self.client = APIClient(enforce_csrf_checks=False)
         self.register_url = "/api/v1/auth/register/"
         self.login_url = "/api/v1/auth/login/"
@@ -128,6 +131,7 @@ class AuthAPITests(TestCase):
 
 class GuestAPITests(TestCase):
     def setUp(self) -> None:
+        cache.clear()
         self.client = APIClient(enforce_csrf_checks=False)
         self.guest_url = "/api/v1/auth/guest/"
         self.me_url = "/api/v1/auth/me/"
@@ -209,3 +213,62 @@ class GuestAPITests(TestCase):
 
         self.assertEqual(trial.status_code, status.HTTP_403_FORBIDDEN)
         self.assertEqual(patch.status_code, status.HTTP_403_FORBIDDEN)
+
+
+def _rate_count(scope: str) -> int:
+    return int(settings.REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"][scope].split("/")[0])
+
+
+class AuthThrottleTests(TestCase):
+    def setUp(self) -> None:
+        cache.clear()
+        self.addCleanup(cache.clear)
+
+    def _exhaust(self, url: str, scope: str, payload: dict, ip: str = "10.0.0.1") -> None:
+        for _ in range(_rate_count(scope)):
+            response = APIClient().post(url, payload, format="json", REMOTE_ADDR=ip)
+            self.assertNotEqual(response.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
+
+    def _assert_throttled(self, response) -> None:
+        self.assertEqual(response.status_code, status.HTTP_429_TOO_MANY_REQUESTS)
+        self.assertIn("Retry-After", response.headers)
+
+    def test_guest_create_is_throttled_per_ip(self) -> None:
+        url = "/api/v1/auth/guest/"
+        self._exhaust(url, "guest_create", {})
+
+        self._assert_throttled(APIClient().post(url, REMOTE_ADDR="10.0.0.1"))
+        other_ip = APIClient().post(url, REMOTE_ADDR="10.0.0.2")
+        self.assertEqual(other_ip.status_code, status.HTTP_201_CREATED)
+
+    def test_register_is_throttled_per_ip(self) -> None:
+        url = "/api/v1/auth/register/"
+        self._exhaust(url, "register", {"username": "x"})
+
+        response = APIClient().post(
+            url,
+            {"username": "cook", "password": "strong-pass-1", "password_confirm": "strong-pass-1"},
+            format="json",
+            REMOTE_ADDR="10.0.0.1",
+        )
+        self._assert_throttled(response)
+        self.assertFalse(User.objects.filter(username="cook").exists())
+
+    def test_register_by_signed_in_guest_counts_against_ip(self) -> None:
+        url = "/api/v1/auth/register/"
+        self._exhaust(url, "register", {"username": "x"})
+        guest = User.objects.create_user(username="guest-1", is_guest=True)
+        client = APIClient()
+        client.force_login(guest)
+
+        self._assert_throttled(client.post(url, {"username": "x"}, format="json", REMOTE_ADDR="10.0.0.1"))
+
+    def test_login_is_throttled_per_ip(self) -> None:
+        User.objects.create_user(username="dev", password="strong-pass-1")
+        url = "/api/v1/auth/login/"
+        self._exhaust(url, "login", {"username": "dev", "password": "wrong"})
+
+        good = {"username": "dev", "password": "strong-pass-1"}
+        self._assert_throttled(APIClient().post(url, good, format="json", REMOTE_ADDR="10.0.0.1"))
+        other_ip = APIClient().post(url, good, format="json", REMOTE_ADDR="10.0.0.2")
+        self.assertEqual(other_ip.status_code, status.HTTP_200_OK)

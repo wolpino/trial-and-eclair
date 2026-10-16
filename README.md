@@ -12,7 +12,7 @@ Recipe development and collection app — not a blog.
 
 **Phases 0–4 complete** (backend + metaphor UI + polish). Walkthrough seed fills every screen. Scan import reads text and OCR (Tesseract on PATH). Staging deploy is Render (gunicorn + WhiteNoise, same-origin SPA). Stripe, R2, and freeform cork canvas are still later.
 
-**Recipe Box** (in progress) is the phone view of the recipe box inside this app, not a separate project: see [`docs/recipe-box/README.md`](docs/recipe-box/README.md). Guest accounts with a 5-card limit and shared starter cards are on the API; throttles and the phone view are next.
+**Recipe Box** (in progress) is the phone view of the recipe box inside this app, not a separate project: see [`docs/recipe-box/README.md`](docs/recipe-box/README.md). Guest accounts with a 5-card limit, shared starter cards, rate limits and the `cleanup_guests` command are on the API; the phone view is next.
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -310,9 +310,32 @@ Set `role`, `subscription_status`, and `trial_ends_at` in Django admin. Stripe i
 | `POST /api/v1/imports/url/` | Auth | Fetch URL, parse JSON-LD Recipe, SSRF-safe. |
 | `GET /api/v1/imports/url/{id}/` | Auth | Read-only cached import. |
 | `POST /api/v1/imports/url/{id}/save/` | Auth | Copy into box or lab. Never publish directly. |
-| `POST /api/v1/imports/scan/` | Auth | Multipart file → `SourceDocument` + draft. Fills `extracted_text` (text files, Tesseract OCR, or `pdftotext`) and parses Ingredients/Directions into lines. |
+| `POST /api/v1/imports/scan/` | Auth | Multipart file → `SourceDocument` + draft. Fills `extracted_text` (text files, Tesseract OCR, or `pdftotext`) and parses Ingredients/Directions into lines. Max 10 MB (`SCAN_UPLOAD_MAX_BYTES`); JPEG, PNG, HEIC, PDF or plain text only (checked by content), else 400. |
 
 Public UI: **Save to box** / **Rework** on `/r/:slug`. Box and lab have URL preview + scan upload.
+
+### Rate limits
+
+DRF scoped throttles; rates live in `REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]` in `config/settings.py`. Over the limit returns 429 with `Retry-After`.
+
+| Scope | Endpoint | Rate | Keyed by |
+|-------|----------|------|----------|
+| `guest_create` | `POST /api/v1/auth/guest/` | 10/hour | IP |
+| `register` | `POST /api/v1/auth/register/` | 10/hour | IP |
+| `login` | `POST /api/v1/auth/login/` | 20/hour | IP |
+| `url_import` / `url_import_guest` | `POST /api/v1/imports/url/` | 30/day (guest 10/day) | User |
+| `scan_import` / `scan_import_guest` | `POST /api/v1/imports/scan/` | 20/day (guest 5/day) | User |
+
+Counts live in Django's default cache (local memory), so each gunicorn worker keeps its own count and a restart resets them. A shared cache is not set up yet. Behind a proxy, set `THROTTLE_NUM_PROXIES` to the number of proxies in front of the app so the client IP is read from `X-Forwarded-For` correctly. On Render it is `3` (measured on staging, 2026-10-15); a wrong value either lets clients fake their IP or makes many users share one limit.
+
+### Guest cleanup
+
+`cleanup_guests` deletes guest accounts with no card change, login or sign-up in the last N days, along with their cards and uploaded files (scans and card photos). Signed-up users are never touched. It is not scheduled; run it by hand (for example from the Render shell):
+
+```bash
+python manage.py cleanup_guests --days 30 --dry-run   # print counts only
+python manage.py cleanup_guests --days 30
+```
 
 ## Tests
 

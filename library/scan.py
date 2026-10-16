@@ -6,6 +6,8 @@ from collections.abc import Sequence
 from decimal import Decimal
 from pathlib import Path
 
+from django.conf import settings
+
 from development.services import IngredientLineCopy, RecipeCopyPayload
 
 from .models import SourceDocument
@@ -41,6 +43,31 @@ _STEP_HEADERS = frozenset(
 _IMAGE_SUFFIXES = frozenset(
     {".jpg", ".jpeg", ".png", ".webp", ".gif", ".tif", ".tiff", ".bmp"}
 )
+
+_HEIC_BRANDS = frozenset({b"heic", b"heix", b"hevc", b"hevx", b"heim", b"heis", b"mif1", b"msf1"})
+_SNIFF_BYTES = 8192
+ALLOWED_SCAN_TYPES = "JPEG, PNG, HEIC, PDF or plain text"
+
+
+def scan_upload_error(uploaded_file) -> str | None:
+    """Return a message for the user if the upload is over the size cap or not an allowed type."""
+    if uploaded_file.size > settings.SCAN_UPLOAD_MAX_BYTES:
+        limit_mb = settings.SCAN_UPLOAD_MAX_BYTES // (1024 * 1024)
+        return f"Scans must be {limit_mb} MB or smaller."
+    uploaded_file.seek(0)
+    head = uploaded_file.read(_SNIFF_BYTES)
+    uploaded_file.seek(0)
+    if not _is_allowed_content(head):
+        return f"Upload a {ALLOWED_SCAN_TYPES} file."
+    return None
+
+
+def _is_allowed_content(head: bytes) -> bool:
+    if head.startswith((b"\xff\xd8\xff", b"\x89PNG\r\n\x1a\n", b"%PDF-")):
+        return True
+    if head[4:8] == b"ftyp" and head[8:12] in _HEIC_BRANDS:
+        return True
+    return bool(head) and b"\x00" not in head
 
 
 def extract_document_text(document: SourceDocument) -> str:
