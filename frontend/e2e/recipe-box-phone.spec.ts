@@ -41,7 +41,7 @@ test("the lid shows the first card and A–Z tabs sit below", async ({ page }) =
   await expect(card).toContainText("Serves 6");
   await expect(card).toContainText("Prep 25 min");
   await expect(card).toContainText("Cook 45 min");
-  await expect(card).toContainText("Almonds");
+  await expect(card).toContainText(/almonds/i);
   await expect(card).toContainText("Shape two logs.");
 
   await expect(tabs(page)).toHaveCount(27);

@@ -1,6 +1,5 @@
-import type { PublicIngredientLine } from "../../../api/client";
 import type { CollectionRecipe, IngredientLine, RecipeSourceType } from "../../../api/collection";
-import { displayUnit, formatQuantity } from "../../../lib/recipeFormat";
+import { ingredientText as formatLine } from "../../../lib/recipeFormat";
 
 export const TAB_KEYS = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ", "#"];
 
@@ -32,13 +31,12 @@ export function metaText(recipe: CollectionRecipe): string {
   return parts.join(" · ");
 }
 
+// Box cards show the line as typed or imported when there is one (decision 003).
 export function ingredientText(line: IngredientLine): string {
-  if (!line.ingredient) {
+  if (line.raw_text || !line.ingredient) {
     return line.raw_text;
   }
-  return [formatQuantity(line.quantity), displayUnit(line as PublicIngredientLine), line.ingredient_name]
-    .filter(Boolean)
-    .join(" ");
+  return formatLine(line);
 }
 
 export function sourceLabel(recipe: CollectionRecipe): string {

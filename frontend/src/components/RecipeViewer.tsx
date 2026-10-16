@@ -3,11 +3,7 @@ import { Link } from "react-router-dom";
 
 import type { PublicRecipe } from "../api/client";
 import { mediaUrl } from "../api/client";
-import {
-  displayUnit,
-  formatQuantity,
-  formatTiming,
-} from "../lib/recipeFormat";
+import { IngredientLineText, formatTiming } from "../lib/recipeFormat";
 
 interface RecipeViewerProps {
   recipe: PublicRecipe;
@@ -67,11 +63,7 @@ export function RecipeViewer({ recipe, actions }: RecipeViewerProps) {
           <ul className="ingredient-list">
             {recipe.ingredient_lines.map((line) => (
               <li key={`${line.sort_order}-${line.ingredient_name}`}>
-                <span className="ingredient-qty">
-                  {formatQuantity(line.quantity)}
-                  {displayUnit(line) ? ` ${displayUnit(line)}` : ""}
-                </span>{" "}
-                <span className="ingredient-name">{line.ingredient_name}</span>
+                <IngredientLineText line={line} />
                 {line.prep_note ? (
                   <span className="ingredient-note">, {line.prep_note}</span>
                 ) : null}

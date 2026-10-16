@@ -1,7 +1,6 @@
 import { FormEvent, useEffect, useState } from "react";
 
-import { ApiError } from "../../api/client";
-import type { PublicIngredientLine } from "../../api/client";
+import { ApiError, apiFetch } from "../../api/client";
 import {
   createBoxIngredientLine,
   createBoxStep,
@@ -11,8 +10,9 @@ import {
   patchBoxStep,
   patchRecipeBoxRecipe,
   type CollectionRecipe,
+  type IngredientLine,
 } from "../../api/collection";
-import { displayUnit, formatQuantity } from "../../lib/recipeFormat";
+import { IngredientLineText, ingredientText } from "../../lib/recipeFormat";
 import { AddIngredientLineForm } from "../AddIngredientLineForm";
 import { RecipeStepsEditor } from "../RecipeStepsEditor";
 import { IndexCard } from "./IndexCard";
@@ -49,6 +49,7 @@ export function RecipeBoxCard({
   const [draft, setDraft] = useState(recipe);
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
+  const [editingLine, setEditingLine] = useState<{ id: string; text: string } | null>(null);
 
   useEffect(() => {
     setDraft(recipe);
@@ -58,6 +59,29 @@ export function RecipeBoxCard({
     const fresh = await fetchRecipeBoxRecipe(recipe.id);
     setDraft(fresh);
     onSaved(fresh);
+  }
+
+  // The line editor saves the whole line as raw_text, which box cards show
+  // first, so an edit never leaves an out-of-date structured line on screen.
+  async function saveLine(lineId: string, text: string) {
+    const trimmed = text.trim();
+    if (!trimmed) {
+      return;
+    }
+    try {
+      await apiFetch<IngredientLine>(
+        `/api/v1/recipe-box/${draft.id}/ingredient-lines/${lineId}/`,
+        {
+          method: "PATCH",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ raw_text: trimmed }),
+        },
+      );
+      setEditingLine(null);
+      await refreshRecipe();
+    } catch (err: unknown) {
+      setError(err instanceof ApiError ? err.message : "Could not save ingredient.");
+    }
   }
 
   async function handleSave(event: FormEvent<HTMLFormElement>) {
@@ -178,16 +202,60 @@ export function RecipeBoxCard({
               <ul className="recipe-box-card__ingredients">
                 {draft.ingredient_lines.map((line) => (
                   <li key={line.id}>
-                    <span>
-                      {line.ingredient ? (
-                        <>
-                          {formatQuantity(line.quantity)}{" "}
-                          {displayUnit(line as PublicIngredientLine)} {line.ingredient_name}
-                        </>
-                      ) : (
-                        line.raw_text
-                      )}
-                    </span>
+                    {editingLine?.id === line.id ? (
+                      <>
+                        <input
+                          aria-label="Ingredient line"
+                          className="recipe-box-card__input"
+                          value={editingLine.text}
+                          onChange={(event) =>
+                            setEditingLine({ id: line.id, text: event.target.value })
+                          }
+                          onKeyDown={(event) => {
+                            if (event.key === "Enter") {
+                              event.preventDefault();
+                              void saveLine(line.id, editingLine.text);
+                            }
+                          }}
+                        />
+                        <button
+                          className="recipe-box-card__remove"
+                          type="button"
+                          onClick={() => void saveLine(line.id, editingLine.text)}
+                        >
+                          Save line
+                        </button>
+                        <button
+                          className="recipe-box-card__remove"
+                          type="button"
+                          onClick={() => setEditingLine(null)}
+                        >
+                          Cancel
+                        </button>
+                      </>
+                    ) : (
+                      <>
+                        <span>
+                          {line.raw_text || !line.ingredient ? (
+                            line.raw_text
+                          ) : (
+                            <IngredientLineText line={line} />
+                          )}
+                        </span>
+                        <button
+                          className="recipe-box-card__remove"
+                          type="button"
+                          onClick={() =>
+                            setEditingLine({
+                              id: line.id,
+                              text: line.raw_text || ingredientText(line),
+                            })
+                          }
+                        >
+                          Edit
+                        </button>
+                      </>
+                    )}
                     <button
                       className="recipe-box-card__remove"
                       type="button"
