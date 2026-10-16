@@ -1,5 +1,9 @@
+import os
+import subprocess
+import sys
 from unittest.mock import patch
 
+from django.conf import settings
 from django.contrib.auth import get_user_model
 from django.test import TestCase
 from django.utils import timezone
@@ -32,6 +36,28 @@ class DeploySurfaceTests(TestCase):
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.assertNotEqual(response.headers.get("Content-Type", ""), "text/html")
+
+
+class DebugDefaultTests(TestCase):
+    def test_debug_is_off_when_env_var_is_unset(self) -> None:
+        env = {key: value for key, value in os.environ.items() if key != "DEBUG"}
+        env["SECRET_KEY"] = "test-only-secret"
+        # Skip .env so only the code default decides.
+        script = (
+            "import dotenv; dotenv.load_dotenv = lambda *a, **k: False; "
+            "import config.settings as s; print(s.DEBUG)"
+        )
+
+        result = subprocess.run(
+            [sys.executable, "-c", script],
+            capture_output=True,
+            check=True,
+            cwd=settings.BASE_DIR,
+            env=env,
+            text=True,
+        )
+
+        self.assertEqual(result.stdout.strip(), "False")
 
 
 class ErrorBodyTests(TestCase):

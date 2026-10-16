@@ -40,7 +40,8 @@ def _postgres_config(url: str) -> dict:
     return config
 
 
-DEBUG = _flag("DEBUG", "True")
+# Off unless DEBUG=True is set (local dev: .env.example sets it).
+DEBUG = _flag("DEBUG", "False")
 SECRET_KEY = os.environ.get("SECRET_KEY", _DEV_SECRET)
 if not DEBUG and SECRET_KEY == _DEV_SECRET:
     raise ImproperlyConfigured("Set SECRET_KEY when DEBUG is False.")

@@ -35,6 +35,8 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
+`DEBUG` is off unless the environment sets it. The copied `.env` has `DEBUG=True` for local dev; without it, settings need a real `SECRET_KEY` and redirect to https.
+
 Photo scan OCR (optional): install [Tesseract](https://github.com/tesseract-ocr/tesseract) so `tesseract` is on your `PATH` (`brew install tesseract` on macOS). Without it, scans still open a draft; typed `.txt` uploads are parsed either way. Digital PDFs use `pdftotext` if present.
 
 Admin: http://127.0.0.1:8000/admin/
