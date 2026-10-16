@@ -1,3 +1,4 @@
+import json
 import os
 from decimal import Decimal
 from unittest.mock import patch
@@ -10,6 +11,7 @@ from rest_framework.test import APIClient
 
 from catalog.models import Ingredient
 
+from .management.commands.load_starter_recipes import STARTER_FILE
 from .models import CollectionRecipe, HiddenStarterRecipe, RecipeBoxItem, StarterRecipe
 from . import services
 
@@ -353,10 +355,11 @@ class LoadStarterRecipesTests(TestCase):
             first = list(StarterRecipe.objects.order_by("sort_order").values_list("id", "title"))
             call_command("load_starter_recipes")
 
-        self.assertEqual(len(first), 3)
+        expected = len(json.loads(STARTER_FILE.read_text()))
+        self.assertEqual(len(first), expected)
         self.assertEqual(
             list(StarterRecipe.objects.order_by("sort_order").values_list("id", "title")),
             first,
         )
-        self.assertEqual(StarterRecipe.objects.filter(is_active=True).count(), 3)
+        self.assertEqual(StarterRecipe.objects.filter(is_active=True).count(), expected)
         self.assertEqual(User.objects.count(), users_before)
