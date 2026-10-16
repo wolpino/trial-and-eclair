@@ -35,6 +35,8 @@ python manage.py createsuperuser
 python manage.py runserver
 ```
 
+`DEBUG` is off unless the environment sets it. The copied `.env` has `DEBUG=True` for local dev; without it, settings need a real `SECRET_KEY` and redirect to https.
+
 Photo scan OCR (optional): install [Tesseract](https://github.com/tesseract-ocr/tesseract) so `tesseract` is on your `PATH` (`brew install tesseract` on macOS). Without it, scans still open a draft; typed `.txt` uploads are parsed either way. Digital PDFs use `pdftotext` if present.
 
 Admin: http://127.0.0.1:8000/admin/
@@ -327,6 +329,15 @@ DRF scoped throttles; rates live in `REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]` i
 | `scan_import` / `scan_import_guest` | `POST /api/v1/imports/scan/` | 20/day (guest 5/day) | User |
 
 Counts live in Django's default cache (local memory), so each gunicorn worker keeps its own count and a restart resets them. A shared cache is not set up yet. Behind a proxy, set `THROTTLE_NUM_PROXIES` to the number of proxies in front of the app so the client IP is read from `X-Forwarded-For` correctly. On Render it is `3` (measured on staging, 2026-10-15); a wrong value either lets clients fake their IP or makes many users share one limit.
+
+### API errors
+
+Every error body is one of two forms (`config/exceptions.py`, DRF `EXCEPTION_HANDLER`):
+
+- **Everything except field validation:** `{"detail": "<message for the user>", "code": "<machine code>"}`. Codes include `invalid`, `parse_error`, `not_authenticated`, `permission_denied`, `not_found`, `throttled` (with a `Retry-After` header), `guest_card_limit`, `fetch_failed` (502 from URL import) and `server_error`.
+- **Field validation (400):** DRF's map, `{"<field>": ["<message>"], "non_field_errors": ["<message>"]}`.
+
+Bodies never carry exception text. Domain errors subclass `config.exceptions.UserFacingError` and views return its fixed `user_message`; any other exception is logged and returns `500 {"detail": "Something went wrong on our side. Please try again.", "code": "server_error"}` (with `DEBUG` on, Django's debug page shows instead). The frontend reads errors only in `toApiError` (`frontend/src/api/client.ts`), which sets `ApiError.message` and `ApiError.code`. The audit of every error source is in [`docs/error-audit.md`](docs/error-audit.md).
 
 ### Guest cleanup
 

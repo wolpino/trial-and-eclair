@@ -10,6 +10,10 @@ import {
   type UrlRecipeImport,
 } from "../api/imports";
 
+// Matches what the scan API accepts (library/scan.py ALLOWED_SCAN_TYPES).
+const SCAN_ACCEPT =
+  "image/jpeg,image/png,image/heic,image/heif,.heic,.heif,application/pdf,.pdf,text/plain,.txt";
+
 type RecipeImportPanelProps = {
   destination: "box" | "lab";
 };
@@ -136,7 +140,7 @@ export function RecipeImportPanel({ destination }: RecipeImportPanelProps) {
       <form className="recipe-import__row" onSubmit={(event) => void handleScan(event)}>
         <label>
           Photo or PDF
-          <input accept="image/*,.pdf,application/pdf" name="scan" type="file" />
+          <input accept={SCAN_ACCEPT} name="scan" type="file" />
         </label>
         <button className="paper-btn paper-btn--ghost" disabled={scanning} type="submit">
           {scanning ? "Reading scan…" : "Upload scan"}

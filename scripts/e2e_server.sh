@@ -16,6 +16,8 @@ fi
 DB="$ROOT/e2e.sqlite3"
 rm -f "$DB"
 export DATABASE_URL="sqlite:///${DB}"
+# Local runserver over plain http; DEBUG defaults to False otherwise.
+export DEBUG=True
 if [[ -x "$ROOT/.venv/bin/python" ]]; then
   PY="$ROOT/.venv/bin/python"
 else
