@@ -1,0 +1,353 @@
+/* Card View (decision 003): a full-screen index card for cooking. Paper stays cream
+   with dark ink in dark mode. Sideways: ingredients left, steps right, each scrolling.
+   Portrait: an ingredient band pinned on top, steps scrolling underneath. */
+
+.phone-cv {
+  position: fixed;
+  z-index: 50;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  padding: max(12px, env(safe-area-inset-top)) max(16px, env(safe-area-inset-right))
+    max(12px, env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
+  overflow: hidden;
+  background: var(--pb-paper);
+  color: var(--pb-paper-ink);
+  font-family: Georgia, serif;
+  line-height: 1.45;
+  perspective: 60rem;
+}
+
+.phone-cv__head {
+  display: flex;
+  flex: none;
+  gap: 8px;
+  align-items: flex-start;
+  justify-content: space-between;
+}
+
+.phone-cv__heading {
+  flex: 1;
+  min-width: 0;
+}
+
+.phone-cv__title {
+  margin: 0;
+  font-size: clamp(20px, 5.6vw, 24px);
+  font-weight: 600;
+  line-height: 1.2;
+  overflow-wrap: anywhere;
+}
+
+.phone-cv__meta {
+  margin: 2px 0 0;
+  color: #6b5b4b;
+  font-size: 13px;
+}
+
+.phone-cv__controls {
+  display: flex;
+  flex: none;
+  gap: 6px;
+  align-items: center;
+}
+
+.phone-cv__icon {
+  min-width: 44px;
+  min-height: 44px;
+  border: 1px solid var(--pb-rule);
+  border-radius: 999px;
+  background: transparent;
+  color: inherit;
+  font-size: 20px;
+  line-height: 1;
+  cursor: pointer;
+}
+
+.phone-cv__sun[aria-pressed="true"] {
+  border-color: #d9b866;
+  background: #fff2c4;
+  color: #8c6a24;
+}
+
+.phone-cv__sun[aria-pressed="false"] {
+  opacity: 0.5;
+}
+
+.phone-cv__menu-wrap {
+  position: relative;
+}
+
+.phone-cv__menu {
+  position: absolute;
+  z-index: 1;
+  top: calc(100% + 4px);
+  right: 0;
+  min-width: 10rem;
+  margin: 0;
+  padding: 4px;
+  border: 1px solid var(--pb-rule);
+  border-radius: 8px;
+  background: var(--pb-paper);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
+  list-style: none;
+}
+
+.phone-cv__menu button {
+  width: 100%;
+  min-height: 44px;
+  padding: 0 12px;
+  border: 0;
+  border-radius: 6px;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.phone-cv__menu button:hover,
+.phone-cv__menu button:focus-visible {
+  background: #fff2c4;
+}
+
+.phone-cv__label {
+  margin: 0;
+  color: #8a7560;
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.phone-cv__empty {
+  margin: 4px 0;
+  color: #6b5b4b;
+  font-style: italic;
+}
+
+.phone-cv__error {
+  flex: none;
+  margin: 0;
+  color: #9b2c1a;
+}
+
+/* Faces */
+
+.phone-cv__face {
+  display: flex;
+  flex: 1;
+  flex-direction: column;
+  gap: 8px;
+  min-height: 0;
+  animation: phone-cv-flip 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.1) both;
+}
+
+.phone-cv__band {
+  flex: none;
+  max-height: 40%;
+  padding-bottom: 6px;
+  overflow-y: auto;
+  border-bottom: 2px solid var(--pb-rule);
+}
+
+.phone-cv__band-toggle {
+  display: flex;
+  gap: 4px;
+  align-items: center;
+  min-height: 36px;
+  padding: 0;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  letter-spacing: inherit;
+  text-transform: inherit;
+  cursor: pointer;
+}
+
+.phone-cv__chevron {
+  display: inline-block;
+  transition: transform 0.2s;
+}
+
+.phone-cv__band-toggle[aria-expanded="false"] .phone-cv__chevron {
+  transform: rotate(-90deg);
+}
+
+.phone-cv__ingredients {
+  margin: 0;
+  padding: 0;
+  list-style: none;
+  font-size: 15px;
+}
+
+.phone-cv__tick {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  min-height: 36px;
+  padding: 4px 0;
+  cursor: pointer;
+}
+
+.phone-cv__tick input {
+  flex: none;
+  width: 20px;
+  height: 20px;
+  margin: 2px 0 0;
+  accent-color: #8c6a24;
+}
+
+.phone-cv__tick:has(input:checked) span {
+  color: #8a7560;
+  text-decoration: line-through;
+}
+
+.phone-cv__steps {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+
+.phone-cv__step-list {
+  margin: 4px 0 0;
+  padding-left: 1.5rem;
+  font-size: 16px;
+}
+
+.phone-cv__step-list li {
+  margin-bottom: 4px;
+}
+
+.phone-cv__step-list textarea {
+  vertical-align: top;
+}
+
+.phone-cv__step {
+  display: block;
+  width: 100%;
+  padding: 6px 8px;
+  border: 0;
+  border-left: 4px solid transparent;
+  border-radius: 4px;
+  background: none;
+  color: inherit;
+  font: inherit;
+  line-height: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.phone-cv__step[aria-current="step"] {
+  border-left-color: var(--pb-accent);
+  background: #fff2c4;
+}
+
+.phone-cv__back {
+  flex: 1;
+  min-height: 0;
+  overflow-y: auto;
+}
+
+.phone-cv__back p {
+  margin: 4px 0 10px;
+}
+
+.phone-cv__scan {
+  display: block;
+  max-width: 100%;
+  border: 1px solid var(--pb-rule);
+}
+
+/* Editing: same layout, fields in place of text */
+
+.phone-cv__input {
+  box-sizing: border-box;
+  width: 100%;
+  margin: 2px 0;
+  padding: 6px 8px;
+  border: 1px solid #c9b994;
+  border-radius: 4px;
+  background: #fff;
+  color: var(--pb-paper-ink);
+  font: inherit;
+}
+
+.phone-cv__title-input {
+  font-size: 20px;
+  font-weight: 600;
+}
+
+.phone-cv__meta-fields {
+  display: flex;
+  gap: 8px;
+  color: #6b5b4b;
+  font-size: 13px;
+}
+
+.phone-cv__meta-fields label {
+  display: flex;
+  flex: 1;
+  gap: 6px;
+  align-items: center;
+}
+
+/* Footer */
+
+.phone-cv__tools {
+  display: flex;
+  flex: none;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: flex-end;
+}
+
+.phone-cv__side {
+  margin-right: auto;
+  color: #6b5b4b;
+  font-size: 13px;
+}
+
+/* Sideways: two columns, each scrolling on its own */
+@media (orientation: landscape) {
+  .phone-cv__face--front {
+    flex-direction: row;
+    gap: 16px;
+  }
+
+  .phone-cv__band {
+    flex: 0 0 40%;
+    max-height: none;
+    padding: 0 12px 0 0;
+    border-right: 2px solid var(--pb-rule);
+    border-bottom: 0;
+  }
+}
+
+@keyframes phone-cv-flip {
+  from {
+    opacity: 0.4;
+    transform: rotateY(90deg);
+  }
+}
+
+@keyframes phone-cv-fade {
+  from {
+    opacity: 0;
+  }
+}
+
+/* Under Reduce Motion, turning the card over becomes a crossfade. */
+@media (prefers-reduced-motion: reduce) {
+  .phone-cv__face {
+    animation-name: phone-cv-fade;
+  }
+
+  .phone-cv__chevron {
+    transition: none;
+  }
+}

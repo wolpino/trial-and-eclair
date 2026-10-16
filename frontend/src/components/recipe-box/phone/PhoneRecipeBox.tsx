@@ -14,6 +14,7 @@ type PhoneRecipeBoxProps = {
   menu: ReactNode;
   onSelect: (id: string) => void;
   onEdit: (id: string) => void;
+  onSaved: (recipe: CollectionRecipe) => void;
   onAdd: () => void;
 };
 
@@ -33,6 +34,7 @@ export function PhoneRecipeBox({
   menu,
   onSelect,
   onEdit,
+  onSaved,
   onAdd,
 }: PhoneRecipeBoxProps) {
   const { user } = useAuth();
@@ -170,6 +172,7 @@ export function PhoneRecipeBox({
           recipe={selected}
           onClose={closeCardView}
           onEdit={() => onEdit(selected.id)}
+          onSaved={onSaved}
         />
       ) : null}
     </div>

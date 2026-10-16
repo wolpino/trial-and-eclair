@@ -12,7 +12,8 @@ test("signs in on the recipe card and opens a recipe", async ({ page }) => {
   await page.getByRole("region", { name: "Selected recipe" }).click();
   const cardView = page.getByRole("dialog", { name: "Almond Biscotti" });
   await expect(cardView).toBeVisible();
-  await cardView.getByRole("button", { name: "Edit" }).click();
+  await cardView.getByRole("button", { name: "Card menu" }).click();
+  await cardView.getByRole("menuitem", { name: "Full editor" }).click();
 
   await expect(page).toHaveURL(/\/recipe-box\/.+/);
   await expect(page.getByRole("link", { name: "Back to box" })).toBeVisible();

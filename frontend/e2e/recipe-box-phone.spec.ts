@@ -232,10 +232,10 @@ test("tapping anywhere on the lid card opens Card View; no Open recipe button", 
   await expect(cardView).toBeVisible();
   await expect(cardView.getByRole("heading", { name: "Ingredients" })).toBeVisible();
 
-  await cardView.getByRole("button", { name: "Flip card" }).click();
+  await cardView.getByRole("button", { name: "Turn over" }).click();
   await expect(cardView.getByRole("heading", { name: "Notes" })).toBeVisible();
   await expect(cardView).toContainText("Twice-baked, for dunking.");
-  await cardView.getByRole("button", { name: "Flip card" }).click();
+  await cardView.getByRole("button", { name: "Turn over" }).click();
   await expect(cardView.getByRole("heading", { name: "Ingredients" })).toBeVisible();
 
   await cardView.getByRole("button", { name: "Close" }).click();
@@ -251,10 +251,10 @@ test("Reduce Motion turns the flip into a crossfade", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
   await logIn(page);
   await lid(page).click();
-  const face = page.locator(".phone-box-cardview__face");
+  const face = page.locator(".phone-cv__face");
   await expect(face).toBeVisible();
   const animation = await face.evaluate((el) => getComputedStyle(el).animationName);
-  expect(animation).toBe("phone-box-fade");
+  expect(animation).toBe("phone-cv-fade");
 });
 
 test("the menu lists Account, Add recipe, View, then Sign out", async ({ page }) => {

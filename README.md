@@ -12,7 +12,7 @@ Recipe development and collection app — not a blog.
 
 **Phases 0–4 complete** (backend + metaphor UI + polish). Walkthrough seed fills every screen. Scan import reads text and OCR (Tesseract on PATH). Staging deploy is Render (gunicorn + WhiteNoise, same-origin SPA). Stripe, R2, and freeform cork canvas are still later.
 
-**Recipe Box** (in progress) is the phone view of the recipe box inside this app, not a separate project: see [`docs/recipe-box/README.md`](docs/recipe-box/README.md). Guest accounts with a 5-card limit, shared starter cards, rate limits and the `cleanup_guests` command are on the API, and the phone view (lid, A–Z tabs, fan, Card View) is built. Next: guest and starter-card UI on the phone (#56) and a design pass to match the prototype.
+**Recipe Box** (in progress) is the phone view of the recipe box inside this app, not a separate project: see [`docs/recipe-box/README.md`](docs/recipe-box/README.md). Guest accounts with a 5-card limit, shared starter cards, rate limits and the `cleanup_guests` command are on the API, and the phone view is built to [decision 003](docs/decisions/003-phone-recipe-box-design.md): wooden box, staggered A–Z tabs, fan, ☰ menu (#63), and a cooking Card View with two columns sideways, a pinned ingredient band, step marks, a screen wake lock and in-place editing (#64). Next: guest and starter-card UI on the phone (#56).
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
