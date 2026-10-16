@@ -1,30 +1,45 @@
-import { useCallback, useEffect, useMemo, useRef, useState, type CSSProperties } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
+import type { User } from "../../../api/client";
 import type { CollectionRecipe } from "../../../api/collection";
+import { useAuth } from "../../../auth/AuthContext";
+import { PhoneBoxTabs } from "./PhoneBoxTabs";
 import { PhoneCardView } from "./PhoneCardView";
-import { TAB_KEYS, ingredientText, metaText, tabKey } from "./cardText";
+import { ingredientText, metaText, tabKey } from "./cardText";
 import "./phone-box.css";
 
 type PhoneRecipeBoxProps = {
   recipes: CollectionRecipe[];
   selected: CollectionRecipe | undefined;
+  menu: ReactNode;
   onSelect: (id: string) => void;
   onEdit: (id: string) => void;
-  onAddFirst: () => void;
+  onAdd: () => void;
 };
 
 const LID_STEP_PREVIEW = 2;
 
+/** Engraved on the box front: "Ari's Recipes · est. 2026" (decision 003, Box label). */
+function boxLabel(user: User | null): string {
+  if (!user) {
+    return "Recipes";
+  }
+  return `${user.first_name || user.username}'s Recipes · est. ${user.date_joined.slice(0, 4)}`;
+}
+
 export function PhoneRecipeBox({
   recipes,
   selected,
+  menu,
   onSelect,
   onEdit,
-  onAddFirst,
+  onAdd,
 }: PhoneRecipeBoxProps) {
+  const { user } = useAuth();
   const [openTab, setOpenTab] = useState<string | null>(null);
   const [cardViewOpen, setCardViewOpen] = useState(false);
-  const openButtonRef = useRef<HTMLButtonElement>(null);
+  const [announcement, setAnnouncement] = useState("");
+  const lidCardRef = useRef<HTMLElement>(null);
 
   const byTab = useMemo(() => {
     const groups: Record<string, CollectionRecipe[]> = {};
@@ -48,29 +63,47 @@ export function PhoneRecipeBox({
     return () => document.removeEventListener("keydown", onKeyDown);
   }, [openTab]);
 
+  const openTabKey = useCallback(
+    (key: string | null) => {
+      setOpenTab(key);
+      if (key) {
+        const count = byTab[key]?.length ?? 0;
+        setAnnouncement(`${key}, ${count} ${count === 1 ? "card" : "cards"}`);
+      }
+    },
+    [byTab],
+  );
+
   const closeCardView = useCallback(() => {
     setCardViewOpen(false);
-    requestAnimationFrame(() => openButtonRef.current?.focus());
+    requestAnimationFrame(() => lidCardRef.current?.focus());
   }, []);
 
   const meta = selected ? metaText(selected) : "";
-  const fanCards = openTab ? (byTab[openTab] ?? []) : [];
 
   return (
     <div className="phone-box">
       <section aria-label="Selected recipe" className="phone-box-lid">
         {selected ? (
           <article
+            ref={lidCardRef}
             key={selected.id}
-            className="phone-box-card phone-box-lid__card"
+            className="phone-box-lid__card"
+            tabIndex={0}
             onClick={() => setCardViewOpen(true)}
+            onKeyDown={(event) => {
+              if (event.key === "Enter" || event.key === " ") {
+                event.preventDefault();
+                setCardViewOpen(true);
+              }
+            }}
           >
-            <h2 className="phone-box-card__title">{selected.title}</h2>
-            {meta ? <p className="phone-box-card__meta">{meta}</p> : null}
+            <h2 className="phone-box-lid__title">{selected.title}</h2>
+            {meta ? <p className="phone-box-lid__meta">{meta}</p> : null}
             {selected.ingredient_lines.length > 0 ? (
               <>
-                <h3 className="phone-box-card__label">Ingredients</h3>
-                <ul className="phone-box-card__list">
+                <h3 className="phone-box-lid__label">Ingredients</h3>
+                <ul className="phone-box-lid__list">
                   {selected.ingredient_lines.map((line) => (
                     <li key={line.id}>{ingredientText(line)}</li>
                   ))}
@@ -79,8 +112,8 @@ export function PhoneRecipeBox({
             ) : null}
             {selected.steps.length > 0 ? (
               <>
-                <h3 className="phone-box-card__label">Directions</h3>
-                <ol className="phone-box-card__list">
+                <h3 className="phone-box-lid__label">Directions</h3>
+                <ol className="phone-box-lid__list">
                   {selected.steps.slice(0, LID_STEP_PREVIEW).map((step) => (
                     <li key={step.id}>{step.body}</li>
                   ))}
@@ -88,76 +121,49 @@ export function PhoneRecipeBox({
               </>
             ) : null}
             {selected.ingredient_lines.length === 0 && selected.steps.length === 0 ? (
-              <p className="phone-box-card__empty">
+              <p className="phone-box-lid__empty">
                 {selected.description || "No ingredients or steps yet."}
               </p>
             ) : null}
-            <button
-              ref={openButtonRef}
-              className="phone-box-btn phone-box-lid__open"
-              type="button"
-              onClick={(event) => {
-                event.stopPropagation();
-                setCardViewOpen(true);
-              }}
-            >
-              Open recipe
-            </button>
           </article>
         ) : (
-          <div className="phone-box-card phone-box-lid__card phone-box-lid__card--empty">
-            <button className="phone-box-btn phone-box-btn--primary" type="button" onClick={onAddFirst}>
+          <div className="phone-box-lid__card phone-box-lid__card--empty">
+            <button className="phone-box-btn phone-box-btn--primary" type="button" onClick={onAdd}>
               Add your first recipe
             </button>
           </div>
         )}
+        <div className="phone-box-lid__menu">{menu}</div>
       </section>
 
-      <section aria-label="Recipe box" className="phone-box-front">
-        {openTab ? (
-          <ul aria-label={`Cards under ${openTab}`} className="phone-box-fan" id="phone-box-fan">
-            {fanCards.map((recipe, index) => (
-              <li key={recipe.id} style={{ "--i": index } as CSSProperties}>
-                <button
-                  aria-current={recipe.id === selected?.id ? "true" : undefined}
-                  className="phone-box-fan__card"
-                  type="button"
-                  onClick={() => {
-                    onSelect(recipe.id);
-                    setOpenTab(null);
-                  }}
-                >
-                  {recipe.title}
-                </button>
-              </li>
-            ))}
-          </ul>
-        ) : null}
-
-        <div aria-label="Divider tabs" className="phone-box-tabs" role="group">
-          {TAB_KEYS.map((key) => {
-            const count = byTab[key]?.length ?? 0;
-            const open = openTab === key;
-            return (
-              <button
-                key={key}
-                aria-controls={open ? "phone-box-fan" : undefined}
-                aria-expanded={open}
-                aria-label={`${key}, ${count} ${count === 1 ? "card" : "cards"}`}
-                className="phone-box-tab"
-                disabled={count === 0}
-                type="button"
-                onClick={() => setOpenTab(open ? null : key)}
-              >
-                {key}
-              </button>
-            );
-          })}
-        </div>
-        <div aria-hidden="true" className="phone-box-front__panel">
-          Recipes
+      <section aria-label="Recipe box" className="phone-box-box">
+        <div aria-hidden="true" className="phone-box-stack" />
+        <PhoneBoxTabs
+          byTab={byTab}
+          openTab={openTab}
+          selectedId={selected?.id}
+          onOpenTab={openTabKey}
+          onPick={(recipe) => {
+            onSelect(recipe.id);
+            setOpenTab(null);
+            setAnnouncement(`${recipe.title} selected`);
+          }}
+        />
+        <div className="phone-box-front">
+          <i aria-hidden="true" className="phone-box-latch" />
+          {boxLabel(user)}
         </div>
       </section>
+
+      {!openTab && !cardViewOpen ? (
+        <button aria-label="Add recipe" className="phone-box-plus" type="button" onClick={onAdd}>
+          +
+        </button>
+      ) : null}
+
+      <p aria-live="polite" className="phone-box-sr">
+        {announcement}
+      </p>
 
       {cardViewOpen && selected ? (
         <PhoneCardView

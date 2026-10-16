@@ -16,6 +16,7 @@ import { useAuth } from "../auth/AuthContext";
 import { RecipeBoxCard } from "../components/recipe-box/RecipeBoxCard";
 import { RecipeBoxFrame } from "../components/recipe-box/RecipeBoxFrame";
 import { RecipeBoxIndex } from "../components/recipe-box/RecipeBoxIndex";
+import { PhoneAddSheet, PhoneBoxMenu } from "../components/recipe-box/phone/PhoneBoxMenu";
 import { PhoneRecipeBox } from "../components/recipe-box/phone/PhoneRecipeBox";
 import { RecipeImportPanel } from "../components/RecipeImportPanel";
 import { usePhoneLayout } from "../lib/usePhoneLayout";
@@ -96,6 +97,7 @@ export function RecipeBoxPage() {
   useEffect(() => {
     if (recipeId) {
       setPhoneSelectedId(recipeId);
+      setPhoneAddOpen(false);
     }
   }, [recipeId]);
 
@@ -279,26 +281,19 @@ export function RecipeBoxPage() {
   }
 
   if (isPhone) {
-    const viewToggle = (
-      <div aria-label="View" className="phone-box-segment" role="group">
-        <button
-          aria-pressed={phoneView === "box"}
-          className="phone-box-btn"
-          type="button"
-          onClick={() => setPhoneView("box")}
-        >
-          Box
-        </button>
-        <button
-          aria-pressed={phoneView === "list"}
-          className="phone-box-btn"
-          type="button"
-          onClick={() => setPhoneView("list")}
-        >
-          Simple list
-        </button>
-      </div>
+    const menu = (
+      <PhoneBoxMenu
+        simpleList={phoneView === "list"}
+        onAdd={() => setPhoneAddOpen(true)}
+        onToggleSimpleList={() => setPhoneView(phoneView === "list" ? "box" : "list")}
+      />
     );
+    const addSheet = phoneAddOpen ? (
+      <PhoneAddSheet onClose={() => setPhoneAddOpen(false)}>
+        {addForm}
+        <RecipeImportPanel destination="box" />
+      </PhoneAddSheet>
+    ) : null;
 
     if (phoneView === "list") {
       return (
@@ -306,12 +301,13 @@ export function RecipeBoxPage() {
           <header className="recipe-box-page__header">
             <div className="phone-box-toolbar">
               <h1>Recipe box</h1>
-              {viewToggle}
+              {menu}
             </div>
             <RecipeImportPanel destination="box" />
             {addForm}
           </header>
           {collection}
+          {addSheet}
         </main>
       );
     }
@@ -320,37 +316,25 @@ export function RecipeBoxPage() {
       recipes.find((recipe) => recipe.id === phoneSelectedId) ?? recipes[0];
     return (
       <main className="recipe-box-page recipe-box-page--phone recipe-box-page--phone-box">
-        <div className="phone-box-toolbar">
-          <h1>Recipe box</h1>
-          {viewToggle}
-          <button
-            aria-expanded={phoneAddOpen}
-            className="phone-box-btn"
-            type="button"
-            onClick={() => setPhoneAddOpen(!phoneAddOpen)}
-          >
-            Add recipe
-          </button>
-        </div>
-        {phoneAddOpen ? (
-          <div className="phone-box-add">
-            {addForm}
-            <RecipeImportPanel destination="box" />
-          </div>
-        ) : error ? (
-          <p className="recipe-box-form-error">{error}</p>
+        <h1 className="phone-box-sr">Recipe box</h1>
+        {error && !phoneAddOpen ? (
+          <p className="recipe-box-form-error phone-box-error" role="alert">
+            {error}
+          </p>
         ) : null}
         {loading ? (
           <p className="recipe-box-page__note">Loading…</p>
         ) : (
           <PhoneRecipeBox
+            menu={menu}
             recipes={recipes}
             selected={selected}
-            onSelect={setPhoneSelectedId}
+            onAdd={() => setPhoneAddOpen(true)}
             onEdit={focusCard}
-            onAddFirst={() => setPhoneAddOpen(true)}
+            onSelect={setPhoneSelectedId}
           />
         )}
+        {addSheet}
       </main>
     );
   }
