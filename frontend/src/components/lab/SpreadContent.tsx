@@ -3,8 +3,7 @@ import { FormEvent } from "react";
 import { AddIngredientLineForm } from "../AddIngredientLineForm";
 import { RecipeStepsEditor } from "../RecipeStepsEditor";
 import type { RecipeVersion } from "../../api/development";
-import { displayUnit, formatQuantity } from "../../lib/recipeFormat";
-import type { PublicIngredientLine } from "../../api/client";
+import { IngredientLineText } from "../../lib/recipeFormat";
 
 type SpreadIngredientsProps = {
   version: RecipeVersion;
@@ -33,10 +32,7 @@ export function SpreadIngredients({
       <ul className="lab-ingredient-list">
         {version.ingredient_lines.map((line) => (
           <li key={line.id}>
-            <span className="ingredient-qty">
-              {formatQuantity(line.quantity)} {displayUnit(line as PublicIngredientLine)}
-            </span>{" "}
-            {line.ingredient_name}
+            <IngredientLineText line={line} />
             {line.prep_note ? (
               <span className="ingredient-note"> ({line.prep_note})</span>
             ) : null}
