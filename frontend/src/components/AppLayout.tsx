@@ -13,8 +13,9 @@ export function AppLayout() {
   const { user } = useAuth();
   const location = useLocation();
   const isPhone = usePhoneLayout();
+  const isPhoneOrSideways = usePhoneLayout({ sideways: true });
   // The phone box takes the whole screen; other phone pages keep the bottom bar (decision 003).
-  const phoneBox = isPhone && /^\/recipe-box\/?$/.test(location.pathname);
+  const phoneBox = isPhoneOrSideways && /^\/recipe-box\/?$/.test(location.pathname);
   const showFrame = Boolean(user) && !isPublicReadingPath(location.pathname);
 
   if (!showFrame) {
@@ -37,7 +38,7 @@ export function AppLayout() {
       <div className="app-frame">
         {phoneBox ? null : <FrameNav />}
         <div className="app-frame__body">
-          {isPhone ? null : (
+          {isPhone || phoneBox ? null : (
             <div className="app-frame__history">
               <HistoryNav />
             </div>

@@ -63,7 +63,7 @@ export function RecipeBoxPage() {
   const { recipeId } = useParams<{ recipeId?: string }>();
   const navigate = useNavigate();
   const { user } = useAuth();
-  const isPhone = usePhoneLayout();
+  const isPhone = usePhoneLayout({ sideways: true });
   const isHomeCook = user?.role === "home_cook";
 
   const [recipes, setRecipes] = useState<CollectionRecipe[]>([]);
@@ -331,6 +331,7 @@ export function RecipeBoxPage() {
             selected={selected}
             onAdd={() => setPhoneAddOpen(true)}
             onEdit={focusCard}
+            onSaved={upsertRecipe}
             onSelect={setPhoneSelectedId}
           />
         )}
