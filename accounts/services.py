@@ -2,12 +2,14 @@ from datetime import timedelta
 
 from django.utils import timezone
 
+from config.exceptions import UserFacingError
+
 from .models import SubscriptionStatus, User, UserRole
 
 TRIAL_DAYS = 14
 
 
-class TrialUnavailable(ValueError):
+class TrialUnavailable(UserFacingError):
     pass
 
 

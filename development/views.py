@@ -58,8 +58,8 @@ class IdeaViewSet(viewsets.ModelViewSet):
         title = serializer.validated_data.get("title", "").strip()
         try:
             services.promote_idea(idea, title=title or None)
-        except ValueError as exc:
-            raise ValidationError(str(exc)) from exc
+        except services.RecipeError as exc:
+            raise ValidationError(exc.user_message) from exc
         idea.refresh_from_db()
         return Response(
             IdeaSerializer(idea, context=self.get_serializer_context()).data,
@@ -119,8 +119,8 @@ class DevelopmentRecipeViewSet(viewsets.ModelViewSet):
                 story=data.get("story") if "story" in data else None,
                 hero_image=data.get("hero_image"),
             )
-        except ValueError as exc:
-            raise ValidationError(str(exc)) from exc
+        except services.RecipeError as exc:
+            raise ValidationError(exc.user_message) from exc
         recipe.refresh_from_db()
         return Response(
             DevelopmentRecipeSerializer(recipe, context=self.get_serializer_context()).data
@@ -147,8 +147,8 @@ class DevelopmentRecipeViewSet(viewsets.ModelViewSet):
         right = get_object_or_404(recipe.versions, pk=right_id)
         try:
             diff = services.compare_versions(left, right)
-        except ValueError as exc:
-            raise ValidationError(str(exc)) from exc
+        except services.RecipeError as exc:
+            raise ValidationError(exc.user_message) from exc
         return Response(diff)
 
 
@@ -394,8 +394,8 @@ class CookbookEntryViewSet(viewsets.ModelViewSet):
                 version_id=data.get("version_id"),
                 sort_order=data.get("sort_order", 0),
             )
-        except ValueError as exc:
-            raise ValidationError(str(exc)) from exc
+        except services.RecipeError as exc:
+            raise ValidationError(exc.user_message) from exc
         output = CookbookRecipeSerializer(entry, context=self.get_serializer_context())
         return Response(output.data, status=status.HTTP_201_CREATED)
 

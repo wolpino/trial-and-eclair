@@ -328,6 +328,15 @@ DRF scoped throttles; rates live in `REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]` i
 
 Counts live in Django's default cache (local memory), so each gunicorn worker keeps its own count and a restart resets them. A shared cache is not set up yet. Behind a proxy, set `THROTTLE_NUM_PROXIES` to the number of proxies in front of the app so the client IP is read from `X-Forwarded-For` correctly. On Render it is `3` (measured on staging, 2026-10-15); a wrong value either lets clients fake their IP or makes many users share one limit.
 
+### API errors
+
+Every error body is one of two forms (`config/exceptions.py`, DRF `EXCEPTION_HANDLER`):
+
+- **Everything except field validation:** `{"detail": "<message for the user>", "code": "<machine code>"}`. Codes include `invalid`, `parse_error`, `not_authenticated`, `permission_denied`, `not_found`, `throttled` (with a `Retry-After` header), `guest_card_limit`, `fetch_failed` (502 from URL import) and `server_error`.
+- **Field validation (400):** DRF's map, `{"<field>": ["<message>"], "non_field_errors": ["<message>"]}`.
+
+Bodies never carry exception text. Domain errors subclass `config.exceptions.UserFacingError` and views return its fixed `user_message`; any other exception is logged and returns `500 {"detail": "Something went wrong on our side. Please try again.", "code": "server_error"}` (with `DEBUG` on, Django's debug page shows instead). The frontend reads errors only in `toApiError` (`frontend/src/api/client.ts`), which sets `ApiError.message` and `ApiError.code`. The audit of every error source is in [`docs/error-audit.md`](docs/error-audit.md).
+
 ### Guest cleanup
 
 `cleanup_guests` deletes guest accounts with no card change, login or sign-up in the last N days, along with their cards and uploaded files (scans and card photos). Signed-up users are never touched. It is not scheduled; run it by hand (for example from the Render shell):

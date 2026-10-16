@@ -163,6 +163,8 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    # One error shape, no exception text in bodies (see README "API errors").
+    "EXCEPTION_HANDLER": "config.exceptions.api_exception_handler",
     # Scoped throttles (see README). Counts live in the default cache, so each
     # gunicorn worker keeps its own count until a shared cache is added.
     "DEFAULT_THROTTLE_RATES": {

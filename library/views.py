@@ -100,12 +100,13 @@ class UrlImportCreateView(APIView):
         url = serializer.validated_data["url"]
         try:
             record = services.import_from_url(url)
-        except services.UnsafeURLError as exc:
-            raise PermissionDenied(str(exc)) from exc
-        except services.RobotsDisallowedError as exc:
-            raise PermissionDenied(str(exc)) from exc
+        except (services.UnsafeURLError, services.RobotsDisallowedError) as exc:
+            raise PermissionDenied(exc.user_message) from exc
         except services.FetchError as exc:
-            return Response({"detail": str(exc)}, status=status.HTTP_502_BAD_GATEWAY)
+            return Response(
+                {"detail": exc.user_message, "code": "fetch_failed"},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
         output = UrlRecipeImportSerializer(record)
         return Response(output.data, status=status.HTTP_201_CREATED)
 

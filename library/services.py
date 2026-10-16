@@ -16,6 +16,7 @@ from django.db import transaction
 from django.utils import timezone
 
 from collection.models import RecipeSourceType
+from config.exceptions import UserFacingError
 from development.models import ForkType
 from development.services import (
     IngredientLineCopy,
@@ -36,15 +37,15 @@ _ISO_DURATION = re.compile(
 )
 
 
-class UnsafeURLError(ValueError):
+class UnsafeURLError(UserFacingError):
     pass
 
 
-class FetchError(Exception):
+class FetchError(UserFacingError):
     pass
 
 
-class RobotsDisallowedError(Exception):
+class RobotsDisallowedError(UserFacingError):
     pass
 
 
