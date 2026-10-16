@@ -246,7 +246,7 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout, optional string links) | Planned (post–Phase UI) |
 | **2.0 frame** | Recipe-card login, in-frame navigation, phone list and one notebook page, local walkthrough fixtures, short Playwright pass | **Milestones 1–3** — [milestone plan](milestone-1-2-technical-plan.md) |
-| **Recipe Box** | Phone recipe box (lid, A–Z tabs, fan, Card View), guest mode, starter cards, throttles. Plan: [docs/recipe-box/](recipe-box/README.md) | In progress: box card fields (#41) and guest accounts (#42) shipped; #43–#45 next |
+| **Recipe Box** | Phone recipe box (lid, A–Z tabs, fan, Card View), guest mode, starter cards, throttles. Plan: [docs/recipe-box/](recipe-box/README.md) | In progress: #41–#45, the phone box design pass (#63), ingredient text (#65) and Card View (#64) shipped; guest and starter-card UI (#56) next |
 
 **MVP (first shippable product):** Phases 0 + 1 + 2 — **complete**. A developer can iterate, publish, and share; a viewer can read published recipes at `/r/{slug}`. Home cook tier and cookbooks are Phase 3+.
 

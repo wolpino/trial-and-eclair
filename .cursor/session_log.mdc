@@ -10,6 +10,40 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-16 · Card View redesign (#64), cloud session
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-16` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (cloud) |
+| **Outcome** | completed |
+
+### Intent
+After #63 (PR #72) and #65 (PR #71) merged, build #64: the phone Card View from decision 003.
+
+### Summary
+Wrote `frontend/e2e/recipe-box-card-view.spec.ts` first (9 tests), then rebuilt `PhoneCardView.tsx` with a new `phone-card-view.css` and `useWakeLock.ts`. Sideways it shows two columns, ingredients left. In portrait, an ingredient band is pinned on top and collapses to "Ingredients (N)", with the steps scrolling underneath. "Turn over" shows notes, source and `hero_image`. Tapping a step marks it (`aria-current="step"`) and tapping an ingredient ticks it; neither is saved. The wake lock is on while the card is open, and ☀ toggles it. The ⋯ card menu has "Edit card" (in-place fields, Done saves, Cancel discards) and "Full editor" (the old `/recipe-box/:id` page). The owner approved small edits outside the Owned paths: `onSaved` is threaded through `PhoneRecipeBox.tsx` and `RecipeBoxPage.tsx`; `usePhoneLayout({ sideways: true })` (landscape, at most 500px tall) is used only by the recipe box and AppLayout's box check; old Card View CSS moved out of `phone-box.css`; "Flip card" became "Turn over" in `recipe-box-phone.spec.ts` and `walkthrough.spec.ts`. Backend, build and e2e (48) are green.
+
+### Decisions
+- **Sideways phones keep the phone box (recipe box only)**: the owner's choice; the other pages keep the 767px rule
+- **Edit card drafts the existing text only**: title, prep, cook, notes, lines (saved as raw_text) and steps. Adding or removing lines and steps stays in Full editor, so Cancel really discards
+
+### Open threads
+- Owner reviews and merges the #64 PR
+- #56 needs the owner's OK (draft)
+- The #65 formatter prints "2 egg": names don't pluralise
+- With an even number of letters, the staggered front row of tabs ends one slot short (same as the prototype)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Card View, wake lock, ingredient band, step marks, in-place edit, sideways phone
+**Files:** frontend/src/components/recipe-box/phone/PhoneCardView.tsx, frontend/src/components/recipe-box/phone/phone-card-view.css, frontend/src/components/recipe-box/phone/useWakeLock.ts, frontend/src/lib/usePhoneLayout.ts, frontend/e2e/recipe-box-card-view.spec.ts
+**Do not redo:** #63, #64, #65; the sideways-phone question
+**Resume with:** after the #64 PR merges and the owner OKs #56, start #56 from staging-render
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-16 · Phone box design pass (#63), cloud session
 
 | Field | Value |

@@ -4,7 +4,7 @@
 
 | Screen width | `/recipe-box` shows |
 | --- | --- |
-| Phone (below 768px) | Recipe Box: card in the lid, A–Z tabs, fan, full-screen Card View (#45; redesign per [003](../decisions/003-phone-recipe-box-design.md)) |
+| Phone (below 768px, or a phone held sideways: landscape and at most 500px tall) | Recipe Box: card in the lid, A–Z tabs, fan, full-screen Card View (#45, #63, #64; per [003](../decisions/003-phone-recipe-box-design.md)) |
 | Tablet, monitor | The existing wooden box with index cards |
 
 The rest of Trial and Eclair (notebook, cork board, cookbooks, references) is unchanged.
