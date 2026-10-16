@@ -9,10 +9,13 @@ test("signs in on the recipe card and opens a recipe", async ({ page }) => {
 
   await expect(page).toHaveURL(/\/recipe-box\/?$/);
   await expect(page.getByRole("heading", { name: "Recipe box" })).toBeVisible();
-  await page.locator(".recipe-box-index__row-title", { hasText: "Almond Biscotti" }).click();
+  await page.getByRole("region", { name: "Selected recipe" }).click();
+  const cardView = page.getByRole("dialog", { name: "Almond Biscotti" });
+  await expect(cardView).toBeVisible();
+  await cardView.getByRole("button", { name: "Edit" }).click();
 
   await expect(page).toHaveURL(/\/recipe-box\/.+/);
-  await expect(page.getByRole("link", { name: "Back to list" })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Back to box" })).toBeVisible();
   await expect(page.locator(".recipe-box-card__title-input")).toHaveValue("Almond Biscotti");
 });
 
