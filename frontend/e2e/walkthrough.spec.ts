@@ -23,5 +23,5 @@ test("reads a public recipe", async ({ page }) => {
   await page.goto("/r/raisin-bran-muffins");
   await expect(page.getByRole("heading", { name: "Raisin Bran Muffins" })).toBeVisible();
   await expect(page.getByRole("heading", { name: "Ingredients" })).toBeVisible();
-  await expect(page.getByText("Raisin bran cereal", { exact: true })).toBeVisible();
+  await expect(page.locator(".ingredient-list").getByText(/raisin bran cereal/i)).toBeVisible();
 });
