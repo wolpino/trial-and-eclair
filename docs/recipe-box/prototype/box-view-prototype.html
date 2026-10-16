@@ -77,6 +77,7 @@ html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font:15px/1
 .sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
 :focus-visible{outline:3px solid #2f6fd8;outline-offset:2px}
 @media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+.dec{position:fixed;inset:0;z-index:20;overflow:auto;padding:16px;background:var(--bg)}.dec[hidden]{display:none}.dec pre{max-width:440px;margin:12px auto;white-space:pre-wrap;font:13px/1.45 system-ui,sans-serif}.dec button{min-height:44px;padding:0 16px;border:1px solid var(--line);border-radius:999px;background:var(--ctl);color:var(--ink);font:inherit;cursor:pointer;display:block;margin:0 auto}#decBtn{border:0;background:none;color:var(--ink);padding:0 12px;min-height:44px;font:inherit;font-size:14px;cursor:pointer}
 </style>
 </head>
 <body>
@@ -85,6 +86,7 @@ html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font:15px/1
     <div class="seg" role="group" aria-label="Look"><button data-look="tidy" aria-pressed="true">Tidy</button><button data-look="wild" aria-pressed="false">Wild West</button></div>
     <div class="seg" role="group" aria-label="Tabs"><button data-sort="cat" aria-pressed="true">Categories</button><button data-sort="az" aria-pressed="false">A–Z</button></div>
     <div class="seg"><button id="stress" aria-pressed="false">Test: all letters</button></div>
+    <div class="seg"><button id="decBtn" aria-expanded="false" aria-controls="dec">Decisions</button></div>
     <div class="seg" id="colors" role="group" aria-label="Tidy tab color"></div>
   </div>
   <section class="lid" aria-label="Selected recipe"><article class="card" id="card"></article></section>
@@ -94,6 +96,54 @@ html,body{height:100%;margin:0;background:var(--bg);color:var(--ink);font:15px/1
     <div class="tabs" id="tabs" role="group" aria-label="Divider tabs"></div>
     <div class="front grain"><i class="latch"></i>Recipes · est. 2026</div>
   </section>
+  <section id="dec" class="dec" hidden aria-label="Design decisions"><button id="decClose">Close</button><pre># Box View: design decisions (from prototype v7)
+
+Source of truth for the look. The runnable reference is `box-view-prototype.html` in this folder. Where this file and the prototype disagree, fix the prototype and update this file.
+
+## Structure
+- Front-on view. The selected card sits in the open lid; divider tabs sit in front of it; the box front is below. (Perspective or depth is a later polish item.)
+- The box image is the navigation. Tap a tab to fan out that tab&#x27;s cards as horizontally scrolling chips. Tap a chip to put the card in the lid.
+- Chips show the recipe title only (no time, no other meta).
+- Escape closes an open tab.
+
+## Two looks
+- **Tidy**: every card uses the same clean typed style with ruled lines. Tab color is user-selectable: Cream (#f1e3c4, default), Sage #d9e8c8, Sky #cfe0ee, Rose #f3d4c4, Butter #f2e6a8.
+- **Wild West**: not random or messy. It means flexibility: each card is styled by its **source type**. Style is tied to type for now; per-card overrides and per-tab colors come later.
+  - typed: typed font, ruled lines
+  - hand (handwritten card scan): script font, ruled lines, blue ink
+  - card (recipe card scan): red header band, ruled lines
+  - cook (cookbook scan): serif small-caps title, page number, page gutter shading
+  - blog (web import): white page with a URL bar strip
+- Default categories use the typed font. Custom categories (e.g. &quot;Mom&#x27;s&quot;) may use a handwriting font on the tab in Wild West.
+- No tilt, rotation, or random offsets anywhere. Removed on purpose.
+
+## Tabs
+- Category tabs size to their labels, overlap slightly, and wrap to a second row when they do not fit. Text must never run over a neighbouring tab.
+- A-Z tabs show only letters that have recipes, plus `#` for non-letters. Empty letters collapse to small slivers when there is room.
+- A-Z tabs run edge to edge, with the letter centered on its tab.
+- When more than 12 letters are in use, tabs switch to a two-row stagger: alternating tabs sit high and low, each about 3 slots wide so they overlap. Odd tabs (A, C, E...) are in the front row and cover the others; the in-between ones sit behind. Open question: whether the user wanted a different front/back split (&quot;A &gt; #&quot;).
+- Scrub: dragging a finger along the A-Z tabs jumps between letters and shows a large letter bubble above the finger.
+- Landscape with letters along the bottom is a later item.
+- Tap target note: the A-Z tabs are smaller than 48px. Scrub and the stagger are the mitigation. Re-check against R1-AC4 on a real phone.
+
+## Motion
+- Selected card slides up into the lid (~0.42s, springy). Open tab lifts 9px. Chips rise in with a small stagger.
+- All motion is disabled under `prefers-reduced-motion`.
+
+## Visual tokens
+- Wood: #b0814d / #8a5f34 / #6e4a28 with a faint vertical grain; dark box inside #4a321c.
+- Paper #fffaf0, rule lines #e3d6bd, accent #b5472b, page background #efe6d8.
+- Dark mode supported (follows system, `data-theme` override).
+- Body font system-ui; card text Georgia; handwriting stack: Segoe Script, Bradley Hand, Snell Roundhand, cursive.
+- Minimum control height 44px; focus ring 3px #2f6fd8.
+
+## Accessibility baseline
+- Tabs are buttons with `aria-expanded`, `aria-controls`, and labels like &quot;Desserts, 3 cards&quot;. Empty tabs are disabled. Selection changes are announced through an `aria-live` region.
+
+## Still rough or later
+- Background behind the tabs is a placeholder; it should look like the reference photos.
+- Per-card style override, per-tab colors, landscape view, perspective/depth.
+</pre></section>
   <div class="bubble" id="bubble" hidden></div>
   <p class="sr" id="live" aria-live="polite"></p>
 </main>
@@ -136,7 +186,7 @@ function drawTabs(){
     b.setAttribute('aria-expanded',open===k);b.setAttribute('aria-controls','fan');
     b.setAttribute('aria-label',k+', '+n+(n===1?' card':' cards'));
     b.onclick=()=>toggle(k);
-    if(stag){const N=keys.length+1;Object.assign(b.style,{left:(i/N*100)+'%',width:(2/N*100)+'%',top:i%2?'24px':'0',height:i%2?'30px':'38px',zIndex:i%2?2:1})}
+    if(stag){const N=keys.length+2;Object.assign(b.style,{left:(i/N*100)+'%',width:(3/N*100)+'%',top:i%2?'0':'24px',height:i%2?'38px':'30px',zIndex:i%2?1:2})}
     t.appendChild(b);
     if(az&&!stag){const a=LET.indexOf(k),nx=keys[i+1],e=nx?LET.indexOf(nx[0]):LET.length;if(e-a>1){const s=document.createElement('span');s.className='sliver';s.setAttribute('aria-hidden','true');s.title=LET[a+1]+(e-a>2?'–'+LET[e-1]:'')+' (no recipes)';t.appendChild(s)}}
   });
@@ -175,6 +225,7 @@ const COLORS=[['Cream','#f1e3c4'],['Sage','#d9e8c8'],['Sky','#cfe0ee'],['Rose','
 let chosen=COLORS[0][1];
 function applyTab(){document.documentElement.style.setProperty('--tab',look==='tidy'?chosen:COLORS[0][1]);$('colors').hidden=look!=='tidy'}
 COLORS.forEach(([n,c],i)=>{const b=document.createElement('button');b.className='swatch';b.style.setProperty('--c',c);b.innerHTML='<i></i>';b.setAttribute('aria-label',n+' tabs');b.setAttribute('aria-pressed',i===0);b.onclick=()=>{chosen=c;document.querySelectorAll('.swatch').forEach(x=>x.setAttribute('aria-pressed',x===b));applyTab()};$('colors').appendChild(b)});
+$("decBtn").onclick=()=>{$("dec").hidden=false;$("decBtn").setAttribute("aria-expanded","true");$("decClose").focus()};$("decClose").onclick=()=>{$("dec").hidden=true;$("decBtn").setAttribute("aria-expanded","false");$("decBtn").focus()};
 applyTab();
 drawCard();drawTabs();drawFan();
 </script>
