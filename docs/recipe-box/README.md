@@ -27,5 +27,5 @@ The files below were copied from the old standalone `wolpino/recipe-box` repo on
 
 1. ~~Write `gap-list.md`~~ done.
 2. ~~Decision records~~ done: [001](../decisions/001-recipe-box-in-frontend.md) (Recipe Box in `frontend/`, A–Z only), [002](../decisions/002-guest-mode.md) (guest mode).
-3. Pick the starter recipes (placeholders until then).
+3. ~~Pick the starter recipes~~ done: six in `seed/data/starter_recipes.json`; the owner can change them any time.
 4. Turn the gap list into 3–5 tickets.

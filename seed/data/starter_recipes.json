@@ -1,56 +1,145 @@
 [
   {
-    "title": "PLACEHOLDER starter: weeknight pasta",
-    "servings": 2,
-    "prep_minutes": 5,
-    "cook_minutes": 15,
-    "source_type": "typed",
+    "title": "Banana Bread",
+    "servings": 10,
+    "prep_minutes": 15,
+    "cook_minutes": 60,
+    "source_type": "handwritten",
     "ingredient_lines": [
-      "PLACEHOLDER - owner replaces this recipe",
-      "200 g dried pasta",
-      "2 tbsp olive oil",
-      "salt to taste"
+      "3 very ripe bananas",
+      "1/3 cup butter, melted",
+      "3/4 cup sugar",
+      "1 egg, beaten",
+      "1 tsp vanilla",
+      "1 tsp baking soda",
+      "pinch of salt",
+      "1 1/2 cups all-purpose flour"
     ],
     "steps": [
-      "PLACEHOLDER - owner replaces this recipe.",
-      "Boil the pasta in salted water.",
-      "Drain and toss with olive oil."
+      "Heat the oven to 350°F (175°C) and butter a 9x5 loaf pan.",
+      "Mash the bananas in a bowl and stir in the melted butter.",
+      "Mix in the sugar, egg and vanilla.",
+      "Sprinkle the baking soda and salt over the batter and stir, then fold in the flour until just combined.",
+      "Bake 55 to 65 minutes, until a skewer in the middle comes out clean. Cool 10 minutes in the pan."
     ]
   },
   {
-    "title": "PLACEHOLDER starter: simple salad",
+    "title": "Chocolate Chip Cookies",
+    "servings": 24,
+    "prep_minutes": 20,
+    "cook_minutes": 12,
+    "source_type": "recipe_card",
+    "ingredient_lines": [
+      "2 1/4 cups all-purpose flour",
+      "1 tsp baking soda",
+      "1 tsp salt",
+      "1 cup butter, softened",
+      "3/4 cup sugar",
+      "3/4 cup packed brown sugar",
+      "2 eggs",
+      "2 tsp vanilla",
+      "2 cups chocolate chips"
+    ],
+    "steps": [
+      "Heat the oven to 375°F (190°C).",
+      "Whisk the flour, baking soda and salt in a small bowl.",
+      "Beat the butter and both sugars until creamy, then beat in the eggs and vanilla.",
+      "Stir in the flour mixture, then the chocolate chips.",
+      "Drop rounded tablespoons onto ungreased baking sheets.",
+      "Bake 9 to 11 minutes, until golden at the edges. Cool 2 minutes on the sheet, then move to a rack."
+    ]
+  },
+  {
+    "title": "Lemon Garlic Chicken Thighs",
+    "servings": 4,
+    "prep_minutes": 10,
+    "cook_minutes": 40,
+    "source_type": "typed",
+    "ingredient_lines": [
+      "8 bone-in, skin-on chicken thighs",
+      "2 lemons",
+      "4 cloves garlic, minced",
+      "2 tbsp olive oil",
+      "1 tsp dried thyme",
+      "1 tsp salt",
+      "1/2 tsp black pepper"
+    ],
+    "steps": [
+      "Heat the oven to 425°F (220°C).",
+      "Zest and juice one lemon. Mix the zest and juice with the garlic, oil, thyme, salt and pepper.",
+      "Toss the chicken in the mixture and lay it skin side up in a baking dish. Slice the second lemon and tuck the slices around the chicken.",
+      "Roast 35 to 40 minutes, until the skin is crisp and the thickest piece reads 175°F (80°C).",
+      "Rest 5 minutes and spoon the pan juices over before serving."
+    ]
+  },
+  {
+    "title": "Sunday Pancakes",
+    "servings": 4,
+    "prep_minutes": 10,
+    "cook_minutes": 20,
+    "source_type": "typed",
+    "ingredient_lines": [
+      "1 1/2 cups all-purpose flour",
+      "2 tbsp sugar",
+      "2 tsp baking powder",
+      "1/2 tsp salt",
+      "1 1/4 cups milk",
+      "1 egg",
+      "3 tbsp butter, melted, plus more for the pan"
+    ],
+    "steps": [
+      "Whisk the flour, sugar, baking powder and salt in a large bowl.",
+      "Whisk the milk, egg and melted butter in another bowl.",
+      "Pour the wet into the dry and stir until just combined. A few lumps are fine.",
+      "Heat a griddle over medium heat and butter it lightly.",
+      "Pour 1/4 cup of batter per pancake. Flip when bubbles pop on top and the edges look set, about 2 minutes, then cook 1 to 2 minutes more."
+    ]
+  },
+  {
+    "title": "Tomato Soup",
+    "servings": 4,
+    "prep_minutes": 10,
+    "cook_minutes": 35,
+    "source_type": "cookbook",
+    "ingredient_lines": [
+      "2 tbsp butter",
+      "1 onion, chopped",
+      "2 cloves garlic, sliced",
+      "1 can (28 oz) whole tomatoes",
+      "2 cups vegetable or chicken stock",
+      "1 tsp sugar",
+      "salt and pepper to taste",
+      "1/2 cup cream (optional)"
+    ],
+    "steps": [
+      "Melt the butter in a pot over medium heat and cook the onion until soft, about 8 minutes.",
+      "Add the garlic and cook 1 minute.",
+      "Add the tomatoes with their juice, the stock and the sugar. Simmer 20 minutes.",
+      "Blend until smooth.",
+      "Stir in the cream if using, and season with salt and pepper."
+    ]
+  },
+  {
+    "title": "Weeknight Fried Rice",
     "servings": 2,
     "prep_minutes": 10,
-    "cook_minutes": null,
+    "cook_minutes": 10,
     "source_type": "typed",
     "ingredient_lines": [
-      "PLACEHOLDER - owner replaces this recipe",
-      "1 head lettuce",
-      "1 tbsp vinegar",
-      "2 tbsp olive oil"
+      "3 cups cooked rice, cold",
+      "2 eggs, beaten",
+      "2 tbsp neutral oil",
+      "1 cup frozen peas and carrots",
+      "3 green onions, sliced",
+      "2 tbsp soy sauce",
+      "1 tsp sesame oil"
     ],
     "steps": [
-      "PLACEHOLDER - owner replaces this recipe.",
-      "Wash and tear the lettuce.",
-      "Whisk the dressing and toss."
-    ]
-  },
-  {
-    "title": "PLACEHOLDER starter: baked potato",
-    "servings": 1,
-    "prep_minutes": 5,
-    "cook_minutes": 60,
-    "source_type": "typed",
-    "ingredient_lines": [
-      "PLACEHOLDER - owner replaces this recipe",
-      "1 large potato",
-      "butter",
-      "salt"
-    ],
-    "steps": [
-      "PLACEHOLDER - owner replaces this recipe.",
-      "Bake the potato at 200 C until tender.",
-      "Split and add butter and salt."
+      "Heat 1 tbsp of the oil in a large pan over high heat. Scramble the eggs, then move them to a plate.",
+      "Add the rest of the oil and the peas and carrots. Cook 2 minutes.",
+      "Add the rice, break up any clumps, and fry 3 to 4 minutes.",
+      "Return the eggs, add the soy sauce and green onions, and toss.",
+      "Take off the heat and stir in the sesame oil."
     ]
   }
 ]
