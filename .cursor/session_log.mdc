@@ -10,6 +10,40 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-16 · Phone recipe box design decisions (003)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-16` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code |
+| **Outcome** | completed |
+
+### Intent
+Go through the phone box design checklist with the owner, record the answers as decision 003, and file Task issues for the work.
+
+### Summary
+The owner decided every item: menu, fan, dark mode, ingredient text, Card View, and what comes later. `docs/decisions/003-phone-recipe-box-design.md` records them, and `docs/recipe-box/README.md` links to it. The proto-recover session confirmed that the v7 fan matches the artifact, so the fan is final. Filed #62 (this doc), #63 (design pass), #64 (Card View), #65 (ingredient text everywhere) and drafts #66–#69 (dark mode for the rest of the app, Appearance, tray, servings scaler). #56 now depends on #63, and its guest items go in the new ☰ menu.
+
+### Decisions
+- **Bottom bar hidden on the phone box; one ☰ menu; floating + only while browsing**
+- **Ingredient text: ¾ / 1½, "2 cups flour", no "whole", raw_text first and written on edit, on every screen**
+- **Card View: two columns sideways, pinned ingredient band in portrait, scrolling, flip only to the back, wake lock on**
+- **Box label: "<name>'s Recipes · est. <year joined>"**
+
+### Open threads
+- Owner merges #61 (prototype v7) and this PR
+- Order: #63 and #65 in parallel, then #64, then #56
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phone recipe box, decision 003, menu, fan, dark mode, recipeFormat, Card View, wake lock
+**Files:** docs/decisions/003-phone-recipe-box-design.md, docs/recipe-box/README.md
+**Do not redo:** the 003 checklist; filing #62–#69; editing #56
+**Resume with:** after #61 merges, hand #63 and #65 to worktree subagents
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-15 · Recipe Box milestone: #43, #44, #45
 
 | Field | Value |
