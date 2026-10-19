@@ -10,20 +10,40 @@ import {
   deleteRecipeBoxRecipe,
   fetchRecipeBox,
   fetchRecipeBoxRecipe,
+  fetchStarterRecipes,
+  forkStarterRecipe,
+  hideStarterRecipe,
+  type BoxCard,
   type CollectionRecipe,
 } from "../api/collection";
+import { GUEST_CARD_LIMIT, isGuest } from "../auth/access";
 import { useAuth } from "../auth/AuthContext";
 import { RecipeBoxCard } from "../components/recipe-box/RecipeBoxCard";
 import { RecipeBoxFrame } from "../components/recipe-box/RecipeBoxFrame";
 import { RecipeBoxIndex } from "../components/recipe-box/RecipeBoxIndex";
 import { PhoneAddSheet, PhoneBoxMenu } from "../components/recipe-box/phone/PhoneBoxMenu";
 import { PhoneRecipeBox } from "../components/recipe-box/phone/PhoneRecipeBox";
+import {
+  GUEST_CLEANUP_NOTE,
+  PhoneSignUpCard,
+} from "../components/recipe-box/phone/PhoneSignUpCard";
 import { RecipeImportPanel } from "../components/RecipeImportPanel";
 import { usePhoneLayout } from "../lib/usePhoneLayout";
 import "../styles/recipe-box.css";
 
 function sortRecipes(recipes: CollectionRecipe[]): CollectionRecipe[] {
   return [...recipes].sort((a, b) => a.title.localeCompare(b.title));
+}
+
+/** A–Z with the starter cards mixed in; on a tie the person's own card comes first. */
+function sortCards(cards: BoxCard[]): BoxCard[] {
+  return [...cards].sort(
+    (a, b) => a.title.localeCompare(b.title) || Number(!!a.is_starter) - Number(!!b.is_starter),
+  );
+}
+
+function isGuestLimit(err: unknown): boolean {
+  return err instanceof ApiError && err.code === "guest_card_limit";
 }
 
 function groupByLetter(recipes: CollectionRecipe[]): Record<string, CollectionRecipe[]> {
@@ -62,9 +82,11 @@ async function addFirstDetail(
 export function RecipeBoxPage() {
   const { recipeId } = useParams<{ recipeId?: string }>();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, ensureUser } = useAuth();
   const isPhone = usePhoneLayout({ sideways: true });
-  const isHomeCook = user?.role === "home_cook";
+  // Visitors become home-cook guests on their first save (decision 002).
+  const isHomeCook = !user || user.role === "home_cook";
+  const signedUp = !!user && !user.is_guest;
 
   const [recipes, setRecipes] = useState<CollectionRecipe[]>([]);
   const [newTitle, setNewTitle] = useState("");
@@ -77,6 +99,9 @@ export function RecipeBoxPage() {
   const [phoneView, setPhoneView] = useState<"box" | "list">("box");
   const [phoneSelectedId, setPhoneSelectedId] = useState<string | null>(null);
   const [phoneAddOpen, setPhoneAddOpen] = useState(false);
+  const [starters, setStarters] = useState<BoxCard[]>([]);
+  const [signUpFor, setSignUpFor] = useState<"add" | "fork" | null>(null);
+  const [forking, setForking] = useState(false);
 
   const grouped = useMemo(() => groupByLetter(recipes), [recipes]);
   const letters = useMemo(() => Object.keys(grouped).sort(), [grouped]);
@@ -85,13 +110,27 @@ export function RecipeBoxPage() {
     [recipeId, recipes],
   );
 
+  const atGuestLimit = isGuest(user) && recipes.length >= GUEST_CARD_LIMIT;
+  const phoneCards = useMemo(() => sortCards([...recipes, ...starters]), [recipes, starters]);
+
   useEffect(() => {
-    fetchRecipeBox()
-      .then((items) => setRecipes(sortRecipes(items)))
-      .catch((err: unknown) => {
-        setError(errorText(err, "Could not load recipe box."));
-      })
-      .finally(() => setLoading(false));
+    // Visitors (phone only) have no box yet, just the starter cards.
+    const box = user
+      ? fetchRecipeBox()
+          .then((items) => setRecipes(sortRecipes(items)))
+          .catch((err: unknown) => {
+            setError(errorText(err, "Could not load recipe box."));
+          })
+      : Promise.resolve();
+    const starterCards = isPhone
+      ? fetchStarterRecipes()
+          .then(setStarters)
+          .catch((err: unknown) => {
+            setError(errorText(err, "Could not load the starter cards."));
+          })
+      : Promise.resolve();
+    void Promise.all([box, starterCards]).finally(() => setLoading(false));
+    // Load once on mount: a visitor turning into a guest has no cards to fetch.
   }, []);
 
   useEffect(() => {
@@ -130,6 +169,47 @@ export function RecipeBoxPage() {
     navigate("/recipe-box");
   }
 
+  function openPhoneAdd() {
+    if (atGuestLimit) {
+      setSignUpFor("add");
+      return;
+    }
+    setPhoneAddOpen(true);
+  }
+
+  async function handleFork(starter: BoxCard) {
+    if (atGuestLimit) {
+      setSignUpFor("fork");
+      return;
+    }
+    setForking(true);
+    setError(null);
+    try {
+      await ensureUser();
+      const copy = await forkStarterRecipe(starter.id);
+      upsertRecipe(copy);
+      setPhoneSelectedId(copy.id);
+    } catch (err: unknown) {
+      if (isGuestLimit(err)) {
+        setSignUpFor("fork");
+      } else {
+        setError(errorText(err, "Could not fork the card."));
+      }
+    } finally {
+      setForking(false);
+    }
+  }
+
+  async function handleHide(starter: BoxCard) {
+    setError(null);
+    try {
+      await hideStarterRecipe(starter.id);
+      setStarters((current) => current.filter((card) => card.id !== starter.id));
+    } catch (err: unknown) {
+      setError(errorText(err, "Could not hide the card."));
+    }
+  }
+
   function clearAddForm() {
     setNewTitle("");
     setIngredientName("");
@@ -166,6 +246,7 @@ export function RecipeBoxPage() {
     setAdding(true);
     setError(null);
     try {
+      await ensureUser();
       const created = await createRecipeBoxRecipe(title || "Untitled recipe");
       upsertRecipe(created);
       let saved = created;
@@ -190,7 +271,12 @@ export function RecipeBoxPage() {
       clearAddForm();
       navigate(`/recipe-box/${saved.id}`);
     } catch (err: unknown) {
-      setError(errorText(err, "Could not add card."));
+      if (isPhone && isGuestLimit(err)) {
+        setPhoneAddOpen(false);
+        setSignUpFor("add");
+      } else {
+        setError(errorText(err, "Could not add card."));
+      }
     } finally {
       setAdding(false);
     }
@@ -283,17 +369,36 @@ export function RecipeBoxPage() {
   if (isPhone) {
     const menu = (
       <PhoneBoxMenu
+        cardCount={recipes.length}
         simpleList={phoneView === "list"}
-        onAdd={() => setPhoneAddOpen(true)}
+        onAdd={openPhoneAdd}
         onToggleSimpleList={() => setPhoneView(phoneView === "list" ? "box" : "list")}
       />
     );
-    const addSheet = phoneAddOpen ? (
-      <PhoneAddSheet onClose={() => setPhoneAddOpen(false)}>
-        {addForm}
-        <RecipeImportPanel destination="box" />
-      </PhoneAddSheet>
-    ) : null;
+    const guestNote = signedUp ? null : (
+      <p className="recipe-box-page__note">{GUEST_CLEANUP_NOTE}</p>
+    );
+    // URL and scan import for guests come in a later task (#56, Out of scope).
+    const importPanel = signedUp ? <RecipeImportPanel destination="box" /> : null;
+    let addSheet: ReactNode = null;
+    if (signUpFor) {
+      addSheet = (
+        <PhoneAddSheet
+          title={signUpFor === "fork" ? "Fork to my box" : "Add recipe"}
+          onClose={() => setSignUpFor(null)}
+        >
+          <PhoneSignUpCard />
+        </PhoneAddSheet>
+      );
+    } else if (phoneAddOpen) {
+      addSheet = (
+        <PhoneAddSheet onClose={() => setPhoneAddOpen(false)}>
+          {guestNote}
+          {addForm}
+          {importPanel}
+        </PhoneAddSheet>
+      );
+    }
 
     if (phoneView === "list") {
       return (
@@ -303,8 +408,15 @@ export function RecipeBoxPage() {
               <h1>Recipe box</h1>
               {menu}
             </div>
-            <RecipeImportPanel destination="box" />
-            {addForm}
+            {importPanel}
+            {atGuestLimit ? (
+              <PhoneSignUpCard />
+            ) : (
+              <>
+                {guestNote}
+                {addForm}
+              </>
+            )}
           </header>
           {collection}
           {addSheet}
@@ -313,11 +425,11 @@ export function RecipeBoxPage() {
     }
 
     const selected =
-      recipes.find((recipe) => recipe.id === phoneSelectedId) ?? recipes[0];
+      phoneCards.find((card) => card.id === phoneSelectedId) ?? phoneCards[0];
     return (
       <main className="recipe-box-page recipe-box-page--phone recipe-box-page--phone-box">
         <h1 className="phone-box-sr">Recipe box</h1>
-        {error && !phoneAddOpen ? (
+        {error && !phoneAddOpen && !signUpFor ? (
           <p className="recipe-box-form-error phone-box-error" role="alert">
             {error}
           </p>
@@ -326,11 +438,14 @@ export function RecipeBoxPage() {
           <p className="recipe-box-page__note">Loading…</p>
         ) : (
           <PhoneRecipeBox
+            busy={forking}
             menu={menu}
-            recipes={recipes}
+            recipes={phoneCards}
             selected={selected}
-            onAdd={() => setPhoneAddOpen(true)}
+            onAdd={openPhoneAdd}
             onEdit={focusCard}
+            onFork={(starter) => void handleFork(starter)}
+            onHide={signedUp ? (starter) => void handleHide(starter) : undefined}
             onSaved={upsertRecipe}
             onSelect={setPhoneSelectedId}
           />

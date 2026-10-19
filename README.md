@@ -12,7 +12,7 @@ Recipe development and collection app — not a blog.
 
 **Phases 0–4 complete** (backend + metaphor UI + polish). Walkthrough seed fills every screen. Scan import reads text and OCR (Tesseract on PATH). Staging deploy is Render (gunicorn + WhiteNoise, same-origin SPA). Stripe, R2, and freeform cork canvas are still later.
 
-**Recipe Box** (in progress) is the phone view of the recipe box inside this app, not a separate project: see [`docs/recipe-box/README.md`](docs/recipe-box/README.md). Guest accounts with a 5-card limit, shared starter cards, rate limits and the `cleanup_guests` command are on the API, and the phone view is built to [decision 003](docs/decisions/003-phone-recipe-box-design.md): wooden box, staggered A–Z tabs, fan, ☰ menu (#63), and a cooking Card View with two columns sideways, a pinned ingredient band, step marks, a screen wake lock and in-place editing (#64). Next: guest and starter-card UI on the phone (#56).
+**Recipe Box** (in progress) is the phone view of the recipe box inside this app, not a separate project: see [`docs/recipe-box/README.md`](docs/recipe-box/README.md). Guest accounts with a 5-card limit, shared starter cards, rate limits and the `cleanup_guests` command are on the API, and the phone view is built to [decision 003](docs/decisions/003-phone-recipe-box-design.md): wooden box, staggered A–Z tabs, fan, ☰ menu (#63), and a cooking Card View with two columns sideways, a pinned ingredient band, step marks, a screen wake lock and in-place editing (#64). On a phone, visitors see the starter cards, their first save makes a guest, and guests get a sign-up card at 5 cards; signed-up people can fork or hide starters (#56).
 
 At the end of each phase, update this README and [`docs/PRD.md`](docs/PRD.md) (status table, shipped scope, setup notes).
 
@@ -196,11 +196,11 @@ Open http://localhost:5173/r/your-recipe-slug or `/c/your-cookbook-slug` after p
 
 | Route | Access | Purpose |
 |-------|--------|---------|
-| `/login`, `/register` | Guest | Session auth |
+| `/login`, `/register` | Visitor or guest | Session auth; a guest who registers keeps their cards |
 | `/developer` | Developer | Cork board (ideas) |
 | `/developer/lab`, `/developer/lab/:id` | Developer | Lab — recipe shelf + notebook editor |
 | `/developer/cookbooks`, `/developer/cookbooks/:id` | Developer | Cookbook manager |
-| `/recipe-box` | Authenticated | Home cook recipe box (A–Z; `:id` deep-link → focused card) |
+| `/recipe-box` | Authenticated; visitors too on a phone | Home cook recipe box (A–Z; `:id` deep-link → focused card). On a phone, visitors see the starter cards and their first save makes a guest |
 | `/references` | Authenticated | Reference library |
 
 Recipes can be created **without an idea** in both lab (`POST /recipes/`) and recipe box (`POST /recipe-box/`). Idea promote is optional (Phase UI C2/C6).

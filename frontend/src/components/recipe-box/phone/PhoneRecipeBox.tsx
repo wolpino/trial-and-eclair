@@ -1,7 +1,7 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 
 import type { User } from "../../../api/client";
-import type { CollectionRecipe } from "../../../api/collection";
+import type { BoxCard, CollectionRecipe } from "../../../api/collection";
 import { useAuth } from "../../../auth/AuthContext";
 import { PhoneBoxTabs } from "./PhoneBoxTabs";
 import { PhoneCardView } from "./PhoneCardView";
@@ -9,13 +9,18 @@ import { ingredientText, metaText, tabKey } from "./cardText";
 import "./phone-box.css";
 
 type PhoneRecipeBoxProps = {
-  recipes: CollectionRecipe[];
-  selected: CollectionRecipe | undefined;
+  /** The person's cards and the starter cards, sorted A–Z together. */
+  recipes: BoxCard[];
+  selected: BoxCard | undefined;
   menu: ReactNode;
   onSelect: (id: string) => void;
   onEdit: (id: string) => void;
   onSaved: (recipe: CollectionRecipe) => void;
   onAdd: () => void;
+  onFork: (starter: BoxCard) => void;
+  /** Only signed-up people can hide a starter card (decision 002). */
+  onHide?: (starter: BoxCard) => void;
+  busy?: boolean;
 };
 
 const LID_STEP_PREVIEW = 2;
@@ -24,6 +29,9 @@ const LID_STEP_PREVIEW = 2;
 function boxLabel(user: User | null): string {
   if (!user) {
     return "Recipes";
+  }
+  if (user.is_guest) {
+    return `Recipes · est. ${user.date_joined.slice(0, 4)}`;
   }
   return `${user.first_name || user.username}'s Recipes · est. ${user.date_joined.slice(0, 4)}`;
 }
@@ -36,6 +44,9 @@ export function PhoneRecipeBox({
   onEdit,
   onSaved,
   onAdd,
+  onFork,
+  onHide,
+  busy = false,
 }: PhoneRecipeBoxProps) {
   const { user } = useAuth();
   const [openTab, setOpenTab] = useState<string | null>(null);
@@ -44,7 +55,7 @@ export function PhoneRecipeBox({
   const lidCardRef = useRef<HTMLElement>(null);
 
   const byTab = useMemo(() => {
-    const groups: Record<string, CollectionRecipe[]> = {};
+    const groups: Record<string, BoxCard[]> = {};
     for (const recipe of recipes) {
       const key = tabKey(recipe);
       groups[key] = [...(groups[key] ?? []), recipe];
@@ -87,47 +98,72 @@ export function PhoneRecipeBox({
     <div className="phone-box">
       <section aria-label="Selected recipe" className="phone-box-lid">
         {selected ? (
-          <article
-            ref={lidCardRef}
-            key={selected.id}
-            className="phone-box-lid__card"
-            tabIndex={0}
-            onClick={() => setCardViewOpen(true)}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                setCardViewOpen(true);
-              }
-            }}
-          >
-            <h2 className="phone-box-lid__title">{selected.title}</h2>
-            {meta ? <p className="phone-box-lid__meta">{meta}</p> : null}
-            {selected.ingredient_lines.length > 0 ? (
-              <>
-                <h3 className="phone-box-lid__label">Ingredients</h3>
-                <ul className="phone-box-lid__list">
-                  {selected.ingredient_lines.map((line) => (
-                    <li key={line.id}>{ingredientText(line)}</li>
-                  ))}
-                </ul>
-              </>
+          <>
+            <article
+              ref={lidCardRef}
+              key={selected.id}
+              className="phone-box-lid__card"
+              tabIndex={0}
+              onClick={() => setCardViewOpen(true)}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setCardViewOpen(true);
+                }
+              }}
+            >
+              {selected.is_starter ? <p className="phone-box-starter">Starter card</p> : null}
+              <h2 className="phone-box-lid__title">{selected.title}</h2>
+              {meta ? <p className="phone-box-lid__meta">{meta}</p> : null}
+              {selected.ingredient_lines.length > 0 ? (
+                <>
+                  <h3 className="phone-box-lid__label">Ingredients</h3>
+                  <ul className="phone-box-lid__list">
+                    {selected.ingredient_lines.map((line) => (
+                      <li key={line.id}>{ingredientText(line)}</li>
+                    ))}
+                  </ul>
+                </>
+              ) : null}
+              {selected.steps.length > 0 ? (
+                <>
+                  <h3 className="phone-box-lid__label">Directions</h3>
+                  <ol className="phone-box-lid__list">
+                    {selected.steps.slice(0, LID_STEP_PREVIEW).map((step) => (
+                      <li key={step.id}>{step.body}</li>
+                    ))}
+                  </ol>
+                </>
+              ) : null}
+              {selected.ingredient_lines.length === 0 && selected.steps.length === 0 ? (
+                <p className="phone-box-lid__empty">
+                  {selected.description || "No ingredients or steps yet."}
+                </p>
+              ) : null}
+            </article>
+            {selected.is_starter ? (
+              <div className="phone-box-lid__actions">
+                <button
+                  className="phone-box-btn phone-box-btn--primary phone-box-btn--tall"
+                  disabled={busy}
+                  type="button"
+                  onClick={() => onFork(selected)}
+                >
+                  Fork to my box
+                </button>
+                {onHide ? (
+                  <button
+                    className="phone-box-btn phone-box-btn--tall"
+                    disabled={busy}
+                    type="button"
+                    onClick={() => onHide(selected)}
+                  >
+                    Hide
+                  </button>
+                ) : null}
+              </div>
             ) : null}
-            {selected.steps.length > 0 ? (
-              <>
-                <h3 className="phone-box-lid__label">Directions</h3>
-                <ol className="phone-box-lid__list">
-                  {selected.steps.slice(0, LID_STEP_PREVIEW).map((step) => (
-                    <li key={step.id}>{step.body}</li>
-                  ))}
-                </ol>
-              </>
-            ) : null}
-            {selected.ingredient_lines.length === 0 && selected.steps.length === 0 ? (
-              <p className="phone-box-lid__empty">
-                {selected.description || "No ingredients or steps yet."}
-              </p>
-            ) : null}
-          </article>
+          </>
         ) : (
           <div className="phone-box-lid__card phone-box-lid__card--empty">
             <button className="phone-box-btn phone-box-btn--primary" type="button" onClick={onAdd}>
@@ -171,7 +207,7 @@ export function PhoneRecipeBox({
         <PhoneCardView
           recipe={selected}
           onClose={closeCardView}
-          onEdit={() => onEdit(selected.id)}
+          onEdit={selected.is_starter ? undefined : () => onEdit(selected.id)}
           onSaved={onSaved}
         />
       ) : null}

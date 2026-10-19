@@ -40,6 +40,40 @@ export interface CollectionRecipe {
   updated_at: string;
 }
 
+/** A card the person owns, or a shared read-only starter card (decision 002). */
+export type BoxCard = CollectionRecipe & { is_starter?: boolean };
+
+/** Starter lines and steps come with null ids; give them stable ones for keys. */
+function withStarterIds(starter: BoxCard): BoxCard {
+  return {
+    ...starter,
+    is_starter: true,
+    ingredient_lines: starter.ingredient_lines.map((line, index) => ({
+      ...line,
+      id: line.id ?? `${starter.id}-line-${index}`,
+    })),
+    steps: starter.steps.map((step, index) => ({
+      ...step,
+      id: step.id ?? `${starter.id}-step-${index}`,
+    })),
+  };
+}
+
+export async function fetchStarterRecipes(): Promise<BoxCard[]> {
+  const starters = await apiFetch<BoxCard[]>("/api/v1/starter-recipes/");
+  return starters.map(withStarterIds);
+}
+
+/** Copies a starter card into the box. For a guest it uses one of the 5 slots. */
+export function forkStarterRecipe(id: string): Promise<CollectionRecipe> {
+  return apiFetch<CollectionRecipe>(`/api/v1/starter-recipes/${id}/fork/`, { method: "POST" });
+}
+
+/** Hides a starter card for this person only. Signed-up people only. */
+export function hideStarterRecipe(id: string): Promise<void> {
+  return apiFetch<void>(`/api/v1/starter-recipes/${id}/hide/`, { method: "POST" });
+}
+
 export function fetchRecipeBox(): Promise<CollectionRecipe[]> {
   return apiFetch<CollectionRecipe[]>("/api/v1/recipe-box/");
 }

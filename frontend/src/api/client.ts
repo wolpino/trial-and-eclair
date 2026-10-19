@@ -74,6 +74,8 @@ export interface User {
   measurement_preference: MeasurementPreference;
   show_forks: boolean;
   date_joined: string;
+  /** Passwordless account made on the first save; registering upgrades it (decision 002). */
+  is_guest: boolean;
 }
 
 export interface RegisterInput {
@@ -234,6 +236,10 @@ export function registerUser(input: RegisterInput): Promise<User> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
+}
+
+export function createGuest(): Promise<User> {
+  return apiFetch<User>("/api/v1/auth/guest/", { method: "POST" });
 }
 
 export function loginUser(input: LoginInput): Promise<User> {

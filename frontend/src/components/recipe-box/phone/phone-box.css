@@ -628,3 +628,62 @@
     transition: none;
   }
 }
+
+/* Starter cards (decision 002): shared, read-only, marked in the lid and the fan */
+
+.phone-box-starter {
+  display: inline-block;
+  margin: 0 0 4px;
+  padding: 1px 6px;
+  border: 1px solid var(--pb-accent);
+  border-radius: 3px;
+  color: var(--pb-accent);
+  font: 600 11px/1.4 system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.phone-box-fan__card .phone-box-starter {
+  display: block;
+  width: fit-content;
+  margin: 4px 0 0;
+}
+
+.phone-box-btn--tall {
+  min-height: 3rem;
+}
+
+/* Fork and Hide sit on the foot of the lid card, over its lower lines. */
+.phone-box-lid__actions {
+  position: absolute;
+  z-index: 1;
+  right: 28px;
+  bottom: 10px;
+  left: 28px;
+  display: flex;
+  gap: var(--phone-box-gap);
+}
+
+.phone-box-lid__actions .phone-box-btn {
+  flex: 1;
+}
+
+/* Sign-up card at the guest limit */
+
+.phone-box-signup {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  color: var(--color-text);
+}
+
+.phone-box-signup__title {
+  margin: 0;
+}
+
+.phone-box-signup p {
+  margin: 0;
+}

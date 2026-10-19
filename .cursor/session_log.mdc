@@ -10,6 +10,39 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-19 · Recipe Box: guest saves and starter cards on the phone (#56)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-19` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code |
+| **Outcome** | completed (PR open, waiting on the owner) |
+
+### Intent
+Check PR #73 (#64 Card View), then build #56 once the owner OK'd it.
+
+### Summary
+PR #73 was merged with CI green. #56 is on `feat/issue-56-guest-phone`, and `frontend/e2e/recipe-box-guest-phone.spec.ts` was written first. On a phone (including a sideways phone), visitors can open `/recipe-box` and see the starter cards sorted A–Z with their own cards, marked "Starter card" in the lid and "Starter" in the fan. No guest is made on page load: `AuthContext.ensureUser()` makes one on the first Add or Fork. The ☰ Account section shows "Guest · N of 5 cards" with Sign up and Sign in for guests, and Sign in for visitors. Sign out is for signed-up people only. Guests see the 30-day note in the Add sheet. At 5 cards, Add and Fork open a sign-up card, and so does a `guest_card_limit` 403. Starter cards have Fork and, for signed-up people only, Hide (48px buttons). Card View has no card menu for starters. `/register` lets guests in and says their cards stay. Wide screens still send visitors to `/login`. URL and scan import are hidden for visitors and guests on the phone, and Simple list shows only the person's own cards (no starters).
+
+### Decisions
+- **AppLayout edit (owner OK'd, outside Owned paths)**: a visitor on the phone box gets the framed shell, so making a guest doesn't remount the page and lose the first save
+- **recipe-box-phone.spec.ts stubs starters to [] (owner chose option A)**: its layout tests count only the walkthrough seed's cards; the new spec covers starters
+
+### Open threads
+- Owner reviews and merges the #56 PR
+- Optional Task issues, ask first: "2 egg" pluralising in the #65 formatter; the staggered front row ending one slot short with an even number of letters
+- Later: starters in Simple list; URL and scan import for guests on the phone
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** guest mode, starter cards, fork, hide, sign-up card, ensureUser, phone recipe box
+**Files:** frontend/src/pages/RecipeBoxPage.tsx, frontend/src/components/recipe-box/phone/PhoneSignUpCard.tsx, frontend/src/auth/AuthContext.tsx, frontend/src/components/AppLayout.tsx, frontend/e2e/recipe-box-guest-phone.spec.ts
+**Do not redo:** #64 check (PR #73 merged); #56 build (its PR)
+**Resume with:** after the #56 PR merges, ask the owner about the two optional Task issues
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-16 · Card View redesign (#64), cloud session
 
 | Field | Value |

@@ -16,7 +16,9 @@ export function AppLayout() {
   const isPhoneOrSideways = usePhoneLayout({ sideways: true });
   // The phone box takes the whole screen; other phone pages keep the bottom bar (decision 003).
   const phoneBox = isPhoneOrSideways && /^\/recipe-box\/?$/.test(location.pathname);
-  const showFrame = Boolean(user) && !isPublicReadingPath(location.pathname);
+  // Visitors on the phone box get the same shell, so making a guest on the first
+  // save doesn't remount the page and lose the save (#56).
+  const showFrame = (Boolean(user) || phoneBox) && !isPublicReadingPath(location.pathname);
 
   if (!showFrame) {
     return (
