@@ -10,6 +10,40 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-19 · Plural ingredient names (#75) and staggered tab edge (#76)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-19T22:18:49Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (main session plus two worktree subagents) |
+| **Outcome** | completed (PRs #77 and #78 open, waiting on the owner) |
+
+### Intent
+After PR #74 (#56) merged, the owner OK'd the two optional issues, #75 and #76. The plan was to remove their draft labels and build both at once in worktree subagents.
+
+### Summary
+The draft labels came off both issues. Both subagents wrote their tests first and saw them fail before the fix. Each PR touches only its issue's Owned paths. Each subagent passed backend tests (157), the build and e2e (56 and 59) before pushing. Only one e2e run used :8010 at a time: the subagents took turns with a `mkdir` lock in the main session's scratchpad. **#76 → PR #77** (`feat/issue-76-stagger-edge`): `staggerStyle()` spaces each row on its own, so both rows end at the right edge for even and odd letter counts. The back row still starts one slot in. `phone-box.css` was unchanged. **#75 → PR #78** (`feat/issue-75-plural-names`): `recipeFormat.ts` pluralises the last word of the name when there is no unit (or the unit is `whole`) and the quantity is above one. It uses a small irregulars map, consonant + y → "ies", and leaves names ending in "s" alone.
+
+### Decisions
+- **No singularising follow-up for now**: it would need a big exceptions list. If "1 eggs" ever shows up, storing catalog names in the singular is the cheaper fix
+- **No README / PRD change**: no endpoint, field or phase changed
+
+### Open threads
+- The owner reviews and merges PRs #77 and #78
+- #77: the last front and back tabs now line up one behind the other. Nobody has looked at a screenshot yet
+- #78: uncountable names with no unit, like "2 garlic", become "2 garlics"
+- Later: starters in Simple list; URL and scan import for guests on the phone. Drafts #66–#69 are untouched
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** pluralise, ingredient names, staggered tabs, right edge, worktree subagents, e2e lock
+**Files:** frontend/src/lib/recipeFormat.ts, frontend/e2e/recipe-format.spec.ts, frontend/src/components/recipe-box/phone/PhoneBoxTabs.tsx, frontend/e2e/recipe-box-phone.spec.ts
+**Do not redo:** #56 (PR #74 merged); #75 build (PR #78); #76 build (PR #77)
+**Resume with:** after PRs #77 and #78 merge, ask the owner which Recipe Box item is next (starters in Simple list, or URL and scan import for guests)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-19 · Recipe Box: guest saves and starter cards on the phone (#56)
 
 | Field | Value |
