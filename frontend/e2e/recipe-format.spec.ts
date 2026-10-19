@@ -102,11 +102,12 @@ test.describe("plural ingredient names", () => {
     expect(ingredientText(line("butter", "2", "tablespoon"))).toBe("2 tbsp butter");
   });
 
-  test("IngredientLineText prints the same plural", () => {
+  test("IngredientLineText prints the same plural", async ({ page }) => {
     const html = renderToStaticMarkup(
       createElement(IngredientLineText, { line: line("egg", "2", "whole") }),
     );
-    expect(html.replace(/<[^>]+>/g, "")).toBe("2 eggs");
+    await page.setContent(html);
+    expect(await page.locator("body").textContent()).toBe("2 eggs");
   });
 });
 
