@@ -14,13 +14,21 @@ type PhoneBoxTabsProps = {
 /** Above this many tabs, they stagger in two rows (decision 003). */
 const ONE_ROW_MAX = 12;
 
-/** Two staggered rows: 1st, 3rd… low in front; 2nd, 4th… high behind. Each tab is 3/N wide. */
+/**
+ * Two staggered rows: 1st, 3rd… low in front; 2nd, 4th… high behind. Each tab is
+ * 3 slots wide (N + 2 slots). The front row starts at 0, the back row one slot in,
+ * and each row spreads out so its last tab ends at the right edge.
+ */
 function staggerStyle(index: number, total: number): CSSProperties {
-  const n = total + 2;
+  const slot = 1 / (total + 2);
+  const width = 3 * slot;
   const back = index % 2 === 1;
+  const start = back ? slot : 0;
+  const inRow = back ? Math.floor(total / 2) : Math.ceil(total / 2);
+  const step = (1 - width - start) / (inRow - 1);
   return {
-    left: `${(index / n) * 100}%`,
-    width: `${(3 / n) * 100}%`,
+    left: `${(start + Math.floor(index / 2) * step) * 100}%`,
+    width: `${width * 100}%`,
     top: back ? 0 : "24px",
     height: back ? "38px" : "30px",
     zIndex: back ? 1 : 2,
