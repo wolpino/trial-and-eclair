@@ -14,7 +14,8 @@ export function GuestRoute() {
     return <p className="status-message">Checking session…</p>;
   }
 
-  if (user) {
+  // Guests may sign in or sign up; signing up keeps their cards.
+  if (user && !user.is_guest) {
     return <Navigate to={redirectTo} replace />;
   }
 

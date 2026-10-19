@@ -15,8 +15,8 @@ import "./phone-card-view.css";
 type PhoneCardViewProps = {
   recipe: CollectionRecipe;
   onClose: () => void;
-  /** Opens the whole card editor (add or remove lines and steps). */
-  onEdit: () => void;
+  /** Opens the whole card editor (add or remove lines and steps). Starter cards have none. */
+  onEdit?: () => void;
   onSaved: (recipe: CollectionRecipe) => void;
 };
 
@@ -352,7 +352,7 @@ export function PhoneCardView({ recipe, onClose, onEdit, onSaved }: PhoneCardVie
               ☀
             </button>
           ) : null}
-          {draft ? null : (
+          {draft || !onEdit ? null : (
             <div ref={menuRef} className="phone-cv__menu-wrap">
               <button
                 aria-expanded={menuOpen}

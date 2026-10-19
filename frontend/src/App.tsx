@@ -39,9 +39,11 @@ export function App() {
               element={<CookbookDetailPage />}
             />
           </Route>
-          <Route element={<ProtectedRoute />}>
+          <Route element={<ProtectedRoute allowVisitorOnPhone />}>
             <Route path="/recipe-box" element={<RecipeBoxPage />} />
             <Route path="/recipe-box/:recipeId" element={<RecipeBoxPage />} />
+          </Route>
+          <Route element={<ProtectedRoute />}>
             <Route path="/references" element={<ReferencesPage />} />
           </Route>
         </Route>

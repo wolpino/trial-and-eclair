@@ -73,6 +73,12 @@ async function openMenu(page: Page) {
 
 test.use({ viewport: { width: 390, height: 844 } });
 
+// These layout tests count the walkthrough seed's cards only. Starter cards
+// (decision 002) are covered in recipe-box-guest-phone.spec.ts.
+test.beforeEach(async ({ page }) => {
+  await page.route("**/api/v1/starter-recipes/", (route) => route.fulfill({ json: [] }));
+});
+
 test("the lid shows the first card and the tabs sit below it", async ({ page }) => {
   // The walkthrough seed has no servings, so add some to the first card here.
   await editBoxList(page, (recipes) =>

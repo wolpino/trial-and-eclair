@@ -10,6 +10,7 @@ import {
 
 import {
   ApiError,
+  createGuest,
   fetchCurrentUser,
   loginUser,
   logoutUser,
@@ -31,6 +32,8 @@ interface AuthContextValue {
   logout: () => Promise<void>;
   updateProfile: (data: Pick<User, "show_forks">) => Promise<User>;
   startTrial: () => Promise<User>;
+  /** Makes a guest on the first save, or returns the person already signed in. */
+  ensureUser: () => Promise<User>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -93,6 +96,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return updated;
   }, []);
 
+  const ensureUser = useCallback(async () => {
+    if (user) {
+      return user;
+    }
+    const guest = await createGuest();
+    setUser(guest);
+    return guest;
+  }, [user]);
+
   const value = useMemo(
     () => ({
       user,
@@ -103,8 +115,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       logout,
       updateProfile,
       startTrial,
+      ensureUser,
     }),
-    [user, loading, login, register, logout, updateProfile, startTrial],
+    [user, loading, login, register, logout, updateProfile, startTrial, ensureUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

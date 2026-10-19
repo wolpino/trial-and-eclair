@@ -31,3 +31,10 @@ export function canStartDeveloperTrial(user: User): boolean {
 export function defaultRouteForUser(_user: User): string {
   return "/recipe-box";
 }
+
+/** Cards a guest can keep before the sign-up card (decision 002). */
+export const GUEST_CARD_LIMIT = 5;
+
+export function isGuest(user: User | null): boolean {
+  return user?.is_guest === true;
+}

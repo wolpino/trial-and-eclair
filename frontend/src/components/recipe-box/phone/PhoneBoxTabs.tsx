@@ -1,14 +1,14 @@
 import { Fragment, useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
 
-import type { CollectionRecipe } from "../../../api/collection";
+import type { BoxCard } from "../../../api/collection";
 import { TAB_KEYS } from "./cardText";
 
 type PhoneBoxTabsProps = {
-  byTab: Record<string, CollectionRecipe[]>;
+  byTab: Record<string, BoxCard[]>;
   openTab: string | null;
   selectedId: string | undefined;
   onOpenTab: (key: string | null) => void;
-  onPick: (recipe: CollectionRecipe) => void;
+  onPick: (recipe: BoxCard) => void;
 };
 
 /** Above this many tabs, they stagger in two rows (decision 003). */
@@ -93,6 +93,7 @@ export function PhoneBoxTabs({ byTab, openTab, selectedId, onOpenTab, onPick }: 
                 onClick={() => onPick(recipe)}
               >
                 {recipe.title}
+                {recipe.is_starter ? <span className="phone-box-starter">Starter</span> : null}
               </button>
             </li>
           ))}
