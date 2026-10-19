@@ -54,6 +54,14 @@ const PROPER_WORDS = new Set([
   "mexican", "spanish", "swiss", "english", "granny", "smith",
 ]);
 
+// Plurals the simple rules below get wrong.
+const IRREGULAR_PLURALS: Record<string, string> = {
+  tomato: "tomatoes",
+  potato: "potatoes",
+  leaf: "leaves",
+  loaf: "loaves",
+};
+
 type Parts = { whole: number; fraction: (typeof FRACTIONS)[number] | null };
 
 function quantityParts(quantity: string | null): Parts | null {
@@ -146,9 +154,35 @@ export function displayName(name: string | null): string {
     .join(" ");
 }
 
+function pluralWord(word: string): string {
+  const irregular = IRREGULAR_PLURALS[word.toLowerCase()];
+  if (irregular) {
+    return irregular;
+  }
+  if (/s$/i.test(word)) {
+    return word;
+  }
+  if (/[^aeiou]y$/i.test(word)) {
+    return `${word.slice(0, -1)}ies`;
+  }
+  return `${word}s`;
+}
+
+// The name as shown on the line: plural for a count with no unit ("2 eggs").
+function lineName(line: FormattableLine): string {
+  const name = displayName(line.ingredient_name);
+  const counted = !line.custom_unit && (!line.unit || line.unit === "whole");
+  if (!name || !counted || !isPlural(line.quantity)) {
+    return name;
+  }
+  const words = name.split(" ");
+  words[words.length - 1] = pluralWord(words[words.length - 1]);
+  return words.join(" ");
+}
+
 // The whole line as plain text, e.g. "1½ cups flour".
 export function ingredientText(line: FormattableLine): string {
-  return [formatQuantity(line.quantity), displayUnit(line), displayName(line.ingredient_name)]
+  return [formatQuantity(line.quantity), displayUnit(line), lineName(line)]
     .filter(Boolean)
     .join(" ");
 }
@@ -166,7 +200,7 @@ export function IngredientAmount({ quantity }: { quantity: string | null }): Rea
 // The whole line for screens: amount and unit (bold), then the name.
 export function IngredientLineText({ line }: { line: FormattableLine }): ReactNode {
   const unit = displayUnit(line);
-  const name = displayName(line.ingredient_name);
+  const name = lineName(line);
   const hasAmount = Boolean(line.quantity) || Boolean(unit);
   return createElement(
     "span",

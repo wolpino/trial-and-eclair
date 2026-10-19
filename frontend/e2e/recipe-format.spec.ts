@@ -1,6 +1,13 @@
 import { expect, test, type Page } from "@playwright/test";
+import { createElement } from "react";
+import { renderToStaticMarkup } from "react-dom/server";
 
-import { formatQuantity, ingredientText, quantityWords } from "../src/lib/recipeFormat";
+import {
+  formatQuantity,
+  IngredientLineText,
+  ingredientText,
+  quantityWords,
+} from "../src/lib/recipeFormat";
 
 // Decision 003, Ingredient text: one formatter for every screen.
 const LINES = [
@@ -65,6 +72,42 @@ test.describe("recipeFormat", () => {
     expect(ingredientText(line("All-purpose flour", "1", "cup"))).toBe("1 cup all-purpose flour");
     expect(ingredientText(line("Brown Sugar", "1", "cup"))).toBe("1 cup brown sugar");
     expect(ingredientText(line("BBQ sauce", "1", "cup"))).toBe("1 cup BBQ sauce");
+  });
+});
+
+test.describe("plural ingredient names", () => {
+  test("pluralises a counted name with no unit or whole", () => {
+    expect(ingredientText(line("egg", "2", "whole"))).toBe("2 eggs");
+    expect(ingredientText(line("egg", "2"))).toBe("2 eggs");
+    expect(ingredientText(line("egg", "1", "whole"))).toBe("1 egg");
+    expect(ingredientText(line("egg", "1.5", "whole"))).toBe("1½ eggs");
+  });
+
+  test("names already ending in s don't gain another", () => {
+    expect(ingredientText(line("Eggs", "2", "whole"))).toBe("2 eggs");
+    expect(ingredientText(line("oats", "2"))).toBe("2 oats");
+  });
+
+  test("irregulars and consonant + y", () => {
+    expect(ingredientText(line("tomato", "2"))).toBe("2 tomatoes");
+    expect(ingredientText(line("potato", "3", "whole"))).toBe("3 potatoes");
+    expect(ingredientText(line("leaf", "2"))).toBe("2 leaves");
+    expect(ingredientText(line("loaf", "2"))).toBe("2 loaves");
+    expect(ingredientText(line("berry", "2"))).toBe("2 berries");
+  });
+
+  test("with a unit the name never changes", () => {
+    expect(ingredientText(line("flour", "2", "cup"))).toBe("2 cups flour");
+    expect(ingredientText(line("garlic", "3", "", "cloves"))).toBe("3 cloves garlic");
+    expect(ingredientText(line("butter", "2", "tablespoon"))).toBe("2 tbsp butter");
+  });
+
+  test("IngredientLineText prints the same plural", async ({ page }) => {
+    const html = renderToStaticMarkup(
+      createElement(IngredientLineText, { line: line("egg", "2", "whole") }),
+    );
+    await page.setContent(html);
+    expect(await page.locator("body").textContent()).toBe("2 eggs");
   });
 });
 
