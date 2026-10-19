@@ -124,6 +124,50 @@ test("13 or more letters stagger the tabs in two rows, A, C, E… in front", asy
   expect(last.x + last.width).toBeLessThanOrEqual(390);
 });
 
+for (const { count, drop } of [
+  { count: 14, drop: null },
+  { count: 13, drop: /^Z/ },
+]) {
+  test(`with ${count} letters both staggered rows reach the right edge`, async ({ page }) => {
+    if (drop) {
+      await editBoxList(page, (recipes) => recipes.filter((r) => !drop.test(r.title)));
+    }
+    await logIn(page);
+    await expect(tabs(page)).toHaveCount(count);
+
+    const group = (await page.getByRole("group", { name: "Divider tabs" }).boundingBox())!;
+    const boxes = [];
+    for (const tab of await tabs(page).all()) {
+      boxes.push((await tab.boundingBox())!);
+    }
+    const front = boxes.filter((_, i) => i % 2 === 0);
+    const back = boxes.filter((_, i) => i % 2 === 1);
+    const right = group.x + group.width;
+    for (const row of [front, back]) {
+      const last = row[row.length - 1]!;
+      expect(Math.abs(last.x + last.width - right)).toBeLessThanOrEqual(1);
+    }
+    // The front row starts at the left edge; the back row one slot in, behind it.
+    const slot = group.width / (count + 2);
+    expect(Math.abs(front[0]!.x - group.x)).toBeLessThanOrEqual(1);
+    expect(Math.abs(back[0]!.x - (group.x + slot))).toBeLessThanOrEqual(1);
+    // Tabs in one row overlap no more than one slot (as before this change).
+    for (const row of [front, back]) {
+      for (let i = 1; i < row.length; i++) {
+        const prev = row[i - 1]!;
+        expect(prev.x + prev.width - row[i]!.x).toBeLessThanOrEqual(slot + 1);
+      }
+    }
+
+    // Nothing scrolls sideways on a small phone.
+    await page.setViewportSize({ width: 360, height: 640 });
+    const overflow = await page.evaluate(
+      () => document.documentElement.scrollWidth - document.documentElement.clientWidth,
+    );
+    expect(overflow).toBeLessThanOrEqual(0);
+  });
+}
+
 test("12 or fewer letters keep the tabs in one row, with # only when used", async ({ page }) => {
   await editBoxList(page, (recipes) => {
     const kept = recipes.filter((r) => !/^[BWYZ]/.test(r.title));
