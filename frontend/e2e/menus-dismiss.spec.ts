@@ -23,12 +23,13 @@ function details(page: Page, name: string) {
 
 test.use({ viewport: { width: 390, height: 844 } });
 
+// On /references, since the cork board's Pin note button sits over Account on a phone.
 test.describe("header menus", () => {
   for (const name of ["Account", "More"]) {
     test(`${name} closes on an outside click and on Escape, not on a click inside`, async ({
       page,
     }) => {
-      await logIn(page, "/developer");
+      await logIn(page, "/references");
       const menu = details(page, name);
       const summary = menu.locator("summary");
 
@@ -37,7 +38,7 @@ test.describe("header menus", () => {
       await menu.locator(".frame-nav__panel").click({ position: { x: 4, y: 4 } });
       await expect(menu).toHaveAttribute("open", "");
 
-      await page.getByRole("heading", { name: "Cork board" }).click();
+      await page.getByRole("heading", { name: "Reference shelf" }).click();
       await expect(menu).not.toHaveAttribute("open");
 
       await summary.click();
@@ -48,7 +49,7 @@ test.describe("header menus", () => {
   }
 
   test("opening one header menu closes the other", async ({ page }) => {
-    await logIn(page, "/developer");
+    await logIn(page, "/references");
     const account = details(page, "Account");
     const more = details(page, "More");
 
