@@ -26,7 +26,7 @@ The files below were copied from the old standalone `wolpino/recipe-box` repo on
 ## Next
 
 1. ~~Write `gap-list.md`~~ done.
-2. ~~Decision records~~ done: [001](../decisions/001-recipe-box-in-frontend.md) (Recipe Box in `frontend/`, A–Z only), [002](../decisions/002-guest-mode.md) (guest mode), [003](../decisions/003-phone-recipe-box-design.md) (phone box design).
+2. ~~Decision records~~ done: [001](../decisions/001-recipe-box-in-frontend.md) (Recipe Box in `frontend/`, A–Z only), [002](../decisions/002-guest-mode.md) (guest mode), [003](../decisions/003-phone-recipe-box-design.md) (phone box design), [004](../decisions/004-kitchen-home.md) (kitchen home; the box object opens the phone Recipe Box).
 3. ~~Pick the starter recipes~~ done: six in `seed/data/starter_recipes.json`; the owner can change them any time.
 4. Turn the gap list into 3–5 tickets.
 5. Phone box design pass and follow-ups from [003](../decisions/003-phone-recipe-box-design.md).
