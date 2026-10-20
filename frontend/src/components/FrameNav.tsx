@@ -25,9 +25,10 @@ function DismissableMenu({
   // Always listening: React state would learn of the native toggle a task late,
   // and an Escape pressed right after opening would be missed.
   const close = useCallback(() => {
-    if (ref.current?.open) {
-      ref.current.open = false;
+    if (!ref.current?.open) {
+      return false;
     }
+    ref.current.open = false;
   }, []);
   useDismiss(ref, true, close);
 
@@ -156,7 +157,11 @@ function AccountMenu() {
   return (
     <DismissableMenu
       className="frame-account"
-      summary={<summary className="frame-nav__summary">Account</summary>}
+      summary={
+        <summary className="frame-nav__summary" data-dismiss-passthrough>
+          Account
+        </summary>
+      }
     >
       <div className="frame-nav__panel frame-account__panel">
         <p className="frame-account__name">{user.username}</p>
@@ -193,6 +198,7 @@ export function FrameNav() {
                 ? "frame-nav__summary frame-nav__summary--active"
                 : "frame-nav__summary"
             }
+            data-dismiss-passthrough
           >
             More
           </summary>
