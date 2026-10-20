@@ -1,4 +1,4 @@
-import { useRef, useState, type ReactNode } from "react";
+import { useCallback, useRef, type ReactNode } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthContext";
@@ -22,16 +22,17 @@ function DismissableMenu({
   children: ReactNode;
 }) {
   const ref = useRef<HTMLDetailsElement>(null);
-  const [open, setOpen] = useState(false);
-  useDismiss(ref, open, () => setOpen(false));
+  // Always listening: React state would learn of the native toggle a task late,
+  // and an Escape pressed right after opening would be missed.
+  const close = useCallback(() => {
+    if (ref.current?.open) {
+      ref.current.open = false;
+    }
+  }, []);
+  useDismiss(ref, true, close);
 
   return (
-    <details
-      ref={ref}
-      className={className}
-      open={open}
-      onToggle={(event) => setOpen(event.currentTarget.open)}
-    >
+    <details ref={ref} className={className}>
       {summary}
       {children}
     </details>
