@@ -252,6 +252,7 @@ class Cookbook(TimestampedModel):
         default="draft",
     )
     published_at = models.DateTimeField(null=True, blank=True)
+    on_shelf = models.BooleanField(default=False)
 
     class Meta:
         ordering = ["title"]

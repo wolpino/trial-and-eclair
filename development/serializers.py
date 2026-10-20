@@ -249,6 +249,7 @@ class CookbookSerializer(serializers.ModelSerializer):
             "description",
             "status",
             "published_at",
+            "on_shelf",
             "entries",
             "created_at",
             "updated_at",
