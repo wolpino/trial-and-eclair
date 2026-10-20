@@ -10,6 +10,42 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-20 · Design Bash run: wave 1
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-20T03:30:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (director plus one worktree subagent per issue, two at a time) |
+| **Outcome** | partial (wave 1: seven PRs open, #91 blocked; waves 2–4 wait on merges) |
+
+### Intent
+Run the Design Bash issues the owner OK'd (#80–#88, #90–#93) as the director: one subagent per issue in its own worktree, status in issue #94. The owner merges every PR, so only wave 1 could start.
+
+### Summary
+Status lives in #94 ("Design Bash run: status"). Draft labels came off #80, #81, #82, #83, #90, #91, #92 and #93 as each started. Each subagent committed its tests first. All three checks passed before every push, and every PR's check runs are green. **#83 → PR #95** decision 004 (kitchen home) and the PRD line. **#81 → PR #96** `Cookbook.on_shelf` plus the empty state. **#80 → PR #97** `useDismiss` for menus, the fan and the drawers. **#82 → PR #98** shared default references with "Remove from shelf". **#93 → PR #99** `load_demo_data`. **#90 → PR #100** box search. **#92 → PR #101** Baker's % panel. **#91 blocked**: it needs `DeveloperRecipePage.tsx`, which builds the `createTestSession` payload and is outside the Owned paths. Asked the owner on the issue.
+
+### Decisions
+- **Merge order**: #95, #96 (wave 2 needs both), then #97, #98, #99, #100, #101
+- **Known conflicts (checked by merging in that order)**: #99 conflicts with #98 in `entrypoint.sh` (both add a line after `load_starter_recipes`), and #100 conflicts with #97 in `PhoneRecipeBox.tsx`. The rest merge clean. #91's future migration must follow #96's `development/0002_cookbook_on_shelf.py`
+- **The e2e lock is only removed by the run that took it**: the first template's `mkdir && …; rmdir` could delete another worktree's lock
+
+### Open threads
+- The owner merges PRs #95–#101 and resolves the two conflicts (or asks for them to be resolved)
+- #91: the owner OKs `DeveloperRecipePage.tsx` (test session form state and `handleAddTestSession`)
+- #93: deleting the demo developer in /admin/ fails until its cookbooks are deleted (`CookbookRecipe.snapshot_version` is PROTECT). The README says to do that. A follow-up for CASCADE/RESTRICT is the owner's call. Render env vars: `DEMO_DEVELOPER_PASSWORD`, `DEMO_COOK_PASSWORD` (the usernames default to `demo-developer` / `demo-cook`)
+- #82 added empty `library/management/__init__.py` files, which the owned command needs. #92's panel reads the saved current version, not an older version the developer is viewing
+- Wave 2 (#84) needs #95 and #96 merged; wave 3 (#86, then #85, then #88) needs #84; wave 4 (#87) needs #84 and #85. #89 waits on photographs. Drafts #66–#69 untouched
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** design bash, director, worktree subagents, kitchen home, on_shelf, default references, demo data, box search, baker's percent, useDismiss
+**Files:** docs/decisions/004-kitchen-home.md, development/management/commands/load_demo_data.py, library/management/commands/load_default_references.py, frontend/src/lib/useDismiss.ts, frontend/src/lib/boxSearch.ts, frontend/src/lib/bakersPercent.ts
+**Do not redo:** #80, #81, #82, #83, #90, #92, #93 builds (PRs #95–#101); #91 until the owner OKs DeveloperRecipePage.tsx
+**Resume with:** run the director prompt again after the owner merges wave 1 (PRs #95 and #96 at least, which unblock #84)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-19 · Plural ingredient names (#75) and staggered tab edge (#76)
 
 | Field | Value |
