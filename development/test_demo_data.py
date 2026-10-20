@@ -132,6 +132,8 @@ class DemoDataTests(TestCase):
         cook_cards = CollectionRecipe.objects.filter(user=cook).count()
         dev = User.objects.get(username="demo-developer")
         dev_ideas = Idea.objects.filter(user=dev).count()
+        # CookbookRecipe.snapshot_version is PROTECT, so cookbooks go first (README reset steps).
+        Cookbook.objects.filter(user=dev).delete()
         dev.delete()
 
         self._run()
