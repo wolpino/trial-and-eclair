@@ -63,6 +63,36 @@ test.describe("header menus", () => {
     await expect(account).toHaveAttribute("open", "");
     await expect(more).not.toHaveAttribute("open");
   });
+
+  test("a click outside an open menu only closes it; a link under it does not navigate", async ({
+    page,
+  }) => {
+    await logIn(page, "/references");
+    const account = details(page, "Account");
+    await account.locator("summary").click();
+    await expect(account).toHaveAttribute("open", "");
+
+    await page.getByRole("link", { name: "Box", exact: true }).click();
+    await expect(account).not.toHaveAttribute("open");
+    await expect(page).toHaveURL(/\/references$/);
+  });
+
+  test("a press outside that turns into a scroll doesn't eat the next click", async ({ page }) => {
+    await logIn(page, "/references");
+    const account = details(page, "Account");
+    await account.locator("summary").click();
+    await expect(account).toHaveAttribute("open", "");
+
+    // A touch scroll: pointerdown, then pointercancel and no click.
+    await page.getByRole("heading", { name: "Reference shelf" }).evaluate((el) => {
+      el.dispatchEvent(new PointerEvent("pointerdown", { bubbles: true, isPrimary: true }));
+      el.dispatchEvent(new PointerEvent("pointercancel", { bubbles: true, isPrimary: true }));
+    });
+    await expect(account).not.toHaveAttribute("open");
+
+    await page.getByRole("link", { name: "Box", exact: true }).click();
+    await expect(page).toHaveURL(/\/recipe-box$/);
+  });
 });
 
 test("the A–Z fan closes on an outside click and stays open on a click inside", async ({
@@ -80,6 +110,25 @@ test("the A–Z fan closes on an outside click and stays open on a click inside"
   await page.locator(".phone-box-front").click();
   await expect(fan).toBeHidden();
   await expect(tab).toHaveAttribute("aria-expanded", "false");
+});
+
+test("tapping the lid card while the fan is open only closes the fan", async ({ page }) => {
+  await logIn(page, "/recipe-box");
+  const tab = page.getByRole("group", { name: "Divider tabs" }).getByRole("button").first();
+  const fan = page.locator("#phone-box-fan");
+  const card = page.locator(".phone-box-lid__card");
+  const cardView = page.locator(".phone-cv");
+  await card.evaluate((el) => Promise.all(el.getAnimations().map((a) => a.finished)));
+  const box = (await card.boundingBox())!;
+
+  await tab.click();
+  await expect(fan).toBeVisible();
+  await page.mouse.click(box.x + box.width / 2, box.y + 40);
+  await expect(fan).toBeHidden();
+  await expect(cardView).toBeHidden();
+
+  await page.mouse.click(box.x + box.width / 2, box.y + 40);
+  await expect(cardView).toBeVisible();
 });
 
 test.describe("cork board drawers", () => {
