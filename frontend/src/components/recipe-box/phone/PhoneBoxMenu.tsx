@@ -30,11 +30,18 @@ type PhoneBoxMenuProps = {
   cardCount: number;
   simpleList: boolean;
   onToggleSimpleList: () => void;
+  onSearch: () => void;
   onAdd: () => void;
 };
 
 /** The ☰ menu: Account, Add recipe, View, then Sign out (decision 003, Menu). */
-export function PhoneBoxMenu({ cardCount, simpleList, onToggleSimpleList, onAdd }: PhoneBoxMenuProps) {
+export function PhoneBoxMenu({
+  cardCount,
+  simpleList,
+  onToggleSimpleList,
+  onSearch,
+  onAdd,
+}: PhoneBoxMenuProps) {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   const [open, setOpen] = useState(false);
@@ -121,6 +128,9 @@ export function PhoneBoxMenu({ cardCount, simpleList, onToggleSimpleList, onAdd 
                 onClick={() => choose(onToggleSimpleList)}
               >
                 Simple list
+              </button>
+              <button className="phone-box-menu__item" type="button" onClick={() => choose(onSearch)}>
+                Search
               </button>
             </section>
             {user && !user.is_guest ? (

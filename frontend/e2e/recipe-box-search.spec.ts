@@ -106,9 +106,14 @@ test.describe("phone", () => {
 
     const field = await openSearch(page);
     await field.fill("butter");
-    // Seed: butter is in these two cards' ingredients, and in no title.
+    // Seed: one title, two ingredient lists, and buttermilk in the soda bread.
     // Yogurt Cake only says "butter" in its description, so it stays out.
-    await expect(results(page)).toHaveText(["Lemon Bars", "Rosemary Shortbread"]);
+    await expect(results(page)).toHaveText([
+      "Brown Butter Blondies",
+      "Lemon Bars",
+      "Rosemary Shortbread",
+      "Weekday Soda Bread",
+    ]);
     await expect(tabs(page)).toHaveCount(0);
 
     await field.fill("LEMON");
@@ -154,10 +159,11 @@ test.describe("wide screen", () => {
     await expect(index.getByRole("tab", { name: "A" })).toBeVisible();
 
     await page.getByRole("searchbox", { name: "Search recipes" }).fill("Butter");
-    await expect(index.getByRole("tab")).toHaveText(["L", "R"]);
-    await expect(page.getByRole("button", { name: /Lemon Bars/ })).toBeVisible();
+    await expect(index.getByRole("tab")).toHaveText(["B", "L", "R", "W"]);
+    await index.getByRole("tab", { name: "L" }).click();
+    await expect(page.getByRole("button", { name: /^Lemon Bars/ })).toBeVisible();
     await index.getByRole("tab", { name: "R" }).click();
-    await expect(page.getByRole("button", { name: /Rosemary Shortbread/ })).toBeVisible();
+    await expect(page.getByRole("button", { name: /^Rosemary Shortbread/ })).toBeVisible();
 
     await page.getByRole("searchbox", { name: "Search recipes" }).fill("2 cups");
     await expect(page.getByText("No cards match.")).toBeVisible();

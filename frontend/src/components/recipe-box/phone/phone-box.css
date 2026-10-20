@@ -687,3 +687,32 @@
 .phone-box-signup p {
   margin: 0;
 }
+
+/* Search from the ☰ menu: a field where the tabs sit, results as a fan above it */
+
+.phone-box-search {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+}
+
+.phone-box-search__field {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: 0 12px;
+  border: 1px solid var(--pb-line);
+  border-radius: 6px;
+  background: var(--pb-paper);
+  color: var(--pb-paper-ink);
+  font: inherit;
+}
+
+.phone-box-search__empty {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--pb-tab);
+}

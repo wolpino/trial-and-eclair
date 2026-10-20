@@ -28,6 +28,7 @@ import {
   PhoneSignUpCard,
 } from "../components/recipe-box/phone/PhoneSignUpCard";
 import { RecipeImportPanel } from "../components/RecipeImportPanel";
+import { matchesSearch } from "../lib/boxSearch";
 import { usePhoneLayout } from "../lib/usePhoneLayout";
 import "../styles/recipe-box.css";
 
@@ -102,8 +103,16 @@ export function RecipeBoxPage() {
   const [starters, setStarters] = useState<BoxCard[]>([]);
   const [signUpFor, setSignUpFor] = useState<"add" | "fork" | null>(null);
   const [forking, setForking] = useState(false);
+  // Null until the phone opens Search from the ☰ menu; wide screens use "" too.
+  const [search, setSearch] = useState<string | null>(null);
 
-  const grouped = useMemo(() => groupByLetter(recipes), [recipes]);
+  const grouped = useMemo(
+    () =>
+      groupByLetter(
+        isPhone || !search ? recipes : recipes.filter((recipe) => matchesSearch(recipe, search)),
+      ),
+    [recipes, search, isPhone],
+  );
   const letters = useMemo(() => Object.keys(grouped).sort(), [grouped]);
   const focusedRecipe = useMemo(
     () => (recipeId ? recipes.find((recipe) => recipe.id === recipeId) : undefined),
@@ -144,11 +153,8 @@ export function RecipeBoxPage() {
     if (letters.length === 0) {
       return;
     }
-    if (focusedRecipe) {
-      const letter = letterForRecipe(focusedRecipe);
-      if (letters.includes(letter)) {
-        setActiveLetter(letter);
-      }
+    if (focusedRecipe && letters.includes(letterForRecipe(focusedRecipe))) {
+      setActiveLetter(letterForRecipe(focusedRecipe));
       return;
     }
     if (!activeLetter || !letters.includes(activeLetter)) {
@@ -328,6 +334,8 @@ export function RecipeBoxPage() {
     collection = (
       <p className="recipe-box-empty">Your recipe box is empty — add a card above.</p>
     );
+  } else if (letters.length === 0) {
+    collection = <p className="recipe-box-empty">No cards match.</p>;
   } else {
     collection = (
       <RecipeBoxIndex
@@ -373,6 +381,10 @@ export function RecipeBoxPage() {
         simpleList={phoneView === "list"}
         onAdd={openPhoneAdd}
         onToggleSimpleList={() => setPhoneView(phoneView === "list" ? "box" : "list")}
+        onSearch={() => {
+          setPhoneView("box");
+          setSearch("");
+        }}
       />
     );
     const guestNote = signedUp ? null : (
@@ -447,7 +459,9 @@ export function RecipeBoxPage() {
             onFork={(starter) => void handleFork(starter)}
             onHide={signedUp ? (starter) => void handleHide(starter) : undefined}
             onSaved={upsertRecipe}
+            onSearchChange={setSearch}
             onSelect={setPhoneSelectedId}
+            search={search}
           />
         )}
         {addSheet}
@@ -481,6 +495,14 @@ export function RecipeBoxPage() {
         </p>
         {addForm}
         <RecipeImportPanel destination="box" />
+        <input
+          aria-label="Search recipes"
+          className="recipe-box-search"
+          placeholder="Search by title or ingredient"
+          type="search"
+          value={search ?? ""}
+          onChange={(event) => setSearch(event.target.value)}
+        />
       </header>
       <RecipeBoxFrame lid={lidContent}>{collection}</RecipeBoxFrame>
     </main>
