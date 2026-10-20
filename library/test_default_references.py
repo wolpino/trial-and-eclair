@@ -79,10 +79,16 @@ class DefaultReferenceAPITests(TestCase):
         self.assertEqual(self.king_arthur.title, "King Arthur Baking recipes")
 
     def test_default_cannot_take_links(self) -> None:
-        self.client.force_login(self.cook)
+        developer = User.objects.create_user(
+            username="dev", password="strong-pass-1", role="developer"
+        )
+        self.client.force_login(developer)
+        idea = self.client.post("/api/v1/ideas/", {"title": "Rye test"}, format="json")
 
         response = self.client.post(
-            f"{REFERENCES_URL}{self.king_arthur.id}/links/", {"note": "x"}, format="json"
+            f"{REFERENCES_URL}{self.king_arthur.id}/links/",
+            {"idea": idea.data["id"], "note": "x"},
+            format="json",
         )
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
