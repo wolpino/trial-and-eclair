@@ -1,3 +1,4 @@
+import { useRef, useState, type ReactNode } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthContext";
@@ -8,6 +9,34 @@ import {
   type FontPresetId,
   type ThemePresetId,
 } from "../theme/ThemeProvider";
+import { useDismiss } from "../lib/useDismiss";
+
+/** A native <details> menu that closes on an outside press and on Escape. */
+function DismissableMenu({
+  className,
+  summary,
+  children,
+}: {
+  className: string;
+  summary: ReactNode;
+  children: ReactNode;
+}) {
+  const ref = useRef<HTMLDetailsElement>(null);
+  const [open, setOpen] = useState(false);
+  useDismiss(ref, open, () => setOpen(false));
+
+  return (
+    <details
+      ref={ref}
+      className={className}
+      open={open}
+      onToggle={(event) => setOpen(event.currentTarget.open)}
+    >
+      {summary}
+      {children}
+    </details>
+  );
+}
 
 function ThemeSettings() {
   const { theme, font, setTheme, setFont } = useTheme();
@@ -124,8 +153,10 @@ function AccountMenu() {
   }
 
   return (
-    <details className="frame-account">
-      <summary className="frame-nav__summary">Account</summary>
+    <DismissableMenu
+      className="frame-account"
+      summary={<summary className="frame-nav__summary">Account</summary>}
+    >
       <div className="frame-nav__panel frame-account__panel">
         <p className="frame-account__name">{user.username}</p>
         <ThemeSettings />
@@ -138,7 +169,7 @@ function AccountMenu() {
           Log out
         </button>
       </div>
-    </details>
+    </DismissableMenu>
   );
 }
 
@@ -152,18 +183,22 @@ export function FrameNav() {
       <PlaceLink to="/recipe-box" label="Box" />
       {hasDeveloperAccess ? <PlaceLink to="/developer/lab" label="Lab" /> : null}
       <div className="frame-nav__places">{overflowPlaces(hasDeveloperAccess)}</div>
-      <details className="frame-nav__more">
-        <summary
-          className={
-            moreActive
-              ? "frame-nav__summary frame-nav__summary--active"
-              : "frame-nav__summary"
-          }
-        >
-          More
-        </summary>
+      <DismissableMenu
+        className="frame-nav__more"
+        summary={
+          <summary
+            className={
+              moreActive
+                ? "frame-nav__summary frame-nav__summary--active"
+                : "frame-nav__summary"
+            }
+          >
+            More
+          </summary>
+        }
+      >
         <div className="frame-nav__panel">{overflowPlaces(hasDeveloperAccess)}</div>
-      </details>
+      </DismissableMenu>
       <AccountMenu />
     </nav>
   );
