@@ -152,12 +152,25 @@ class TestSessionSerializer(serializers.ModelSerializer):
             "id",
             "notes",
             "outcome",
+            "oven_temp",
+            "oven_temp_unit",
+            "bake_minutes",
+            "rating",
             "tested_at",
             "photos",
             "created_at",
             "updated_at",
         )
         read_only_fields = ("id", "tested_at", "created_at", "updated_at")
+
+    def validate(self, attrs: dict) -> dict:
+        oven_temp = attrs.get("oven_temp", getattr(self.instance, "oven_temp", None))
+        unit = attrs.get("oven_temp_unit", getattr(self.instance, "oven_temp_unit", None))
+        if oven_temp is not None and not unit:
+            raise serializers.ValidationError(
+                {"oven_temp_unit": ["Pick °F or °C for the oven temperature."]}
+            )
+        return attrs
 
 
 class PromoteIdeaSerializer(serializers.Serializer):

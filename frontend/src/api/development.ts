@@ -112,7 +112,18 @@ export interface TestSessionPhoto {
   updated_at: string;
 }
 
-export interface TestSession {
+export type OvenTempUnit = "F" | "C";
+
+/** Optional bake details on a test session; stored as typed, no conversion. */
+export interface TestSessionBake {
+  oven_temp: number | null;
+  oven_temp_unit: OvenTempUnit | null;
+  bake_minutes: number | null;
+  /** 1–5 */
+  rating: number | null;
+}
+
+export interface TestSession extends TestSessionBake {
   id: string;
   notes: string;
   outcome: string;
@@ -343,7 +354,7 @@ export function fetchTestSessions(versionId: string): Promise<TestSession[]> {
 
 export function createTestSession(
   versionId: string,
-  data: { notes?: string; outcome?: string },
+  data: { notes?: string; outcome?: string } & Partial<TestSessionBake>,
 ): Promise<TestSession> {
   return apiFetch<TestSession>(
     `/api/v1/versions/${versionId}/test-sessions/`,

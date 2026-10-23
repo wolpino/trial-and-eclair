@@ -2,6 +2,7 @@ import uuid
 
 from django.conf import settings
 from django.core.exceptions import ValidationError
+from django.core.validators import MaxValueValidator, MinValueValidator
 from django.db import models
 
 from catalog.base import StandardUnit, TimestampedModel
@@ -186,6 +187,25 @@ class TestSession(TimestampedModel):
     notes = models.TextField(blank=True)
     outcome = models.TextField(blank=True)
     tested_at = models.DateTimeField(auto_now_add=True)
+
+    class TempUnit(models.TextChoices):
+        FAHRENHEIT = "F", "°F"
+        CELSIUS = "C", "°C"
+
+    # Stored as typed; no conversion between units.
+    oven_temp = models.PositiveSmallIntegerField(null=True, blank=True)
+    oven_temp_unit = models.CharField(
+        max_length=1,
+        choices=TempUnit.choices,
+        null=True,
+        blank=True,
+    )
+    bake_minutes = models.PositiveSmallIntegerField(null=True, blank=True)
+    rating = models.PositiveSmallIntegerField(
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(1), MaxValueValidator(5)],
+    )
 
     class Meta:
         ordering = ["-tested_at"]
