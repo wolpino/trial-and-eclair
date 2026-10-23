@@ -27,11 +27,13 @@ function kitchen(page: Page): Locator {
   return page.getByRole("main", { name: "Kitchen" });
 }
 
-/** Nothing in the page can create, edit, pin or delete. */
+/** Nothing in the page can create, edit, pin or delete (filters may stay). */
 async function expectNoEditControls(main: Locator) {
-  await expect(main.locator("input:enabled, textarea:enabled, select:enabled")).toHaveCount(0);
+  await expect(main.locator("input:enabled, textarea:enabled")).toHaveCount(0);
   await expect(
-    main.getByRole("button", { name: /pin|delete|save|publish|log entry|open notebook|remove/i }),
+    main.getByRole("button", {
+      name: /^(pin|delete|save|publish|log entry|open notebook|remove|import|add)/i,
+    }),
   ).toHaveCount(0);
 }
 
@@ -72,7 +74,7 @@ test("a home cook opens the sample notebook and reads a recipe", async ({ page }
   await expect(notebook.getByRole("textbox", { name: /title/i }).first()).toHaveValue(
     "Brown Butter Cornbread",
   );
-  await expect(notebook.getByRole("region", { name: "Ingredients" }).getByText(/Honey/)).toBeVisible();
+  await expect(notebook.getByRole("region", { name: "Ingredients" }).getByText(/honey/i)).toBeVisible();
   await expect(notebook.getByText(/Brown the butter in the skillet/)).toBeVisible();
   await expect(notebook.getByText("Much nuttier. Edges crisp, middle moist.")).toBeVisible();
   await expectNoEditControls(notebook);

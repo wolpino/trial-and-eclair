@@ -15,13 +15,22 @@ class IdeaStatus(models.TextChoices):
     ARCHIVED = "archived", "Archived"
 
 
+# Sample rows (seed/data/sample_kitchen.json) have no owner and are read-only.
+SAMPLE_OWNER_CHECK = models.Q(is_sample=True, user__isnull=True) | models.Q(
+    is_sample=False, user__isnull=False
+)
+
+
 class Idea(TimestampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        null=True,
+        blank=True,
         related_name="ideas",
     )
+    is_sample = models.BooleanField(default=False)
     title = models.CharField(max_length=255)
     notes = models.TextField(blank=True)
     category_tag = models.CharField(max_length=100, blank=True)
@@ -42,6 +51,9 @@ class Idea(TimestampedModel):
 
     class Meta:
         ordering = ["-updated_at"]
+        constraints = [
+            models.CheckConstraint(condition=SAMPLE_OWNER_CHECK, name="idea_sample_has_no_owner"),
+        ]
 
     def __str__(self):
         return self.title
@@ -52,8 +64,11 @@ class DevelopmentRecipe(TimestampedModel):
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        null=True,
+        blank=True,
         related_name="development_recipes",
     )
+    is_sample = models.BooleanField(default=False)
     title = models.CharField(max_length=255)
     slug = models.SlugField(max_length=255, unique=True, null=True, blank=True)
     status = models.CharField(
@@ -90,6 +105,11 @@ class DevelopmentRecipe(TimestampedModel):
 
     class Meta:
         ordering = ["-updated_at"]
+        constraints = [
+            models.CheckConstraint(
+                condition=SAMPLE_OWNER_CHECK, name="development_recipe_sample_has_no_owner"
+            ),
+        ]
 
     def __str__(self):
         return self.title

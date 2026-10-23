@@ -26,5 +26,6 @@ fi
 "$PY" manage.py migrate --noinput
 "$PY" manage.py load_recipe_seed --force
 "$PY" manage.py load_starter_recipes
+"$PY" manage.py load_sample_kitchen
 "$PY" manage.py load_default_references
 exec "$PY" manage.py runserver 127.0.0.1:8010 --noreload
