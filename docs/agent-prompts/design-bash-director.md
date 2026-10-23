@@ -78,6 +78,7 @@ Start it with `isolation: "worktree"`. Give it the issue number, the GitHub tabl
 5. Before every push, all three must pass: `DEBUG=True .venv/bin/python manage.py test`, `npm --prefix frontend run build`, `npm --prefix frontend run test:e2e`.
 6. E2E lock. Playwright reuses any server on 127.0.0.1:8010, so e2e runs from different worktrees must never overlap. Run every e2e (including single specs) through `flock`, which waits for the lock and releases it when the run exits, even after a crash:
    - `flock /tmp/te-e2e.lock npm --prefix frontend run test:e2e`, or from `frontend/`: `flock /tmp/te-e2e.lock npx playwright test <spec>`. If the wait may be long, run it in the background.
+   - Subagents share the director's scratchpad. Put the issue number in every scratch file name (`e2e-issue84.sh`, not `e2e.sh`) so two subagents never overwrite each other's scripts.
    - Before starting, check that nothing is listening on 127.0.0.1:8010: `curl -s http://127.0.0.1:8010/healthz` should fail to connect (`ss` isn't installed). If something is listening, wait. Never kill another worktree's server.
    - `scripts/e2e_server.sh` only builds when `frontend/dist/index.html` is missing, so build first every time the frontend changed.
 7. Stop after three failed fix attempts. Comment on the issue with what's left, and hand back "blocked".

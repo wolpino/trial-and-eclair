@@ -10,6 +10,41 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-23 · Design Bash run 2: #84 and #91
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-23T06:30:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (director plus two worktree subagents) |
+| **Outcome** | partial (#84 → PR #119, #91 → PR #120; waves 3–4 wait on #119) |
+
+### Intent
+Run the director prompt again. Since run 1, #95, #96, #97, #98 and #101 merged, and the owner OK'd `DeveloperRecipePage.tsx` for #91 (comment on #91, 2026-10-23).
+
+### Summary
+Started #84 (wave 2) and #91 side by side; the draft label came off #84. Both subagents committed tests first and passed the backend tests, the build and e2e before hand-back. **#84 → PR #119** (`feat/issue-84-kitchen-home`): on wide screens, `/` is a drawn kitchen scene (`components/kitchen/`, `styles/kitchen.css`) with the shelf (References plus `on_shelf` cookbooks), board, notebook, recipe box and a working clock. Locked board and notebook for home cooks. On `/` the top nav and Back/Forward are hidden and the account menu sits top-right. Tests: 160 backend, 70 e2e (7 new). **#91 → PR #120** (`feat/issue-91-test-session-fields`): `TestSession` gets nullable `oven_temp`, `oven_temp_unit` (F/C), `bake_minutes`, `rating` (1–5) in migration `0003_test_session_bake_fields` (after `0002_cookbook_on_shelf`). The Lab form reads them with `readBakeFields(form)`, so `DeveloperRecipePage.tsx` changes by 5 lines. README row added. Tests: 176 backend, 85 e2e (2 new). In this session, GitHub writes needed the owner's explicit OK before the permission check allowed them.
+
+### Decisions
+- **Merge order**: #120 and #119 are independent and both merge clean onto `staging-render`; merge #119 first since wave 3 waits on it
+- **#84**: a sideways phone keeps the old home (phone kitchen is #87); the start-trial note sits on the counter; guests see the kitchen
+- **#91**: a temperature without a unit is refused (400 on `oven_temp_unit`)
+- **Scratch files carry the issue number**: two subagents both wrote `scratchpad/e2e.sh`; the prompt now says so
+
+### Open threads
+- The owner reviews and merges #119 and #120 (owner checks are listed in each PR body)
+- Run 1's #99 and #100 now conflict with `staging-render` (#98 and #97 merged): #99 in `entrypoint.sh`, #100 in `PhoneRecipeBox.tsx`. Not resolved in this run
+- #103 and #104 stay drafts until the owner OKs them. #89 waits on photographs. Drafts #66–#69 untouched. 14 Dependabot PRs (#105–#118) are outside this run
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** design bash, director, kitchen scene, kitchen home, test session, oven temperature, rating, bake time
+**Files:** frontend/src/components/kitchen/KitchenScene.tsx, frontend/src/components/kitchen/useKitchenHome.ts, frontend/src/styles/kitchen.css, frontend/e2e/kitchen-home.spec.ts, development/migrations/0003_test_session_bake_fields.py, frontend/src/components/lab/LabTestSessions.tsx, frontend/e2e/lab-test-sessions.spec.ts
+**Do not redo:** #84 build (PR #119); #91 build (PR #120); wave 1 builds (PRs #95–#101)
+**Resume with:** run the director prompt again after the owner merges #119 (unblocks wave 3: #86, then #85, then #88)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-20 · Design Bash run: wave 1
 
 | Field | Value |
