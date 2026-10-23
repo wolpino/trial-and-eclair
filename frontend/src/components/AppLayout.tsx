@@ -3,6 +3,7 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 import { useAuth } from "../auth/AuthContext";
 import { usePhoneLayout } from "../lib/usePhoneLayout";
 import { FrameNav } from "./FrameNav";
+import { useKitchenHome } from "./kitchen/useKitchenHome";
 import { HistoryNav } from "./HistoryNav";
 
 function isPublicReadingPath(pathname: string): boolean {
@@ -14,6 +15,8 @@ export function AppLayout() {
   const location = useLocation();
   const isPhone = usePhoneLayout();
   const isPhoneOrSideways = usePhoneLayout({ sideways: true });
+  // The kitchen scene home goes full-bleed: no Back/Forward strip (decision 004).
+  const kitchenHome = useKitchenHome();
   // The phone box takes the whole screen; other phone pages keep the bottom bar (decision 003).
   const phoneBox = isPhoneOrSideways && /^\/recipe-box\/?$/.test(location.pathname);
   // Visitors on the phone box get the same shell, so making a guest on the first
@@ -40,7 +43,7 @@ export function AppLayout() {
       <div className="app-frame">
         {phoneBox ? null : <FrameNav />}
         <div className="app-frame__body">
-          {isPhone || phoneBox ? null : (
+          {isPhone || phoneBox || kitchenHome ? null : (
             <div className="app-frame__history">
               <HistoryNav />
             </div>
