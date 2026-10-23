@@ -6,6 +6,8 @@ import { canStartDeveloperTrial } from "../../auth/access";
 import { useAuth } from "../../auth/AuthContext";
 import { StartTrialCallout } from "../StartTrialCallout";
 import { KitchenClock } from "./KitchenClock";
+import { KitchenLight } from "./KitchenLight";
+import { useSunlight } from "./useSunlight";
 import "../../styles/kitchen.css";
 
 const LOCKED_TIP = "For developers. Start a 14-day developer trial to use it.";
@@ -109,6 +111,7 @@ function Decoration() {
 export function KitchenScene() {
   const { user, hasDeveloperAccess } = useAuth();
   const [shelfBooks, setShelfBooks] = useState<Cookbook[]>([]);
+  const sun = useSunlight();
 
   useEffect(() => {
     if (!hasDeveloperAccess) {
@@ -137,10 +140,11 @@ export function KitchenScene() {
     !canStartDeveloperTrial(user);
 
   return (
-    <main className="kitchen" aria-label="Kitchen">
+    <main className="kitchen" aria-label="Kitchen" data-light={sun.phase} style={sun.style}>
       <h1 className="kitchen-title">Trial and Eclair</h1>
       <div className="kitchen-wall" aria-hidden="true" />
       <div className="kitchen-counter" aria-hidden="true" />
+      <KitchenLight sun={sun} />
       <Decoration />
 
       <div className="kitchen-shelf-area">
