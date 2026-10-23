@@ -1,8 +1,9 @@
-import { useCallback, useMemo, useRef, useState, type ReactNode } from "react";
+import { useCallback, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 import type { User } from "../../../api/client";
 import type { BoxCard, CollectionRecipe } from "../../../api/collection";
 import { useAuth } from "../../../auth/AuthContext";
+import { matchesSearch } from "../../../lib/boxSearch";
 import { useDismiss } from "../../../lib/useDismiss";
 import { PhoneBoxTabs } from "./PhoneBoxTabs";
 import { PhoneCardView } from "./PhoneCardView";
@@ -22,6 +23,9 @@ type PhoneRecipeBoxProps = {
   /** Only signed-up people can hide a starter card (decision 002). */
   onHide?: (starter: BoxCard) => void;
   busy?: boolean;
+  /** The search typed from the ☰ menu; null shows the A–Z tabs. */
+  search: string | null;
+  onSearchChange: (search: string | null) => void;
 };
 
 const LID_STEP_PREVIEW = 2;
@@ -48,6 +52,8 @@ export function PhoneRecipeBox({
   onFork,
   onHide,
   busy = false,
+  search,
+  onSearchChange,
 }: PhoneRecipeBoxProps) {
   const { user } = useAuth();
   const [openTab, setOpenTab] = useState<string | null>(null);
@@ -77,6 +83,11 @@ export function PhoneRecipeBox({
       }
     },
     [byTab],
+  );
+
+  const results = useMemo(
+    () => (search?.trim() ? recipes.filter((recipe) => matchesSearch(recipe, search)) : []),
+    [recipes, search],
   );
 
   const closeCardView = useCallback(() => {
@@ -168,27 +179,74 @@ export function PhoneRecipeBox({
 
       <section aria-label="Recipe box" className="phone-box-box">
         <div aria-hidden="true" className="phone-box-stack" />
-        {/* The fan and the tabs; a press anywhere else closes the fan. */}
-        <div ref={tabsRef} style={{ display: "contents" }}>
-          <PhoneBoxTabs
-            byTab={byTab}
-            openTab={openTab}
-            selectedId={selected?.id}
-            onOpenTab={openTabKey}
-            onPick={(recipe) => {
-              onSelect(recipe.id);
-              setOpenTab(null);
-              setAnnouncement(`${recipe.title} selected`);
-            }}
-          />
-        </div>
+        {search !== null ? (
+          <>
+            {results.length > 0 ? (
+              <ul aria-label="Search results" className="phone-box-fan">
+                {results.map((recipe, index) => (
+                  <li key={recipe.id} style={{ "--i": index } as CSSProperties}>
+                    <button
+                      aria-current={recipe.id === selected?.id ? "true" : undefined}
+                      className="phone-box-fan__card"
+                      type="button"
+                      onClick={() => {
+                        onSelect(recipe.id);
+                        setCardViewOpen(true);
+                      }}
+                    >
+                      {recipe.title}
+                      {recipe.is_starter ? <span className="phone-box-starter">Starter</span> : null}
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            ) : null}
+            <div className="phone-box-search">
+              <input
+                autoFocus
+                aria-label="Search recipes"
+                className="phone-box-search__field"
+                placeholder="Title or ingredient"
+                type="search"
+                value={search}
+                onChange={(event) => onSearchChange(event.target.value)}
+              />
+              <button
+                aria-label="Clear search"
+                className="phone-box-btn"
+                type="button"
+                onClick={() => onSearchChange(null)}
+              >
+                Clear
+              </button>
+              {search.trim() && results.length === 0 ? (
+                <p className="phone-box-search__empty">No cards match.</p>
+              ) : null}
+            </div>
+          </>
+        ) : (
+          // The fan and the tabs; a press anywhere else closes the fan.
+          <div ref={tabsRef} style={{ display: "contents" }}>
+            <PhoneBoxTabs
+              byTab={byTab}
+              openTab={openTab}
+              selectedId={selected?.id}
+              onOpenTab={openTabKey}
+              onPick={(recipe) => {
+                onSelect(recipe.id);
+                setOpenTab(null);
+                setAnnouncement(`${recipe.title} selected`);
+              }}
+            />
+          </div>
+        )}
         <div className="phone-box-front">
           <i aria-hidden="true" className="phone-box-latch" />
           {boxLabel(user)}
         </div>
       </section>
 
-      {!openTab && !cardViewOpen ? (
+      {!openTab && !cardViewOpen && search === null ? (
         <button aria-label="Add recipe" className="phone-box-plus" type="button" onClick={onAdd}>
           +
         </button>
