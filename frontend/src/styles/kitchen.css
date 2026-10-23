@@ -1,0 +1,549 @@
+/*
+ * The kitchen scene home on wide screens (decision 004).
+ * A simple drawing that stands in until photographs exist.
+ * Positions are percentages of the scene so it scales with the window.
+ */
+
+.kitchen {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  min-height: 560px;
+  overflow: hidden;
+  --kitchen-counter-top: 74%;
+  --kitchen-ink: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+
+.kitchen-title {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Wall and counter */
+
+.kitchen-wall {
+  position: absolute;
+  inset: 0 0 calc(100% - var(--kitchen-counter-top));
+  background:
+    radial-gradient(ellipse 60% 70% at 18% 10%, var(--color-sun-glow) 0%, transparent 70%),
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 calc(10% - 1px),
+      color-mix(in srgb, var(--color-border) 60%, transparent) calc(10% - 1px) 10%
+    ),
+    var(--color-bg);
+}
+
+.kitchen-counter {
+  position: absolute;
+  top: var(--kitchen-counter-top);
+  right: 0;
+  bottom: 0;
+  left: 0;
+  background:
+    linear-gradient(
+      to bottom,
+      var(--surface-wood) 0 18px,
+      color-mix(in srgb, var(--surface-wood) 70%, #000) 18px 22px,
+      var(--color-surface) 22px
+    );
+  border-top: 2px solid color-mix(in srgb, var(--surface-wood) 75%, #000);
+}
+
+/* Objects: every one is a real link or button with a focus ring */
+
+.kitchen-object {
+  position: absolute;
+  display: block;
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 160ms ease, filter 160ms ease;
+}
+
+.kitchen-object:hover {
+  filter: drop-shadow(0 6px 14px var(--color-sun-glow));
+}
+
+.kitchen-object:focus-visible {
+  outline: 3px solid var(--color-accent-floral);
+  outline-offset: 5px;
+  border-radius: var(--radius-md);
+}
+
+.kitchen-object--locked {
+  cursor: not-allowed;
+}
+
+.kitchen-object--locked > :not(.kitchen-lock) {
+  filter: grayscale(0.85) opacity(0.6);
+}
+
+.kitchen-object--locked:hover {
+  filter: none;
+}
+
+.kitchen-lock {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 2.25rem;
+  height: 2.25rem;
+  padding: 0.4rem;
+  transform: translate(-50%, -50%);
+  background: var(--surface-paper);
+  border: 1px solid var(--color-border-strong);
+  border-radius: 50%;
+  fill: var(--color-text-muted);
+  stroke: var(--color-text-muted);
+  box-shadow: var(--shadow-card);
+}
+
+.kitchen-lock rect {
+  stroke: none;
+}
+
+/* Shelf across the top */
+
+.kitchen-shelf-area {
+  position: absolute;
+  top: 4%;
+  left: 6%;
+  width: 62%;
+  height: 15%;
+}
+
+.kitchen-shelf {
+  position: absolute;
+  inset: 0 2% 10px;
+  display: flex;
+  align-items: flex-end;
+  gap: 0.5rem;
+  margin: 0;
+  padding: 0 0.5rem;
+  list-style: none;
+}
+
+.kitchen-shelf li {
+  display: flex;
+  align-items: flex-end;
+  height: 100%;
+}
+
+.kitchen-shelf .kitchen-object {
+  position: relative;
+}
+
+.kitchen-shelf__plank {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 12px;
+  background: var(--surface-wood);
+  border-bottom: 4px solid color-mix(in srgb, var(--surface-wood) 70%, #000);
+  border-radius: 2px;
+  box-shadow: 0 6px 10px -6px var(--kitchen-ink);
+}
+
+.kitchen-references {
+  display: flex;
+  align-items: flex-end;
+  gap: 2px;
+  height: 100%;
+}
+
+.kitchen-book {
+  display: block;
+  border-radius: 2px 2px 0 0;
+  box-shadow: inset -3px 0 0 color-mix(in srgb, #000 15%, transparent);
+}
+
+.kitchen-book--ref-a {
+  width: 1.4rem;
+  height: 92%;
+  background: var(--color-accent-secondary);
+}
+
+.kitchen-book--ref-b {
+  width: 1.1rem;
+  height: 80%;
+  background: var(--color-accent-floral);
+}
+
+.kitchen-book--ref-c {
+  width: 1.6rem;
+  height: 86%;
+  background: var(--surface-box);
+}
+
+.kitchen-book--cookbook {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2rem;
+  height: 96%;
+  background: var(--surface-kraft);
+  border: 1px solid var(--color-border-strong);
+}
+
+.kitchen-book__title {
+  overflow: hidden;
+  max-height: 92%;
+  font-family: var(--font-label);
+  font-size: 0.7rem;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  writing-mode: vertical-rl;
+  color: var(--color-text);
+}
+
+/* Clock on the wall */
+
+.kitchen-clock {
+  position: absolute;
+  top: 5%;
+  right: 9%;
+  width: clamp(4.5rem, 9vw, 7.5rem);
+  aspect-ratio: 1;
+}
+
+.kitchen-clock svg {
+  display: block;
+  width: 100%;
+  height: 100%;
+  filter: drop-shadow(1px 3px 0 var(--shadow-card-color));
+}
+
+.kitchen-clock__rim {
+  fill: var(--color-accent-secondary);
+}
+
+.kitchen-clock__face {
+  fill: var(--surface-paper);
+}
+
+.kitchen-clock__tick,
+.kitchen-clock__hour,
+.kitchen-clock__minute {
+  stroke: var(--color-text);
+  stroke-linecap: round;
+}
+
+.kitchen-clock__tick {
+  stroke-width: 2;
+}
+
+.kitchen-clock__hour {
+  stroke-width: 4.5;
+}
+
+.kitchen-clock__minute {
+  stroke-width: 3;
+}
+
+.kitchen-clock__pin {
+  fill: var(--color-accent);
+}
+
+/* Cork board, centre of the wall */
+
+.kitchen-board {
+  top: 25%;
+  left: 31%;
+  width: 38%;
+  height: 43%;
+}
+
+.kitchen-board__cork {
+  position: absolute;
+  inset: 0;
+  background:
+    radial-gradient(circle at 20% 30%, color-mix(in srgb, #000 8%, transparent) 1px, transparent 2px),
+    radial-gradient(circle at 70% 60%, color-mix(in srgb, #000 8%, transparent) 1px, transparent 2px),
+    var(--surface-cork);
+  background-size: 9px 9px, 13px 13px, auto;
+  border: 10px solid var(--surface-wood);
+  border-radius: var(--radius-sm);
+  box-shadow: 0 8px 18px -8px var(--kitchen-ink);
+}
+
+.kitchen-board__note {
+  position: absolute;
+  width: 22%;
+  height: 30%;
+  background: var(--surface-card);
+  box-shadow: var(--shadow-pin);
+}
+
+.kitchen-board__note::before {
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  content: "";
+  background: var(--tape-rose);
+  border-radius: 50%;
+  transform: translateX(-50%);
+}
+
+.kitchen-board__note--a {
+  top: 10%;
+  left: 8%;
+  transform: rotate(-4deg);
+}
+
+.kitchen-board__note--b {
+  top: 14%;
+  left: 40%;
+  transform: rotate(3deg);
+  background: var(--tape-cream);
+}
+
+.kitchen-board__note--c {
+  top: 52%;
+  left: 22%;
+  transform: rotate(2deg);
+}
+
+.kitchen-board__note--d {
+  top: 48%;
+  left: 68%;
+  transform: rotate(-3deg);
+  background: color-mix(in srgb, var(--color-accent-secondary) 25%, var(--surface-card));
+}
+
+/* Lab notebook, standing on the counter and leaning on the board's left corner */
+
+.kitchen-notebook {
+  bottom: calc(100% - var(--kitchen-counter-top));
+  left: 26.5%;
+  width: 8%;
+  height: 27%;
+  transform: rotate(9deg);
+  transform-origin: bottom left;
+}
+
+.kitchen-notebook__cover {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  padding-top: 22%;
+  background: var(--surface-notebook-border);
+  border-left: 6px solid color-mix(in srgb, var(--surface-notebook-border) 70%, #000);
+  border-radius: 2px 6px 6px 2px;
+  box-shadow: 4px 6px 12px -6px var(--kitchen-ink);
+}
+
+.kitchen-notebook__label {
+  padding: 0.2rem 0.5rem;
+  background: var(--surface-notebook);
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+
+/* Recipe box on the counter */
+
+.kitchen-box {
+  bottom: calc(100% - var(--kitchen-counter-top) - 3%);
+  left: 64%;
+  width: 15%;
+  height: 17%;
+}
+
+.kitchen-box__drawing {
+  position: absolute;
+  inset: 0;
+}
+
+.kitchen-box__card {
+  position: absolute;
+  top: 0;
+  width: 70%;
+  height: 40%;
+  background: var(--surface-card);
+  border: 1px solid var(--color-border-card);
+}
+
+.kitchen-box__card--a {
+  left: 12%;
+  transform: rotate(-3deg);
+}
+
+.kitchen-box__card--b {
+  top: 6%;
+  left: 18%;
+  transform: rotate(2deg);
+}
+
+.kitchen-box__front {
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  height: 72%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface-wood);
+  border: 2px solid var(--surface-box-edge);
+  border-radius: 3px;
+  box-shadow: 0 8px 12px -8px var(--kitchen-ink);
+}
+
+.kitchen-box__plate {
+  padding: 0.15rem 0.6rem;
+  background: var(--surface-paper);
+  border: 1px solid var(--surface-box-edge);
+  font-family: var(--font-label);
+  font-size: 0.8rem;
+  color: var(--color-text);
+}
+
+/* Decoration: plants, lemons, mug */
+
+.kitchen-decor > * {
+  position: absolute;
+  display: block;
+}
+
+.kitchen-plant {
+  width: 5rem;
+  height: 5.5rem;
+  background: var(--color-accent);
+  border-radius: 0 0 0.8rem 0.8rem;
+}
+
+.kitchen-plant--counter {
+  bottom: calc(100% - var(--kitchen-counter-top));
+  left: 7%;
+}
+
+/* A smaller pot standing on the shelf's right end */
+.kitchen-plant--shelf {
+  bottom: calc(81% + 16px);
+  left: 62%;
+  transform: scale(0.6);
+  transform-origin: bottom center;
+  background: var(--color-accent-floral);
+}
+
+.kitchen-plant__leaf {
+  position: absolute;
+  bottom: 100%;
+  width: 1.6rem;
+  height: 3.2rem;
+  background: #4f8a5b;
+  border-radius: 50% 50% 50% 50% / 70% 70% 30% 30%;
+}
+
+.kitchen-plant__leaf--a {
+  left: 0.6rem;
+  transform: rotate(-20deg);
+}
+
+.kitchen-plant__leaf--b {
+  left: 1.7rem;
+  height: 4rem;
+  background: #3d7a4b;
+}
+
+.kitchen-plant__leaf--c {
+  left: 2.8rem;
+  transform: rotate(22deg);
+}
+
+.kitchen-lemons {
+  bottom: calc(100% - var(--kitchen-counter-top) - 2%);
+  left: 16%;
+  display: flex;
+  gap: 0.15rem;
+}
+
+.kitchen-lemon {
+  display: block;
+  width: 2.2rem;
+  height: 1.7rem;
+  background: #f2cf3b;
+  border-radius: 50%;
+  box-shadow: inset -4px -4px 0 color-mix(in srgb, #000 8%, transparent);
+}
+
+.kitchen-mug {
+  bottom: calc(100% - var(--kitchen-counter-top) - 2%);
+  left: 54%;
+  width: 3rem;
+  height: 3.4rem;
+  background: var(--color-accent-secondary);
+  border-radius: 0 0 0.6rem 0.6rem;
+}
+
+.kitchen-mug::after {
+  position: absolute;
+  top: 0.7rem;
+  right: -1rem;
+  width: 1.2rem;
+  height: 1.6rem;
+  content: "";
+  border: 0.35rem solid var(--color-accent-secondary);
+  border-left: none;
+  border-radius: 0 0.8rem 0.8rem 0;
+}
+
+/* Trial note for home cooks, on the counter front */
+
+.kitchen-note {
+  position: absolute;
+  top: calc(var(--kitchen-counter-top) + 4%);
+  right: 6%;
+  max-width: 24rem;
+  margin: 0;
+  padding: 0.75rem 1rem;
+  background: var(--surface-paper);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+}
+
+.kitchen-note .start-trial {
+  gap: 0.5rem;
+  margin: 0;
+}
+
+.kitchen-note p {
+  margin: 0;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kitchen-object {
+    transition: none;
+  }
+}
+
+/* The account menu floats in the top-right corner (FrameNav on the kitchen home) */
+
+.frame-account-corner {
+  position: fixed;
+  top: 0.75rem;
+  right: 1rem;
+  z-index: 50;
+}
+
+.frame-account-corner .frame-nav__summary {
+  background: var(--color-surface-elevated);
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  box-shadow: var(--shadow-card);
+}

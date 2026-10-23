@@ -2,11 +2,14 @@ import { Link } from "react-router-dom";
 
 import { canStartDeveloperTrial } from "../auth/access";
 import { useAuth } from "../auth/AuthContext";
+import { KitchenScene } from "../components/kitchen/KitchenScene";
+import { useKitchenHome } from "../components/kitchen/useKitchenHome";
 import { StartTrialCallout } from "../components/StartTrialCallout";
 import { LoginPage } from "./LoginPage";
 
 export function HomePage() {
   const { user, loading, hasDeveloperAccess } = useAuth();
+  const kitchenHome = useKitchenHome();
 
   if (loading) {
     return <p className="status-message">Loading…</p>;
@@ -14,6 +17,11 @@ export function HomePage() {
 
   if (!user) {
     return <LoginPage />;
+  }
+
+  // Wide screens get the kitchen scene; the phone keeps these links for now (decision 004).
+  if (kitchenHome) {
+    return <KitchenScene />;
   }
 
   return (

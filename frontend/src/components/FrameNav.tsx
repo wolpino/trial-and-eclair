@@ -1,6 +1,7 @@
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthContext";
+import { useKitchenHome } from "./kitchen/useKitchenHome";
 import {
   FONT_PRESETS,
   THEME_PRESETS,
@@ -146,6 +147,16 @@ export function FrameNav() {
   const { hasDeveloperAccess } = useAuth();
   const location = useLocation();
   const moreActive = moreRouteActive(location.pathname);
+  const kitchenHome = useKitchenHome();
+
+  // The kitchen scene replaces the top nav; only the account menu stays, top-right.
+  if (kitchenHome) {
+    return (
+      <div className="frame-account-corner">
+        <AccountMenu />
+      </div>
+    );
+  }
 
   return (
     <nav className="frame-nav" aria-label="Places">
