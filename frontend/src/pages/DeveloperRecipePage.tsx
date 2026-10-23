@@ -6,7 +6,7 @@ import { usePhoneLayout } from "../lib/usePhoneLayout";
 import { ApiError } from "../api/client";
 import { ComparePanel } from "../components/lab/ComparePanel";
 import { LabJournal } from "../components/lab/LabJournal";
-import { LabTestSessions } from "../components/lab/LabTestSessions";
+import { LabTestSessions, readBakeFields } from "../components/lab/LabTestSessions";
 import { MarginTools } from "../components/lab/MarginTools";
 import { NotebookMargin } from "../components/lab/NotebookMargin";
 import { NotebookOverlay } from "../components/lab/NotebookOverlay";
@@ -273,14 +273,17 @@ export function DeveloperRecipePage() {
     if (!displayedVersion) {
       return;
     }
+    const form = event.currentTarget;
     try {
       const session = await createTestSession(displayedVersion.id, {
         notes: sessionNotes,
         outcome: sessionOutcome,
+        ...readBakeFields(form),
       });
       for (const photo of sessionPhotos) {
         await uploadTestSessionPhoto(session.id, photo);
       }
+      form.reset();
       setSessionNotes("");
       setSessionOutcome("");
       setSessionPhotos([]);

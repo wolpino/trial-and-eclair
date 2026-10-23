@@ -141,6 +141,7 @@ Developer-only. Creating a recipe auto-creates **version 1** as `current_version
 | `recipes/{id}/versions/{id}/` | GET, PATCH | PATCH allowed on **current** version only |
 | `versions/{id}/ingredient-lines/` | GET, POST | Ingredient lines for a version |
 | `versions/{id}/ingredient-lines/{id}/` | GET, PATCH, DELETE | Writes on **current** version only |
+| `versions/{id}/test-sessions/`, `.../{id}/` | GET, POST, PATCH, DELETE | Bake log: `notes`, `outcome`, read-only `tested_at` and `photos`. Optional (null when unset): `oven_temp` (≥ 0, needs `oven_temp_unit` `F` or `C`, stored as typed), `bake_minutes` (≥ 0), `rating` (1–5) |
 
 Ingredient lines reference `catalog.Ingredient` by UUID (`quantity`, `unit` or `custom_unit`, `prep_note`, etc.).
 

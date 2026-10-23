@@ -1,7 +1,7 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, Fragment, useId, useState } from "react";
 
 import { mediaUrl } from "../../api/client";
-import type { TestSession } from "../../api/development";
+import type { OvenTempUnit, TestSession, TestSessionBake } from "../../api/development";
 import { formatLabDate } from "./labDates";
 
 type LabTestSessionsProps = {
@@ -17,6 +17,55 @@ type LabTestSessionsProps = {
   onDelete: (sessionId: string) => void;
   onDeletePhoto: (sessionId: string, photoId: string) => void;
 };
+
+const RATINGS = [5, 4, 3, 2, 1];
+
+function optionalNumber(value: FormDataEntryValue | null): number | null {
+  if (typeof value !== "string" || value.trim() === "") {
+    return null;
+  }
+  return Number(value);
+}
+
+/** Reads the bake fields from the bake session form. Empty fields become null. */
+export function readBakeFields(form: HTMLFormElement): TestSessionBake {
+  const data = new FormData(form);
+  const ovenTemp = optionalNumber(data.get("oven_temp"));
+  return {
+    oven_temp: ovenTemp,
+    oven_temp_unit: ovenTemp === null ? null : (data.get("oven_temp_unit") as OvenTempUnit),
+    bake_minutes: optionalNumber(data.get("bake_minutes")),
+    rating: optionalNumber(data.get("rating")),
+  };
+}
+
+function BakeSummary({ session }: { session: TestSession }) {
+  const parts: string[] = [];
+  if (session.oven_temp !== null) {
+    parts.push(`${session.oven_temp} °${session.oven_temp_unit ?? ""}`);
+  }
+  if (session.bake_minutes !== null) {
+    parts.push(`${session.bake_minutes} min`);
+  }
+  if (parts.length === 0 && session.rating === null) {
+    return null;
+  }
+  return (
+    <p className="lab-test-session-bake">
+      {parts.length > 0 ? <span>{parts.join(" · ")}</span> : null}
+      {session.rating !== null ? (
+        <span
+          className="lab-test-session-rating"
+          role="img"
+          aria-label={`Rated ${session.rating} of 5`}
+        >
+          {"★".repeat(session.rating)}
+          {"☆".repeat(5 - session.rating)}
+        </span>
+      ) : null}
+    </p>
+  );
+}
 
 function TestSessionEntry({
   session,
@@ -34,6 +83,7 @@ function TestSessionEntry({
       <time className="lab-log-entry__date" dateTime={session.tested_at}>
         {formatLabDate(session.tested_at)}
       </time>
+      <BakeSummary session={session} />
       {session.notes ? <p className="lab-log-entry__body">{session.notes}</p> : null}
       {session.outcome ? (
         <p className="lab-log-entry__aside">{session.outcome}</p>
@@ -86,6 +136,7 @@ function TestSessionWriteForm({
   onPhotoSelect: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onSubmit: (event: FormEvent<HTMLFormElement>) => void;
 }) {
+  const ratingId = useId();
   return (
     <form className="lab-test-session-form lab-log-page__write" onSubmit={onSubmit}>
       {error ? <p className="form-error">{error}</p> : null}
@@ -101,6 +152,40 @@ function TestSessionWriteForm({
           onChange={(event) => onOutcomeChange(event.target.value)}
         />
       </label>
+      <div className="lab-test-session-form__row">
+        <label>
+          Oven temperature
+          <input inputMode="numeric" min={0} name="oven_temp" step={1} type="number" />
+        </label>
+        <select aria-label="Temperature unit" defaultValue="F" name="oven_temp_unit">
+          <option value="F">°F</option>
+          <option value="C">°C</option>
+        </select>
+        <label>
+          Bake time (minutes)
+          <input inputMode="numeric" min={0} name="bake_minutes" step={1} type="number" />
+        </label>
+      </div>
+      <fieldset className="lab-test-session-stars">
+        <legend>Rating</legend>
+        {/* Highest first in the DOM; CSS reverses the row so checked ~ label fills the stars below it. */}
+        <div className="lab-test-session-stars__row">
+          {RATINGS.map((value) => (
+            <Fragment key={value}>
+              <input
+                aria-label={value === 1 ? "1 star" : `${value} stars`}
+                id={`${ratingId}-${value}`}
+                name="rating"
+                type="radio"
+                value={value}
+              />
+              <label htmlFor={`${ratingId}-${value}`} aria-hidden="true">
+                ★
+              </label>
+            </Fragment>
+          ))}
+        </div>
+      </fieldset>
       <label>
         Photos (up to 5)
         <input accept="image/*" multiple type="file" onChange={onPhotoSelect} />
