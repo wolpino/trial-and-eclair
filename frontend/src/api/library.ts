@@ -13,6 +13,8 @@ export interface Reference {
   title: string;
   url: string;
   notes: string;
+  /** Shared shelf book: can't be edited or deleted, only hidden for you. */
+  is_default: boolean;
   created_at: string;
   updated_at: string;
 }
@@ -48,4 +50,8 @@ export function patchReference(
 
 export function deleteReference(id: string): Promise<void> {
   return apiFetch<void>(`/api/v1/references/${id}/`, { method: "DELETE" });
+}
+
+export function hideReference(id: string): Promise<void> {
+  return apiFetch<void>(`/api/v1/references/${id}/hide/`, { method: "POST" });
 }
