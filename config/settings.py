@@ -24,6 +24,11 @@ def _flag(name: str, default: str) -> bool:
     return os.environ.get(name, default).lower() in ("true", "1", "yes")
 
 
+def login_throttle_rate(debug: bool, override: str | None) -> str:
+    """Login rate. The override (local e2e server only) is ignored unless DEBUG."""
+    return (override if debug else None) or "20/hour"
+
+
 def _postgres_config(url: str) -> dict:
     parsed = urllib.parse.urlparse(url)
     sslmode = urllib.parse.parse_qs(parsed.query).get("sslmode", [""])[0]
@@ -171,7 +176,8 @@ REST_FRAMEWORK = {
     "DEFAULT_THROTTLE_RATES": {
         "guest_create": "10/hour",
         "register": "10/hour",
-        "login": "20/hour",
+        # E2E_LOGIN_THROTTLE_RATE is for scripts/e2e_server.sh; ignored unless DEBUG.
+        "login": login_throttle_rate(DEBUG, os.environ.get("E2E_LOGIN_THROTTLE_RATE")),
         "url_import": "30/day",
         "url_import_guest": "10/day",
         "scan_import": "20/day",
