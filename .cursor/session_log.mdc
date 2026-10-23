@@ -77,6 +77,38 @@ PR #73 was merged with CI green. #56 is on `feat/issue-56-guest-phone`, and `fro
 
 ---
 
+## 2026-10-16 · Error-handling audit (#55, PR #57) and #56 issue
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-16` (logged 2026-10-23) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (main session plus worktree subagents) |
+| **Outcome** | completed (#57 merged; #56 finished by another session in PR #74) |
+
+### Intent
+Next Recipe Box milestone: confirm #51, #52 and #54 merged, get the owner's OK on #55, write a Task issue for guest and starter-card UI on the phone, and hand each issue to a worktree subagent.
+
+### Summary
+#51, #52 and #54 were merged. Opened #56 (phone guest saves and starter cards) as a draft and the owner approved it. Before handing off #55, added two items to it: the scan picker `accept` list and `ApiError.code`. A subagent built #55 tests-first in PR #57. `config/exceptions.py` makes errors `{"detail", "code"}` (field errors keep DRF's map). `UserFacingError` replaces `str(exc)` in the accounts, library and development views. Bad JSON and unhandled errors get fixed messages. `toApiError` in `client.ts` sets `code`, reads field errors as sentences and turns 429 into "try again in N minutes". `docs/error-audit.md` and a README "API errors" section were added. With the owner's OK, `ci.yml` and `scripts/e2e_server.sh` were added to #55's Owned paths so `DEBUG` could default to `False` (CI and e2e set `DEBUG=True`). CI was green and the owner merged #57. Then a #56 subagent stopped before pushing: `recipe-box-phone.spec.ts`'s empty-box test broke once starters showed in every box, and that file was outside Owned paths. Another session finished #56 (PR #74), so branch `feat/issue-56-phone-guest` was never pushed and has been dropped.
+
+### Decisions
+- **One at a time**: #55 before #56, because #56 needs `ApiError.code`
+- **DEBUG default in #57, not a separate issue**: owner's choice; Owned paths widened to `ci.yml` and `e2e_server.sh`
+- **"One error shape" means two documented forms**: `{"detail", "code"}` plus DRF's field map, so validation responses didn't all change
+
+### Open threads
+- None from this session
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** error audit, UserFacingError, toApiError, ApiError.code, DEBUG default, scan accept list
+**Files:** config/exceptions.py, frontend/src/api/client.ts, docs/error-audit.md, frontend/e2e/api-errors.spec.ts
+**Do not redo:** #55 (PR #57 merged); #56 (PR #74 merged)
+**Resume with:** nothing from this session; see newer entries
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-16 · Card View redesign (#64), cloud session
 
 | Field | Value |
