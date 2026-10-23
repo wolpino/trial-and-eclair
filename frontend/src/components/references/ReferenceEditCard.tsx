@@ -42,6 +42,23 @@ export function ReferenceEditCard({
     setNotes(reference.notes);
   }, [reference]);
 
+  if (reference.is_default) {
+    return (
+      <section className="reference-edit" aria-labelledby="reference-edit-heading">
+        <p className="reference-edit__kicker">On every shelf</p>
+        <h2 id="reference-edit-heading">{reference.title}</h2>
+        <div className="reference-edit__actions">
+          <button className="paper-btn paper-btn--ghost" type="button" onClick={onCancel}>
+            Back on shelf
+          </button>
+          <a className="reference-edit__visit" href={reference.url} rel="noreferrer" target="_blank">
+            Open link
+          </a>
+        </div>
+      </section>
+    );
+  }
+
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
     setSaving(true);

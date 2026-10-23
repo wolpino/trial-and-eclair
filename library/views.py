@@ -1,5 +1,7 @@
 from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework import status, viewsets
+from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
@@ -10,7 +12,7 @@ from collection.serializers import CollectionRecipeSerializer
 from development.models import DevelopmentRecipe, ForkType
 from development.serializers import DevelopmentRecipeSerializer
 
-from .models import Reference, ReferenceLink, UrlRecipeImport
+from .models import HiddenDefaultReference, Reference, ReferenceLink, UrlRecipeImport
 from .serializers import (
     ReferenceLinkSerializer,
     ReferenceSerializer,
@@ -39,12 +41,17 @@ class GuestAwareScopedRateThrottle(ScopedRateThrottle):
 
 
 class ReferenceViewSet(viewsets.ModelViewSet):
+    """Own references plus the shared defaults the user has not hidden."""
+
     serializer_class = ReferenceSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = Reference.objects.filter(user=self.request.user).prefetch_related(
-            "links"
+        user = self.request.user
+        queryset = (
+            Reference.objects.filter(Q(user=user) | Q(user__isnull=True))
+            .exclude(hidden_by__user=user)
+            .prefetch_related("links")
         )
         ref_type = self.request.query_params.get("ref_type")
         if ref_type:
@@ -53,6 +60,27 @@ class ReferenceViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer) -> None:
         serializer.save(user=self.request.user)
+
+    def perform_update(self, serializer) -> None:
+        _deny_default_change(serializer.instance)
+        serializer.save()
+
+    def perform_destroy(self, instance) -> None:
+        _deny_default_change(instance)
+        instance.delete()
+
+    @action(detail=True, methods=["post"])
+    def hide(self, request, pk=None):
+        reference = get_object_or_404(Reference, pk=pk, user__isnull=True)
+        HiddenDefaultReference.objects.get_or_create(user=request.user, reference=reference)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+def _deny_default_change(reference: Reference) -> None:
+    if reference.user_id is None:
+        raise PermissionDenied(
+            "Shared references can't be changed. Remove it from your shelf instead."
+        )
 
 
 class ReferenceLinkViewSet(viewsets.ModelViewSet):

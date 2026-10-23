@@ -1,17 +1,10 @@
-import {
-  useCallback,
-  useEffect,
-  useMemo,
-  useRef,
-  useState,
-  type CSSProperties,
-  type ReactNode,
-} from "react";
+import { useCallback, useMemo, useRef, useState, type CSSProperties, type ReactNode } from "react";
 
 import type { User } from "../../../api/client";
 import type { BoxCard, CollectionRecipe } from "../../../api/collection";
 import { useAuth } from "../../../auth/AuthContext";
 import { matchesSearch } from "../../../lib/boxSearch";
+import { useDismiss } from "../../../lib/useDismiss";
 import { PhoneBoxTabs } from "./PhoneBoxTabs";
 import { PhoneCardView } from "./PhoneCardView";
 import { ingredientText, metaText, tabKey } from "./cardText";
@@ -67,6 +60,7 @@ export function PhoneRecipeBox({
   const [cardViewOpen, setCardViewOpen] = useState(false);
   const [announcement, setAnnouncement] = useState("");
   const lidCardRef = useRef<HTMLElement>(null);
+  const tabsRef = useRef<HTMLDivElement>(null);
 
   const byTab = useMemo(() => {
     const groups: Record<string, BoxCard[]> = {};
@@ -77,18 +71,8 @@ export function PhoneRecipeBox({
     return groups;
   }, [recipes]);
 
-  useEffect(() => {
-    if (!openTab) {
-      return;
-    }
-    function onKeyDown(event: KeyboardEvent) {
-      if (event.key === "Escape") {
-        setOpenTab(null);
-      }
-    }
-    document.addEventListener("keydown", onKeyDown);
-    return () => document.removeEventListener("keydown", onKeyDown);
-  }, [openTab]);
+  const closeFan = useCallback(() => setOpenTab(null), []);
+  useDismiss(tabsRef, openTab !== null, closeFan);
 
   const openTabKey = useCallback(
     (key: string | null) => {
@@ -241,17 +225,20 @@ export function PhoneRecipeBox({
             </div>
           </>
         ) : (
-          <PhoneBoxTabs
-            byTab={byTab}
-            openTab={openTab}
-            selectedId={selected?.id}
-            onOpenTab={openTabKey}
-            onPick={(recipe) => {
-              onSelect(recipe.id);
-              setOpenTab(null);
-              setAnnouncement(`${recipe.title} selected`);
-            }}
-          />
+          // The fan and the tabs; a press anywhere else closes the fan.
+          <div ref={tabsRef} style={{ display: "contents" }}>
+            <PhoneBoxTabs
+              byTab={byTab}
+              openTab={openTab}
+              selectedId={selected?.id}
+              onOpenTab={openTabKey}
+              onPick={(recipe) => {
+                onSelect(recipe.id);
+                setOpenTab(null);
+                setAnnouncement(`${recipe.title} selected`);
+              }}
+            />
+          </div>
         )}
         <div className="phone-box-front">
           <i aria-hidden="true" className="phone-box-latch" />

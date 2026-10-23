@@ -1,7 +1,8 @@
-import { FormEvent, useRef, useState } from "react";
+import { FormEvent, useCallback, useRef, useState } from "react";
 
 import { ApiError } from "../../api/client";
 import { createIdea, type Idea } from "../../api/development";
+import { useDismiss } from "../../lib/useDismiss";
 
 type PinIdeaFabProps = {
   onCreated: (idea: Idea) => void;
@@ -13,6 +14,10 @@ export function PinIdeaFab({ onCreated }: PinIdeaFabProps) {
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  // The backdrop sits inside the drawer and closes it on a click; this adds Escape.
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const close = useCallback(() => setOpen(false), []);
+  useDismiss(drawerRef, open, close);
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
@@ -50,6 +55,7 @@ export function PinIdeaFab({ onCreated }: PinIdeaFabProps) {
 
       {open ? (
         <div
+          ref={drawerRef}
           className="cork-drawer cork-drawer--fab"
           role="dialog"
           aria-modal="true"
