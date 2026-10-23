@@ -64,6 +64,21 @@ Do **not** run `load_recipe_seed --force` on a URL you will share — `dev` / `c
 
 `python manage.py load_starter_recipes` and `python manage.py load_default_references` are safe to run on a shared URL (recipe and shelf content only, no users).
 
+### Demo accounts
+
+`entrypoint.sh` runs `python manage.py load_demo_data` on every start. It creates two demo accounts filled from `seed/data` (a developer with ideas, Lab recipes, references and cookbooks; a home cook with box cards and references). Passwords live only in Render env vars:
+
+| Env var | Default |
+|---|---|
+| `DEMO_DEVELOPER_USERNAME` | `demo-developer` |
+| `DEMO_DEVELOPER_PASSWORD` | none (set in Render, `sync: false`) |
+| `DEMO_COOK_USERNAME` | `demo-cook` |
+| `DEMO_COOK_PASSWORD` | none (set in Render, `sync: false`) |
+
+If either password is unset or fails Django's password validators, the command prints a notice and does nothing; the deploy still starts. It only fills an account that is missing or has no content, so testers' changes survive restarts. Nothing is published. Tester uploads still vanish on restart (ephemeral disk).
+
+To reset a demo account: in `/admin/`, delete the demo developer's cookbooks first (cookbook entries protect recipe versions), then delete the demo user, then redeploy or restart.
+
 Local production-shaped run (after `cd frontend && npm run build`):
 
 ```bash
