@@ -10,6 +10,43 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-23 · Design Bash run 3: wave 3 (#86, #85, #88) and follow-ups #103, #104
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-23T08:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (director plus worktree subagents, two at a time) |
+| **Outcome** | partial (five PRs open, #123–#125, #127, #128; wave 4 waits on #125) |
+
+### Intent
+Run the director prompt again. Since run 2, every earlier PR merged (#95–#101, #119, #120). The owner OK'd #103 and #104 ("yes" on each, 2026-10-23).
+
+### Summary
+Ran wave 3 one issue at a time (#86, then #85, then #88), because all three edit `components/kitchen/`. Paired #103 and #104 with slots where nothing else touched their files. Each subagent committed its tests first, and backend tests and the build passed before every push. **#86 → PR #123**: read-only sample board and notebook for home cooks (`/sample/board`, `/sample/lab[/:id]`). `load_sample_kitchen` loads `seed/data/sample_kitchen.json`, and `Idea`/`DevelopmentRecipe` get `is_sample` and a nullable `user` (migration `0004_sample_content`). Sample endpoints refuse writes with 403 `sample_read_only`. **#85 → PR #125**: focused views over a faded kitchen with one "Back to kitchen"; `HistoryNav.tsx` deleted. **#88 → PR #128**: `useSunlight` + `KitchenLight` change the light from the device clock every 5 minutes, with a moonlit night. **#103 → PR #124**: `CookbookRecipe.snapshot_version` PROTECT → RESTRICT (`0004_cookbook_snapshot_restrict`); README reset step simplified. **#104 → PR #127**: `MarginTools` reads `displayedVersion.ingredient_lines` and no longer fetches.
+
+`staging-render` e2e is red: the suite makes more than 20 logins, so the 20/hour login throttle gives 429 to the last specs (`references-defaults.spec.ts:41`, `walkthrough.spec.ts:3`). Reproduced on a clean checkout (97 passed, 2 failed); both pass alone. Every PR's e2e check is red for that reason; every other check is green. Opened draft **#126** with the proposed fix (`LOGIN_THROTTLE_RATE` env var, high in `scripts/e2e_server.sh`).
+
+### Decisions
+- **Merge order**: #126 fix first if OK'd (turns e2e green), then #123, #125, #128, #124, #127
+- **Conflicts (checked by merging in that order)**: #128 conflicts with #125 in `frontend/src/styles/kitchen.css` (both append at the end; keep both). #124 merges clean in git but leaves two `development` `0004` migrations next to #123's, so Django refuses to migrate: regenerate #124's as `0005` depending on `0004_sample_content`. The rest merge clean
+- **Base e2e red is not fixed in any PR**: the fix is in `config/settings.py`, outside every issue's Owned paths, so it went to draft #126
+
+### Open threads
+- #123 edits `frontend/e2e/kitchen-home.spec.ts`, which is outside its Owned paths: it deletes the two "locked" home-cook tests that the issue replaces. The owner needs to OK that (or ask for it to be reverted). The unused lock styles in `kitchen.css` stay
+- #85: the top nav still shows inside focused views (decision 004 says it goes; the issue didn't ask). `.history-nav` styles in `src/index.css` are now unused
+- #88 adds `--color-moon-glow` to `themes/default.css` (scoped "sun tokens only"); nobody has checked the light in a screenshot
+- #87 (wave 4) needs #125 merged. #89 waits on photographs. Drafts #66–#69 untouched. Dependabot PRs #105–#118 outside this run
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** design bash, director, sample kitchen, read-only samples, focused views, back to kitchen, sunlight, moonlight, RESTRICT, baker's percent, login throttle
+**Files:** development/management/commands/load_sample_kitchen.py, seed/data/sample_kitchen.json, development/migrations/0004_sample_content.py, development/migrations/0004_cookbook_snapshot_restrict.py, frontend/src/components/kitchen/KitchenBackdrop.tsx, frontend/src/components/kitchen/useSunlight.ts, frontend/src/components/lab/MarginTools.tsx, config/settings.py
+**Do not redo:** #86 (PR #123), #85 (PR #125), #88 (PR #128), #103 (PR #124), #104 (PR #127); builds from runs 1–2
+**Resume with:** run the director prompt again after the owner merges wave 3 (#125 at least, which unblocks #87); build #126 once the owner OKs it
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-23 · Design Bash run 2: #84 and #91
 
 | Field | Value |
