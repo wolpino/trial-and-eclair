@@ -272,3 +272,24 @@ class AuthThrottleTests(TestCase):
         self._assert_throttled(APIClient().post(url, good, format="json", REMOTE_ADDR="10.0.0.1"))
         other_ip = APIClient().post(url, good, format="json", REMOTE_ADDR="10.0.0.2")
         self.assertEqual(other_ip.status_code, status.HTTP_200_OK)
+
+
+class LoginThrottleRateTests(TestCase):
+    """The e2e override is honoured only with DEBUG on; production stays 20/hour."""
+
+    def test_override_ignored_when_debug_off(self) -> None:
+        from config.settings import login_throttle_rate
+
+        self.assertEqual(login_throttle_rate(debug=False, override="1000/hour"), "20/hour")
+
+    def test_default_when_override_unset(self) -> None:
+        from config.settings import login_throttle_rate
+
+        self.assertEqual(login_throttle_rate(debug=False, override=None), "20/hour")
+        self.assertEqual(login_throttle_rate(debug=True, override=None), "20/hour")
+        self.assertEqual(login_throttle_rate(debug=True, override=""), "20/hour")
+
+    def test_override_used_when_debug_on(self) -> None:
+        from config.settings import login_throttle_rate
+
+        self.assertEqual(login_throttle_rate(debug=True, override="1000/hour"), "1000/hour")

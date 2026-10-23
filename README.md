@@ -339,7 +339,7 @@ Public UI: **Save to box** / **Rework** on `/r/:slug`. Box and lab have URL prev
 
 ### Rate limits
 
-DRF scoped throttles; rates live in `REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]` in `config/settings.py`. Over the limit returns 429 with `Retry-After`.
+DRF scoped throttles; rates live in `REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]` in `config/settings.py`. Over the limit returns 429 with `Retry-After`. The local e2e server (`scripts/e2e_server.sh`) raises `login` to 1000/hour via `E2E_LOGIN_THROTTLE_RATE`, which is ignored unless `DEBUG=True`.
 
 | Scope | Endpoint | Rate | Keyed by |
 |-------|----------|------|----------|
