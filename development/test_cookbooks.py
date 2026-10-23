@@ -118,3 +118,52 @@ class CookbookAPITests(TestCase):
         services.publish_cookbook(cookbook, slug="weekend-bakes")
         public_response = self.client.get("/api/v1/public/cookbooks/weekend-bakes/")
         self.assertEqual(public_response.data["recipes"][0]["title"], frozen_title)
+
+
+class CookbookShelfTests(TestCase):
+    def setUp(self) -> None:
+        self.client = APIClient(enforce_csrf_checks=False)
+        self.developer = User.objects.create_user(
+            username="dev",
+            password="strong-pass-1",
+            role="developer",
+        )
+        self.other_developer = User.objects.create_user(
+            username="baker",
+            password="strong-pass-1",
+            role="developer",
+        )
+        self.cookbook = Cookbook.objects.create(user=self.developer, title="Weekend bakes")
+        self.url = f"/api/v1/cookbooks/{self.cookbook.id}/"
+
+    def test_on_shelf_defaults_to_false(self) -> None:
+        self.client.force_login(self.developer)
+
+        response = self.client.get(self.url)
+
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        self.assertIs(response.data["on_shelf"], False)
+
+    def test_owner_sets_and_clears_on_shelf(self) -> None:
+        self.client.force_login(self.developer)
+
+        on = self.client.patch(self.url, {"on_shelf": True}, format="json")
+        self.assertEqual(on.status_code, status.HTTP_200_OK)
+        self.assertIs(on.data["on_shelf"], True)
+        self.cookbook.refresh_from_db()
+        self.assertTrue(self.cookbook.on_shelf)
+
+        off = self.client.patch(self.url, {"on_shelf": False}, format="json")
+        self.assertEqual(off.status_code, status.HTTP_200_OK)
+        self.assertIs(off.data["on_shelf"], False)
+        self.cookbook.refresh_from_db()
+        self.assertFalse(self.cookbook.on_shelf)
+
+    def test_other_user_cannot_change_on_shelf(self) -> None:
+        self.client.force_login(self.other_developer)
+
+        response = self.client.patch(self.url, {"on_shelf": True}, format="json")
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.cookbook.refresh_from_db()
+        self.assertFalse(self.cookbook.on_shelf)

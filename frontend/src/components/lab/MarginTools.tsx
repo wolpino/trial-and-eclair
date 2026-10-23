@@ -1,4 +1,10 @@
-import { Link } from "react-router-dom";
+import { useState } from "react";
+import { Link, useParams } from "react-router-dom";
+
+import { ApiError } from "../../api/client";
+import { fetchDevelopmentRecipe, type IngredientLine } from "../../api/development";
+import { BakersPercentPanel } from "./BakersPercentPanel";
+import { NotebookOverlay } from "./NotebookOverlay";
 
 type RecipeStatus = "draft" | "published" | "unpublished";
 
@@ -25,6 +31,26 @@ export function MarginTools({
   onToggleJournal,
   journalOpen,
 }: MarginToolsProps) {
+  const { recipeId } = useParams<{ recipeId: string }>();
+  const [bakersOpen, setBakersOpen] = useState(false);
+  const [bakersLines, setBakersLines] = useState<IngredientLine[] | null>(null);
+  const [bakersError, setBakersError] = useState<string | null>(null);
+
+  function openBakers() {
+    setBakersOpen(true);
+    setBakersLines(null);
+    setBakersError(null);
+    if (!recipeId) {
+      return;
+    }
+    // The saved current version: ingredient lines save as they are added.
+    fetchDevelopmentRecipe(recipeId)
+      .then((recipe) => setBakersLines(recipe.current_version.ingredient_lines))
+      .catch((err: unknown) => {
+        setBakersError(err instanceof ApiError ? err.message : "Could not load ingredients.");
+      });
+  }
+
   return (
     <div className="lab-margin-tools">
       <p className={`lab-margin-tools__status lab-margin-tools__status--${status}`}>
@@ -42,6 +68,9 @@ export function MarginTools({
       <button type="button" className="lab-margin-tools__btn" onClick={onPublish}>
         Publish ✎
       </button>
+      <button type="button" className="lab-margin-tools__btn" onClick={openBakers}>
+        Baker&apos;s %
+      </button>
       <button
         type="button"
         className="lab-margin-tools__btn"
@@ -51,6 +80,10 @@ export function MarginTools({
       >
         {journalOpen ? "Hide log pages ↑" : "Log pages ↓"}
       </button>
+      <NotebookOverlay title="Baker's %" open={bakersOpen} onClose={() => setBakersOpen(false)}>
+        {bakersError ? <p className="lab-form-error">{bakersError}</p> : null}
+        {bakersLines ? <BakersPercentPanel lines={bakersLines} /> : null}
+      </NotebookOverlay>
     </div>
   );
 }

@@ -138,6 +138,7 @@ export interface Cookbook {
   description: string;
   status: string;
   published_at: string | null;
+  on_shelf: boolean;
   entries: CookbookEntry[];
   created_at: string;
   updated_at: string;
@@ -454,6 +455,17 @@ export function createCookbook(data: {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
+  });
+}
+
+export function setCookbookOnShelf(
+  cookbookId: string,
+  onShelf: boolean,
+): Promise<Cookbook> {
+  return apiFetch<Cookbook>(`/api/v1/cookbooks/${cookbookId}/`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ on_shelf: onShelf }),
   });
 }
 

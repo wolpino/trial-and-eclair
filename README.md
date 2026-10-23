@@ -62,7 +62,7 @@ Same origin: gunicorn serves the API, admin, media, and the Vite build. Do **not
 
 Do **not** run `load_recipe_seed --force` on a URL you will share — `dev` / `cook` / `baker` passwords are in this README. The command refuses when `RENDER_EXTERNAL_HOSTNAME` is set or `ALLOWED_HOSTS` is not only localhost. Uploaded photos live on ephemeral disk and can vanish on restart.
 
-`python manage.py load_starter_recipes` is safe to run on a shared URL (recipe content only, no users).
+`python manage.py load_starter_recipes` and `python manage.py load_default_references` are safe to run on a shared URL (recipe and shelf content only, no users).
 
 ### Demo accounts
 
@@ -257,7 +257,7 @@ Developer-only. Entries freeze a `snapshot_version` at add time; unpublishing a 
 | Endpoint | Methods | Notes |
 |----------|---------|-------|
 | `cookbooks/` | GET, POST | Create/list cookbooks |
-| `cookbooks/{id}/` | GET, PATCH, DELETE | Own cookbooks only |
+| `cookbooks/{id}/` | GET, PATCH, DELETE | Own cookbooks only. PATCH: `title`, `description`, `on_shelf` (bool, default false; shows the cookbook on the kitchen shelf) |
 | `cookbooks/{id}/publish/` | POST | Optional `slug` |
 | `cookbooks/{id}/unpublish/` | POST | Hides public page |
 | `cookbooks/{id}/entries/` | GET, POST | POST: `recipe`, optional `version_id`, `sort_order` |
@@ -292,19 +292,22 @@ One shared, read-only set of cards shown in every box (client merges them with `
 
 Load or refresh them with `python manage.py load_starter_recipes` (reads `seed/data/starter_recipes.json`). It creates no users or passwords, so it is **safe on public URLs** such as Render, and `entrypoint.sh` runs it on every deploy. It is idempotent: it updates by title, and starters removed from the file are marked inactive.
 
+Default references load the same way: `python manage.py load_default_references` reads `seed/data/default_references.json`, creates no users, runs from `entrypoint.sh` on every deploy, and is idempotent (updates by URL; defaults removed from the file leave every shelf).
+
 To change the starters, edit the JSON and merge; the next deploy applies it. Renaming a title counts as a new starter: the old one is retired, and anyone who hid the old one sees the new one. Copies people already forked into their box don't change.
 
 Register defaults to `home_cook`. Start a 14-day developer trial from the home page (`POST /api/v1/auth/start-trial/`), or set `role` in admin.
 
 ### Reference library (`/api/v1/references/`)
 
-Any authenticated user (home cook or developer). Personal research shelf — cookbooks owned, blogs, chefs, tools.
+Any authenticated user (home cook or developer). Personal research shelf — cookbooks owned, blogs, chefs, tools. Each reference has `is_default`: `true` for the shared defaults on every shelf (King Arthur Baking recipes, Sally's Baking Addiction), `false` for ones the user added.
 
 | Endpoint | Methods | Notes |
 |----------|---------|-------|
-| `references/` | GET, POST | Optional filter: `?ref_type=blog` |
-| `references/{id}/` | GET, PATCH, DELETE | Own references only |
-| `references/{id}/links/` | GET, POST | Link to `idea` or `recipe_version` (developer targets) |
+| `references/` | GET, POST | Own references plus the defaults the caller hasn't hidden. Optional filter: `?ref_type=blog` |
+| `references/{id}/` | GET, PATCH, DELETE | Own references; defaults are read-only (PATCH/DELETE 403 `permission_denied`) |
+| `references/{id}/hide/` | POST | Defaults only (404 otherwise). Takes it off the caller's shelf (204, idempotent) |
+| `references/{id}/links/` | GET, POST | Own references only. Link to `idea` or `recipe_version` (developer targets) |
 | `references/{id}/links/{id}/` | GET, PATCH, DELETE | |
 
 ### Developer subscription gates
