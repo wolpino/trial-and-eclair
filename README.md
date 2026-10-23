@@ -242,7 +242,7 @@ Developer-only. Entries freeze a `snapshot_version` at add time; unpublishing a 
 | Endpoint | Methods | Notes |
 |----------|---------|-------|
 | `cookbooks/` | GET, POST | Create/list cookbooks |
-| `cookbooks/{id}/` | GET, PATCH, DELETE | Own cookbooks only |
+| `cookbooks/{id}/` | GET, PATCH, DELETE | Own cookbooks only. PATCH: `title`, `description`, `on_shelf` (bool, default false; shows the cookbook on the kitchen shelf) |
 | `cookbooks/{id}/publish/` | POST | Optional `slug` |
 | `cookbooks/{id}/unpublish/` | POST | Hides public page |
 | `cookbooks/{id}/entries/` | GET, POST | POST: `recipe`, optional `version_id`, `sort_order` |
