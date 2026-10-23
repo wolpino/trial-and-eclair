@@ -295,7 +295,7 @@ class CookbookRecipe(TimestampedModel):
     )
     snapshot_version = models.ForeignKey(
         RecipeVersion,
-        on_delete=models.PROTECT,
+        on_delete=models.RESTRICT,
         related_name="cookbook_snapshots",
     )
     sort_order = models.PositiveIntegerField(default=0)
