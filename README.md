@@ -77,7 +77,7 @@ Do **not** run `load_recipe_seed --force` on a URL you will share — `dev` / `c
 
 If either password is unset or fails Django's password validators, the command prints a notice and does nothing; the deploy still starts. It only fills an account that is missing or has no content, so testers' changes survive restarts. Nothing is published. Tester uploads still vanish on restart (ephemeral disk).
 
-To reset a demo account: in `/admin/`, delete the demo developer's cookbooks first (cookbook entries protect recipe versions), then delete the demo user, then redeploy or restart.
+To reset a demo account: in `/admin/`, delete the demo user (their cookbooks, recipes and versions go with it), then redeploy or restart.
 
 Local production-shaped run (after `cd frontend && npm run build`):
 
