@@ -1,10 +1,11 @@
 from django.contrib.auth import get_user_model
+from django.db.models import RestrictedError
 from django.test import TestCase
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from . import services
-from .models import Cookbook, CookbookRecipe
+from .models import Cookbook, CookbookRecipe, DevelopmentRecipe, RecipeVersion
 
 User = get_user_model()
 
@@ -167,3 +168,36 @@ class CookbookShelfTests(TestCase):
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
         self.cookbook.refresh_from_db()
         self.assertFalse(self.cookbook.on_shelf)
+
+
+class CookbookDeleteTests(TestCase):
+    def setUp(self) -> None:
+        self.developer = User.objects.create_user(
+            username="dev",
+            password="strong-pass-1",
+            role="developer",
+        )
+        self.recipe = services.create_development_recipe(self.developer, title="Corn muffin")
+        self.version = self.recipe.current_version
+        self.cookbook = Cookbook.objects.create(user=self.developer, title="Weekend bakes")
+        self.entry = CookbookRecipe.objects.create(
+            cookbook=self.cookbook,
+            recipe=self.recipe,
+            snapshot_version=self.version,
+        )
+
+    def test_deleting_developer_removes_cookbook_entries_recipes_and_versions(self) -> None:
+        self.developer.delete()
+
+        self.assertFalse(User.objects.filter(pk=self.developer.pk).exists())
+        self.assertFalse(Cookbook.objects.filter(pk=self.cookbook.pk).exists())
+        self.assertFalse(CookbookRecipe.objects.filter(pk=self.entry.pk).exists())
+        self.assertFalse(DevelopmentRecipe.objects.filter(pk=self.recipe.pk).exists())
+        self.assertFalse(RecipeVersion.objects.filter(pk=self.version.pk).exists())
+
+    def test_deleting_version_in_a_cookbook_is_restricted(self) -> None:
+        with self.assertRaises(RestrictedError):
+            self.version.delete()
+
+        self.assertTrue(RecipeVersion.objects.filter(pk=self.version.pk).exists())
+        self.assertTrue(CookbookRecipe.objects.filter(pk=self.entry.pk).exists())
