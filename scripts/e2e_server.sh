@@ -18,6 +18,7 @@ rm -f "$DB"
 export DATABASE_URL="sqlite:///${DB}"
 # Local runserver over plain http; DEBUG defaults to False otherwise.
 export DEBUG=True
+export E2E_LOGIN_THROTTLE_RATE="${E2E_LOGIN_THROTTLE_RATE:-1000/hour}"
 if [[ -x "$ROOT/.venv/bin/python" ]]; then
   PY="$ROOT/.venv/bin/python"
 else
