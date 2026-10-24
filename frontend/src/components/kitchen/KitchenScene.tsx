@@ -4,6 +4,7 @@ import { Link } from "react-router-dom";
 import { fetchCookbooks, type Cookbook } from "../../api/development";
 import { canStartDeveloperTrial } from "../../auth/access";
 import { useAuth } from "../../auth/AuthContext";
+import { usePhoneLayout } from "../../lib/usePhoneLayout";
 import { StartTrialCallout } from "../StartTrialCallout";
 import { KitchenClock } from "./KitchenClock";
 import { KitchenLight } from "./KitchenLight";
@@ -88,11 +89,15 @@ function Decoration() {
   );
 }
 
-/** The signed-in home on wide screens: one drawn kitchen (decision 004). */
+/**
+ * The signed-in home: one drawn kitchen (decision 004). A phone, upright or
+ * sideways, gets a simpler crop of the same objects (`kitchen--phone`).
+ */
 export function KitchenScene() {
   const { user, hasDeveloperAccess } = useAuth();
   const [shelfBooks, setShelfBooks] = useState<Cookbook[]>([]);
   const sun = useSunlight();
+  const phone = usePhoneLayout({ sideways: true });
 
   useEffect(() => {
     if (!hasDeveloperAccess) {
@@ -121,7 +126,12 @@ export function KitchenScene() {
     !canStartDeveloperTrial(user);
 
   return (
-    <main className="kitchen" aria-label="Kitchen" data-light={sun.phase} style={sun.style}>
+    <main
+      className={phone ? "kitchen kitchen--phone" : "kitchen"}
+      aria-label="Kitchen"
+      data-light={sun.phase}
+      style={sun.style}
+    >
       <h1 className="kitchen-title">Trial and Eclair</h1>
       <div className="kitchen-wall" aria-hidden="true" />
       <div className="kitchen-counter" aria-hidden="true" />

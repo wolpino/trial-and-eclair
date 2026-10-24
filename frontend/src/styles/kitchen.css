@@ -532,6 +532,132 @@
   }
 }
 
+/*
+ * Phone kitchen (issue #87, decision 004): a simpler crop of the same scene.
+ * Upright it is a tall crop: shelf, then board, then the counter with the
+ * notebook and the recipe box in the biggest spot. Sideways the shelf and board
+ * sit on the left and the box takes the middle. Positions use dvh so a trial
+ * note can follow the scene below the counter without moving the objects.
+ * The clock and decoration are left out to keep the tap targets big.
+ */
+
+.kitchen--phone {
+  --kitchen-counter-top: 66dvh;
+  height: auto;
+  min-height: 100dvh;
+  padding-top: 84dvh;
+  box-sizing: border-box;
+}
+
+.app-frame--kitchen .app-frame__body {
+  padding-bottom: 0;
+}
+
+.kitchen--phone .kitchen-wall {
+  bottom: auto;
+  height: var(--kitchen-counter-top);
+}
+
+.kitchen--phone .kitchen-clock,
+.kitchen--phone .kitchen-decor {
+  display: none;
+}
+
+.kitchen--phone .kitchen-shelf-area {
+  top: 9dvh;
+  left: 6%;
+  width: 88%;
+  height: 14dvh;
+}
+
+.kitchen--phone .kitchen-shelf {
+  overflow-x: auto;
+}
+
+.kitchen--phone .kitchen-references {
+  min-width: 3rem;
+}
+
+.kitchen--phone .kitchen-book--cookbook {
+  width: 3rem;
+}
+
+.kitchen--phone .kitchen-board {
+  top: 26dvh;
+  left: 14%;
+  width: 72%;
+  height: 20dvh;
+}
+
+.kitchen--phone .kitchen-notebook {
+  top: 53dvh;
+  bottom: auto;
+  left: 8%;
+  width: 20%;
+  height: 19dvh;
+  transform: rotate(-3deg);
+  transform-origin: bottom center;
+}
+
+.kitchen--phone .kitchen-box {
+  top: 50dvh;
+  bottom: auto;
+  left: 34%;
+  width: 60%;
+  height: 30dvh;
+}
+
+.kitchen--phone .kitchen-box__plate {
+  font-size: 1.1rem;
+}
+
+.kitchen--phone .kitchen-note {
+  position: relative;
+  top: auto;
+  right: auto;
+  max-width: none;
+  margin: 0 1rem 1rem;
+}
+
+.kitchen--phone .kitchen-note .paper-btn {
+  min-height: 48px;
+}
+
+@media (orientation: landscape) {
+  .kitchen--phone {
+    --kitchen-counter-top: 74dvh;
+    padding-top: 90dvh;
+  }
+
+  .kitchen--phone .kitchen-shelf-area {
+    top: 6dvh;
+    left: 3%;
+    width: 40%;
+    height: 24dvh;
+  }
+
+  .kitchen--phone .kitchen-board {
+    top: 36dvh;
+    left: 3%;
+    width: 36%;
+    height: 40dvh;
+  }
+
+  .kitchen--phone .kitchen-box {
+    top: 32dvh;
+    left: 43%;
+    width: 30%;
+    height: 54dvh;
+  }
+
+  .kitchen--phone .kitchen-notebook {
+    top: 42dvh;
+    left: 78%;
+    width: 10%;
+    height: 40dvh;
+  }
+}
+
 /* The account menu floats in the top-right corner (FrameNav on the kitchen home) */
 
 .frame-account-corner {
