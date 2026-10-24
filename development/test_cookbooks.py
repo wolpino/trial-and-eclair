@@ -218,11 +218,9 @@ class CookbookSnapshotMigrationTests(TransactionTestCase):
         executor.migrate(self.before)
         executor.loader.build_graph()
         old_apps = executor.loader.project_state(self.before).apps
-        user = old_apps.get_model("accounts", "User").objects.create(
-            username="olddev", role="developer"
-        )
+        user = User.objects.create_user(username="olddev", password="strong-pass-1")
         recipe = old_apps.get_model("development", "DevelopmentRecipe").objects.create(
-            user=user, title="Old muffin"
+            user_id=user.pk, title="Old muffin"
         )
         version = old_apps.get_model("development", "RecipeVersion").objects.create(
             recipe=recipe, version_number=2, title="Old muffin", description="Pinned"
@@ -235,7 +233,7 @@ class CookbookSnapshotMigrationTests(TransactionTestCase):
             version=version, order=1, body="Stir."
         )
         cookbook = old_apps.get_model("development", "Cookbook").objects.create(
-            user=user, title="Old book"
+            user_id=user.pk, title="Old book"
         )
         Entry = old_apps.get_model("development", "CookbookRecipe")
         entry = Entry.objects.create(cookbook=cookbook, recipe=recipe, snapshot_version=version)

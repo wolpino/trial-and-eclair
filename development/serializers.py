@@ -1,3 +1,4 @@
+from django.core.files.storage import default_storage
 from rest_framework import serializers
 
 from .models import (
@@ -238,26 +239,54 @@ class PublishCookbookSerializer(serializers.Serializer):
     slug = serializers.SlugField(required=False, allow_blank=True, max_length=255)
 
 
+class CookbookCopyLineSerializer(serializers.Serializer):
+    ingredient_name = serializers.CharField()
+    quantity = serializers.CharField()
+    unit = serializers.CharField()
+    custom_unit = serializers.CharField()
+    prep_note = serializers.CharField()
+    substitution_note = serializers.CharField()
+
+
+class CookbookCopySerializer(serializers.Serializer):
+    """Fixed keys for a cookbook entry's copy; never the raw JSON blob."""
+
+    version_number = serializers.IntegerField()
+    title = serializers.CharField()
+    description = serializers.CharField()
+    equipment_notes = serializers.CharField()
+    prep_minutes = serializers.IntegerField(allow_null=True)
+    cook_minutes = serializers.IntegerField(allow_null=True)
+    story = serializers.CharField()
+    hero_image = serializers.SerializerMethodField()
+    ingredient_lines = CookbookCopyLineSerializer(many=True)
+    steps = serializers.SerializerMethodField()
+
+    def get_hero_image(self, copy: dict) -> str | None:
+        path = copy.get("hero_image")
+        return default_storage.url(path) if path else None
+
+    def get_steps(self, copy: dict) -> list[dict]:
+        return [
+            {"order": order, "body": body}
+            for order, body in enumerate(copy.get("steps", []), start=1)
+        ]
+
+
 class CookbookRecipeSerializer(serializers.ModelSerializer):
-    snapshot_version = RecipeVersionSerializer(read_only=True)
+    snapshot = CookbookCopySerializer(read_only=True)
 
     class Meta:
         model = CookbookRecipe
         fields = (
             "id",
             "recipe",
-            "snapshot_version",
+            "snapshot",
             "sort_order",
             "created_at",
             "updated_at",
         )
-        read_only_fields = ("id", "snapshot_version", "created_at", "updated_at")
-
-    def validate_recipe(self, recipe: DevelopmentRecipe) -> DevelopmentRecipe:
-        user = self.context["request"].user
-        if recipe.user_id != user.id:
-            raise serializers.ValidationError("Recipe not found.")
-        return recipe
+        read_only_fields = ("id", "recipe", "snapshot", "created_at", "updated_at")
 
 
 class CookbookRecipeCreateSerializer(serializers.Serializer):
@@ -300,9 +329,7 @@ class CookbookCreateSerializer(serializers.ModelSerializer):
         fields = ("title", "description")
 
 
-class PublicCookbookEntrySerializer(serializers.Serializer):
-    title = serializers.CharField()
-    description = serializers.CharField()
+class PublicCookbookEntrySerializer(CookbookCopySerializer):
     sort_order = serializers.IntegerField()
     recipe_slug = serializers.CharField(allow_null=True)
 

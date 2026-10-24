@@ -319,10 +319,7 @@ class CookbookViewSet(viewsets.ModelViewSet):
     permission_classes = [IsDeveloper]
 
     def get_queryset(self):
-        return Cookbook.objects.filter(user=self.request.user).prefetch_related(
-            "entries__recipe",
-            "entries__snapshot_version",
-        )
+        return Cookbook.objects.filter(user=self.request.user).prefetch_related("entries")
 
     def get_serializer_class(self):
         if self.action == "create":
@@ -374,7 +371,7 @@ class CookbookEntryViewSet(viewsets.ModelViewSet):
         return CookbookRecipe.objects.filter(
             cookbook_id=self.kwargs["cookbook_pk"],
             cookbook__user=self.request.user,
-        ).select_related("recipe", "snapshot_version")
+        )
 
     def create(self, request, *args, **kwargs):
         cookbook = get_object_or_404(

@@ -302,22 +302,24 @@ class Cookbook(TimestampedModel):
 
 
 class CookbookRecipe(TimestampedModel):
+    """A copy of a recipe, owned by the cookbook. Lab edits and deletes never change it."""
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     cookbook = models.ForeignKey(
         Cookbook,
         on_delete=models.CASCADE,
         related_name="entries",
     )
+    # Link back to the Lab recipe for the developer's manager; null once it is deleted.
     recipe = models.ForeignKey(
         DevelopmentRecipe,
-        on_delete=models.CASCADE,
+        null=True,
+        blank=True,
+        on_delete=models.SET_NULL,
         related_name="cookbook_entries",
     )
-    snapshot_version = models.ForeignKey(
-        RecipeVersion,
-        on_delete=models.PROTECT,
-        related_name="cookbook_snapshots",
-    )
+    # Built by services.cookbook_snapshot from model fields at add time.
+    snapshot = models.JSONField(default=dict)
     sort_order = models.PositiveIntegerField(default=0)
 
     class Meta:

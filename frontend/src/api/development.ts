@@ -133,10 +133,35 @@ export interface TestSession extends TestSessionBake {
   updated_at: string;
 }
 
+/** A line in a cookbook entry's copy, stored as text. */
+export interface CookbookCopyLine {
+  ingredient_name: string;
+  quantity: string;
+  unit: string;
+  custom_unit: string;
+  prep_note: string;
+  substitution_note: string;
+}
+
+/** The recipe as it was when added to the cookbook. Lab edits never change it. */
+export interface CookbookCopy {
+  version_number: number;
+  title: string;
+  description: string;
+  equipment_notes: string;
+  prep_minutes: number | null;
+  cook_minutes: number | null;
+  story: string;
+  hero_image: string | null;
+  ingredient_lines: CookbookCopyLine[];
+  steps: { order: number; body: string }[];
+}
+
 export interface CookbookEntry {
   id: string;
+  /** Lab recipe id; "" once the Lab recipe is deleted (the API sends null). */
   recipe: string;
-  snapshot_version: RecipeVersion;
+  snapshot: CookbookCopy;
   sort_order: number;
   created_at: string;
   updated_at: string;
@@ -450,12 +475,23 @@ export function deleteJournalEntry(id: string): Promise<void> {
   return apiFetch<void>(`/api/v1/journal/${id}/`, { method: "DELETE" });
 }
 
+type ApiCookbook = Omit<Cookbook, "entries"> & {
+  entries: (Omit<CookbookEntry, "recipe"> & { recipe: string | null })[];
+};
+
+function fromApiCookbook(cookbook: ApiCookbook): Cookbook {
+  return {
+    ...cookbook,
+    entries: cookbook.entries.map((entry) => ({ ...entry, recipe: entry.recipe ?? "" })),
+  };
+}
+
 export function fetchCookbooks(): Promise<Cookbook[]> {
-  return apiFetch<Cookbook[]>("/api/v1/cookbooks/");
+  return apiFetch<ApiCookbook[]>("/api/v1/cookbooks/").then((rows) => rows.map(fromApiCookbook));
 }
 
 export function fetchCookbook(id: string): Promise<Cookbook> {
-  return apiFetch<Cookbook>(`/api/v1/cookbooks/${id}/`);
+  return apiFetch<ApiCookbook>(`/api/v1/cookbooks/${id}/`).then(fromApiCookbook);
 }
 
 export function createCookbook(data: {
@@ -473,11 +509,11 @@ export function setCookbookOnShelf(
   cookbookId: string,
   onShelf: boolean,
 ): Promise<Cookbook> {
-  return apiFetch<Cookbook>(`/api/v1/cookbooks/${cookbookId}/`, {
+  return apiFetch<ApiCookbook>(`/api/v1/cookbooks/${cookbookId}/`, {
     method: "PATCH",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ on_shelf: onShelf }),
-  });
+  }).then(fromApiCookbook);
 }
 
 export function addCookbookEntry(
@@ -508,15 +544,15 @@ export function publishCookbook(
   cookbookId: string,
   slug?: string,
 ): Promise<Cookbook> {
-  return apiFetch<Cookbook>(`/api/v1/cookbooks/${cookbookId}/publish/`, {
+  return apiFetch<ApiCookbook>(`/api/v1/cookbooks/${cookbookId}/publish/`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(slug ? { slug } : {}),
-  });
+  }).then(fromApiCookbook);
 }
 
 export function unpublishCookbook(cookbookId: string): Promise<Cookbook> {
-  return apiFetch<Cookbook>(`/api/v1/cookbooks/${cookbookId}/unpublish/`, {
+  return apiFetch<ApiCookbook>(`/api/v1/cookbooks/${cookbookId}/unpublish/`, {
     method: "POST",
-  });
+  }).then(fromApiCookbook);
 }
