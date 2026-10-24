@@ -212,3 +212,119 @@ class ForkAPITests(TestCase):
         )
 
         self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+
+
+class ForkOutlivesOriginalTests(TestCase):
+    """Forks keep their copied content when the original or its author goes."""
+
+    def setUp(self) -> None:
+        self.client = APIClient(enforce_csrf_checks=False)
+        self.author = User.objects.create_user(
+            username="author", password="strong-pass-1", role="developer"
+        )
+        self.forker = User.objects.create_user(
+            username="forker", password="strong-pass-1", role="developer"
+        )
+        self.home_cook = User.objects.create_user(
+            username="cook", password="strong-pass-1", role="home_cook"
+        )
+        self.source = self._publish_source()
+        self.lab_fork = self._fork(self.forker, ForkType.REWORK)
+        self.box_fork = self._fork(self.home_cook, ForkType.SAVE_TO_BOX)
+        self.client.force_login(self.forker)
+        published = self.client.post(
+            f"/api/v1/recipes/{self.lab_fork.id}/publish/",
+            {"slug": "my-muffin"},
+            format="json",
+        )
+        self.assertEqual(published.status_code, status.HTTP_200_OK)
+
+    def _publish_source(self) -> DevelopmentRecipe:
+        self.client.force_login(self.author)
+        created = self.client.post(
+            "/api/v1/recipes/", {"title": "Corn muffin"}, format="json"
+        )
+        recipe = DevelopmentRecipe.objects.get(id=created.data["id"])
+        RecipeStep.objects.create(
+            version=recipe.current_version, order=1, body="Bake until golden."
+        )
+        published = self.client.post(
+            f"/api/v1/recipes/{recipe.id}/publish/",
+            {"slug": "corn-muffin"},
+            format="json",
+        )
+        self.assertEqual(published.status_code, status.HTTP_200_OK)
+        recipe.refresh_from_db()
+        return recipe
+
+    def _fork(self, user, fork_type: str) -> DevelopmentRecipe | CollectionRecipe:
+        self.client.force_login(user)
+        response = self.client.post(
+            "/api/v1/public/recipes/corn-muffin/fork/",
+            {"fork_type": fork_type},
+            format="json",
+        )
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        model = DevelopmentRecipe if fork_type == ForkType.REWORK else CollectionRecipe
+        return model.objects.get(id=response.data["recipe"]["id"])
+
+    def _lineage(self) -> dict:
+        self.client.logout()
+        response = self.client.get("/api/v1/public/recipes/my-muffin/")
+        self.assertEqual(response.status_code, status.HTTP_200_OK)
+        return response.data["fork_lineage"]
+
+    def test_deleting_forked_recipe_keeps_forks_and_shows_original_removed(self) -> None:
+        self.client.force_login(self.author)
+
+        response = self.client.delete(f"/api/v1/recipes/{self.source.id}/")
+
+        self.assertEqual(response.status_code, status.HTTP_204_NO_CONTENT)
+        self.assertFalse(DevelopmentRecipe.objects.filter(id=self.source.id).exists())
+        self.lab_fork.refresh_from_db()
+        self.box_fork.refresh_from_db()
+        self.assertEqual(self.lab_fork.title, "Corn muffin")
+        self.assertEqual(self.lab_fork.current_version.steps.count(), 1)
+        self.assertEqual(self.box_fork.steps.count(), 1)
+        self.assertIsNone(self.lab_fork.fork_record.forked_from_version)
+        self.assertIsNone(self.box_fork.fork_record.forked_from_version)
+        lineage = self._lineage()
+        self.assertIsNone(lineage["title"])
+        self.assertIsNone(lineage["slug"])
+        self.assertEqual(lineage["author"], "author")
+
+    def test_deleting_original_author_keeps_forks_and_shows_deleted_user(self) -> None:
+        self.author.delete()
+
+        self.lab_fork.refresh_from_db()
+        self.box_fork.refresh_from_db()
+        self.assertEqual(self.lab_fork.title, "Corn muffin")
+        self.assertEqual(self.box_fork.steps.count(), 1)
+        self.assertIsNone(self.lab_fork.fork_record.forked_from_user)
+        self.assertIsNone(self.box_fork.fork_record.forked_from_user)
+        lineage = self._lineage()
+        self.assertIsNone(lineage["author"])
+        self.assertIsNone(lineage["title"])
+        self.assertIsNone(lineage["slug"])
+
+    def test_lineage_with_original_but_no_author_shows_deleted_user(self) -> None:
+        RecipeFork.objects.filter(id=self.lab_fork.fork_record_id).update(
+            forked_from_user=None
+        )
+
+        lineage = self._lineage()
+
+        self.assertEqual(lineage["title"], "Corn muffin")
+        self.assertEqual(lineage["slug"], "corn-muffin")
+        self.assertIsNone(lineage["author"])
+
+    def test_deleting_forker_still_deletes_their_fork(self) -> None:
+        fork_ids = [self.lab_fork.fork_record_id, self.box_fork.fork_record_id]
+
+        self.forker.delete()
+        self.home_cook.delete()
+
+        self.assertFalse(DevelopmentRecipe.objects.filter(id=self.lab_fork.id).exists())
+        self.assertFalse(CollectionRecipe.objects.filter(id=self.box_fork.id).exists())
+        self.assertFalse(RecipeFork.objects.filter(id__in=fork_ids).exists())
+        self.assertTrue(DevelopmentRecipe.objects.filter(id=self.source.id).exists())

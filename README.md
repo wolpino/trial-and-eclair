@@ -177,7 +177,7 @@ Publishes `current_version` by default. Unpublish hides the public page but keep
 
 | Endpoint | Purpose |
 |----------|---------|
-| `GET /api/v1/public/recipes/{slug}/` | Published recipe: ingredients, steps, story, hero, fork lineage |
+| `GET /api/v1/public/recipes/{slug}/` | Published recipe: ingredients, steps, story, hero, fork lineage (`title`/`slug` null once the original is deleted, `author` null once its author is) |
 
 ### Frontend PWA (`frontend/`)
 

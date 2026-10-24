@@ -99,8 +99,8 @@ Two layers:
 | Data model | Content-type split + normalized ingredient catalog |
 | Home cook organization | Recipe box only, alphabetical — no categories |
 | Publishing | Developer-only; public on publish; can unpublish |
+| Forking | Both tiers; editable copy with a link to the original. The fork outlives the original and its author; lineage then reads "original recipe removed" or "original by a deleted user" |
 | Cookbook snapshots | Each entry is a copy of the recipe made at add time and owned by the cookbook; editing, unpublishing or deleting the Lab recipe does not change a cookbook |
-| Forking | Both tiers; editable copy with permanent link to original |
 | Fork visibility | Lineage on public pages; author can hide via `show_forks` |
 | Story | Recipe-attached only on published version |
 | Reference library | Both tiers; account required; metaphor shelf UI in Phase UI |
