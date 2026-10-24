@@ -163,8 +163,7 @@ export function AccountMenu() {
   }
 
   async function handleLogout() {
-    await logout();
-    navigate("/", { replace: true });
+    await logout(() => navigate("/", { replace: true }));
   }
 
   return (
