@@ -547,3 +547,101 @@
   border-radius: 999px;
   box-shadow: var(--shadow-card);
 }
+
+/*
+ * Window light that follows the device clock (issue #88): sun from 6:00 to
+ * 19:00, moonlight at night. useSunlight sets --sun-x/--sun-y, --light-strength
+ * and --shadow-x/-y/-blur on .kitchen and the light layer every 5 minutes.
+ */
+
+.kitchen[data-light] {
+  --light-color: var(--color-sun-glow);
+  --night-tint: transparent;
+  --shadow-alpha: 22%;
+  --sun-shadow: var(--shadow-x) var(--shadow-y) var(--shadow-blur)
+    color-mix(in srgb, var(--color-text) var(--shadow-alpha), transparent);
+}
+
+.kitchen[data-light="morning"] {
+  --light-color: color-mix(in srgb, var(--color-sun-glow) 75%, #fff4d6);
+  --shadow-alpha: 18%;
+}
+
+.kitchen[data-light="midday"] {
+  --light-color: color-mix(in srgb, var(--color-sun-glow) 80%, #fffbe8);
+  --shadow-alpha: 24%;
+}
+
+.kitchen[data-light="evening"] {
+  --light-color: color-mix(in srgb, var(--color-sun-glow) 70%, #e98a5c);
+  --shadow-alpha: 26%;
+}
+
+.kitchen[data-light="night"] {
+  --light-color: var(--color-moon-glow);
+  --night-tint: color-mix(in srgb, #1c2440 34%, transparent);
+  --shadow-alpha: 30%;
+}
+
+/* The light layer replaces the wall's fixed sun tint. */
+.kitchen[data-light] .kitchen-wall {
+  background:
+    repeating-linear-gradient(
+      90deg,
+      transparent 0 calc(10% - 1px),
+      color-mix(in srgb, var(--color-border) 60%, transparent) calc(10% - 1px) 10%
+    ),
+    var(--color-bg);
+}
+
+.kitchen-light,
+.kitchen-light__tint,
+.kitchen-light__glow {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+}
+
+.kitchen-light__tint {
+  background-color: var(--night-tint);
+  transition: background-color 4s ease;
+}
+
+.kitchen-light__glow {
+  opacity: var(--light-strength);
+  background: radial-gradient(
+    ellipse 55% 65% at var(--sun-x) var(--sun-y),
+    var(--light-color) 0%,
+    transparent 70%
+  );
+  transition: opacity 4s ease;
+}
+
+/* Objects cast shadows away from the light. */
+.kitchen[data-light] .kitchen-object,
+.kitchen[data-light] .kitchen-decor > *,
+.kitchen[data-light] .kitchen-clock svg {
+  filter: drop-shadow(var(--sun-shadow));
+}
+
+.kitchen[data-light] .kitchen-object:not(.kitchen-object--locked):hover {
+  filter: drop-shadow(var(--sun-shadow)) drop-shadow(0 6px 14px var(--light-color));
+}
+
+/* By night the room is dimmer and cooler, not dark. */
+.kitchen[data-light="night"] .kitchen-object,
+.kitchen[data-light="night"] .kitchen-decor > *,
+.kitchen[data-light="night"] .kitchen-clock svg {
+  filter: brightness(0.85) saturate(0.8) drop-shadow(var(--sun-shadow));
+}
+
+/*
+ * Reduced motion: the light still updates every 5 minutes (a slow colour
+ * change, not motion); only the fades are dropped.
+ */
+@media (prefers-reduced-motion: reduce) {
+  .kitchen-light__tint,
+  .kitchen-light__glow {
+    transition: none;
+  }
+}
