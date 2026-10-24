@@ -100,7 +100,7 @@ Two layers:
 | Home cook organization | Recipe box only, alphabetical — no categories |
 | Publishing | Developer-only; public on publish; can unpublish |
 | Cookbook snapshots | Recipe frozen at add time; unpublishing recipe does not remove from published cookbook |
-| Forking | Both tiers; editable copy with permanent link to original |
+| Forking | Both tiers; editable copy with a link to the original. The fork outlives the original and its author; lineage then reads "original recipe removed" or "original by a deleted user" |
 | Fork visibility | Lineage on public pages; author can hide via `show_forks` |
 | Story | Recipe-attached only on published version |
 | Reference library | Both tiers; account required; metaphor shelf UI in Phase UI |

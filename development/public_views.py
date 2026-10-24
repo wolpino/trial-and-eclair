@@ -8,7 +8,7 @@ from rest_framework.views import APIView
 from collection.serializers import CollectionRecipeSerializer
 from collection.services import assert_can_add_card
 
-from .models import Cookbook, DevelopmentRecipe, ForkType
+from .models import Cookbook, DevelopmentRecipe, ForkType, RecipeFork
 from .serializers import (
     DevelopmentRecipeSerializer,
     ForkRecipeSerializer,
@@ -18,6 +18,19 @@ from .serializers import (
 from . import services
 
 
+def build_fork_lineage(fork: RecipeFork) -> dict:
+    """Title/slug are None once the original is deleted; author once its user is."""
+    source_version = fork.forked_from_version
+    source_user = fork.forked_from_user
+    source_recipe = source_version.recipe if source_version else None
+    published = source_recipe is not None and source_recipe.status == "published"
+    return {
+        "title": source_recipe.title if source_recipe else None,
+        "author": source_user.username if source_user else None,
+        "slug": source_recipe.slug if published else None,
+    }
+
+
 def build_public_recipe_payload(recipe: DevelopmentRecipe) -> dict:
     if recipe.status != "published" or recipe.published_version_id is None:
         raise NotFound("Recipe not found.")
@@ -25,12 +38,7 @@ def build_public_recipe_payload(recipe: DevelopmentRecipe) -> dict:
     version = recipe.published_version
     fork_lineage = None
     if recipe.user.show_forks and recipe.fork_record_id is not None:
-        source_recipe = recipe.fork_record.forked_from_version.recipe
-        fork_lineage = {
-            "title": source_recipe.title,
-            "author": recipe.fork_record.forked_from_user.username,
-            "slug": source_recipe.slug if source_recipe.status == "published" else None,
-        }
+        fork_lineage = build_fork_lineage(recipe.fork_record)
 
     return {
         "slug": recipe.slug,

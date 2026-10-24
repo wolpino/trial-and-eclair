@@ -32,14 +32,24 @@ export function RecipeViewer({ recipe, actions }: RecipeViewerProps) {
         {recipe.fork_lineage ? (
           <p className="fork-lineage">
             Based on{" "}
-            {recipe.fork_lineage.slug ? (
+            {recipe.fork_lineage.title === null ? (
+              "a recipe"
+            ) : recipe.fork_lineage.slug ? (
               <Link to={`/r/${recipe.fork_lineage.slug}`}>
                 {recipe.fork_lineage.title}
               </Link>
             ) : (
               recipe.fork_lineage.title
-            )}{" "}
-            by {recipe.fork_lineage.author}
+            )}
+            {recipe.fork_lineage.author === null
+              ? null
+              : ` by ${recipe.fork_lineage.author}`}
+            {recipe.fork_lineage.title === null
+              ? " · original recipe removed"
+              : null}
+            {recipe.fork_lineage.author === null
+              ? " · original by a deleted user"
+              : null}
           </p>
         ) : null}
         {recipe.description ? (

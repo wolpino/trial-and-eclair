@@ -30,8 +30,10 @@ export interface PublicRecipeStep {
 }
 
 export interface PublicForkLineage {
-  title: string;
-  author: string;
+  /** null once the original recipe is deleted */
+  title: string | null;
+  /** null once the original's author is deleted */
+  author: string | null;
   slug: string | null;
 }
 

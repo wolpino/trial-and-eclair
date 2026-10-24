@@ -332,8 +332,8 @@ class PublicIngredientLineSerializer(serializers.Serializer):
 
 
 class PublicForkLineageSerializer(serializers.Serializer):
-    title = serializers.CharField()
-    author = serializers.CharField()
+    title = serializers.CharField(allow_null=True)
+    author = serializers.CharField(allow_null=True)
     slug = serializers.CharField(allow_null=True)
 
 
