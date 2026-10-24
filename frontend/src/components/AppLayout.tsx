@@ -59,7 +59,7 @@ export function AppLayout() {
 
   return (
     <div className="app-shell app-shell--framed">
-      <div className="app-frame">
+      <div className={kitchenHome ? "app-frame app-frame--kitchen" : "app-frame"}>
         {phoneBox ? null : <FrameNav />}
         <div className="app-frame__body">
           <Outlet />
