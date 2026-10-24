@@ -5,6 +5,7 @@ from django.db import transaction
 from django.db.models import Max
 from django.utils import timezone
 from django.utils.text import slugify
+from rest_framework.exceptions import ValidationError
 
 from collection.models import CollectionIngredientLine, CollectionRecipe
 from collection.services import create_box_recipe
@@ -23,6 +24,10 @@ from .models import (
 
 class RecipeError(UserFacingError):
     """A recipe, version or cookbook action the user asked for cannot be done."""
+
+
+# Raised as a field error so the publish panel shows it under the slug input.
+SLUG_TAKEN_MESSAGE = "That web address is taken. Try another."
 
 
 _VERSION_SCALAR_FIELDS = (
@@ -229,6 +234,17 @@ def publish_recipe(
     if version is None:
         raise RecipeError("Recipe has no version to publish.")
 
+    # Check the slug before saving the story or hero image.
+    if slug:
+        recipe.slug = slugify(slug)[:255] or _unique_recipe_slug(
+            version.title,
+            exclude_recipe_id=recipe.id,
+        )
+        if DevelopmentRecipe.objects.filter(slug=recipe.slug).exclude(id=recipe.id).exists():
+            raise ValidationError({"slug": [SLUG_TAKEN_MESSAGE]})
+    elif not recipe.slug:
+        recipe.slug = _unique_recipe_slug(version.title, exclude_recipe_id=recipe.id)
+
     update_fields: list[str] = []
     if story is not None:
         version.story = story
@@ -239,14 +255,6 @@ def publish_recipe(
     if update_fields:
         update_fields.append("updated_at")
         version.save(update_fields=update_fields)
-
-    if slug:
-        recipe.slug = slugify(slug)[:255] or _unique_recipe_slug(
-            version.title,
-            exclude_recipe_id=recipe.id,
-        )
-    elif not recipe.slug:
-        recipe.slug = _unique_recipe_slug(version.title, exclude_recipe_id=recipe.id)
 
     recipe.published_version = version
     recipe.published_at = timezone.now()
@@ -306,6 +314,9 @@ def add_cookbook_entry(
     if version is None:
         raise RecipeError("No version available to snapshot.")
 
+    if CookbookRecipe.objects.filter(cookbook=cookbook, recipe=recipe).exists():
+        raise RecipeError("This recipe is already in this cookbook.")
+
     return CookbookRecipe.objects.create(
         cookbook=cookbook,
         recipe=recipe,
@@ -344,11 +355,15 @@ def cookbook_snapshot(version: RecipeVersion) -> dict:
 
 @transaction.atomic
 def publish_cookbook(cookbook, *, slug: str = ""):
+    from .models import Cookbook
+
     if slug:
         cookbook.slug = slugify(slug)[:255] or _unique_cookbook_slug(
             cookbook.title,
             exclude_cookbook_id=cookbook.id,
         )
+        if Cookbook.objects.filter(slug=cookbook.slug).exclude(id=cookbook.id).exists():
+            raise ValidationError({"slug": [SLUG_TAKEN_MESSAGE]})
     elif not cookbook.slug:
         cookbook.slug = _unique_cookbook_slug(
             cookbook.title,

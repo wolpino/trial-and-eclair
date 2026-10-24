@@ -295,6 +295,10 @@ class CookbookRecipeCreateSerializer(serializers.Serializer):
     sort_order = serializers.IntegerField(required=False, min_value=0, default=0)
 
 
+class CookbookRecipeUpdateSerializer(serializers.Serializer):
+    sort_order = serializers.IntegerField(min_value=0, max_value=2_147_483_647)
+
+
 class CookbookSerializer(serializers.ModelSerializer):
     entries = CookbookRecipeSerializer(many=True, read_only=True)
 
