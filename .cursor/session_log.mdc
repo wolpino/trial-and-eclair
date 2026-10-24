@@ -10,6 +10,43 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-24 · Design Bash run 4: wave 5 pre-release (#133, #134, #137, #136, #87)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-24T04:45:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (director plus worktree subagents, two at a time) |
+| **Outcome** | partial (four PRs open, #140–#143; audit #137 done, fix task #139 drafted; wave 6 #131 waits on wave 5 merges) |
+
+### Intent
+Run the director prompt again. Since run 3, every run 3 PR merged (#123, #125, #127, #128), plus #135 (#126 login limit) and #138 (prompt covers wave 5). #124 stays open and unmerged: #133 replaces it.
+
+### Summary
+Slot A ran #133, then #134. Slot B ran #137, then #136, then #87. Each build subagent committed its tests first, and the backend tests, the build and e2e passed before every push. Every PR's six check runs are green on its head. **#133 → PR #140**: `CookbookRecipe.snapshot` (JSON copy built by `services.cookbook_snapshot`) replaces the `snapshot_version` FK. `recipe` becomes nullable `SET_NULL`. Migrations `0005_cookbook_entry_snapshot`, `0006_fill_cookbook_snapshots` (data), `0007_remove_cookbookrecipe_snapshot_version`. Fixed-key serializers. `/c/:slug` shows full recipes. **#134 → PR #143**: `RecipeFork.forked_from_version`/`forked_from_user` become `SET_NULL`. Lineage reads "original recipe removed" / "original by a deleted user". Deleting a forked recipe gives 204, not 500. **#137** (audit, no PR): findings on https://github.com/wolpino/trial-and-eclair/issues/137#issuecomment-6380111035; fix task drafted as **#139**; three post-release lines added to #132. **#136 → PR #141**: wide focused views lose the strip. `PlacesMenu` ("← Kitchen" plus a Places list) sits top-left, and the exported `AccountMenu` sits top-right. **#87 → PR #142**: the phone and sideways-phone home is the kitchen scene cropped (`kitchen--phone`), and `HomePage`'s old phone link list is gone.
+
+### Decisions
+- **Merge order**: #140, then #143 (after resolving it), then #141, then #142
+- **Conflicts (checked by merging in that order)**: #143 after #140 conflicts in `docs/PRD.md` (keep #140's "Cookbook snapshots" row and #143's "Forking" row). Its `0005_recipefork_lineage_set_null` must be regenerated as `0008` after `0007_remove_cookbookrecipe_snapshot_version`. #142 after #141 merges clean in git (`AppLayout.tsx`, `kitchen.css` auto-merge; braces balance). #140 and #141 are clean
+- **#134 and #87 branched from `staging-render`**, not from the unmerged #133/#136 branches (no stacking)
+
+### Open threads
+- #139 (fix generic 500s) is a draft; it needs the owner's OK and #140 and #143 merged
+- #140: `development.ts` maps a null entry `recipe` to `""` so `CookbookDetailPage.tsx` (not owned) still compiles; a one-line page edit would be cleaner. The README/PRD unpublish note still mentions `published_version` for cookbook snapshots. The data migration doesn't batch
+- #143: when the original and its author are both gone, the lineage reads "Based on a recipe · original recipe removed · original by a deleted user" (wordy). `load_recipe_seed --force` still deletes forks of a user's recipes
+- #142: login still lands on `/recipe-box` (`auth/access.ts`, not owned), so the phone kitchen shows only at `/`. `.home-page` styles in `index.css` are unused. The phone hides the clock
+- #141: the Places list is links you Tab through, not an arrow-key ARIA menu
+- #124: close when #140 merges. #89 waits on photographs. Drafts #66–#69 untouched
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** design bash, director, wave 5, pre-release, cookbook copy, snapshot JSON, fork lineage, SET_NULL, API error audit, places menu, account menu, phone kitchen
+**Files:** development/migrations/0005_cookbook_entry_snapshot.py, development/migrations/0006_fill_cookbook_snapshots.py, development/migrations/0007_remove_cookbookrecipe_snapshot_version.py, development/migrations/0005_recipefork_lineage_set_null.py, development/public_views.py, frontend/src/components/kitchen/BackToKitchen.tsx, frontend/src/components/kitchen/KitchenScene.tsx, frontend/e2e/kitchen-places.spec.ts, frontend/e2e/kitchen-phone.spec.ts, frontend/e2e/cookbook-copy.spec.ts
+**Do not redo:** #133 (PR #140), #134 (PR #143), #137 audit (findings comment and #139), #136 (PR #141), #87 (PR #142)
+**Resume with:** run the director prompt again after the owner merges wave 5 (#140, #143, #141, #142), which unblocks wave 6 (#131); build #139 once the owner OKs it
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-23 · Design Bash run 3: wave 3 (#86, #85, #88) and follow-ups #103, #104
 
 | Field | Value |
