@@ -6,49 +6,32 @@ import { canStartDeveloperTrial } from "../../auth/access";
 import { useAuth } from "../../auth/AuthContext";
 import { StartTrialCallout } from "../StartTrialCallout";
 import { KitchenClock } from "./KitchenClock";
+import { KitchenLight } from "./KitchenLight";
+import { useSunlight } from "./useSunlight";
 import "../../styles/kitchen.css";
 
-const LOCKED_TIP = "For developers. Start a 14-day developer trial to use it.";
-
-function Padlock() {
-  return (
-    <svg className="kitchen-lock" viewBox="0 0 24 24" aria-hidden="true">
-      <path d="M7 10V7a5 5 0 0 1 10 0v3" fill="none" strokeWidth="2.5" />
-      <rect x="4" y="10" width="16" height="11" rx="2" />
-    </svg>
-  );
-}
-
-/** A clickable object: a link, or a locked button that stays put. */
+/** A clickable object. `sample` opens the read-only sample view (home cooks). */
 function KitchenObject({
   name,
   to,
-  locked,
+  sample = false,
   className,
   children,
 }: {
   name: string;
   to: string;
-  locked: boolean;
+  sample?: boolean;
   className: string;
   children: ReactNode;
 }) {
-  if (locked) {
-    return (
-      <button
-        type="button"
-        className={`kitchen-object kitchen-object--locked ${className}`}
-        aria-label={`${name} (locked)`}
-        aria-disabled="true"
-        title={LOCKED_TIP}
-      >
-        {children}
-        <Padlock />
-      </button>
-    );
-  }
+  const label = sample ? `${name} (sample)` : name;
   return (
-    <Link className={`kitchen-object ${className}`} to={to} aria-label={name} title={name}>
+    <Link
+      className={`kitchen-object ${className}`}
+      to={to}
+      aria-label={label}
+      title={sample ? `${name}: a read-only sample` : name}
+    >
       {children}
     </Link>
   );
@@ -109,6 +92,7 @@ function Decoration() {
 export function KitchenScene() {
   const { user, hasDeveloperAccess } = useAuth();
   const [shelfBooks, setShelfBooks] = useState<Cookbook[]>([]);
+  const sun = useSunlight();
 
   useEffect(() => {
     if (!hasDeveloperAccess) {
@@ -129,7 +113,7 @@ export function KitchenScene() {
     };
   }, [hasDeveloperAccess]);
 
-  const locked = !hasDeveloperAccess;
+  const sample = !hasDeveloperAccess;
   const trialEnded =
     user !== null &&
     !hasDeveloperAccess &&
@@ -137,10 +121,11 @@ export function KitchenScene() {
     !canStartDeveloperTrial(user);
 
   return (
-    <main className="kitchen" aria-label="Kitchen">
+    <main className="kitchen" aria-label="Kitchen" data-light={sun.phase} style={sun.style}>
       <h1 className="kitchen-title">Trial and Eclair</h1>
       <div className="kitchen-wall" aria-hidden="true" />
       <div className="kitchen-counter" aria-hidden="true" />
+      <KitchenLight sun={sun} />
       <Decoration />
 
       <div className="kitchen-shelf-area">
@@ -177,20 +162,25 @@ export function KitchenScene() {
 
       <KitchenClock />
 
-      <KitchenObject name="Cork board" to="/developer" locked={locked} className="kitchen-board">
+      <KitchenObject
+        name="Cork board"
+        to={sample ? "/sample/board" : "/developer"}
+        sample={sample}
+        className="kitchen-board"
+      >
         <CorkBoardDrawing />
       </KitchenObject>
 
       <KitchenObject
         name="Lab notebook"
-        to="/developer/lab"
-        locked={locked}
+        to={sample ? "/sample/lab" : "/developer/lab"}
+        sample={sample}
         className="kitchen-notebook"
       >
         <NotebookDrawing />
       </KitchenObject>
 
-      <KitchenObject name="Recipe box" to="/recipe-box" locked={false} className="kitchen-box">
+      <KitchenObject name="Recipe box" to="/recipe-box" className="kitchen-box">
         <RecipeBoxDrawing />
       </KitchenObject>
 

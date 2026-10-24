@@ -62,7 +62,7 @@ Same origin: gunicorn serves the API, admin, media, and the Vite build. Do **not
 
 Do **not** run `load_recipe_seed --force` on a URL you will share — `dev` / `cook` / `baker` passwords are in this README. The command refuses when `RENDER_EXTERNAL_HOSTNAME` is set or `ALLOWED_HOSTS` is not only localhost. Uploaded photos live on ephemeral disk and can vanish on restart.
 
-`python manage.py load_starter_recipes` and `python manage.py load_default_references` are safe to run on a shared URL (recipe and shelf content only, no users).
+`python manage.py load_starter_recipes`, `python manage.py load_default_references` and `python manage.py load_sample_kitchen` are safe to run on a shared URL (recipe, shelf and sample content only, no users).
 
 ### Demo accounts
 
@@ -218,6 +218,7 @@ Open http://localhost:5173/r/your-recipe-slug or `/c/your-cookbook-slug` after p
 | `/developer/cookbooks`, `/developer/cookbooks/:id` | Developer | Cookbook manager |
 | `/recipe-box` | Authenticated; visitors too on a phone | Home cook recipe box (A–Z; `:id` deep-link → focused card). On a phone, visitors see the starter cards and their first save makes a guest |
 | `/references` | Authenticated | Reference library |
+| `/sample/board`, `/sample/lab`, `/sample/lab/:id` | Authenticated | Read-only sample cork board and Lab notebook (what home cooks open from the kitchen) |
 
 Recipes can be created **without an idea** in both lab (`POST /recipes/`) and recipe box (`POST /recipe-box/`). Idea promote is optional (Phase UI C2/C6).
 
@@ -297,6 +298,18 @@ Default references load the same way: `python manage.py load_default_references`
 
 To change the starters, edit the JSON and merge; the next deploy applies it. Renaming a title counts as a new starter: the old one is retired, and anyone who hid the old one sees the new one. Copies people already forked into their box don't change.
 
+### Sample board and notebook (`/api/v1/sample-ideas/`, `/api/v1/sample-recipes/`)
+
+Home cooks who click the cork board or Lab notebook in the kitchen open a read-only sample (`/sample/board`, `/sample/lab`, `/sample/lab/:id`). Sample ideas and Lab recipes have `is_sample: true` in the database and no owner, so developers' own lists and endpoints never include them.
+
+| Endpoint | Methods | Notes |
+|----------|---------|-------|
+| `sample-ideas/`, `sample-ideas/{id}/` | GET | Any signed-in user (guests too). Same shape as `ideas/` |
+| `sample-recipes/`, `sample-recipes/{id}/` | GET | Any signed-in user. Same shape as `recipes/` plus `versions` (every version with `ingredient_lines`, `steps` and `test_sessions`) |
+| any of the above | POST, PUT, PATCH, DELETE | Always `403 {"detail": "Sample content is read-only.", "code": "sample_read_only"}` |
+
+Load or refresh them with `python manage.py load_sample_kitchen` (reads `seed/data/sample_kitchen.json`). It creates no users or passwords, so it is **safe on public URLs**; `entrypoint.sh` and `scripts/e2e_server.sh` run it. It is idempotent: ideas and recipes update by title, each version's ingredient lines, steps and bake log are rebuilt from the file, and samples removed from the file are deleted.
+
 Register defaults to `home_cook`. Start a 14-day developer trial from the home page (`POST /api/v1/auth/start-trial/`), or set `role` in admin.
 
 ### Reference library (`/api/v1/references/`)
@@ -339,7 +352,7 @@ Public UI: **Save to box** / **Rework** on `/r/:slug`. Box and lab have URL prev
 
 ### Rate limits
 
-DRF scoped throttles; rates live in `REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]` in `config/settings.py`. Over the limit returns 429 with `Retry-After`.
+DRF scoped throttles; rates live in `REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]` in `config/settings.py`. Over the limit returns 429 with `Retry-After`. The local e2e server (`scripts/e2e_server.sh`) raises `login` to 1000/hour via `E2E_LOGIN_THROTTLE_RATE`, which is ignored unless `DEBUG=True`.
 
 | Scope | Endpoint | Rate | Keyed by |
 |-------|----------|------|----------|
@@ -355,7 +368,7 @@ Counts live in Django's default cache (local memory), so each gunicorn worker ke
 
 Every error body is one of two forms (`config/exceptions.py`, DRF `EXCEPTION_HANDLER`):
 
-- **Everything except field validation:** `{"detail": "<message for the user>", "code": "<machine code>"}`. Codes include `invalid`, `parse_error`, `not_authenticated`, `permission_denied`, `not_found`, `throttled` (with a `Retry-After` header), `guest_card_limit`, `fetch_failed` (502 from URL import) and `server_error`.
+- **Everything except field validation:** `{"detail": "<message for the user>", "code": "<machine code>"}`. Codes include `invalid`, `parse_error`, `not_authenticated`, `permission_denied`, `not_found`, `throttled` (with a `Retry-After` header), `guest_card_limit`, `sample_read_only`, `fetch_failed` (502 from URL import) and `server_error`.
 - **Field validation (400):** DRF's map, `{"<field>": ["<message>"], "non_field_errors": ["<message>"]}`.
 
 Bodies never carry exception text. Domain errors subclass `config.exceptions.UserFacingError` and views return its fixed `user_message`; any other exception is logged and returns `500 {"detail": "Something went wrong on our side. Please try again.", "code": "server_error"}` (with `DEBUG` on, Django's debug page shows instead). The frontend reads errors only in `toApiError` (`frontend/src/api/client.ts`), which sets `ApiError.message` and `ApiError.code`. The audit of every error source is in [`docs/error-audit.md`](docs/error-audit.md).

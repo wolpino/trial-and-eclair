@@ -43,6 +43,7 @@
   --pattern-botanical-edge: color-mix(in srgb, #2a5c42 10%, transparent);
   --pattern-sun-wash: color-mix(in srgb, var(--color-accent) 16%, transparent);
   --color-sun-glow: color-mix(in srgb, var(--color-accent) 28%, transparent);
+  --color-moon-glow: color-mix(in srgb, #c4d2ee 45%, transparent);
 
   --shadow-card-color: #e0c898;
   --shadow-pin-color: #c9a870;

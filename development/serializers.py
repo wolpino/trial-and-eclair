@@ -173,6 +173,22 @@ class TestSessionSerializer(serializers.ModelSerializer):
         return attrs
 
 
+class SampleRecipeVersionSerializer(RecipeVersionSerializer):
+    test_sessions = TestSessionSerializer(many=True, read_only=True)
+
+    class Meta(RecipeVersionSerializer.Meta):
+        fields = (*RecipeVersionSerializer.Meta.fields, "test_sessions")
+
+
+class SampleRecipeSerializer(DevelopmentRecipeSerializer):
+    """A sample Lab recipe with every version, read in one request."""
+
+    versions = SampleRecipeVersionSerializer(many=True, read_only=True)
+
+    class Meta(DevelopmentRecipeSerializer.Meta):
+        fields = (*DevelopmentRecipeSerializer.Meta.fields, "versions")
+
+
 class PromoteIdeaSerializer(serializers.Serializer):
     title = serializers.CharField(required=False, allow_blank=True, max_length=255)
 
