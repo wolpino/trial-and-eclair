@@ -133,7 +133,7 @@ test("the places menu works by keyboard and closes on Escape and outside clicks"
   await page.keyboard.press("Escape");
   await expect(placesList(page)).toHaveCount(0);
   await expect(button).toHaveAttribute("aria-expanded", "false");
-  expect(await isFocused(button)).toBe(true);
+  await expect(button).toBeFocused();
 
   // An outside click only closes it, and focus goes back to the button.
   await button.click();
@@ -141,7 +141,8 @@ test("the places menu works by keyboard and closes on Escape and outside clicks"
   await page.getByRole("heading", { level: 1, name: "Lab" }).click();
   await expect(placesList(page)).toHaveCount(0);
   await expect(page).toHaveURL(/\/developer\/lab$/);
-  expect(await isFocused(button)).toBe(true);
+  // PlacesMenu gives focus back in a setTimeout, so wait for it.
+  await expect(button).toBeFocused();
 });
 
 test("a home cook sees no developer places, and the account menu top-right logs out", async ({

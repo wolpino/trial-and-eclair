@@ -1,5 +1,6 @@
 import {
   createContext,
+  startTransition,
   useCallback,
   useContext,
   useEffect,
@@ -29,7 +30,8 @@ interface AuthContextValue {
   hasDeveloperAccess: boolean;
   login: (input: LoginInput) => Promise<User>;
   register: (input: RegisterInput) => Promise<User>;
-  logout: () => Promise<void>;
+  /** `andThen` runs in the same transition as clearing the user (e.g. a navigate). */
+  logout: (andThen?: () => void) => Promise<void>;
   updateProfile: (data: Pick<User, "show_forks">) => Promise<User>;
   startTrial: () => Promise<User>;
   /** Makes a guest on the first save, or returns the person already signed in. */
@@ -79,9 +81,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return registeredUser;
   }, []);
 
-  const logout = useCallback(async () => {
+  const logout = useCallback(async (andThen?: () => void) => {
     await logoutUser();
-    setUser(null);
+    // One transition for clearing the user and the caller's navigate(), so they
+    // render together. Apart, the protected page re-renders with no user first
+    // and redirects to /login.
+    startTransition(() => {
+      setUser(null);
+      andThen?.();
+    });
   }, []);
 
   const updateProfile = useCallback(async (data: Pick<User, "show_forks">) => {
