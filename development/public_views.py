@@ -90,17 +90,14 @@ def build_public_cookbook_payload(cookbook: Cookbook) -> dict:
         raise NotFound("Cookbook not found.")
 
     recipes = []
-    for entry in cookbook.entries.select_related("recipe", "snapshot_version").order_by(
-        "sort_order"
-    ):
-        snapshot = entry.snapshot_version
+    for entry in cookbook.entries.select_related("recipe").order_by("sort_order"):
         recipe = entry.recipe
+        published = recipe is not None and recipe.status == "published"
         recipes.append(
             {
-                "title": snapshot.title,
-                "description": snapshot.description,
+                **entry.snapshot,
                 "sort_order": entry.sort_order,
-                "recipe_slug": recipe.slug if recipe.status == "published" else None,
+                "recipe_slug": recipe.slug if published else None,
             }
         )
 
@@ -168,7 +165,7 @@ class PublicCookbookView(RetrieveAPIView):
         cookbook = (
             Cookbook.objects.filter(slug=self.kwargs["slug"], status="published")
             .select_related("user")
-            .prefetch_related("entries__recipe", "entries__snapshot_version")
+            .prefetch_related("entries__recipe")
             .first()
         )
         if cookbook is None:

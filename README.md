@@ -77,7 +77,7 @@ Do **not** run `load_recipe_seed --force` on a URL you will share — `dev` / `c
 
 If either password is unset or fails Django's password validators, the command prints a notice and does nothing; the deploy still starts. It only fills an account that is missing or has no content, so testers' changes survive restarts. Nothing is published. Tester uploads still vanish on restart (ephemeral disk).
 
-To reset a demo account: in `/admin/`, delete the demo developer's cookbooks first (cookbook entries protect recipe versions), then delete the demo user, then redeploy or restart.
+To reset a demo account: in `/admin/`, delete the demo user (their cookbooks and entries go with it), then redeploy or restart.
 
 Local production-shaped run (after `cd frontend && npm run build`):
 
@@ -254,7 +254,7 @@ POST body: `recipe` (required), `body` (required), optional `title`, `version_sn
 
 ### Cookbooks (`/api/v1/cookbooks/`)
 
-Developer-only. Entries freeze a `snapshot_version` at add time; unpublishing a recipe keeps the entry but drops the public recipe link.
+Developer-only. Each entry is a copy of the recipe, made at add time and owned by the cookbook: editing, unpublishing or deleting the Lab recipe never changes it. Unpublishing or deleting the Lab recipe drops the public recipe link (`recipe` becomes null on delete).
 
 | Endpoint | Methods | Notes |
 |----------|---------|-------|
@@ -262,11 +262,11 @@ Developer-only. Entries freeze a `snapshot_version` at add time; unpublishing a 
 | `cookbooks/{id}/` | GET, PATCH, DELETE | Own cookbooks only. PATCH: `title`, `description`, `on_shelf` (bool, default false; shows the cookbook on the kitchen shelf) |
 | `cookbooks/{id}/publish/` | POST | Optional `slug` |
 | `cookbooks/{id}/unpublish/` | POST | Hides public page |
-| `cookbooks/{id}/entries/` | GET, POST | POST: `recipe`, optional `version_id`, `sort_order` |
+| `cookbooks/{id}/entries/` | GET, POST | POST: `recipe`, optional `version_id` (default: published, else current version), `sort_order`. Entry: `id`, `recipe` (Lab recipe id or null), `snapshot` (the copy: `version_number`, `title`, `description`, `equipment_notes`, `prep_minutes`, `cook_minutes`, `story`, `hero_image`, `ingredient_lines`, `steps`), `sort_order` |
 | `cookbooks/{id}/entries/{id}/` | GET, PATCH, DELETE | PATCH: `sort_order` only |
-| `GET /api/v1/public/cookbooks/{slug}/` | GET | No auth; frozen recipe list |
+| `GET /api/v1/public/cookbooks/{slug}/` | GET | No auth. `recipes`: each entry's full copy (same fields as `snapshot` above) plus `sort_order` and `recipe_slug` |
 
-Public PWA: **`/c/:slug`** (links to `/r/{slug}` when recipe still published).
+Public PWA: **`/c/:slug`** shows each recipe in full from its copy (links to `/r/{slug}` when the recipe is still published).
 
 ### Home cook recipe box (`/api/v1/recipe-box/`)
 

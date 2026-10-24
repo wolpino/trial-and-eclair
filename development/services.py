@@ -309,9 +309,37 @@ def add_cookbook_entry(
     return CookbookRecipe.objects.create(
         cookbook=cookbook,
         recipe=recipe,
-        snapshot_version=version,
+        snapshot=cookbook_snapshot(version),
         sort_order=sort_order,
     )
+
+
+def cookbook_snapshot(version: RecipeVersion) -> dict:
+    """A standalone copy of a version for a cookbook entry, from model fields only."""
+    payload = payload_from_version(version)
+    return {
+        "version_number": version.version_number,
+        "title": payload.title,
+        "description": payload.description,
+        "equipment_notes": payload.equipment_notes,
+        "prep_minutes": payload.prep_minutes,
+        "cook_minutes": payload.cook_minutes,
+        "story": payload.story,
+        # The image path only; the file is shared, not duplicated.
+        "hero_image": version.hero_image.name or "",
+        "ingredient_lines": [
+            {
+                "ingredient_name": line.name,
+                "quantity": str(line.quantity),
+                "unit": line.unit,
+                "custom_unit": line.custom_unit,
+                "prep_note": line.prep_note,
+                "substitution_note": line.substitution_note,
+            }
+            for line in payload.ingredient_lines
+        ],
+        "steps": payload.step_bodies,
+    }
 
 
 @transaction.atomic

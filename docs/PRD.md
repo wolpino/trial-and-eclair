@@ -99,8 +99,8 @@ Two layers:
 | Data model | Content-type split + normalized ingredient catalog |
 | Home cook organization | Recipe box only, alphabetical — no categories |
 | Publishing | Developer-only; public on publish; can unpublish |
-| Cookbook snapshots | Recipe frozen at add time; unpublishing recipe does not remove from published cookbook |
 | Forking | Both tiers; editable copy with a link to the original. The fork outlives the original and its author; lineage then reads "original recipe removed" or "original by a deleted user" |
+| Cookbook snapshots | Each entry is a copy of the recipe made at add time and owned by the cookbook; editing, unpublishing or deleting the Lab recipe does not change a cookbook |
 | Fork visibility | Lineage on public pages; author can hide via `show_forks` |
 | Story | Recipe-attached only on published version |
 | Reference library | Both tiers; account required; metaphor shelf UI in Phase UI |
@@ -136,7 +136,7 @@ ingredients (catalog)          ideas (developer)
 ingredient_aliases             development_recipes ──< recipe_versions
                                version_ingredient_lines ──> ingredients
                                recipe_steps, test_sessions
-                               cookbooks ──< cookbook_recipes (snapshot versions)
+                               cookbooks ──< cookbook_recipes (copied recipe per entry)
                                journal_entries, recipe_forks
 
 collection_recipes (home cook) recipe_box_items (alphabetical)
@@ -156,7 +156,7 @@ users (role + plan tier)
 | `VersionIngredientLine` | Quantity, unit or custom_unit, prep/substitution notes |
 | `TestSession` / `TestSessionPhoto` | Bake log; up to 5 photos |
 | `JournalEntry` | Private dev timeline with optional version snapshot |
-| `Cookbook` / `CookbookRecipe` | Published collection; frozen snapshot per entry |
+| `Cookbook` / `CookbookRecipe` | Published collection; each entry holds its own copy (`snapshot` JSON) and an optional link back to the Lab recipe |
 | `RecipeFork` | Lineage when forking published recipes |
 | `CollectionRecipe` / `RecipeBoxItem` | Home cook single-version recipes; A–Z box |
 | `Reference` / `ReferenceLink` | Research shelf |
@@ -272,7 +272,7 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 
 - `GET /api/v1/recipes/{id}/compare-versions/?left=&right=` — ingredient + field diff between two versions
 - `GET/POST/PATCH/DELETE /api/v1/journal/` — private journal entries; filter by `?recipe=`
-- Cookbooks API + `GET /api/v1/public/cookbooks/{slug}/`; PWA `/c/:slug` — frozen `snapshot_version` per entry
+- Cookbooks API + `GET /api/v1/public/cookbooks/{slug}/`; PWA `/c/:slug` — each entry shows its own copied recipe in full
 - Home cook recipe box: `/api/v1/recipe-box/` — `CollectionRecipe` + A–Z `RecipeBoxItem`; any authenticated user
 - Reference library: `/api/v1/references/` + `/links/` to ideas or recipe versions (developer)
 - Developer access gated by `User.has_developer_access()` — active/trial subscription; expired trial and expired/cancelled status blocked (`subscription_status=none` allowed for admin-promoted devs until Stripe)
