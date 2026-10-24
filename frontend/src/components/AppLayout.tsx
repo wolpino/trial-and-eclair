@@ -2,8 +2,8 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthContext";
 import { usePhoneLayout } from "../lib/usePhoneLayout";
-import { FrameNav } from "./FrameNav";
-import { BackToKitchen } from "./kitchen/BackToKitchen";
+import { AccountMenu, FrameNav } from "./FrameNav";
+import { PlacesMenu } from "./kitchen/BackToKitchen";
 import { KitchenBackdrop } from "./kitchen/KitchenBackdrop";
 import { useKitchenHome } from "./kitchen/useKitchenHome";
 
@@ -39,16 +39,17 @@ export function AppLayout() {
   }
 
   // On wide screens every other signed-in page is a focused view over the
-  // faded kitchen, with one "back to kitchen" instead of Back/Forward (decision 004).
+  // faded kitchen (decision 004). No top nav: the places menu top-left and the
+  // account menu top-right (issue #136).
   if (user && !isPhoneOrSideways && !kitchenHome) {
     return (
       <div className="app-shell app-shell--framed">
         <KitchenBackdrop />
         <div className="app-frame kitchen-view">
-          <FrameNav />
           <div className="app-frame__body">
-            <div className="kitchen-view__back">
-              <BackToKitchen />
+            <div className="kitchen-view__bar">
+              <PlacesMenu />
+              <AccountMenu />
             </div>
             <Outlet />
           </div>
