@@ -29,3 +29,20 @@ The frontend turns every failed response into an `ApiError` in one place:
 | Serializer field errors (register, login, recipe forms, etc.) | 400 | `{"<field>": ["<message>"], "non_field_errors": ["<message>"]}` | Messages only, no raw keys: "This field is required." on `title` reads "Title is required." | API left as is; frontend fixed (was `title: This field is required.`) |
 | Proxy or server error with a non-JSON body | 5xx | HTML or text | "Something went wrong on our side. Please try again." | Frontend fixed (was the bare status text) |
 | `config/settings.py` `DEBUG` default | n/a | `DEBUG` is `False` when the env var is unset, so a missing var never shows Django debug pages | n/a | Fixed: was `True`. Local dev sets `DEBUG=True` in `.env` (from `.env.example`); CI and `scripts/e2e_server.sh` set it explicitly |
+
+## Requests that returned a generic 500 (audit #137, fixed in #139)
+
+Each row used to return `500 {"detail": "Something went wrong on our side. Please try again.", "code": "server_error"}`. Tests are in `development/test_errors.py` and `library/test_errors.py`.
+
+| Endpoint or source | Status | What the API returns | What the user sees | Fixed / left as is |
+| --- | --- | --- | --- | --- |
+| `POST /api/v1/recipes/<id>/publish/`, `POST /api/v1/cookbooks/<id>/publish/` with a slug someone else has (2.1, 2.2) | 400 | `{"slug": ["That web address is taken. Try another."]}` | That message (the Lab page shows it above the notebook, behind the publish panel) | Fixed: checked before saving; republishing with your own slug still works |
+| `POST /api/v1/cookbooks/<id>/entries/`, same recipe twice (2.3) | 400 | `{"detail": "This recipe is already in this cookbook.", "code": "invalid"}` | That message | Fixed: #133 kept `unique_together (cookbook, recipe)`, so `add_cookbook_entry` checks it |
+| `PATCH /api/v1/cookbooks/<id>/entries/<entry_id>/`, bad `sort_order` (3.1) | 400 | `{"sort_order": ["A valid integer is required."]}` / `["Ensure this value is greater than or equal to 0."]` | That message | Fixed: serializer field, 0 to 2147483647 |
+| `GET /api/v1/journal/?recipe=<not a UUID>` (3.2) | 400 | `{"detail": "Pick a valid recipe.", "code": "invalid"}` | That message | Fixed |
+| `GET /api/v1/recipes/<id>/compare-versions/?left=<not a UUID>`, `POST /api/v1/references/<not a UUID>/hide/` (3.3, 3.4) | 404 | `{"detail": "Not found.", "code": "not_found"}` | That message | Fixed: DRF's `get_object_or_404` |
+| `POST /api/v1/imports/url/`, port out of range (4.1) | 403 | `{"detail": "Enter a valid web address.", "code": "permission_denied"}` | That message | Fixed |
+| `POST /api/v1/imports/url/`, site drops the connection or sends a bad status line (4.2) | 502 | `{"detail": "Could not fetch URL.", "code": "fetch_failed"}` | That message | Fixed: `fetch_bytes` catches `http.client.HTTPException` and `OSError`; a failed robots.txt fetch still allows the import |
+| `POST /api/v1/imports/url/<id>/save/`, negative, huge, `NaN` or infinite `prepTime` / `cookTime` (4.3) | 201 | The recipe, with that time empty | Saved card without that time | Fixed: `parse_duration_minutes` drops it |
+| `POST /api/v1/imports/scan/`, very long file extension (5.1) | 201 | The scan import; `original_filename` is what was typed | Saved card | Fixed: the file is stored under a short generated name |
+| Any delete blocked by a PROTECT or RESTRICT foreign key (1.3) | 409 | `{"detail": "This is still used somewhere else, so it can't be deleted yet.", "code": "in_use"}` | That message | Fixed: safety net in `config/exceptions.py`; nothing reachable raises it today |
