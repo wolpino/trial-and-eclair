@@ -133,7 +133,7 @@ export function CookbookDetailPage() {
               <CookbookEntryCard
                 key={entry.id}
                 entry={entry}
-                recipeSlug={slugByRecipeId.get(entry.recipe) ?? null}
+                recipeSlug={entry.recipe ? (slugByRecipeId.get(entry.recipe) ?? null) : null}
                 onRemove={() =>
                   void deleteCookbookEntry(cookbook.id, entry.id)
                     .then(reloadCookbook)
