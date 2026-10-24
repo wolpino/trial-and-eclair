@@ -548,6 +548,88 @@
   box-shadow: var(--shadow-card);
 }
 
+/* Focused views over the faded kitchen (wide screens, issue #85) */
+
+.kitchen-backdrop {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  height: auto;
+  opacity: 0.35;
+  filter: blur(2px) saturate(0.8);
+  pointer-events: none;
+}
+
+/* The view fills the window, leaving a margin of kitchen around it. */
+.kitchen-view {
+  position: relative;
+  z-index: 1;
+  min-height: calc(100vh - 2.5rem);
+  margin: 1.25rem;
+  background: color-mix(in srgb, var(--color-bg) 94%, transparent);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-card);
+  animation: kitchen-view-zoom 260ms ease-out;
+}
+
+.kitchen-view__back {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 0.65rem 1.25rem 0;
+}
+
+.kitchen-back {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  min-height: 44px;
+  padding: 0 0.85rem;
+  border: 1px solid var(--color-border);
+  border-radius: 999px;
+  background: var(--color-surface-elevated);
+  color: var(--color-accent-secondary);
+  text-decoration: none;
+}
+
+.kitchen-back:hover {
+  color: var(--color-accent);
+}
+
+.kitchen-back:focus-visible {
+  outline: 3px solid var(--color-accent-floral);
+  outline-offset: 3px;
+}
+
+@keyframes kitchen-view-zoom {
+  from {
+    opacity: 0;
+    transform: scale(0.94);
+  }
+
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes kitchen-view-fade {
+  from {
+    opacity: 0;
+  }
+
+  to {
+    opacity: 1;
+  }
+}
+
+/* Reduced motion: a short fade instead of the zoom. */
+@media (prefers-reduced-motion: reduce) {
+  .kitchen-view {
+    animation: kitchen-view-fade 120ms ease-out;
+  }
+}
+
 /*
  * Window light that follows the device clock (issue #88): sun from 6:00 to
  * 19:00, moonlight at night. useSunlight sets --sun-x/--sun-y, --light-strength

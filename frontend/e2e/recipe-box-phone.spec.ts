@@ -199,7 +199,7 @@ test("the phone box has no page header, Back/Forward or bottom bar", async ({ pa
   expect(front.y + front.height).toBeGreaterThan(844 - 24);
 });
 
-test("Back/Forward are hidden on other phone pages and shown on wide screens", async ({
+test("Back/Forward are gone; wide screens get one Back to kitchen (decision 004)", async ({
   page,
 }) => {
   await logIn(page);
@@ -209,10 +209,11 @@ test("Back/Forward are hidden on other phone pages and shown on wide screens", a
   await expect(page.getByRole("button", { name: "Forward", exact: true })).toHaveCount(0);
 
   await page.setViewportSize({ width: 1280, height: 800 });
-  await expect(page.getByRole("button", { name: "Back", exact: true })).toBeVisible();
-  await expect(page.getByRole("button", { name: "Forward", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Back to kitchen" })).toBeVisible();
+  await expect(page.getByRole("button", { name: "Back", exact: true })).toHaveCount(0);
+  await expect(page.getByRole("button", { name: "Forward", exact: true })).toHaveCount(0);
   await page.goto("/recipe-box");
-  await expect(page.getByRole("button", { name: "Back", exact: true })).toBeVisible();
+  await expect(page.getByRole("link", { name: "Back to kitchen" })).toBeVisible();
   await expect(page.getByRole("navigation", { name: "Places" })).toBeVisible();
 });
 
