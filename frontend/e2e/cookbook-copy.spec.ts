@@ -70,3 +70,63 @@ test("a published cookbook shows each recipe's copy, unchanged by later Lab edit
   await expectOriginalCopy();
   await expect(entry).not.toContainText("4 cups");
 });
+
+// When the Lab recipe is deleted, the entry keeps its copy (the API sends
+// "recipe": null) and the developer's cookbook page shows it without a link.
+test("a cookbook entry whose Lab recipe was deleted still shows its copy, with no Lab link", async ({
+  page,
+}) => {
+  await page.goto("/login");
+  await page.getByLabel("Username").fill("dev");
+  await page.getByLabel("Password").fill("devpass123");
+  await page.getByRole("button", { name: "Log in" }).click();
+  await expect(page).not.toHaveURL(/\/login/);
+
+  const cookies = await page.context().cookies();
+  const csrf = cookies.find((cookie) => cookie.name === "csrftoken")?.value ?? "";
+  const headers = { "X-CSRFToken": csrf };
+  const api = page.request;
+  const stamp = Date.now();
+
+  async function post(url: string, data: Record<string, unknown>) {
+    const response = await api.post(url, { data, headers });
+    expect(response.ok(), `post ${url}`).toBe(true);
+    return response.json();
+  }
+
+  const title = `Orphan scone ${stamp}`;
+  const recipe = await post("/api/v1/recipes/", { title });
+  await post(`/api/v1/recipes/${recipe.id}/publish/`, { slug: `orphan-scone-${stamp}` });
+  const cookbook = await post("/api/v1/cookbooks/", { title: `Orphan book ${stamp}` });
+  const entryRow = await post(`/api/v1/cookbooks/${cookbook.id}/entries/`, { recipe: recipe.id });
+  expect(entryRow.recipe).toBe(recipe.id);
+
+  const card = page.locator(".cookbook-entry-card");
+
+  // Collect errors from the cookbook page only (the logged-out login page
+  // has an expected 403 from /auth/me/).
+  const consoleErrors: string[] = [];
+  page.on("console", (message) => {
+    if (message.type() === "error") {
+      consoleErrors.push(message.text());
+    }
+  });
+  page.on("pageerror", (error) => consoleErrors.push(error.message));
+
+  await page.goto(`/developer/cookbooks/${cookbook.id}`);
+  await expect(card).toHaveCount(1);
+  await expect(card.getByRole("link", { name: "Public recipe" })).toBeVisible();
+
+  const deleted = await api.delete(`/api/v1/recipes/${recipe.id}/`, { headers });
+  expect(deleted.status()).toBe(204);
+
+  const reread = await api.get(`/api/v1/cookbooks/${cookbook.id}/`);
+  expect((await reread.json()).entries[0].recipe).toBeNull();
+
+  await page.reload();
+  await expect(card).toHaveCount(1);
+  await expect(card.getByRole("heading", { level: 3 })).toHaveText(title);
+  await expect(card.getByRole("link")).toHaveCount(0);
+  await expect(card).toContainText("Not on public web");
+  expect(consoleErrors).toEqual([]);
+});
