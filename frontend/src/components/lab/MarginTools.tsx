@@ -1,8 +1,7 @@
 import { useState } from "react";
-import { Link, useParams } from "react-router-dom";
+import { Link } from "react-router-dom";
 
-import { ApiError } from "../../api/client";
-import { fetchDevelopmentRecipe, type IngredientLine } from "../../api/development";
+import type { IngredientLine } from "../../api/development";
 import { BakersPercentPanel } from "./BakersPercentPanel";
 import { NotebookOverlay } from "./NotebookOverlay";
 
@@ -11,6 +10,8 @@ type RecipeStatus = "draft" | "published" | "unpublished";
 type MarginToolsProps = {
   status: RecipeStatus;
   slug: string | null;
+  /** Lines of the version shown on the page, so Baker's % matches what the developer sees. */
+  ingredientLines: IngredientLine[];
   onCompare: () => void;
   onPublish: () => void;
   onToggleJournal: () => void;
@@ -26,30 +27,13 @@ const STATUS_LABEL: Record<RecipeStatus, string> = {
 export function MarginTools({
   status,
   slug,
+  ingredientLines,
   onCompare,
   onPublish,
   onToggleJournal,
   journalOpen,
 }: MarginToolsProps) {
-  const { recipeId } = useParams<{ recipeId: string }>();
   const [bakersOpen, setBakersOpen] = useState(false);
-  const [bakersLines, setBakersLines] = useState<IngredientLine[] | null>(null);
-  const [bakersError, setBakersError] = useState<string | null>(null);
-
-  function openBakers() {
-    setBakersOpen(true);
-    setBakersLines(null);
-    setBakersError(null);
-    if (!recipeId) {
-      return;
-    }
-    // The saved current version: ingredient lines save as they are added.
-    fetchDevelopmentRecipe(recipeId)
-      .then((recipe) => setBakersLines(recipe.current_version.ingredient_lines))
-      .catch((err: unknown) => {
-        setBakersError(err instanceof ApiError ? err.message : "Could not load ingredients.");
-      });
-  }
 
   return (
     <div className="lab-margin-tools">
@@ -68,7 +52,7 @@ export function MarginTools({
       <button type="button" className="lab-margin-tools__btn" onClick={onPublish}>
         Publish ✎
       </button>
-      <button type="button" className="lab-margin-tools__btn" onClick={openBakers}>
+      <button type="button" className="lab-margin-tools__btn" onClick={() => setBakersOpen(true)}>
         Baker&apos;s %
       </button>
       <button
@@ -81,8 +65,7 @@ export function MarginTools({
         {journalOpen ? "Hide log pages ↑" : "Log pages ↓"}
       </button>
       <NotebookOverlay title="Baker's %" open={bakersOpen} onClose={() => setBakersOpen(false)}>
-        {bakersError ? <p className="lab-form-error">{bakersError}</p> : null}
-        {bakersLines ? <BakersPercentPanel lines={bakersLines} /> : null}
+        <BakersPercentPanel lines={ingredientLines} />
       </NotebookOverlay>
     </div>
   );

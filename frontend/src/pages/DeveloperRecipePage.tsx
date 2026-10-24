@@ -426,6 +426,7 @@ export function DeveloperRecipePage({ sample = false }: { sample?: boolean }) {
     <MarginTools
       status={recipe.status}
       slug={recipe.slug}
+      ingredientLines={displayedVersion.ingredient_lines}
       journalOpen={journalOpen}
       onCompare={() => setCompareOpen(true)}
       onPublish={() => setPublishOpen(true)}

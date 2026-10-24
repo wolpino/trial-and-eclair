@@ -105,6 +105,53 @@ async function seedLabRecipe(
   return lab.id;
 }
 
+async function patch(page: Page, url: string, data: unknown) {
+  const response = await page.request.patch(url, { data, headers: await csrfHeader(page) });
+  expect(response.ok(), `${url}: ${await response.text()}`).toBeTruthy();
+}
+
+type SeededVersion = {
+  id: string;
+  ingredient_lines: { id: string; ingredient_name: string }[];
+};
+
+// v1 has 500 g flour, v2 (current) has 1000 g. Water is 350 g in both.
+async function checkPanelFollowsDisplayedVersion(page: Page) {
+  const id = await seedLabRecipe(page, `Two versions ${Date.now()}`, [
+    { name: "bread flour", quantity: "500", unit: "gram" },
+    { name: "water", quantity: "350", unit: "gram" },
+  ]);
+  const v2 = await post<SeededVersion>(page, `/api/v1/recipes/${id}/save-new-version/`, {});
+  const flourLine = v2.ingredient_lines.find((item) => item.ingredient_name === "bread flour");
+  expect(flourLine).toBeTruthy();
+  await patch(page, `/api/v1/versions/${v2.id}/ingredient-lines/${flourLine!.id}/`, {
+    quantity: "1000",
+  });
+
+  await page.goto(`/developer/lab/${id}`);
+  const pages = page.getByRole("navigation", { name: "Version pages" });
+  const panel = page
+    .getByRole("dialog")
+    .filter({ has: page.getByRole("heading", { name: "Baker's %" }) });
+  const row = (name: string) => panel.getByRole("row").filter({ hasText: name });
+
+  // An older version: the panel shows v1's lines, not the current ones.
+  await pages.getByRole("button", { name: /^v1/ }).click();
+  await expect(page.getByText("Viewing v1 (read-only)")).toBeVisible();
+  await page.getByRole("button", { name: "Baker's %" }).click();
+  await expect(panel.getByLabel("Flour weight (g)")).toHaveValue("500");
+  await expect(row("water")).toContainText("70%");
+  await panel.getByRole("button", { name: "Close" }).click();
+  await expect(panel).toHaveCount(0);
+
+  // Back to the current version: the panel shows v2's lines.
+  await pages.getByRole("button", { name: /^v2/ }).click();
+  await expect(page.getByText("Viewing v1 (read-only)")).toHaveCount(0);
+  await page.getByRole("button", { name: "Baker's %" }).click();
+  await expect(panel.getByLabel("Flour weight (g)")).toHaveValue("1000");
+  await expect(row("water")).toContainText("35%");
+}
+
 test.describe("Baker's % in the Lab", () => {
   test.use({ viewport: { width: 1280, height: 900 } });
 
@@ -136,6 +183,9 @@ test.describe("Baker's % in the Lab", () => {
     await expect(row("salt")).toContainText("20 g");
     await expect(row("honey")).toContainText("2 tbsp");
     await expect(row("honey")).not.toContainText("4 tbsp");
+
+    // Same sign-in (the login throttle): the panel follows the version on the page.
+    await checkPanelFollowsDisplayedVersion(page);
   });
 
   test("says so when there is no flour line", async ({ page }) => {
