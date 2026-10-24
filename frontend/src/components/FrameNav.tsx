@@ -125,14 +125,26 @@ function PlaceLink({
   );
 }
 
+/** The places a person can reach; developer places only for developers. */
+export const PLACES: { to: string; label: string; end?: boolean; developer?: boolean }[] = [
+  { to: "/recipe-box", label: "Box" },
+  { to: "/developer/lab", label: "Lab", developer: true },
+  { to: "/developer", label: "Board", end: true, developer: true },
+  { to: "/developer/cookbooks", label: "Cookbooks", developer: true },
+  { to: "/references", label: "Shelf" },
+];
+
+export function placesFor(developer: boolean) {
+  return PLACES.filter((place) => developer || !place.developer);
+}
+
+/** Box and Lab sit in the strip; the rest go under More on a phone. */
+const STRIP_PLACES = ["/recipe-box", "/developer/lab"];
+
 function overflowPlaces(developer: boolean) {
-  return (
-    <>
-      {developer ? <PlaceLink to="/developer" label="Board" end /> : null}
-      {developer ? <PlaceLink to="/developer/cookbooks" label="Cookbooks" /> : null}
-      <PlaceLink to="/references" label="Shelf" />
-    </>
-  );
+  return placesFor(developer)
+    .filter((place) => !STRIP_PLACES.includes(place.to))
+    .map((place) => <PlaceLink key={place.to} {...place} />);
 }
 
 function moreRouteActive(pathname: string): boolean {
@@ -143,7 +155,7 @@ function moreRouteActive(pathname: string): boolean {
   );
 }
 
-function AccountMenu() {
+export function AccountMenu() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   if (!user) {
@@ -187,6 +199,8 @@ export function FrameNav() {
   const kitchenHome = useKitchenHome();
 
   // The kitchen scene replaces the top nav; only the account menu stays, top-right.
+  // Wide focused views don't render FrameNav (AppLayout gives them PlacesMenu and
+  // AccountMenu), so the strip below is the phone's bottom bar.
   if (kitchenHome) {
     return (
       <div className="frame-account-corner">
@@ -197,8 +211,11 @@ export function FrameNav() {
 
   return (
     <nav className="frame-nav" aria-label="Places">
-      <PlaceLink to="/recipe-box" label="Box" />
-      {hasDeveloperAccess ? <PlaceLink to="/developer/lab" label="Lab" /> : null}
+      {placesFor(hasDeveloperAccess)
+        .filter((place) => STRIP_PLACES.includes(place.to))
+        .map((place) => (
+          <PlaceLink key={place.to} {...place} />
+        ))}
       <div className="frame-nav__places">{overflowPlaces(hasDeveloperAccess)}</div>
       <DismissableMenu
         className="frame-nav__more"
