@@ -2,15 +2,32 @@ import { useEffect, useMemo, useState } from "react";
 
 import { ApiError } from "../api/client";
 import { fetchIdeas, type Idea, type IdeaStatus } from "../api/development";
+import { fetchSampleIdeas } from "../api/samples";
 import {
   CorkBoardFilters,
   IdeaEditDrawer,
   PinIdeaFab,
+  PinnedNote,
   PinnedNoteCard,
 } from "../components/corkboard";
+import { IDEA_STATUS_LABELS } from "../components/corkboard/constants";
+import { rotationFromIdeaId } from "../lib/ideaRotation";
 import "../components/corkboard/corkboard.css";
 
-export function DeveloperHomePage() {
+/** A sample note: read only, so not a button and no edit drawer. */
+function SampleNote({ idea }: { idea: Idea }) {
+  return (
+    <PinnedNote rotation={rotationFromIdeaId(idea.id)}>
+      <p className="pinned-note__status">{IDEA_STATUS_LABELS[idea.status]}</p>
+      <h3 className="pinned-note__title">{idea.title}</h3>
+      {idea.category_tag ? <p className="pinned-note__tag">{idea.category_tag}</p> : null}
+      {idea.notes ? <p className="pinned-note__tag">{idea.notes}</p> : null}
+    </PinnedNote>
+  );
+}
+
+/** The cork board. `sample` shows the shared read-only sample board for home cooks. */
+export function DeveloperHomePage({ sample = false }: { sample?: boolean }) {
   const [ideas, setIdeas] = useState<Idea[]>([]);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(true);
@@ -21,7 +38,7 @@ export function DeveloperHomePage() {
   useEffect(() => {
     let cancelled = false;
 
-    fetchIdeas()
+    (sample ? fetchSampleIdeas() : fetchIdeas())
       .then((data) => {
         if (!cancelled) {
           setIdeas(data);
@@ -41,7 +58,7 @@ export function DeveloperHomePage() {
     return () => {
       cancelled = true;
     };
-  }, []);
+  }, [sample]);
 
   const tags = useMemo(() => {
     const unique = new Set<string>();
@@ -96,7 +113,9 @@ export function DeveloperHomePage() {
       <header className="cork-board-page__header">
         <h1>Cork board</h1>
         <p className="cork-board-page__note">
-          Pin recipe ideas in progress. Promote to the lab when you are ready to develop.
+          {sample
+            ? "A sample board, read only: this is how developers pin recipe ideas in progress."
+            : "Pin recipe ideas in progress. Promote to the lab when you are ready to develop."}
         </p>
       </header>
 
@@ -121,28 +140,32 @@ export function DeveloperHomePage() {
               </p>
             ) : (
               <section aria-label="Pinned ideas" className="cork-board-grid">
-                {filteredIdeas.map((idea) => (
-                  <PinnedNoteCard
-                    key={idea.id}
-                    idea={idea}
-                    onSelect={setSelectedIdea}
-                  />
-                ))}
+                {filteredIdeas.map((idea) =>
+                  sample ? (
+                    <SampleNote key={idea.id} idea={idea} />
+                  ) : (
+                    <PinnedNoteCard key={idea.id} idea={idea} onSelect={setSelectedIdea} />
+                  ),
+                )}
               </section>
             )}
           </div>
         </div>
       </div>
 
-      <PinIdeaFab onCreated={handleCreated} />
+      {sample ? null : (
+        <>
+          <PinIdeaFab onCreated={handleCreated} />
 
-      <IdeaEditDrawer
-        idea={selectedIdea}
-        open={selectedIdea !== null}
-        onClose={() => setSelectedIdea(null)}
-        onDeleted={handleDeleted}
-        onSaved={handleSaved}
-      />
+          <IdeaEditDrawer
+            idea={selectedIdea}
+            open={selectedIdea !== null}
+            onClose={() => setSelectedIdea(null)}
+            onDeleted={handleDeleted}
+            onSaved={handleSaved}
+          />
+        </>
+      )}
     </main>
   );
 }
