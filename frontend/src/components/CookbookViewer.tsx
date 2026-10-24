@@ -1,6 +1,8 @@
 import { Link } from "react-router-dom";
 
-import type { PublicCookbook } from "../api/client";
+import type { PublicCookbook, PublicCookbookEntry } from "../api/client";
+import { mediaUrl } from "../api/client";
+import { IngredientLineText, formatTiming } from "../lib/recipeFormat";
 import { CookbookBinder } from "./cookbooks/CookbookBinder";
 import "../styles/cookbooks.css";
 
@@ -41,6 +43,7 @@ export function CookbookViewer({ cookbook }: CookbookViewerProps) {
               )}
             </h2>
             {entry.description ? <p>{entry.description}</p> : null}
+            <CookbookEntryCopy entry={entry} />
           </article>
         ))}
       </section>
@@ -49,5 +52,51 @@ export function CookbookViewer({ cookbook }: CookbookViewerProps) {
         <Link to="/">Trial &amp; Eclair</Link>
       </footer>
     </CookbookBinder>
+  );
+}
+
+// The entry's copy as plain text (React escapes it); never the live Lab recipe.
+function CookbookEntryCopy({ entry }: { entry: PublicCookbookEntry }) {
+  const heroUrl = mediaUrl(entry.hero_image);
+  const timing = formatTiming(entry.prep_minutes, entry.cook_minutes);
+
+  return (
+    <div className="public-cookbook-entry__copy">
+      {timing ? <p className="public-meta">{timing}</p> : null}
+      {heroUrl ? (
+        <figure className="public-hero">
+          <img src={heroUrl} alt={entry.title} />
+        </figure>
+      ) : null}
+      {entry.story ? <p className="recipe-story">{entry.story}</p> : null}
+      {entry.ingredient_lines.length > 0 ? (
+        <section aria-label={`Ingredients for ${entry.title}`}>
+          <h3>Ingredients</h3>
+          {entry.equipment_notes ? (
+            <p className="equipment-notes">{entry.equipment_notes}</p>
+          ) : null}
+          <ul className="ingredient-list">
+            {entry.ingredient_lines.map((line, index) => (
+              <li key={index}>
+                <IngredientLineText line={line} />
+                {line.prep_note ? (
+                  <span className="ingredient-note">, {line.prep_note}</span>
+                ) : null}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ) : null}
+      {entry.steps.length > 0 ? (
+        <section className="recipe-steps" aria-label={`Directions for ${entry.title}`}>
+          <h3>Directions</h3>
+          <ol>
+            {entry.steps.map((step) => (
+              <li key={step.order}>{step.body}</li>
+            ))}
+          </ol>
+        </section>
+      ) : null}
+    </div>
   );
 }
