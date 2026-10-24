@@ -41,7 +41,7 @@ The cloud GitHub proxy blocks GraphQL, so `gh pr ...` and `gh issue ...` fail wi
 
 ## The owner's OK
 
-The owner OKs these issues: #80, #81, #82, #83, #84, #85, #86, #87, #88, #90, #91, #92, #93, follow-ups #103 and #104, the pre-release tasks #133, #134, #136, #137 and #131 (merge checklist #130), and #139 (the fixes from audit #137) once the owner removes its draft label. While #139 still has the draft label, skip it. Remove the draft label from each one just before you start it, if it still has one. #89 stays draft and is skipped: it waits for the owner's photographs. Leave drafts #66–#69 alone. Don't start #124's issue (#103) again: #133 replaces #124, and the owner closes #124 when #133 merges. Don't start an issue that isn't in this list. Anything new you find that isn't needed for the release goes on the post-release list #132 as a line, not as new work.
+The owner OKs these issues: #80, #81, #82, #83, #84, #85, #86, #87, #88, #90, #91, #92, #93, follow-ups #103 and #104, the pre-release tasks #133, #134, #136, #137 and #131 (merge checklist #130), #139 (the fixes from audit #137) and follow-up #145 (cookbook entry `recipe` can be null) once the owner removes each one's draft label. While either still has the draft label, skip it. Remove the draft label from each one just before you start it, if it still has one. #89 stays draft and is skipped: it waits for the owner's photographs. Leave drafts #66–#69 alone. Don't start #124's issue (#103) again: #133 replaces #124, and the owner closes #124 when #133 merges. Don't start an issue that isn't in this list. Anything new you find that isn't needed for the release goes on the post-release list #132 as a line, not as new work.
 
 An issue the director marked blocked (for example #91, waiting for an OK to edit a file outside its Owned paths) starts again only after the owner answers on the issue. Read the issue comments to check.
 
@@ -56,8 +56,8 @@ The owner merges every PR, and you never merge. So an issue whose dependency has
 | 3 | #86, then #85, then #88 | #84 is merged |
 | 4 | #87 | #84 and #85 are merged |
 | 5 (pre-release) | slot A: #133, then #134. Slot B: #137 (audit, no code), then #136, then #87 | built in run 4: #140, #143, #141, #142 (#137 done, no PR) |
-| 5b | #139 | #140 and #143 are merged, and the owner removed #139's draft label |
-| 6 | #131 | everything in wave 5 is merged, and #139 is merged or still draft |
+| 5b | #139, and #145 side by side (no shared files) | #139: #140 and #143 are merged. #145: #140 is merged. Each also needs its draft label removed |
+| 6 | #131 | everything in wave 5 is merged, and #139 and #145 are each merged or still draft |
 
 The last wave is #89 (photographs), which only the owner can start.
 
