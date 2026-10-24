@@ -98,6 +98,7 @@ Start it with `isolation: "worktree"`. Give it the issue number, the GitHub tabl
 
 - The status issue is #94, "Design Bash run: status" (labelled `task`). Keep its body as a table: issue | wave | state (waiting / running / PR open / blocked / merged) | PR | note. Update it whenever a state changes.
 - Each blocked issue also gets a comment on the issue itself saying what you need from the owner.
+- Whenever the owner has to OK something in a comment, give the full link to the exact issue or PR where they should comment (e.g. `https://github.com/wolpino/trial-and-eclair/issues/86`), in the status comment and in the final report. Removing an issue's `draft` label also counts as the owner's OK.
 - Never write the literal at-sign followed by "claude" in any issue, PR or comment. It triggers the repo's GitHub Action (`.github/workflows/claude.yml`).
 
 ## At the end of the run
