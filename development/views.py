@@ -1,10 +1,12 @@
+from django.db.models import Prefetch
 from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.response import Response
 
 from accounts.permissions import IsDeveloper
+from config.exceptions import UserFacingError
 
 from .models import (
     Cookbook,
@@ -32,6 +34,7 @@ from .serializers import (
     PublishRecipeSerializer,
     RecipeStepSerializer,
     RecipeVersionSerializer,
+    SampleRecipeSerializer,
     SaveNewVersionSerializer,
     TestSessionPhotoSerializer,
     TestSessionSerializer,
@@ -408,4 +411,41 @@ class CookbookEntryViewSet(viewsets.ModelViewSet):
         entry.save(update_fields=["sort_order", "updated_at"])
         return Response(
             CookbookRecipeSerializer(entry, context=self.get_serializer_context()).data
+        )
+
+
+class SampleReadOnly(UserFacingError):
+    code = "sample_read_only"
+
+
+class SampleViewSet(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
+    """Shared sample content for any signed-in user. Writes are refused."""
+
+    def _refuse(self, *args, **kwargs) -> Response:
+        exc = SampleReadOnly("Sample content is read-only.")
+        raise PermissionDenied({"detail": exc.user_message, "code": exc.code})
+
+    create = update = partial_update = destroy = _refuse
+
+
+class SampleIdeaViewSet(SampleViewSet):
+    serializer_class = IdeaSerializer
+
+    def get_queryset(self):
+        return Idea.objects.filter(is_sample=True)
+
+
+class SampleRecipeViewSet(SampleViewSet):
+    serializer_class = SampleRecipeSerializer
+
+    def get_queryset(self):
+        versions = RecipeVersion.objects.prefetch_related(
+            "ingredient_lines__ingredient", "steps", "test_sessions__photos"
+        ).order_by("version_number")
+        return (
+            DevelopmentRecipe.objects.filter(is_sample=True)
+            .select_related("current_version", "published_version")
+            .prefetch_related(Prefetch("versions", queryset=versions))
         )
