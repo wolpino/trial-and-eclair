@@ -10,6 +10,46 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-08 · Cleanup: Phases 1–3 of the merge checklist
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-08` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, main session) |
+| **Outcome** | partial (Phases 1–3 of 8 done; checklist below) |
+
+### Intent
+On "hi", catch up on what merged since 2026-10-19 (Design Bash runs 3–5 in the cloud). Write an ordered checklist of everything still open, then do its first three phases.
+
+### Summary
+**Phase 1:** closed PR #124 unmerged and issue #103 (both replaced by #133 / PR #140), and closed audit #137 (its findings went to #139 and #132). Each one got a comment. **Phase 2:** ran Update branch on #146 and #147. All six checks passed on both, e2e included: the #148 logout race was their only failure, and #150 fixed it. Read both diffs, then merged #146 (`9f3bf5a`, closes #145) and #147 (`f8aff32`, closes #139). Updated status issue #94 (rows #103, #137, #139, #145, #148, #131) and checklist #130 (done items ticked, plus a status line). README already had #147's `in_use` code. No phase changed, so PRD is unchanged. CI on `staging-render` after both merges (`f8aff32`) is green, e2e included. **Phase 3:** after Update branch, #149 (run 5 log) and #122 (addendum) each passed all six checks and were merged. This PR conflicted with #149 at the top of this file; both entries are kept.
+
+### Checklist (owner's order; all must be done)
+1. ~~Close #124, #103, #137~~ (done)
+2. ~~Update branch, then merge #146 and #147~~ (done)
+3. ~~Docs PRs #149, then #122, then this one~~ (done)
+4. Safe Dependabot, one at a time, each green: #157, #155, #156, #153, #151 (check the Render deploy and admin), #152 Pillow 11 → 13 (upload a hero image on staging)
+5. Local checkout: it is a detached HEAD at `71d75a9`. Compare the untracked `docs/agent-prompts/design-bash-director.md` with the committed one (it is probably an older draft), then `git switch staging-render && git pull` and reinstall dependencies
+6. #131 e2e storageState (no longer blocked, not a draft)
+7. Post-release dependencies (#132): #118 TypeScript 7, #114 vite-plugin-pwa 2 (check install and update on staging), #108 gunicorn 26 (check the Render deploy). For #154 vite 8 + #158 plugin-react 6 the frontend build fails: open one Task issue and close both PRs in favour of it
+8. Close #130, close #94 (#89 waits on photographs), decide drafts #66–#69 and #89, write the session log
+
+### Decisions
+- **Merge commits, not squash**, as in earlier PRs. `staging-render` doesn't require branches to be up to date (`strict: false`), so #147 merged right after #146 without another update
+
+### Open threads
+- Phases 4–8 above
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** merge checklist, cleanup, Dependabot, generic 500s, null cookbook recipe, status issue
+**Files:** .cursor/session_log.mdc, .cursor/handoffs/NEXT.md (local only)
+**Do not redo:** closing #124, #103, #137; merging #146, #147, #149, #122; updating #94 and #130
+**Resume with:** Phase 4 of the checklist above (#157 first)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-24 · Design Bash run 5: wave 5b (#139, #145)
 
 | Field | Value |
