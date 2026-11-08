@@ -47,16 +47,19 @@ import {
   type TestSession,
   type VersionDiff,
 } from "../api/development";
+import { fetchSampleRecipe } from "../api/samples";
 import "../styles/lab.css";
 
 type PhoneNotebookPage = "ingredients" | "steps";
 
-export function DeveloperRecipePage() {
+/** One Lab notebook. `sample` shows a shared sample recipe, read only, for home cooks. */
+export function DeveloperRecipePage({ sample = false }: { sample?: boolean }) {
   const { recipeId } = useParams<{ recipeId: string }>();
   const [recipe, setRecipe] = useState<DevelopmentRecipe | null>(null);
   const [versions, setVersions] = useState<RecipeVersion[]>([]);
   const [journal, setJournal] = useState<JournalEntry[]>([]);
   const [testSessions, setTestSessions] = useState<TestSession[]>([]);
+  const [sampleSessions, setSampleSessions] = useState<Record<string, TestSession[]>>({});
   const [activeVersionId, setActiveVersionId] = useState("");
   const [draftVersion, setDraftVersion] = useState<RecipeVersion | null>(null);
   const [diff, setDiff] = useState<VersionDiff | null>(null);
@@ -84,6 +87,26 @@ export function DeveloperRecipePage() {
       return;
     }
     setLoading(true);
+    if (sample) {
+      fetchSampleRecipe(recipeId)
+        .then((data) => {
+          const sessions = Object.fromEntries(
+            data.versions.map((version) => [version.id, version.test_sessions]),
+          );
+          setRecipe(data);
+          setVersions(data.versions);
+          setSampleSessions(sessions);
+          setActiveVersionId(data.current_version.id);
+          setDraftVersion(data.current_version);
+          setTestSessions(sessions[data.current_version.id] ?? []);
+          setError(null);
+        })
+        .catch((err: unknown) => {
+          setError(err instanceof ApiError ? err.message : "Could not load recipe.");
+        })
+        .finally(() => setLoading(false));
+      return;
+    }
     Promise.all([
       fetchDevelopmentRecipe(recipeId),
       fetchRecipeVersions(recipeId),
@@ -110,10 +133,12 @@ export function DeveloperRecipePage() {
         setError(err instanceof ApiError ? err.message : "Could not load recipe.");
       })
       .finally(() => setLoading(false));
-  }, [recipeId]);
+  }, [recipeId, sample]);
 
   const currentVersionId = recipe?.current_version.id ?? "";
   const isCurrentVersion = activeVersionId === currentVersionId;
+  const editable = isCurrentVersion && !sample;
+  const shelfPath = sample ? "/sample/lab" : "/developer/lab";
 
   const displayedVersion = useMemo(() => {
     if (isCurrentVersion && draftVersion) {
@@ -146,6 +171,10 @@ export function DeveloperRecipePage() {
   }
 
   async function reloadTestSessions(versionId: string) {
+    if (sample) {
+      setTestSessions(sampleSessions[versionId] ?? []);
+      return;
+    }
     setTestSessions(await fetchTestSessions(versionId));
   }
 
@@ -323,7 +352,7 @@ export function DeveloperRecipePage() {
     return (
       <main className="lab-page">
         <p className="lab-form-error">{error}</p>
-        <Link className="lab-back-link" to="/developer/lab">
+        <Link className="lab-back-link" to={shelfPath}>
           Back to lab
         </Link>
       </main>
@@ -334,7 +363,7 @@ export function DeveloperRecipePage() {
     return (
       <main className="lab-page">
         <p className="lab-form-error">Recipe not found.</p>
-        <Link className="lab-back-link" to="/developer/lab">
+        <Link className="lab-back-link" to={shelfPath}>
           Back to lab
         </Link>
       </main>
@@ -345,11 +374,11 @@ export function DeveloperRecipePage() {
     <>
       <SpreadHeader
         version={displayedVersion}
-        editable={isCurrentVersion}
+        editable={editable}
         onFieldChange={updateDraftField}
       />
       <SpreadActions
-        editable={isCurrentVersion}
+        editable={editable}
         saving={saving}
         onSave={(event) => void handleSaveVersion(event)}
         onSaveNewVersion={() => void handleSaveNewVersion()}
@@ -360,7 +389,7 @@ export function DeveloperRecipePage() {
   const ingredientsPage = (
     <SpreadIngredients
       version={displayedVersion}
-      editable={isCurrentVersion}
+      editable={editable}
       onRemoveLine={(lineId) =>
         void deleteVersionIngredientLine(displayedVersion.id, lineId).then(reload)
       }
@@ -372,7 +401,7 @@ export function DeveloperRecipePage() {
   const stepsPage = (
     <SpreadSteps
       version={displayedVersion}
-      editable={isCurrentVersion}
+      editable={editable}
       onAdd={(data) => createVersionStep(displayedVersion.id, data)}
       onUpdate={(stepId, data) => patchVersionStep(displayedVersion.id, stepId, data)}
       onDelete={(stepId) => deleteVersionStep(displayedVersion.id, stepId)}
@@ -391,10 +420,13 @@ export function DeveloperRecipePage() {
     />
   );
 
-  const marginTools = (
+  const marginTools = sample ? (
+    <p className="lab-page__note">A sample notebook, read only.</p>
+  ) : (
     <MarginTools
       status={recipe.status}
       slug={recipe.slug}
+      ingredientLines={displayedVersion.ingredient_lines}
       journalOpen={journalOpen}
       onCompare={() => setCompareOpen(true)}
       onPublish={() => setPublishOpen(true)}
@@ -409,7 +441,7 @@ export function DeveloperRecipePage() {
           ? draftVersion.version_notes
           : displayedVersion.version_notes
       }
-      editable={isCurrentVersion}
+      editable={editable}
       onChange={(value) => updateDraftField("version_notes", value)}
     />
   );
@@ -420,20 +452,22 @@ export function DeveloperRecipePage() {
         className="notebook-spread--log"
         header={<p className="lab-log-spread__title">Log pages</p>}
       >
-        <LabJournal
-          entries={journal}
-          body={journalBody}
-          onBodyChange={setJournalBody}
-          onSubmit={(event) => void handleAddJournal(event)}
-          onDelete={(entryId) =>
-            void deleteJournalEntry(entryId).then(() =>
-              recipeId ? fetchJournal(recipeId).then(setJournal) : undefined,
-            )
-          }
-        />
+        {sample ? null : (
+          <LabJournal
+            entries={journal}
+            body={journalBody}
+            onBodyChange={setJournalBody}
+            onSubmit={(event) => void handleAddJournal(event)}
+            onDelete={(entryId) =>
+              void deleteJournalEntry(entryId).then(() =>
+                recipeId ? fetchJournal(recipeId).then(setJournal) : undefined,
+              )
+            }
+          />
+        )}
         <LabTestSessions
           sessions={testSessions}
-          editable={isCurrentVersion}
+          editable={editable}
           notes={sessionNotes}
           outcome={sessionOutcome}
           photos={sessionPhotos}
@@ -458,7 +492,7 @@ export function DeveloperRecipePage() {
 
   return (
     <main className="lab-page">
-      <Link className="lab-back-link" to="/developer/lab">
+      <Link className="lab-back-link" to={shelfPath}>
         ← Lab shelf
       </Link>
 

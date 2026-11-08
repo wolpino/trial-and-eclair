@@ -62,7 +62,7 @@ Same origin: gunicorn serves the API, admin, media, and the Vite build. Do **not
 
 Do **not** run `load_recipe_seed --force` on a URL you will share — `dev` / `cook` / `baker` passwords are in this README. The command refuses when `RENDER_EXTERNAL_HOSTNAME` is set or `ALLOWED_HOSTS` is not only localhost. Uploaded photos live on ephemeral disk and can vanish on restart.
 
-`python manage.py load_starter_recipes` and `python manage.py load_default_references` are safe to run on a shared URL (recipe and shelf content only, no users).
+`python manage.py load_starter_recipes`, `python manage.py load_default_references` and `python manage.py load_sample_kitchen` are safe to run on a shared URL (recipe, shelf and sample content only, no users).
 
 ### Demo accounts
 
@@ -77,7 +77,7 @@ Do **not** run `load_recipe_seed --force` on a URL you will share — `dev` / `c
 
 If either password is unset or fails Django's password validators, the command prints a notice and does nothing; the deploy still starts. It only fills an account that is missing or has no content, so testers' changes survive restarts. Nothing is published. Tester uploads still vanish on restart (ephemeral disk).
 
-To reset a demo account: in `/admin/`, delete the demo developer's cookbooks first (cookbook entries protect recipe versions), then delete the demo user, then redeploy or restart.
+To reset a demo account: in `/admin/`, delete the demo user (their cookbooks and entries go with it), then redeploy or restart.
 
 Local production-shaped run (after `cd frontend && npm run build`):
 
@@ -177,7 +177,7 @@ Publishes `current_version` by default. Unpublish hides the public page but keep
 
 | Endpoint | Purpose |
 |----------|---------|
-| `GET /api/v1/public/recipes/{slug}/` | Published recipe: ingredients, steps, story, hero, fork lineage |
+| `GET /api/v1/public/recipes/{slug}/` | Published recipe: ingredients, steps, story, hero, fork lineage (`title`/`slug` null once the original is deleted, `author` null once its author is) |
 
 ### Frontend PWA (`frontend/`)
 
@@ -218,6 +218,7 @@ Open http://localhost:5173/r/your-recipe-slug or `/c/your-cookbook-slug` after p
 | `/developer/cookbooks`, `/developer/cookbooks/:id` | Developer | Cookbook manager |
 | `/recipe-box` | Authenticated; visitors too on a phone | Home cook recipe box (A–Z; `:id` deep-link → focused card). On a phone, visitors see the starter cards and their first save makes a guest |
 | `/references` | Authenticated | Reference library |
+| `/sample/board`, `/sample/lab`, `/sample/lab/:id` | Authenticated | Read-only sample cork board and Lab notebook (what home cooks open from the kitchen) |
 
 Recipes can be created **without an idea** in both lab (`POST /recipes/`) and recipe box (`POST /recipe-box/`). Idea promote is optional (Phase UI C2/C6).
 
@@ -253,7 +254,7 @@ POST body: `recipe` (required), `body` (required), optional `title`, `version_sn
 
 ### Cookbooks (`/api/v1/cookbooks/`)
 
-Developer-only. Entries freeze a `snapshot_version` at add time; unpublishing a recipe keeps the entry but drops the public recipe link.
+Developer-only. Each entry is a copy of the recipe, made at add time and owned by the cookbook: editing, unpublishing or deleting the Lab recipe never changes it. Unpublishing or deleting the Lab recipe drops the public recipe link (`recipe` becomes null on delete).
 
 | Endpoint | Methods | Notes |
 |----------|---------|-------|
@@ -261,11 +262,11 @@ Developer-only. Entries freeze a `snapshot_version` at add time; unpublishing a 
 | `cookbooks/{id}/` | GET, PATCH, DELETE | Own cookbooks only. PATCH: `title`, `description`, `on_shelf` (bool, default false; shows the cookbook on the kitchen shelf) |
 | `cookbooks/{id}/publish/` | POST | Optional `slug` |
 | `cookbooks/{id}/unpublish/` | POST | Hides public page |
-| `cookbooks/{id}/entries/` | GET, POST | POST: `recipe`, optional `version_id`, `sort_order` |
+| `cookbooks/{id}/entries/` | GET, POST | POST: `recipe`, optional `version_id` (default: published, else current version), `sort_order`. Entry: `id`, `recipe` (Lab recipe id or null), `snapshot` (the copy: `version_number`, `title`, `description`, `equipment_notes`, `prep_minutes`, `cook_minutes`, `story`, `hero_image`, `ingredient_lines`, `steps`), `sort_order` |
 | `cookbooks/{id}/entries/{id}/` | GET, PATCH, DELETE | PATCH: `sort_order` only |
-| `GET /api/v1/public/cookbooks/{slug}/` | GET | No auth; frozen recipe list |
+| `GET /api/v1/public/cookbooks/{slug}/` | GET | No auth. `recipes`: each entry's full copy (same fields as `snapshot` above) plus `sort_order` and `recipe_slug` |
 
-Public PWA: **`/c/:slug`** (links to `/r/{slug}` when recipe still published).
+Public PWA: **`/c/:slug`** shows each recipe in full from its copy (links to `/r/{slug}` when the recipe is still published).
 
 ### Home cook recipe box (`/api/v1/recipe-box/`)
 
@@ -296,6 +297,18 @@ Load or refresh them with `python manage.py load_starter_recipes` (reads `seed/d
 Default references load the same way: `python manage.py load_default_references` reads `seed/data/default_references.json`, creates no users, runs from `entrypoint.sh` on every deploy, and is idempotent (updates by URL; defaults removed from the file leave every shelf).
 
 To change the starters, edit the JSON and merge; the next deploy applies it. Renaming a title counts as a new starter: the old one is retired, and anyone who hid the old one sees the new one. Copies people already forked into their box don't change.
+
+### Sample board and notebook (`/api/v1/sample-ideas/`, `/api/v1/sample-recipes/`)
+
+Home cooks who click the cork board or Lab notebook in the kitchen open a read-only sample (`/sample/board`, `/sample/lab`, `/sample/lab/:id`). Sample ideas and Lab recipes have `is_sample: true` in the database and no owner, so developers' own lists and endpoints never include them.
+
+| Endpoint | Methods | Notes |
+|----------|---------|-------|
+| `sample-ideas/`, `sample-ideas/{id}/` | GET | Any signed-in user (guests too). Same shape as `ideas/` |
+| `sample-recipes/`, `sample-recipes/{id}/` | GET | Any signed-in user. Same shape as `recipes/` plus `versions` (every version with `ingredient_lines`, `steps` and `test_sessions`) |
+| any of the above | POST, PUT, PATCH, DELETE | Always `403 {"detail": "Sample content is read-only.", "code": "sample_read_only"}` |
+
+Load or refresh them with `python manage.py load_sample_kitchen` (reads `seed/data/sample_kitchen.json`). It creates no users or passwords, so it is **safe on public URLs**; `entrypoint.sh` and `scripts/e2e_server.sh` run it. It is idempotent: ideas and recipes update by title, each version's ingredient lines, steps and bake log are rebuilt from the file, and samples removed from the file are deleted.
 
 Register defaults to `home_cook`. Start a 14-day developer trial from the home page (`POST /api/v1/auth/start-trial/`), or set `role` in admin.
 
@@ -339,7 +352,7 @@ Public UI: **Save to box** / **Rework** on `/r/:slug`. Box and lab have URL prev
 
 ### Rate limits
 
-DRF scoped throttles; rates live in `REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]` in `config/settings.py`. Over the limit returns 429 with `Retry-After`.
+DRF scoped throttles; rates live in `REST_FRAMEWORK["DEFAULT_THROTTLE_RATES"]` in `config/settings.py`. Over the limit returns 429 with `Retry-After`. The local e2e server (`scripts/e2e_server.sh`) raises `login` to 1000/hour via `E2E_LOGIN_THROTTLE_RATE`, which is ignored unless `DEBUG=True`.
 
 | Scope | Endpoint | Rate | Keyed by |
 |-------|----------|------|----------|
@@ -355,7 +368,7 @@ Counts live in Django's default cache (local memory), so each gunicorn worker ke
 
 Every error body is one of two forms (`config/exceptions.py`, DRF `EXCEPTION_HANDLER`):
 
-- **Everything except field validation:** `{"detail": "<message for the user>", "code": "<machine code>"}`. Codes include `invalid`, `parse_error`, `not_authenticated`, `permission_denied`, `not_found`, `throttled` (with a `Retry-After` header), `guest_card_limit`, `fetch_failed` (502 from URL import) and `server_error`.
+- **Everything except field validation:** `{"detail": "<message for the user>", "code": "<machine code>"}`. Codes include `invalid`, `parse_error`, `not_authenticated`, `permission_denied`, `not_found`, `throttled` (with a `Retry-After` header), `guest_card_limit`, `sample_read_only`, `fetch_failed` (502 from URL import), `in_use` (409 when a delete is blocked because something else still uses the row) and `server_error`.
 - **Field validation (400):** DRF's map, `{"<field>": ["<message>"], "non_field_errors": ["<message>"]}`.
 
 Bodies never carry exception text. Domain errors subclass `config.exceptions.UserFacingError` and views return its fixed `user_message`; any other exception is logged and returns `500 {"detail": "Something went wrong on our side. Please try again.", "code": "server_error"}` (with `DEBUG` on, Django's debug page shows instead). The frontend reads errors only in `toApiError` (`frontend/src/api/client.ts`), which sets `ApiError.message` and `ApiError.code`. The audit of every error source is in [`docs/error-audit.md`](docs/error-audit.md).

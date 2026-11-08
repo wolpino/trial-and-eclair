@@ -45,6 +45,9 @@ export function App() {
           </Route>
           <Route element={<ProtectedRoute />}>
             <Route path="/references" element={<ReferencesPage />} />
+            <Route path="/sample/board" element={<DeveloperHomePage sample />} />
+            <Route path="/sample/lab" element={<DeveloperLabPage sample />} />
+            <Route path="/sample/lab/:recipeId" element={<DeveloperRecipePage sample />} />
           </Route>
         </Route>
       </Routes>

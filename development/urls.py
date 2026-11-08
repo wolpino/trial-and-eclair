@@ -9,6 +9,8 @@ from .views import (
     IdeaViewSet,
     JournalEntryViewSet,
     RecipeVersionViewSet,
+    SampleIdeaViewSet,
+    SampleRecipeViewSet,
     TestSessionPhotoViewSet,
     TestSessionViewSet,
     VersionIngredientLineViewSet,
@@ -20,6 +22,8 @@ router.register("ideas", IdeaViewSet, basename="idea")
 router.register("recipes", DevelopmentRecipeViewSet, basename="recipe")
 router.register("journal", JournalEntryViewSet, basename="journal")
 router.register("cookbooks", CookbookViewSet, basename="cookbook")
+router.register("sample-ideas", SampleIdeaViewSet, basename="sample-idea")
+router.register("sample-recipes", SampleRecipeViewSet, basename="sample-recipe")
 
 urlpatterns = [
     path("", include(router.urls)),

@@ -2,9 +2,10 @@ import { Link, Outlet, useLocation } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthContext";
 import { usePhoneLayout } from "../lib/usePhoneLayout";
-import { FrameNav } from "./FrameNav";
+import { AccountMenu, FrameNav } from "./FrameNav";
+import { PlacesMenu } from "./kitchen/BackToKitchen";
+import { KitchenBackdrop } from "./kitchen/KitchenBackdrop";
 import { useKitchenHome } from "./kitchen/useKitchenHome";
-import { HistoryNav } from "./HistoryNav";
 
 function isPublicReadingPath(pathname: string): boolean {
   return pathname.startsWith("/r/") || pathname.startsWith("/c/");
@@ -13,9 +14,8 @@ function isPublicReadingPath(pathname: string): boolean {
 export function AppLayout() {
   const { user } = useAuth();
   const location = useLocation();
-  const isPhone = usePhoneLayout();
   const isPhoneOrSideways = usePhoneLayout({ sideways: true });
-  // The kitchen scene home goes full-bleed: no Back/Forward strip (decision 004).
+  // The kitchen scene home goes full-bleed (decision 004).
   const kitchenHome = useKitchenHome();
   // The phone box takes the whole screen; other phone pages keep the bottom bar (decision 003).
   const phoneBox = isPhoneOrSideways && /^\/recipe-box\/?$/.test(location.pathname);
@@ -38,16 +38,31 @@ export function AppLayout() {
     );
   }
 
+  // On wide screens every other signed-in page is a focused view over the
+  // faded kitchen (decision 004). No top nav: the places menu top-left and the
+  // account menu top-right (issue #136).
+  if (user && !isPhoneOrSideways && !kitchenHome) {
+    return (
+      <div className="app-shell app-shell--framed">
+        <KitchenBackdrop />
+        <div className="app-frame kitchen-view">
+          <div className="app-frame__body">
+            <div className="kitchen-view__bar">
+              <PlacesMenu />
+              <AccountMenu />
+            </div>
+            <Outlet />
+          </div>
+        </div>
+      </div>
+    );
+  }
+
   return (
     <div className="app-shell app-shell--framed">
-      <div className="app-frame">
+      <div className={kitchenHome ? "app-frame app-frame--kitchen" : "app-frame"}>
         {phoneBox ? null : <FrameNav />}
         <div className="app-frame__body">
-          {isPhone || phoneBox || kitchenHome ? null : (
-            <div className="app-frame__history">
-              <HistoryNav />
-            </div>
-          )}
           <Outlet />
         </div>
       </div>

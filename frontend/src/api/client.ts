@@ -1,6 +1,21 @@
+/** One recipe in a published cookbook, from the entry's own copy. */
 export interface PublicCookbookEntry {
   title: string;
   description: string;
+  equipment_notes: string;
+  prep_minutes: number | null;
+  cook_minutes: number | null;
+  story: string;
+  hero_image: string | null;
+  ingredient_lines: {
+    ingredient_name: string;
+    quantity: string;
+    unit: string;
+    custom_unit: string;
+    prep_note: string;
+    substitution_note: string;
+  }[];
+  steps: { order: number; body: string }[];
   sort_order: number;
   recipe_slug: string | null;
 }
@@ -30,8 +45,10 @@ export interface PublicRecipeStep {
 }
 
 export interface PublicForkLineage {
-  title: string;
-  author: string;
+  /** null once the original recipe is deleted */
+  title: string | null;
+  /** null once the original's author is deleted */
+  author: string | null;
   slug: string | null;
 }
 

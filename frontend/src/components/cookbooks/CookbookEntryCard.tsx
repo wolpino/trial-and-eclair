@@ -13,18 +13,18 @@ export function CookbookEntryCard({
   recipeSlug,
   onRemove,
 }: CookbookEntryCardProps) {
-  const version = entry.snapshot_version;
+  const copy = entry.snapshot;
 
   return (
     <article className="cookbook-entry-card">
       <header className="cookbook-entry-card__header">
-        <h3>{version.title}</h3>
+        <h3>{copy.title}</h3>
         <span className="cookbook-entry-card__badge">
-          v{version.version_number} snapshot
+          v{copy.version_number} copy
         </span>
       </header>
-      {version.description ? (
-        <p className="cookbook-entry-card__description">{version.description}</p>
+      {copy.description ? (
+        <p className="cookbook-entry-card__description">{copy.description}</p>
       ) : null}
       <footer className="cookbook-entry-card__footer">
         {recipeSlug ? (

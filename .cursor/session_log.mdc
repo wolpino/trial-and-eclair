@@ -10,6 +10,114 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-24 · Design Bash run 5: wave 5b (#139, #145)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-24T17:25:20Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code desktop (director plus two worktree subagents, local Mac) |
+| **Outcome** | partial (PRs #147 and #146 open; e2e red on a flaky test outside both) |
+
+### Intent
+Run the director prompt. Run 4's PRs (#140–#143) had all merged and the owner had removed the draft labels on #139 and #145, so wave 5b was unblocked.
+
+### Summary
+Two subagents built #139 and #145 side by side, each writing its tests first and touching only Owned paths. **#139 → PR #147** (`feat/issue-139-generic-500s`): taken slugs return a 400 field error, duplicate cookbook entries a 400 (audit 2.3 was still unvalidated after #133), bad `sort_order` and non-UUID ids a 400/404, bad ports a 403, dropped connections a 502, bad durations are dropped, long scan file names are stored under a generated name, and `ProtectedError`/`RestrictedError` map to 409 `in_use`. 223 backend tests. **#145 → PR #146** (`feat/issue-145-null-entry-recipe`): `CookbookEntry.recipe` is `string | null`, the `""` mapping is gone, and the cookbook page handles null. Both pass backend, frontend, CodeQL and both analyze jobs. e2e fails on both in `kitchen-places.spec.ts` (from #136), which neither touches; the same tests fail locally on unchanged `staging-render` 9fef8f5. Cause of the logout one: `FrameNav.tsx` clears the user before navigating to `/`, so the protected route can send you to `/login`. Drafted as #148. The two branches merge cleanly together. macOS has no `flock`, so e2e runs shared a `mkdir` lock script in the director's scratchpad.
+
+### Decisions
+- **Pushed past the red local e2e**: the two failures reproduce on unchanged staging and are outside both issues' Owned paths
+- **#87 login landing goes on the post-release list #132** (owner: kitchen is the default, but cooks only use the box on a phone; undecided)
+
+### Open threads
+- Owner: OK #148 (remove draft) or merge #146/#147 past the red e2e
+- #147: the slug message shows behind the publish overlay; fixing it needs `DeveloperRecipePage.tsx` (comment on #139)
+- Close #124 (#133 merged)
+- `CookbookDetailPage.tsx` reads errors with `instanceof ApiError`, not `toApiError`
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** director run 5, generic 500s, null entry recipe, flaky logout e2e, kitchen-places
+**Files:** development/services.py, library/services.py, config/exceptions.py, frontend/src/api/development.ts, frontend/src/pages/CookbookDetailPage.tsx, frontend/src/components/FrameNav.tsx
+**Do not redo:** #139 build (PR #147); #145 build (PR #146); the #87 login-landing question (on #132)
+**Resume with:** run the director prompt again after the owner merges wave 5b (#146, #147) and #148; then build #131 (wave 6)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-24 · Design Bash run 4: wave 5 pre-release (#133, #134, #137, #136, #87)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-24T04:45:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (director plus worktree subagents, two at a time) |
+| **Outcome** | partial (four PRs open, #140–#143; audit #137 done, fix task #139 drafted; wave 6 #131 waits on wave 5 merges) |
+
+### Intent
+Run the director prompt again. Since run 3, every run 3 PR merged (#123, #125, #127, #128), plus #135 (#126 login limit) and #138 (prompt covers wave 5). #124 stays open and unmerged: #133 replaces it.
+
+### Summary
+Slot A ran #133, then #134. Slot B ran #137, then #136, then #87. Each build subagent committed its tests first, and the backend tests, the build and e2e passed before every push. Every PR's six check runs are green on its head. **#133 → PR #140**: `CookbookRecipe.snapshot` (JSON copy built by `services.cookbook_snapshot`) replaces the `snapshot_version` FK. `recipe` becomes nullable `SET_NULL`. Migrations `0005_cookbook_entry_snapshot`, `0006_fill_cookbook_snapshots` (data), `0007_remove_cookbookrecipe_snapshot_version`. Fixed-key serializers. `/c/:slug` shows full recipes. **#134 → PR #143**: `RecipeFork.forked_from_version`/`forked_from_user` become `SET_NULL`. Lineage reads "original recipe removed" / "original by a deleted user". Deleting a forked recipe gives 204, not 500. **#137** (audit, no PR): findings on https://github.com/wolpino/trial-and-eclair/issues/137#issuecomment-6380111035; fix task drafted as **#139**; three post-release lines added to #132. **#136 → PR #141**: wide focused views lose the strip. `PlacesMenu` ("← Kitchen" plus a Places list) sits top-left, and the exported `AccountMenu` sits top-right. **#87 → PR #142**: the phone and sideways-phone home is the kitchen scene cropped (`kitchen--phone`), and `HomePage`'s old phone link list is gone.
+
+### Decisions
+- **Merge order**: #140, then #143 (after resolving it), then #141, then #142
+- **Conflicts (checked by merging in that order)**: #143 after #140 conflicts in `docs/PRD.md` (keep #140's "Cookbook snapshots" row and #143's "Forking" row). Its `0005_recipefork_lineage_set_null` must be regenerated as `0008` after `0007_remove_cookbookrecipe_snapshot_version`. #142 after #141 merges clean in git (`AppLayout.tsx`, `kitchen.css` auto-merge; braces balance). #140 and #141 are clean
+- **#134 and #87 branched from `staging-render`**, not from the unmerged #133/#136 branches (no stacking)
+
+### Open threads
+- #139 (fix generic 500s) is a draft; it needs the owner's OK and #140 and #143 merged
+- #140: `development.ts` maps a null entry `recipe` to `""` so `CookbookDetailPage.tsx` (not owned) still compiles; a one-line page edit would be cleaner. The README/PRD unpublish note still mentions `published_version` for cookbook snapshots. The data migration doesn't batch
+- #143: when the original and its author are both gone, the lineage reads "Based on a recipe · original recipe removed · original by a deleted user" (wordy). `load_recipe_seed --force` still deletes forks of a user's recipes
+- #142: login still lands on `/recipe-box` (`auth/access.ts`, not owned), so the phone kitchen shows only at `/`. `.home-page` styles in `index.css` are unused. The phone hides the clock
+- #141: the Places list is links you Tab through, not an arrow-key ARIA menu
+- #124: close when #140 merges. #89 waits on photographs. Drafts #66–#69 untouched
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** design bash, director, wave 5, pre-release, cookbook copy, snapshot JSON, fork lineage, SET_NULL, API error audit, places menu, account menu, phone kitchen
+**Files:** development/migrations/0005_cookbook_entry_snapshot.py, development/migrations/0006_fill_cookbook_snapshots.py, development/migrations/0007_remove_cookbookrecipe_snapshot_version.py, development/migrations/0005_recipefork_lineage_set_null.py, development/public_views.py, frontend/src/components/kitchen/BackToKitchen.tsx, frontend/src/components/kitchen/KitchenScene.tsx, frontend/e2e/kitchen-places.spec.ts, frontend/e2e/kitchen-phone.spec.ts, frontend/e2e/cookbook-copy.spec.ts
+**Do not redo:** #133 (PR #140), #134 (PR #143), #137 audit (findings comment and #139), #136 (PR #141), #87 (PR #142)
+**Resume with:** run the director prompt again after the owner merges wave 5 (#140, #143, #141, #142), which unblocks wave 6 (#131); build #139 once the owner OKs it
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-23 · Design Bash run 3: wave 3 (#86, #85, #88) and follow-ups #103, #104
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-23T08:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (director plus worktree subagents, two at a time) |
+| **Outcome** | partial (five PRs open, #123–#125, #127, #128; wave 4 waits on #125) |
+
+### Intent
+Run the director prompt again. Since run 2, every earlier PR merged (#95–#101, #119, #120). The owner OK'd #103 and #104 ("yes" on each, 2026-10-23).
+
+### Summary
+Ran wave 3 one issue at a time (#86, then #85, then #88), because all three edit `components/kitchen/`. Paired #103 and #104 with slots where nothing else touched their files. Each subagent committed its tests first, and backend tests and the build passed before every push. **#86 → PR #123**: read-only sample board and notebook for home cooks (`/sample/board`, `/sample/lab[/:id]`). `load_sample_kitchen` loads `seed/data/sample_kitchen.json`, and `Idea`/`DevelopmentRecipe` get `is_sample` and a nullable `user` (migration `0004_sample_content`). Sample endpoints refuse writes with 403 `sample_read_only`. **#85 → PR #125**: focused views over a faded kitchen with one "Back to kitchen"; `HistoryNav.tsx` deleted. **#88 → PR #128**: `useSunlight` + `KitchenLight` change the light from the device clock every 5 minutes, with a moonlit night. **#103 → PR #124**: `CookbookRecipe.snapshot_version` PROTECT → RESTRICT (`0004_cookbook_snapshot_restrict`); README reset step simplified. **#104 → PR #127**: `MarginTools` reads `displayedVersion.ingredient_lines` and no longer fetches.
+
+`staging-render` e2e is red: the suite makes more than 20 logins, so the 20/hour login throttle gives 429 to the last specs (`references-defaults.spec.ts:41`, `walkthrough.spec.ts:3`). Reproduced on a clean checkout (97 passed, 2 failed); both pass alone. Every PR's e2e check is red for that reason; every other check is green. Opened draft **#126** with the proposed fix (`LOGIN_THROTTLE_RATE` env var, high in `scripts/e2e_server.sh`).
+
+### Decisions
+- **Merge order**: #126 fix first if OK'd (turns e2e green), then #123, #125, #128, #124, #127
+- **Conflicts (checked by merging in that order)**: #128 conflicts with #125 in `frontend/src/styles/kitchen.css` (both append at the end; keep both). #124 merges clean in git but leaves two `development` `0004` migrations next to #123's, so Django refuses to migrate: regenerate #124's as `0005` depending on `0004_sample_content`. The rest merge clean
+- **Base e2e red is not fixed in any PR**: the fix is in `config/settings.py`, outside every issue's Owned paths, so it went to draft #126
+
+### Open threads
+- #123 edits `frontend/e2e/kitchen-home.spec.ts`, which is outside its Owned paths: it deletes the two "locked" home-cook tests that the issue replaces. The owner needs to OK that (or ask for it to be reverted). The unused lock styles in `kitchen.css` stay
+- #85: the top nav still shows inside focused views (decision 004 says it goes; the issue didn't ask). `.history-nav` styles in `src/index.css` are now unused
+- #88 adds `--color-moon-glow` to `themes/default.css` (scoped "sun tokens only"); nobody has checked the light in a screenshot
+- #87 (wave 4) needs #125 merged. #89 waits on photographs. Drafts #66–#69 untouched. Dependabot PRs #105–#118 outside this run
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** design bash, director, sample kitchen, read-only samples, focused views, back to kitchen, sunlight, moonlight, RESTRICT, baker's percent, login throttle
+**Files:** development/management/commands/load_sample_kitchen.py, seed/data/sample_kitchen.json, development/migrations/0004_sample_content.py, development/migrations/0004_cookbook_snapshot_restrict.py, frontend/src/components/kitchen/KitchenBackdrop.tsx, frontend/src/components/kitchen/useSunlight.ts, frontend/src/components/lab/MarginTools.tsx, config/settings.py
+**Do not redo:** #86 (PR #123), #85 (PR #125), #88 (PR #128), #103 (PR #124), #104 (PR #127); builds from runs 1–2
+**Resume with:** run the director prompt again after the owner merges wave 3 (#125 at least, which unblocks #87); build #126 once the owner OKs it
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-23 · Design Bash run 2: #84 and #91
 
 | Field | Value |

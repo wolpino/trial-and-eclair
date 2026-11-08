@@ -133,10 +133,35 @@ export interface TestSession extends TestSessionBake {
   updated_at: string;
 }
 
+/** A line in a cookbook entry's copy, stored as text. */
+export interface CookbookCopyLine {
+  ingredient_name: string;
+  quantity: string;
+  unit: string;
+  custom_unit: string;
+  prep_note: string;
+  substitution_note: string;
+}
+
+/** The recipe as it was when added to the cookbook. Lab edits never change it. */
+export interface CookbookCopy {
+  version_number: number;
+  title: string;
+  description: string;
+  equipment_notes: string;
+  prep_minutes: number | null;
+  cook_minutes: number | null;
+  story: string;
+  hero_image: string | null;
+  ingredient_lines: CookbookCopyLine[];
+  steps: { order: number; body: string }[];
+}
+
 export interface CookbookEntry {
   id: string;
-  recipe: string;
-  snapshot_version: RecipeVersion;
+  /** Lab recipe id; null once the Lab recipe is deleted. */
+  recipe: string | null;
+  snapshot: CookbookCopy;
   sort_order: number;
   created_at: string;
   updated_at: string;

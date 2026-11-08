@@ -92,26 +92,6 @@ test("the shelf shows only cookbooks set on_shelf", async ({ page }) => {
   await setOnShelf(page, "Summer tests", false);
 });
 
-test("a home cook's board and notebook are locked and don't navigate", async ({ page }) => {
-  await openKitchen(page, "cook");
-  const k = kitchen(page);
-
-  for (const name of ["Cork board", "Lab notebook"]) {
-    const locked = k.getByRole("button", { name: `${name} (locked)` });
-    await expect(locked).toBeVisible();
-    await expect(locked).toHaveAttribute("aria-disabled", "true");
-    await expect(locked).toHaveAttribute("title", /developer/i);
-    await expect(k.getByRole("link", { name })).toHaveCount(0);
-    // aria-disabled fails Playwright's "enabled" check, so click past it.
-    await locked.click({ force: true });
-    await expect(page).toHaveURL(/\/$/);
-  }
-
-  // Everyone signed in gets the box and the references shelf.
-  await expect(k.getByRole("link", { name: "Recipe box" })).toBeVisible();
-  await expect(shelf(page).getByRole("link", { name: "References" })).toBeVisible();
-});
-
 test("the clock shows the current hour and minute", async ({ page }) => {
   await page.clock.install({ time: new Date("2026-10-23T15:07:00Z") });
   await openKitchen(page, "dev");
@@ -157,14 +137,4 @@ test("every object can be reached and opened with the keyboard", async ({ page }
     await page.keyboard.press("Enter");
     await expect(page).toHaveURL(url);
   }
-});
-
-test("a home cook reaches the locked objects with the keyboard and stays home", async ({
-  page,
-}) => {
-  await openKitchen(page, "cook");
-  const locked = kitchen(page).getByRole("button", { name: "Cork board (locked)" });
-  await tabTo(page, locked);
-  await page.keyboard.press("Enter");
-  await expect(page).toHaveURL(/\/$/);
 });

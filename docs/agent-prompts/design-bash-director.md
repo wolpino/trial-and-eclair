@@ -41,7 +41,7 @@ The cloud GitHub proxy blocks GraphQL, so `gh pr ...` and `gh issue ...` fail wi
 
 ## The owner's OK
 
-The owner OKs these issues: #80, #81, #82, #83, #84, #85, #86, #87, #88, #90, #91, #92, #93. Remove the draft label from each one just before you start it, not all at once. #89 stays draft and is skipped: it waits for the owner's photographs. Leave drafts #66–#69 alone. Follow-ups #103 and #104 are drafts too: start them only after the owner OKs them in a comment. Don't start an issue that isn't in this list.
+The owner OKs these issues: #80, #81, #82, #83, #84, #85, #86, #87, #88, #90, #91, #92, #93, follow-ups #103 and #104, the pre-release tasks #133, #134, #136, #137 and #131 (merge checklist #130), #139 (the fixes from audit #137) and follow-up #145 (cookbook entry `recipe` can be null) once the owner removes each one's draft label. While either still has the draft label, skip it. Remove the draft label from each one just before you start it, if it still has one. #89 stays draft and is skipped: it waits for the owner's photographs. Leave drafts #66–#69 alone. Don't start #124's issue (#103) again: #133 replaces #124, and the owner closes #124 when #133 merges. Don't start an issue that isn't in this list. Anything new you find that isn't needed for the release goes on the post-release list #132 as a line, not as new work.
 
 An issue the director marked blocked (for example #91, waiting for an OK to edit a file outside its Owned paths) starts again only after the owner answers on the issue. Read the issue comments to check.
 
@@ -55,6 +55,9 @@ The owner merges every PR, and you never merge. So an issue whose dependency has
 | 2 | #84 | #83 and #81 are merged |
 | 3 | #86, then #85, then #88 | #84 is merged |
 | 4 | #87 | #84 and #85 are merged |
+| 5 (pre-release) | slot A: #133, then #134. Slot B: #137 (audit, no code), then #136, then #87 | built in run 4: #140, #143, #141, #142 (#137 done, no PR) |
+| 5b | #139, and #145 side by side (no shared files) | #139: #140 and #143 are merged. #145: #140 is merged. Each also needs its draft label removed |
+| 6 | #131 | everything in wave 5 is merged, and #139 and #145 are each merged or still draft |
 
 The last wave is #89 (photographs), which only the owner can start.
 
@@ -64,8 +67,19 @@ Overlaps inside a wave. Run these one after the other, not side by side. The sec
 - #81 and #91 both add a migration to `development/`. Whichever merges second has to regenerate its migration. Say so in the second PR.
 - #85, #86 and #88 all edit `frontend/src/components/kitchen/` and `frontend/src/styles/kitchen.css`. Run them in order: #86, then #85, then #88.
 - #82, #86 and #93 each add one line to `entrypoint.sh`, and several issues edit the README API table. Those are small conflicts: list them in the final report.
+- #133 and #134 both add a `development/` migration and edit `development/serializers.py` and `public_views.py`. Run #134 after #133. Its migration must be regenerated after #133 merges; say so in #134's PR.
+- #136 and #87 both edit `frontend/src/components/kitchen/`, `kitchen.css` and `AppLayout.tsx`. Run #87 after #136.
+- #137 is an audit: its subagent posts findings on the issue and drafts one fix task. It changes no code and opens no PR. It needs no e2e run.
+- #139 edits `add_cookbook_entry` and `CookbookEntryViewSet`, which #140 rewrote. Branch it only after #140 and #143 merge, and recheck audit finding 2.3 (adding the same recipe twice) against the new code.
+- #131 rewrites how every e2e spec logs in, so it conflicts with any open PR that adds a spec. Start it only when nothing else is open.
+
+When you resolve a merge conflict in CSS, check that braces balance afterwards. Git can treat the closing `}` lines two blocks share as common text and leave one rule unclosed, which silently breaks every style after it in the bundle.
 
 Before the final report, check conflicts for real: clone to a temp dir, merge the open PR branches into `staging-render` in the recommended order, and note which ones conflict and in which files.
+
+## Open PRs that a merge has unblocked
+
+Before starting new issues, check each open PR from an earlier run whose PR body or the last status comment says it needs work after another PR merges. If that PR has merged, send a subagent to the open PR's branch (rules 1 and 5–12 below): merge `origin/staging-render` in (a merge commit, never rebase or force-push), resolve the conflict, regenerate migrations with `makemigrations` so there is one leaf, run the three checks, push, and wait for CI. Known case: **#143** after #140 merges. Keep #140's "Cookbook snapshots" row and #143's "Forking" row in `docs/PRD.md`, and regenerate `0005_recipefork_lineage_set_null` as `0008_…` depending on `0007_remove_cookbookrecipe_snapshot_version`. Also rerun CI on **#142** after #141 merges (bring `staging-render` in).
 
 ## Each issue: what the subagent does
 
@@ -92,12 +106,13 @@ Start it with `isolation: "worktree"`. Give it the issue number, the GitHub tabl
 
 - The PR's base is `staging-render`, its files are inside the Owned paths, "Closes #N" is in the body, and every check run has succeeded.
 - Read the diff (`git diff origin/staging-render...<branch>`). If it's outside scope or misses a "Done when" item, send it back to the same subagent once. If it's still wrong, mark the issue blocked.
-- A subagent's report is a claim. The PR and CI are the proof.
+- A subagent's report is a claim. The PR and CI are the proof. Read the check runs on the PR's current head SHA yourself, and wait until all six (backend, frontend, e2e, CodeQL, analyze (python), analyze (javascript-typescript)) have completed. A subagent can report green while the checks on its last push are still running.
 
 ## Status: where the owner looks
 
 - The status issue is #94, "Design Bash run: status" (labelled `task`). Keep its body as a table: issue | wave | state (waiting / running / PR open / blocked / merged) | PR | note. Update it whenever a state changes.
 - Each blocked issue also gets a comment on the issue itself saying what you need from the owner.
+- Whenever the owner has to OK something in a comment, give the full link to the exact issue or PR where they should comment (e.g. `https://github.com/wolpino/trial-and-eclair/issues/86`), in the status comment and in the final report. Removing an issue's `draft` label also counts as the owner's OK.
 - Never write the literal at-sign followed by "claude" in any issue, PR or comment. It triggers the repo's GitHub Action (`.github/workflows/claude.yml`).
 
 ## At the end of the run

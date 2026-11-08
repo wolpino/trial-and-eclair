@@ -57,8 +57,7 @@ export function PhoneBoxMenu({
   }
 
   async function signOut() {
-    await logout();
-    navigate("/", { replace: true });
+    await logout(() => navigate("/", { replace: true }));
   }
 
   return (
