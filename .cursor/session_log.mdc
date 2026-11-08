@@ -10,6 +10,40 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-10-24 · Design Bash run 5: wave 5b (#139, #145)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-24T17:25:20Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code desktop (director plus two worktree subagents, local Mac) |
+| **Outcome** | partial (PRs #147 and #146 open; e2e red on a flaky test outside both) |
+
+### Intent
+Run the director prompt. Run 4's PRs (#140–#143) had all merged and the owner had removed the draft labels on #139 and #145, so wave 5b was unblocked.
+
+### Summary
+Two subagents built #139 and #145 side by side, each writing its tests first and touching only Owned paths. **#139 → PR #147** (`feat/issue-139-generic-500s`): taken slugs return a 400 field error, duplicate cookbook entries a 400 (audit 2.3 was still unvalidated after #133), bad `sort_order` and non-UUID ids a 400/404, bad ports a 403, dropped connections a 502, bad durations are dropped, long scan file names are stored under a generated name, and `ProtectedError`/`RestrictedError` map to 409 `in_use`. 223 backend tests. **#145 → PR #146** (`feat/issue-145-null-entry-recipe`): `CookbookEntry.recipe` is `string | null`, the `""` mapping is gone, and the cookbook page handles null. Both pass backend, frontend, CodeQL and both analyze jobs. e2e fails on both in `kitchen-places.spec.ts` (from #136), which neither touches; the same tests fail locally on unchanged `staging-render` 9fef8f5. Cause of the logout one: `FrameNav.tsx` clears the user before navigating to `/`, so the protected route can send you to `/login`. Drafted as #148. The two branches merge cleanly together. macOS has no `flock`, so e2e runs shared a `mkdir` lock script in the director's scratchpad.
+
+### Decisions
+- **Pushed past the red local e2e**: the two failures reproduce on unchanged staging and are outside both issues' Owned paths
+- **#87 login landing goes on the post-release list #132** (owner: kitchen is the default, but cooks only use the box on a phone; undecided)
+
+### Open threads
+- Owner: OK #148 (remove draft) or merge #146/#147 past the red e2e
+- #147: the slug message shows behind the publish overlay; fixing it needs `DeveloperRecipePage.tsx` (comment on #139)
+- Close #124 (#133 merged)
+- `CookbookDetailPage.tsx` reads errors with `instanceof ApiError`, not `toApiError`
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** director run 5, generic 500s, null entry recipe, flaky logout e2e, kitchen-places
+**Files:** development/services.py, library/services.py, config/exceptions.py, frontend/src/api/development.ts, frontend/src/pages/CookbookDetailPage.tsx, frontend/src/components/FrameNav.tsx
+**Do not redo:** #139 build (PR #147); #145 build (PR #146); the #87 login-landing question (on #132)
+**Resume with:** run the director prompt again after the owner merges wave 5b (#146, #147) and #148; then build #131 (wave 6)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-24 · Design Bash run 4: wave 5 pre-release (#133, #134, #137, #136, #87)
 
 | Field | Value |
