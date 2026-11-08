@@ -1,8 +1,10 @@
+import uuid
+
 from django.db.models import Prefetch
-from django.shortcuts import get_object_or_404
 from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from accounts.permissions import IsDeveloper
@@ -24,6 +26,7 @@ from .serializers import (
     CookbookCreateSerializer,
     CookbookRecipeCreateSerializer,
     CookbookRecipeSerializer,
+    CookbookRecipeUpdateSerializer,
     CookbookSerializer,
     DevelopmentRecipeCreateSerializer,
     DevelopmentRecipeSerializer,
@@ -308,6 +311,10 @@ class JournalEntryViewSet(viewsets.ModelViewSet):
         )
         recipe_id = self.request.query_params.get("recipe")
         if recipe_id:
+            try:
+                recipe_id = uuid.UUID(recipe_id)
+            except ValueError as exc:
+                raise ValidationError("Pick a valid recipe.") from exc
             queryset = queryset.filter(recipe_id=recipe_id)
         return queryset
 
@@ -401,10 +408,9 @@ class CookbookEntryViewSet(viewsets.ModelViewSet):
 
     def partial_update(self, request, *args, **kwargs) -> Response:
         entry = self.get_object()
-        sort_order = request.data.get("sort_order")
-        if sort_order is None:
-            raise ValidationError({"sort_order": "This field is required for update."})
-        entry.sort_order = sort_order
+        serializer = CookbookRecipeUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        entry.sort_order = serializer.validated_data["sort_order"]
         entry.save(update_fields=["sort_order", "updated_at"])
         return Response(
             CookbookRecipeSerializer(entry, context=self.get_serializer_context()).data
