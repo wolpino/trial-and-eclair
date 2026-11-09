@@ -10,6 +10,41 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-09 · Cleanup: Phases 4–8 (PR clean-up track)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-08` to `2026-11-09` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop; PR clean-up director plus two worktree subagents, alongside a separate design session) |
+| **Outcome** | completed (checklist done; PR #164 waits on the owner) |
+
+### Intent
+Finish the 2026-11-08 checklist below: Phase 4 (done earlier that day), then Phases 5–8.
+
+### Summary
+**Phase 4:** Dependabot #157, #155, #156, #153, #152, #151 merged, each 6/6 green (`21d918e`). **Phase 5:** the local checkout was a detached HEAD at `71d75a9`. The untracked `docs/agent-prompts/design-bash-director.md` was an Oct 19 draft that matched no commit: its prompt half had been superseded by the committed file, and its "Part 1: cloud setup" section was moved to a backup outside the repo (owner: the backup is enough). The checkout is on `staging-render`; 223 backend tests and the build pass. PR #160 merged `staging-render` into `main` (owner's merge, same files). The default branch is still `staging-render`, and the owner confirmed: branch from it and open PRs into it. **Phase 6:** #131 → PR #163, merged. A Playwright `setup` project logs dev, cook and baker in once and saves `frontend/e2e/.auth/<user>.json`; logins per run went from about 30 to 6. **Phase 7:** #114 (vite-plugin-pwa 2) and #108 (gunicorn 26) merged; #118 (TypeScript 7) merged after `@dependabot recreate`, because Dependabot ignored the rebase request. #154 and #158 were closed in favour of Task #162 (vite 8 + plugin-react 6 must move together, and vite 8 needs pwa 2) → PR #164, rebased onto #118 with the lockfile regenerated. **Phase 8:** closed #130 and #94 with comments; #89 moved to #132 (new Kitchen section) and closed; drafts #66–#69 stay drafts (not reviewed yet).
+
+### Decisions
+- **Lockfile regenerated for vite 8**: an in-place `npm install` fails with ERESOLVE on plugin-react 6's optional Babel 8 peers against workbox's Babel 7. A fresh resolve is clean (`npm ci`, no `--legacy-peer-deps`); `@playwright/test` is pinned back to 1.64.1
+- **api-errors "scan upload errors" use the saved cook session**: they test the upload picker, not the login form
+- **e2e lock**: worktree subagents take turns on port 8010 with a `mkdir` lock, since `reuseExistingServer` would reuse another worktree's server
+
+### Open threads
+- Owner merges PR #164 (vite 8)
+- Owner on Render staging: the deploy with gunicorn 26 starts and `/admin/` loads; the PWA installs and updates with vite-plugin-pwa 2
+- e2e is not rerun-safe: on a reused server, run 2 fails 5 specs that change seed data (`references-defaults`, `recipe-box-phone`, `recipe-box-card-view`, `recipe-box-guest-phone`). This was already true before #163. Tracked in #132 (Tests)
+- Drafts #66–#69 wait for the owner's review
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** cleanup, Dependabot, storageState, vite 8, TypeScript 7, lockfile, default branch, e2e lock
+**Files:** frontend/playwright.config.ts, frontend/e2e/auth.setup.ts, frontend/e2e/auth.ts, frontend/package.json, frontend/package-lock.json
+**Do not redo:** Phases 1–8 of the 2026-11-08 checklist; #131 (PR #163); #162 (PR #164); closing #130, #94, #89, #154, #158
+**Resume with:** after PR #164 merges, pick the next feature (owner's call)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-08 · Cleanup: Phases 1–3 of the merge checklist
 
 | Field | Value |
