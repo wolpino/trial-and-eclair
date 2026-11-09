@@ -1,6 +1,8 @@
+import { useCallback, useRef, type ReactNode } from "react";
 import { NavLink, useLocation, useNavigate } from "react-router-dom";
 
 import { useAuth } from "../auth/AuthContext";
+import { useKitchenHome } from "./kitchen/useKitchenHome";
 import {
   FONT_PRESETS,
   THEME_PRESETS,
@@ -8,6 +10,36 @@ import {
   type FontPresetId,
   type ThemePresetId,
 } from "../theme/ThemeProvider";
+import { useDismiss } from "../lib/useDismiss";
+
+/** A native <details> menu that closes on an outside press and on Escape. */
+function DismissableMenu({
+  className,
+  summary,
+  children,
+}: {
+  className: string;
+  summary: ReactNode;
+  children: ReactNode;
+}) {
+  const ref = useRef<HTMLDetailsElement>(null);
+  // Always listening: React state would learn of the native toggle a task late,
+  // and an Escape pressed right after opening would be missed.
+  const close = useCallback(() => {
+    if (!ref.current?.open) {
+      return false;
+    }
+    ref.current.open = false;
+  }, []);
+  useDismiss(ref, true, close);
+
+  return (
+    <details ref={ref} className={className}>
+      {summary}
+      {children}
+    </details>
+  );
+}
 
 function ThemeSettings() {
   const { theme, font, setTheme, setFont } = useTheme();
@@ -93,14 +125,26 @@ function PlaceLink({
   );
 }
 
+/** The places a person can reach; developer places only for developers. */
+export const PLACES: { to: string; label: string; end?: boolean; developer?: boolean }[] = [
+  { to: "/recipe-box", label: "Box" },
+  { to: "/developer/lab", label: "Lab", developer: true },
+  { to: "/developer", label: "Board", end: true, developer: true },
+  { to: "/developer/cookbooks", label: "Cookbooks", developer: true },
+  { to: "/references", label: "Shelf" },
+];
+
+export function placesFor(developer: boolean) {
+  return PLACES.filter((place) => developer || !place.developer);
+}
+
+/** Box and Lab sit in the strip; the rest go under More on a phone. */
+const STRIP_PLACES = ["/recipe-box", "/developer/lab"];
+
 function overflowPlaces(developer: boolean) {
-  return (
-    <>
-      {developer ? <PlaceLink to="/developer" label="Board" end /> : null}
-      {developer ? <PlaceLink to="/developer/cookbooks" label="Cookbooks" /> : null}
-      <PlaceLink to="/references" label="Shelf" />
-    </>
-  );
+  return placesFor(developer)
+    .filter((place) => !STRIP_PLACES.includes(place.to))
+    .map((place) => <PlaceLink key={place.to} {...place} />);
 }
 
 function moreRouteActive(pathname: string): boolean {
@@ -111,7 +155,7 @@ function moreRouteActive(pathname: string): boolean {
   );
 }
 
-function AccountMenu() {
+export function AccountMenu() {
   const { user, logout } = useAuth();
   const navigate = useNavigate();
   if (!user) {
@@ -119,13 +163,18 @@ function AccountMenu() {
   }
 
   async function handleLogout() {
-    await logout();
-    navigate("/", { replace: true });
+    await logout(() => navigate("/", { replace: true }));
   }
 
   return (
-    <details className="frame-account">
-      <summary className="frame-nav__summary">Account</summary>
+    <DismissableMenu
+      className="frame-account"
+      summary={
+        <summary className="frame-nav__summary" data-dismiss-passthrough>
+          Account
+        </summary>
+      }
+    >
       <div className="frame-nav__panel frame-account__panel">
         <p className="frame-account__name">{user.username}</p>
         <ThemeSettings />
@@ -138,7 +187,7 @@ function AccountMenu() {
           Log out
         </button>
       </div>
-    </details>
+    </DismissableMenu>
   );
 }
 
@@ -146,24 +195,44 @@ export function FrameNav() {
   const { hasDeveloperAccess } = useAuth();
   const location = useLocation();
   const moreActive = moreRouteActive(location.pathname);
+  const kitchenHome = useKitchenHome();
+
+  // The kitchen scene replaces the top nav; only the account menu stays, top-right.
+  // Wide focused views don't render FrameNav (AppLayout gives them PlacesMenu and
+  // AccountMenu), so the strip below is the phone's bottom bar.
+  if (kitchenHome) {
+    return (
+      <div className="frame-account-corner">
+        <AccountMenu />
+      </div>
+    );
+  }
 
   return (
     <nav className="frame-nav" aria-label="Places">
-      <PlaceLink to="/recipe-box" label="Box" />
-      {hasDeveloperAccess ? <PlaceLink to="/developer/lab" label="Lab" /> : null}
+      {placesFor(hasDeveloperAccess)
+        .filter((place) => STRIP_PLACES.includes(place.to))
+        .map((place) => (
+          <PlaceLink key={place.to} {...place} />
+        ))}
       <div className="frame-nav__places">{overflowPlaces(hasDeveloperAccess)}</div>
-      <details className="frame-nav__more">
-        <summary
-          className={
-            moreActive
-              ? "frame-nav__summary frame-nav__summary--active"
-              : "frame-nav__summary"
-          }
-        >
-          More
-        </summary>
+      <DismissableMenu
+        className="frame-nav__more"
+        summary={
+          <summary
+            className={
+              moreActive
+                ? "frame-nav__summary frame-nav__summary--active"
+                : "frame-nav__summary"
+            }
+            data-dismiss-passthrough
+          >
+            More
+          </summary>
+        }
+      >
         <div className="frame-nav__panel">{overflowPlaces(hasDeveloperAccess)}</div>
-      </details>
+      </DismissableMenu>
       <AccountMenu />
     </nav>
   );

@@ -1,6 +1,21 @@
+/** One recipe in a published cookbook, from the entry's own copy. */
 export interface PublicCookbookEntry {
   title: string;
   description: string;
+  equipment_notes: string;
+  prep_minutes: number | null;
+  cook_minutes: number | null;
+  story: string;
+  hero_image: string | null;
+  ingredient_lines: {
+    ingredient_name: string;
+    quantity: string;
+    unit: string;
+    custom_unit: string;
+    prep_note: string;
+    substitution_note: string;
+  }[];
+  steps: { order: number; body: string }[];
   sort_order: number;
   recipe_slug: string | null;
 }
@@ -30,8 +45,10 @@ export interface PublicRecipeStep {
 }
 
 export interface PublicForkLineage {
-  title: string;
-  author: string;
+  /** null once the original recipe is deleted */
+  title: string | null;
+  /** null once the original's author is deleted */
+  author: string | null;
   slug: string | null;
 }
 
@@ -74,6 +91,8 @@ export interface User {
   measurement_preference: MeasurementPreference;
   show_forks: boolean;
   date_joined: string;
+  /** Passwordless account made on the first save; registering upgrades it (decision 002). */
+  is_guest: boolean;
 }
 
 export interface RegisterInput {
@@ -90,14 +109,18 @@ export interface LoginInput {
 
 export class ApiError extends Error {
   status: number;
+  /** Machine-readable code from the API body, e.g. "guest_card_limit". */
+  code?: string;
 
-  constructor(status: number, message: string) {
+  constructor(status: number, message: string, code?: string) {
     super(message);
     this.status = status;
+    this.code = code;
   }
 }
 
-const API_BASE = import.meta.env.VITE_API_BASE_URL ?? "";
+// `?.` keeps this module importable outside Vite (Playwright unit specs).
+const API_BASE = import.meta.env?.VITE_API_BASE_URL ?? "";
 
 function getCsrfToken(): string | null {
   const match = document.cookie.match(/(?:^|;\s*)csrftoken=([^;]+)/);
@@ -108,35 +131,76 @@ function isMutatingMethod(method: string): boolean {
   return !["GET", "HEAD", "OPTIONS"].includes(method.toUpperCase());
 }
 
-async function parseApiErrorMessage(response: Response): Promise<string> {
+const SERVER_ERROR_MESSAGE = "Something went wrong on our side. Please try again.";
+const FALLBACK_ERROR_MESSAGE = "That did not work. Please try again.";
+
+function isRecord(value: unknown): value is Record<string, unknown> {
+  return typeof value === "object" && value !== null && !Array.isArray(value);
+}
+
+/** Builds the ApiError for a failed response. The API's error shape is in README "API errors". */
+export async function toApiError(response: Response): Promise<ApiError> {
+  let data: unknown = null;
   try {
-    const data: unknown = await response.json();
-    if (typeof data === "string") {
-      return data;
-    }
-    if (Array.isArray(data)) {
-      return data.map(String).join(" ");
-    }
-    if (data && typeof data === "object") {
-      const parts: string[] = [];
-      for (const [key, value] of Object.entries(data)) {
-        if (key === "detail") {
-          parts.push(typeof value === "string" ? value : String(value));
-        } else if (Array.isArray(value)) {
-          const label = key === "non_field_errors" ? "" : `${key}: `;
-          parts.push(`${label}${value.map(String).join(" ")}`);
-        } else if (typeof value === "string") {
-          parts.push(value);
-        }
-      }
-      if (parts.length > 0) {
-        return parts.join(" ");
-      }
-    }
+    data = await response.json();
   } catch {
-    // Response body was not JSON.
+    // Body was not JSON (for example a proxy's HTML error page).
   }
-  return response.statusText;
+  const code = isRecord(data) && typeof data.code === "string" ? data.code : undefined;
+  return new ApiError(response.status, parseApiErrorMessage(response, data), code);
+}
+
+export function parseApiErrorMessage(response: Response, data: unknown): string {
+  if (response.status === 429) {
+    return retryMessage(response.headers.get("Retry-After"));
+  }
+  if (isRecord(data) && typeof data.detail === "string") {
+    return data.detail;
+  }
+  const messages = isRecord(data) || Array.isArray(data) ? fieldMessages("", data) : [];
+  if (messages.length > 0) {
+    return messages.join(" ");
+  }
+  return response.status >= 500 ? SERVER_ERROR_MESSAGE : FALLBACK_ERROR_MESSAGE;
+}
+
+function retryMessage(retryAfter: string | null): string {
+  const seconds = Number(retryAfter);
+  if (!retryAfter || !Number.isFinite(seconds) || seconds <= 0) {
+    return "Too many tries. Please try again later.";
+  }
+  const minutes = Math.ceil(seconds / 60);
+  if (minutes < 90) {
+    return `Too many tries. Try again in ${minutes} minute${minutes === 1 ? "" : "s"}.`;
+  }
+  const hours = Math.ceil(minutes / 60);
+  return `Too many tries. Try again in ${hours} hours.`;
+}
+
+/** Field errors as sentences: {"title": ["This field is required."]} -> "Title is required." */
+function fieldMessages(key: string, value: unknown): string[] {
+  if (typeof value === "string") {
+    return [withFieldName(key, value)];
+  }
+  if (Array.isArray(value)) {
+    return value.flatMap((item) => fieldMessages(key, item));
+  }
+  if (isRecord(value)) {
+    return Object.entries(value).flatMap(([childKey, child]) =>
+      childKey === "code" ? [] : fieldMessages(childKey, child),
+    );
+  }
+  return [];
+}
+
+function withFieldName(key: string, message: string): string {
+  if (!key || key === "non_field_errors" || key === "detail") {
+    return message;
+  }
+  const name = key.replace(/_/g, " ");
+  return message
+    .replace(/^This field\b/, name.charAt(0).toUpperCase() + name.slice(1))
+    .replace(/\bthis field\b/g, name);
 }
 
 export async function apiFetch<T>(
@@ -161,8 +225,7 @@ export async function apiFetch<T>(
   });
 
   if (!response.ok) {
-    const message = await parseApiErrorMessage(response);
-    throw new ApiError(response.status, message);
+    throw await toApiError(response);
   }
 
   if (response.status === 204) {
@@ -190,6 +253,10 @@ export function registerUser(input: RegisterInput): Promise<User> {
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(input),
   });
+}
+
+export function createGuest(): Promise<User> {
+  return apiFetch<User>("/api/v1/auth/guest/", { method: "POST" });
 }
 
 export function loginUser(input: LoginInput): Promise<User> {

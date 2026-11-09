@@ -17,6 +17,14 @@ services:
         value: "True"
       - key: WEB_CONCURRENCY
         value: "2"
+      - key: DEMO_DEVELOPER_USERNAME
+        value: demo-developer
+      - key: DEMO_DEVELOPER_PASSWORD
+        sync: false
+      - key: DEMO_COOK_USERNAME
+        value: demo-cook
+      - key: DEMO_COOK_PASSWORD
+        sync: false
 
 databases:
   - name: trial-and-eclair-db

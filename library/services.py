@@ -1,10 +1,12 @@
 from __future__ import annotations
 
+import http.client
 import ipaddress
 import json
 import re
 import socket
 import urllib.request
+import uuid
 from decimal import Decimal
 from html.parser import HTMLParser
 from pathlib import Path
@@ -15,6 +17,8 @@ from urllib.robotparser import RobotFileParser
 from django.db import transaction
 from django.utils import timezone
 
+from collection.models import RecipeSourceType
+from config.exceptions import UserFacingError
 from development.models import ForkType
 from development.services import (
     IngredientLineCopy,
@@ -30,20 +34,21 @@ FETCH_TIMEOUT_SECONDS = 8
 ROBOTS_TIMEOUT_SECONDS = 3
 MAX_FETCH_BYTES = 1_048_576
 USER_AGENT = "TrialAndEclairBot/1.0"
+MAX_DURATION_MINUTES = 2_147_483_647  # PositiveIntegerField limit on Postgres
 _ISO_DURATION = re.compile(
     r"^P(?:(\d+)D)?(?:T(?:(\d+)H)?(?:(\d+)M)?(?:(\d+(?:\.\d+)?)S)?)?$"
 )
 
 
-class UnsafeURLError(ValueError):
+class UnsafeURLError(UserFacingError):
     pass
 
 
-class FetchError(Exception):
+class FetchError(UserFacingError):
     pass
 
 
-class RobotsDisallowedError(Exception):
+class RobotsDisallowedError(UserFacingError):
     pass
 
 
@@ -103,8 +108,12 @@ def validate_public_http_url(url: str) -> str:
     host = parsed.hostname
     if not host:
         raise UnsafeURLError("URL must include a host.")
+    try:
+        port = parsed.port
+    except ValueError as exc:  # out of range, e.g. :99999
+        raise UnsafeURLError("Enter a valid web address.") from exc
     default_port = 443 if parsed.scheme == "https" else 80
-    _assert_host_public(host, parsed.port or default_port)
+    _assert_host_public(host, port or default_port)
     return url
 
 
@@ -143,6 +152,9 @@ def fetch_bytes(url: str, *, timeout: float = FETCH_TIMEOUT_SECONDS) -> bytes:
     except HTTPError as exc:
         raise FetchError(f"Fetch failed with HTTP {exc.code}.") from exc
     except URLError as exc:
+        raise FetchError("Could not fetch URL.") from exc
+    except (http.client.HTTPException, OSError) as exc:
+        # Dropped connection, bad status line or a failed read.
         raise FetchError("Could not fetch URL.") from exc
     if len(data) > MAX_FETCH_BYTES:
         raise FetchError("Response too large.")
@@ -251,15 +263,19 @@ def parse_duration_minutes(value: object) -> int | None:
     if value is None or value == "":
         return None
     if isinstance(value, (int, float)):
-        return int(value)
-    match = _ISO_DURATION.fullmatch(str(value).strip().upper())
-    if match is None:
+        total = value
+    else:
+        match = _ISO_DURATION.fullmatch(str(value).strip().upper())
+        if match is None:
+            return None
+        days, hours, minutes, seconds = match.groups()
+        total = int(days or 0) * 1440 + int(hours or 0) * 60 + int(minutes or 0)
+        if seconds:
+            total += float(seconds) // 60
+    # Negative, too large, NaN or infinite times are treated as unknown.
+    if not 0 <= total <= MAX_DURATION_MINUTES:
         return None
-    days, hours, minutes, seconds = match.groups()
-    total = int(days or 0) * 1440 + int(hours or 0) * 60 + int(minutes or 0)
-    if seconds:
-        total += int(float(seconds) // 60)
-    return total
+    return int(total)
 
 
 def _as_list(value: object) -> list:
@@ -307,6 +323,7 @@ def payload_from_parsed_data(
         IngredientLineCopy(
             name=str(raw).strip()[:255] or "ingredient",
             quantity=Decimal("1"),
+            raw_text=str(raw).strip(),
             sort_order=index,
         )
         for index, raw in enumerate(_as_list(parsed_data.get("recipeIngredient")))
@@ -358,7 +375,12 @@ def save_url_import(user, url_import: UrlRecipeImport, *, fork_type: str):
         version_notes=notes,
     )
     if fork_type == ForkType.SAVE_TO_BOX:
-        return copy_payload_to_box(user, payload, url_import=url_import)
+        return copy_payload_to_box(
+            user,
+            payload,
+            url_import=url_import,
+            source_type=RecipeSourceType.WEB,
+        )
     return copy_payload_to_lab(user, payload)
 
 
@@ -377,6 +399,10 @@ def _title_from_filename(filename: str) -> str:
 def create_scan_import(user, uploaded_file, *, destination: str = "box"):
     filename = getattr(uploaded_file, "name", "") or "scan"
     mime_type = getattr(uploaded_file, "content_type", "") or ""
+    # Store under a short generated name: the typed name can be longer than the
+    # FileField allows. original_filename keeps what the user typed.
+    suffix = Path(filename).suffix.lower()
+    uploaded_file.name = f"{uuid.uuid4().hex}{suffix if len(suffix) <= 10 else ''}"
     document = SourceDocument.objects.create(
         user=user,
         file=uploaded_file,
@@ -392,5 +418,10 @@ def create_scan_import(user, uploaded_file, *, destination: str = "box"):
     )
     if destination == "lab":
         return document, copy_payload_to_lab(user, payload)
-    recipe = copy_payload_to_box(user, payload, source_document=document)
+    recipe = copy_payload_to_box(
+        user,
+        payload,
+        source_document=document,
+        source_type=RecipeSourceType.SCAN,
+    )
     return document, recipe

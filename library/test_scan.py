@@ -25,6 +25,10 @@ class ParseRecipeTextTests(SimpleTestCase):
             ["2 cups flour", "1 cup sugar"],
         )
         self.assertEqual(
+            [line.raw_text for line in payload.ingredient_lines],
+            ["2 cups flour", "1 cup sugar"],
+        )
+        self.assertEqual(
             payload.step_bodies,
             ["Mix dry ingredients.", "Bake until golden."],
         )

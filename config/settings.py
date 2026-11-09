@@ -24,6 +24,11 @@ def _flag(name: str, default: str) -> bool:
     return os.environ.get(name, default).lower() in ("true", "1", "yes")
 
 
+def login_throttle_rate(debug: bool, override: str | None) -> str:
+    """Login rate. The override (local e2e server only) is ignored unless DEBUG."""
+    return (override if debug else None) or "20/hour"
+
+
 def _postgres_config(url: str) -> dict:
     parsed = urllib.parse.urlparse(url)
     sslmode = urllib.parse.parse_qs(parsed.query).get("sslmode", [""])[0]
@@ -40,7 +45,8 @@ def _postgres_config(url: str) -> dict:
     return config
 
 
-DEBUG = _flag("DEBUG", "True")
+# Off unless DEBUG=True is set (local dev: .env.example sets it).
+DEBUG = _flag("DEBUG", "False")
 SECRET_KEY = os.environ.get("SECRET_KEY", _DEV_SECRET)
 if not DEBUG and SECRET_KEY == _DEV_SECRET:
     raise ImproperlyConfigured("Set SECRET_KEY when DEBUG is False.")
@@ -163,6 +169,25 @@ REST_FRAMEWORK = {
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
     ],
+    # One error shape, no exception text in bodies (see README "API errors").
+    "EXCEPTION_HANDLER": "config.exceptions.api_exception_handler",
+    # Scoped throttles (see README). Counts live in the default cache, so each
+    # gunicorn worker keeps its own count until a shared cache is added.
+    "DEFAULT_THROTTLE_RATES": {
+        "guest_create": "10/hour",
+        "register": "10/hour",
+        # E2E_LOGIN_THROTTLE_RATE is for scripts/e2e_server.sh; ignored unless DEBUG.
+        "login": login_throttle_rate(DEBUG, os.environ.get("E2E_LOGIN_THROTTLE_RATE")),
+        "url_import": "30/day",
+        "url_import_guest": "10/day",
+        "scan_import": "20/day",
+        "scan_import_guest": "5/day",
+    },
+    # Proxies in front of the app; DRF uses it to pick the client IP from
+    # X-Forwarded-For. Unset means the whole header is used as the key.
+    "NUM_PROXIES": (
+        int(os.environ["THROTTLE_NUM_PROXIES"]) if os.environ.get("THROTTLE_NUM_PROXIES") else None
+    ),
 }
 
 CORS_ALLOWED_ORIGINS = _csv(
@@ -201,3 +226,4 @@ LOGGING = {
 IDEA_IMAGE_LIMIT = 1
 TEST_SESSION_PHOTO_LIMIT = 5
 PUBLISHED_HERO_IMAGE_LIMIT = 1
+SCAN_UPLOAD_MAX_BYTES = 10 * 1024 * 1024

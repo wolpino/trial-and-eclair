@@ -5,10 +5,12 @@ from .views import (
     CollectionIngredientLineViewSet,
     CollectionRecipeStepViewSet,
     RecipeBoxViewSet,
+    StarterRecipeViewSet,
 )
 
 router = DefaultRouter()
 router.register("recipe-box", RecipeBoxViewSet, basename="recipe-box")
+router.register("starter-recipes", StarterRecipeViewSet, basename="starter-recipe")
 
 urlpatterns = [
     path("", include(router.urls)),

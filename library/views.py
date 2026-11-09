@@ -1,15 +1,18 @@
-from django.shortcuts import get_object_or_404
+from django.db.models import Q
 from rest_framework import status, viewsets
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
+from rest_framework.throttling import ScopedRateThrottle, SimpleRateThrottle
 from rest_framework.views import APIView
 
 from collection.serializers import CollectionRecipeSerializer
 from development.models import DevelopmentRecipe, ForkType
 from development.serializers import DevelopmentRecipeSerializer
 
-from .models import Reference, ReferenceLink, UrlRecipeImport
+from .models import HiddenDefaultReference, Reference, ReferenceLink, UrlRecipeImport
 from .serializers import (
     ReferenceLinkSerializer,
     ReferenceSerializer,
@@ -19,16 +22,36 @@ from .serializers import (
     UrlImportSaveSerializer,
     UrlRecipeImportSerializer,
 )
+from collection.services import assert_can_add_card
+
 from . import services
+from .scan import scan_upload_error
+
+
+class GuestAwareScopedRateThrottle(ScopedRateThrottle):
+    """Per-user scoped throttle; guests use the `<scope>_guest` rate."""
+
+    def allow_request(self, request, view) -> bool:
+        if not getattr(request.user, "is_guest", False):
+            return super().allow_request(request, view)
+        self.scope = f"{view.throttle_scope}_guest"
+        self.rate = self.get_rate()
+        self.num_requests, self.duration = self.parse_rate(self.rate)
+        return SimpleRateThrottle.allow_request(self, request, view)
 
 
 class ReferenceViewSet(viewsets.ModelViewSet):
+    """Own references plus the shared defaults the user has not hidden."""
+
     serializer_class = ReferenceSerializer
     permission_classes = [IsAuthenticated]
 
     def get_queryset(self):
-        queryset = Reference.objects.filter(user=self.request.user).prefetch_related(
-            "links"
+        user = self.request.user
+        queryset = (
+            Reference.objects.filter(Q(user=user) | Q(user__isnull=True))
+            .exclude(hidden_by__user=user)
+            .prefetch_related("links")
         )
         ref_type = self.request.query_params.get("ref_type")
         if ref_type:
@@ -37,6 +60,27 @@ class ReferenceViewSet(viewsets.ModelViewSet):
 
     def perform_create(self, serializer) -> None:
         serializer.save(user=self.request.user)
+
+    def perform_update(self, serializer) -> None:
+        _deny_default_change(serializer.instance)
+        serializer.save()
+
+    def perform_destroy(self, instance) -> None:
+        _deny_default_change(instance)
+        instance.delete()
+
+    @action(detail=True, methods=["post"])
+    def hide(self, request, pk=None):
+        reference = get_object_or_404(Reference, pk=pk, user__isnull=True)
+        HiddenDefaultReference.objects.get_or_create(user=request.user, reference=reference)
+        return Response(status=status.HTTP_204_NO_CONTENT)
+
+
+def _deny_default_change(reference: Reference) -> None:
+    if reference.user_id is None:
+        raise PermissionDenied(
+            "Shared references can't be changed. Remove it from your shelf instead."
+        )
 
 
 class ReferenceLinkViewSet(viewsets.ModelViewSet):
@@ -75,6 +119,8 @@ def _imported_recipe_payload(request, recipe) -> dict:
 
 class UrlImportCreateView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes = [GuestAwareScopedRateThrottle]
+    throttle_scope = "url_import"
 
     def post(self, request) -> Response:
         serializer = UrlImportCreateSerializer(data=request.data)
@@ -82,12 +128,13 @@ class UrlImportCreateView(APIView):
         url = serializer.validated_data["url"]
         try:
             record = services.import_from_url(url)
-        except services.UnsafeURLError as exc:
-            raise PermissionDenied(str(exc)) from exc
-        except services.RobotsDisallowedError as exc:
-            raise PermissionDenied(str(exc)) from exc
+        except (services.UnsafeURLError, services.RobotsDisallowedError) as exc:
+            raise PermissionDenied(exc.user_message) from exc
         except services.FetchError as exc:
-            return Response({"detail": str(exc)}, status=status.HTTP_502_BAD_GATEWAY)
+            return Response(
+                {"detail": exc.user_message, "code": "fetch_failed"},
+                status=status.HTTP_502_BAD_GATEWAY,
+            )
         output = UrlRecipeImportSerializer(record)
         return Response(output.data, status=status.HTTP_201_CREATED)
 
@@ -109,6 +156,8 @@ class UrlImportSaveView(APIView):
         serializer.is_valid(raise_exception=True)
         fork_type = serializer.validated_data["fork_type"]
         _rework_denied_if_needed(request.user, fork_type)
+        if fork_type == ForkType.SAVE_TO_BOX:
+            assert_can_add_card(request.user)
         recipe = services.save_url_import(
             request.user,
             record,
@@ -125,13 +174,20 @@ class UrlImportSaveView(APIView):
 
 class ScanImportView(APIView):
     permission_classes = [IsAuthenticated]
+    throttle_classes = [GuestAwareScopedRateThrottle]
+    throttle_scope = "scan_import"
 
     def post(self, request) -> Response:
         serializer = ScanImportSerializer(data=request.data)
         serializer.is_valid(raise_exception=True)
+        upload_error = scan_upload_error(serializer.validated_data["file"])
+        if upload_error:
+            raise ValidationError({"file": [upload_error]})
         destination = serializer.validated_data.get("destination") or "box"
         if destination == "lab" and not request.user.has_developer_access():
             raise PermissionDenied("Lab import requires developer access.")
+        if destination == "box":
+            assert_can_add_card(request.user)
         document, recipe = services.create_scan_import(
             request.user,
             serializer.validated_data["file"],

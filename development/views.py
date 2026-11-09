@@ -1,10 +1,14 @@
-from django.shortcuts import get_object_or_404
-from rest_framework import status, viewsets
+import uuid
+
+from django.db.models import Prefetch
+from rest_framework import mixins, status, viewsets
 from rest_framework.decorators import action
 from rest_framework.exceptions import PermissionDenied, ValidationError
+from rest_framework.generics import get_object_or_404
 from rest_framework.response import Response
 
 from accounts.permissions import IsDeveloper
+from config.exceptions import UserFacingError
 
 from .models import (
     Cookbook,
@@ -22,6 +26,7 @@ from .serializers import (
     CookbookCreateSerializer,
     CookbookRecipeCreateSerializer,
     CookbookRecipeSerializer,
+    CookbookRecipeUpdateSerializer,
     CookbookSerializer,
     DevelopmentRecipeCreateSerializer,
     DevelopmentRecipeSerializer,
@@ -32,6 +37,7 @@ from .serializers import (
     PublishRecipeSerializer,
     RecipeStepSerializer,
     RecipeVersionSerializer,
+    SampleRecipeSerializer,
     SaveNewVersionSerializer,
     TestSessionPhotoSerializer,
     TestSessionSerializer,
@@ -58,8 +64,8 @@ class IdeaViewSet(viewsets.ModelViewSet):
         title = serializer.validated_data.get("title", "").strip()
         try:
             services.promote_idea(idea, title=title or None)
-        except ValueError as exc:
-            raise ValidationError(str(exc)) from exc
+        except services.RecipeError as exc:
+            raise ValidationError(exc.user_message) from exc
         idea.refresh_from_db()
         return Response(
             IdeaSerializer(idea, context=self.get_serializer_context()).data,
@@ -119,8 +125,8 @@ class DevelopmentRecipeViewSet(viewsets.ModelViewSet):
                 story=data.get("story") if "story" in data else None,
                 hero_image=data.get("hero_image"),
             )
-        except ValueError as exc:
-            raise ValidationError(str(exc)) from exc
+        except services.RecipeError as exc:
+            raise ValidationError(exc.user_message) from exc
         recipe.refresh_from_db()
         return Response(
             DevelopmentRecipeSerializer(recipe, context=self.get_serializer_context()).data
@@ -147,8 +153,8 @@ class DevelopmentRecipeViewSet(viewsets.ModelViewSet):
         right = get_object_or_404(recipe.versions, pk=right_id)
         try:
             diff = services.compare_versions(left, right)
-        except ValueError as exc:
-            raise ValidationError(str(exc)) from exc
+        except services.RecipeError as exc:
+            raise ValidationError(exc.user_message) from exc
         return Response(diff)
 
 
@@ -305,6 +311,10 @@ class JournalEntryViewSet(viewsets.ModelViewSet):
         )
         recipe_id = self.request.query_params.get("recipe")
         if recipe_id:
+            try:
+                recipe_id = uuid.UUID(recipe_id)
+            except ValueError as exc:
+                raise ValidationError("Pick a valid recipe.") from exc
             queryset = queryset.filter(recipe_id=recipe_id)
         return queryset
 
@@ -316,10 +326,7 @@ class CookbookViewSet(viewsets.ModelViewSet):
     permission_classes = [IsDeveloper]
 
     def get_queryset(self):
-        return Cookbook.objects.filter(user=self.request.user).prefetch_related(
-            "entries__recipe",
-            "entries__snapshot_version",
-        )
+        return Cookbook.objects.filter(user=self.request.user).prefetch_related("entries")
 
     def get_serializer_class(self):
         if self.action == "create":
@@ -371,7 +378,7 @@ class CookbookEntryViewSet(viewsets.ModelViewSet):
         return CookbookRecipe.objects.filter(
             cookbook_id=self.kwargs["cookbook_pk"],
             cookbook__user=self.request.user,
-        ).select_related("recipe", "snapshot_version")
+        )
 
     def create(self, request, *args, **kwargs):
         cookbook = get_object_or_404(
@@ -394,18 +401,54 @@ class CookbookEntryViewSet(viewsets.ModelViewSet):
                 version_id=data.get("version_id"),
                 sort_order=data.get("sort_order", 0),
             )
-        except ValueError as exc:
-            raise ValidationError(str(exc)) from exc
+        except services.RecipeError as exc:
+            raise ValidationError(exc.user_message) from exc
         output = CookbookRecipeSerializer(entry, context=self.get_serializer_context())
         return Response(output.data, status=status.HTTP_201_CREATED)
 
     def partial_update(self, request, *args, **kwargs) -> Response:
         entry = self.get_object()
-        sort_order = request.data.get("sort_order")
-        if sort_order is None:
-            raise ValidationError({"sort_order": "This field is required for update."})
-        entry.sort_order = sort_order
+        serializer = CookbookRecipeUpdateSerializer(data=request.data)
+        serializer.is_valid(raise_exception=True)
+        entry.sort_order = serializer.validated_data["sort_order"]
         entry.save(update_fields=["sort_order", "updated_at"])
         return Response(
             CookbookRecipeSerializer(entry, context=self.get_serializer_context()).data
+        )
+
+
+class SampleReadOnly(UserFacingError):
+    code = "sample_read_only"
+
+
+class SampleViewSet(
+    mixins.ListModelMixin, mixins.RetrieveModelMixin, viewsets.GenericViewSet
+):
+    """Shared sample content for any signed-in user. Writes are refused."""
+
+    def _refuse(self, *args, **kwargs) -> Response:
+        exc = SampleReadOnly("Sample content is read-only.")
+        raise PermissionDenied({"detail": exc.user_message, "code": exc.code})
+
+    create = update = partial_update = destroy = _refuse
+
+
+class SampleIdeaViewSet(SampleViewSet):
+    serializer_class = IdeaSerializer
+
+    def get_queryset(self):
+        return Idea.objects.filter(is_sample=True)
+
+
+class SampleRecipeViewSet(SampleViewSet):
+    serializer_class = SampleRecipeSerializer
+
+    def get_queryset(self):
+        versions = RecipeVersion.objects.prefetch_related(
+            "ingredient_lines__ingredient", "steps", "test_sessions__photos"
+        ).order_by("version_number")
+        return (
+            DevelopmentRecipe.objects.filter(is_sample=True)
+            .select_related("current_version", "published_version")
+            .prefetch_related(Prefetch("versions", queryset=versions))
         )

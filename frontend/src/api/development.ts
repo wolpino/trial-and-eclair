@@ -112,7 +112,18 @@ export interface TestSessionPhoto {
   updated_at: string;
 }
 
-export interface TestSession {
+export type OvenTempUnit = "F" | "C";
+
+/** Optional bake details on a test session; stored as typed, no conversion. */
+export interface TestSessionBake {
+  oven_temp: number | null;
+  oven_temp_unit: OvenTempUnit | null;
+  bake_minutes: number | null;
+  /** 1–5 */
+  rating: number | null;
+}
+
+export interface TestSession extends TestSessionBake {
   id: string;
   notes: string;
   outcome: string;
@@ -122,10 +133,35 @@ export interface TestSession {
   updated_at: string;
 }
 
+/** A line in a cookbook entry's copy, stored as text. */
+export interface CookbookCopyLine {
+  ingredient_name: string;
+  quantity: string;
+  unit: string;
+  custom_unit: string;
+  prep_note: string;
+  substitution_note: string;
+}
+
+/** The recipe as it was when added to the cookbook. Lab edits never change it. */
+export interface CookbookCopy {
+  version_number: number;
+  title: string;
+  description: string;
+  equipment_notes: string;
+  prep_minutes: number | null;
+  cook_minutes: number | null;
+  story: string;
+  hero_image: string | null;
+  ingredient_lines: CookbookCopyLine[];
+  steps: { order: number; body: string }[];
+}
+
 export interface CookbookEntry {
   id: string;
-  recipe: string;
-  snapshot_version: RecipeVersion;
+  /** Lab recipe id; null once the Lab recipe is deleted. */
+  recipe: string | null;
+  snapshot: CookbookCopy;
   sort_order: number;
   created_at: string;
   updated_at: string;
@@ -138,6 +174,7 @@ export interface Cookbook {
   description: string;
   status: string;
   published_at: string | null;
+  on_shelf: boolean;
   entries: CookbookEntry[];
   created_at: string;
   updated_at: string;
@@ -342,7 +379,7 @@ export function fetchTestSessions(versionId: string): Promise<TestSession[]> {
 
 export function createTestSession(
   versionId: string,
-  data: { notes?: string; outcome?: string },
+  data: { notes?: string; outcome?: string } & Partial<TestSessionBake>,
 ): Promise<TestSession> {
   return apiFetch<TestSession>(
     `/api/v1/versions/${versionId}/test-sessions/`,
@@ -454,6 +491,17 @@ export function createCookbook(data: {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify(data),
+  });
+}
+
+export function setCookbookOnShelf(
+  cookbookId: string,
+  onShelf: boolean,
+): Promise<Cookbook> {
+  return apiFetch<Cookbook>(`/api/v1/cookbooks/${cookbookId}/`, {
+    method: "PATCH",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ on_shelf: onShelf }),
   });
 }
 

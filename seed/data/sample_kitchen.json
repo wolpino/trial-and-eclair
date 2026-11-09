@@ -1,0 +1,157 @@
+{
+  "ideas": [
+    {
+      "title": "Brown butter cornbread",
+      "notes": "Swap the melted butter for brown butter. Try a little honey in the batter.",
+      "category_tag": "Breads",
+      "status": "testing",
+      "recipe": "Brown Butter Cornbread"
+    },
+    {
+      "title": "Lemon olive oil cake",
+      "notes": "Moist crumb, glaze with lemon syrup while warm.",
+      "category_tag": "Cakes",
+      "status": "testing",
+      "recipe": "Lemon Olive Oil Cake"
+    },
+    {
+      "title": "Miso caramel sauce",
+      "notes": "White miso in a basic caramel. For apples or ice cream.",
+      "category_tag": "Sauces",
+      "status": "researching"
+    },
+    {
+      "title": "Rye chocolate chip cookies",
+      "notes": "Replace a third of the flour with whole rye. Rest the dough overnight.",
+      "category_tag": "Cookies",
+      "status": "researching"
+    },
+    {
+      "title": "Cardamom morning buns",
+      "notes": "Laminated dough, cardamom sugar filling, baked in a muffin tin.",
+      "category_tag": "Breads",
+      "status": "ready"
+    },
+    {
+      "title": "Tomato galette",
+      "notes": "Salt the tomatoes first so the crust stays crisp.",
+      "category_tag": "Savory",
+      "status": "researching"
+    }
+  ],
+  "recipes": [
+    {
+      "title": "Brown Butter Cornbread",
+      "versions": [
+        {
+          "title": "Brown Butter Cornbread",
+          "description": "A skillet cornbread with a nutty, golden crumb.",
+          "version_notes": "First pass: plain melted butter as a baseline.",
+          "equipment_notes": "10-inch cast iron skillet",
+          "prep_minutes": 15,
+          "cook_minutes": 22,
+          "ingredients": [
+            {"name": "Cornmeal", "quantity": "1", "unit": "cup"},
+            {"name": "All-purpose flour", "quantity": "1", "unit": "cup"},
+            {"name": "Sugar", "quantity": "0.25", "unit": "cup"},
+            {"name": "Baking powder", "quantity": "1", "unit": "tablespoon"},
+            {"name": "Salt", "quantity": "1", "unit": "teaspoon"},
+            {"name": "Buttermilk", "quantity": "1", "unit": "cup"},
+            {"name": "Eggs", "quantity": "2", "unit": "whole"},
+            {"name": "Butter", "quantity": "6", "unit": "tablespoon", "prep_note": "melted"}
+          ],
+          "steps": [
+            "Heat the oven to 425°F with the skillet inside.",
+            "Whisk the cornmeal, flour, sugar, baking powder and salt.",
+            "Whisk the buttermilk, eggs and melted butter, then stir into the dry mix until just combined.",
+            "Pour into the hot skillet and bake 20 to 22 minutes, until the top is golden."
+          ],
+          "test_sessions": [
+            {
+              "notes": "Good rise, crumb a bit dry at the edges.",
+              "outcome": "Fine baseline. Try brown butter next.",
+              "oven_temp": 425,
+              "oven_temp_unit": "F",
+              "bake_minutes": 22,
+              "rating": 3
+            }
+          ]
+        },
+        {
+          "title": "Brown Butter Cornbread",
+          "description": "A skillet cornbread with a nutty, golden crumb.",
+          "version_notes": "Brown the butter and add a spoon of honey. Two minutes less in the oven.",
+          "equipment_notes": "10-inch cast iron skillet",
+          "prep_minutes": 20,
+          "cook_minutes": 20,
+          "ingredients": [
+            {"name": "Cornmeal", "quantity": "1", "unit": "cup"},
+            {"name": "All-purpose flour", "quantity": "1", "unit": "cup"},
+            {"name": "Sugar", "quantity": "0.25", "unit": "cup"},
+            {"name": "Baking powder", "quantity": "1", "unit": "tablespoon"},
+            {"name": "Salt", "quantity": "1", "unit": "teaspoon"},
+            {"name": "Buttermilk", "quantity": "1", "unit": "cup"},
+            {"name": "Eggs", "quantity": "2", "unit": "whole"},
+            {"name": "Butter", "quantity": "6", "unit": "tablespoon", "prep_note": "browned and cooled"},
+            {"name": "Honey", "quantity": "1", "unit": "tablespoon"}
+          ],
+          "steps": [
+            "Brown the butter in the skillet over medium heat, then pour it into a bowl to cool.",
+            "Heat the oven to 425°F with the skillet inside.",
+            "Whisk the cornmeal, flour, sugar, baking powder and salt.",
+            "Whisk the buttermilk, eggs, honey and brown butter, then stir into the dry mix until just combined.",
+            "Pour into the hot skillet and bake about 20 minutes, until the top is golden."
+          ],
+          "test_sessions": [
+            {
+              "notes": "Much nuttier. Edges crisp, middle moist.",
+              "outcome": "Keeper. Maybe a pinch more salt.",
+              "oven_temp": 425,
+              "oven_temp_unit": "F",
+              "bake_minutes": 20,
+              "rating": 5
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Lemon Olive Oil Cake",
+      "versions": [
+        {
+          "title": "Lemon Olive Oil Cake",
+          "description": "A tender loaf cake with a lemon syrup soak.",
+          "version_notes": "Starting point from a family card.",
+          "equipment_notes": "9x5 loaf pan",
+          "prep_minutes": 15,
+          "cook_minutes": 50,
+          "ingredients": [
+            {"name": "All-purpose flour", "quantity": "1.5", "unit": "cup"},
+            {"name": "Sugar", "quantity": "1", "unit": "cup"},
+            {"name": "Baking powder", "quantity": "2", "unit": "teaspoon"},
+            {"name": "Salt", "quantity": "0.5", "unit": "teaspoon"},
+            {"name": "Olive oil", "quantity": "0.75", "unit": "cup"},
+            {"name": "Eggs", "quantity": "3", "unit": "whole"},
+            {"name": "Lemons", "quantity": "2", "unit": "whole", "prep_note": "zest and juice"}
+          ],
+          "steps": [
+            "Heat the oven to 350°F and line a loaf pan.",
+            "Rub the lemon zest into the sugar, then whisk in the eggs and olive oil.",
+            "Fold in the flour, baking powder and salt.",
+            "Bake 45 to 50 minutes, then brush with lemon juice while warm."
+          ],
+          "test_sessions": [
+            {
+              "notes": "Domed and cracked on top. Lemon flavor faint.",
+              "outcome": "Needs more zest and a real syrup.",
+              "oven_temp": 175,
+              "oven_temp_unit": "C",
+              "bake_minutes": 48,
+              "rating": 3
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

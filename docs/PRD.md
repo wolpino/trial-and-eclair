@@ -99,8 +99,8 @@ Two layers:
 | Data model | Content-type split + normalized ingredient catalog |
 | Home cook organization | Recipe box only, alphabetical — no categories |
 | Publishing | Developer-only; public on publish; can unpublish |
-| Cookbook snapshots | Recipe frozen at add time; unpublishing recipe does not remove from published cookbook |
-| Forking | Both tiers; editable copy with permanent link to original |
+| Forking | Both tiers; editable copy with a link to the original. The fork outlives the original and its author; lineage then reads "original recipe removed" or "original by a deleted user" |
+| Cookbook snapshots | Each entry is a copy of the recipe made at add time and owned by the cookbook; editing, unpublishing or deleting the Lab recipe does not change a cookbook |
 | Fork visibility | Lineage on public pages; author can hide via `show_forks` |
 | Story | Recipe-attached only on published version |
 | Reference library | Both tiers; account required; metaphor shelf UI in Phase UI |
@@ -120,6 +120,8 @@ Two layers:
 | **Recipe box UI** | In-place index-card editing within the box grid — not a separate editor page |
 | **Theming** | CSS custom properties + `ThemeProvider`; user picks color theme + font preset; `localStorage` in Phase UI C1; optional profile sync in C6 |
 | **Cork board UI** | Grid of pinned notes (Phase UI C2, last chunk); freeform drag-and-drop canvas deferred (roadmap) |
+| **Recipe Box** | The phone view of the home-cook recipe box, inside `frontend/`; still A–Z only ([decision 001](decisions/001-recipe-box-in-frontend.md)). It was a standalone plan until 2026-10-15 |
+| **Guest mode** | Save up to 5 box cards before signing up; shared read-only starter cards; developer tier shown as a locked preview ([decision 002](decisions/002-guest-mode.md)) |
 
 ---
 
@@ -134,7 +136,7 @@ ingredients (catalog)          ideas (developer)
 ingredient_aliases             development_recipes ──< recipe_versions
                                version_ingredient_lines ──> ingredients
                                recipe_steps, test_sessions
-                               cookbooks ──< cookbook_recipes (snapshot versions)
+                               cookbooks ──< cookbook_recipes (copied recipe per entry)
                                journal_entries, recipe_forks
 
 collection_recipes (home cook) recipe_box_items (alphabetical)
@@ -154,7 +156,7 @@ users (role + plan tier)
 | `VersionIngredientLine` | Quantity, unit or custom_unit, prep/substitution notes |
 | `TestSession` / `TestSessionPhoto` | Bake log; up to 5 photos |
 | `JournalEntry` | Private dev timeline with optional version snapshot |
-| `Cookbook` / `CookbookRecipe` | Published collection; frozen snapshot per entry |
+| `Cookbook` / `CookbookRecipe` | Published collection; each entry holds its own copy (`snapshot` JSON) and an optional link back to the Lab recipe |
 | `RecipeFork` | Lineage when forking published recipes |
 | `CollectionRecipe` / `RecipeBoxItem` | Home cook single-version recipes; A–Z box |
 | `Reference` / `ReferenceLink` | Research shelf |
@@ -244,6 +246,8 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout, optional string links) | Planned (post–Phase UI) |
 | **2.0 frame** | Recipe-card login, in-frame navigation, phone list and one notebook page, local walkthrough fixtures, short Playwright pass | **Milestones 1–3** — [milestone plan](milestone-1-2-technical-plan.md) |
+| **Recipe Box** | Phone recipe box (lid, A–Z tabs, fan, Card View), guest mode, starter cards, throttles. Plan: [docs/recipe-box/](recipe-box/README.md) | In progress: #41–#45, the phone box design pass (#63), ingredient text (#65) and Card View (#64) shipped; guest and starter-card UI on the phone (#56) in review |
+| **Kitchen home** | One kitchen scene as the signed-in home, views open over it, "back to kitchen" ([decision 004](decisions/004-kitchen-home.md)) | Decided; not built yet |
 
 **MVP (first shippable product):** Phases 0 + 1 + 2 — **complete**. A developer can iterate, publish, and share; a viewer can read published recipes at `/r/{slug}`. Home cook tier and cookbooks are Phase 3+.
 
@@ -268,7 +272,7 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 
 - `GET /api/v1/recipes/{id}/compare-versions/?left=&right=` — ingredient + field diff between two versions
 - `GET/POST/PATCH/DELETE /api/v1/journal/` — private journal entries; filter by `?recipe=`
-- Cookbooks API + `GET /api/v1/public/cookbooks/{slug}/`; PWA `/c/:slug` — frozen `snapshot_version` per entry
+- Cookbooks API + `GET /api/v1/public/cookbooks/{slug}/`; PWA `/c/:slug` — each entry shows its own copied recipe in full
 - Home cook recipe box: `/api/v1/recipe-box/` — `CollectionRecipe` + A–Z `RecipeBoxItem`; any authenticated user
 - Reference library: `/api/v1/references/` + `/links/` to ideas or recipe versions (developer)
 - Developer access gated by `User.has_developer_access()` — active/trial subscription; expired trial and expired/cancelled status blocked (`subscription_status=none` allowed for admin-promoted devs until Stripe)
@@ -330,7 +334,7 @@ Export command: `python manage.py export_recipe_seed` → `seed/data/`
 | Additional color/font presets | After Phase UI C1 token architecture |
 | Cookbook re-release (point an entry at a newer version) | Later. Entries stay frozen. Sort order is the only edit today |
 | `User.updated_at` | Later. `date_joined` and `last_login` exist |
-| Kitchen illustration as the signed-in home | Later. Not part of the 2.0 frame milestones |
+| Kitchen illustration as the signed-in home | Decided in [decision 004](decisions/004-kitchen-home.md); not built yet |
 | Second Render service for production (`main`) | When there is a public URL. `staging` uses the current service |
 | Voice / dictation | Roadmap |
 
@@ -349,7 +353,7 @@ Visual references: `recipes/` screenshots and photographs — cork board, recipe
 
 Lab never uses index-card dimensions. Recipe box never uses notebook spread layout.
 
-On a phone, the lab shows **one notebook page at a time** (ingredients, or steps). The two-page spread is the wide-screen layout. The phone has no kitchen picture. The recipe box is a title list, then one card filling the screen. Wide screens keep the existing box, cork, binder, and shelf pictures. Login and signup are one recipe card for every persona. A developer’s title-only note is an idea on the cork board. A home-cook box card needs a title and at least one ingredient or step. Implementation: [milestone-1-2-technical-plan.md](milestone-1-2-technical-plan.md).
+On a phone, the lab shows **one notebook page at a time** (ingredients, or steps). The two-page spread is the wide-screen layout. The signed-in home is becoming one kitchen scene ([decision 004](decisions/004-kitchen-home.md)); on a phone it is a simpler, tall kitchen whose recipe box opens the Recipe Box. The recipe box is a title list, then one card filling the screen; the Recipe Box view (#45) replaces this phone layout. Wide screens keep the existing box, cork, binder, and shelf pictures. Login and signup are one recipe card for every persona. A developer’s title-only note is an idea on the cork board. A home-cook box card needs a title and at least one ingredient or step. Implementation: [milestone-1-2-technical-plan.md](milestone-1-2-technical-plan.md).
 
 ### Lab margin tools
 

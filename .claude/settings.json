@@ -1,0 +1,33 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "\"$CLAUDE_PROJECT_DIR\"/.claude/hooks/session-context.sh"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Bash(python manage.py test:*)",
+      "Bash(python manage.py check:*)",
+      "Bash(python manage.py makemigrations --check:*)",
+      "Bash(python manage.py showmigrations:*)",
+      "Bash(npm run build:*)",
+      "Bash(npm run test:e2e:*)",
+      "Bash(npm --prefix frontend run build:*)",
+      "Bash(npm --prefix frontend run test:e2e:*)",
+      "Bash(gh pr view:*)",
+      "Bash(gh pr checks:*)",
+      "Bash(gh issue view:*)",
+      "Bash(gh issue list:*)"
+    ],
+    "deny": [
+      "Read(./.env)"
+    ]
+  }
+}

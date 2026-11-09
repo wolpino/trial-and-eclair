@@ -1,0 +1,718 @@
+/* Recipe Box phone view (Tidy look). Wood and paper colours follow the look prototype
+   (docs/recipe-box/prototype/box-view-prototype.html); Simple list uses the app's semantic
+   tokens. Card View is in phone-card-view.css. */
+
+.recipe-box-page--phone-box {
+  --phone-box-gap: 0.5rem;
+  --phone-box-ease: cubic-bezier(0.2, 0.9, 0.3, 1.1);
+  --phone-box-spring: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --phone-box-front-height: 96px;
+  --pb-bg: #efe6d8;
+  --pb-ink: #2b2118;
+  --pb-line: #d9cdb8;
+  --pb-w1: #b0814d;
+  --pb-w2: #8a5f34;
+  --pb-w3: #6e4a28;
+  --pb-inner: #4a321c;
+  --pb-tab: #f1e3c4;
+  --pb-tabopen: #fff7dc;
+  --pb-accent: #b5472b;
+  --pb-ctl: #fff;
+  /* Card paper stays cream with dark ink in dark mode too. */
+  --pb-paper: #fffaf0;
+  --pb-paper-ink: #2b2118;
+  --pb-rule: #e3d6bd;
+  max-width: 100%;
+  overflow-x: clip;
+}
+
+@media (prefers-color-scheme: dark) {
+  .recipe-box-page--phone-box {
+    --pb-bg: #1c1712;
+    --pb-ink: #f1e6d6;
+    --pb-line: #4a3e30;
+    --pb-w1: #7b5630;
+    --pb-w2: #5f4023;
+    --pb-w3: #4a3019;
+    --pb-inner: #2e1e10;
+    --pb-ctl: #2b241c;
+  }
+}
+
+/* Simple list header */
+
+.phone-box-toolbar {
+  display: flex;
+  gap: var(--phone-box-gap);
+  align-items: center;
+  margin-bottom: var(--phone-box-gap);
+}
+
+.phone-box-toolbar h1 {
+  flex: 1 1 auto;
+  margin: 0;
+}
+
+.phone-box-btn {
+  min-height: 2.75rem;
+  padding: 0 0.875rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  color: var(--color-text);
+  font: inherit;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.phone-box-btn--primary {
+  border-color: var(--color-accent);
+  background: var(--color-accent);
+  color: var(--color-accent-text);
+}
+
+.phone-box-btn:focus-visible {
+  outline: 3px solid var(--color-accent-secondary);
+  outline-offset: 2px;
+}
+
+/* The box: fills the screen inside the safe areas, no page chrome */
+
+.phone-box {
+  position: fixed;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  padding: max(8px, env(safe-area-inset-top)) 10px max(10px, env(safe-area-inset-bottom));
+  background: var(--pb-bg);
+  color: var(--pb-ink);
+  font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.phone-box-sr {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.phone-box :focus-visible,
+.phone-box-menu :focus-visible,
+.phone-box-menu-btn:focus-visible {
+  outline: 3px solid #2f6fd8;
+  outline-offset: 2px;
+}
+
+/* Lid: open, seen from the front. Hinge bar, side walls, dark inside back. */
+
+.phone-box-lid {
+  position: relative;
+  display: flex;
+  flex: 1 1 0;
+  min-height: 0;
+  padding: 20px 16px 0;
+  border-radius: 12px 12px 0 0;
+  background: linear-gradient(
+    90deg,
+    var(--pb-w3),
+    var(--pb-w2) 14px,
+    var(--pb-inner) 15px,
+    var(--pb-inner) calc(100% - 15px),
+    var(--pb-w2) calc(100% - 14px),
+    var(--pb-w3)
+  );
+  box-shadow: inset 0 10px 14px rgba(0, 0, 0, 0.35);
+}
+
+.phone-box-lid::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  right: 0;
+  left: 0;
+  height: 11px;
+  border-radius: 12px 12px 0 0;
+  background: linear-gradient(var(--pb-w1), var(--pb-w3));
+  box-shadow: 0 1px 0 rgba(255, 255, 255, 0.18) inset;
+}
+
+.phone-box-lid::after {
+  content: "";
+  position: absolute;
+  top: 3px;
+  left: 50%;
+  width: 34px;
+  height: 6px;
+  margin-left: -17px;
+  border-radius: 3px;
+  background: linear-gradient(#d9b866, #8c6a24);
+}
+
+/* Ruled index card in the lid */
+
+.phone-box-lid__card {
+  position: relative;
+  flex: 1;
+  min-width: 0;
+  overflow: hidden;
+  padding: 12px 16px;
+  border-radius: 3px 3px 0 0;
+  background-color: var(--pb-paper);
+  background-image: repeating-linear-gradient(transparent 0 21px, var(--pb-rule) 21px 22px);
+  background-position: 0 12px;
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  color: var(--pb-paper-ink);
+  font-family: Georgia, serif;
+  cursor: pointer;
+  animation: phone-box-cardin 0.42s cubic-bezier(0.2, 0.9, 0.3, 1.15) both;
+}
+
+.phone-box-lid__title {
+  margin: 0;
+  padding-right: 40px;
+  font-family: inherit;
+  font-size: clamp(18px, 5.4vw, 22px);
+  font-weight: 600;
+  line-height: 26px;
+  overflow-wrap: anywhere;
+}
+
+.phone-box-lid__meta {
+  margin: 0;
+  color: #6b5b4b;
+  font-size: 12px;
+  line-height: 22px;
+}
+
+.phone-box-lid__label {
+  margin: 0;
+  color: #8a7560;
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  line-height: 22px;
+  text-transform: uppercase;
+}
+
+.phone-box-lid__list {
+  margin: 0;
+  padding-left: 18px;
+  font-size: 13px;
+  line-height: 22px;
+}
+
+.phone-box-lid__empty {
+  margin: 0;
+  color: #6b5b4b;
+  font-style: italic;
+  line-height: 22px;
+}
+
+.phone-box-lid__card--empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: default;
+  animation: none;
+}
+
+.phone-box-lid__menu {
+  position: absolute;
+  z-index: 2;
+  top: 18px;
+  right: 14px;
+}
+
+/* ☰ button: a small round wooden knob */
+
+.phone-box-menu-btn {
+  display: inline-flex;
+  flex: none;
+  align-items: center;
+  justify-content: center;
+  width: 44px;
+  height: 44px;
+  padding: 0;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+  background: linear-gradient(var(--pb-w1), var(--pb-w3));
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4);
+  color: var(--pb-tabopen);
+  font: 600 20px/1 system-ui, sans-serif;
+  cursor: pointer;
+}
+
+/* Box: card edges behind the tabs, the tabs, the front */
+
+.phone-box-box {
+  position: relative;
+  flex: none;
+}
+
+.phone-box-stack {
+  position: absolute;
+  z-index: 1;
+  top: 0;
+  right: 10px;
+  bottom: var(--phone-box-front-height);
+  left: 10px;
+  overflow: hidden;
+  border-radius: 6px 6px 0 0;
+  background: linear-gradient(var(--pb-inner), #2a1b0e);
+  box-shadow: inset 0 6px 8px rgba(0, 0, 0, 0.45);
+}
+
+.phone-box-stack::before {
+  content: "";
+  position: absolute;
+  top: 3px;
+  right: 7px;
+  bottom: 0;
+  left: 7px;
+  border-radius: 3px 3px 0 0;
+  background: repeating-linear-gradient(180deg, #f6eed8 0 5px, #cdbf9f 5px 6px);
+}
+
+/* A–Z tabs: one overlapping row, or two staggered rows above 12 letters */
+
+.phone-box-tabs {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: nowrap;
+  margin-bottom: -6px;
+  padding: 0 12px;
+  touch-action: pan-y;
+}
+
+.phone-box-tab {
+  position: relative;
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 28px;
+  margin: 0 0 0 -4px;
+  padding: 2px 4px 0 0;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 0;
+  border-radius: 5px 5px 0 0;
+  background: var(--pb-tab);
+  color: #3a2c1c;
+  font: 600 13px/1 system-ui, sans-serif;
+  text-align: center;
+  cursor: pointer;
+  transition:
+    transform 0.3s var(--phone-box-spring),
+    background-color 0.2s;
+}
+
+.phone-box-tab:first-child {
+  margin-left: 0;
+}
+
+/* Taller hit area above a one-row tab */
+.phone-box-tab::before {
+  content: "";
+  position: absolute;
+  top: -14px;
+  right: -2px;
+  left: -2px;
+  height: 14px;
+}
+
+.phone-box-tab[aria-expanded="true"] {
+  transform: translateY(-7px);
+  background: var(--pb-tabopen);
+}
+
+.phone-box-tabs--stagger {
+  display: block;
+  height: 54px;
+  padding: 0;
+}
+
+.phone-box-tabs--stagger .phone-box-tab {
+  position: absolute;
+  min-height: 0;
+  margin: 0;
+  padding: 3px 0 0;
+}
+
+.phone-box-tabs--stagger .phone-box-tab::before {
+  display: none;
+}
+
+.phone-box-sliver {
+  flex: none;
+  align-self: flex-end;
+  width: 7px;
+  height: 21px;
+  margin-left: -4px;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-bottom: 0;
+  border-radius: 4px 4px 0 0;
+  background: var(--pb-tab);
+  opacity: 0.8;
+}
+
+.phone-box-bubble {
+  position: fixed;
+  z-index: 9;
+  min-width: 40px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  background: var(--pb-accent);
+  color: #fff;
+  font: 700 22px/1 system-ui, sans-serif;
+  text-align: center;
+  pointer-events: none;
+  transform: translate(-50%, -130%);
+}
+
+/* Fan: title-only cards rising just above the tabs, with no layer over the lid */
+
+.phone-box-fan {
+  position: absolute;
+  z-index: 3;
+  right: 0;
+  bottom: 100%;
+  left: 0;
+  display: flex;
+  gap: 8px;
+  margin: 0 0 -4px;
+  padding: 10px 12px 14px;
+  overflow-x: auto;
+  list-style: none;
+  scroll-snap-type: x proximity;
+}
+
+.phone-box-fan li {
+  flex: 0 0 124px;
+  scroll-snap-align: start;
+  animation: phone-box-chip 0.32s var(--phone-box-spring) both;
+  animation-delay: calc(var(--i, 0) * 40ms);
+}
+
+.phone-box-fan__card {
+  width: 100%;
+  height: 100%;
+  min-height: 52px;
+  padding: 8px;
+  border: 1px solid var(--pb-line);
+  border-radius: 5px;
+  background: var(--pb-paper);
+  box-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+  color: var(--pb-paper-ink);
+  font: 600 13px/1.2 Georgia, serif;
+  text-align: left;
+  overflow-wrap: anywhere;
+  cursor: pointer;
+}
+
+.phone-box-fan__card[aria-current="true"] {
+  border-color: var(--pb-accent);
+}
+
+/* Box front: latch and engraved label */
+
+.phone-box-front {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--phone-box-front-height);
+  padding: 0 72px;
+  border-top: 3px solid rgba(255, 255, 255, 0.28);
+  border-radius: 0 0 12px 12px;
+  background:
+    repeating-linear-gradient(
+      90deg,
+      rgba(0, 0, 0, 0.045) 0 1px,
+      transparent 1px 5px,
+      rgba(255, 255, 255, 0.035) 5px 6px,
+      transparent 6px 13px
+    ),
+    linear-gradient(var(--pb-w1), var(--pb-w2));
+  box-shadow: inset 0 8px 10px -6px rgba(0, 0, 0, 0.35);
+  color: rgba(60, 35, 12, 0.78);
+  font: italic 600 clamp(16px, 5vw, 22px) / 1.2 Georgia, serif;
+  letter-spacing: 0.04em;
+  text-align: center;
+  text-shadow:
+    0 1px 0 rgba(255, 255, 255, 0.28),
+    0 -1px 0 rgba(0, 0, 0, 0.25);
+}
+
+.phone-box-front::before,
+.phone-box-front::after {
+  content: "";
+  position: absolute;
+  top: 8px;
+  bottom: 8px;
+  width: 2px;
+  background: repeating-linear-gradient(transparent 0 8px, rgba(0, 0, 0, 0.28) 8px 16px);
+}
+
+.phone-box-front::before {
+  left: 8px;
+}
+
+.phone-box-front::after {
+  right: 8px;
+}
+
+.phone-box-latch {
+  position: absolute;
+  top: 8px;
+  left: 50%;
+  width: 22px;
+  height: 12px;
+  margin-left: -11px;
+  border-radius: 3px;
+  background: linear-gradient(#e2c277, #8f6c26);
+  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.4);
+}
+
+/* Floating +: only while browsing the closed box */
+
+.phone-box-plus {
+  position: fixed;
+  z-index: 5;
+  right: 22px;
+  bottom: calc(max(10px, env(safe-area-inset-bottom)) + 22px);
+  width: 52px;
+  height: 52px;
+  padding: 0 0 3px;
+  border: 1px solid rgba(0, 0, 0, 0.35);
+  border-radius: 50%;
+  background: linear-gradient(var(--pb-w1), var(--pb-w3));
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.4);
+  color: var(--pb-tabopen);
+  font: 500 32px/1 system-ui, sans-serif;
+  cursor: pointer;
+}
+
+/* ☰ menu */
+
+.phone-box-backdrop {
+  position: fixed;
+  z-index: 40;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.25);
+}
+
+.phone-box-menu {
+  position: absolute;
+  top: calc(max(8px, env(safe-area-inset-top)) + 64px);
+  right: 12px;
+  width: min(18rem, calc(100vw - 24px));
+  padding: 4px 0;
+  border: 1px solid var(--pb-line);
+  border-radius: 12px;
+  background: var(--pb-ctl);
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.3);
+  color: var(--pb-ink);
+  font: 15px/1.4 system-ui, -apple-system, "Segoe UI", sans-serif;
+}
+
+.phone-box-menu__section {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--pb-line);
+}
+
+.phone-box-menu__label {
+  margin: 0;
+  padding: 0 16px;
+  color: inherit;
+  font: 600 11px/22px system-ui, sans-serif;
+  letter-spacing: 0.08em;
+  opacity: 0.7;
+  text-transform: uppercase;
+}
+
+.phone-box-menu__name {
+  margin: 0;
+  padding: 4px 16px;
+  font-weight: 600;
+}
+
+.phone-box-menu__item {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  min-height: 44px;
+  padding: 0 16px;
+  border: 0;
+  background: none;
+  color: inherit;
+  font: inherit;
+  text-align: left;
+  cursor: pointer;
+}
+
+.phone-box-menu__item[aria-pressed]::after {
+  content: "Off";
+  opacity: 0.7;
+}
+
+.phone-box-menu__item[aria-pressed="true"]::after {
+  content: "On";
+  color: var(--pb-accent);
+  opacity: 1;
+}
+
+.phone-box-menu__signout {
+  color: var(--pb-accent);
+}
+
+/* Add sheet and errors */
+
+.phone-box-sheet {
+  position: fixed;
+  z-index: 60;
+  inset: 0;
+  padding: max(12px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  overflow-y: auto;
+  background: var(--surface-card);
+  color: var(--color-text);
+}
+
+.phone-box-sheet__head {
+  display: flex;
+  gap: var(--phone-box-gap);
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--phone-box-gap);
+}
+
+.phone-box-sheet__head h2 {
+  margin: 0;
+}
+
+.phone-box-error {
+  position: fixed;
+  z-index: 45;
+  top: max(8px, env(safe-area-inset-top));
+  right: 12px;
+  left: 12px;
+  margin: 0;
+  padding: 8px 12px;
+  border-radius: 8px;
+  background: var(--surface-card);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.3);
+}
+
+@keyframes phone-box-cardin {
+  from {
+    opacity: 0;
+    transform: translateY(70px) scale(0.96);
+  }
+}
+
+@keyframes phone-box-chip {
+  from {
+    opacity: 0;
+    transform: translateY(22px);
+  }
+}
+
+/* Motion is off under Reduce Motion (Card View's is in phone-card-view.css). */
+@media (prefers-reduced-motion: reduce) {
+  .phone-box-lid__card,
+  .phone-box-fan li {
+    animation: none;
+  }
+
+  .phone-box-tab {
+    transition: none;
+  }
+}
+
+/* Starter cards (decision 002): shared, read-only, marked in the lid and the fan */
+
+.phone-box-starter {
+  display: inline-block;
+  margin: 0 0 4px;
+  padding: 1px 6px;
+  border: 1px solid var(--pb-accent);
+  border-radius: 3px;
+  color: var(--pb-accent);
+  font: 600 11px/1.4 system-ui, sans-serif;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.phone-box-fan__card .phone-box-starter {
+  display: block;
+  width: fit-content;
+  margin: 4px 0 0;
+}
+
+.phone-box-btn--tall {
+  min-height: 3rem;
+}
+
+/* Fork and Hide sit on the foot of the lid card, over its lower lines. */
+.phone-box-lid__actions {
+  position: absolute;
+  z-index: 1;
+  right: 28px;
+  bottom: 10px;
+  left: 28px;
+  display: flex;
+  gap: var(--phone-box-gap);
+}
+
+.phone-box-lid__actions .phone-box-btn {
+  flex: 1;
+}
+
+/* Sign-up card at the guest limit */
+
+.phone-box-signup {
+  display: grid;
+  gap: 0.75rem;
+  padding: 1rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  color: var(--color-text);
+}
+
+.phone-box-signup__title {
+  margin: 0;
+}
+
+.phone-box-signup p {
+  margin: 0;
+}
+
+/* Search from the ☰ menu: a field where the tabs sit, results as a fan above it */
+
+.phone-box-search {
+  position: relative;
+  z-index: 2;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 8px 12px;
+}
+
+.phone-box-search__field {
+  flex: 1 1 0;
+  min-width: 0;
+  min-height: 2.75rem;
+  padding: 0 12px;
+  border: 1px solid var(--pb-line);
+  border-radius: 6px;
+  background: var(--pb-paper);
+  color: var(--pb-paper-ink);
+  font: inherit;
+}
+
+.phone-box-search__empty {
+  flex-basis: 100%;
+  margin: 0;
+  color: var(--pb-tab);
+}

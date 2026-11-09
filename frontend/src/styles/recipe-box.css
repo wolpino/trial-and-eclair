@@ -1,1 +1,15 @@
 @import "../components/recipe-box/recipe-box.css";
+
+/* Wide-screen search (issue #90) */
+
+.recipe-box-search {
+  width: min(100%, 24rem);
+  min-height: 2.5rem;
+  margin-top: 1rem;
+  padding: 0 0.75rem;
+  border: 1px solid var(--color-border-strong);
+  border-radius: var(--radius-md);
+  background: var(--surface-card);
+  color: var(--color-text);
+  font: inherit;
+}

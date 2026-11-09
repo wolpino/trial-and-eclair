@@ -1,10 +1,17 @@
+import { useState } from "react";
 import { Link } from "react-router-dom";
+
+import type { IngredientLine } from "../../api/development";
+import { BakersPercentPanel } from "./BakersPercentPanel";
+import { NotebookOverlay } from "./NotebookOverlay";
 
 type RecipeStatus = "draft" | "published" | "unpublished";
 
 type MarginToolsProps = {
   status: RecipeStatus;
   slug: string | null;
+  /** Lines of the version shown on the page, so Baker's % matches what the developer sees. */
+  ingredientLines: IngredientLine[];
   onCompare: () => void;
   onPublish: () => void;
   onToggleJournal: () => void;
@@ -20,11 +27,14 @@ const STATUS_LABEL: Record<RecipeStatus, string> = {
 export function MarginTools({
   status,
   slug,
+  ingredientLines,
   onCompare,
   onPublish,
   onToggleJournal,
   journalOpen,
 }: MarginToolsProps) {
+  const [bakersOpen, setBakersOpen] = useState(false);
+
   return (
     <div className="lab-margin-tools">
       <p className={`lab-margin-tools__status lab-margin-tools__status--${status}`}>
@@ -42,6 +52,9 @@ export function MarginTools({
       <button type="button" className="lab-margin-tools__btn" onClick={onPublish}>
         Publish ✎
       </button>
+      <button type="button" className="lab-margin-tools__btn" onClick={() => setBakersOpen(true)}>
+        Baker&apos;s %
+      </button>
       <button
         type="button"
         className="lab-margin-tools__btn"
@@ -51,6 +64,9 @@ export function MarginTools({
       >
         {journalOpen ? "Hide log pages ↑" : "Log pages ↓"}
       </button>
+      <NotebookOverlay title="Baker's %" open={bakersOpen} onClose={() => setBakersOpen(false)}>
+        <BakersPercentPanel lines={ingredientLines} />
+      </NotebookOverlay>
     </div>
   );
 }

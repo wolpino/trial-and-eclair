@@ -9,6 +9,7 @@ import {
   type Idea,
   type IdeaStatus,
 } from "../../api/development";
+import { useDismiss } from "../../lib/useDismiss";
 import { IDEA_STATUS_LABELS, IDEA_STATUS_OPTIONS } from "./constants";
 
 type IdeaEditDrawerProps = {
@@ -35,6 +36,9 @@ export function IdeaEditDrawer({
   const [error, setError] = useState<string | null>(null);
   const [saving, setSaving] = useState(false);
   const [promoting, setPromoting] = useState(false);
+  // The backdrop sits inside the drawer and closes it on a click; this adds Escape.
+  const drawerRef = useRef<HTMLDivElement>(null);
+  useDismiss(drawerRef, open && idea !== null, onClose);
 
   useEffect(() => {
     if (!idea) {
@@ -115,6 +119,7 @@ export function IdeaEditDrawer({
 
   return (
     <div
+      ref={drawerRef}
       className="cork-drawer cork-drawer--sheet"
       role="dialog"
       aria-modal="true"

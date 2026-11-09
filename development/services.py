@@ -5,9 +5,11 @@ from django.db import transaction
 from django.db.models import Max
 from django.utils import timezone
 from django.utils.text import slugify
+from rest_framework.exceptions import ValidationError
 
 from collection.models import CollectionIngredientLine, CollectionRecipe
 from collection.services import create_box_recipe
+from config.exceptions import UserFacingError
 
 from .models import (
     DevelopmentRecipe,
@@ -18,6 +20,15 @@ from .models import (
     RecipeVersion,
     VersionIngredientLine,
 )
+
+
+class RecipeError(UserFacingError):
+    """A recipe, version or cookbook action the user asked for cannot be done."""
+
+
+# Raised as a field error so the publish panel shows it under the slug input.
+SLUG_TAKEN_MESSAGE = "That web address is taken. Try another."
+
 
 _VERSION_SCALAR_FIELDS = (
     "title",
@@ -58,7 +69,7 @@ def _serialize_ingredient_line(line: VersionIngredientLine) -> dict:
 
 def compare_versions(left: RecipeVersion, right: RecipeVersion) -> dict:
     if left.recipe_id != right.recipe_id:
-        raise ValueError("Versions must belong to the same recipe.")
+        raise RecipeError("Versions must belong to the same recipe.")
 
     field_changes = [
         {"field": field, "left": getattr(left, field), "right": getattr(right, field)}
@@ -155,7 +166,7 @@ def save_new_version(
 ) -> RecipeVersion:
     current = recipe.current_version
     if current is None:
-        raise ValueError("Recipe has no current version.")
+        raise RecipeError("Recipe has no current version.")
 
     max_version = recipe.versions.aggregate(max_number=Max("version_number"))[
         "max_number"
@@ -216,12 +227,23 @@ def publish_recipe(
     if version_id is not None:
         version = recipe.versions.filter(pk=version_id).first()
         if version is None:
-            raise ValueError("Version not found for this recipe.")
+            raise RecipeError("Version not found for this recipe.")
     else:
         version = recipe.current_version
 
     if version is None:
-        raise ValueError("Recipe has no version to publish.")
+        raise RecipeError("Recipe has no version to publish.")
+
+    # Check the slug before saving the story or hero image.
+    if slug:
+        recipe.slug = slugify(slug)[:255] or _unique_recipe_slug(
+            version.title,
+            exclude_recipe_id=recipe.id,
+        )
+        if DevelopmentRecipe.objects.filter(slug=recipe.slug).exclude(id=recipe.id).exists():
+            raise ValidationError({"slug": [SLUG_TAKEN_MESSAGE]})
+    elif not recipe.slug:
+        recipe.slug = _unique_recipe_slug(version.title, exclude_recipe_id=recipe.id)
 
     update_fields: list[str] = []
     if story is not None:
@@ -233,14 +255,6 @@ def publish_recipe(
     if update_fields:
         update_fields.append("updated_at")
         version.save(update_fields=update_fields)
-
-    if slug:
-        recipe.slug = slugify(slug)[:255] or _unique_recipe_slug(
-            version.title,
-            exclude_recipe_id=recipe.id,
-        )
-    elif not recipe.slug:
-        recipe.slug = _unique_recipe_slug(version.title, exclude_recipe_id=recipe.id)
 
     recipe.published_version = version
     recipe.published_at = timezone.now()
@@ -288,33 +302,68 @@ def add_cookbook_entry(
     from .models import CookbookRecipe
 
     if cookbook.user_id != recipe.user_id:
-        raise ValueError("Recipe not found.")
+        raise RecipeError("Recipe not found.")
 
     if version_id is not None:
         version = recipe.versions.filter(pk=version_id).first()
         if version is None:
-            raise ValueError("Version not found for this recipe.")
+            raise RecipeError("Version not found for this recipe.")
     else:
         version = recipe.published_version or recipe.current_version
 
     if version is None:
-        raise ValueError("No version available to snapshot.")
+        raise RecipeError("No version available to snapshot.")
+
+    if CookbookRecipe.objects.filter(cookbook=cookbook, recipe=recipe).exists():
+        raise RecipeError("This recipe is already in this cookbook.")
 
     return CookbookRecipe.objects.create(
         cookbook=cookbook,
         recipe=recipe,
-        snapshot_version=version,
+        snapshot=cookbook_snapshot(version),
         sort_order=sort_order,
     )
 
 
+def cookbook_snapshot(version: RecipeVersion) -> dict:
+    """A standalone copy of a version for a cookbook entry, from model fields only."""
+    payload = payload_from_version(version)
+    return {
+        "version_number": version.version_number,
+        "title": payload.title,
+        "description": payload.description,
+        "equipment_notes": payload.equipment_notes,
+        "prep_minutes": payload.prep_minutes,
+        "cook_minutes": payload.cook_minutes,
+        "story": payload.story,
+        # The image path only; the file is shared, not duplicated.
+        "hero_image": version.hero_image.name or "",
+        "ingredient_lines": [
+            {
+                "ingredient_name": line.name,
+                "quantity": str(line.quantity),
+                "unit": line.unit,
+                "custom_unit": line.custom_unit,
+                "prep_note": line.prep_note,
+                "substitution_note": line.substitution_note,
+            }
+            for line in payload.ingredient_lines
+        ],
+        "steps": payload.step_bodies,
+    }
+
+
 @transaction.atomic
 def publish_cookbook(cookbook, *, slug: str = ""):
+    from .models import Cookbook
+
     if slug:
         cookbook.slug = slugify(slug)[:255] or _unique_cookbook_slug(
             cookbook.title,
             exclude_cookbook_id=cookbook.id,
         )
+        if Cookbook.objects.filter(slug=cookbook.slug).exclude(id=cookbook.id).exists():
+            raise ValidationError({"slug": [SLUG_TAKEN_MESSAGE]})
     elif not cookbook.slug:
         cookbook.slug = _unique_cookbook_slug(
             cookbook.title,
@@ -339,7 +388,7 @@ def unpublish_cookbook(cookbook) -> None:
 @transaction.atomic
 def promote_idea(idea: Idea, *, title: str | None = None) -> DevelopmentRecipe:
     if idea.promoted_recipe_id is not None:
-        raise ValueError("Idea already promoted to a recipe.")
+        raise RecipeError("Idea already promoted to a recipe.")
 
     recipe_title = (title or idea.title).strip() or idea.title
     recipe = create_development_recipe(idea.user, title=recipe_title)
@@ -351,13 +400,14 @@ def promote_idea(idea: Idea, *, title: str | None = None) -> DevelopmentRecipe:
 @dataclass
 class IngredientLineCopy:
     name: str
-    quantity: Decimal
+    quantity: Decimal | None
     unit: str = ""
     custom_unit: str = ""
     prep_note: str = ""
     substitution_note: str = ""
     sort_order: int = 0
     ingredient: object | None = None
+    raw_text: str = ""
 
 
 @dataclass
@@ -438,10 +488,13 @@ def _copy_payload_lines_to_box(
     lines: list[IngredientLineCopy],
 ) -> None:
     for sort_order, line in enumerate(lines):
+        # Imported lines keep their text as written; no catalog row is created.
+        keep_raw = bool(line.raw_text) and line.ingredient is None
         CollectionIngredientLine.objects.create(
             recipe=recipe,
-            ingredient=_resolve_ingredient(line),
-            quantity=line.quantity,
+            ingredient=None if keep_raw else _resolve_ingredient(line),
+            raw_text=line.raw_text,
+            quantity=None if keep_raw else line.quantity,
             unit=line.unit,
             custom_unit=line.custom_unit,
             prep_note=line.prep_note,
@@ -494,7 +547,7 @@ def copy_payload_to_lab(
     recipe = create_development_recipe(user, title=recipe_title)
     current = recipe.current_version
     if current is None:
-        raise ValueError("Recipe has no current version.")
+        raise RecipeError("Recipe has no current version.")
     current.title = recipe_title
     current.description = payload.description
     current.equipment_notes = payload.equipment_notes

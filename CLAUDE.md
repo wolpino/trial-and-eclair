@@ -1,0 +1,55 @@
+# Trial & Eclair — Claude Code context
+
+Recipe development and collection app (not a blog). Django REST API + React/TypeScript PWA, served same-origin.
+
+One app, one `frontend/`:
+
+- **Wide screens:** notebook, cork board, cookbooks, references, and the wooden recipe box.
+- **Recipe Box** is the phone view of the recipe box (in progress). It is part of this app, not a separate one: same `frontend/`, API, database and login. See `docs/recipe-box/README.md` and `docs/decisions/001-recipe-box-in-frontend.md`.
+
+## Read first
+
+- `README.md` — setup, staging on Render, seed users
+- `docs/PRD.md` — product, data model, phase status
+- `docs/recipe-box/README.md` — the mobile front end plan and which docs still apply
+- `.cursor/session_log.mdc` — top 3 entries only; honor **Do not redo** and **Resume with**
+
+`docs/recipe-box/agents.md` and `original-*.md` describe the old standalone Supabase plan. Reference only; they do not govern this repo.
+
+## Rules (shared with Cursor)
+
+These always apply:
+
+@.cursor/rules/anti-overeng.mdc
+@.cursor/rules/session-context.mdc
+@.cursor/rules/sesc-dev-ssdld-appsec.mdc
+
+Read these when the work touches them:
+
+- Any Python: `.cursor/rules/python.mdc`, `.cursor/rules/django.mdc`
+- Views, serializers, URLs: `.cursor/rules/api-design.mdc`
+- Migrations: `.cursor/rules/migration-safety.mdc`
+
+## Commands
+
+```bash
+source .venv/bin/activate
+python manage.py runserver          # API on :8000
+python manage.py test               # Django tests
+cd frontend && npm run dev          # PWA on :5173 (proxies /api and /media)
+cd frontend && npm run build        # typecheck + build
+cd frontend && npm run test:e2e     # Playwright
+```
+
+## Working agreements
+
+- Every piece of work is a Task issue first (`.github/ISSUE_TEMPLATE/task.md`: Goal, Owned paths, Tests to write first, Done when). Stay inside its Owned paths.
+- One task per session. Done means tests pass and the task's "done when" is met.
+- Plan before code on anything non-trivial; ask when unsure.
+- Branch from `staging-render` and open PRs into it. Don't merge `staging-render` into `main` unless the owner asks.
+- Keep the PWA same-origin with the API (session cookies). No separate frontend host.
+- Never run `load_recipe_seed --force` against a shared URL. `load_starter_recipes` is safe anywhere.
+- API errors use the one shape in README "API errors": raise `config.exceptions.UserFacingError` subclasses, never put exception text in a response, and read errors on the frontend only through `toApiError`.
+- At the end of a session, add an entry to `.cursor/session_log.mdc` and update `README.md` / `docs/PRD.md` status if a phase changed. If an endpoint or field changed, update the README API tables too.
+- In GitHub Actions on issue N: if a `claude/issue-N-*` branch already exists (`git ls-remote --heads origin 'claude/issue-N-*'`), continue the newest one instead of starting over: `git fetch origin <branch>:<branch>`, `git switch <branch>`, and push to that branch by name. Run `python manage.py test` and `npm --prefix frontend run build` (plus `npm --prefix frontend run test:e2e` if the UI changed) before every push.
+- Decisions go in `docs/decisions/NNN-short-name.md` (Context, Options, Decision, Consequences, Revisit when).

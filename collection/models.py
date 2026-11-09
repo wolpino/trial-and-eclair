@@ -6,6 +6,15 @@ from django.db import models
 from catalog.base import StandardUnit, TimestampedModel
 
 
+class RecipeSourceType(models.TextChoices):
+    TYPED = "typed", "Typed"
+    HANDWRITTEN = "handwritten", "Handwritten"
+    RECIPE_CARD = "recipe_card", "Recipe card"
+    COOKBOOK = "cookbook", "Cookbook"
+    WEB = "web", "Web"
+    SCAN = "scan", "Scan"
+
+
 class CollectionRecipe(TimestampedModel):
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
@@ -18,6 +27,12 @@ class CollectionRecipe(TimestampedModel):
     equipment_notes = models.TextField(blank=True)
     prep_minutes = models.PositiveIntegerField(null=True, blank=True)
     cook_minutes = models.PositiveIntegerField(null=True, blank=True)
+    servings = models.PositiveIntegerField(null=True, blank=True)
+    source_type = models.CharField(
+        max_length=16,
+        choices=RecipeSourceType.choices,
+        default=RecipeSourceType.TYPED,
+    )
     hero_image = models.ImageField(upload_to="collection/", null=True, blank=True)
     source_document = models.ForeignKey(
         "library.SourceDocument",
@@ -57,10 +72,15 @@ class CollectionIngredientLine(TimestampedModel):
     )
     ingredient = models.ForeignKey(
         "catalog.Ingredient",
+        null=True,
+        blank=True,
         on_delete=models.PROTECT,
         related_name="collection_lines",
     )
-    quantity = models.DecimalField(max_digits=10, decimal_places=3)
+    raw_text = models.TextField(blank=True)
+    quantity = models.DecimalField(
+        max_digits=10, decimal_places=3, null=True, blank=True
+    )
     unit = models.CharField(max_length=32, choices=StandardUnit.choices, blank=True)
     custom_unit = models.CharField(max_length=64, blank=True)
     prep_note = models.CharField(max_length=255, blank=True)
@@ -86,3 +106,48 @@ class RecipeBoxItem(TimestampedModel):
 
     class Meta:
         ordering = ["recipe__title"]
+
+
+class StarterRecipe(TimestampedModel):
+    """One shared, read-only set of cards shown in every box. No owner."""
+
+    id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
+    title = models.CharField(max_length=255, unique=True)
+    servings = models.PositiveIntegerField(null=True, blank=True)
+    prep_minutes = models.PositiveIntegerField(null=True, blank=True)
+    cook_minutes = models.PositiveIntegerField(null=True, blank=True)
+    source_type = models.CharField(
+        max_length=16,
+        choices=RecipeSourceType.choices,
+        default=RecipeSourceType.TYPED,
+    )
+    ingredient_lines = models.JSONField(default=list, blank=True)
+    steps = models.JSONField(default=list, blank=True)
+    sort_order = models.PositiveIntegerField(default=0)
+    is_active = models.BooleanField(default=True)
+
+    class Meta:
+        ordering = ["sort_order", "title"]
+
+    def __str__(self):
+        return self.title
+
+
+class HiddenStarterRecipe(TimestampedModel):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="hidden_starter_recipes",
+    )
+    starter = models.ForeignKey(
+        StarterRecipe,
+        on_delete=models.CASCADE,
+        related_name="hidden_by",
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "starter"], name="unique_hidden_starter_per_user"
+            )
+        ]

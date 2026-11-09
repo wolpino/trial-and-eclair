@@ -150,8 +150,7 @@ a {
   color: var(--color-text-muted);
 }
 
-.app-public-brand,
-.app-frame__history {
+.app-public-brand {
   max-width: 1100px;
   margin: 0 auto;
   padding: 0.65rem 1.25rem 0;
@@ -166,11 +165,6 @@ a {
 .app-frame__body {
   flex: 1 1 auto;
   min-width: 0;
-}
-
-.history-nav {
-  display: flex;
-  gap: 0.35rem;
 }
 
 .app-brand {

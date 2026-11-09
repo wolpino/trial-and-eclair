@@ -7,6 +7,7 @@ import {
   createReference,
   deleteReference,
   fetchReferences,
+  hideReference,
   patchReference,
   type Reference,
   type ReferenceType,
@@ -121,7 +122,10 @@ export function ReferencesPage() {
               setEditError(null);
             }}
             onDelete={(id) =>
-              void deleteReference(id)
+              void (references.find((reference) => reference.id === id)?.is_default
+                ? hideReference(id)
+                : deleteReference(id)
+              )
                 .then(() => {
                   if (selectedId === id) {
                     setSelectedId(null);
@@ -130,7 +134,7 @@ export function ReferencesPage() {
                 })
                 .catch((err: unknown) => {
                   setError(
-                    err instanceof ApiError ? err.message : "Could not delete reference.",
+                    err instanceof ApiError ? err.message : "Could not remove reference.",
                   );
                 })
             }

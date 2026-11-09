@@ -41,6 +41,7 @@ class ReferenceLinkSerializer(serializers.ModelSerializer):
 
 class ReferenceSerializer(serializers.ModelSerializer):
     links = ReferenceLinkSerializer(many=True, read_only=True)
+    is_default = serializers.SerializerMethodField()
 
     class Meta:
         model = Reference
@@ -51,10 +52,14 @@ class ReferenceSerializer(serializers.ModelSerializer):
             "url",
             "notes",
             "links",
+            "is_default",
             "created_at",
             "updated_at",
         )
         read_only_fields = ("id", "links", "created_at", "updated_at")
+
+    def get_is_default(self, obj: Reference) -> bool:
+        return obj.user_id is None
 
     def validate_ref_type(self, value: str) -> str:
         if value not in ReferenceType.values:

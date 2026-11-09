@@ -10,6 +10,535 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-08 · Cleanup: Phases 1–3 of the merge checklist
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-08` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, main session) |
+| **Outcome** | partial (Phases 1–3 of 8 done; checklist below) |
+
+### Intent
+On "hi", catch up on what merged since 2026-10-19 (Design Bash runs 3–5 in the cloud). Write an ordered checklist of everything still open, then do its first three phases.
+
+### Summary
+**Phase 1:** closed PR #124 unmerged and issue #103 (both replaced by #133 / PR #140), and closed audit #137 (its findings went to #139 and #132). Each one got a comment. **Phase 2:** ran Update branch on #146 and #147. All six checks passed on both, e2e included: the #148 logout race was their only failure, and #150 fixed it. Read both diffs, then merged #146 (`9f3bf5a`, closes #145) and #147 (`f8aff32`, closes #139). Updated status issue #94 (rows #103, #137, #139, #145, #148, #131) and checklist #130 (done items ticked, plus a status line). README already had #147's `in_use` code. No phase changed, so PRD is unchanged. CI on `staging-render` after both merges (`f8aff32`) is green, e2e included. **Phase 3:** after Update branch, #149 (run 5 log) and #122 (addendum) each passed all six checks and were merged. This PR conflicted with #149 at the top of this file; both entries are kept.
+
+### Checklist (owner's order; all must be done)
+1. ~~Close #124, #103, #137~~ (done)
+2. ~~Update branch, then merge #146 and #147~~ (done)
+3. ~~Docs PRs #149, then #122, then this one~~ (done)
+4. Safe Dependabot, one at a time, each green: #157, #155, #156, #153, #151 (check the Render deploy and admin), #152 Pillow 11 → 13 (upload a hero image on staging)
+5. Local checkout: it is a detached HEAD at `71d75a9`. Compare the untracked `docs/agent-prompts/design-bash-director.md` with the committed one (it is probably an older draft), then `git switch staging-render && git pull` and reinstall dependencies
+6. #131 e2e storageState (no longer blocked, not a draft)
+7. Post-release dependencies (#132): #118 TypeScript 7, #114 vite-plugin-pwa 2 (check install and update on staging), #108 gunicorn 26 (check the Render deploy). For #154 vite 8 + #158 plugin-react 6 the frontend build fails: open one Task issue and close both PRs in favour of it
+8. Close #130, close #94 (#89 waits on photographs), decide drafts #66–#69 and #89, write the session log
+
+### Decisions
+- **Merge commits, not squash**, as in earlier PRs. `staging-render` doesn't require branches to be up to date (`strict: false`), so #147 merged right after #146 without another update
+
+### Open threads
+- Phases 4–8 above
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** merge checklist, cleanup, Dependabot, generic 500s, null cookbook recipe, status issue
+**Files:** .cursor/session_log.mdc, .cursor/handoffs/NEXT.md (local only)
+**Do not redo:** closing #124, #103, #137; merging #146, #147, #149, #122; updating #94 and #130
+**Resume with:** Phase 4 of the checklist above (#157 first)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-24 · Design Bash run 5: wave 5b (#139, #145)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-24T17:25:20Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code desktop (director plus two worktree subagents, local Mac) |
+| **Outcome** | partial (PRs #147 and #146 open; e2e red on a flaky test outside both) |
+
+### Intent
+Run the director prompt. Run 4's PRs (#140–#143) had all merged and the owner had removed the draft labels on #139 and #145, so wave 5b was unblocked.
+
+### Summary
+Two subagents built #139 and #145 side by side, each writing its tests first and touching only Owned paths. **#139 → PR #147** (`feat/issue-139-generic-500s`): taken slugs return a 400 field error, duplicate cookbook entries a 400 (audit 2.3 was still unvalidated after #133), bad `sort_order` and non-UUID ids a 400/404, bad ports a 403, dropped connections a 502, bad durations are dropped, long scan file names are stored under a generated name, and `ProtectedError`/`RestrictedError` map to 409 `in_use`. 223 backend tests. **#145 → PR #146** (`feat/issue-145-null-entry-recipe`): `CookbookEntry.recipe` is `string | null`, the `""` mapping is gone, and the cookbook page handles null. Both pass backend, frontend, CodeQL and both analyze jobs. e2e fails on both in `kitchen-places.spec.ts` (from #136), which neither touches; the same tests fail locally on unchanged `staging-render` 9fef8f5. Cause of the logout one: `FrameNav.tsx` clears the user before navigating to `/`, so the protected route can send you to `/login`. Drafted as #148. The two branches merge cleanly together. macOS has no `flock`, so e2e runs shared a `mkdir` lock script in the director's scratchpad.
+
+### Decisions
+- **Pushed past the red local e2e**: the two failures reproduce on unchanged staging and are outside both issues' Owned paths
+- **#87 login landing goes on the post-release list #132** (owner: kitchen is the default, but cooks only use the box on a phone; undecided)
+
+### Open threads
+- Owner: OK #148 (remove draft) or merge #146/#147 past the red e2e
+- #147: the slug message shows behind the publish overlay; fixing it needs `DeveloperRecipePage.tsx` (comment on #139)
+- Close #124 (#133 merged)
+- `CookbookDetailPage.tsx` reads errors with `instanceof ApiError`, not `toApiError`
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** director run 5, generic 500s, null entry recipe, flaky logout e2e, kitchen-places
+**Files:** development/services.py, library/services.py, config/exceptions.py, frontend/src/api/development.ts, frontend/src/pages/CookbookDetailPage.tsx, frontend/src/components/FrameNav.tsx
+**Do not redo:** #139 build (PR #147); #145 build (PR #146); the #87 login-landing question (on #132)
+**Resume with:** run the director prompt again after the owner merges wave 5b (#146, #147) and #148; then build #131 (wave 6)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-24 · Design Bash run 4: wave 5 pre-release (#133, #134, #137, #136, #87)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-24T04:45:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (director plus worktree subagents, two at a time) |
+| **Outcome** | partial (four PRs open, #140–#143; audit #137 done, fix task #139 drafted; wave 6 #131 waits on wave 5 merges) |
+
+### Intent
+Run the director prompt again. Since run 3, every run 3 PR merged (#123, #125, #127, #128), plus #135 (#126 login limit) and #138 (prompt covers wave 5). #124 stays open and unmerged: #133 replaces it.
+
+### Summary
+Slot A ran #133, then #134. Slot B ran #137, then #136, then #87. Each build subagent committed its tests first, and the backend tests, the build and e2e passed before every push. Every PR's six check runs are green on its head. **#133 → PR #140**: `CookbookRecipe.snapshot` (JSON copy built by `services.cookbook_snapshot`) replaces the `snapshot_version` FK. `recipe` becomes nullable `SET_NULL`. Migrations `0005_cookbook_entry_snapshot`, `0006_fill_cookbook_snapshots` (data), `0007_remove_cookbookrecipe_snapshot_version`. Fixed-key serializers. `/c/:slug` shows full recipes. **#134 → PR #143**: `RecipeFork.forked_from_version`/`forked_from_user` become `SET_NULL`. Lineage reads "original recipe removed" / "original by a deleted user". Deleting a forked recipe gives 204, not 500. **#137** (audit, no PR): findings on https://github.com/wolpino/trial-and-eclair/issues/137#issuecomment-6380111035; fix task drafted as **#139**; three post-release lines added to #132. **#136 → PR #141**: wide focused views lose the strip. `PlacesMenu` ("← Kitchen" plus a Places list) sits top-left, and the exported `AccountMenu` sits top-right. **#87 → PR #142**: the phone and sideways-phone home is the kitchen scene cropped (`kitchen--phone`), and `HomePage`'s old phone link list is gone.
+
+### Decisions
+- **Merge order**: #140, then #143 (after resolving it), then #141, then #142
+- **Conflicts (checked by merging in that order)**: #143 after #140 conflicts in `docs/PRD.md` (keep #140's "Cookbook snapshots" row and #143's "Forking" row). Its `0005_recipefork_lineage_set_null` must be regenerated as `0008` after `0007_remove_cookbookrecipe_snapshot_version`. #142 after #141 merges clean in git (`AppLayout.tsx`, `kitchen.css` auto-merge; braces balance). #140 and #141 are clean
+- **#134 and #87 branched from `staging-render`**, not from the unmerged #133/#136 branches (no stacking)
+
+### Open threads
+- #139 (fix generic 500s) is a draft; it needs the owner's OK and #140 and #143 merged
+- #140: `development.ts` maps a null entry `recipe` to `""` so `CookbookDetailPage.tsx` (not owned) still compiles; a one-line page edit would be cleaner. The README/PRD unpublish note still mentions `published_version` for cookbook snapshots. The data migration doesn't batch
+- #143: when the original and its author are both gone, the lineage reads "Based on a recipe · original recipe removed · original by a deleted user" (wordy). `load_recipe_seed --force` still deletes forks of a user's recipes
+- #142: login still lands on `/recipe-box` (`auth/access.ts`, not owned), so the phone kitchen shows only at `/`. `.home-page` styles in `index.css` are unused. The phone hides the clock
+- #141: the Places list is links you Tab through, not an arrow-key ARIA menu
+- #124: close when #140 merges. #89 waits on photographs. Drafts #66–#69 untouched
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** design bash, director, wave 5, pre-release, cookbook copy, snapshot JSON, fork lineage, SET_NULL, API error audit, places menu, account menu, phone kitchen
+**Files:** development/migrations/0005_cookbook_entry_snapshot.py, development/migrations/0006_fill_cookbook_snapshots.py, development/migrations/0007_remove_cookbookrecipe_snapshot_version.py, development/migrations/0005_recipefork_lineage_set_null.py, development/public_views.py, frontend/src/components/kitchen/BackToKitchen.tsx, frontend/src/components/kitchen/KitchenScene.tsx, frontend/e2e/kitchen-places.spec.ts, frontend/e2e/kitchen-phone.spec.ts, frontend/e2e/cookbook-copy.spec.ts
+**Do not redo:** #133 (PR #140), #134 (PR #143), #137 audit (findings comment and #139), #136 (PR #141), #87 (PR #142)
+**Resume with:** run the director prompt again after the owner merges wave 5 (#140, #143, #141, #142), which unblocks wave 6 (#131); build #139 once the owner OKs it
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-23 · Design Bash run 3: wave 3 (#86, #85, #88) and follow-ups #103, #104
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-23T08:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (director plus worktree subagents, two at a time) |
+| **Outcome** | partial (five PRs open, #123–#125, #127, #128; wave 4 waits on #125) |
+
+### Intent
+Run the director prompt again. Since run 2, every earlier PR merged (#95–#101, #119, #120). The owner OK'd #103 and #104 ("yes" on each, 2026-10-23).
+
+### Summary
+Ran wave 3 one issue at a time (#86, then #85, then #88), because all three edit `components/kitchen/`. Paired #103 and #104 with slots where nothing else touched their files. Each subagent committed its tests first, and backend tests and the build passed before every push. **#86 → PR #123**: read-only sample board and notebook for home cooks (`/sample/board`, `/sample/lab[/:id]`). `load_sample_kitchen` loads `seed/data/sample_kitchen.json`, and `Idea`/`DevelopmentRecipe` get `is_sample` and a nullable `user` (migration `0004_sample_content`). Sample endpoints refuse writes with 403 `sample_read_only`. **#85 → PR #125**: focused views over a faded kitchen with one "Back to kitchen"; `HistoryNav.tsx` deleted. **#88 → PR #128**: `useSunlight` + `KitchenLight` change the light from the device clock every 5 minutes, with a moonlit night. **#103 → PR #124**: `CookbookRecipe.snapshot_version` PROTECT → RESTRICT (`0004_cookbook_snapshot_restrict`); README reset step simplified. **#104 → PR #127**: `MarginTools` reads `displayedVersion.ingredient_lines` and no longer fetches.
+
+`staging-render` e2e is red: the suite makes more than 20 logins, so the 20/hour login throttle gives 429 to the last specs (`references-defaults.spec.ts:41`, `walkthrough.spec.ts:3`). Reproduced on a clean checkout (97 passed, 2 failed); both pass alone. Every PR's e2e check is red for that reason; every other check is green. Opened draft **#126** with the proposed fix (`LOGIN_THROTTLE_RATE` env var, high in `scripts/e2e_server.sh`).
+
+### Decisions
+- **Merge order**: #126 fix first if OK'd (turns e2e green), then #123, #125, #128, #124, #127
+- **Conflicts (checked by merging in that order)**: #128 conflicts with #125 in `frontend/src/styles/kitchen.css` (both append at the end; keep both). #124 merges clean in git but leaves two `development` `0004` migrations next to #123's, so Django refuses to migrate: regenerate #124's as `0005` depending on `0004_sample_content`. The rest merge clean
+- **Base e2e red is not fixed in any PR**: the fix is in `config/settings.py`, outside every issue's Owned paths, so it went to draft #126
+
+### Open threads
+- #123 edits `frontend/e2e/kitchen-home.spec.ts`, which is outside its Owned paths: it deletes the two "locked" home-cook tests that the issue replaces. The owner needs to OK that (or ask for it to be reverted). The unused lock styles in `kitchen.css` stay
+- #85: the top nav still shows inside focused views (decision 004 says it goes; the issue didn't ask). `.history-nav` styles in `src/index.css` are now unused
+- #88 adds `--color-moon-glow` to `themes/default.css` (scoped "sun tokens only"); nobody has checked the light in a screenshot
+- #87 (wave 4) needs #125 merged. #89 waits on photographs. Drafts #66–#69 untouched. Dependabot PRs #105–#118 outside this run
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** design bash, director, sample kitchen, read-only samples, focused views, back to kitchen, sunlight, moonlight, RESTRICT, baker's percent, login throttle
+**Files:** development/management/commands/load_sample_kitchen.py, seed/data/sample_kitchen.json, development/migrations/0004_sample_content.py, development/migrations/0004_cookbook_snapshot_restrict.py, frontend/src/components/kitchen/KitchenBackdrop.tsx, frontend/src/components/kitchen/useSunlight.ts, frontend/src/components/lab/MarginTools.tsx, config/settings.py
+**Do not redo:** #86 (PR #123), #85 (PR #125), #88 (PR #128), #103 (PR #124), #104 (PR #127); builds from runs 1–2
+**Resume with:** run the director prompt again after the owner merges wave 3 (#125 at least, which unblocks #87); build #126 once the owner OKs it
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-23 · Design Bash run 2: #84 and #91
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-23T06:30:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (director plus two worktree subagents) |
+| **Outcome** | partial (#84 → PR #119, #91 → PR #120; waves 3–4 wait on #119) |
+
+### Intent
+Run the director prompt again. Since run 1, #95, #96, #97, #98 and #101 merged, and the owner OK'd `DeveloperRecipePage.tsx` for #91 (comment on #91, 2026-10-23).
+
+### Summary
+Started #84 (wave 2) and #91 side by side; the draft label came off #84. Both subagents committed tests first and passed the backend tests, the build and e2e before hand-back. **#84 → PR #119** (`feat/issue-84-kitchen-home`): on wide screens, `/` is a drawn kitchen scene (`components/kitchen/`, `styles/kitchen.css`) with the shelf (References plus `on_shelf` cookbooks), board, notebook, recipe box and a working clock. Locked board and notebook for home cooks. On `/` the top nav and Back/Forward are hidden and the account menu sits top-right. Tests: 160 backend, 70 e2e (7 new). **#91 → PR #120** (`feat/issue-91-test-session-fields`): `TestSession` gets nullable `oven_temp`, `oven_temp_unit` (F/C), `bake_minutes`, `rating` (1–5) in migration `0003_test_session_bake_fields` (after `0002_cookbook_on_shelf`). The Lab form reads them with `readBakeFields(form)`, so `DeveloperRecipePage.tsx` changes by 5 lines. README row added. Tests: 176 backend, 85 e2e (2 new). In this session, GitHub writes needed the owner's explicit OK before the permission check allowed them.
+
+### Decisions
+- **Merge order**: #120 and #119 are independent and both merge clean onto `staging-render`; merge #119 first since wave 3 waits on it
+- **#84**: a sideways phone keeps the old home (phone kitchen is #87); the start-trial note sits on the counter; guests see the kitchen
+- **#91**: a temperature without a unit is refused (400 on `oven_temp_unit`)
+- **Scratch files carry the issue number**: two subagents both wrote `scratchpad/e2e.sh`; the prompt now says so
+
+### Open threads
+- The owner reviews and merges #119 and #120 (owner checks are listed in each PR body)
+- Run 1's #99 and #100 now conflict with `staging-render` (#98 and #97 merged): #99 in `entrypoint.sh`, #100 in `PhoneRecipeBox.tsx`. Not resolved in this run
+- #103 and #104 stay drafts until the owner OKs them. #89 waits on photographs. Drafts #66–#69 untouched. 14 Dependabot PRs (#105–#118) are outside this run
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** design bash, director, kitchen scene, kitchen home, test session, oven temperature, rating, bake time
+**Files:** frontend/src/components/kitchen/KitchenScene.tsx, frontend/src/components/kitchen/useKitchenHome.ts, frontend/src/styles/kitchen.css, frontend/e2e/kitchen-home.spec.ts, development/migrations/0003_test_session_bake_fields.py, frontend/src/components/lab/LabTestSessions.tsx, frontend/e2e/lab-test-sessions.spec.ts
+**Do not redo:** #84 build (PR #119); #91 build (PR #120); wave 1 builds (PRs #95–#101)
+**Resume with:** run the director prompt again after the owner merges #119 (unblocks wave 3: #86, then #85, then #88)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-20 · Design Bash run: wave 1
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-20T03:30:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (director plus one worktree subagent per issue, two at a time) |
+| **Outcome** | partial (wave 1: seven PRs open, #91 blocked; waves 2–4 wait on merges) |
+
+### Intent
+Run the Design Bash issues the owner OK'd (#80–#88, #90–#93) as the director: one subagent per issue in its own worktree, status in issue #94. The owner merges every PR, so only wave 1 could start.
+
+### Summary
+Status lives in #94 ("Design Bash run: status"). Draft labels came off #80, #81, #82, #83, #90, #91, #92 and #93 as each started. Each subagent committed its tests first. All three checks passed before every push, and every PR's check runs are green. **#83 → PR #95** decision 004 (kitchen home) and the PRD line. **#81 → PR #96** `Cookbook.on_shelf` plus the empty state. **#80 → PR #97** `useDismiss` for menus, the fan and the drawers. **#82 → PR #98** shared default references with "Remove from shelf". **#93 → PR #99** `load_demo_data`. **#90 → PR #100** box search. **#92 → PR #101** Baker's % panel. **#91 blocked**: it needs `DeveloperRecipePage.tsx`, which builds the `createTestSession` payload and is outside the Owned paths. Asked the owner on the issue.
+
+### Decisions
+- **Merge order**: #95, #96 (wave 2 needs both), then #97, #98, #99, #100, #101
+- **Known conflicts (checked by merging in that order)**: #99 conflicts with #98 in `entrypoint.sh` (both add a line after `load_starter_recipes`), and #100 conflicts with #97 in `PhoneRecipeBox.tsx`. The rest merge clean. #91's future migration must follow #96's `development/0002_cookbook_on_shelf.py`
+- **The e2e lock is only removed by the run that took it**: the first template's `mkdir && …; rmdir` could delete another worktree's lock
+
+### Open threads
+- The owner merges PRs #95–#101 and resolves the two conflicts (or asks for them to be resolved)
+- #91: the owner OKs `DeveloperRecipePage.tsx` (test session form state and `handleAddTestSession`)
+- #93: deleting the demo developer in /admin/ fails until its cookbooks are deleted (`CookbookRecipe.snapshot_version` is PROTECT). The README says to do that. A follow-up for CASCADE/RESTRICT is the owner's call. Render env vars: `DEMO_DEVELOPER_PASSWORD`, `DEMO_COOK_PASSWORD` (the usernames default to `demo-developer` / `demo-cook`)
+- #82 added empty `library/management/__init__.py` files, which the owned command needs. #92's panel reads the saved current version, not an older version the developer is viewing
+- Wave 2 (#84) needs #95 and #96 merged; wave 3 (#86, then #85, then #88) needs #84; wave 4 (#87) needs #84 and #85. #89 waits on photographs. Drafts #66–#69 untouched
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** design bash, director, worktree subagents, kitchen home, on_shelf, default references, demo data, box search, baker's percent, useDismiss
+**Files:** docs/decisions/004-kitchen-home.md, development/management/commands/load_demo_data.py, library/management/commands/load_default_references.py, frontend/src/lib/useDismiss.ts, frontend/src/lib/boxSearch.ts, frontend/src/lib/bakersPercent.ts
+**Do not redo:** #80, #81, #82, #83, #90, #92, #93 builds (PRs #95–#101); #91 until the owner OKs DeveloperRecipePage.tsx
+**Resume with:** run the director prompt again after the owner merges wave 1 (PRs #95 and #96 at least, which unblock #84)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-19 · Plural ingredient names (#75) and staggered tab edge (#76)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-19T22:18:49Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (main session plus two worktree subagents) |
+| **Outcome** | completed (PRs #77 and #78 open, waiting on the owner) |
+
+### Intent
+After PR #74 (#56) merged, the owner OK'd the two optional issues, #75 and #76. The plan was to remove their draft labels and build both at once in worktree subagents.
+
+### Summary
+The draft labels came off both issues. Both subagents wrote their tests first and saw them fail before the fix. Each PR touches only its issue's Owned paths. Each subagent passed backend tests (157), the build and e2e (56 and 59) before pushing. Only one e2e run used :8010 at a time: the subagents took turns with a `mkdir` lock in the main session's scratchpad. **#76 → PR #77** (`feat/issue-76-stagger-edge`): `staggerStyle()` spaces each row on its own, so both rows end at the right edge for even and odd letter counts. The back row still starts one slot in. `phone-box.css` was unchanged. **#75 → PR #78** (`feat/issue-75-plural-names`): `recipeFormat.ts` pluralises the last word of the name when there is no unit (or the unit is `whole`) and the quantity is above one. It uses a small irregulars map, consonant + y → "ies", and leaves names ending in "s" alone.
+
+### Decisions
+- **No singularising follow-up for now**: it would need a big exceptions list. If "1 eggs" ever shows up, storing catalog names in the singular is the cheaper fix
+- **No README / PRD change**: no endpoint, field or phase changed
+
+### Open threads
+- The owner reviews and merges PRs #77 and #78
+- #77: the last front and back tabs now line up one behind the other. Nobody has looked at a screenshot yet
+- #78: uncountable names with no unit, like "2 garlic", become "2 garlics"
+- Later: starters in Simple list; URL and scan import for guests on the phone. Drafts #66–#69 are untouched
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** pluralise, ingredient names, staggered tabs, right edge, worktree subagents, e2e lock
+**Files:** frontend/src/lib/recipeFormat.ts, frontend/e2e/recipe-format.spec.ts, frontend/src/components/recipe-box/phone/PhoneBoxTabs.tsx, frontend/e2e/recipe-box-phone.spec.ts
+**Do not redo:** #56 (PR #74 merged); #75 build (PR #78); #76 build (PR #77)
+**Resume with:** after PRs #77 and #78 merge, ask the owner which Recipe Box item is next (starters in Simple list, or URL and scan import for guests)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-19 · Recipe Box: guest saves and starter cards on the phone (#56)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-19` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code |
+| **Outcome** | completed (PR open, waiting on the owner) |
+
+### Intent
+Check PR #73 (#64 Card View), then build #56 once the owner OK'd it.
+
+### Summary
+PR #73 was merged with CI green. #56 is on `feat/issue-56-guest-phone`, and `frontend/e2e/recipe-box-guest-phone.spec.ts` was written first. On a phone (including a sideways phone), visitors can open `/recipe-box` and see the starter cards sorted A–Z with their own cards, marked "Starter card" in the lid and "Starter" in the fan. No guest is made on page load: `AuthContext.ensureUser()` makes one on the first Add or Fork. The ☰ Account section shows "Guest · N of 5 cards" with Sign up and Sign in for guests, and Sign in for visitors. Sign out is for signed-up people only. Guests see the 30-day note in the Add sheet. At 5 cards, Add and Fork open a sign-up card, and so does a `guest_card_limit` 403. Starter cards have Fork and, for signed-up people only, Hide (48px buttons). Card View has no card menu for starters. `/register` lets guests in and says their cards stay. Wide screens still send visitors to `/login`. URL and scan import are hidden for visitors and guests on the phone, and Simple list shows only the person's own cards (no starters).
+
+### Decisions
+- **AppLayout edit (owner OK'd, outside Owned paths)**: a visitor on the phone box gets the framed shell, so making a guest doesn't remount the page and lose the first save
+- **recipe-box-phone.spec.ts stubs starters to [] (owner chose option A)**: its layout tests count only the walkthrough seed's cards; the new spec covers starters
+
+### Open threads
+- Owner reviews and merges the #56 PR
+- Optional Task issues, ask first: "2 egg" pluralising in the #65 formatter; the staggered front row ending one slot short with an even number of letters
+- Later: starters in Simple list; URL and scan import for guests on the phone
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** guest mode, starter cards, fork, hide, sign-up card, ensureUser, phone recipe box
+**Files:** frontend/src/pages/RecipeBoxPage.tsx, frontend/src/components/recipe-box/phone/PhoneSignUpCard.tsx, frontend/src/auth/AuthContext.tsx, frontend/src/components/AppLayout.tsx, frontend/e2e/recipe-box-guest-phone.spec.ts
+**Do not redo:** #64 check (PR #73 merged); #56 build (its PR)
+**Resume with:** after the #56 PR merges, ask the owner about the two optional Task issues
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-16 · Error-handling audit (#55, PR #57) and #56 issue
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-16` (logged 2026-10-23) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (main session plus worktree subagents) |
+| **Outcome** | completed (#57 merged; #56 finished by another session in PR #74) |
+
+### Intent
+Next Recipe Box milestone: confirm #51, #52 and #54 merged, get the owner's OK on #55, write a Task issue for guest and starter-card UI on the phone, and hand each issue to a worktree subagent.
+
+### Summary
+#51, #52 and #54 were merged. Opened #56 (phone guest saves and starter cards) as a draft and the owner approved it. Before handing off #55, added two items to it: the scan picker `accept` list and `ApiError.code`. A subagent built #55 tests-first in PR #57. `config/exceptions.py` makes errors `{"detail", "code"}` (field errors keep DRF's map). `UserFacingError` replaces `str(exc)` in the accounts, library and development views. Bad JSON and unhandled errors get fixed messages. `toApiError` in `client.ts` sets `code`, reads field errors as sentences and turns 429 into "try again in N minutes". `docs/error-audit.md` and a README "API errors" section were added. With the owner's OK, `ci.yml` and `scripts/e2e_server.sh` were added to #55's Owned paths so `DEBUG` could default to `False` (CI and e2e set `DEBUG=True`). CI was green and the owner merged #57. Then a #56 subagent stopped before pushing: `recipe-box-phone.spec.ts`'s empty-box test broke once starters showed in every box, and that file was outside Owned paths. Another session finished #56 (PR #74), so branch `feat/issue-56-phone-guest` was never pushed and has been dropped.
+
+### Decisions
+- **One at a time**: #55 before #56, because #56 needs `ApiError.code`
+- **DEBUG default in #57, not a separate issue**: owner's choice; Owned paths widened to `ci.yml` and `e2e_server.sh`
+- **"One error shape" means two documented forms**: `{"detail", "code"}` plus DRF's field map, so validation responses didn't all change
+
+### Open threads
+- None from this session
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** error audit, UserFacingError, toApiError, ApiError.code, DEBUG default, scan accept list
+**Files:** config/exceptions.py, frontend/src/api/client.ts, docs/error-audit.md, frontend/e2e/api-errors.spec.ts
+**Do not redo:** #55 (PR #57 merged); #56 (PR #74 merged)
+**Resume with:** nothing from this session; see newer entries
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-16 · Card View redesign (#64), cloud session
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-16` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (cloud) |
+| **Outcome** | completed |
+
+### Intent
+After #63 (PR #72) and #65 (PR #71) merged, build #64: the phone Card View from decision 003.
+
+### Summary
+Wrote `frontend/e2e/recipe-box-card-view.spec.ts` first (9 tests), then rebuilt `PhoneCardView.tsx` with a new `phone-card-view.css` and `useWakeLock.ts`. Sideways it shows two columns, ingredients left. In portrait, an ingredient band is pinned on top and collapses to "Ingredients (N)", with the steps scrolling underneath. "Turn over" shows notes, source and `hero_image`. Tapping a step marks it (`aria-current="step"`) and tapping an ingredient ticks it; neither is saved. The wake lock is on while the card is open, and ☀ toggles it. The ⋯ card menu has "Edit card" (in-place fields, Done saves, Cancel discards) and "Full editor" (the old `/recipe-box/:id` page). The owner approved small edits outside the Owned paths: `onSaved` is threaded through `PhoneRecipeBox.tsx` and `RecipeBoxPage.tsx`; `usePhoneLayout({ sideways: true })` (landscape, at most 500px tall) is used only by the recipe box and AppLayout's box check; old Card View CSS moved out of `phone-box.css`; "Flip card" became "Turn over" in `recipe-box-phone.spec.ts` and `walkthrough.spec.ts`. Backend, build and e2e (48) are green.
+
+### Decisions
+- **Sideways phones keep the phone box (recipe box only)**: the owner's choice; the other pages keep the 767px rule
+- **Edit card drafts the existing text only**: title, prep, cook, notes, lines (saved as raw_text) and steps. Adding or removing lines and steps stays in Full editor, so Cancel really discards
+
+### Open threads
+- Owner reviews and merges the #64 PR
+- #56 needs the owner's OK (draft)
+- The #65 formatter prints "2 egg": names don't pluralise
+- With an even number of letters, the staggered front row of tabs ends one slot short (same as the prototype)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Card View, wake lock, ingredient band, step marks, in-place edit, sideways phone
+**Files:** frontend/src/components/recipe-box/phone/PhoneCardView.tsx, frontend/src/components/recipe-box/phone/phone-card-view.css, frontend/src/components/recipe-box/phone/useWakeLock.ts, frontend/src/lib/usePhoneLayout.ts, frontend/e2e/recipe-box-card-view.spec.ts
+**Do not redo:** #63, #64, #65; the sideways-phone question
+**Resume with:** after the #64 PR merges and the owner OKs #56, start #56 from staging-render
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-16 · Phone box design pass (#63), cloud session
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-16` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (cloud) |
+| **Outcome** | completed |
+
+### Intent
+Continue #63 from WIP commit 7d002b5 in a cloud session, get e2e green, and open the PR.
+
+### Summary
+The one failing e2e test ("tapping anywhere on the lid card opens Card View") wasn't a layout bug. At rest, `elementFromPoint` 20px in from the card's lower-right corner is the card. On load the card plays the prototype's slide-up (`translateY(70px) scale(0.96)`, 0.42s). With the shared-cookie login the test measured it mid-animation, when its box overlapped the tab row, so the click hit a tab. The test now waits for the card's animations to finish before measuring. Backend, build and e2e (31) are green. Light and dark screenshots at 390×844 match the prototype's lid, hinge, card edges, latch and label.
+
+### Decisions
+- **Fixed the test, not the layout**: the resting layout is correct and matches the prototype
+
+### Open threads
+- With an even number of letters, the staggered front row ends one slot short of the right edge (the prototype's formula does the same; its demo uses 27 tabs). Ask the owner whether to stretch it
+- #63 and #71 both edit `frontend/e2e/recipe-box-phone.spec.ts`; whichever merges second needs a merge
+- #64 waits on #63 merging; #56 waits on #63 and the owner's OK (draft)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phone recipe box, lid card animation, e2e, staggered tabs
+**Files:** frontend/e2e/recipe-box-phone.spec.ts, frontend/src/components/recipe-box/phone/phone-box.css
+**Do not redo:** the hit-test investigation for the lid card click
+**Resume with:** after #63 merges, start #64 (Card View) from staging-render
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-16 · Phone recipe box design decisions (003)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-16` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code |
+| **Outcome** | completed |
+
+### Intent
+Go through the phone box design checklist with the owner, record the answers as decision 003, and file Task issues for the work.
+
+### Summary
+The owner decided every item: menu, fan, dark mode, ingredient text, Card View, and what comes later. `docs/decisions/003-phone-recipe-box-design.md` records them, and `docs/recipe-box/README.md` links to it. The proto-recover session confirmed that the v7 fan matches the artifact, so the fan is final. Filed #62 (this doc), #63 (design pass), #64 (Card View), #65 (ingredient text everywhere) and drafts #66–#69 (dark mode for the rest of the app, Appearance, tray, servings scaler). #56 now depends on #63, and its guest items go in the new ☰ menu.
+
+### Decisions
+- **Bottom bar hidden on the phone box; one ☰ menu; floating + only while browsing**
+- **Ingredient text: ¾ / 1½, "2 cups flour", no "whole", raw_text first and written on edit, on every screen**
+- **Card View: two columns sideways, pinned ingredient band in portrait, scrolling, flip only to the back, wake lock on**
+- **Box label: "<name>'s Recipes · est. <year joined>"**
+
+### Open threads
+- Owner merges #61 (prototype v7) and this PR
+- Order: #63 and #65 in parallel, then #64, then #56
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phone recipe box, decision 003, menu, fan, dark mode, recipeFormat, Card View, wake lock
+**Files:** docs/decisions/003-phone-recipe-box-design.md, docs/recipe-box/README.md
+**Do not redo:** the 003 checklist; filing #62–#69; editing #56
+**Resume with:** after #61 merges, hand #63 and #65 to worktree subagents
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-15 · Recipe Box milestone: #43, #44, #45
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-15` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code |
+| **Outcome** | completed |
+
+### Intent
+Run Task issues #43 (starter cards), #44 (throttles, upload caps, guest cleanup) and #45 (Recipe Box phone view) through subagents, one PR per issue into `staging-render`.
+
+### Summary
+The owner chose parallel. Three worktree subagents each wrote their tests first and opened a PR. All three have backend, frontend and e2e green, and none are merged. #50 (closes #43) adds `StarterRecipe` and `HiddenStarterRecipe`, plus `/api/v1/starter-recipes/` with list, fork (through `copy_payload_to_box`) and hide (signed-up only). It also adds the `load_starter_recipes` command and 3 placeholder starters in `seed/data/starter_recipes.json`. #51 (closes #44) adds DRF scoped throttles with the rates in settings, a 10 MB and file-type check on scan uploads, and `cleanup_guests --days N [--dry-run]`, which also deletes scan files and card photos. #52 (closes #45) adds the phone view under `frontend/src/components/recipe-box/phone/`: the lid, A–Z and # tabs, the fan, a Card View that flips, and a Simple list toggle. `draft` labels are removed from #43 and #44. To choose `THROTTLE_NUM_PROXIES`, #53 added a temporary `/api/v1/ipcheck/` page. The owner measured `3` on staging and set it in Render, and the value is now in #51's README. This PR removes the page. #50 and #53 are merged. On 2026-10-16, CodeQL flagged `str(exc)` reaching the scan-upload response in #51 (information exposure). The bot's generic-message suggestion was not used: `library/scan.py` `scan_upload_error()` now returns the fixed user message and the view sends it, so the 400 body is unchanged and the alert closed. That led to Task issue #55 (error-handling audit: no exception text in responses, one error shape, clear frontend messages, `DEBUG` off by default), opened as a draft and handed to the next session. #51, #52 and #54 were then merged.
+
+### Decisions
+- **Ran the three in parallel**: the owner's choice
+- **`THROTTLE_NUM_PROXIES` env var (#51)**: unset, the per-IP limits use the whole `X-Forwarded-For` header, which a client can fake. Render needs `3`
+- **CodeQL fix without the bot's suggestion**: return the fixed message instead of a generic one, so users still see why the upload failed; the wider audit became #55
+
+### Open threads
+- Owner merges #51, #52 and this cleanup PR
+- Narrow the scan file picker in `RecipeImportPanel.tsx` to JPEG, PNG, HEIC, PDF and text (WebP and GIF now get a 400)
+- Owner picks the real starter recipes
+- Next: guest and starter-card UI on the phone (left out of #45)
+- Playwright reuses any server already on :8010 locally, so parallel worktrees can pick up each other's server
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** starter recipes, throttles, cleanup_guests, phone recipe box, lid, A–Z tabs, subagents
+**Files:** config/urls.py, collection/views.py, accounts/views.py, library/scan.py, config/settings.py, frontend/src/components/recipe-box/phone/PhoneRecipeBox.tsx
+**Do not redo:** #43, #44, #45 (PRs #50, #51, #52); measuring THROTTLE_NUM_PROXIES (3)
+**Resume with:** after the merges, write the Task issue for guest and starter-card UI on the phone
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-15 · Claude workflow fix
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-15` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code |
+| **Outcome** | completed |
+
+### Intent
+Stop `@claude` runs starting on their own, let the Action run tests before pushing, and fix blank ingredient rows on imported box cards.
+
+### Summary
+The five Task issues (#41–#45) had "@claude" in their Budget line, so the `issues: opened` trigger started all of them at once, `draft` label or not. In Actions, Claude had no Python or npm, so it pushed untested code. `claude.yml` now triggers only on comments and reviews, skips anything labelled `draft`, installs Python 3.12, the npm packages and Playwright Chromium, and allows `python manage.py`, the build and e2e scripts, and read-only git plus `git ls-remote` and `git switch`, with up to 60 turns. The action always creates a new `claude/issue-N-*` branch and its push wrapper takes only `origin <branch>`, so continuing an old branch requires `git switch`. CLAUDE.md now says to continue the newest existing branch and run the tests before pushing. Removed "@claude" from the Task template's Budget line and from #42–#45. Box cards show `raw_text` when a line has no ingredient. `IngredientLine` in `collection.ts` is now box-only (nullable ingredient and quantity), and the Notebook type is unchanged.
+
+### Decisions
+- **No `issues` trigger**: an @claude run starts only from a comment or review
+- **`git switch` and `git ls-remote` allowed in Actions**: needed to continue an existing branch; pushing still goes through the action's wrapper
+
+### Changes
+- `.github/workflows/claude.yml`, `.github/ISSUE_TEMPLATE/task.md`, `CLAUDE.md`
+- `frontend/src/api/collection.ts`, `frontend/src/lib/recipeFormat.ts`, `frontend/src/components/recipe-box/RecipeBoxCard.tsx`
+
+### Open threads
+- After this merges: PR from `claude/issue-42-20261015-2146` into `staging-render`, fix CI within #42's Owned paths
+- Ask the owner before deleting `claude/issue-42-20261015-2158` and `claude/issue-45-20261015-2159`
+- #43 and #44 wait on #42; #45 can be rerun
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** claude action, workflow trigger, draft label, allowedTools, raw_text, ingredient lines
+**Files:** .github/workflows/claude.yml, .github/ISSUE_TEMPLATE/task.md, CLAUDE.md, frontend/src/components/recipe-box/RecipeBoxCard.tsx
+**Do not redo:** removing the issues trigger; editing #42–#45 Budget lines
+**Resume with:** once this PR merges, open the #42 PR from claude/issue-42-20261015-2146
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-10-15 · Recipe Box gap list
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-10-15` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code |
+| **Outcome** | completed |
+
+### Intent
+Compare the Recipe Box PRD/spec (written for Supabase) with the Django API and list what's covered, missing, or conflicting. No code.
+
+### Summary
+`feat/milestone-3-fixtures` was already merged (wolpino/trial-and-eclair#36). Moved the untracked `.DS_Store`, `.vscode/`, `recipes/mockup-*.jpg` and `trial-and-eclair- visuals/` to the macOS Trash at the user's request. Branched `docs/recipe-box-merge` from `main`, wrote `docs/recipe-box/gap-list.md`, and committed the `docs/recipe-box/` folder. Then recorded decisions 001 (Recipe Box replaces the phone view in `frontend/`, A–Z only, no revisions or share links for home cooks) and 002 (guest mode: 5-card limit, locked developer preview, starter recipes, 30-day cleanup, throttles), and marked the settled rows in the gap list. Opened PR #38 (docs, with `CLAUDE.md`) into `staging-render`. Then opened PR #39 (`chore/ci-and-agent-setup`): GitHub Actions CI (Django check, migrations check, tests on Postgres 16, frontend build, Playwright), CodeQL, Dependabot, `@claude` and Claude review workflows, a Task issue template, and `.claude/` (SessionStart hook printing this log, allowlist, session-log skill link). CI green except the Claude review (no API key yet). Applied repo settings with the user's OK: required checks backend/frontend/e2e on `staging-render` and `main`, auto-merge, delete merged branches, secret push protection.
+
+### Decisions
+- **PR flow is `docs/recipe-box-merge` → `staging-render` → `main`**
+- **Spec's Supabase backend is superseded by `/api/v1/`**
+- **A–Z only; Recipe Box lives in `frontend/`** — `docs/decisions/001-recipe-box-in-frontend.md`
+- **Guest mode with a 5-card limit** — `docs/decisions/002-guest-mode.md`
+- **No required review approvals; direct pushes still allowed** — user chose required checks only
+
+### Open threads
+- Owner picks the starter recipes
+- Starter cards settled: shared, read-only, forkable, don't count; signed-up people can hide them
+- User adds the `ANTHROPIC_API_KEY` secret and installs the Claude GitHub app
+- Merge #39 first, then merge `staging-render` into `docs/recipe-box-merge` so #38 gets the required checks
+- Next: 3–5 tickets from the gap list as Task issues
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** recipe box, gap list, supabase, django api, mobile
+**Files:** .github/workflows/ci.yml, .claude/settings.json, docs/recipe-box/gap-list.md, docs/decisions/001-recipe-box-in-frontend.md, docs/decisions/002-guest-mode.md
+**Do not redo:** the gap list, decisions 001–002, CI and repo settings; merging staging-render into main
+**Resume with:** after #39 and #38 merge, write 3–5 Task issues from the gap list
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-10-12 · commit milestone 3
 
 | Field | Value |

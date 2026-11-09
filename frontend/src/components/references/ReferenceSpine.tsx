@@ -33,8 +33,17 @@ export function ReferenceSpine({
           {REFERENCE_TYPE_LABELS[reference.ref_type]}
         </span>
       </button>
-      <button className="reference-spine__delete" type="button" onClick={onDelete}>
-        Remove
+      <button
+        aria-label={
+          reference.is_default
+            ? `Remove ${reference.title} from shelf`
+            : `Delete ${reference.title}`
+        }
+        className="reference-spine__delete"
+        type="button"
+        onClick={onDelete}
+      >
+        {reference.is_default ? "Remove from shelf" : "Delete"}
       </button>
     </div>
   );

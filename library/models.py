@@ -15,9 +15,13 @@ class ReferenceType(models.TextChoices):
 
 
 class Reference(TimestampedModel):
+    """A shelf book. No user means a shared default (load_default_references)."""
+
     id = models.UUIDField(primary_key=True, default=uuid.uuid4, editable=False)
     user = models.ForeignKey(
         settings.AUTH_USER_MODEL,
+        null=True,
+        blank=True,
         on_delete=models.CASCADE,
         related_name="references",
     )
@@ -31,6 +35,26 @@ class Reference(TimestampedModel):
 
     def __str__(self):
         return self.title
+
+
+class HiddenDefaultReference(TimestampedModel):
+    user = models.ForeignKey(
+        settings.AUTH_USER_MODEL,
+        on_delete=models.CASCADE,
+        related_name="hidden_default_references",
+    )
+    reference = models.ForeignKey(
+        Reference,
+        on_delete=models.CASCADE,
+        related_name="hidden_by",
+    )
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=["user", "reference"], name="unique_hidden_default_reference_per_user"
+            )
+        ]
 
 
 class ReferenceLink(TimestampedModel):

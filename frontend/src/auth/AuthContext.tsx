@@ -1,5 +1,6 @@
 import {
   createContext,
+  startTransition,
   useCallback,
   useContext,
   useEffect,
@@ -10,6 +11,7 @@ import {
 
 import {
   ApiError,
+  createGuest,
   fetchCurrentUser,
   loginUser,
   logoutUser,
@@ -28,9 +30,12 @@ interface AuthContextValue {
   hasDeveloperAccess: boolean;
   login: (input: LoginInput) => Promise<User>;
   register: (input: RegisterInput) => Promise<User>;
-  logout: () => Promise<void>;
+  /** `andThen` runs in the same transition as clearing the user (e.g. a navigate). */
+  logout: (andThen?: () => void) => Promise<void>;
   updateProfile: (data: Pick<User, "show_forks">) => Promise<User>;
   startTrial: () => Promise<User>;
+  /** Makes a guest on the first save, or returns the person already signed in. */
+  ensureUser: () => Promise<User>;
 }
 
 const AuthContext = createContext<AuthContextValue | null>(null);
@@ -76,9 +81,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return registeredUser;
   }, []);
 
-  const logout = useCallback(async () => {
+  const logout = useCallback(async (andThen?: () => void) => {
     await logoutUser();
-    setUser(null);
+    // One transition for clearing the user and the caller's navigate(), so they
+    // render together. Apart, the protected page re-renders with no user first
+    // and redirects to /login.
+    startTransition(() => {
+      setUser(null);
+      andThen?.();
+    });
   }, []);
 
   const updateProfile = useCallback(async (data: Pick<User, "show_forks">) => {
@@ -93,6 +104,15 @@ export function AuthProvider({ children }: { children: ReactNode }) {
     return updated;
   }, []);
 
+  const ensureUser = useCallback(async () => {
+    if (user) {
+      return user;
+    }
+    const guest = await createGuest();
+    setUser(guest);
+    return guest;
+  }, [user]);
+
   const value = useMemo(
     () => ({
       user,
@@ -103,8 +123,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       logout,
       updateProfile,
       startTrial,
+      ensureUser,
     }),
-    [user, loading, login, register, logout, updateProfile, startTrial],
+    [user, loading, login, register, logout, updateProfile, startTrial, ensureUser],
   );
 
   return <AuthContext.Provider value={value}>{children}</AuthContext.Provider>;

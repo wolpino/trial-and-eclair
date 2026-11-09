@@ -1,0 +1,156 @@
+import { Fragment, useEffect, useRef, useState, type CSSProperties, type PointerEvent } from "react";
+
+import type { BoxCard } from "../../../api/collection";
+import { TAB_KEYS } from "./cardText";
+
+type PhoneBoxTabsProps = {
+  byTab: Record<string, BoxCard[]>;
+  openTab: string | null;
+  selectedId: string | undefined;
+  onOpenTab: (key: string | null) => void;
+  onPick: (recipe: BoxCard) => void;
+};
+
+/** Above this many tabs, they stagger in two rows (decision 003). */
+const ONE_ROW_MAX = 12;
+
+/**
+ * Two staggered rows: 1st, 3rd… low in front; 2nd, 4th… high behind. Each tab is
+ * 3 slots wide (N + 2 slots). The front row starts at 0, the back row one slot in,
+ * and each row spreads out so its last tab ends at the right edge.
+ */
+function staggerStyle(index: number, total: number): CSSProperties {
+  const slot = 1 / (total + 2);
+  const width = 3 * slot;
+  const back = index % 2 === 1;
+  const start = back ? slot : 0;
+  const inRow = back ? Math.floor(total / 2) : Math.ceil(total / 2);
+  const step = (1 - width - start) / (inRow - 1);
+  return {
+    left: `${(start + Math.floor(index / 2) * step) * 100}%`,
+    width: `${width * 100}%`,
+    top: back ? 0 : "24px",
+    height: back ? "38px" : "30px",
+    zIndex: back ? 1 : 2,
+  };
+}
+
+/** A thin sliver for skipped letters between two tabs (one-row layout only). */
+function hasGapAfter(key: string, next: string | undefined): boolean {
+  const end = next ? TAB_KEYS.indexOf(next) : TAB_KEYS.length;
+  return end - TAB_KEYS.indexOf(key) > 1;
+}
+
+export function PhoneBoxTabs({ byTab, openTab, selectedId, onOpenTab, onPick }: PhoneBoxTabsProps) {
+  const keys = TAB_KEYS.filter((key) => (byTab[key]?.length ?? 0) > 0);
+  const stagger = keys.length > ONE_ROW_MAX;
+  const fanCards = openTab ? (byTab[openTab] ?? []) : [];
+
+  const scrubbing = useRef(false);
+  const scrubbed = useRef(false);
+  const [bubble, setBubble] = useState<{ key: string; x: number; y: number } | null>(null);
+
+  useEffect(() => {
+    function stop() {
+      scrubbing.current = false;
+      setBubble(null);
+    }
+    window.addEventListener("pointerup", stop);
+    window.addEventListener("pointercancel", stop);
+    return () => {
+      window.removeEventListener("pointerup", stop);
+      window.removeEventListener("pointercancel", stop);
+    };
+  }, []);
+
+  function onPointerDown(event: PointerEvent) {
+    if (event.pointerType !== "mouse") {
+      scrubbing.current = true;
+      scrubbed.current = false;
+    }
+  }
+
+  function onPointerMove(event: PointerEvent) {
+    if (!scrubbing.current) {
+      return;
+    }
+    const tab = document
+      .elementFromPoint(event.clientX, event.clientY)
+      ?.closest<HTMLElement>(".phone-box-tab");
+    const key = tab?.dataset.key;
+    if (!key) {
+      return;
+    }
+    setBubble({ key, x: event.clientX, y: event.clientY });
+    if (key !== openTab) {
+      scrubbed.current = true;
+      onOpenTab(key);
+    }
+  }
+
+  return (
+    <>
+      {openTab ? (
+        <ul aria-label={`Cards under ${openTab}`} className="phone-box-fan" id="phone-box-fan">
+          {fanCards.map((recipe, index) => (
+            <li key={recipe.id} style={{ "--i": index } as CSSProperties}>
+              <button
+                aria-current={recipe.id === selectedId ? "true" : undefined}
+                className="phone-box-fan__card"
+                type="button"
+                onClick={() => onPick(recipe)}
+              >
+                {recipe.title}
+                {recipe.is_starter ? <span className="phone-box-starter">Starter</span> : null}
+              </button>
+            </li>
+          ))}
+        </ul>
+      ) : null}
+
+      <div
+        aria-label="Divider tabs"
+        className={stagger ? "phone-box-tabs phone-box-tabs--stagger" : "phone-box-tabs"}
+        role="group"
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+      >
+        {keys.map((key, index) => {
+          const count = byTab[key]?.length ?? 0;
+          const open = openTab === key;
+          return (
+            <Fragment key={key}>
+              <button
+                aria-controls={open ? "phone-box-fan" : undefined}
+                aria-expanded={open}
+                aria-label={`${key}, ${count} ${count === 1 ? "card" : "cards"}`}
+                className="phone-box-tab"
+                data-key={key}
+                style={stagger ? staggerStyle(index, keys.length) : undefined}
+                type="button"
+                onClick={() => {
+                  if (scrubbed.current) {
+                    scrubbed.current = false;
+                    return;
+                  }
+                  onOpenTab(open ? null : key);
+                }}
+              >
+                {key}
+              </button>
+              {!stagger && hasGapAfter(key, keys[index + 1]) ? (
+                <span aria-hidden="true" className="phone-box-sliver" />
+              ) : null}
+            </Fragment>
+          );
+        })}
+      </div>
+
+      {bubble ? (
+        <div aria-hidden="true" className="phone-box-bubble" style={{ left: bubble.x, top: bubble.y }}>
+          {bubble.key}
+        </div>
+      ) : null}
+    </>
+  );
+}
