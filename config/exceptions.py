@@ -7,6 +7,7 @@ copies exception text into a response.
 import logging
 
 from django.conf import settings
+from django.db.models import ProtectedError, RestrictedError
 from rest_framework import status
 from rest_framework.exceptions import ErrorDetail, ParseError
 from rest_framework.response import Response
@@ -16,6 +17,7 @@ logger = logging.getLogger(__name__)
 
 GENERIC_ERROR_MESSAGE = "Something went wrong on our side. Please try again."
 PARSE_ERROR_MESSAGE = "The request body could not be read."
+IN_USE_MESSAGE = "This is still used somewhere else, so it can't be deleted yet."
 
 
 class UserFacingError(Exception):
@@ -28,6 +30,13 @@ class UserFacingError(Exception):
 
 def api_exception_handler(exc: Exception, context: dict) -> Response | None:
     response = exception_handler(exc, context)
+    if response is None and isinstance(exc, (ProtectedError, RestrictedError)):
+        # A PROTECT or RESTRICT foreign key blocked a delete.
+        set_rollback()
+        return Response(
+            {"detail": IN_USE_MESSAGE, "code": "in_use"},
+            status=status.HTTP_409_CONFLICT,
+        )
     if response is None:
         return _server_error(exc)
     if isinstance(exc, ParseError):
