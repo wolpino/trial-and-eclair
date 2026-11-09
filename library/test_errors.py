@@ -1,16 +1,22 @@
+import http.client
 import socket
+import tempfile
 from unittest.mock import patch
 from urllib.error import HTTPError, URLError
 
 from django.contrib.auth import get_user_model
 from django.core.cache import cache
 from django.core.files.uploadedfile import SimpleUploadedFile
-from django.test import TestCase
+from django.test import TestCase, override_settings
 from rest_framework import status
 from rest_framework.test import APIClient
 
 from collection import services as box_services
 from config.exceptions import GENERIC_ERROR_MESSAGE
+from development.models import ForkType
+
+from . import services
+from .models import UrlRecipeImport
 
 User = get_user_model()
 SENTINEL = "SENTINEL-upstream-detail"
@@ -100,3 +106,98 @@ class GuestLimitErrorBodyTests(TestCase):
                 "code": "guest_card_limit",
             },
         )
+
+
+@override_settings(DEBUG=False)
+class NoGeneric500Tests(TestCase):
+    """Requests from audit #137 that used to return a generic 500."""
+
+    def setUp(self) -> None:
+        cache.clear()
+        self.client = APIClient(enforce_csrf_checks=False)
+        self.client.force_login(User.objects.create_user(username="cook", password="strong-pass-1"))
+
+    def test_out_of_range_port_is_refused(self) -> None:
+        response = self.client.post(
+            URL_IMPORT, {"url": "http://example.com:99999/pie"}, format="json"
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_403_FORBIDDEN)
+        self.assertEqual(
+            response.json(),
+            {"detail": "Enter a valid web address.", "code": "permission_denied"},
+        )
+
+    def test_dropped_connection_is_a_fetch_failure(self) -> None:
+        errors = (
+            http.client.RemoteDisconnected(SENTINEL),
+            http.client.BadStatusLine(SENTINEL),
+        )
+        for error in errors:
+            with (
+                self.subTest(type(error).__name__),
+                patch("library.services._assert_host_public"),
+                patch("library.services._urlopen", side_effect=error),
+            ):
+                response = self.client.post(
+                    URL_IMPORT, {"url": "https://example.com/pie"}, format="json"
+                )
+
+                self.assertEqual(response.status_code, status.HTTP_502_BAD_GATEWAY)
+                self.assertEqual(
+                    response.json(),
+                    {"detail": "Could not fetch URL.", "code": "fetch_failed"},
+                )
+                self.assertNotIn(SENTINEL, response.content.decode())
+
+    def test_dropped_robots_connection_allows_the_fetch(self) -> None:
+        errors = (
+            http.client.RemoteDisconnected(SENTINEL),
+            http.client.BadStatusLine(SENTINEL),
+        )
+        for error in errors:
+            with (
+                self.subTest(type(error).__name__),
+                patch("library.services._assert_host_public"),
+                patch("library.services._urlopen", side_effect=error),
+            ):
+                self.assertTrue(services.robots_allows("https://example.com/pie"))
+
+    def test_bad_times_in_parsed_data_are_dropped(self) -> None:
+        record = UrlRecipeImport.objects.create(
+            normalized_url="https://example.com/pie",
+            source_title="Pie",
+            parsed_data={"name": "Pie", "prepTime": -5, "cookTime": 10**12},
+        )
+
+        response = self.client.post(
+            f"{URL_IMPORT}{record.id}/save/",
+            {"fork_type": ForkType.SAVE_TO_BOX},
+            format="json",
+        )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertIsNone(response.json()["recipe"]["prep_minutes"])
+        self.assertIsNone(response.json()["recipe"]["cook_minutes"])
+
+    def test_non_finite_times_are_dropped(self) -> None:
+        for value in (float("nan"), float("inf"), "P99999999999D"):
+            with self.subTest(value=value):
+                self.assertIsNone(services.parse_duration_minutes(value))
+
+    def test_hide_with_bad_reference_id(self) -> None:
+        response = self.client.post("/api/v1/references/nope/hide/")
+
+        self.assertEqual(response.status_code, status.HTTP_404_NOT_FOUND)
+        self.assertEqual(response.json()["code"], "not_found")
+
+    def test_scan_with_long_extension_is_saved(self) -> None:
+        name = "a." + "x" * 120
+        upload = SimpleUploadedFile(name, b"Cookies\n2 cups flour", content_type="text/plain")
+        with tempfile.TemporaryDirectory() as media, override_settings(MEDIA_ROOT=media):
+            response = self.client.post(
+                "/api/v1/imports/scan/", {"file": upload}, format="multipart"
+            )
+
+        self.assertEqual(response.status_code, status.HTTP_201_CREATED)
+        self.assertEqual(response.json()["source_document"]["original_filename"], name)
