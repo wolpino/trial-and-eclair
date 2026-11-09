@@ -1,21 +1,12 @@
-import { expect, test, type Cookie, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+import { authFile } from "./auth";
 
 // Card View on a phone (decision 003, Card View; issue #64).
 
-// Login is throttled (20 an hour per address), so tests share one session.
-let sessionCookies: Cookie[] | null = null;
+test.use({ storageState: authFile("cook") });
 
-async function logIn(page: Page) {
-  if (!sessionCookies) {
-    await page.goto("/");
-    await page.getByLabel("Username").fill("cook");
-    await page.getByLabel("Password").fill("cookpass123");
-    await page.getByRole("button", { name: "Log in" }).click();
-    await expect(page).toHaveURL(/\/recipe-box\/?$/);
-    sessionCookies = await page.context().cookies();
-    return;
-  }
-  await page.context().addCookies(sessionCookies);
+async function openBox(page: Page) {
   await page.goto("/recipe-box");
   await expect(page).toHaveURL(/\/recipe-box\/?$/);
 }
@@ -123,7 +114,7 @@ test.describe("sideways", () => {
   test.use({ viewport: { width: 844, height: 390 } });
 
   test("ingredients and steps sit side by side, ingredients on the left", async ({ page }) => {
-    await logIn(page);
+    await openBox(page);
     const cardView = await openCardView(page);
     const left = (await band(cardView).boundingBox())!;
     const right = (await stepsRegion(cardView).boundingBox())!;
@@ -142,7 +133,7 @@ test.describe("portrait", () => {
     page,
   }) => {
     await useLongBiscotti(page);
-    await logIn(page);
+    await openBox(page);
     const cardView = await openCardView(page);
 
     const top = (await band(cardView).boundingBox())!;
@@ -173,7 +164,7 @@ test.describe("portrait", () => {
 
   test("a long recipe scrolls; Turn over shows notes, source and the scan", async ({ page }) => {
     await useLongBiscotti(page);
-    await logIn(page);
+    await openBox(page);
     const cardView = await openCardView(page);
 
     const steps = stepsRegion(cardView);
@@ -196,7 +187,7 @@ test.describe("portrait", () => {
   test("tapping a step marks it, tapping an ingredient ticks it; reopening clears both", async ({
     page,
   }) => {
-    await logIn(page);
+    await openBox(page);
     let cardView = await openCardView(page);
     const first = cardView.getByRole("button", { name: /^Shape two logs/ });
     const second = cardView.getByRole("button", { name: /^Slice, bake/ });
@@ -223,7 +214,7 @@ test.describe("portrait", () => {
 
   test("the screen stays awake while the card is open; ☀ turns it off", async ({ page }) => {
     await stubWakeLock(page);
-    await logIn(page);
+    await openBox(page);
     const cardView = await openCardView(page);
     await expect.poll(() => wakeLog(page)).toEqual(["request:screen"]);
 
@@ -249,13 +240,13 @@ test.describe("portrait", () => {
     await page.addInitScript(() => {
       Object.defineProperty(navigator, "wakeLock", { configurable: true, value: undefined });
     });
-    await logIn(page);
+    await openBox(page);
     const cardView = await openCardView(page);
     await expect(cardView.getByRole("button", { name: "Keep screen on" })).toHaveCount(0);
   });
 
   test("no servings scaler or unit toggle", async ({ page }) => {
-    await logIn(page);
+    await openBox(page);
     const cardView = await openCardView(page);
     for (const role of ["button", "combobox", "slider", "spinbutton", "switch"] as const) {
       await expect(
@@ -267,7 +258,7 @@ test.describe("portrait", () => {
   test("Edit turns the card into fields in the same layout; Cancel discards, Done saves", async ({
     page,
   }) => {
-    await logIn(page);
+    await openBox(page);
     const csrf = (await page.context().cookies()).find((c) => c.name === "csrftoken")?.value ?? "";
     const headers = { "X-CSRFToken": csrf };
     const title = `Zest Card Edit Check ${Date.now()}`;
@@ -353,7 +344,7 @@ test.describe("portrait", () => {
   });
 
   test("Full editor in the card menu opens the whole card editor", async ({ page }) => {
-    await logIn(page);
+    await openBox(page);
     const cardView = await openCardView(page);
     await cardView.getByRole("button", { name: "Card menu" }).click();
     await cardView.getByRole("menuitem", { name: "Full editor" }).click();

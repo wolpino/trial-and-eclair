@@ -1,24 +1,10 @@
-import { expect, test, type Cookie, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
+
+import { authFile } from "./auth";
 
 // Focused views open over a faded kitchen, with one "back to kitchen" (decision 004, issue #85).
 
-test.use({ viewport: { width: 1280, height: 800 } });
-
-// Login is throttled (20 an hour per address), so the tests share one session.
-let session: Cookie[] | null = null;
-
-async function logIn(page: Page) {
-  if (!session) {
-    await page.goto("/login");
-    await page.getByLabel("Username").fill("dev");
-    await page.getByLabel("Password").fill("devpass123");
-    await page.getByRole("button", { name: "Log in" }).click();
-    await expect(page).not.toHaveURL(/\/login/);
-    session = await page.context().cookies();
-  } else {
-    await page.context().addCookies(session);
-  }
-}
+test.use({ viewport: { width: 1280, height: 800 }, storageState: authFile("dev") });
 
 function backdrop(page: Page): Locator {
   return page.locator(".kitchen-backdrop");
@@ -56,7 +42,6 @@ const views: [string, string][] = [
 test("each focused view sits over the faded kitchen and goes back to the kitchen", async ({
   page,
 }) => {
-  await logIn(page);
   for (const [path, heading] of views) {
     await page.goto(path);
     await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible();
@@ -72,7 +57,6 @@ test("each focused view sits over the faded kitchen and goes back to the kitchen
 test("a deep link loads straight into its view and the browser's back button works", async ({
   page,
 }) => {
-  await logIn(page);
   const response = await page.request.get("/api/v1/recipes/");
   expect(response.ok()).toBe(true);
   const recipes = (await response.json()) as { id: number | string }[];
@@ -108,7 +92,6 @@ async function viewAnimation(page: Page) {
 test("the view zooms in, and with reduced motion it only fades briefly or switches", async ({
   page,
 }) => {
-  await logIn(page);
   await page.goto("/references");
   await expectFocusedView(page);
   const normal = await viewAnimation(page);

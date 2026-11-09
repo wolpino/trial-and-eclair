@@ -1,24 +1,13 @@
-import { expect, test, type Cookie, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
+
+import { authFile } from "./auth";
 
 // Home cooks open a read-only sample board and notebook from the kitchen (issue #86).
 // Sample content comes from seed/data/sample_kitchen.json (load_sample_kitchen).
 
-test.use({ viewport: { width: 1280, height: 800 } });
-
-// Login is throttled (20 an hour per address), so tests share one session.
-let cookSession: Cookie[] | null = null;
+test.use({ viewport: { width: 1280, height: 800 }, storageState: authFile("cook") });
 
 async function openKitchenAsCook(page: Page) {
-  if (!cookSession) {
-    await page.goto("/login");
-    await page.getByLabel("Username").fill("cook");
-    await page.getByLabel("Password").fill("cookpass123");
-    await page.getByRole("button", { name: "Log in" }).click();
-    await expect(page).not.toHaveURL(/\/login/);
-    cookSession = await page.context().cookies();
-  } else {
-    await page.context().addCookies(cookSession);
-  }
   await page.goto("/");
   await expect(kitchen(page)).toBeVisible();
 }

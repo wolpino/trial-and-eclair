@@ -1,21 +1,12 @@
-import { expect, test, type Cookie, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
+
+import { authFile } from "./auth";
 
 // The simpler kitchen on a phone, upright and sideways (decision 004, issue #87).
 
-// Login is throttled, so every test in this file shares one session.
-let session: Cookie[] | null = null;
+test.use({ storageState: authFile("cook") });
 
 async function openKitchen(page: Page) {
-  if (!session) {
-    await page.goto("/login");
-    await page.getByLabel("Username").fill("cook");
-    await page.getByLabel("Password").fill("cookpass123");
-    await page.getByRole("button", { name: "Log in" }).click();
-    await expect(page).not.toHaveURL(/\/login/);
-    session = await page.context().cookies();
-  } else {
-    await page.context().addCookies(session);
-  }
   await page.goto("/");
   await expect(kitchen(page)).toBeVisible();
 }

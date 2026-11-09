@@ -2,6 +2,8 @@ import { expect, test, type Page } from "@playwright/test";
 
 import { bakersPercentages, gramsOf, scaledQuantity } from "../src/lib/bakersPercent";
 
+import { authFile } from "./auth";
+
 function line(name: string, quantity: string | null, unit = "", custom_unit = "") {
   return { ingredient_name: name, quantity, unit, custom_unit };
 }
@@ -66,13 +68,6 @@ async function csrfHeader(page: Page): Promise<Record<string, string>> {
   const cookies = await page.context().cookies();
   const token = cookies.find((cookie) => cookie.name === "csrftoken")?.value ?? "";
   return { "X-CSRFToken": token };
-}
-
-async function signIn(page: Page) {
-  const response = await page.request.post("/api/v1/auth/login/", {
-    data: { username: "dev", password: "devpass123" },
-  });
-  expect(response.ok(), await response.text()).toBeTruthy();
 }
 
 async function post<T>(page: Page, url: string, data: unknown): Promise<T> {
@@ -153,10 +148,9 @@ async function checkPanelFollowsDisplayedVersion(page: Page) {
 }
 
 test.describe("Baker's % in the Lab", () => {
-  test.use({ viewport: { width: 1280, height: 900 } });
+  test.use({ viewport: { width: 1280, height: 900 }, storageState: authFile("dev") });
 
   test("shows percentages and scales weight lines to a new flour weight", async ({ page }) => {
-    await signIn(page);
     const id = await seedLabRecipe(page, `Bakers loaf ${Date.now()}`, [
       { name: "bread flour", quantity: "500", unit: "gram" },
       { name: "water", quantity: "350", unit: "gram" },
@@ -189,7 +183,6 @@ test.describe("Baker's % in the Lab", () => {
   });
 
   test("says so when there is no flour line", async ({ page }) => {
-    await signIn(page);
     const id = await seedLabRecipe(page, `No flour ${Date.now()}`, [
       { name: "cream", quantity: "200", unit: "gram" },
     ]);

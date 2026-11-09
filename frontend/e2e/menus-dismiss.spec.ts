@@ -1,21 +1,8 @@
-import { expect, test, type Cookie, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
-// Login is throttled (20 an hour per address), so tests share one session.
-let sessionCookies: Cookie[] | null = null;
+import { authFile } from "./auth";
 
-async function logIn(page: Page, path: string) {
-  if (!sessionCookies) {
-    await page.goto("/");
-    await page.getByLabel("Username").fill("dev");
-    await page.getByLabel("Password").fill("devpass123");
-    await page.getByRole("button", { name: "Log in" }).click();
-    await expect(page).not.toHaveURL(/\/(login)?$/);
-    sessionCookies = await page.context().cookies();
-  } else {
-    await page.context().addCookies(sessionCookies);
-  }
-  await page.goto(path);
-}
+test.use({ storageState: authFile("dev") });
 
 function details(page: Page, name: string) {
   return page.locator("details", { has: page.locator("summary", { hasText: name }) });
@@ -29,7 +16,7 @@ test.describe("header menus", () => {
     test(`${name} closes on an outside click and on Escape, not on a click inside`, async ({
       page,
     }) => {
-      await logIn(page, "/references");
+      await page.goto("/references");
       const menu = details(page, name);
       const summary = menu.locator("summary");
 
@@ -49,7 +36,7 @@ test.describe("header menus", () => {
   }
 
   test("opening one header menu closes the other", async ({ page }) => {
-    await logIn(page, "/references");
+    await page.goto("/references");
     const account = details(page, "Account");
     const more = details(page, "More");
 
@@ -67,7 +54,7 @@ test.describe("header menus", () => {
   test("a click outside an open menu only closes it; a link under it does not navigate", async ({
     page,
   }) => {
-    await logIn(page, "/references");
+    await page.goto("/references");
     const account = details(page, "Account");
     await account.locator("summary").click();
     await expect(account).toHaveAttribute("open", "");
@@ -78,7 +65,7 @@ test.describe("header menus", () => {
   });
 
   test("a press outside that turns into a scroll doesn't eat the next click", async ({ page }) => {
-    await logIn(page, "/references");
+    await page.goto("/references");
     const account = details(page, "Account");
     await account.locator("summary").click();
     await expect(account).toHaveAttribute("open", "");
@@ -98,7 +85,7 @@ test.describe("header menus", () => {
 test("the A–Z fan closes on an outside click and stays open on a click inside", async ({
   page,
 }) => {
-  await logIn(page, "/recipe-box");
+  await page.goto("/recipe-box");
   const tab = page.getByRole("group", { name: "Divider tabs" }).getByRole("button").first();
   const fan = page.locator("#phone-box-fan");
 
@@ -113,7 +100,7 @@ test("the A–Z fan closes on an outside click and stays open on a click inside"
 });
 
 test("tapping the lid card while the fan is open only closes the fan", async ({ page }) => {
-  await logIn(page, "/recipe-box");
+  await page.goto("/recipe-box");
   const tab = page.getByRole("group", { name: "Divider tabs" }).getByRole("button").first();
   const fan = page.locator("#phone-box-fan");
   const card = page.locator(".phone-box-lid__card");
@@ -133,7 +120,7 @@ test("tapping the lid card while the fan is open only closes the fan", async ({ 
 
 test.describe("cork board drawers", () => {
   test("the Pin idea drawer closes on Escape", async ({ page }) => {
-    await logIn(page, "/developer");
+    await page.goto("/developer");
     await page.getByRole("button", { name: "Pin new idea" }).click();
     const drawer = page.getByRole("dialog", { name: "Pin a new idea" });
     await expect(drawer).toBeVisible();
@@ -145,7 +132,7 @@ test.describe("cork board drawers", () => {
   });
 
   test("the Edit idea drawer closes on Escape", async ({ page }) => {
-    await logIn(page, "/developer");
+    await page.goto("/developer");
     await page
       .getByRole("region", { name: "Pinned ideas" })
       .getByRole("button")
@@ -162,7 +149,7 @@ test.describe("cork board drawers", () => {
 });
 
 test("the Lab Tools panel on a phone ignores outside clicks and Escape", async ({ page }) => {
-  await logIn(page, "/developer/lab");
+  await page.goto("/developer/lab");
   await page.locator('a[href^="/developer/lab/"]').first().click();
   const tools = page.locator("details.lab-phone-tools");
   await tools.locator("summary").click();

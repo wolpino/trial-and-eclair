@@ -1,24 +1,19 @@
-import { expect, test, type Cookie, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
+
+import { authFile, signedOut } from "./auth";
 
 // Focused views have a places menu top-left and the account menu top-right,
 // and no top nav strip (decision 004, issue #136).
 
-test.use({ viewport: { width: 1280, height: 800 } });
+test.use({ viewport: { width: 1280, height: 800 }, storageState: authFile("dev") });
 
-// Login is throttled (20 an hour per address), so tests share one session per user.
-const sessions: Record<string, Cookie[]> = {};
-
-async function logIn(page: Page, username: "dev" | "cook") {
-  if (!sessions[username]) {
-    await page.goto("/login");
-    await page.getByLabel("Username").fill(username);
-    await page.getByLabel("Password").fill(`${username}pass123`);
-    await page.getByRole("button", { name: "Log in" }).click();
-    await expect(page).not.toHaveURL(/\/login/);
-    sessions[username] = await page.context().cookies();
-  } else {
-    await page.context().addCookies(sessions[username]);
-  }
+/** A login of its own, for the test that logs out (logout ends the server session). */
+async function logInWithForm(page: Page) {
+  await page.goto("/login");
+  await page.getByLabel("Username").fill("cook");
+  await page.getByLabel("Password").fill("cookpass123");
+  await page.getByRole("button", { name: "Log in" }).click();
+  await expect(page).not.toHaveURL(/\/login/);
 }
 
 function kitchenLink(page: Page): Locator {
@@ -46,7 +41,6 @@ const views: [string, string][] = [
 ];
 
 test("no focused view has the top nav strip; Kitchen goes home", async ({ page }) => {
-  await logIn(page, "dev");
   for (const [path, heading] of views) {
     await page.goto(path);
     await expect(page.getByRole("heading", { level: 1, name: heading })).toBeVisible();
@@ -65,7 +59,6 @@ test("no focused view has the top nav strip; Kitchen goes home", async ({ page }
 });
 
 test("from the Lab, the places menu goes straight to the cork board", async ({ page }) => {
-  await logIn(page, "dev");
   await page.goto("/developer/lab");
   await expect(page.getByRole("heading", { level: 1, name: "Lab" })).toBeVisible();
 
@@ -109,7 +102,6 @@ test("from the Lab, the places menu goes straight to the cork board", async ({ p
 test("the places menu works by keyboard and closes on Escape and outside clicks", async ({
   page,
 }) => {
-  await logIn(page, "dev");
   await page.goto("/references");
   const button = placesButton(page);
 
@@ -145,29 +137,34 @@ test("the places menu works by keyboard and closes on Escape and outside clicks"
   await expect(button).toBeFocused();
 });
 
-test("a home cook sees no developer places, and the account menu top-right logs out", async ({
-  page,
-}) => {
-  await logIn(page, "cook");
-  await page.goto("/recipe-box");
-  await expect(page.getByRole("heading", { level: 1, name: "Recipe box" })).toBeVisible();
+// Logs out, so it signs in with the form in a context of its own.
+test.describe("logging out", () => {
+  test.use({ storageState: signedOut });
 
-  await placesButton(page).click();
-  await expect(placesList(page).getByRole("link")).toHaveText(["Box", "Shelf"]);
-  await expect(placesList(page).getByRole("link", { name: "Box" })).toHaveAttribute(
-    "aria-current",
-    "page",
-  );
-  await page.keyboard.press("Escape");
+  test("a home cook sees no developer places, and the account menu top-right logs out", async ({
+    page,
+  }) => {
+    await logInWithForm(page);
+    await page.goto("/recipe-box");
+    await expect(page.getByRole("heading", { level: 1, name: "Recipe box" })).toBeVisible();
 
-  const account = page.getByText("Account", { exact: true });
-  await expect(account).toBeVisible();
-  const box = (await account.boundingBox())!;
-  expect(box.x + box.width).toBeGreaterThan(1280 - 120);
-  expect(box.y).toBeLessThan(80);
+    await placesButton(page).click();
+    await expect(placesList(page).getByRole("link")).toHaveText(["Box", "Shelf"]);
+    await expect(placesList(page).getByRole("link", { name: "Box" })).toHaveAttribute(
+      "aria-current",
+      "page",
+    );
+    await page.keyboard.press("Escape");
 
-  await account.click();
-  await page.getByRole("button", { name: "Log out" }).click();
-  await expect(page).toHaveURL(/\/$/);
-  await expect(page.getByLabel("Username")).toBeVisible();
+    const account = page.getByText("Account", { exact: true });
+    await expect(account).toBeVisible();
+    const box = (await account.boundingBox())!;
+    expect(box.x + box.width).toBeGreaterThan(1280 - 120);
+    expect(box.y).toBeLessThan(80);
+
+    await account.click();
+    await page.getByRole("button", { name: "Log out" }).click();
+    await expect(page).toHaveURL(/\/$/);
+    await expect(page.getByLabel("Username")).toBeVisible();
+  });
 });

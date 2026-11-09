@@ -9,6 +9,8 @@ import {
   quantityWords,
 } from "../src/lib/recipeFormat";
 
+import { authFile, signedOut } from "./auth";
+
 // Decision 003, Ingredient text: one formatter for every screen.
 const LINES = [
   { name: "Flour", quantity: "0.75", unit: "cup" },
@@ -117,13 +119,6 @@ async function csrfHeader(page: Page): Promise<Record<string, string>> {
   return { "X-CSRFToken": token };
 }
 
-async function signIn(page: Page) {
-  const response = await page.request.post("/api/v1/auth/login/", {
-    data: { username: "dev", password: "devpass123" },
-  });
-  expect(response.ok(), await response.text()).toBeTruthy();
-}
-
 async function post<T>(page: Page, url: string, data: unknown): Promise<T> {
   const response = await page.request.post(url, { data, headers: await csrfHeader(page) });
   expect(response.ok(), `${url}: ${await response.text()}`).toBeTruthy();
@@ -182,20 +177,21 @@ async function seedRecipes(page: Page): Promise<Seeded> {
 
 test.describe("ingredient lines on every screen", () => {
   test.describe.configure({ mode: "serial" });
-  test.use({ viewport: { width: 1280, height: 900 } });
+  test.use({ viewport: { width: 1280, height: 900 }, storageState: authFile("dev") });
 
   let seeded: Seeded;
 
   test.beforeAll(async ({ browser }) => {
-    const context = await browser.newContext({ baseURL: "http://127.0.0.1:8010" });
+    const context = await browser.newContext({
+      baseURL: "http://127.0.0.1:8010",
+      storageState: authFile("dev"),
+    });
     const page = await context.newPage();
-    await signIn(page);
     seeded = await seedRecipes(page);
     await context.close();
   });
 
   test("the wide box card reads like a recipe and keeps raw_text", async ({ page }) => {
-    await signIn(page);
     await page.goto(`/recipe-box/${seeded.boxId}`);
     const list = page.locator(".recipe-box-card__ingredients");
     for (const text of EXPECTED) {
@@ -207,7 +203,6 @@ test.describe("ingredient lines on every screen", () => {
   });
 
   test("the notebook recipe view reads like a recipe", async ({ page }) => {
-    await signIn(page);
     await page.goto(`/developer/lab/${seeded.labId}`);
     // The list only: the add form's unit picker rightly offers "whole".
     const list = page.getByRole("region", { name: "Ingredients" }).getByRole("list");
@@ -218,20 +213,24 @@ test.describe("ingredient lines on every screen", () => {
     await expect(list).not.toContainText(/\d\.\d/);
   });
 
-  test("the public recipe page reads like a recipe, fractions in words", async ({ page }) => {
-    await page.goto(`/r/${seeded.slug}`);
-    const list = page.locator(".ingredient-list");
-    for (const text of EXPECTED) {
-      await expect(list.getByText(text, { exact: true })).toBeVisible();
-    }
-    await expect(list).not.toContainText("whole");
-    await expect(list).not.toContainText(/\d\.\d/);
-    await expect(list.getByRole("img", { name: "three quarters" })).toHaveText("¾");
-    await expect(list.getByRole("img", { name: "one and a half" })).toHaveText("1½");
+  test.describe("as a visitor", () => {
+    test.use({ storageState: signedOut });
+
+    test("the public recipe page reads like a recipe, fractions in words", async ({ page }) => {
+      await page.goto(`/r/${seeded.slug}`);
+      const list = page.locator(".ingredient-list");
+      for (const text of EXPECTED) {
+        await expect(list.getByText(text, { exact: true })).toBeVisible();
+      }
+      await expect(list).not.toContainText("whole");
+      await expect(list).not.toContainText(/\d\.\d/);
+      await expect(list.getByRole("img", { name: "three quarters" })).toHaveText("¾");
+      await expect(list.getByRole("img", { name: "one and a half" })).toHaveText("1½");
+    });
   });
 
+
   test("editing a box line saves raw_text", async ({ page }) => {
-    await signIn(page);
     await page.goto(`/recipe-box/${seeded.boxId}`);
     const list = page.locator(".recipe-box-card__ingredients");
     await list

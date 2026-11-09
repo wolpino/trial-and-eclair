@@ -1,23 +1,16 @@
-import { expect, test, type Cookie, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Locator, type Page } from "@playwright/test";
+
+import { authFile } from "./auth";
 
 // The kitchen scene home on wide screens (decision 004, issue #84).
 
-test.use({ viewport: { width: 1280, height: 800 }, timezoneId: "UTC" });
+test.use({
+  viewport: { width: 1280, height: 800 },
+  timezoneId: "UTC",
+  storageState: authFile("dev"),
+});
 
-// Login is throttled (20 an hour per address), so tests share one session per user.
-const sessions: Record<string, Cookie[]> = {};
-
-async function openKitchen(page: Page, username: "dev" | "cook") {
-  if (!sessions[username]) {
-    await page.goto("/login");
-    await page.getByLabel("Username").fill(username);
-    await page.getByLabel("Password").fill(`${username}pass123`);
-    await page.getByRole("button", { name: "Log in" }).click();
-    await expect(page).not.toHaveURL(/\/login/);
-    sessions[username] = await page.context().cookies();
-  } else {
-    await page.context().addCookies(sessions[username]);
-  }
+async function openKitchen(page: Page) {
   await page.goto("/");
   await expect(kitchen(page)).toBeVisible();
 }
@@ -52,7 +45,7 @@ async function tabTo(page: Page, target: Locator) {
 test("a developer sees the shelf, board, notebook, box and clock, and each opens its route", async ({
   page,
 }) => {
-  await openKitchen(page, "dev");
+  await openKitchen(page);
   const k = kitchen(page);
 
   const objects: [Locator, RegExp][] = [
@@ -74,7 +67,7 @@ test("a developer sees the shelf, board, notebook, box and clock, and each opens
 });
 
 test("the shelf shows only cookbooks set on_shelf", async ({ page }) => {
-  await openKitchen(page, "dev");
+  await openKitchen(page);
   const book = shelf(page).getByRole("link", { name: "Cookbook: Summer tests" });
 
   await setOnShelf(page, "Summer tests", false);
@@ -94,7 +87,7 @@ test("the shelf shows only cookbooks set on_shelf", async ({ page }) => {
 
 test("the clock shows the current hour and minute", async ({ page }) => {
   await page.clock.install({ time: new Date("2026-10-23T15:07:00Z") });
-  await openKitchen(page, "dev");
+  await openKitchen(page);
   const clock = kitchen(page).getByRole("img", { name: /^Clock/ });
   await expect(clock).toHaveAccessibleName("Clock, 3:07 PM");
 
@@ -103,7 +96,7 @@ test("the clock shows the current hour and minute", async ({ page }) => {
 });
 
 test("the account menu is top-right and the old top nav is gone on /", async ({ page }) => {
-  await openKitchen(page, "dev");
+  await openKitchen(page);
   await expect(page.getByRole("navigation", { name: "Places" })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Back", exact: true })).toHaveCount(0);
 
@@ -118,7 +111,7 @@ test("the account menu is top-right and the old top nav is gone on /", async ({ 
 });
 
 test("every object can be reached and opened with the keyboard", async ({ page }) => {
-  await openKitchen(page, "dev");
+  await openKitchen(page);
   const k = kitchen(page);
 
   const objects: [Locator, RegExp][] = [

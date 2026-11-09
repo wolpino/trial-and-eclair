@@ -1,23 +1,9 @@
-import { expect, test, type Cookie, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
+
+import { authFile } from "./auth";
 
 // The Lab is a wide-screen view.
-test.use({ viewport: { width: 1280, height: 900 } });
-
-// Login is throttled (20 an hour per address), so tests share one session.
-let sessionCookies: Cookie[] | null = null;
-
-async function logIn(page: Page) {
-  if (sessionCookies) {
-    await page.context().addCookies(sessionCookies);
-    return;
-  }
-  await page.goto("/login");
-  await page.getByLabel("Username").fill("dev");
-  await page.getByLabel("Password").fill("devpass123");
-  await page.getByRole("button", { name: "Log in" }).click();
-  await expect(page).not.toHaveURL(/\/login/);
-  sessionCookies = await page.context().cookies();
-}
+test.use({ viewport: { width: 1280, height: 900 }, storageState: authFile("dev") });
 
 /** Makes a fresh Lab recipe through the API and opens it. */
 async function openNewLabRecipe(page: Page, title: string) {
@@ -36,7 +22,6 @@ async function openNewLabRecipe(page: Page, title: string) {
 test("a developer logs oven temperature, bake time and rating, and they stay after a reload", async ({
   page,
 }) => {
-  await logIn(page);
   const sessions = await openNewLabRecipe(page, `Bake fields ${Date.now()}`);
   await expect(sessions.getByText("No bake sessions logged yet.")).toBeVisible();
 
@@ -62,7 +47,6 @@ test("a developer logs oven temperature, bake time and rating, and they stay aft
 });
 
 test("a bake session with no temperature, time or rating still saves", async ({ page }) => {
-  await logIn(page);
   const sessions = await openNewLabRecipe(page, `Bare session ${Date.now()}`);
   await expect(sessions.getByText("No bake sessions logged yet.")).toBeVisible();
 

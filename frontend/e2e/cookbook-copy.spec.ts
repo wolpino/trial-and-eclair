@@ -1,16 +1,14 @@
 import { expect, test } from "@playwright/test";
 
+import { authFile } from "./auth";
+
+test.use({ storageState: authFile("dev") });
+
 // A cookbook entry is a copy: the public page shows the recipe as it was added,
 // even after the Lab recipe changes.
 test("a published cookbook shows each recipe's copy, unchanged by later Lab edits", async ({
   page,
 }) => {
-  await page.goto("/login");
-  await page.getByLabel("Username").fill("dev");
-  await page.getByLabel("Password").fill("devpass123");
-  await page.getByRole("button", { name: "Log in" }).click();
-  await expect(page).not.toHaveURL(/\/login/);
-
   const cookies = await page.context().cookies();
   const csrf = cookies.find((cookie) => cookie.name === "csrftoken")?.value ?? "";
   const api = page.request;
@@ -76,12 +74,6 @@ test("a published cookbook shows each recipe's copy, unchanged by later Lab edit
 test("a cookbook entry whose Lab recipe was deleted still shows its copy, with no Lab link", async ({
   page,
 }) => {
-  await page.goto("/login");
-  await page.getByLabel("Username").fill("dev");
-  await page.getByLabel("Password").fill("devpass123");
-  await page.getByRole("button", { name: "Log in" }).click();
-  await expect(page).not.toHaveURL(/\/login/);
-
   const cookies = await page.context().cookies();
   const csrf = cookies.find((cookie) => cookie.name === "csrftoken")?.value ?? "";
   const headers = { "X-CSRFToken": csrf };

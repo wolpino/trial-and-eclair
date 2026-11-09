@@ -1,27 +1,27 @@
 import { expect, test } from "@playwright/test";
 
-test("a developer puts a cookbook on the shelf and it sticks", async ({ page }) => {
-  await page.goto("/login");
-  await page.getByLabel("Username").fill("dev");
-  await page.getByLabel("Password").fill("devpass123");
-  await page.getByRole("button", { name: "Log in" }).click();
-  await expect(page).not.toHaveURL(/\/login/);
+import { authFile } from "./auth";
 
-  await page.goto("/developer/cookbooks");
-  const onShelf = page.getByRole("checkbox", { name: "On shelf: Summer tests" });
-  await expect(onShelf).toBeVisible();
-  const before = await onShelf.isChecked();
+test.describe("as dev", () => {
+  test.use({ storageState: authFile("dev") });
 
-  await onShelf.setChecked(!before);
-  await expect(onShelf).toBeEnabled();
-  await page.reload();
-  await expect(onShelf).toBeChecked({ checked: !before });
+  test("a developer puts a cookbook on the shelf and it sticks", async ({ page }) => {
+    await page.goto("/developer/cookbooks");
+    const onShelf = page.getByRole("checkbox", { name: "On shelf: Summer tests" });
+    await expect(onShelf).toBeVisible();
+    const before = await onShelf.isChecked();
 
-  // Put it back so reruns against the same server start the same way.
-  await onShelf.setChecked(before);
-  await expect(onShelf).toBeEnabled();
-  await page.reload();
-  await expect(onShelf).toBeChecked({ checked: before });
+    await onShelf.setChecked(!before);
+    await expect(onShelf).toBeEnabled();
+    await page.reload();
+    await expect(onShelf).toBeChecked({ checked: !before });
+
+    // Put it back so reruns against the same server start the same way.
+    await onShelf.setChecked(before);
+    await expect(onShelf).toBeEnabled();
+    await page.reload();
+    await expect(onShelf).toBeChecked({ checked: before });
+  });
 });
 
 test("a developer with no Lab recipes sees what to do first", async ({ page }) => {
