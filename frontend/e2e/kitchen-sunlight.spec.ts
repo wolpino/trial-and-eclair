@@ -1,25 +1,11 @@
-import { expect, test, type Browser, type Cookie, type Locator, type Page } from "@playwright/test";
+import { expect, test, type Browser, type Locator, type Page } from "@playwright/test";
+
+import { authFile } from "./auth";
 
 // Kitchen sunlight that follows the device clock (issue #88, decision 004).
 
 const VIEW = { viewport: { width: 1280, height: 800 }, timezoneId: "UTC" };
-test.use(VIEW);
-
-// Login is throttled (20 an hour per address), so every test reuses one session.
-let session: Cookie[] | null = null;
-
-async function signIn(page: Page) {
-  if (session) {
-    await page.context().addCookies(session);
-    return;
-  }
-  await page.goto("/login");
-  await page.getByLabel("Username").fill("dev");
-  await page.getByLabel("Password").fill("devpass123");
-  await page.getByRole("button", { name: "Log in" }).click();
-  await expect(page).not.toHaveURL(/\/login/);
-  session = await page.context().cookies();
-}
+test.use({ ...VIEW, storageState: authFile("dev") });
 
 /** Records any use of the geolocation API so a test can assert there was none. */
 async function spyOnGeolocation(page: Page) {
@@ -42,7 +28,6 @@ async function spyOnGeolocation(page: Page) {
 
 async function openKitchenAt(page: Page, time: string): Promise<Locator> {
   await page.clock.install({ time: new Date(time) });
-  await signIn(page);
   await page.goto("/");
   await expect(page.getByRole("main", { name: "Kitchen" })).toBeVisible();
   const light = page.getByTestId("kitchen-light");
@@ -64,7 +49,11 @@ async function readLight(light: Locator): Promise<LightState> {
 }
 
 async function lightAt(browser: Browser, time: string): Promise<LightState> {
-  const context = await browser.newContext({ ...VIEW, baseURL: "http://127.0.0.1:8010" });
+  const context = await browser.newContext({
+    ...VIEW,
+    baseURL: "http://127.0.0.1:8010",
+    storageState: authFile("dev"),
+  });
   const page = await context.newPage();
   try {
     return await readLight(await openKitchenAt(page, time));

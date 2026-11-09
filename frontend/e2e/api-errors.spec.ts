@@ -2,6 +2,8 @@ import { expect, test, type Page } from "@playwright/test";
 
 import { ApiError, toApiError } from "../src/api/client";
 
+import { authFile } from "./auth";
+
 // Unit checks for the one place the app turns an API error into text.
 function jsonResponse(status: number, body: unknown, headers: Record<string, string> = {}) {
   return new Response(JSON.stringify(body), {
@@ -97,11 +99,10 @@ test.describe("toApiError", () => {
 });
 
 test.describe("scan upload errors", () => {
+  test.use({ storageState: authFile("cook") });
+
   async function openScanPicker(page: Page) {
-    await page.goto("/");
-    await page.getByLabel("Username").fill("cook");
-    await page.getByLabel("Password").fill("cookpass123");
-    await page.getByRole("button", { name: "Log in" }).click();
+    await page.goto("/recipe-box");
     await expect(page).toHaveURL(/\/recipe-box\/?$/);
     await page.getByRole("button", { name: "Add recipe" }).click();
     return page.getByLabel("Photo or PDF");

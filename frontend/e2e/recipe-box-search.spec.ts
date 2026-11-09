@@ -1,7 +1,9 @@
-import { expect, test, type Cookie, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
 import type { CollectionRecipe, IngredientLine } from "../src/api/collection";
 import { matchesSearch } from "../src/lib/boxSearch";
+
+import { authFile } from "./auth";
 
 // Recipe box search by title or ingredient (Design Bash B1; issue #90).
 
@@ -63,20 +65,9 @@ test.describe("matchesSearch", () => {
   });
 });
 
-// Login is throttled (20 an hour per address), so tests share one session.
-let sessionCookies: Cookie[] | null = null;
+test.use({ storageState: authFile("cook") });
 
-async function logIn(page: Page) {
-  if (!sessionCookies) {
-    await page.goto("/");
-    await page.getByLabel("Username").fill("cook");
-    await page.getByLabel("Password").fill("cookpass123");
-    await page.getByRole("button", { name: "Log in" }).click();
-    await expect(page).toHaveURL(/\/recipe-box\/?$/);
-    sessionCookies = await page.context().cookies();
-    return;
-  }
-  await page.context().addCookies(sessionCookies);
+async function openBox(page: Page) {
   await page.goto("/recipe-box");
   await expect(page).toHaveURL(/\/recipe-box\/?$/);
 }
@@ -102,7 +93,7 @@ test.describe("phone", () => {
 
   test("search by ingredient, open a result, and clear back to the tabs", async ({ page }) => {
     await page.route("**/api/v1/starter-recipes/", (route) => route.fulfill({ json: [] }));
-    await logIn(page);
+    await openBox(page);
 
     const field = await openSearch(page);
     await field.fill("butter");
@@ -154,7 +145,7 @@ test.describe("wide screen", () => {
   test.use({ viewport: { width: 1280, height: 800 } });
 
   test("the same search filters the box", async ({ page }) => {
-    await logIn(page);
+    await openBox(page);
     const index = page.getByRole("tablist", { name: "A–Z index" });
     await expect(index.getByRole("tab", { name: "A" })).toBeVisible();
 

@@ -1,5 +1,10 @@
-import { expect, test, type Cookie, type Page } from "@playwright/test";
+import { expect, test, type Page } from "@playwright/test";
 
+import { authFile, signedOut } from "./auth";
+
+test.use({ storageState: authFile("cook") });
+
+/** A login of its own, for the test that signs out (that ends the server session). */
 async function logInWithForm(page: Page) {
   await page.goto("/");
   await page.getByLabel("Username").fill("cook");
@@ -8,16 +13,7 @@ async function logInWithForm(page: Page) {
   await expect(page).toHaveURL(/\/recipe-box\/?$/);
 }
 
-// Login is throttled (20 an hour per address), so tests share one session.
-let sessionCookies: Cookie[] | null = null;
-
-async function logIn(page: Page) {
-  if (!sessionCookies) {
-    await logInWithForm(page);
-    sessionCookies = await page.context().cookies();
-    return;
-  }
-  await page.context().addCookies(sessionCookies);
+async function openBox(page: Page) {
   await page.goto("/recipe-box");
   await expect(page).toHaveURL(/\/recipe-box\/?$/);
 }
@@ -84,7 +80,7 @@ test("the lid shows the first card and the tabs sit below it", async ({ page }) 
   await editBoxList(page, (recipes) =>
     recipes.map((r) => (r.title === "Almond Biscotti" ? { ...r, servings: 6 } : r)),
   );
-  await logIn(page);
+  await openBox(page);
 
   const card = lid(page);
   await expect(card.getByRole("heading", { name: "Almond Biscotti" })).toBeVisible();
@@ -100,7 +96,7 @@ test("the lid shows the first card and the tabs sit below it", async ({ page }) 
 });
 
 test("13 or more letters stagger the tabs in two rows, A, C, E… in front", async ({ page }) => {
-  await logIn(page);
+  await openBox(page);
   // Seed: A B C F G L O P R T V W Y Z (14 letters, no titles outside A–Z).
   await expect(tabs(page)).toHaveText(["A", "B", "C", "F", "G", "L", "O", "P", "R", "T", "V", "W", "Y", "Z"]);
 
@@ -132,7 +128,7 @@ for (const { count, drop } of [
     if (drop) {
       await editBoxList(page, (recipes) => recipes.filter((r) => !drop.test(r.title)));
     }
-    await logIn(page);
+    await openBox(page);
     await expect(tabs(page)).toHaveCount(count);
 
     const group = (await page.getByRole("group", { name: "Divider tabs" }).boundingBox())!;
@@ -174,7 +170,7 @@ test("12 or fewer letters keep the tabs in one row, with # only when used", asyn
     const sample = kept[0]!;
     return [...kept, { ...sample, id: "00000000-0000-4000-8000-000000000777", title: "7-Layer Bars" }];
   });
-  await logIn(page);
+  await openBox(page);
 
   await expect(tabs(page)).toHaveText(["A", "C", "F", "G", "L", "O", "P", "R", "T", "V", "#"]);
   const firstY = (await tabs(page).first().boundingBox())!.y;
@@ -185,7 +181,7 @@ test("12 or fewer letters keep the tabs in one row, with # only when used", asyn
 });
 
 test("the phone box has no page header, Back/Forward or bottom bar", async ({ page }) => {
-  await logIn(page);
+  await openBox(page);
   await expect(lid(page)).toBeVisible();
   await expect(page.getByRole("button", { name: "Back", exact: true })).toHaveCount(0);
   await expect(page.getByRole("button", { name: "Forward", exact: true })).toHaveCount(0);
@@ -202,7 +198,7 @@ test("the phone box has no page header, Back/Forward or bottom bar", async ({ pa
 test("Back/Forward are gone; wide screens get one Back to kitchen (decision 004)", async ({
   page,
 }) => {
-  await logIn(page);
+  await openBox(page);
   await page.goto("/references");
   await expect(page.getByRole("navigation", { name: "Places" })).toBeVisible();
   await expect(page.getByRole("button", { name: "Back", exact: true })).toHaveCount(0);
@@ -218,7 +214,7 @@ test("Back/Forward are gone; wide screens get one Back to kitchen (decision 004)
 });
 
 test("a tab opens a fan of title-only cards that leaves the lid uncovered", async ({ page }) => {
-  await logIn(page);
+  await openBox(page);
   const tabP = page.getByRole("button", { name: /^P, 2 cards/ });
   await tabP.click();
   await expect(tabP).toHaveAttribute("aria-expanded", "true");
@@ -252,7 +248,7 @@ test("a tab opens a fan of title-only cards that leaves the lid uncovered", asyn
 });
 
 test("tapping the open tab again or Escape closes the fan", async ({ page }) => {
-  await logIn(page);
+  await openBox(page);
   const tabL = page.getByRole("button", { name: /^L, 1 card/ });
   const fan = page.getByRole("list", { name: "Cards under L" });
 
@@ -271,7 +267,7 @@ test("tapping the open tab again or Escape closes the fan", async ({ page }) => 
 test("tapping anywhere on the lid card opens Card View; no Open recipe button", async ({
   page,
 }) => {
-  await logIn(page);
+  await openBox(page);
   await expect(page.getByRole("button", { name: "Open recipe" })).toHaveCount(0);
 
   const card = page.locator(".phone-box-lid__card");
@@ -300,7 +296,7 @@ test("tapping anywhere on the lid card opens Card View; no Open recipe button", 
 
 test("Reduce Motion turns the flip into a crossfade", async ({ page }) => {
   await page.emulateMedia({ reducedMotion: "reduce" });
-  await logIn(page);
+  await openBox(page);
   await lid(page).click();
   const face = page.locator(".phone-cv__face");
   await expect(face).toBeVisible();
@@ -308,29 +304,33 @@ test("Reduce Motion turns the flip into a crossfade", async ({ page }) => {
   expect(animation).toBe("phone-cv-fade");
 });
 
-test("the menu lists Account, Add recipe, View, then Sign out", async ({ page }) => {
-  // Its own session: signing out ends it.
-  await logInWithForm(page);
-  const menu = await openMenu(page);
+// Signs out, so it logs in with the form in a context of its own.
+test.describe("signing out", () => {
+  test.use({ storageState: signedOut });
 
-  await expect(menu.getByRole("heading")).toHaveText(["Account", "Add recipe", "View"]);
-  await expect(menu).toContainText("cook");
-  await expect(menu.getByRole("button", { name: "Simple list" })).toHaveAttribute(
-    "aria-pressed",
-    "false",
-  );
-  await expect(menu).not.toContainText("Appearance");
-  await expect(menu.getByRole("button").last()).toHaveText("Sign out");
+  test("the menu lists Account, Add recipe, View, then Sign out", async ({ page }) => {
+    await logInWithForm(page);
+    const menu = await openMenu(page);
 
-  await page.keyboard.press("Escape");
-  await expect(menu).toBeHidden();
+    await expect(menu.getByRole("heading")).toHaveText(["Account", "Add recipe", "View"]);
+    await expect(menu).toContainText("cook");
+    await expect(menu.getByRole("button", { name: "Simple list" })).toHaveAttribute(
+      "aria-pressed",
+      "false",
+    );
+    await expect(menu).not.toContainText("Appearance");
+    await expect(menu.getByRole("button").last()).toHaveText("Sign out");
 
-  await (await openMenu(page)).getByRole("button", { name: "Sign out" }).click();
-  await expect(page.getByRole("heading", { name: "Log in" })).toBeVisible();
+    await page.keyboard.press("Escape");
+    await expect(menu).toBeHidden();
+
+    await (await openMenu(page)).getByRole("button", { name: "Sign out" }).click();
+    await expect(page.getByRole("heading", { name: "Log in" })).toBeVisible();
+  });
 });
 
 test("the floating + shows only while browsing and opens Add", async ({ page }) => {
-  await logIn(page);
+  await openBox(page);
   await expect(plus(page)).toBeVisible();
 
   await page.getByRole("button", { name: /^L, 1 card/ }).click();
@@ -353,7 +353,7 @@ test("the floating + shows only while browsing and opens Add", async ({ page }) 
 });
 
 test("Add recipe in the menu opens the same Add sheet", async ({ page }) => {
-  await logIn(page);
+  await openBox(page);
   const menu = await openMenu(page);
   await menu.getByRole("button", { name: /type, link or scan/i }).click();
   await expect(menu).toBeHidden();
@@ -364,13 +364,13 @@ test("Add recipe in the menu opens the same Add sheet", async ({ page }) => {
 
 test("the box front reads the first name and the year joined", async ({ page }) => {
   await editSignedInUser(page, { first_name: "Ari", date_joined: "2024-03-01T12:00:00Z" });
-  await logIn(page);
+  await openBox(page);
   await expect(page.locator(".phone-box-front")).toHaveText("Ari's Recipes · est. 2024");
 });
 
 test("the box front falls back to the username", async ({ page }) => {
   await editSignedInUser(page, { first_name: "", date_joined: "2023-07-09T12:00:00Z" });
-  await logIn(page);
+  await openBox(page);
   await expect(page.locator(".phone-box-front")).toHaveText("cook's Recipes · est. 2023");
 });
 
@@ -380,7 +380,7 @@ test("dark mode darkens the wood and keeps the card cream", async ({ page }) => 
   const cardPaper = () =>
     page.locator(".phone-box-lid__card").evaluate((el) => getComputedStyle(el).backgroundColor);
 
-  await logIn(page);
+  await openBox(page);
   expect(await frontWood()).toContain("rgb(176, 129, 77)");
 
   await page.emulateMedia({ colorScheme: "dark" });
@@ -391,7 +391,7 @@ test("dark mode darkens the wood and keeps the card cream", async ({ page }) => 
 
 test("nothing scrolls sideways at 360×640", async ({ page }) => {
   await page.setViewportSize({ width: 360, height: 640 });
-  await logIn(page);
+  await openBox(page);
   await expect(lid(page)).toBeVisible();
   const overflow = () =>
     page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth);
@@ -410,7 +410,7 @@ test("an empty box shows an Add your first recipe card in the lid", async ({ pag
     }
     await route.fallback();
   });
-  await logIn(page);
+  await openBox(page);
 
   await expect(tabs(page)).toHaveCount(0);
   const addFirst = lid(page).getByRole("button", { name: "Add your first recipe" });
@@ -420,7 +420,7 @@ test("an empty box shows an Add your first recipe card in the lid", async ({ pag
 });
 
 test("Simple list from the menu keeps open, add and edit working", async ({ page }) => {
-  await logIn(page);
+  await openBox(page);
   await (await openMenu(page)).getByRole("button", { name: "Simple list" }).click();
   await expect(lid(page)).toBeHidden();
   await expect(page.getByRole("group", { name: "Divider tabs" })).toHaveCount(0);

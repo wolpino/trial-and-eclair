@@ -1,13 +1,17 @@
-import { expect, test, type Page } from "@playwright/test";
+import { expect, test, type Browser, type Page } from "@playwright/test";
 
-// Uses the seeded cook and baker accounts from the local e2e database.
+import { authFile, type SeedUser } from "./auth";
 
-async function logIn(page: Page, username: string, password: string) {
-  await page.goto("/");
-  await page.getByLabel("Username").fill(username);
-  await page.getByLabel("Password").fill(password);
-  await page.getByRole("button", { name: "Log in" }).click();
-  await expect(page).toHaveURL(/\/recipe-box\/?$/);
+// Uses the seeded cook and baker sessions saved by auth.setup.ts.
+
+test.use({ storageState: authFile("cook") });
+
+async function pageAs(browser: Browser, user: SeedUser): Promise<Page> {
+  const context = await browser.newContext({
+    baseURL: "http://127.0.0.1:8010",
+    storageState: authFile(user),
+  });
+  return context.newPage();
 }
 
 function spine(page: Page, title: string) {
@@ -16,9 +20,7 @@ function spine(page: Page, title: string) {
     .locator(".reference-spine", { hasText: title });
 }
 
-test("defaults show as spines and can be taken off one shelf", async ({ browser }) => {
-  const cook = await browser.newPage();
-  await logIn(cook, "cook", "cookpass123");
+test("defaults show as spines and can be taken off one shelf", async ({ page: cook, browser }) => {
   await cook.goto("/references");
 
   await expect(spine(cook, "King Arthur Baking recipes")).toBeVisible();
@@ -32,14 +34,13 @@ test("defaults show as spines and can be taken off one shelf", async ({ browser 
   await expect(spine(cook, "Sally's Baking Addiction")).toBeVisible();
   await expect(spine(cook, "King Arthur Baking recipes")).toHaveCount(0);
 
-  const baker = await browser.newPage();
-  await logIn(baker, "baker", "bakerpass123");
+  const baker = await pageAs(browser, "baker");
   await baker.goto("/references");
   await expect(spine(baker, "King Arthur Baking recipes")).toBeVisible();
+  await baker.context().close();
 });
 
 test("a personal reference can still be deleted", async ({ page }) => {
-  await logIn(page, "cook", "cookpass123");
   await page.goto("/references");
 
   await page.getByLabel("Title").fill("My notebook blog");
