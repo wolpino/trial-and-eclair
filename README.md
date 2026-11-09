@@ -368,7 +368,7 @@ Counts live in Django's default cache (local memory), so each gunicorn worker ke
 
 Every error body is one of two forms (`config/exceptions.py`, DRF `EXCEPTION_HANDLER`):
 
-- **Everything except field validation:** `{"detail": "<message for the user>", "code": "<machine code>"}`. Codes include `invalid`, `parse_error`, `not_authenticated`, `permission_denied`, `not_found`, `throttled` (with a `Retry-After` header), `guest_card_limit`, `sample_read_only`, `fetch_failed` (502 from URL import) and `server_error`.
+- **Everything except field validation:** `{"detail": "<message for the user>", "code": "<machine code>"}`. Codes include `invalid`, `parse_error`, `not_authenticated`, `permission_denied`, `not_found`, `throttled` (with a `Retry-After` header), `guest_card_limit`, `sample_read_only`, `fetch_failed` (502 from URL import), `in_use` (409 when a delete is blocked because something else still uses the row) and `server_error`.
 - **Field validation (400):** DRF's map, `{"<field>": ["<message>"], "non_field_errors": ["<message>"]}`.
 
 Bodies never carry exception text. Domain errors subclass `config.exceptions.UserFacingError` and views return its fixed `user_message`; any other exception is logged and returns `500 {"detail": "Something went wrong on our side. Please try again.", "code": "server_error"}` (with `DEBUG` on, Django's debug page shows instead). The frontend reads errors only in `toApiError` (`frontend/src/api/client.ts`), which sets `ApiError.message` and `ApiError.code`. The audit of every error source is in [`docs/error-audit.md`](docs/error-audit.md).
