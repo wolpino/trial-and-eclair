@@ -33,7 +33,7 @@ Finish the 2026-11-08 checklist below: Phase 4 (done earlier that day), then Pha
 ### Open threads
 - Owner merges PR #164 (vite 8)
 - Owner on Render staging: the deploy with gunicorn 26 starts and `/admin/` loads; the PWA installs and updates with vite-plugin-pwa 2
-- e2e is not rerun-safe: on a reused server, run 2 fails 5 specs that change seed data (`references-defaults`, `recipe-box-phone`, `recipe-box-card-view`, `recipe-box-guest-phone`). This was already true before #163
+- e2e is not rerun-safe: on a reused server, run 2 fails 5 specs that change seed data (`references-defaults`, `recipe-box-phone`, `recipe-box-card-view`, `recipe-box-guest-phone`). This was already true before #163. Tracked in #132 (Tests)
 - Drafts #66–#69 wait for the owner's review
 
 <!-- AGENT_CONTEXT_START -->
