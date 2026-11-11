@@ -10,6 +10,95 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-11 · Kitchen layout: archive and rounds 1–4
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-11` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts) |
+| **Outcome** | partial (layout mostly settled; round 5 open; no code) |
+
+### Intent
+Collect every kitchen image so far, then rethink the kitchen as the site's navigation: put prime space on things that open something.
+
+### Summary
+- Archive of 143 kitchen images (inspiration photos, the in-app kitchen, style study, tuning board options, Kitchen Plate options, mark round, Artstudio starter layers): https://claude.ai/artifact/QxzHEPyWnygnsWcersdufW
+- Round 1, window × cabinet sketches: https://claude.ai/artifact/GWT1vd9Wzu1ijEU8VGF7yj
+- Round 2, plain blocks: https://claude.ai/artifact/PdWcZeZPWAaWNHQbBg8vdJ
+- Round 3, recipe box detail, two-tier shelf, anniversary equipment: https://claude.ai/artifact/Min9Q1tV5v65wJBiCvw3Hy
+- Round 4, cook and developer kitchens, wide screen, skinny tabs: https://claude.ai/artifact/6ZvH65AZSnzorgxsm5hosX
+
+### Decisions
+- No window and no oven. One board in the middle: whiteboard (next up, pinned plus automatic) on the left, cork ideas on the right
+- Lab notebook upright on a cookbook stand under the whiteboard
+- Recipe box closed on the counter; opens to fill the screen; the recipe rests on a ledge in the lid; empty until picked; A–Z staggered tabs; "Recipes" brass label holder, no name
+- Two-tier open shelf under the counter (cookbooks, references), 1:1 with real items, growing between two cabinets
+- Counter runs off both screen edges except on very wide screens
+- Find-or-jot bar centred at the top; phone stacked with the jot button bottom right
+- Anniversary equipment later (1 month, 6 months, 1 year, yearly), with room left for it; no pegboard at first
+- No title or name in the kitchen
+
+### Open threads
+- Round 5 list in `.cursor/handoffs/NEXT.md`: wide-screen plate border, left/right rule, the middle, overlapping tabs, personas
+- Mark is parked until the layout is done
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** kitchen layout, navigation, recipe box lid, A–Z tabs, whiteboard, cork board, two-tier shelf, anniversary equipment, find or jot, personas
+**Files:** .cursor/handoffs/NEXT.md, docs/PRD.md, docs/decisions/004-kitchen-home.md, recipes/recipeboxdisplay.png, recipes/orthisrecipebox.png
+**Do not redo:** the image archive; rounds 1–4
+**Resume with:** `.cursor/handoffs/NEXT.md`, round 5
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-10 · Mark rounds 4–9b and the kitchen starter file
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-09` to `2026-11-11` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts) |
+| **Outcome** | partial (no mark chosen; mark parked behind the kitchen layout; no code) |
+
+### Intent
+Find the Trial & Eclair mark (wordmark and icon), starting broad and narrowing down.
+
+### Summary
+Published rounds:
+- Round 4, concepts (& eclair, eclair as the slash, flour, bowl, recipe card): https://claude.ai/artifact/J4NYD857xV32F2hSGKdnJQ
+- Round 5, eclair through the & in the title font: https://claude.ai/artifact/FqbP4xFsnZLmTkHrC1Zu68
+- Round 6, A2/A3/D/E and mess icons: https://claude.ai/artifact/4XLma3svsmciHqSvnXu1dq
+- Round 7, measured layout with switchable eclairs, fonts, grounds and a mirrored &: https://claude.ai/artifact/KdK8SekwtCeDgcjgWh9gYe
+- Round 8, broad brainstorm of 10 sketches: https://claude.ai/artifact/AFG9sDfLCqEptWUZK3LFv5
+- Round 9, notebook-led sketches: https://claude.ai/artifact/QBDBPiDYw77hijQdPzUjgs
+- Round 9b, label box and masking tape notebooks in the kitchen plate: https://claude.ai/artifact/SY2qoM3TwtXseNyPVXnfEn
+
+Rounds 4–7 wove the eclair through the "&". Ari wasn't sure the eclair works that way, so round 8 went broad. From round 8 Ari liked the composition notebook, tally marks, masking tape (without the lines) and something about the eclair. Round 9 followed the notebook. After 9b Ari rejected both the label box and the tape as the mark.
+
+On 2026-11-11 Ari asked whether the plate could be edited in another program. `design/kitchen-starter/` now holds a 17-layer PSD (2400×1600) for Artstudio Pro, the layer PNGs, a preview and a README with the recolouring rules. It was built from the Kitchen Plate SVG by splitting fills by colour token, with the ink re-rendered so hidden lines are removed. It isn't committed (20 MB).
+
+### Decisions
+- **Liked:** the simpler round-one eclair, Young Serif for the title, the & as a central idea
+- **Disliked:** badges, colour off register, busy drawings
+- **Rejected as the mark:** the notebook label box and the masking tape (round 9b)
+- **No header nav, ever** (decision 004): the kitchen is home and the account menu floats top right
+- **No title in the kitchen:** confirmed later in the 2026-11-11 layout session
+
+### Open threads
+- Mark directions still to brainstorm: parchment labels, trial bakes, composition notebook, eclair cross-section with "T&E", eclair behind the &, & piped in icing. Proof each at wordmark size and at 64/32 px on cream and dark. Full list in `.cursor/handoffs/archive/NEXT-2026-11-09-mark.md`
+- The mark is parked until the kitchen layout is done
+- Decide whether to commit `design/kitchen-starter/` (20 MB) or keep it local
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** mark, wordmark, icon, eclair, ampersand, composition notebook, masking tape, tally marks, Young Serif, kitchen starter, PSD, Artstudio
+**Files:** .cursor/handoffs/archive/NEXT-2026-11-09-mark.md, design/kitchen-starter/README.md
+**Do not redo:** mark rounds 4–9b; the eclair woven through the & (rounds 4–7); the label box and tape marks; the kitchen starter PSD
+**Resume with:** the kitchen layout first (`.cursor/handoffs/NEXT.md`), then the mark directions list in the archived handoff
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-09 · Cleanup: Phases 4–8 (PR clean-up track)
 
 | Field | Value |
@@ -41,6 +130,52 @@ Finish the 2026-11-08 checklist below: Phase 4 (done earlier that day), then Pha
 **Files:** frontend/playwright.config.ts, frontend/e2e/auth.setup.ts, frontend/e2e/auth.ts, frontend/package.json, frontend/package-lock.json
 **Do not redo:** Phases 1–8 of the 2026-11-08 checklist; #131 (PR #163); #162 (PR #164); closing #130, #94, #89, #154, #158
 **Resume with:** after PR #164 merges, pick the next feature (owner's call)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-08 · Visual redesign: style, colours, kitchen behaviour, recipe log issue
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-08` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts) |
+| **Outcome** | partial (design decisions made; mark still open; no code) |
+
+### Intent
+Make the drab kitchen bright and cohesive. Start from Ari's inspiration collage (tulip palette) and get to a brand and a buildable plan.
+
+### Summary
+Published mockups:
+- Style study: https://claude.ai/artifact/T168Br8MaJ83rQR1knXFkc
+- Brand sheet v1: https://claude.ai/artifact/K8X63SdpkmtbUUqoard9w4
+- Brand tuning board: https://claude.ai/artifact/TUHh5zwujKsDQ6Hy6YATCQ
+- Kitchen Plate (round three, current): https://claude.ai/artifact/3NHEb9cHQuachu9vBWvnuN
+
+Ari chose the printed cookbook plate style and a one-wall layout. The kitchen colours are a deep cobalt #2F4E9A box, walnut #9A6234 wood, a sage white #EEF0DF wall, stem green #5E8C3A cabinets and a Prussian #24406E scallop valance, with no tile and the light off. Printer's marks are on, and hover snaps colour into register. The kitchen is customisable, it fills up as content grows, and the sill changes with the seasons. Task issue #161 (recipe log, draft) was created.
+
+### Decisions
+- **Layering:** colour sits under the ink line for solid things; only loose things drift. Draw back to front
+- **Clock light parked:** `useSunlight` stays in the code
+- **Customise:** brand swatches plus a colour wheel per part, with an automatic ink-or-cream text choice
+- **Seasonal sill:** the default; a cook's pick pins it until they choose Seasonal again
+- **Fill-up rule:** one more drawn item per 5 real ones, capped
+- **Stains:** come from logged bakes (3+, 6+, 10+), not from card opens. Separate issue after #161
+- **Mark:** the E made of eclairs is dropped in every version, and the recipe-card mark too. The mark is still open
+
+### Open threads
+- Pick a mark direction
+- Update the brand sheet
+- Draft the visual Task issues: tokens and fonts, kitchen plate SVG, customise settings, fill-up and seasonal sill, marks and icons, stains
+- Ari reviews #161
+- The PR clean-up track (phases 5–8) is in `.cursor/handoffs/archive/`
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** visual redesign, cookbook plate, palette, customise kitchen, printer's marks, hover registration, recipe log, stains, eclair mark
+**Files:** frontend/src/components/kitchen/KitchenScene.tsx, frontend/src/styles/kitchen.css, frontend/src/styles/themes/default.css, .cursor/handoffs/NEXT.md
+**Do not redo:** style choice; colour picks; the E-of-eclairs mark (rejected); recipe log issue (#161)
+**Resume with:** read .cursor/handoffs/NEXT.md, then the mark direction (option 1)
 <!-- AGENT_CONTEXT_END -->
 
 ---
