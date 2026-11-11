@@ -10,6 +10,49 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-11 · Kitchen layout: rounds 5–9
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-11` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts) |
+| **Outcome** | partial (block layout nearly settled; final tabs not drawn; no code) |
+
+### Intent
+Work through the round 5 list in `.cursor/handoffs/NEXT.md` as plain blocks, then keep iterating on Ari's answers.
+
+### Summary
+- Round 5, plate border, upgrade, middle, tabs, roles: https://claude.ai/artifact/19GFsMLPyJcsY5oHsfFsnk
+- Round 6, nothing moves, middle options, two-row tabs, guest: https://claude.ai/artifact/PDiK3NFTpkQQQnz53tTHyG
+- Round 7, eclair or flowers between the Lab and box, box resized: https://claude.ai/artifact/AjDeA1NzQZHXuJjYWAdjsb
+- Round 8, three tab rows, lid limit, Lab over the board: https://claude.ai/artifact/GyUR9LwAahWhZ5KYRYBm92
+- Round 9, board lowered, stepped A–I/J–Q/R–Z tabs: https://claude.ai/artifact/NycqsZG7m8dMgeczemSfSU
+- `.cursor/handoffs/NEXT.md` now lists the whole settled layout and a prompt for round 10
+
+### Decisions
+- "Switch" meant a cook upgrading. Upgrading moves nothing; paid things just open
+- No plate border. The normal view at every width; very wide screens only extend the cabinets and counter
+- Middle: the Lab (overlapping the board) on the whiteboard's side, a half-eaten eclair on a plate, the box on the cork's side, all close. The board is lowered to just above the box
+- Nothing hidden for any role; paid things carry a "paid plan" label. Guests: decision 002 unchanged
+- Open box: short body for three tab rows; the lid grows with the recipe up to a limit; a full-screen card view later
+- Tabs: A–I, J–Q, R–Z; R–Z lined up behind A–I, J–Q centred between; no XYZ tab
+- Wall above the board stays plain for now
+
+### Open threads
+- Draw the final tabs and one page with the whole settled layout (round 10), then ask whether to start the plate style or the mark
+- Equipment spots: visible edges or fixed distance from the middle
+- `design/kitchen-starter/` (20 MB) still local
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** kitchen layout, upgrade, paid plan, eclair, Lab over the board, lowered board, three tab rows, lid limit, guests, decision 002
+**Files:** .cursor/handoffs/NEXT.md, docs/PRD.md, docs/decisions/002-guest-mode.md, docs/decisions/004-kitchen-home.md
+**Do not redo:** rounds 5–9; the plate border; two-row tabs; stepped tab rows
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent"
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-11 · Kitchen layout: archive and rounds 1–4
 
 | Field | Value |
