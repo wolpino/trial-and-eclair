@@ -52,6 +52,53 @@ Collect every kitchen image so far, then rethink the kitchen as the site's navig
 
 ---
 
+## 2026-11-10 · Mark rounds 4–9b and the kitchen starter file
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-09` to `2026-11-11` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts) |
+| **Outcome** | partial (no mark chosen; mark parked behind the kitchen layout; no code) |
+
+### Intent
+Find the Trial & Eclair mark (wordmark and icon), starting broad and narrowing down.
+
+### Summary
+Published rounds:
+- Round 4, concepts (& eclair, eclair as the slash, flour, bowl, recipe card): https://claude.ai/artifact/J4NYD857xV32F2hSGKdnJQ
+- Round 5, eclair through the & in the title font: https://claude.ai/artifact/FqbP4xFsnZLmTkHrC1Zu68
+- Round 6, A2/A3/D/E and mess icons: https://claude.ai/artifact/4XLma3svsmciHqSvnXu1dq
+- Round 7, measured layout with switchable eclairs, fonts, grounds and a mirrored &: https://claude.ai/artifact/KdK8SekwtCeDgcjgWh9gYe
+- Round 8, broad brainstorm of 10 sketches: https://claude.ai/artifact/AFG9sDfLCqEptWUZK3LFv5
+- Round 9, notebook-led sketches: https://claude.ai/artifact/QBDBPiDYw77hijQdPzUjgs
+- Round 9b, label box and masking tape notebooks in the kitchen plate: https://claude.ai/artifact/SY2qoM3TwtXseNyPVXnfEn
+
+Rounds 4–7 wove the eclair through the "&". Ari wasn't sure the eclair works that way, so round 8 went broad. From round 8 Ari liked the composition notebook, tally marks, masking tape (without the lines) and something about the eclair. Round 9 followed the notebook. After 9b Ari rejected both the label box and the tape as the mark.
+
+On 2026-11-11 Ari asked whether the plate could be edited in another program. `design/kitchen-starter/` now holds a 17-layer PSD (2400×1600) for Artstudio Pro, the layer PNGs, a preview and a README with the recolouring rules. It was built from the Kitchen Plate SVG by splitting fills by colour token, with the ink re-rendered so hidden lines are removed. It isn't committed (20 MB).
+
+### Decisions
+- **Liked:** the simpler round-one eclair, Young Serif for the title, the & as a central idea
+- **Disliked:** badges, colour off register, busy drawings
+- **Rejected as the mark:** the notebook label box and the masking tape (round 9b)
+- **No header nav, ever** (decision 004): the kitchen is home and the account menu floats top right
+- **No title in the kitchen:** confirmed later in the 2026-11-11 layout session
+
+### Open threads
+- Mark directions still to brainstorm: parchment labels, trial bakes, composition notebook, eclair cross-section with "T&E", eclair behind the &, & piped in icing. Proof each at wordmark size and at 64/32 px on cream and dark. Full list in `.cursor/handoffs/archive/NEXT-2026-11-09-mark.md`
+- The mark is parked until the kitchen layout is done
+- Decide whether to commit `design/kitchen-starter/` (20 MB) or keep it local
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** mark, wordmark, icon, eclair, ampersand, composition notebook, masking tape, tally marks, Young Serif, kitchen starter, PSD, Artstudio
+**Files:** .cursor/handoffs/archive/NEXT-2026-11-09-mark.md, design/kitchen-starter/README.md
+**Do not redo:** mark rounds 4–9b; the eclair woven through the & (rounds 4–7); the label box and tape marks; the kitchen starter PSD
+**Resume with:** the kitchen layout first (`.cursor/handoffs/NEXT.md`), then the mark directions list in the archived handoff
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-09 · Cleanup: Phases 4–8 (PR clean-up track)
 
 | Field | Value |
