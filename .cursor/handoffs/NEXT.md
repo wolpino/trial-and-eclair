@@ -5,15 +5,13 @@ The block layout is final (round 10). Draw the kitchen in the plate style, then 
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate II v2: aligned colour, button lift, scaling) → mark → brand sheet → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate IV, waiting on Ari) → mark → brand sheet → Task issues → build
 ```
 
 ## Prompt for the next agent
-> Kitchen plate drawing, round 2. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout` and `visual-direction` memories first. The block layout is final; don't change it.
+> Kitchen plate drawing, round 5. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout` and `visual-direction` memories first.
 >
-> Plate II (https://claude.ai/artifact/Da1GrHKYarXotyj8HwpUpZ, version 2) draws the final layout in the plate style: developer/home cook toggle, a browser-width slider, three window sizes, the open box at its minimum lid height with the A–I / J–Q / R–Z tabs, and three crops at mark size. Start from its source (`Artifact` read, `path: index.html`).
->
-> Ari's Plate II answers so far: colour always sits inside its ink line (no off-register colour anywhere, no snapping); things that open lift like a pressable button on hover and press flat; the kitchen scales with the window between a min (80% at 960 px) and a max (140% at 1680 px), cropping the sides below and extending cabinets/counter above. The yellow "paid plan" tags stay for now (not sure about them). The three mark crops (eclair, box, notebook) are liked but none is enough alone. Ask what else to change in the drawing, then move to the mark using `.cursor/handoffs/archive/NEXT-2026-11-09-mark.md`, perhaps combining the crops.
+> Plate IV (https://claude.ai/artifact/BcqU8atxTQmnC45ywnzQa2) answers Ari's Plate III notes: composition notebook covers (Fog, Oat, Speckled) and an open composition spread; names Lab / Trials / Trial notes; pointing styles Glow, Halo, Label +, Glow + label; mixed labels; more detail with a Flat / Dimensional switch; a jot destination menu; quiet backsplash and made-it note toggles; the evening (dark mode) kitchen; wide screens with a fixed middle and a cork that shows more ideas. Start from its source (`Artifact` read, `path: index.html`) and apply Ari's picks from its "Still to pick" list. Phone layout and the mark wait until the design is set.
 >
 > Proof locally with Playwright from `frontend/node_modules` (screenshot once), then publish. No code changes.
 
@@ -22,13 +20,15 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 - **Counter, middle:** the Lab notebook on a cookbook stand on the whiteboard's side, tall enough to overlap the board's bottom edge. A half-eaten eclair on a plate in the middle (seasonal flowers maybe later). The recipe box on the cork's side. All three sit close together
 - **Side rule:** the Lab is always on the whiteboard's side and the box on the cork's side. The Lab need not be right under the whiteboard
 - **Under the counter:** two-tier open shelf (cookbooks above, references below), one drawn book per real one, a cabinet each side. It starts short with one book lying down per tier, and the cabinets narrow as it fills
-- **Width:** the whole kitchen scales with the window between a minimum (80%, at 960 px) and a maximum (140%, at 1680 px). Below the minimum the sides crop until the phone layout; above the maximum only the cabinets and counter fill the extra width. No plate border
-- **Clickable things:** colour sits inside the ink line; on hover the object lifts like a button on a hard printed shadow, and pressing pushes it flat
-- **Top:** find-or-jot bar centred at the top, Account top right. Phone: stacked layout, jot button bottom right
+- **Width:** the whole kitchen scales with the window between a minimum (80%, at 960 px) and a maximum (140%, at 1680 px). Outside that range the middle (notebook, eclair, box) keeps its spacing; the cork grows and shows more ideas, the shelf widens a little, the two cabinets each side take the rest; no extra doors. No plate border
+- **Clickable things:** colour sits inside the ink line; every object has a permanent label (no hover labels). Pointing style still open (Plate III options)
+- **Top:** find-or-jot bar centred at the top, Account top right. A jot goes where the cook picks in a small menu: the cork (idea) or the whiteboard (next up). Phone: stacked layout, jot button bottom right
 - **Recipe box closed:** "Recipes" in a brass label holder. Click opens it to fill most of the screen over the dimmed kitchen
 - **Recipe box open:** the card rests on a ledge in the lid; the lid is empty until a card is picked. The box body is short, sized for three tab rows. The lid grows with the recipe from a minimum (round 9 height, about 45% of the screen) to a limit (about 55%), then the card scrolls. Later: a full-screen card view
 - **Tabs:** A–I front, J–Q middle, R–Z back; R–Z lined up with A–I, J–Q centred in the gaps; nine R–Z tabs, no XYZ (drawn in round 10)
 - **Roles:** one kitchen for everyone; nothing hidden, nothing moves on upgrade. Paid things (Lab, cork ideas, cookbooks tier) carry a "paid plan" label and open read-only with sample data for cooks and guests. Cooks get the box, whiteboard and references. Guests: decision 002 as it is (starter recipes, up to 5 cards of their own)
+- **New kitchen:** starts with demo data; sign-up asks whether to include it, and it can be removed later in one go
+- **Evening:** dark mode is a darker evening kitchen
 - **Equipment:** anniversary equipment later (1 month, 6 months, 1 year, yearly; pick one of three). No pegboard at first
 
 ## Still open
@@ -50,6 +50,8 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 | Round 9 (board lowered, stepped tabs) — best base | https://claude.ai/artifact/NycqsZG7m8dMgeczemSfSU |
 | Round 10 (whole settled layout, final tabs, lid min/limit) — FINAL | https://claude.ai/artifact/WkNKvfgetbz3QB4kQdWW8U |
 | Plate II (final layout in the plate style) | https://claude.ai/artifact/Da1GrHKYarXotyj8HwpUpZ |
+| Plate III (spacing, notebooks, pointing styles, grow-to-fill, questions) | https://claude.ai/artifact/VnwCp1aaWnJX2e3FWJ3ioa |
+| Plate IV (covers, detail/depth, pointing, jot menu, evening, sizing) | https://claude.ai/artifact/BcqU8atxTQmnC45ywnzQa2 |
 | Kitchen Plate (plate style reference) | https://claude.ai/artifact/3NHEb9cHQuachu9vBWvnuN |
 
 ## Rules to keep

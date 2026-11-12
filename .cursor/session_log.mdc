@@ -32,10 +32,13 @@ Draw the whole settled layout with the final tabs, confirm it, then start the pl
 - The lid has a minimum height (round 9 height, about 45% of the screen) as well as the limit (about 55%)
 - Next is the plate drawing; Ari hopes finishing it helps pick the mark
 - Plate II v2: colour always inside the line (no off-register colour); things that open lift like a button on hover and press flat; the kitchen scales with the window between 80% (960 px) and 140% (1680 px)
-- Paid-plan tags stay for now (unsure). The three mark crops are liked, but none is enough alone
+- Paid-plan tags stay for now (unsure). The mark crops were then rejected
+- Plate III (https://claude.ai/artifact/VnwCp1aaWnJX2e3FWJ3ioa): less crowded middle with and without the eclair, whiter notebook options and names (Trials?), open notebook spread, five pointing styles instead of the lift, permanent labels, grow-to-fill sizing, 12 questions
+- Plate IV (https://claude.ai/artifact/BcqU8atxTQmnC45ywnzQa2): composition notebook (no spiral) in softer covers, mixed labels, more detail with a depth switch, glow/label pointing variants, jot menu, backsplash and made-it toggles, evening kitchen for dark mode, fixed middle on wide screens
+- Decided: phone after the design; demo data asked at sign-up and removable; jot destination picked by the cook (cork or whiteboard); dark mode is an evening kitchen
 
 ### Open threads
-- Anything else to change in Plate II, then the mark (maybe combining the eclair, box and notebook crops)
+- Ari's picks on Plate IV: cover, name, pointing style, depth, backsplash, made-it note, wide-screen behaviour
 - Equipment spots: visible edges or fixed distance from the middle
 - `design/kitchen-starter/` (20 MB) still local
 
