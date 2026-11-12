@@ -10,6 +10,49 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-11 · Kitchen layout round 10 and Plate II
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-11` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts) |
+| **Outcome** | partial (layout final; Plate II drawn, waiting on Ari; no code) |
+
+### Intent
+Draw the whole settled layout with the final tabs, confirm it, then start the plate-style drawing.
+
+### Summary
+- Round 10, both kitchens, very wide screen, open box with A–I / J–Q / R–Z tabs, lid at minimum and limit: https://claude.ai/artifact/WkNKvfgetbz3QB4kQdWW8U
+- Plate II, the final layout in the plate style (developer/home cook toggle, wide screen, open box, crops at mark size): https://claude.ai/artifact/Da1GrHKYarXotyj8HwpUpZ
+- `.cursor/handoffs/NEXT.md` now points at plate round 2
+
+### Decisions
+- The block layout is final
+- The lid has a minimum height (round 9 height, about 45% of the screen) as well as the limit (about 55%)
+- Next is the plate drawing; Ari hopes finishing it helps pick the mark
+- Plate II v2: colour always inside the line (no off-register colour); things that open lift like a button on hover and press flat; the kitchen scales with the window between 80% (960 px) and 140% (1680 px)
+- Paid-plan tags stay for now (unsure). The mark crops were then rejected
+- Plate III (https://claude.ai/artifact/VnwCp1aaWnJX2e3FWJ3ioa): less crowded middle with and without the eclair, whiter notebook options and names (Trials?), open notebook spread, five pointing styles instead of the lift, permanent labels, grow-to-fill sizing, 12 questions
+- Plate IV (https://claude.ai/artifact/BcqU8atxTQmnC45ywnzQa2): composition notebook (no spiral) in softer covers, mixed labels, more detail with a depth switch, glow/label pointing variants, jot menu, backsplash and made-it toggles, evening kitchen for dark mode, fixed middle on wide screens
+- Plate V (https://claude.ai/artifact/13AuDFvrJxoW5XbDYiVydr): stronger glow + label, evening lit from above, composition book closer to real ones, open book redrawn, jot menus A/B, towel on a bar, torn made-this-week note
+- Plate V answers: idea board glow too faint; evening brighter, light from the top of the page, no lamp; notebook page edges white with lines the long way; open book kept; jot B; note held with tape, titled 'Recently', names link; depth is dimensional with consistent perspective
+- Decided: phone after the design; demo data asked at sign-up and removable; jot destination picked by the cook (cork or whiteboard); dark mode is an evening kitchen
+
+### Open threads
+- Plate VI (prompt in NEXT.md): glow on the idea board, brighter evening light from the top edge, notebook page-edge lines, consistent perspective, the 'Recently' note with tape and links; name and cover still open
+- Equipment spots: visible edges or fixed distance from the middle
+- `design/kitchen-starter/` (20 MB) still local
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** kitchen layout final, Plate II, plate style, recipe box tabs, lid minimum, mark from the kitchen
+**Files:** .cursor/handoffs/NEXT.md, design/kitchen-starter/README.md
+**Do not redo:** layout rounds 1–10; Plates II–V
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent" (Plate VI)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-11 · Kitchen layout: rounds 5–9
 
 | Field | Value |
