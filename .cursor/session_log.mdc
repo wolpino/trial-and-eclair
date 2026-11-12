@@ -36,10 +36,11 @@ Draw the whole settled layout with the final tabs, confirm it, then start the pl
 - Plate III (https://claude.ai/artifact/VnwCp1aaWnJX2e3FWJ3ioa): less crowded middle with and without the eclair, whiter notebook options and names (Trials?), open notebook spread, five pointing styles instead of the lift, permanent labels, grow-to-fill sizing, 12 questions
 - Plate IV (https://claude.ai/artifact/BcqU8atxTQmnC45ywnzQa2): composition notebook (no spiral) in softer covers, mixed labels, more detail with a depth switch, glow/label pointing variants, jot menu, backsplash and made-it toggles, evening kitchen for dark mode, fixed middle on wide screens
 - Plate V (https://claude.ai/artifact/13AuDFvrJxoW5XbDYiVydr): stronger glow + label, evening lit from above, composition book closer to real ones, open book redrawn, jot menus A/B, towel on a bar, torn made-this-week note
+- Plate V answers: idea board glow too faint; evening brighter, light from the top of the page, no lamp; notebook page edges white with lines the long way; open book kept; jot B; note held with tape, titled 'Recently', names link; depth is dimensional with consistent perspective
 - Decided: phone after the design; demo data asked at sign-up and removable; jot destination picked by the cook (cork or whiteboard); dark mode is an evening kitchen
 
 ### Open threads
-- Ari's answers on Plate V: glow strength, evening pendants vs board light, cover black or white, name, jot A or B; still open: depth, backsplash, made-it note
+- Plate VI (prompt in NEXT.md): glow on the idea board, brighter evening light from the top edge, notebook page-edge lines, consistent perspective, the 'Recently' note with tape and links; name and cover still open
 - Equipment spots: visible edges or fixed distance from the middle
 - `design/kitchen-starter/` (20 MB) still local
 
@@ -47,7 +48,7 @@ Draw the whole settled layout with the final tabs, confirm it, then start the pl
 **Keywords:** kitchen layout final, Plate II, plate style, recipe box tabs, lid minimum, mark from the kitchen
 **Files:** .cursor/handoffs/NEXT.md, design/kitchen-starter/README.md
 **Do not redo:** layout rounds 1–10; Plates II–V
-**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent"
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent" (Plate VI)
 <!-- AGENT_CONTEXT_END -->
 
 ---
