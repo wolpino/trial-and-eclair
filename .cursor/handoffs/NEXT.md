@@ -5,20 +5,21 @@ The block layout is final (round 10). Draw the kitchen in the plate style, then 
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate VI out, waiting on Ari) → mark → brand sheet → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate VII out, waiting on Ari) → mark → brand sheet → Task issues → build
 ```
 
 ## Prompt for the next agent
-> Kitchen plate drawing, after Plate VI. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout`, `visual-direction` and `commit-each-round` memories, and the top entry of `.cursor/session_log.mdc` first. The block layout is final; don't change it. No code changes.
+> Kitchen plate drawing, after Plate VII. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout`, `visual-direction` and `commit-each-round` memories, and the top entry of `.cursor/session_log.mdc` first. Don't change the block layout unless Ari asks (the window and pegboard are Ari's own idea). No code changes.
 >
-> Plate VI is published: https://claude.ai/artifact/PPHHNxUm3q1LiJvrpC9tnJ (source: `Artifact` read with `path: index.html`). It answered the Plate V notes:
-> - **Depth:** one-point perspective. One vanishing point at x 900, y 200 (eye level, middle of the board), with depth from `P(x, y, d)` = move toward the vanishing point by d/(d+500). Depths used: board insets 10, door panels 9, notebook 48, stand 52–56, box 66–70, shelf 50, books 40, counter 130, plate 128 across. A construction-line plate shows every receding edge.
-> - **Glow:** a blurred halo that follows the outline and spills about 45 px past it (the cork's halo is clipped at the divider), the cork turns paler, and "Ideas" turns yellow with an orange underline.
-> - **Evening:** one gradient multiplied over the kitchen, warm at the top edge and dusk at the bottom. No lamps, and the ink stays black.
-> - **Notebook:** white page edges. Lines on top run along the width, lines on the right side run down the height. Cloth spine, marbling and cushion label are kept.
-> - **Jot B only.** The **"Recently"** note is taped on, and each name shows yellow with an underline on point.
+> Plate VII is published: https://claude.ai/artifact/V35qBtVGy4KY3zrTVVUsrY (source: `Artifact` read with `path: index.html`). It keeps Plate VI's one-point perspective: vanishing point x 900, y 200, `P(x, y, d)` moves toward it by d/(d+500). The board is drawn 25 px higher with the vanishing point shifted inside its group, so it stays consistent. Changes since Plate VI:
+> - **Notebook:** depth 24 (was 48), plain white page edges, fine grey cover lines, no page lines
+> - **Board and counter:** board up 25 px (clear of the box, under the notebook top); counter depth 100 (was 130); plate about 100 across
+> - **Evening:** a multiply gradient that is lighter at the bottom
+> - **Wall switch:** plain, window + pegboard, pegboard + window, or narrower (viewBox 430–1370)
+> - **Open book:** six fanned page layers at the outer sides and the foot
+> - **"Recently" switch:** torn note, ticket rail (default), clothesline, slate, index card; each name is a link (yellow + underline)
 >
-> Apply Ari's answers to Plate VI (perspective right?, glow on the cork, evening, page edges, name Lab/Trials/Trial notes, cover black/white). If Ari picks the next step instead: more plate rounds, the phone layout (stacked, jot button bottom right), or the mark. Publish each round as a new artifact, proof locally with Playwright from `frontend/node_modules` first, then record the answers in the `kitchen-layout` memory, this file and the session log, and commit on the docs branch.
+> Apply Ari's answers. Ari's note "the notebook says Trials and" was cut off, so ask whether the name is settled as Trials. Publish each round as a new artifact, proof locally with Playwright from `frontend/node_modules` first, then record the answers in the `kitchen-layout` memory, this file and the session log, and commit on the docs branch. Still to choose afterwards: more plate rounds, the phone layout, or the mark.
 
 ## The layout now (final)
 - **Wall:** one board in the middle: whiteboard on the left ("next up", pinned plus automatic, marker font), cork ideas on the right. Lowered to just above the recipe box, with a small gap (round 9 A). The wall above the board stays plain, which leaves room for anniversary equipment or a shelf later. No window, no oven, no title or name
@@ -61,6 +62,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 | Plate IV (covers, detail/depth, pointing, jot menu, evening, sizing) | https://claude.ai/artifact/BcqU8atxTQmnC45ywnzQa2 |
 | Plate V (glow + label, evening lights, composition book, jot menus) | https://claude.ai/artifact/13AuDFvrJxoW5XbDYiVydr |
 | Plate VI (one-point perspective, cork glow, evening from the top edge, page edges, Recently note) | https://claude.ai/artifact/PPHHNxUm3q1LiJvrpC9tnJ |
+| Plate VII (window + pegboard or narrower, slim notebook, raised board, Recently options) | https://claude.ai/artifact/V35qBtVGy4KY3zrTVVUsrY |
 | Kitchen Plate (plate style reference) | https://claude.ai/artifact/3NHEb9cHQuachu9vBWvnuN |
 
 ## Rules to keep
