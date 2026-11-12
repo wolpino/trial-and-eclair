@@ -10,6 +10,44 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-11 · Kitchen layout round 10 and Plate II
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-11` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts) |
+| **Outcome** | partial (layout final; Plate II drawn, waiting on Ari; no code) |
+
+### Intent
+Draw the whole settled layout with the final tabs, confirm it, then start the plate-style drawing.
+
+### Summary
+- Round 10, both kitchens, very wide screen, open box with A–I / J–Q / R–Z tabs, lid at minimum and limit: https://claude.ai/artifact/WkNKvfgetbz3QB4kQdWW8U
+- Plate II, the final layout in the plate style (developer/home cook toggle, wide screen, open box, crops at mark size): https://claude.ai/artifact/Da1GrHKYarXotyj8HwpUpZ
+- `.cursor/handoffs/NEXT.md` now points at plate round 2
+
+### Decisions
+- The block layout is final
+- The lid has a minimum height (round 9 height, about 45% of the screen) as well as the limit (about 55%)
+- Next is the plate drawing; Ari hopes finishing it helps pick the mark
+- Plate II v2: colour always inside the line (no off-register colour); things that open lift like a button on hover and press flat; the kitchen scales with the window between 80% (960 px) and 140% (1680 px)
+- Paid-plan tags stay for now (unsure). The three mark crops are liked, but none is enough alone
+
+### Open threads
+- Anything else to change in Plate II, then the mark (maybe combining the eclair, box and notebook crops)
+- Equipment spots: visible edges or fixed distance from the middle
+- `design/kitchen-starter/` (20 MB) still local
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** kitchen layout final, Plate II, plate style, recipe box tabs, lid minimum, mark from the kitchen
+**Files:** .cursor/handoffs/NEXT.md, design/kitchen-starter/README.md
+**Do not redo:** layout rounds 1–10; Plate II first draw
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent"
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-11 · Kitchen layout: rounds 5–9
 
 | Field | Value |
