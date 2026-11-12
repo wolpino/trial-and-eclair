@@ -5,15 +5,15 @@ The block layout is final (round 10). Draw the kitchen in the plate style, then 
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate IV, waiting on Ari) → mark → brand sheet → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate V, waiting on Ari) → mark → brand sheet → Task issues → build
 ```
 
 ## Prompt for the next agent
-> Kitchen plate drawing, round 5. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout` and `visual-direction` memories first.
+> Kitchen plate drawing, round 6. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout` and `visual-direction` memories first.
 >
-> Plate IV (https://claude.ai/artifact/BcqU8atxTQmnC45ywnzQa2) answers Ari's Plate III notes: composition notebook covers (Fog, Oat, Speckled) and an open composition spread; names Lab / Trials / Trial notes; pointing styles Glow, Halo, Label +, Glow + label; mixed labels; more detail with a Flat / Dimensional switch; a jot destination menu; quiet backsplash and made-it note toggles; the evening (dark mode) kitchen; wide screens with a fixed middle and a cork that shows more ideas. Start from its source (`Artifact` read, `path: index.html`) and apply Ari's picks from its "Still to pick" list. Phone layout and the mark wait until the design is set.
+> Plate V (https://claude.ai/artifact/13AuDFvrJxoW5XbDYiVydr) answers Ari's Plate IV notes: glow + label is the pointing style, made stronger; evening lit from above (pendants vs board light); the composition notebook drawn closer to real ones (cloth spine, marbling, cushion label; black or white marble); the open book as pages only with grey stitches, margins by the spine, handwritten page numbers, corner dates, a sketch over the ruled page and a taped photo; jot menus A (chip) and B (one list under the bar); the towel on a brass bar; a torn-sheet made-this-week note. Start from its source (`Artifact` read, `path: index.html`) and apply Ari's answers to its questions. Watch for objects that look attached to the wrong thing (the towel coming out of the counter was one).
 >
-> Proof locally with Playwright from `frontend/node_modules` (screenshot once), then publish. No code changes.
+> Proof locally with Playwright from `frontend/node_modules` (screenshot once), then publish, then record and commit the round. No code changes.
 
 ## The layout now (final)
 - **Wall:** one board in the middle: whiteboard on the left ("next up", pinned plus automatic, marker font), cork ideas on the right. Lowered to just above the recipe box, with a small gap (round 9 A). The wall above the board stays plain, which leaves room for anniversary equipment or a shelf later. No window, no oven, no title or name
@@ -21,7 +21,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 - **Side rule:** the Lab is always on the whiteboard's side and the box on the cork's side. The Lab need not be right under the whiteboard
 - **Under the counter:** two-tier open shelf (cookbooks above, references below), one drawn book per real one, a cabinet each side. It starts short with one book lying down per tier, and the cabinets narrow as it fills
 - **Width:** the whole kitchen scales with the window between a minimum (80%, at 960 px) and a maximum (140%, at 1680 px). Outside that range the middle (notebook, eclair, box) keeps its spacing; the cork grows and shows more ideas, the shelf widens a little, the two cabinets each side take the rest; no extra doors. No plate border
-- **Clickable things:** colour sits inside the ink line; every object has a permanent label (no hover labels). Pointing style still open (Plate III options)
+- **Clickable things:** colour sits inside the ink line; every object has a permanent label (no hover labels). Pointing: glow + label (amber halftone glow behind, the object's label turns yellow)
 - **Top:** find-or-jot bar centred at the top, Account top right. A jot goes where the cook picks in a small menu: the cork (idea) or the whiteboard (next up). Phone: stacked layout, jot button bottom right
 - **Recipe box closed:** "Recipes" in a brass label holder. Click opens it to fill most of the screen over the dimmed kitchen
 - **Recipe box open:** the card rests on a ledge in the lid; the lid is empty until a card is picked. The box body is short, sized for three tab rows. The lid grows with the recipe from a minimum (round 9 height, about 45% of the screen) to a limit (about 55%), then the card scrolls. Later: a full-screen card view
@@ -52,6 +52,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 | Plate II (final layout in the plate style) | https://claude.ai/artifact/Da1GrHKYarXotyj8HwpUpZ |
 | Plate III (spacing, notebooks, pointing styles, grow-to-fill, questions) | https://claude.ai/artifact/VnwCp1aaWnJX2e3FWJ3ioa |
 | Plate IV (covers, detail/depth, pointing, jot menu, evening, sizing) | https://claude.ai/artifact/BcqU8atxTQmnC45ywnzQa2 |
+| Plate V (glow + label, evening lights, composition book, jot menus) | https://claude.ai/artifact/13AuDFvrJxoW5XbDYiVydr |
 | Kitchen Plate (plate style reference) | https://claude.ai/artifact/3NHEb9cHQuachu9vBWvnuN |
 
 ## Rules to keep
