@@ -5,24 +5,20 @@ The block layout is final (round 10). Draw the kitchen in the plate style, then 
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate VI next) → mark → brand sheet → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate VI out, waiting on Ari) → mark → brand sheet → Task issues → build
 ```
 
 ## Prompt for the next agent
-> Kitchen plate drawing, Plate VI. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout`, `visual-direction` and `commit-each-round` memories, and the top entry of `.cursor/session_log.mdc` first. The block layout is final; don't change it. No code changes.
+> Kitchen plate drawing, after Plate VI. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout`, `visual-direction` and `commit-each-round` memories, and the top entry of `.cursor/session_log.mdc` first. The block layout is final; don't change it. No code changes.
 >
-> Start from the Plate V source: `Artifact` read of https://claude.ai/artifact/13AuDFvrJxoW5XbDYiVydr with `path: index.html`. Publish Plate VI as a new artifact. Keep everything Ari didn't mention as it is in Plate V. Apply these answers:
+> Plate VI is published: https://claude.ai/artifact/PPHHNxUm3q1LiJvrpC9tnJ (source: `Artifact` read with `path: index.html`). It answered the Plate V notes:
+> - **Depth:** one-point perspective. One vanishing point at x 900, y 200 (eye level, middle of the board), with depth from `P(x, y, d)` = move toward the vanishing point by d/(d+500). Depths used: board insets 10, door panels 9, notebook 48, stand 52–56, box 66–70, shelf 50, books 40, counter 130, plate 128 across. A construction-line plate shows every receding edge.
+> - **Glow:** a blurred halo that follows the outline and spills about 45 px past it (the cork's halo is clipped at the divider), the cork turns paler, and "Ideas" turns yellow with an orange underline.
+> - **Evening:** one gradient multiplied over the kitchen, warm at the top edge and dusk at the bottom. No lamps, and the ink stays black.
+> - **Notebook:** white page edges. Lines on top run along the width, lines on the right side run down the height. Cloth spine, marbling and cushion label are kept.
+> - **Jot B only.** The **"Recently"** note is taped on, and each name shows yellow with an underline on point.
 >
-> 1. **Glow + label on the idea board.** The glow barely shows on the cork, because cork is close to the glow's colours. Make it read there too, for example a cooler or lighter wash behind the cork, a glow that spills past the board's frame onto the wall, or a stronger label change on the "Ideas" card. Show all six objects while pointing again so Ari can check each one.
-> 2. **Evening (dark mode):** brighter than Plate V. The light comes from the top of the page itself, a warm wash falling from the top edge. No drawn pendant or board light.
-> 3. **Notebook, dimensional:** the top face of the page block is white, with lines running the long way (along the book's width). The right-side page edge has lines running the long way too (vertical, along the height), not short ticks across it. Everything else on the notebook is close; keep the cloth spine, marbling and cushion label.
-> 4. **Depth: dimensional is the choice.** Make the perspective consistent. Plate V mixed two systems: the box and notebook use an oblique offset to the upper right, while the shelf's inner walls use one-point perspective. Pick one rule and apply it to every object: the box, the notebook and its stand, the shelf (inner walls and shelf board), the counter's top surface, the board frame, the cabinet door panels and the plate. Either (a) one-point perspective with a single vanishing point at the centre (x 900, about eye level above the counter), so objects left of centre show their right side and objects right of centre show their left side, and tops show because everything sits below eye level; or (b) a single oblique angle and depth used everywhere, including the shelf. Explain which you chose and check every receding edge against it. Ari said there is a right and a wrong way to make it look dimensional.
-> 5. **Open notebook:** much better. Keep it as is (pages only, grey stitches, margins by the spine, corner dates, handwritten page numbers).
-> 6. **Jotting:** option B, one list under the bar (jot destinations first, then matching recipes and notebook entries). Drop option A.
-> 7. **The notepad sheet on the cabinet:** held up with tape, not a magnet. Probably titled "Recently". Each name links to its page (a recipe card or a notebook entry), so show a link state on point (underline or the same yellow).
-> 8. Keep the backsplash off unless Ari asks. The name (Lab, Trials or Trial notes) and the cover (black or white marble) are still open; keep the switches.
->
-> Proof locally with Playwright from `frontend/node_modules` (screenshot once, crop to check details), then publish. Then record Ari's answers in the `kitchen-layout` memory, update this file and the session log, and commit on the docs branch (every round). Ask Ari what's next: more plate rounds, the phone layout, or the mark.
+> Apply Ari's answers to Plate VI (perspective right?, glow on the cork, evening, page edges, name Lab/Trials/Trial notes, cover black/white). If Ari picks the next step instead: more plate rounds, the phone layout (stacked, jot button bottom right), or the mark. Publish each round as a new artifact, proof locally with Playwright from `frontend/node_modules` first, then record the answers in the `kitchen-layout` memory, this file and the session log, and commit on the docs branch.
 
 ## The layout now (final)
 - **Wall:** one board in the middle: whiteboard on the left ("next up", pinned plus automatic, marker font), cork ideas on the right. Lowered to just above the recipe box, with a small gap (round 9 A). The wall above the board stays plain, which leaves room for anniversary equipment or a shelf later. No window, no oven, no title or name
@@ -36,7 +32,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 - **Recipe box open:** the card rests on a ledge in the lid; the lid is empty until a card is picked. The box body is short, sized for three tab rows. The lid grows with the recipe from a minimum (round 9 height, about 45% of the screen) to a limit (about 55%), then the card scrolls. Later: a full-screen card view
 - **Tabs:** A–I front, J–Q middle, R–Z back; R–Z lined up with A–I, J–Q centred in the gaps; nine R–Z tabs, no XYZ (drawn in round 10)
 - **Roles:** one kitchen for everyone; nothing hidden, nothing moves on upgrade. Paid things (Lab, cork ideas, cookbooks tier) carry a "paid plan" label and open read-only with sample data for cooks and guests. Cooks get the box, whiteboard and references. Guests: decision 002 as it is (starter recipes, up to 5 cards of their own)
-- **Depth:** dimensional, with one consistent perspective rule
+- **Depth:** dimensional, one-point perspective, one vanishing point at the centre of the board (Plate VI)
 - **Notebook:** a composition book (cloth spine, marbled cover, cushion label) on a cookbook stand; opens to a two-page spread, ruled pages, no spiral or tape
 - **New kitchen:** starts with demo data; sign-up asks whether to include it, and it can be removed later in one go
 - **Evening:** dark mode is a darker evening kitchen
@@ -64,6 +60,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 | Plate III (spacing, notebooks, pointing styles, grow-to-fill, questions) | https://claude.ai/artifact/VnwCp1aaWnJX2e3FWJ3ioa |
 | Plate IV (covers, detail/depth, pointing, jot menu, evening, sizing) | https://claude.ai/artifact/BcqU8atxTQmnC45ywnzQa2 |
 | Plate V (glow + label, evening lights, composition book, jot menus) | https://claude.ai/artifact/13AuDFvrJxoW5XbDYiVydr |
+| Plate VI (one-point perspective, cork glow, evening from the top edge, page edges, Recently note) | https://claude.ai/artifact/PPHHNxUm3q1LiJvrpC9tnJ |
 | Kitchen Plate (plate style reference) | https://claude.ai/artifact/3NHEb9cHQuachu9vBWvnuN |
 
 ## Rules to keep
