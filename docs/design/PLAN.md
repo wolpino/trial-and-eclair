@@ -32,8 +32,8 @@ One view at a time, reviewed as it lands, not all at the end.
 ### Status
 | # | View | Section file | Status |
 |---|------|--------------|--------|
-| 1 | Kitchen (day, evening, extra wide) | 01-kitchen + kitchen.js | drawing |
-| 2 | Recipe box | 07-recipe-box | not started |
+| 1 | Kitchen (day, evening, extra wide) | 01-kitchen + kitchen.js | waiting on Ari |
+| 2 | Recipe box | 07-recipe-box | drawing |
 | 3 | Whiteboard | 02-whiteboard | not started |
 | 4 | Trials notebook | 06-notebook | not started |
 | 5 | Idea board | 03-ideas | not started |
@@ -45,7 +45,7 @@ One view at a time, reviewed as it lands, not all at the end.
 
 Statuses: not started → drawing → waiting on Ari → tweaking → done.
 
-Plate X page: (link added on first publish)
+Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt
 
 ---
 
