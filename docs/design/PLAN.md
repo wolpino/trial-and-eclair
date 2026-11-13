@@ -33,8 +33,8 @@ One view at a time, reviewed as it lands, not all at the end.
 | # | View | Section file | Status |
 |---|------|--------------|--------|
 | 1 | Kitchen (day, evening, extra wide) | 01-kitchen + kitchen.js | waiting on Ari |
-| 2 | Recipe box | 07-recipe-box | drawing |
-| 3 | Whiteboard | 02-whiteboard | not started |
+| 2 | Recipe box | 07-recipe-box | waiting on Ari |
+| 3 | Whiteboard | 02-whiteboard | drawing |
 | 4 | Trials notebook | 06-notebook | not started |
 | 5 | Idea board | 03-ideas | not started |
 | 6 | Cookbooks | 04-cookbooks | not started |
