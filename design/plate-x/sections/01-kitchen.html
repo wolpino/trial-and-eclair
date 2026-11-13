@@ -3,15 +3,21 @@
   <div class="sec-body">
     <h3>The main kitchen, by day</h3>
     <figure id="k-main" class="fx"></figure>
-    <p class="note"><b>What changed since your notes.</b> The smaller board and the black and white floor are settled. Under the counter, left to right: the fridge, a slim cabinet, the bookshelf, a double cabinet with its pulls at the two inner top corners, and the sink cabinet with its false drawer front. A drawer line runs along the whole run. The round knobs are now bar pulls: level on drawers, upright on doors, always on the flat frame of the door. Pinned items on the small whiteboard have an orange marker star.</p>
+    <p class="note"><b>What changed since your notes.</b> The smaller board and the black and white floor are settled. Under the counter, left to right: the fridge, a slim cabinet (now the narrowest), the bookshelf (moved left), the double cabinet for the recipe log (wider, with its pulls at the two inner top corners), and the sink cabinet with its false drawer front. A drawer line runs along the whole run. Brass bar pulls: level on drawers, upright on doors, always on the flat frame of the door. Pinned items on the small whiteboard have an orange marker star.</p>
     <p class="note"><b>Try it.</b> Click the window and a tiny bird flies past. In this mock it also comes on its own every 20 seconds so you can see it; the app would use a slower timing (to be decided, about every 5 minutes). If your computer is set to reduce motion, it only comes on a click. Click the eclair to take a bite. The Plan switch shows the paid tags for a home cook and a guest, and a guest also gets a small "Guest" tag beside Account.</p>
 
     <h3>The evening kitchen</h3>
     <figure id="k-eve" class="fx"></figure>
     <p class="note"><b>Evening.</b> The same kitchen with a dark sky, a moon and stars in the window and a warm wash from the top. A shooting star crosses the window now and then (every 20 seconds in this mock), and when you click it.</p>
 
-    <h3>Cabinet colour</h3>
-    <div class="pair" style="grid-template-columns:repeat(2, minmax(0, 1fr))"><div><figure id="k-cab-now" class="fx"></figure><p class="note"><b>Current green (main kitchen).</b></p></div><div><figure id="k-cab-quiet" class="fx"></figure><p class="note"><b>Quieter.</b> A darker, softer green with thinner lines, so the shelf and books lead. The inside of the shelf goes a warmer, darker brown so it does not blend with the doors.</p></div></div>
+    <h3>The quieter green, whole kitchen</h3>
+    <figure id="k-main-quiet" class="fx"></figure>
+    <p class="note"><b>Quieter.</b> The same kitchen with a darker, softer green and thinner lines, so the shelf and books lead. The inside of the shelf goes a warmer, darker brown so it does not blend with the doors. The main kitchen above keeps the current green until you pick.</p>
+    <p class="note"><b>Hinges.</b> The doors have concealed hinges, fixed inside the cabinet, so from the front they do not show. You can see their hinge cups on the backs of the doors in the open recipe log below.</p>
+
+    <h3>The recipe log cabinet</h3>
+    <figure id="k-log" class="fx" style="max-width:620px"></figure>
+    <p class="note"><b>Open.</b> The double cabinet carries a RECIPE LOG tape label on its drawer and glows when you point at it. Clicking opens its doors: a clipboard hangs inside on a hook, its paper headed "Recipe log". It is finished later, as part of issue #161.</p>
 
     <h3>Recently on the fridge</h3>
     <figure id="k-rec" class="fx" style="max-width:360px"></figure>
@@ -22,9 +28,9 @@
     <p class="note"><b>Same scale, one above the other.</b> At normal width (top) the left edge cuts off the fridge's hinges and the right edge cuts off part of the window and the sink. From a 1680 px browser (bottom) the kitchen simply extends: the hinges, the whole window and the whole sink show. Nothing in the middle moves.</p>
 
     <ol class="qs">
-      <li><b>Cabinet colour:</b> current green or quieter?</li>
-      <li><b>Cabinet order:</b> does slim cabinet, shelf, double cabinet, sink cabinet work?</li>
-      <li><b>Pulls:</b> are brass bar pulls right, or would you like them in the fridge's chrome?</li>
+      <li><b>Cabinet colour:</b> current green or quieter, looking at the whole kitchen?</li>
+      <li><b>Cabinet widths:</b> is the slim cabinet narrow enough now, and the double cabinet wide enough?</li>
+      <li><b>Recipe log:</b> is a clipboard on a hook the right thing to find inside, and is the tape label on the drawer the right place?</li>
     </ol>
   </div>
 </section>
@@ -35,8 +41,8 @@
   PLATE.add(function () {
     put("k-main", VP, null, "The main kitchen by day");
     put("k-eve", VP, { bites: 0 }, "The kitchen in the evening", null, true);
-    put("k-cab-now", VP, { cab: "now" }, "Under the counter in the current green", [470, 1500, 440, 300]);
-    put("k-cab-quiet", VP, { cab: "quiet" }, "Under the counter in a quieter green", [470, 1500, 440, 300]);
+    put("k-main-quiet", VP, { cab: "quiet" }, "The main kitchen in the quieter green");
+    put("k-log", VP, { logOpen: 1 }, "The recipe log cabinet open: a clipboard on a hook inside", [840, 1460, 470, 262]);
     put("k-rec", VP, { linkOn: 1 }, "Recently on an index card held by two magnets", [296, 520, 100, 210]);
     put("k-normal", VP, null, "The kitchen at normal width");
     put("k-wide", VPW, null, "The kitchen extra wide");

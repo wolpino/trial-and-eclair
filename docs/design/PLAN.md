@@ -35,7 +35,7 @@ One view at a time, reviewed as it lands, not all at the end.
 | 1 | Kitchen (day, evening, extra wide) | 01-kitchen + kitchen.js | waiting on Ari |
 | 2 | Recipe box | 07-recipe-box | waiting on Ari |
 | 3 | Whiteboard | 02-whiteboard | waiting on Ari |
-| 4 | Trials notebook | 06-notebook | waiting on Ari |
+| 4 | Trials notebook | 06-notebook | tweaking |
 | 5 | Idea board | 03-ideas | waiting on Ari |
 | 6 | Cookbooks | 04-cookbooks | not started |
 | 7 | References | 05-references | not started |
@@ -148,6 +148,7 @@ Changes the app needs that came out of the plates. Each becomes one Task issue.
 - Idea board: drop the 4 statuses (Researching, Testing, Ready to publish, Archived). An idea is a note; moving it to a trial archives it
 - Starter references are kept when samples are removed
 - Sign-up asks about sample data (on by default); remove all samples in one go from Account
+- Recipe log (issue #161): lives on a clipboard inside the double cabinet under the counter
 - Whiteboard: pinned plus automatic items, wipe, tick with line until the next day, re-tick removes
 - Kitchen home as drawn (port Plate XI to React components)
 - Every open view as drawn

@@ -9,9 +9,11 @@
     '<style>[data-plan="guest"] .paid { display: inline; }</style>');
   function marker(x, y, text, fs) { return T(x, y, text.toUpperCase(), "font:400 " + fs + "px " + MARK + ";letter-spacing:.6px;fill:var(--ink)", 'text-anchor="middle"'); }
   /* The board is 620 wide (settled: a little smaller, so the kitchen is less crowded); the fridge and window sit a little out. */
+  /* Under the counter, left to right: the fridge (to 492), a slim cabinet (the narrowest, 120), the bookshelf (612 to 1012),
+     the double cabinet that opens to the recipe log, and the sink cabinet. */
   function lay(vp, o) {
     o = o || {}; var bw = 620, bx = 900 - bw / 2, wbW = 248, shW = 400;
-    var L = { vp: vp, bx: bx, bw: bw, wbW: wbW, cx: bx + wbW + 10, cw: bw - wbW - 10, shX: 900 - shW / 2, shW: shW, e0: 492 };
+    var L = { vp: vp, bx: bx, bw: bw, wbW: wbW, cx: bx + wbW + 10, cw: bw - wbW - 10, shX: 612, shW: shW, e0: 492 };
     L.B = o.floor === "none" ? 740 : 704; L.FL = o.floor === "none" ? 764 : 720;
     L.win = { x0: 1292, x1: 1548, y0: 150, y1: 392, pot: 1324 };
     return L;
@@ -292,9 +294,31 @@
       for (k = 0; k < nd; k++) out += drawer(a0 + g + k * (rw + g), a0 + g + k * (rw + g) + rw);
       for (k = 0; k < n; k++) { var dx = a0 + g + k * (dw + g); out += door(dx, 556, dw, kn === "r" || (kn === "mid" && k === 0)); }
       return out; }
-    var c0 = XS - 118, c1 = XS + 118;
-    s += cabinet(L.e0, sx, 1, "r", 1) + cabinet(sx + sw, c0, 2, "mid", 2) + cabinet(c0, c1, 2, "mid", 1) + cabinet(c1, c1 + 240, 1, "l", 1) + line("M" + c0 + " 495 V" + B + " M" + c1 + " 495 V" + B, 2);
-    /* the shelf is centred on the vanishing point: both inner walls show, and each tier's floor; the ceilings don't.
+    var c0 = XS - 118, c1 = XS + 118, late = "";
+    s += cabinet(L.e0, sx, 1, "r", 1) + logCab(sx + sw, c0) + cabinet(c0, c1, 2, "mid", 1) + cabinet(c1, c1 + 240, 1, "l", 1) + line("M" + c0 + " 495 V" + B + " M" + c1 + " 495 V" + B, 2);
+    /* The double cabinet holds the recipe log (finished later, issue #161). Closed: one wide drawer with a RECIPE LOG tape label
+       and two doors, pulls at the inner top corners; it glows on point. o.logOpen: the doors swing all the way open, flat against
+       the neighbours, showing their concealed hinge cups, and inside a clipboard hangs on a hook. */
+    function logCab(a0, a1) {
+      var g = 14, dw = (a1 - a0 - 3 * g) / 2, lx = a0 + g + 78, out = drawer(a0 + g, a1 - g) +
+        '<g transform="rotate(-1 ' + lx + ' 526)">' + tape(lx, 526, 140, 19, 0, 0.96, "lbl") + marker(lx, 531.5, "Recipe log", 14) + "</g>";
+      if (!o.logOpen) return hot("the recipe log", out + door(a0 + g, 556, dw, true) + door(a0 + 2 * g + dw, 556, dw, false), [a0, 500, a1 - a0, B - 508]);
+      var i0 = a0 + g, i1 = a1 - g, y0 = 556, y1 = B - 12, d = 70, bk = P(i0, y0, d), bc = P(i1, y1, d), mx = (bk[0] + bc[0]) / 2;
+      /* the hook is just above the opening's top edge (hidden); the clipboard hangs on the back wall where we can see it */
+      var t0 = y0 + 4, clip = hatch(mx - 24, t0 + 6, 54, 70, 0.4) + reg("rect", 'x="' + (mx - 28) + '" y="' + t0 + '" width="56" height="72" rx="4"', "var(--wood-hi)", 1.8) +
+        reg("rect", 'x="' + (mx - 23) + '" y="' + (t0 + 9) + '" width="46" height="58"', "var(--card)", 1.2) +
+        reg("rect", 'x="' + (mx - 12) + '" y="' + (t0 - 3) + '" width="24" height="11" rx="3"', "#d2d0c8", 1.6) +
+        T(mx, t0 + 26, "Recipe log", "font:700 13px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"');
+      for (var l = 0; l < 3; l++) clip += line("M" + (mx - 18) + " " + (t0 + 38 + l * 9) + " H" + (mx + 18), 1, 0.6, "#c3d2ec");
+      out += recess(i0, y0, i1, y1, d, "color-mix(in srgb, var(--wood-hi) 55%, #fff)", { side: "color-mix(in srgb, var(--wood-hi) 40%, #8a6a4a)", top: "color-mix(in srgb, var(--wood) 70%, #000)", bottom: "var(--wood-hi)" }, clip) + reg("rect", 'x="' + i0 + '" y="' + y0 + '" width="' + (i1 - i0) + '" height="' + (y1 - y0) + '"', "none", 2);
+      /* the doors' backs: plain, with two hinge cups each by the hinge edge */
+      function back(x, hingeX) { var b = reg("rect", 'x="' + x + '" y="' + y0 + '" width="' + dw + '" height="' + (y1 - y0) + '" rx="4"', DF, lw);
+        [y0 + 22, y1 - 22].forEach(function (cy) { b += reg("circle", 'cx="' + hingeX + '" cy="' + cy + '" r="8"', "#d2d0c8", 1.6) + reg("rect", 'x="' + (hingeX - (hingeX > x + dw / 2 ? 20 : -4)) + '" y="' + (cy - 3) + '" width="16" height="6" rx="2"', "#d2d0c8", 1.2); });
+        return b; }
+      late += hatch(i0 - dw, y1, dw, 5) + back(i0 - dw, i0 - 14) + back(i1, i1 + 14);
+      return out;
+    }
+    /* the shelf sits a little left of the vanishing point: both inner walls show (the right one wider), and each tier's floor; the ceilings don't.
        Two boards of the same thickness: the middle one and the bottom rail. Both tier floors are the same pale wood. */
     var m0 = 495 + Math.round((B - 539) * 0.52), m1 = m0 + 22, b0 = B - 22, tH = m0 - 495, lH = b0 - m1, SD = 26;
     /* with the quieter green the shelf inside goes a warmer, darker brown so the two stay apart */
@@ -317,6 +341,7 @@
     s += hot("the cookbooks", clipTo(sx, 495, sx + sw, m0, top) + label(m0, "Cookbooks"), [sx + 6, 499, sw - 12, m1 - 503]);
     s += hatch(sx + 2, 495, sw - 4, 7) + hatch(sx + 2, m1, sw - 4, 7);
     s += reg("rect", 'x="' + sx + '" y="495" width="' + sw + '" height="' + (B - 495) + '"', "none", 3) + paidTag(sx + sw - 70, 495 + Math.round(tH * 0.56), -3);
+    s += late;
     /* the kick board, then the floor in front of it */
     s += reg("rect", 'x="' + x0 + '" y="' + B + '" width="' + W + '" height="' + (L.FL - B) + '"', "var(--wood-dark)", 2.4);
     return s + (L.FL < 764 ? floorStrip(L, o) : "");
