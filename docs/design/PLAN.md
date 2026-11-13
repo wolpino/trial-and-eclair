@@ -33,9 +33,9 @@ One view at a time, reviewed as it lands, not all at the end.
 | # | View | Section file | Status |
 |---|------|--------------|--------|
 | 1 | Kitchen (day, evening, extra wide) | 01-kitchen + kitchen.js | waiting on Ari |
-| 2 | Recipe box | 07-recipe-box | waiting on Ari |
+| 2 | Recipe box | 07-recipe-box | tweaking |
 | 3 | Whiteboard | 02-whiteboard | waiting on Ari |
-| 4 | Trials notebook | 06-notebook | not started |
+| 4 | Trials notebook | 06-notebook | drawing |
 | 5 | Idea board | 03-ideas | not started |
 | 6 | Cookbooks | 04-cookbooks | not started |
 | 7 | References | 05-references | not started |

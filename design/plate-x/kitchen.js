@@ -8,17 +8,15 @@
   document.head.insertAdjacentHTML("beforeend", '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap">' +
     '<style>[data-plan="guest"] .paid { display: inline; }</style>');
   function marker(x, y, text, fs) { return T(x, y, text.toUpperCase(), "font:400 " + fs + "px " + MARK + ";letter-spacing:.6px;fill:var(--ink)", 'text-anchor="middle"'); }
-  /* fit "a" (main): the board 40 narrower, the window and fridge a little further out. fit "b": the board as it was,
-     the fridge and window moved further out, so more of each is cut off. */
+  /* The board is 620 wide (settled: a little smaller, so the kitchen is less crowded); the fridge and window sit a little out. */
   function lay(vp, o) {
-    o = o || {}; var b = o.fit === "b", bw = b ? 660 : 620, bx = 900 - bw / 2, wbW = 248, shW = 400;
-    var L = { vp: vp, bx: bx, bw: bw, wbW: wbW, cx: bx + wbW + 10, cw: bw - wbW - 10, shX: 900 - shW / 2, shW: shW, e0: b ? 476 : 492 };
+    o = o || {}; var bw = 620, bx = 900 - bw / 2, wbW = 248, shW = 400;
+    var L = { vp: vp, bx: bx, bw: bw, wbW: wbW, cx: bx + wbW + 10, cw: bw - wbW - 10, shX: 900 - shW / 2, shW: shW, e0: 492 };
     L.B = o.floor === "none" ? 740 : 704; L.FL = o.floor === "none" ? 764 : 720;
-    L.win = b ? { x0: 1312, x1: 1568, y0: 150, y1: 392, pot: 1344 } : { x0: 1292, x1: 1548, y0: 150, y1: 392, pot: 1324 };
-    XS = b ? 1510 : 1490;
+    L.win = { x0: 1292, x1: 1548, y0: 150, y1: 392, pot: 1324 };
     return L;
   }
-  /* The sink sits under the window. XS is its centre on the counter's front edge (perspective pulls it left as it goes back). Set by lay(). */
+  /* The sink sits under the window. XS is its centre on the counter's front edge (perspective pulls it left as it goes back). */
   var XS = 1490;
   var NOTES = [[112, 140, 80, 88, 3, "var(--yellow)", "var(--blue)"], [212, 150, 104, 66, -2, "var(--card)", "var(--stem)"], [22, 250, 98, 64, 2, "var(--amber)", "var(--orange)"],
     [140, 248, 86, 80, -3, "var(--card)", "var(--orange)"], [250, 240, 90, 70, 4, "var(--card)", "var(--yellow)"], [340, 146, 84, 72, -4, "var(--amber)", "var(--blue)"], [362, 244, 92, 76, 2, "var(--yellow)", "var(--stem)"], [446, 160, 80, 90, 3, "var(--card)", "var(--orange)"]];
@@ -275,34 +273,33 @@
     s += reg("rect", 'x="' + x0 + '" y="' + YB.toFixed(1) + '" width="' + W + '" height="' + (CTR - YB).toFixed(1) + '"', "var(--wood-hi)", 2.2) + grain(x0, YB + 4, W, CTR - YB - 8, 11) + grain(x0 + 60, YB + 20, W, CTR - YB - 24, 12) +
       reg("rect", 'x="' + x0 + '" y="' + CTR + '" width="' + W + '" height="12"', "var(--wood)") + reg("rect", 'x="' + x0 + '" y="486" width="' + W + '" height="9"', "var(--wood-dark)", 2.4);
     s += sink(o);
-    /* cab: now | quiet (darker, lower contrast) | slab (flat doors) | shadow (deep hatch under the counter edge).
-       drawers: sink (a false drawer front under the sink only) | all (a matching drawer line along the run) */
-    var cab = o.cab || "now", quiet = cab === "quiet", slab = cab === "slab", CB = quiet ? "color-mix(in srgb, var(--cab) 56%, #2c2a22)" : "var(--cab)",
+    /* cab: now | quiet (a darker, softer green). Left to right: a slim cabinet, the shelf, a double cabinet, the sink cabinet.
+       Every cabinet has a drawer line at the top; the sink's is a false front. Pulls are bars: level on drawers, upright on doors. */
+    var quiet = o.cab === "quiet", CB = quiet ? "color-mix(in srgb, var(--cab) 56%, #2c2a22)" : "var(--cab)",
       DF = quiet ? "color-mix(in srgb, var(--cab) 62%, #2c2a22)" : "var(--cab-hi)", lw = quiet ? 1.6 : 2.2;
     s += reg("rect", 'x="' + x0 + '" y="495" width="' + (sx - x0) + '" height="' + (B - 495) + '"', CB) + reg("rect", 'x="' + (sx + sw) + '" y="495" width="' + (vp[1] + 20 - sx - sw) + '" height="' + (B - 495) + '"', CB);
-    function knob(kx, ky) { return reg("circle", 'cx="' + kx + '" cy="' + ky + '" r="6"', "var(--brass)", 1.8) + '<circle cx="' + (kx - 2) + '" cy="' + (ky - 2) + '" r="1.8" style="fill:#fff;opacity:.7"/>'; }
-    /* a door: a set-in panel (its bottom ledge and the inner wall on the outer side face the eye) and a brass knob; flat for slab */
-    function door(dx, y0, dw, kx) { var out = reg("rect", 'x="' + dx + '" y="' + y0 + '" width="' + dw + '" height="' + (B - 12 - y0) + '" rx="4"', DF, lw);
+    function pull(cx, y, up) { return up ? reg("rect", 'x="' + (cx - 3.5) + '" y="' + y + '" width="7" height="34" rx="3.5"', "var(--brass)", 1.6) + line("M" + (cx - 1) + " " + (y + 5) + " v24", 1.2, 0.7, "#fff")
+      : reg("rect", 'x="' + (cx - 17) + '" y="' + y + '" width="34" height="7" rx="3.5"', "var(--brass)", 1.6) + line("M" + (cx - 12) + " " + (y + 2.2) + " h24", 1.2, 0.7, "#fff"); }
+    /* a door: a set-in panel framed by a flat 16 wide stile; the pull sits on the stile, clear of the bevel */
+    function door(dx, y0, dw, right) { var out = reg("rect", 'x="' + dx + '" y="' + y0 + '" width="' + dw + '" height="' + (B - 12 - y0) + '" rx="4"', DF, lw);
       if (quiet) out += reg("rect", 'x="' + (dx + 16) + '" y="' + (y0 + 16) + '" width="' + (dw - 32) + '" height="' + (B - 44 - y0) + '"', "none", 1.1);
-      else if (!slab) out += recess(dx + 16, y0 + 16, dx + dw - 16, B - 28, 9, DF, { side: CB, bottom: "color-mix(in srgb, var(--cab-hi) 70%, #fff)" }, hatch(dx + 16, y0 + 16, dw - 32, 6)) +
+      else out += recess(dx + 16, y0 + 16, dx + dw - 16, B - 28, 9, DF, { side: CB, bottom: "color-mix(in srgb, var(--cab-hi) 70%, #fff)" }, hatch(dx + 16, y0 + 16, dw - 32, 6)) +
         reg("rect", 'x="' + (dx + 16) + '" y="' + (y0 + 16) + '" width="' + (dw - 32) + '" height="' + (B - 44 - y0) + '"', "none", 1.6);
-      return out + knob(kx, y0 + 32); }
-    function doors(a0, a1, n, kn, top) { var g = 14, dw = (a1 - a0 - (n + 1) * g) / n, out = "";
-      for (var k = 0; k < n; k++) { var dx = a0 + g + k * (dw + g), kr = kn === "r" || (kn === "mid" && k === 0); out += door(dx, top || 508, dw, kr ? dx + dw - 26 : dx + 26); }
+      return out + pull(right ? dx + dw - 8 : dx + 8, y0 + 20, true); }
+    function drawer(a0, a1) { return reg("rect", 'x="' + a0 + '" y="508" width="' + (a1 - a0) + '" height="36" rx="4"', DF, lw) + pull((a0 + a1) / 2, 522.5); }
+    /* a cabinet a0..a1: nd drawers over n doors. kn "r"/"l": pulls on that side; "mid": pulls at the two inner corners */
+    function cabinet(a0, a1, n, kn, nd) { var g = 14, dw = (a1 - a0 - (n + 1) * g) / n, rw = (a1 - a0 - (nd + 1) * g) / nd, out = "", k;
+      for (k = 0; k < nd; k++) out += drawer(a0 + g + k * (rw + g), a0 + g + k * (rw + g) + rw);
+      for (k = 0; k < n; k++) { var dx = a0 + g + k * (dw + g); out += door(dx, 556, dw, kn === "r" || (kn === "mid" && k === 0)); }
       return out; }
-    /* a drawer front across a cabinet, with a brass pull; a sink's is a false front that does not open */
-    function drawer(a0, a1) { var cx = (a0 + a1) / 2;
-      return reg("rect", 'x="' + (a0 + 14) + '" y="508" width="' + (a1 - a0 - 28) + '" height="36" rx="4"', DF, lw) + reg("rect", 'x="' + (cx - 16) + '" y="523" width="32" height="7" rx="3.5"', "var(--brass)", 1.6); }
-    function run(a0, a1, n, kn, dr) { return dr ? drawer(a0, a1) + doors(a0, a1, n, kn, 556) : doors(a0, a1, n, kn); }
-    var c0 = XS - 118, c1 = XS + 118, all = o.drawers === "all";
-    s += run(L.e0, sx, 1, "r", all) + run(sx + sw, c0, 1, "l", all) + run(c0, c1, 2, "mid", true) + run(c1, c1 + 240, 1, "l", all) + line("M" + c0 + " 495 V" + B + " M" + c1 + " 495 V" + B, 2);
-    if (cab === "shadow") s += hatch(x0, 495, sx - x0, 30) + hatch(sx + sw, 495, vp[1] + 20 - sx - sw, 30) + hatch(x0, 495, sx - x0, 12) + hatch(sx + sw, 495, vp[1] + 20 - sx - sw, 12);
-    s += hatch(x0, 495, sx - x0, 7) + hatch(sx + sw, 495, vp[1] + 20 - sx - sw, 7);
+    var c0 = XS - 118, c1 = XS + 118;
+    s += cabinet(L.e0, sx, 1, "r", 1) + cabinet(sx + sw, c0, 2, "mid", 2) + cabinet(c0, c1, 2, "mid", 1) + cabinet(c1, c1 + 240, 1, "l", 1) + line("M" + c0 + " 495 V" + B + " M" + c1 + " 495 V" + B, 2);
     /* the shelf is centred on the vanishing point: both inner walls show, and each tier's floor; the ceilings don't.
        Two boards of the same thickness: the middle one and the bottom rail. Both tier floors are the same pale wood. */
     var m0 = 495 + Math.round((B - 539) * 0.52), m1 = m0 + 22, b0 = B - 22, tH = m0 - 495, lH = b0 - m1, SD = 26;
-    var SH = { side: "var(--cab-side)", bottom: "color-mix(in srgb, var(--wood-hi) 40%, #fff)" };
-    s += reg("rect", 'x="' + sx + '" y="495" width="' + sw + '" height="' + (B - 495) + '"', "var(--cab-deep)") + recess(sx, 495, sx + sw, m0, SD, "var(--cab-deep)", SH) + recess(sx, m1, sx + sw, b0, SD, "var(--cab-deep)", SH);
+    /* with the quieter green the shelf inside goes a warmer, darker brown so the two stay apart */
+    var DEEP = quiet ? "color-mix(in srgb, var(--wood-dark) 34%, #16120d)" : "var(--cab-deep)", SH = { side: quiet ? "color-mix(in srgb, var(--wood-dark) 22%, #0f0c09)" : "var(--cab-side)", bottom: "color-mix(in srgb, var(--wood-hi) 40%, #fff)" };
+    s += reg("rect", 'x="' + sx + '" y="495" width="' + sw + '" height="' + (B - 495) + '"', DEEP) + recess(sx, 495, sx + sw, m0, SD, DEEP, SH) + recess(sx, m1, sx + sw, b0, SD, DEEP, SH);
     [m0, b0].forEach(function (y, k) { s += reg("rect", 'x="' + sx + '" y="' + y + '" width="' + sw + '" height="22"', "var(--wood)", 2.4) + grain(sx + 4, y + 2, sw - 8, 18, 31 + k); });
     /* a book: its top (page edges) and the side facing the centre show */
     function bk(x, y, w, h, fill, rx) { return block(x, y, x + w, y + h, 18, { top: w > h ? "color-mix(in srgb, " + fill + " 72%, #fff)" : "#f6efdc", side: "color-mix(in srgb, " + fill + " 72%, #000)" }) + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 1.5) + '"', fill, 2.2); }
@@ -404,8 +401,8 @@
     return s;
   }
   function svg(vp, inner, label, y0, h) { return '<svg viewBox="' + vp[0] + " " + (y0 || 0) + " " + (vp[1] - vp[0]) + " " + (h || 760) + '" role="group" aria-label="' + label + '">' + inner + "</svg>"; }
-  /* Options. fit: a | b. floor: check | boards | flat | none. cab: now | quiet | slab | shadow. drawers: sink | all. tile: quiet | none. plan: dev | cook | guest. */
-  var o = { cover: "black", name: "Trials", depth: "dim", tile: "quiet", plan: "dev", bites: 0, fit: "a", floor: "check", cab: "now", drawers: "all" };
+  /* Options. floor: check | boards | flat | none. cab: now | quiet. tile: quiet | none. plan: dev | cook | guest. */
+  var o = { cover: "black", name: "Trials", depth: "dim", tile: "quiet", plan: "dev", bites: 0, floor: "check", cab: "now" };
   function vpOf() { return VP; }
   function withView(vpy, zf, fn) { var a = VPY, b = ZF; VPY = vpy; ZF = zf; var r = fn(); VPY = a; ZF = b; return r; }
   function opts(extra) { var r = {}; for (var k in o) r[k] = o[k]; for (var e in extra) r[e] = extra[e]; return r; }
