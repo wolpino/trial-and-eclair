@@ -34,7 +34,7 @@ One view at a time, reviewed as it lands, not all at the end.
 |---|------|--------------|--------|
 | 1 | Kitchen (day, evening, extra wide) | 01-kitchen + kitchen.js | tweaking |
 | 2 | Recipe box | 07-recipe-box | waiting on Ari |
-| 3 | Whiteboard | 02-whiteboard | tweaking (after the first two) |
+| 3 | Whiteboard | 02-whiteboard | waiting on Ari |
 | 4 | Trials notebook | 06-notebook | not started |
 | 5 | Idea board | 03-ideas | not started |
 | 6 | Cookbooks | 04-cookbooks | not started |
