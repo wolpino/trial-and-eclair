@@ -37,21 +37,23 @@ Draw the whole settled layout with the final tabs, confirm it, then start the pl
 - Plate IV (https://claude.ai/artifact/BcqU8atxTQmnC45ywnzQa2): composition notebook (no spiral) in softer covers, mixed labels, more detail with a depth switch, glow/label pointing variants, jot menu, backsplash and made-it toggles, evening kitchen for dark mode, fixed middle on wide screens
 - Plate V (https://claude.ai/artifact/13AuDFvrJxoW5XbDYiVydr): stronger glow + label, evening lit from above, composition book closer to real ones, open book redrawn, jot menus A/B, towel on a bar, torn made-this-week note
 - Plate VI (https://claude.ai/artifact/PPHHNxUm3q1LiJvrpC9tnJ): one-point perspective with one vanishing point (x 900, eye level at the board) on every object, with a construction-line plate; glow halo spills past the board frame, paler cork, 'Ideas' underline; evening a warm multiply wash from the top edge; white page edges with lines the long way; jot B only; 'Recently' note taped with linked names
+- Plate VII answers: narrower kitchen (no window, no pegboard); black marble, cover says Trials; taller wall under the board; recipe box with a flush closed lid; 'Recently' up on the wall or a fridge; eclair eaten in three clicks; camera upload for Trials on phones; other angle options?
+- Plate VIII (https://claude.ai/artifact/KGwgZJZ6XQMeRtQTdMr1mR): all of the above, plus angle variants and an evening with a small dark window to compare
 - Plate VI answers: notebook too thick (keep some, no heavy black lines); evening too dark at the bottom; open wall space: window + pegboard or narrower?; board above the box and under the notebook top, more wall below it; page edges on the open book; 'Recently' note not right
 - Plate VII (https://claude.ai/artifact/V35qBtVGy4KY3zrTVVUsrY): slim notebook, board raised 25 px, shallower counter, lighter evening, window + pegboard (both ways) or narrower, fanned page edges on the open book, 'Recently' as ticket rail, clothesline, slate or index card
 - Plate V answers: idea board glow too faint; evening brighter, light from the top of the page, no lamp; notebook page edges white with lines the long way; open book kept; jot B; note held with tape, titled 'Recently', names link; depth is dimensional with consistent perspective
 - Decided: phone after the design; demo data asked at sign-up and removable; jot destination picked by the cook (cork or whiteboard); dark mode is an evening kitchen
 
 ### Open threads
-- Plate VII waiting on Ari: wall (window + pegboard which way, or narrower), which 'Recently', notebook thickness, open-book edges, evening, board height; cover still open; is the name settled as Trials?
+- Plate VIII waiting on Ari: Recently on wall or fridge (which side); recipe box look; when the eclair comes back (reload, an hour, or a logged bake); angle; wall height; evening window; phone photo flow
 - Equipment spots: visible edges or fixed distance from the middle
 - `design/kitchen-starter/` (20 MB) still local
 
 <!-- AGENT_CONTEXT_START -->
 **Keywords:** kitchen layout final, Plate II, plate style, recipe box tabs, lid minimum, mark from the kitchen
 **Files:** .cursor/handoffs/NEXT.md, design/kitchen-starter/README.md
-**Do not redo:** layout rounds 1–10; Plates II–VII
-**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent" (after Ari's Plate VII answers)
+**Do not redo:** layout rounds 1–10; Plates II–VIII
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent" (after Ari's Plate VIII answers)
 <!-- AGENT_CONTEXT_END -->
 
 ---

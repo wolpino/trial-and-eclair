@@ -5,21 +5,21 @@ The block layout is final (round 10). Draw the kitchen in the plate style, then 
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate VII out, waiting on Ari) → mark → brand sheet → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate VIII out, waiting on Ari) → mark → brand sheet → Task issues → build
 ```
 
 ## Prompt for the next agent
-> Kitchen plate drawing, after Plate VII. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout`, `visual-direction` and `commit-each-round` memories, and the top entry of `.cursor/session_log.mdc` first. Don't change the block layout unless Ari asks (the window and pegboard are Ari's own idea). No code changes.
+> Kitchen plate drawing, after Plate VIII. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout`, `visual-direction` and `commit-each-round` memories, and the top entry of `.cursor/session_log.mdc` first. No code changes.
 >
-> Plate VII is published: https://claude.ai/artifact/V35qBtVGy4KY3zrTVVUsrY (source: `Artifact` read with `path: index.html`). It keeps Plate VI's one-point perspective: vanishing point x 900, y 200, `P(x, y, d)` moves toward it by d/(d+500). The board is drawn 25 px higher with the vanishing point shifted inside its group, so it stays consistent. Changes since Plate VI:
-> - **Notebook:** depth 24 (was 48), plain white page edges, fine grey cover lines, no page lines
-> - **Board and counter:** board up 25 px (clear of the box, under the notebook top); counter depth 100 (was 130); plate about 100 across
-> - **Evening:** a multiply gradient that is lighter at the bottom
-> - **Wall switch:** plain, window + pegboard, pegboard + window, or narrower (viewBox 430–1370)
-> - **Open book:** six fanned page layers at the outer sides and the foot
-> - **"Recently" switch:** torn note, ticket rail (default), clothesline, slate, index card; each name is a link (yellow + underline)
+> Plate VIII is published: https://claude.ai/artifact/KGwgZJZ6XQMeRtQTdMr1mR (source: `Artifact` read with `path: index.html`). Settled by Ari: the narrower kitchen (viewBox 430–1370, no window, no pegboard); black marble cover saying TRIALS (white kept for customising); dimensional one-point perspective. Drawing settings: vanishing point x 900, y 230; `P(x, y, d)` moves toward it by d/(d+500); counter depth 80; board drawn 25 px higher.
+> - **Recipe box:** a flush hinged lid (one block, seam at y 394, back hinges, brass hasp, corner caps), 150 × 100
+> - **Recently switch:** on the wall (left of the whiteboard), fridge right (view 430–1430), fridge left (view 370–1370), none. The fridge's side shows only above the counter
+> - **Eclair:** whole on load; clicks take bites 1, 2, then gone (crumbs and cream smear). Not saved
+> - **Angles plate:** eye higher (140), now (230), eye lower (300), gentler (500→900), stronger (300)
+> - **Evening:** a small dark window shown to compare
+> - **Trials photos:** a phone mockup with a camera button and a Take a photo / Choose sheet; "Add a photo" on the desktop open book
 >
-> Apply Ari's answers. Ari's note "the notebook says Trials and" was cut off, so ask whether the name is settled as Trials. Publish each round as a new artifact, proof locally with Playwright from `frontend/node_modules` first, then record the answers in the `kitchen-layout` memory, this file and the session log, and commit on the docs branch. Still to choose afterwards: more plate rounds, the phone layout, or the mark.
+> Apply Ari's answers. Publish each round as a new artifact, proof locally with Playwright from `frontend/node_modules` first, then record the answers in the `kitchen-layout` memory, this file and the session log, and commit on the docs branch. After the plates: the phone layout, or the mark.
 
 ## The layout now (final)
 - **Wall:** one board in the middle: whiteboard on the left ("next up", pinned plus automatic, marker font), cork ideas on the right. Lowered to just above the recipe box, with a small gap (round 9 A). The wall above the board stays plain, which leaves room for anniversary equipment or a shelf later. No window, no oven, no title or name
@@ -34,7 +34,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 - **Tabs:** A–I front, J–Q middle, R–Z back; R–Z lined up with A–I, J–Q centred in the gaps; nine R–Z tabs, no XYZ (drawn in round 10)
 - **Roles:** one kitchen for everyone; nothing hidden, nothing moves on upgrade. Paid things (Lab, cork ideas, cookbooks tier) carry a "paid plan" label and open read-only with sample data for cooks and guests. Cooks get the box, whiteboard and references. Guests: decision 002 as it is (starter recipes, up to 5 cards of their own)
 - **Depth:** dimensional, one-point perspective, one vanishing point at the centre of the board (Plate VI)
-- **Notebook:** a composition book (cloth spine, marbled cover, cushion label) on a cookbook stand; opens to a two-page spread, ruled pages, no spiral or tape
+- **Notebook:** a composition book named TRIALS (cloth spine, black marble cover, cushion label) on a cookbook stand; opens to a two-page spread, ruled pages, no spiral. Phone photos go straight into an entry (camera button)
 - **New kitchen:** starts with demo data; sign-up asks whether to include it, and it can be removed later in one go
 - **Evening:** dark mode is a darker evening kitchen
 - **Equipment:** anniversary equipment later (1 month, 6 months, 1 year, yearly; pick one of three). No pegboard at first
@@ -63,6 +63,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 | Plate V (glow + label, evening lights, composition book, jot menus) | https://claude.ai/artifact/13AuDFvrJxoW5XbDYiVydr |
 | Plate VI (one-point perspective, cork glow, evening from the top edge, page edges, Recently note) | https://claude.ai/artifact/PPHHNxUm3q1LiJvrpC9tnJ |
 | Plate VII (window + pegboard or narrower, slim notebook, raised board, Recently options) | https://claude.ai/artifact/V35qBtVGy4KY3zrTVVUsrY |
+| Plate VIII (narrower, recipe box lid, Recently on wall or fridge, eclair bites, angles, phone photos) | https://claude.ai/artifact/KGwgZJZ6XQMeRtQTdMr1mR |
 | Kitchen Plate (plate style reference) | https://claude.ai/artifact/3NHEb9cHQuachu9vBWvnuN |
 
 ## Rules to keep
