@@ -8,15 +8,18 @@
   document.head.insertAdjacentHTML("beforeend", '<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Permanent+Marker&display=swap">' +
     '<style>[data-plan="guest"] .paid { display: inline; }</style>');
   function marker(x, y, text, fs) { return T(x, y, text.toUpperCase(), "font:400 " + fs + "px " + MARK + ";letter-spacing:.6px;fill:var(--ink)", 'text-anchor="middle"'); }
+  /* fit "a" (main): the board 40 narrower, the window and fridge a little further out. fit "b": the board as it was,
+     the fridge and window moved further out, so more of each is cut off. */
   function lay(vp, o) {
-    o = o || {}; var bw = 660, bx = 900 - bw / 2, wbW = 248, shW = 400;
-    var L = { vp: vp, bx: bx, bw: bw, wbW: wbW, cx: bx + wbW + 10, cw: bw - wbW - 10, shX: 900 - shW / 2, shW: shW, e0: 500 };
+    o = o || {}; var b = o.fit === "b", bw = b ? 660 : 620, bx = 900 - bw / 2, wbW = 248, shW = 400;
+    var L = { vp: vp, bx: bx, bw: bw, wbW: wbW, cx: bx + wbW + 10, cw: bw - wbW - 10, shX: 900 - shW / 2, shW: shW, e0: b ? 476 : 492 };
     L.B = o.floor === "none" ? 740 : 704; L.FL = o.floor === "none" ? 764 : 720;
-    L.win = { x0: 1272, x1: 1528, y0: 150, y1: 392, pot: 1304 };
+    L.win = b ? { x0: 1312, x1: 1568, y0: 150, y1: 392, pot: 1344 } : { x0: 1292, x1: 1548, y0: 150, y1: 392, pot: 1324 };
+    XS = b ? 1510 : 1490;
     return L;
   }
-  /* The sink sits under the window. XS is its centre on the counter's front edge (perspective pulls it left as it goes back). */
-  var XS = 1470;
+  /* The sink sits under the window. XS is its centre on the counter's front edge (perspective pulls it left as it goes back). Set by lay(). */
+  var XS = 1490;
   var NOTES = [[112, 140, 80, 88, 3, "var(--yellow)", "var(--blue)"], [212, 150, 104, 66, -2, "var(--card)", "var(--stem)"], [22, 250, 98, 64, 2, "var(--amber)", "var(--orange)"],
     [140, 248, 86, 80, -3, "var(--card)", "var(--orange)"], [250, 240, 90, 70, 4, "var(--card)", "var(--yellow)"], [340, 146, 84, 72, -4, "var(--amber)", "var(--blue)"], [362, 244, 92, 76, 2, "var(--yellow)", "var(--stem)"], [446, 160, 80, 90, 3, "var(--card)", "var(--orange)"]];
   function board(L) { YS = BR; VPY += BR; var out = boardAt(L); VPY -= BR; YS = 0; return '<g transform="translate(0 -' + BR + ')">' + out + "</g>"; }
@@ -27,7 +30,7 @@
       : reg("rect", 'x="' + x + '" y="125" width="' + L.wbW + '" height="230"', "var(--wb)", 2.2);
     wb += '<rect class="lbl" x="' + (x + 14) + '" y="136" width="116" height="38" rx="3" style="fill:transparent"/>' + T(x + 22, 164, "Next up", "font:700 33px var(--font-hand);fill:var(--blue)") + line("M" + (x + 22) + " 172 q48 5 96 -2", 2.4, 1, "var(--blue)");
     [["Croissants · trial 4", 0], ["Rough puff pastry", 0], ["Rhubarb galette", 1]].forEach(function (it, i) { var y = 210 + i * 34;
-      wb += it[1] ? '<circle cx="' + (x + 30) + '" cy="' + (y - 7) + '" r="8" style="fill:var(--orange);stroke:var(--ink);stroke-width:1.8"/>' : reg("rect", 'x="' + (x + 22) + '" y="' + (y - 15) + '" width="15" height="15" rx="2"', "var(--wb)", 1.8);
+      wb += it[1] ? star5(x + 30, y - 7, 0.8) : reg("rect", 'x="' + (x + 22) + '" y="' + (y - 15) + '" width="15" height="15" rx="2"', "var(--wb)", 1.8);
       wb += T(x + 48, y, it[0], "font:600 24px var(--font-hand);fill:" + (it[1] ? "var(--orange-text)" : "var(--ink)")); });
     var tx = x + L.wbW - 64;
     wb += reg("rect", 'x="' + tx + '" y="344" width="58" height="9" rx="2"', "var(--wood)", 1.8) + reg("rect", 'x="' + (tx + 6) + '" y="337" width="22" height="7" rx="3"', "var(--blue)", 1.4) + reg("rect", 'x="' + (tx + 32) + '" y="337" width="20" height="7" rx="3"', "var(--orange)", 1.4);
@@ -51,6 +54,9 @@
     return s + paidTag(L.cx + L.cw - 64, 336, 5);
   }
 
+  /* The pinned mark on both boards: an orange star drawn in marker (same as the whiteboard view) */
+  function star5(x, y, k) { var p = ""; for (var i = 0; i < 5; i++) { var a = -Math.PI / 2 + i * 4 * Math.PI / 5; p += (i ? " L" : "M") + (x + Math.cos(a) * 11 * k).toFixed(1) + " " + (y + Math.sin(a) * 11 * k).toFixed(1); }
+    return '<path d="' + p + ' Z" style="fill:var(--orange);fill-opacity:.35;stroke:var(--orange);stroke-width:' + (3.2 * k) + ';stroke-linejoin:round;stroke-linecap:round"/>'; }
   /* The composition notebook: cloth spine, marbled cover, cushion label */
   function cushion(x, y, w, h, r) {
     return "M" + (x + r) + " " + y + " H" + (x + w - r) + " A" + r + " " + r + " 0 0 0 " + (x + w) + " " + (y + r) + " V" + (y + h - r) + " A" + r + " " + r + " 0 0 0 " + (x + w - r) + " " + (y + h) +
@@ -192,17 +198,6 @@
       s += lk(x + 10, by, it[0], 19, onIdx === k, it[2], { cw: 0.42 }) + T(x + w - 9, by, it[1], "font:600 16px var(--font-hand);fill:var(--ink-soft)", 'text-anchor="end"'); });
     return s + magnet(x + 18, y + 16, "var(--orange)") + magnet(x + w - 18, y + 15, "var(--blue)") + "</g>";
   }
-  /* A steel ticket rail, like a restaurant pass: small tickets slid under the bar */
-  function recentRail(dx, dw, y, onIdx) {
-    var cx = dx + dw / 2, tw = (dw - 20) / 3, s = tapeLabel(cx, y - 20, "Recently", -2), bar = reg("rect", 'x="' + dx + '" y="' + y + '" width="' + dw + '" height="12" rx="2"', "#cfccc3", 2) + line("M" + (dx + 5) + " " + (y + 3.5) + " H" + (dx + dw - 5), 1.2, 0.8, "#fff") +
-      '<circle cx="' + (dx + 6) + '" cy="' + (y + 7) + '" r="1.8" style="fill:var(--ink)"/><circle cx="' + (dx + dw - 6) + '" cy="' + (y + 7) + '" r="1.8" style="fill:var(--ink)"/>';
-    s += bar;
-    RECENT.forEach(function (it, k) { var tx = dx + 6 + k * (tw + 4), m = tx + tw / 2, rot = [-2, 1.5, -1][k];
-      s += '<g transform="rotate(' + rot + " " + m + " " + (y + 8) + ')">' + hatch(tx + 3, y + 10, tw, 94, 0.3) + reg("rect", 'x="' + tx + '" y="' + (y + 5) + '" width="' + tw + '" height="96"', "#fffdf5", 1.6) +
-        line("M" + (tx + 4) + " " + (y + 34) + " H" + (tx + tw - 4), 1, 0.8, "#c9442a") + T(m, y + 28, it[1].toUpperCase(), "font:700 10px var(--font-label);letter-spacing:1.5px;fill:var(--ink-soft)", 'text-anchor="middle"') +
-        lk(m, y + 58, it[0], 14, onIdx === k, it[2], { mid: true, cw: 0.36 }) + (it[3] ? T(m, y + 76, it[3], "font:600 13px var(--font-hand);fill:var(--ink-soft)", 'text-anchor="middle"') : "") + "</g>"; });
-    return s + bar;
-  }
   /* A 1950s fridge at the left edge, running past it. It stands on the floor at the counter's end. Its side runs back
      to the wall, so it shows only above the counter and points at the vanishing point, rounded shoulder and all. */
   function fridge(L, o) {
@@ -234,7 +229,7 @@
     s += reg("rect", 'x="' + (fx - 48) + '" y="' + (ty - 17) + '" width="32" height="34" rx="7"', CH, 2) + hatch(fx - 27, ty + 12, 9, 112, 0.5) +
       reg("rect", 'x="' + (fx - 39) + '" y="' + (ty - 9) + '" width="14" height="128" rx="7"', CH, 2) + line("M" + (fx - 35) + " " + (ty + 8) + " v100", 1.4, 0.85, "#fff") +
       '<circle cx="' + (fx - 32) + '" cy="' + ty + '" r="3" style="fill:var(--ink)"/>';
-    return s + (o.recent === "rail" ? recentRail(fx - 196, 184, 164, o.linkOn) : recentSheet(fx - 114, 138, 136, o.linkOn));
+    return s + recentSheet(Math.max(fx - 104, 386), 138, 136, o.linkOn);
   }
   /* The floor runs toward us from the kick board, so every line along its depth runs to the vanishing point.
      floor: check (black and white tiles) | boards | flat | none. Tiles are wide and their rows shallow, so even at the
@@ -260,20 +255,11 @@
       reg("rect", 'x="' + (bx + h - 9) + '" y="' + (by - 19) + '" width="18" height="6" rx="3"', CH, 1.6); });
     return s + reg("ellipse", 'cx="' + bx + '" cy="' + by + '" rx="12" ry="4"', CH, 1.8) + line(d, 9, 1) + line(d, 4.4, 1, CH) + line("M" + (bx - 1.5) + " " + (by - 8) + " V" + (by - 46), 1.4, 0.9, "#fff");
   }
-  /* sink "set": a steel sink set into the counter top; we look down at its back wall and the right wall.
-     sink "top": a white enamel basin standing on the counter. The tap stands behind either one. */
+  /* A steel sink set into the counter top; we look down at its back wall and the right wall. The tap stands behind it. */
   function sink(o) {
     function A(x, d, y) { return P(x, y || CTR, d); }
     function pts(a) { return a.map(function (p) { return p[0].toFixed(1) + "," + p[1].toFixed(1); }).join(" "); }
     var t = A(XS + 10, 74), s = "";
-    if (o.sink === "top") {
-      var F0 = A(XS - 66, 16), F1 = A(XS + 66, 16), h = 30, y0 = F0[1] - h, d = 40;
-      s += tap(t[0], t[1]) + block(F0[0], y0, F1[0], F0[1], d, { side: "#dcd8cc", top: "#fbfaf6" });
-      var c = [[F0[0], y0], [F1[0], y0], P(F1[0], y0, d), P(F0[0], y0, d)], m = [(c[0][0] + c[2][0]) / 2, (c[0][1] + c[2][1]) / 2];
-      s += face(c.map(function (p) { return [m[0] + (p[0] - m[0]) * 0.88, m[1] + (p[1] - m[1]) * 0.66]; }), "#c9c6ba", 1.4);
-      return s + reg("rect", 'x="' + F0[0].toFixed(1) + '" y="' + y0.toFixed(1) + '" width="' + (F1[0] - F0[0]).toFixed(1) + '" height="' + h + '" rx="7"', "#fbfaf6", 2.2) +
-        line("M" + (F0[0] + 3).toFixed(1) + " " + (y0 + 5).toFixed(1) + " H" + (F1[0] - 3).toFixed(1), 3, 1, "var(--blue)") + hatch(F0[0] + 6, F0[1] + 1, F1[0] - F0[0] - 4, 4, 0.6);
-    }
     var rim = [A(XS - 84, 8), A(XS + 84, 8), A(XS + 84, 72), A(XS - 84, 72)], hole = [A(XS - 72, 16), A(XS + 72, 16), A(XS + 72, 64), A(XS - 72, 64)],
       bot = hole.map(function (p, k) { return A([XS - 72, XS + 72, XS + 72, XS - 72][k], [16, 16, 64, 64][k], CTR + 26); }), id = "ks" + (uidN++), dr = A(XS, 46, CTR + 26);
     s += face(rim, "#dedcd4", 2);
@@ -289,20 +275,28 @@
     s += reg("rect", 'x="' + x0 + '" y="' + YB.toFixed(1) + '" width="' + W + '" height="' + (CTR - YB).toFixed(1) + '"', "var(--wood-hi)", 2.2) + grain(x0, YB + 4, W, CTR - YB - 8, 11) + grain(x0 + 60, YB + 20, W, CTR - YB - 24, 12) +
       reg("rect", 'x="' + x0 + '" y="' + CTR + '" width="' + W + '" height="12"', "var(--wood)") + reg("rect", 'x="' + x0 + '" y="486" width="' + W + '" height="9"', "var(--wood-dark)", 2.4);
     s += sink(o);
-    s += reg("rect", 'x="' + x0 + '" y="495" width="' + (sx - x0) + '" height="' + (B - 495) + '"', "var(--cab)") + reg("rect", 'x="' + (sx + sw) + '" y="495" width="' + (vp[1] + 20 - sx - sw) + '" height="' + (B - 495) + '"', "var(--cab)");
-    /* plain doors: a set-in panel (its bottom ledge and the inner wall on the outer side face the eye) and a brass knob */
-    function doors(a0, a1, n, knob) { var g = 14, dw = (a1 - a0 - (n + 1) * g) / n, out = "";
-      for (var k = 0; k < n; k++) { var dx = a0 + g + k * (dw + g), kr = knob === "r" || (knob === "mid" && k === 0), kx = kr ? dx + dw - 26 : dx + 26;
-        out += reg("rect", 'x="' + dx + '" y="508" width="' + dw + '" height="' + (B - 520) + '" rx="4"', "var(--cab-hi)", 2.2) +
-          recess(dx + 16, 524, dx + dw - 16, B - 28, 9, "var(--cab-hi)", { side: "var(--cab)", bottom: "color-mix(in srgb, var(--cab-hi) 70%, #fff)" }, hatch(dx + 16, 524, dw - 32, 6)) +
-          reg("rect", 'x="' + (dx + 16) + '" y="524" width="' + (dw - 32) + '" height="' + (B - 552) + '"', "none", 1.6) +
-          reg("circle", 'cx="' + kx + '" cy="540" r="6"', "var(--brass)", 1.8) + '<circle cx="' + (kx - 2) + '" cy="538" r="1.8" style="fill:#fff;opacity:.7"/>'; }
+    /* cab: now | quiet (darker, lower contrast) | slab (flat doors) | shadow (deep hatch under the counter edge).
+       drawers: sink (a false drawer front under the sink only) | all (a matching drawer line along the run) */
+    var cab = o.cab || "now", quiet = cab === "quiet", slab = cab === "slab", CB = quiet ? "color-mix(in srgb, var(--cab) 56%, #2c2a22)" : "var(--cab)",
+      DF = quiet ? "color-mix(in srgb, var(--cab) 62%, #2c2a22)" : "var(--cab-hi)", lw = quiet ? 1.6 : 2.2;
+    s += reg("rect", 'x="' + x0 + '" y="495" width="' + (sx - x0) + '" height="' + (B - 495) + '"', CB) + reg("rect", 'x="' + (sx + sw) + '" y="495" width="' + (vp[1] + 20 - sx - sw) + '" height="' + (B - 495) + '"', CB);
+    function knob(kx, ky) { return reg("circle", 'cx="' + kx + '" cy="' + ky + '" r="6"', "var(--brass)", 1.8) + '<circle cx="' + (kx - 2) + '" cy="' + (ky - 2) + '" r="1.8" style="fill:#fff;opacity:.7"/>'; }
+    /* a door: a set-in panel (its bottom ledge and the inner wall on the outer side face the eye) and a brass knob; flat for slab */
+    function door(dx, y0, dw, kx) { var out = reg("rect", 'x="' + dx + '" y="' + y0 + '" width="' + dw + '" height="' + (B - 12 - y0) + '" rx="4"', DF, lw);
+      if (quiet) out += reg("rect", 'x="' + (dx + 16) + '" y="' + (y0 + 16) + '" width="' + (dw - 32) + '" height="' + (B - 44 - y0) + '"', "none", 1.1);
+      else if (!slab) out += recess(dx + 16, y0 + 16, dx + dw - 16, B - 28, 9, DF, { side: CB, bottom: "color-mix(in srgb, var(--cab-hi) 70%, #fff)" }, hatch(dx + 16, y0 + 16, dw - 32, 6)) +
+        reg("rect", 'x="' + (dx + 16) + '" y="' + (y0 + 16) + '" width="' + (dw - 32) + '" height="' + (B - 44 - y0) + '"', "none", 1.6);
+      return out + knob(kx, y0 + 32); }
+    function doors(a0, a1, n, kn, top) { var g = 14, dw = (a1 - a0 - (n + 1) * g) / n, out = "";
+      for (var k = 0; k < n; k++) { var dx = a0 + g + k * (dw + g), kr = kn === "r" || (kn === "mid" && k === 0); out += door(dx, top || 508, dw, kr ? dx + dw - 26 : dx + 26); }
       return out; }
-    /* sink "set": a sink-base cabinet with two doors under the sink. Otherwise the plain doors run on. */
-    var c0 = XS - 118, c1 = XS + 118;
-    s += doors(L.e0, sx, 1, "r");
-    s += o.sink === "set" ? doors(sx + sw, c0, 1, "l") + doors(c0, c1, 2, "mid") + doors(c1, c1 + 240, 1, "l") + line("M" + c0 + " 495 V" + B + " M" + c1 + " 495 V" + B, 2)
-      : doors(sx + sw, 1500, 2, "l") + doors(1500, 1740, 1, "l");
+    /* a drawer front across a cabinet, with a brass pull; a sink's is a false front that does not open */
+    function drawer(a0, a1) { var cx = (a0 + a1) / 2;
+      return reg("rect", 'x="' + (a0 + 14) + '" y="508" width="' + (a1 - a0 - 28) + '" height="36" rx="4"', DF, lw) + reg("rect", 'x="' + (cx - 16) + '" y="523" width="32" height="7" rx="3.5"', "var(--brass)", 1.6); }
+    function run(a0, a1, n, kn, dr) { return dr ? drawer(a0, a1) + doors(a0, a1, n, kn, 556) : doors(a0, a1, n, kn); }
+    var c0 = XS - 118, c1 = XS + 118, all = o.drawers === "all";
+    s += run(L.e0, sx, 1, "r", all) + run(sx + sw, c0, 1, "l", all) + run(c0, c1, 2, "mid", true) + run(c1, c1 + 240, 1, "l", all) + line("M" + c0 + " 495 V" + B + " M" + c1 + " 495 V" + B, 2);
+    if (cab === "shadow") s += hatch(x0, 495, sx - x0, 30) + hatch(sx + sw, 495, vp[1] + 20 - sx - sw, 30) + hatch(x0, 495, sx - x0, 12) + hatch(sx + sw, 495, vp[1] + 20 - sx - sw, 12);
     s += hatch(x0, 495, sx - x0, 7) + hatch(sx + sw, 495, vp[1] + 20 - sx - sw, 7);
     /* the shelf is centred on the vanishing point: both inner walls show, and each tier's floor; the ceilings don't.
        Two boards of the same thickness: the middle one and the bottom rail. Both tier floors are the same pale wood. */
@@ -410,8 +404,8 @@
     return s;
   }
   function svg(vp, inner, label, y0, h) { return '<svg viewBox="' + vp[0] + " " + (y0 || 0) + " " + (vp[1] - vp[0]) + " " + (h || 760) + '" role="group" aria-label="' + label + '">' + inner + "</svg>"; }
-  /* Options. recent: magnets | rail. floor: check | boards | flat | none. sink: set | top. tile: quiet | none. plan: dev | cook | guest. */
-  var o = { cover: "black", name: "Trials", depth: "dim", tile: "quiet", plan: "dev", bites: 0, recent: "magnets", floor: "check", sink: "set" };
+  /* Options. fit: a | b. floor: check | boards | flat | none. cab: now | quiet | slab | shadow. drawers: sink | all. tile: quiet | none. plan: dev | cook | guest. */
+  var o = { cover: "black", name: "Trials", depth: "dim", tile: "quiet", plan: "dev", bites: 0, fit: "a", floor: "check", cab: "now", drawers: "all" };
   function vpOf() { return VP; }
   function withView(vpy, zf, fn) { var a = VPY, b = ZF; VPY = vpy; ZF = zf; var r = fn(); VPY = a; ZF = b; return r; }
   function opts(extra) { var r = {}; for (var k in o) r[k] = o[k]; for (var e in extra) r[e] = extra[e]; return r; }
