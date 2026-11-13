@@ -1,39 +1,54 @@
-# NEXT — 2026-11-11 (kitchen plate drawing, round 1 → 2)
+# NEXT — 2026-11-12 (kitchen plate drawing, Plate IX next)
 
 ## Goal
 The block layout is final (round 10). Draw the kitchen in the plate style, then use the drawing to help pick the mark.
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate VIII out, waiting on Ari) → mark → brand sheet → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate IX next; then wrap up) → mark → brand sheet → Task issues → build
 ```
 
 ## Prompt for the next agent
-> Kitchen plate drawing, after Plate VIII. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout`, `visual-direction` and `commit-each-round` memories, and the top entry of `.cursor/session_log.mdc` first. No code changes.
+> Kitchen plate drawing, Plate IX. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout`, `visual-direction` and `commit-each-round` memories, and the top entry of `.cursor/session_log.mdc` first. Read all of Ari's Plate VIII notes below before changing anything. No code changes.
 >
-> Plate VIII is published: https://claude.ai/artifact/KGwgZJZ6XQMeRtQTdMr1mR (source: `Artifact` read with `path: index.html`). Settled by Ari: the narrower kitchen (viewBox 430–1370, no window, no pegboard); black marble cover saying TRIALS (white kept for customising); dimensional one-point perspective. Drawing settings: vanishing point x 900, y 230; `P(x, y, d)` moves toward it by d/(d+500); counter depth 80; board drawn 25 px higher.
-> - **Recipe box:** a flush hinged lid (one block, seam at y 394, back hinges, brass hasp, corner caps), 150 × 100
-> - **Recently switch:** on the wall (left of the whiteboard), fridge right (view 430–1430), fridge left (view 370–1370), none. The fridge's side shows only above the counter
-> - **Eclair:** whole on load; clicks take bites 1, 2, then gone (crumbs and cream smear). Not saved
-> - **Angles plate:** eye higher (140), now (230), eye lower (300), gentler (500→900), stronger (300)
-> - **Evening:** a small dark window shown to compare
-> - **Trials photos:** a phone mockup with a camera button and a Take a photo / Choose sheet; "Add a photo" on the desktop open book
+> Start from the Plate VIII source: `Artifact` read of https://claude.ai/artifact/KGwgZJZ6XQMeRtQTdMr1mR with `path: index.html`. Publish Plate IX as a new artifact. Keep everything Ari didn't mention as it is in Plate VIII.
 >
-> Apply Ari's answers. Publish each round as a new artifact, proof locally with Playwright from `frontend/node_modules` first, then record the answers in the `kitchen-layout` memory, this file and the session log, and commit on the docs branch. After the plates: the phone layout, or the mark.
+> **Ari's Plate VIII notes, and what to draw:**
+> 1. **Perspective:** keep Plate VIII's "now" setting: vanishing point x 900, y 230; `P(x, y, d)` = d/(d+500); counter depth 80; board 25 px higher. Drop the angles strip.
+> 2. **Eclair:** decided. Whole on load, three clicks to eat, back on reload. Keep the click behaviour; drop the bite strip and the three "when does it come back" options.
+> 3. **Width:** Ari asked whether the fridge and window belong in the earlier, wider kitchen (viewBox 300–1500) instead of the narrow one, because "everything is too close together". Recommended: yes. Draw Plate IX wide, with the middle (board, notebook, eclair, box, shelf) where it was in the wide kitchen and the fridge and window using the extra width. Show the narrow version once, small, to compare.
+> 4. **Fridge on the left,** with more detail so it doesn't look like a plain box. A vintage, 1950s-style fridge: rounded top corners, a chrome lever handle, a chrome trim strip and a small badge plate (no real brand name or logo; Ari mentioned Frigidaire only as the look). Also visible hinges, a door gasket line and a grille at the foot. Cream or soft mint enamel. Keep the rule that its side shows only above the counter and points at the vanishing point.
+> 5. **Left cabinets:** one thinner cabinet between the fridge and the shelf (one door, not two), and **no towel**.
+> 6. **Window back, on the right,** so the light can change between day and evening (sun patch by day, dark sky and moon by night). Ari likes the small window. They asked whether it would look odd running past the right edge like the fridge does on the left. Draw both: the window fully inside the view, and the window cut by the right edge (cut on a mullion so it looks deliberate). Same perspective rule: the reveal shows the inner walls facing the eye, and the sill shows its top.
+> 7. **Recently:** the list is better, but the tape is wrong. Fix the tape: a short strip across the top edge, half on the paper and half on the fridge, slightly see-through, with torn ends, sitting flat on the surface rather than floating above the torn edge. Then bring back the holding options on the fridge door: magnets (one or two), ticket rail, clothesline, slate and index card. Each name stays a link (yellow + underline on point).
+> 8. **Shelf labels:** Ari is unsure about the brass "Cookbooks" / "References" holders. Show a masking-tape label written by hand on the front edge of each shelf board, next to the brass holders.
+> 9. **Tile:** the quiet tile backsplash, a little taller (from the counter up toward the board). Check with Ari whether that means tile is now on by default.
+> 10. **Floor:** try a checkerboard strip of floor along the bottom, below the cabinets' kick board. Below eye level, so its lines run to the vanishing point and its rows get shallower toward the back. Show with and without. Ari wasn't sure it would work.
+> 11. **Recipe box:** better. Keep it as is.
+>
+> Proof locally with Playwright from `frontend/node_modules` (screenshot once, crop to check details), then publish. Then record Ari's answers in the `kitchen-layout` memory, update this file and the session log, and commit on the docs branch. Bring the wrap-up questions below to Ari with the plate.
+
+## Questions to wrap up the plates (for Ari)
+1. **What counts as done for the plate drawing?** For example: one day and one evening plate of the final kitchen, plus the open box and open notebook, signed off. After that, changes happen in the build.
+2. **Which open choices must be settled before the build, and which can wait?** Still open: Recently holder, shelf labels (brass or tape), tile on or off, floor strip, window cut or whole, paid-plan tags, colours.
+3. **After the plates:** the mark next (Ari hoped the drawing would help), or the phone layout?
+4. **Brand sheet:** should the final plate become the reference for the brand sheet (colours, ink line, halftone, fonts), then Task issues for the build?
+5. **Equipment spots:** do anniversary pieces go on the counter ends, the fridge top, the window sill, or a shelf above the board?
+6. **`design/kitchen-starter/` (20 MB):** commit it, or keep it local?
 
 ## The layout now (final)
-- **Wall:** one board in the middle: whiteboard on the left ("next up", pinned plus automatic, marker font), cork ideas on the right. Lowered to just above the recipe box, with a small gap (round 9 A). The wall above the board stays plain, which leaves room for anniversary equipment or a shelf later. No window, no oven, no title or name
-- **Counter, middle:** the Lab notebook on a cookbook stand on the whiteboard's side, tall enough to overlap the board's bottom edge. A half-eaten eclair on a plate in the middle (seasonal flowers maybe later). The recipe box on the cork's side. All three sit close together
+- **Wall:** one board in the middle: whiteboard on the left ("next up", pinned plus automatic, marker font), cork ideas on the right. Drawn 25 px higher than round 9, above the recipe box and below the notebook's top. Wall above the board stays plain. No oven, no title or name. Plate IX direction: a vintage fridge at the left edge (holds "Recently") and a small window on the right for day/evening light; no pegboard
+- **Counter, middle:** the Lab notebook on a cookbook stand on the whiteboard's side, tall enough to overlap the board's bottom edge. An eclair on a plate in the middle: whole on load, three clicks eat it (crumbs and cream left), back on reload. The recipe box on the cork's side. All three sit close together
 - **Side rule:** the Lab is always on the whiteboard's side and the box on the cork's side. The Lab need not be right under the whiteboard
-- **Under the counter:** two-tier open shelf (cookbooks above, references below), one drawn book per real one, a cabinet each side. It starts short with one book lying down per tier, and the cabinets narrow as it fills
+- **Under the counter:** two-tier open shelf (cookbooks above, references below), one drawn book per real one. It starts short with one book lying down per tier. Plate IX: one thinner cabinet on the left (beside the fridge), no towel; cabinets on the right
 - **Width:** the whole kitchen scales with the window between a minimum (80%, at 960 px) and a maximum (140%, at 1680 px). Outside that range the middle (notebook, eclair, box) keeps its spacing; the cork grows and shows more ideas, the shelf widens a little, the two cabinets each side take the rest; no extra doors. No plate border
 - **Clickable things:** colour sits inside the ink line; every object has a permanent label (no hover labels). Pointing: glow + label (amber halftone glow behind, the object's label turns yellow)
 - **Top:** find-or-jot bar centred at the top, Account top right. Typing opens one list under the bar: jot destinations first (the cork as an idea, or the whiteboard's next up), then matching recipes and notebook entries. Phone: stacked layout, jot button bottom right
-- **Recipe box closed:** "Recipes" in a brass label holder. Click opens it to fill most of the screen over the dimmed kitchen
+- **Recipe box closed:** a real recipe box with a flush hinged lid (seam, back hinges, brass hasp, corner caps) and "Recipes" in a brass label holder. Click opens it to fill most of the screen over the dimmed kitchen
 - **Recipe box open:** the card rests on a ledge in the lid; the lid is empty until a card is picked. The box body is short, sized for three tab rows. The lid grows with the recipe from a minimum (round 9 height, about 45% of the screen) to a limit (about 55%), then the card scrolls. Later: a full-screen card view
 - **Tabs:** A–I front, J–Q middle, R–Z back; R–Z lined up with A–I, J–Q centred in the gaps; nine R–Z tabs, no XYZ (drawn in round 10)
 - **Roles:** one kitchen for everyone; nothing hidden, nothing moves on upgrade. Paid things (Lab, cork ideas, cookbooks tier) carry a "paid plan" label and open read-only with sample data for cooks and guests. Cooks get the box, whiteboard and references. Guests: decision 002 as it is (starter recipes, up to 5 cards of their own)
-- **Depth:** dimensional, one-point perspective, one vanishing point at the centre of the board (Plate VI)
+- **Depth:** dimensional, one-point perspective, one vanishing point at x 900, y 230 (Plate VIII "now"); kept
 - **Notebook:** a composition book named TRIALS (cloth spine, black marble cover, cushion label) on a cookbook stand; opens to a two-page spread, ruled pages, no spiral. Phone photos go straight into an entry (camera button)
 - **New kitchen:** starts with demo data; sign-up asks whether to include it, and it can be removed later in one go
 - **Evening:** dark mode is a darker evening kitchen
@@ -63,7 +78,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 | Plate V (glow + label, evening lights, composition book, jot menus) | https://claude.ai/artifact/13AuDFvrJxoW5XbDYiVydr |
 | Plate VI (one-point perspective, cork glow, evening from the top edge, page edges, Recently note) | https://claude.ai/artifact/PPHHNxUm3q1LiJvrpC9tnJ |
 | Plate VII (window + pegboard or narrower, slim notebook, raised board, Recently options) | https://claude.ai/artifact/V35qBtVGy4KY3zrTVVUsrY |
-| Plate VIII (narrower, recipe box lid, Recently on wall or fridge, eclair bites, angles, phone photos) | https://claude.ai/artifact/KGwgZJZ6XQMeRtQTdMr1mR |
+| Plate VIII (narrower, recipe box lid, Recently on wall or fridge, eclair bites, angles, phone photos) — base for Plate IX | https://claude.ai/artifact/KGwgZJZ6XQMeRtQTdMr1mR |
 | Kitchen Plate (plate style reference) | https://claude.ai/artifact/3NHEb9cHQuachu9vBWvnuN |
 
 ## Rules to keep

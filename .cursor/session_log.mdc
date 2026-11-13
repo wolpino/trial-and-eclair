@@ -10,6 +10,46 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-12 · Kitchen Plates VI–VIII and the Plate IX prompt
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-12` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts) |
+| **Outcome** | partial (Plates VI–VIII published; Plate IX prompt and wrap-up questions written; no code) |
+
+### Intent
+Apply Ari's notes on Plates V–VII and prepare a fresh chat for Plate IX and the wrap-up.
+
+### Summary
+- Plate VI, one-point perspective with construction lines, cork glow, evening from the top edge: https://claude.ai/artifact/PPHHNxUm3q1LiJvrpC9tnJ
+- Plate VII, window + pegboard or narrower, slim notebook, raised board, Recently options: https://claude.ai/artifact/V35qBtVGy4KY3zrTVVUsrY
+- Plate VIII, narrower kitchen, recipe box with a flush lid, Recently on the wall or a fridge, clickable eclair, angle options, phone photos: https://claude.ai/artifact/KGwgZJZ6XQMeRtQTdMr1mR
+- `.cursor/handoffs/NEXT.md` has the Plate IX prompt (all of Ari's Plate VIII notes) and the wrap-up questions
+
+### Decisions
+- One-point perspective, vanishing point x 900, y 230, kept
+- Notebook: black marble, named TRIALS; white marble kept for customising
+- Eclair: whole on load, three clicks eat it, back on reload
+- Recipe box: flush hinged lid (keep)
+- Plate IX direction: a vintage fridge on the left (holds Recently), a small window on the right for day/evening, one thin left cabinet with no towel, probably the wider kitchen again
+- Phones: a camera button on the open notebook page puts a photo straight into an entry
+
+### Open threads
+- Plate IX (prompt in NEXT.md): wide vs narrow, fridge detail, window whole or cut by the edge, Recently holder and tape, tape shelf labels, taller tile, checkerboard floor
+- Wrap-up questions for Ari: what "done" means, what must be settled before the build, mark or phone next, brand sheet, equipment spots, kitchen-starter files
+- `design/kitchen-starter/` (20 MB) still local
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate IX, vintage fridge, window right, one-point perspective, Recently tape, eclair bites, wrap up plates
+**Files:** .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–VIII
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent" (Plate IX), then "Questions to wrap up the plates"
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-11 · Kitchen layout round 10 and Plate II
 
 | Field | Value |
