@@ -3,156 +3,180 @@
   <div class="sec-body">
     <h3>The notebook, open at Croissants trial 4</h3>
     <figure id="nb-open" class="fx"></figure>
-    <p class="note"><b>Tabs down the side, one per trial.</b> Each trial has a paper tab on the edge of its first page, grouped by recipe in A to Z order. Tabs for the pages before you stick out on the left, the rest on the right, the way a real book with tabs works. The tab you are on is white. Click any tab to jump to that trial. The orange tab at the top is the Contents.</p>
-    <p class="note"><b>Turning pages, two ways on one spread.</b> Click a folded corner at the bottom of a page, or the round arrows outside the book. The words under each arrow say where it goes: back to Croissants trial 3, on to Galette trial 1.</p>
-    <p class="note"><b>Publish is a stamp.</b> At the bottom of the trial's last page sits a "PUBLISH" stamp. Click it to send this trial to the recipe box as a card. The strip under the book keeps New trial, New recipe and Add a photo (it shows how many of the five photos this entry has used).</p>
-    <p class="note"><b>Plans.</b> Switch the Plan to Home cook or Guest to see the read-only notebook: same sample book, pages and tabs still turn, but no stamp, no buttons to write, and the yellow "paid plan" tag tied to the top. A guest sees the same drawing; only the button changes from "See the paid plan" to "Sign up".</p>
+    <p class="note"><b>The book is back to full width.</b> Same composition-book spread as Plate IX. The tabs and arrows sit outside it, over the dimmed kitchen.</p>
+    <p class="note"><b>Tabs are this recipe's trials only.</b> Croissants has four trials, so there are four tabs, plus Contents at the top. Tabs for pages before you stick out on the left, the rest on the right. Colours: left tabs custard (--custard), right tabs light stem green (--cab-hi), the selected tab orange (--orange), the same orange as the recipe box's letter tab you are in. Here trial 4 is the last trial, so every tab is on the left; the Contents view below shows right-hand tabs.</p>
+    <p class="note"><b>Two ways to move.</b> The folded corners turn to the previous or next trial of this recipe ("trial 3" on the left). The round arrows outside the book go to the previous or next recipe, A to Z: Brown butter cookies and Rhubarb galette.</p>
+    <p class="note"><b>Publish (option A drawn here).</b> A dashed "PUBLISH" stamp sits at the top of the trial's first page, beside the title, like an approval stamp on a lab report. Click it and the trial goes to the recipe box as a card. Both options are compared below.</p>
+    <p class="note"><b>Plans.</b> Switch the Plan to Home cook or Guest for the read-only notebook: same sample book, tabs, corners and arrows still work, but no stamp or writing buttons, and the yellow "paid plan" tag on the top of the book. Guest is the same drawing as Home cook; only the button reads "Sign up" instead of "See the paid plan".</p>
 
     <h3>Contents, at the front of the book</h3>
     <figure id="nb-index" class="fx"></figure>
-    <p class="note"><b>Every recipe and its trials.</b> Each line has the date and the page. Click a line, or a tab, to open that trial. Contents is the first page, so every trial tab is on the right and only the Contents tab is on the left. Yellow marks the trial you worked on last. Blondies trial 2 carries a small "PUBLISHED" stamp. The back arrow and back corner are gone here: there is nothing before the Contents.</p>
+    <p class="note"><b>Every recipe and its trials.</b> Click a line to open that trial. The tabs belong to the recipe you worked on last (Croissants). Contents is the first page, so its tab is selected (orange) on the left and the four trial tabs are on the right in green. There is no back corner here; the back arrow still goes to the last recipe.</p>
 
-    <h3>Publishing a trial (Developer)</h3>
-    <div class="trio">
-      <div><figure id="nb-stamp-before"></figure><p class="note"><b>Before.</b> A dashed "PUBLISH" stamp at the bottom of the last page, shown as it looks when pointed at.</p></div>
-      <div><figure id="nb-stamp-after"></figure><p class="note"><b>After.</b> Inked "PUBLISHED" with the date. The trial is now a card in the recipe box; "see the card" opens it.</p></div>
-      <div><figure id="nb-idea"></figure><p class="note"><b>A trial started from an idea.</b> Moving "Miso caramel" off the idea board archives the idea (it leaves the board) and starts a new recipe here. Its first page says where it came from, in small writing under the title.</p></div>
+    <h3>Where Publish lives: two ways</h3>
+    <div class="pair">
+      <div><h3>A · Stamp beside the title</h3><figure id="nb-pub-a"></figure><figure id="nb-pub-a2"></figure>
+        <p class="note"><b>Before and after.</b> Pointed at, the dashed stamp glows. Once clicked, it is inked "PUBLISHED" with the date, and clicking the inked stamp opens the card in the recipe box.</p></div>
+      <div><h3>B · A button on the strip</h3><figure id="nb-pub-b"></figure><figure id="nb-pub-b2"></figure>
+        <p class="note"><b>Before and after.</b> "Publish" sits next to New trial. After publishing it reads "Published 11/11/26" and opens the card. The page itself stays clean.</p></div>
+    </div>
+
+    <div class="pair">
+      <div><h3>Past the last trial</h3><figure id="nb-next"></figure>
+        <p class="note"><b>Turning the corner on the last trial.</b> Trial 4 is Croissants' last trial and is not published, so the next page is blank and asks, quietly, "Start trial 5?". Nothing happens unless the cook clicks. The arrows still go on to the next recipe.</p></div>
+      <div><h3>A trial started from an idea</h3><figure id="nb-idea"></figure>
+        <p class="note"><b>From the idea board.</b> Moving "Miso caramel" to a trial archives the idea (it leaves the board) and starts a new recipe here. Its first page says where it came from, in small writing under the title.</p></div>
     </div>
 
     <ol class="qs">
-      <li><b>Tabs:</b> one per trial gets long for a recipe with many trials (say 12). Should a recipe's older trials fold into one tab, or is one per trial right?</li>
-      <li><b>Publishing again:</b> if trial 5 is stamped later, does it replace the trial 4 card in the box, or add a second card?</li>
+      <li><b>Publish:</b> A, the stamp beside the title, or B, the button on the strip?</li>
+      <li><b>Publishing again:</b> if trial 5 is published later, does it replace the trial 4 card in the box, or add a second card?</li>
+      <li><b>Turning pages:</b> corners for trials and arrows for recipes: is that split clear, or should one of them go?</li>
     </ol>
   </div>
 </section>
 <script>
 (function () {
-  var HAND = "font:600 21px var(--font-hand);fill:var(--ink)", SOFT = "#c3d2ec", RED = "#e3a59a", INKR = "var(--orange-text)";
-  var LX = 580, RX = 1220, PL = "M580 104 Q740 94 900 108 V670 Q740 660 580 668 Z", PR = "M1220 104 Q1060 94 900 108 V670 Q1060 660 1220 668 Z";
+  var HAND = "font:600 23px var(--font-hand);fill:var(--ink)", SOFT = "#c3d2ec", RED = "#e3a59a", INKR = "var(--orange-text)", UI = "font:13px var(--font-body);fill:var(--ink-soft)";
+  var LX = 474, RX = 1326, PL = "M474 104 Q687 94 900 108 V670 Q687 660 474 668 Z", PR = "M1326 104 Q1113 94 900 108 V670 Q1113 660 1326 668 Z";
+  var TL = "var(--custard)", TR = "var(--cab-hi)", TS = "var(--orange)";
   function by(i) { return 214 + i * 28; }
   function U(sz, col) { return "font:600 " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"); }
   function H(sz, w, col) { return "font:" + (w || 600) + " " + sz + "px var(--font-hand);fill:" + (col || "var(--ink)"); }
   function nbCam(x, y, k) {
     return '<g transform="translate(' + x + " " + y + ") scale(" + (k || 1) + ')">' + reg("path", 'd="M-14 -7 h7 l3 -5 h8 l3 5 h7 v18 h-28 Z"', "var(--card)", 2) + '<circle cx="0" cy="2" r="5.5" style="fill:none;stroke:var(--ink);stroke-width:2"/></g>';
   }
-  /* one tab per trial, in book order; the Contents tab first */
-  var TABS = [["Contents", "", "var(--orange)"], ["Blondies", "trial 1", "var(--custard)"], ["Blondies", "trial 2", "var(--custard)"], ["Cookies", "trial 1", "var(--plaster)"], ["Cookies", "trial 2", "var(--plaster)"],
-    ["Croissants", "trial 1", "var(--custard)"], ["Croissants", "trial 2", "var(--custard)"], ["Croissants", "trial 3", "var(--custard)"], ["Croissants", "trial 4", "var(--custard)"],
-    ["Galette", "trial 1", "var(--plaster)"], ["Galette", "trial 2", "var(--plaster)"], ["Rough puff", "trial 1", "var(--custard)"]];
+  /* Tabs: Contents, then the current recipe's trials. Left of the open page: custard; right: green; selected: orange */
+  var TABS = ["Contents", "Trial 1", "Trial 2", "Trial 3", "Trial 4"];
   function tab(t, i, left, on) {
-    var y = 116 + i * 45, w = on ? 96 : 90, x = left ? LX + 10 - w : RX - 10, cx = left ? (x + 566) / 2 : (1234 + x + w) / 2;
-    return '<g role="link" tabindex="0" aria-label="Go to ' + t[0] + " " + t[1] + '">' + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="41" rx="5"', on ? "var(--page)" : t[2], on ? 2.4 : 1.7) +
-      (t[1] ? T(cx, y + 18, t[0], H(15, 700), 'text-anchor="middle"') + T(cx, y + 34, t[1], H(14), 'text-anchor="middle"') : T(cx, y + 26, t[0], H(15, 700), 'text-anchor="middle"')) + "</g>";
+    var y = 128 + i * 60, w = on ? 92 : 84, x = left ? LX + 10 - w : RX - 10, cx = left ? (x + 460) / 2 : (1340 + x + w) / 2;
+    return '<g role="link" tabindex="0" aria-label="Go to ' + t + '">' + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="50" rx="5"', on ? TS : left ? TL : TR, on ? 2.4 : 1.8) +
+      T(cx, y + 31, t, H(t === "Contents" ? 17 : 19, 700), 'text-anchor="middle"') + "</g>";
   }
-  function arrowBtn(cx, cy, dir, a, b) { return '<g role="button" tabindex="0" aria-label="' + (dir < 0 ? "Back to " : "On to ") + a + " " + b + '">' + reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="22"', "var(--card)", 2.2) +
-    line("M" + (cx - 4 * dir) + " " + (cy - 10) + " l" + (10 * dir) + " 10 l" + (-10 * dir) + " 10", 3.4) + T(cx, cy + 42, a, U(12, "#f4efe2"), 'text-anchor="middle"') + T(cx, cy + 57, b, U(12, "#f4efe2"), 'text-anchor="middle"') + "</g>"; }
-  function corner(left) { var x = left ? LX : RX, k = left ? 1 : -1;
-    return '<g role="button" tabindex="0" aria-label="Turn the page ' + (left ? "back" : "on") + '">' + poly(x + ",636 " + (x + 32 * k) + ",668 " + x + ",668", "#e4e0d4", 1.4) + poly(x + ",636 " + (x + 32 * k) + ",668 " + (x + 32 * k) + ",636", "var(--custard)", 2) +
-      line("M" + (x + 25 * k) + " 643 l" + (-6 * k) + " 5.5 l" + (6 * k) + " 5.5", 2.2) + "</g>"; }
-  /* The open book. c: cur (index of the tab in use, or null for no tabs), prev/next ([line1, line2] for the arrows), nl, nr (page numbers) */
+  /* round arrows outside the book: previous / next recipe */
+  function arrowBtn(cx, dir, r) { var cy = 388;
+    return '<g role="button" tabindex="0" aria-label="' + (dir < 0 ? "Previous" : "Next") + " recipe: " + r.join(" ") + '">' + reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="22"', "var(--card)", 2.2) +
+      line("M" + (cx - 4 * dir) + " " + (cy - 10) + " l" + (10 * dir) + " 10 l" + (-10 * dir) + " 10", 3.4) + r.map(function (t, k) { return T(cx, cy + 44 + k * 16, t, U(13, "#f4efe2"), 'text-anchor="middle"'); }).join("") + "</g>"; }
+  /* folded corners: previous / next trial of this recipe */
+  function corner(left, cap) { var x = left ? LX : RX, k = left ? 1 : -1;
+    return '<g role="button" tabindex="0" aria-label="' + (left ? "Back to " : "On to ") + cap + '">' + poly(x + ",636 " + (x + 32 * k) + ",668 " + x + ",668", "#e4e0d4", 1.4) + poly(x + ",636 " + (x + 32 * k) + ",668 " + (x + 32 * k) + ",636", "var(--custard)", 2) +
+      line("M" + (x + 25 * k) + " 643 l" + (-6 * k) + " 5.5 l" + (6 * k) + " 5.5", 2.2) + T(x + 42 * k, 659, cap, UI, left ? "" : 'text-anchor="end"') + "</g>"; }
+  /* The open book. c: cur (selected tab, or null for no tabs), pt/nt (corner captions), pr/nr (arrow captions), nl/nr2 (page numbers) */
   function nbBook(c) {
     var s = "", pl, y, sy, r = rand(7), k;
-    /* black marble cover under the pages */
-    s += reg("path", 'd="M566 98 Q740 86 900 102 Q1060 86 1234 98 V681 Q1060 672 900 684 Q740 672 566 681 Z"', "var(--ink)", 2);
-    for (k = 0; k < 16; k++) { var mx = r() < 0.5 ? 568 + r() * 10 : 1222 + r() * 10, my = 110 + r() * 560;
+    s += reg("path", 'd="M460 98 Q687 86 900 102 Q1113 86 1340 98 V681 Q1113 672 900 684 Q687 672 460 681 Z"', "var(--ink)", 2);
+    for (k = 0; k < 16; k++) { var mx = r() < 0.5 ? 462 + r() * 10 : 1328 + r() * 10, my = 110 + r() * 560;
       s += line("M" + mx.toFixed(0) + " " + my.toFixed(0) + " q4 6 -1 12 q-4 6 2 11", 1, 0.55, "#f4efe2"); }
     if (c.cur != null) TABS.forEach(function (t, i) { s += tab(t, i, i <= c.cur, i === c.cur); });
-    for (pl = 5; pl >= 1; pl--) s += '<path transform="translate(' + (-1.6 * pl) + " " + (1.3 * pl) + ')" d="' + PL + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>' +
-      '<path transform="translate(' + (1.6 * pl) + " " + (1.3 * pl) + ')" d="' + PR + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>';
+    for (pl = 5; pl >= 1; pl--) s += '<path transform="translate(' + (-2.2 * pl) + " " + (1.3 * pl) + ')" d="' + PL + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>' +
+      '<path transform="translate(' + (2.2 * pl) + " " + (1.3 * pl) + ')" d="' + PR + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>';
     s += reg("path", 'd="' + PL + '"', "var(--page)", 2.4) + reg("path", 'd="' + PR + '"', "var(--page)", 2.4);
-    for (y = 190; y <= 638; y += 28) s += line("M" + (LX + 3) + " " + y + " H896 M904 " + y + " H" + (RX - 3), 1.3, 1, SOFT);
-    s += line("M862 112 V662", 1.4, 1, RED) + line("M938 112 V662", 1.4, 1, RED);
-    s += hatch(884, 110, 14, 556, 0.35) + hatch(902, 110, 14, 556, 0.35);
+    for (y = 190; y <= 638; y += 28) s += line("M478 " + y + " H896 M904 " + y + " H1322", 1.3, 1, SOFT);
+    s += line("M852 112 V662", 1.4, 1, RED) + line("M948 112 V662", 1.4, 1, RED);
+    s += hatch(882, 110, 16, 556, 0.35) + hatch(902, 110, 16, 556, 0.35);
     for (sy = 132; sy < 650; sy += 46) s += line("M900 " + sy + " v20", 2.4, 1, "#9b968b") + '<circle cx="900" cy="' + (sy - 3) + '" r="1.6" style="fill:#9b968b"/><circle cx="900" cy="' + (sy + 23) + '" r="1.6" style="fill:#9b968b"/>';
-    if (c.nl) s += T(c.prev ? 626 : 596, 656, c.nl, H(22, 600, "var(--ink-soft)"));
-    if (c.nr) s += T(c.next ? 1174 : 1204, 656, c.nr, H(22, 600, "var(--ink-soft)"), 'text-anchor="end"');
-    if (c.prev) s += corner(true) + arrowBtn(470, 388, -1, c.prev[0], c.prev[1]);
-    if (c.next) s += corner(false) + arrowBtn(1330, 388, 1, c.next[0], c.next[1]);
+    if (c.nl) s += T(c.pt ? 600 : 492, 660, c.nl, H(22, 600, "var(--ink-soft)"));
+    if (c.nr) s += T(c.nt ? 1200 : 1308, 660, c.nr, H(22, 600, "var(--ink-soft)"), 'text-anchor="end"');
+    if (c.pt) s += corner(true, c.pt);
+    if (c.nt) s += corner(false, c.nt);
+    if (c.pr) s += arrowBtn(352, -1, c.pr);
+    if (c.xr) s += arrowBtn(1448, 1, c.xr);
     return s;
   }
-  function nbHead(side, date, title, sz) {
-    return side === "l" ? T(596, 136, date, H(21)) + T(596, 176, title, H(sz || 32, 700)) : T(1204, 136, date, H(21), 'text-anchor="end"') + T(952, 176, title, H(sz || 32, 700));
+  function nbHead(side, date, title) {
+    return side === "l" ? T(492, 136, date, H(21)) + T(492, 176, title, H(36, 700)) : T(1308, 136, date, H(21), 'text-anchor="end"') + T(958, 176, title, H(34, 700));
   }
   function nbPhoto(cx, cy, cap) { var x = cx - 70, y = cy - 60;
-    return '<g transform="rotate(-3 ' + cx + " " + cy + ')">' + reg("rect", 'x="' + x + '" y="' + y + '" width="140" height="122"', "#fffdf7", 2) + '<rect x="' + (x + 8) + '" y="' + (y + 8) + '" width="124" height="90" style="fill:#e9b86a"/>' +
+    return '<g transform="rotate(4 ' + cx + " " + cy + ')">' + reg("rect", 'x="' + x + '" y="' + y + '" width="140" height="122"', "#fffdf7", 2) + '<rect x="' + (x + 8) + '" y="' + (y + 8) + '" width="124" height="90" style="fill:#e9b86a"/>' +
       reg("path", 'd="M' + (cx - 42) + " " + (cy + 18) + " Q" + cx + " " + (cy - 36) + " " + (cx + 42) + " " + (cy + 18) + " Q" + cx + " " + (cy + 2) + " " + (cx - 42) + " " + (cy + 18) + ' Z"', "var(--amber)", 1.8) +
       line("M" + (cx - 24) + " " + (cy + 8) + " l8 -12 M" + (cx - 7) + " " + (cy + 2) + " l4 -15 M" + (cx + 10) + " " + (cy + 2) + " l-2 -15 M" + (cx + 27) + " " + (cy + 8) + " l-8 -12", 1.3, 0.7) +
       T(cx, y + 115, cap, H(16), 'text-anchor="middle"') +
       [-1, 1].map(function (k) { var tx = cx + k * 66, ty = y + 2; return '<rect x="' + (tx - 21) + '" y="' + (ty - 8) + '" width="42" height="16" transform="rotate(' + (k * 30) + " " + tx + " " + ty + ')" style="fill:#e8e0c8;opacity:.9;stroke:#b9a77a;stroke-width:1"/>'; }).join("") + "</g>";
   }
-  /* the stamp: "before" is a dashed PUBLISH you click; "after" is inked PUBLISHED with the date */
-  function stamp(done, lit) { var cx = 1140, cy = 572, w = done ? 132 : 120, h = done ? 62 : 44, x = cx - w / 2, y = cy - h / 2, s;
+  /* Option A: the stamp beside the title. "before" dashed PUBLISH; "after" inked PUBLISHED with the date */
+  function stamp(st) { var done = st === "after", cx = 796, cy = 130, w = done ? 132 : 124, h = done ? 46 : 38, x = cx - w / 2, y = cy - h / 2, s;
     if (!done) { s = '<g transform="rotate(-5 ' + cx + " " + cy + ')"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="4" style="fill:var(--page);stroke:' + INKR + ';stroke-width:2.4;stroke-dasharray:7 5"/>' +
-        T(cx, cy + 7, "PUBLISH", "font:700 19px var(--font-label);letter-spacing:3px;fill:" + INKR, 'text-anchor="middle"') + "</g>" + T(cx, cy + 44, "click to stamp", U(12, "var(--ink-soft)"), 'text-anchor="middle"');
-      s = hot("Publish to the recipe box", s, [x - 4, y - 8, w + 8, h + 40]); return lit ? s.replace('class="hot"', 'class="hot on"') : s; }
-    s = '<g transform="rotate(-6 ' + cx + " " + cy + ')" style="opacity:.92"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="4" style="fill:none;stroke:' + INKR + ';stroke-width:3"/><rect x="' + (x + 5) + '" y="' + (y + 5) + '" width="' + (w - 10) + '" height="' + (h - 10) + '" rx="2" style="fill:none;stroke:' + INKR + ';stroke-width:1.2"/>' +
-      T(cx, cy - 3, "PUBLISHED", "font:700 17px var(--font-label);letter-spacing:2.5px;fill:" + INKR, 'text-anchor="middle"') + line("M" + (x + 14) + " " + (cy + 4) + " H" + (x + w - 14), 1, 1, INKR) +
-      T(cx, cy + 22, "11/11/26", "font:700 16px var(--font-label);letter-spacing:2px;fill:" + INKR, 'text-anchor="middle"') + "</g>";
-    return s + lk(1100, cy + 56, "see the card", 18, false, "the Croissants card in the recipe box");
+        T(cx, cy + 7, "PUBLISH", "font:700 19px var(--font-label);letter-spacing:3px;fill:" + INKR, 'text-anchor="middle"') + "</g>";
+      s = hot("Publish to the recipe box", s, [x - 4, y - 4, w + 8, h + 8]); return st === "lit" ? s.replace('class="hot"', 'class="hot on"') : s; }
+    return '<g role="link" tabindex="0" aria-label="Published 11/11/26. Open the Croissants card" transform="rotate(-6 ' + cx + " " + cy + ')" style="opacity:.92"><rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="4" style="fill:none;stroke:' + INKR + ';stroke-width:3"/><rect x="' + (x + 5) + '" y="' + (y + 5) + '" width="' + (w - 10) + '" height="' + (h - 10) + '" rx="2" style="fill:none;stroke:' + INKR + ';stroke-width:1.2"/>' +
+      T(cx, cy - 2, "PUBLISHED", "font:700 16px var(--font-label);letter-spacing:2.5px;fill:" + INKR, 'text-anchor="middle"') + line("M" + (x + 14) + " " + (cy + 3) + " H" + (x + w - 14), 1, 1, INKR) +
+      T(cx, cy + 19, "11/11/26", "font:700 14px var(--font-label);letter-spacing:2px;fill:" + INKR, 'text-anchor="middle"') + "</g>";
   }
-  /* Trial 4: the written entry and photo (left), the crumb sketch, height bars and the stamp (right) */
+  /* Trial 4: the written entry (left) and the crumb sketch, height bars and taped photo (right) */
   function nbEntry(st) {
     var s = nbHead("l", "11/11/26", "Trial 4: croissants") + nbHead("r", "11/11/26", "Crumb, trial 4"), rh = rand(21), h, a, d;
-    ["Goal: a more open honeycomb", "Changed: rest 2 h, not 1 h", null, "Proof 2 h at 24°C", "Bake 18 min at 200°C", "Result: shatter good,", "   honeycomb still thin", "Next: proof at 26°C,", "   colder butter"].forEach(function (t, i) {
-      if (t) s += T(t.charAt(0) === " " ? 612 : 596, by(i), t.trim(), i > 6 ? H(21, 700, INKR) : HAND);
-      else s += T(596, by(i), "Folds:", HAND) + T(652, by(i), "2", HAND) + line("M647 " + (by(i) - 7) + " H666", 2.2) + T(674, by(i), "3 letter folds", HAND);
+    ["Goal: a more open honeycomb", "Changed: rest 2 h between folds", null, "Proof 2 h at 24°C", "Bake 18 min at 200°C", "Result: shatter good,", "   honeycomb still thin", "Next: proof at 26°C, colder butter"].forEach(function (t, i) {
+      if (t) s += T(t.charAt(0) === " " ? 512 : 492, by(i), t.trim(), i === 7 ? H(23, 700, INKR) : HAND);
+      else s += T(492, by(i), "Folds:", HAND) + T(554, by(i), "2", HAND) + line("M549 " + (by(i) - 7) + " H569", 2.2) + T(578, by(i), "3 letter folds", HAND);
     });
-    s += nbPhoto(712, 546, "trial 4");
-    s += '<ellipse cx="1070" cy="282" rx="104" ry="58" style="fill:none;stroke:var(--ink);stroke-width:2.6"/><ellipse cx="1070" cy="286" rx="90" ry="46" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>';
-    for (h = 0; h < 16; h++) { a = rh() * Math.PI * 2; d = Math.sqrt(rh()) * 0.8;
-      s += '<ellipse cx="' + (1070 + Math.cos(a) * 84 * d).toFixed(1) + '" cy="' + (286 + Math.sin(a) * 42 * d).toFixed(1) + '" rx="' + (4 + rh() * 5).toFixed(1) + '" ry="' + (2.4 + rh() * 2.6).toFixed(1) + '" style="fill:none;stroke:var(--ink);stroke-width:1.3"/>'; }
-    s += T(1206, 206, "crisp shell", HAND, 'text-anchor="end"') + arrow(1166, 212, 1136, 234) + T(952, 386, "holes too small", HAND) + arrow(1000, 368, 1036, 318) + T(1206, 386, "butter leaked", HAND, 'text-anchor="end"') + arrow(1160, 368, 1128, 336);
-    s += T(952, 438, "Height, trial 3 vs 4", H(21, 700));
-    s += T(1034, 488, "+18 mm", H(21, 700, INKR), 'text-anchor="middle"');
-    s += reg("rect", 'x="966" y="546" width="36" height="50"', "none", 2) + reg("rect", 'x="1016" y="504" width="36" height="92"', "none", 2) + line("M954 596 H1066", 2) + hatch(1017, 505, 34, 90, 0.6) +
-      T(984, 618, "T3", H(19), 'text-anchor="middle"') + T(1034, 618, "T4", H(19), 'text-anchor="middle"');
-    return s + (st ? stamp(st === "after", st === "lit") : "");
+    s += '<ellipse cx="1120" cy="290" rx="112" ry="64" style="fill:none;stroke:var(--ink);stroke-width:2.6"/><ellipse cx="1120" cy="294" rx="97" ry="51" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>';
+    for (h = 0; h < 18; h++) { a = rh() * Math.PI * 2; d = Math.sqrt(rh()) * 0.8;
+      s += '<ellipse cx="' + (1120 + Math.cos(a) * 90 * d).toFixed(1) + '" cy="' + (294 + Math.sin(a) * 46 * d).toFixed(1) + '" rx="' + (4 + rh() * 5).toFixed(1) + '" ry="' + (2.4 + rh() * 2.6).toFixed(1) + '" style="fill:none;stroke:var(--ink);stroke-width:1.3"/>'; }
+    var n = H(21);
+    s += T(1222, 212, "crisp shell", n) + arrow(1244, 220, 1212, 244) + T(958, 396, "holes too small", n) + arrow(1020, 378, 1078, 320) + T(1196, 396, "butter leaked", n) + arrow(1226, 378, 1186, 346);
+    s += T(958, 438, "Height, trial 3 vs 4", H(23, 700)) + T(1050, 482, "+18 mm", H(22, 700, INKR), 'text-anchor="middle"');
+    s += reg("rect", 'x="978" y="526" width="38" height="52"', "none", 2) + reg("rect", 'x="1031" y="492" width="38" height="86"', "none", 2) + line("M966 578 H1082", 2) + hatch(1032, 493, 36, 84, 0.6) +
+      T(997, 600, "T3", H(19), 'text-anchor="middle"') + T(1050, 600, "T4", H(19), 'text-anchor="middle"');
+    return s + nbPhoto(1216, 534, "trial 4") + (st ? stamp(st) : "");
   }
-  /* the strip under the book: buttons off the paper */
-  function nbStrip(ro) { var Y = 690;
+  /* the strip under the book. pub: null (option A), "b" or "b-after" (option B) */
+  function nbStrip(ro, pub) { var Y = 688, s;
     if (ro) return reg("rect", 'x="452" y="' + Y + '" width="250" height="34" rx="5"', "var(--card)", 2) + T(466, Y + 23, "Sample notebook. Read only.", U(15)) +
       pill(1168, Y, 180, o.plan === "guest" ? "Sign up" : "See the paid plan", true);
-    return pill(452, Y, 100, "New trial", true) + pill(562, Y, 112, "New recipe", false) +
-      pill(1152, Y, 196, "", false) + nbCam(1176, Y + 16, 0.72) + T(1196, Y + 23, "Add a photo · 1 of 5", U(15));
+    s = pill(452, Y, 100, "New trial", true);
+    if (pub === "b") s += pill(562, Y, 96, "Publish", false) + pill(668, Y, 112, "New recipe", false);
+    else if (pub === "b-after") s += reg("rect", 'x="562" y="' + Y + '" width="176" height="34" rx="17"', "var(--custard)", 2) + T(650, Y + 23, "Published 11/11/26", U(15), 'text-anchor="middle"') + pill(748, Y, 112, "New recipe", false);
+    else s += pill(562, Y, 112, "New recipe", false);
+    return s + pill(1152, Y, 196, "", false) + nbCam(1176, Y + 16, 0.72) + T(1196, Y + 23, "Add a photo · 1 of 5", U(15));
   }
-  /* read-only: the paid plan tag tied to the top of the book (shows for Home cook and Guest) */
-  function nbPaid() { return line("M1116 92 Q1108 98 1110 108", 1.8) + '<g transform="translate(1180 92) scale(1.6) translate(-900 -84)">' + paidTag(900, 84, -4) + "</g>"; }
+  function nbPaid() { return line("M1040 96 Q1030 100 1026 106", 1.6) + '<g transform="translate(1100 98) scale(1.6) translate(-900 -84)">' + paidTag(900, 84, -4) + "</g>"; }
   function ro() { return o.plan !== "dev"; }
-  function nbOpen() {
-    return nbBook({ cur: 8, prev: ["Croissants", "trial 3"], next: ["Galette", "trial 1"], nl: "12", nr: "13" }) + nbEntry(ro() ? null : "before") + nbStrip(ro()) + (ro() ? nbPaid() : "");
-  }
+  var NAV = { cur: 4, pt: "trial 3", nt: "next trial", pr: ["Brown butter", "cookies"], xr: ["Rhubarb", "galette"], nl: "12", nr: "13" };
+  function nbOpen(st, pub) { return nbBook(NAV) + nbEntry(ro() ? null : st) + nbStrip(ro(), pub) + (ro() ? nbPaid() : ""); }
   /* contents: recipes, their trials, dates, pages */
   function nbIndex() {
-    var s = nbBook({ cur: 0, next: ["Blondies", "trial 1"], nl: "i", nr: "ii" }) + nbHead("l", "", "Contents") + T(1204, 136, "Trials", H(21), 'text-anchor="end"');
+    var s = nbBook({ cur: 0, nt: "Blondies 1", pr: ["Rough puff", "pastry"], xr: ["Blondies"], nl: "i", nr: "ii" }) + nbHead("l", "", "Contents") + T(1308, 136, "Trials", H(21), 'text-anchor="end"');
     var L = [["Blondies", [[1, "9/14/26", 1], [2, "9/20/26", 3, "pub"]]], ["Brown butter cookies", [[1, "10/02/26", 4], [2, "10/09/26", 5]]], ["Croissants", [[1, "10/12/26", 6], [2, "10/19/26", 8], [3, "10/28/26", 10], [4, "11/11/26", 12, "last"]]]],
       R = [["Rhubarb galette", [[1, "11/02/26", 14], [2, "11/08/26", 16]]], ["Rough puff pastry", [[1, "11/05/26", 18]]]];
     function col(list, x) { var i = 0;
-      list.forEach(function (r) { s += T(x, by(i), r[0], H(23, 700)); i++;
+      list.forEach(function (r) { s += T(x, by(i), r[0], H(25, 700)); i++;
         r[1].forEach(function (t) { var y = by(i), last = t[3] === "last";
-          if (last) s += '<rect x="' + (x + 8) + '" y="' + (y - 19) + '" width="254" height="24" rx="3" style="fill:var(--yellow);opacity:.55"/>';
-          s += lk(x + 16, y, "Trial " + t[0], 20, false, r[0] + " trial " + t[0]) + T(x + 82, y, t[1], H(20)) + '<path d="M' + (x + (t[3] === "pub" ? 226 : 156)) + " " + (y - 4) + " H" + (x + 238) + '" style="stroke:var(--ink-soft);stroke-width:1.6;stroke-dasharray:1 7;stroke-linecap:round"/>' + T(x + 258, y, t[2], H(20), 'text-anchor="end"');
-          if (t[3] === "pub") s += '<g transform="rotate(-4 ' + (x + 186) + " " + (y - 8) + ')"><rect x="' + (x + 150) + '" y="' + (y - 18) + '" width="72" height="19" rx="3" style="fill:none;stroke:' + INKR + ';stroke-width:1.8"/>' + T(x + 186, y - 4, "PUBLISHED", "font:700 10px var(--font-label);letter-spacing:1.2px;fill:" + INKR, 'text-anchor="middle"') + "</g>";
+          if (last) s += '<rect x="' + (x + 12) + '" y="' + (y - 20) + '" width="336" height="25" rx="3" style="fill:var(--yellow);opacity:.55"/>';
+          s += lk(x + 20, y, "Trial " + t[0], 23, false, r[0] + " trial " + t[0]) + T(x + 96, y, t[1], HAND) + '<path d="M' + (x + (t[3] === "pub" ? 262 : 186)) + " " + (y - 4) + " H" + (x + 312) + '" style="stroke:var(--ink-soft);stroke-width:1.6;stroke-dasharray:1 7;stroke-linecap:round"/>' + T(x + 344, y, t[2], HAND, 'text-anchor="end"');
+          if (t[3] === "pub") s += '<g transform="rotate(-3 ' + (x + 216) + " " + (y - 8) + ')"><rect x="' + (x + 178) + '" y="' + (y - 19) + '" width="76" height="20" rx="3" style="fill:none;stroke:' + INKR + ';stroke-width:1.8"/>' + T(x + 216, y - 4.5, "PUBLISHED", "font:700 11px var(--font-label);letter-spacing:1.2px;fill:" + INKR, 'text-anchor="middle"') + "</g>";
           i++;
-          if (last) { s += T(x + 16, by(i), "last worked on", H(20, 700, INKR)); i++; } });
+          if (last) { s += T(x + 20, by(i), "last worked on", H(21, 700, INKR)); i++; } });
         i++; });
       return i; }
-    col(L, 596); var n = col(R, 952);
-    if (!ro()) s += lk(952, by(n), "+ New recipe", 23, false, "a new recipe");
+    col(L, 492); var n = col(R, 958);
+    if (!ro()) s += lk(958, by(n), "+ New recipe", 25, false, "a new recipe");
     return s + (ro() ? nbStrip(true) + nbPaid() : "");
+  }
+  /* past the last trial: a blank page that offers trial 5 */
+  function nbNext() {
+    return nbBook({ cur: 5, pt: "trial 4", nl: "14" }) + T(492, 136, "Croissants", H(21, 600, "var(--ink-soft)")) +
+      T(672, 318, "Start trial 5?", H(38, 700), 'text-anchor="middle"') + T(672, 356, "Trial 4 is the last one so far.", H(22, 600, "var(--ink-soft)"), 'text-anchor="middle"') +
+      pill(602, 384, 140, "Start trial 5", true) + T(672, 448, "or turn back to trial 4", UI, 'text-anchor="middle"');
   }
   /* a new recipe's first page, started from an idea */
   function nbIdea() {
-    var s = nbBook({ nl: "19" }) + nbHead("l", "11/12/26", "Trial 1: miso caramel", 30) + T(596, 206, "from the idea: Miso caramel", H(17, 600, "var(--ink-soft)"));
-    ["Goal: salty, not bitter", "Sugar 200 g, dry caramel", "Cream 150 g, warm", "White miso 25 g, off heat", "Result: too salty", "Next: miso 15 g"].forEach(function (t, i) { s += T(596, by(i + 1), t, i > 4 ? H(21, 700, INKR) : HAND); });
+    var s = nbBook({ nl: "19" }) + nbHead("l", "11/12/26", "Trial 1: miso caramel") + T(492, 206, "from the idea: Miso caramel", H(18, 600, "var(--ink-soft)"));
+    ["Goal: salty, not bitter", "Sugar 200 g, dry caramel", "Cream 150 g, warm", "White miso 25 g, off heat", "Result: too salty", "Next: miso 15 g"].forEach(function (t, i) { s += T(492, by(i + 1), t, i > 4 ? H(23, 700, INKR) : HAND); });
     return s;
   }
   PLATE.add(function () {
     function put(id, h) { document.getElementById(id).innerHTML = h; }
-    put("nb-open", openOver(nbOpen(), "The Trials notebook open at Croissants trial 4, with trial tabs, page corners, arrows and a Publish stamp"));
+    var dev = o.plan; o.plan = "dev";
+    var A1 = nbBook(NAV) + nbEntry("lit"), A2 = nbBook(NAV) + nbEntry("after"), B1 = nbBook(NAV) + nbEntry() + nbStrip(false, "b"), B2 = nbBook(NAV) + nbEntry() + nbStrip(false, "b-after");
+    put("nb-next", svg([380, 910], nbNext(), "A blank page after Croissants trial 4 asking: Start trial 5?", 76, 620));
+    put("nb-idea", svg([440, 910], nbIdea(), "The first page of a trial started from the idea Miso caramel", 90, 600));
+    o.plan = dev;
+    put("nb-open", openOver(nbOpen("before"), "The Trials notebook open at Croissants trial 4, with trial tabs, corners, recipe arrows and a Publish stamp beside the title"));
     put("nb-index", openOver(nbIndex(), "The notebook's Contents page: every recipe and its trials"));
-    put("nb-stamp-before", svg([900, 1240], nbBook({ next: ["Galette", "trial 1"], nr: "13" }) + nbEntry("lit"), "The PUBLISH stamp at the bottom of trial 4's last page, pointed at", 380, 320));
-    put("nb-stamp-after", svg([900, 1240], nbBook({ next: ["Galette", "trial 1"], nr: "13" }) + nbEntry("after"), "The page after stamping: PUBLISHED 11/11/26 and a link to the card", 380, 320));
-    put("nb-idea", svg([560, 910], nbIdea(), "The first page of a trial started from the idea Miso caramel", 90, 600));
+    put("nb-pub-a", svg([474, 900], A1, "Option A before: a dashed PUBLISH stamp beside the title, pointed at", 92, 150));
+    put("nb-pub-a2", svg([474, 900], A2, "Option A after: PUBLISHED 11/11/26 stamped beside the title", 92, 150));
+    put("nb-pub-b", svg([440, 900], B1, "Option B before: a Publish button next to New trial", 580, 156));
+    put("nb-pub-b2", svg([440, 900], B2, "Option B after: the button reads Published 11/11/26", 580, 156));
   });
 })();
 </script>
