@@ -1,0 +1,177 @@
+<section aria-labelledby="h-wb">
+  <span class="label" id="h-wb">02 · The whiteboard</span>
+  <div class="sec-body">
+    <h3>The whiteboard, opened</h3>
+    <figure id="wb-open"></figure>
+    <p class="note"><b>What it is for.</b> "Next up" is the short list of what the cook will bake next. Click the small whiteboard on the kitchen wall and it opens large, with the cursor already in the bottom line. Type and press Enter to add an item. The first three items match the kitchen wall: Croissants · trial 4, Rough puff pastry, Rhubarb galette.</p>
+    <p class="note"><b>Pinned or automatic.</b> An item the cook wrote holds a small orange magnet: it stays until the cook ticks it. An item the app added from recent activity has a grey "auto" ring and the reason next to it. Each automatic item has a little eraser on the right to wipe it off, and a dashed ring to pin it.</p>
+    <p class="note"><b>Plans.</b> The whiteboard is free, so Developer and Home cook get the same board. The only difference is where automatic items come from: for a developer, trials and recipes; for a home cook, recipe cards only (switch Plan to Home cook). A guest's board is different and is drawn further down.</p>
+
+    <h3>Wiping off an automatic item</h3>
+    <div class="pair"><div><figure id="wb-wipe-a"></figure><p class="note"><b>Before.</b> Pointing at the eraser beside "Rough puff pastry" shows a yellow "Wipe off" label.</p></div><div><figure id="wb-wipe-b"></figure><p class="note"><b>After.</b> The item is gone and a faint smudge is left. It stays away until something new happens on that recipe, such as an edit or a new trial. Then the app may write it back.</p></div></div>
+
+    <h3>Ticking off</h3>
+    <div class="pair"><div><figure id="wb-tick-a"></figure><p class="note"><b>Ticked today.</b> A marker line goes through the item and it stays on the board until the next day, so the cook can see what got done. Pointing at the tick again shows "Wipe off now".</p></div><div><figure id="wb-tick-b"></figure><p class="note"><b>Tick clicked again.</b> The item is wiped off at once, without waiting for tomorrow. The items below move up.</p></div></div>
+
+    <h3>More than six items: the board scrolls</h3>
+    <figure id="wb-long" style="max-width:640px"></figure>
+    <p class="note"><b>Long list.</b> With more than six items the list scrolls inside the board. The bottom item is cut off by the frame, a marker arrow says how many more there are, and a thin rail on the right shows where you are. The "write the next thing" line stays put at the bottom.</p>
+
+    <h3>New kitchen: empty "Next up", three doodles</h3>
+    <div class="trio"><div><figure id="wb-empty-a"></figure><p class="note"><b>A. Question mark.</b> One big marker question mark.</p></div><div><figure id="wb-empty-b"></figure><p class="note"><b>B. Little eclair.</b> A marker eclair with a bite out of it.</p></div><div><figure id="wb-empty-c"></figure><p class="note"><b>C. Whisk.</b> A marker whisk, drawn at a slant.</p></div></div>
+    <p class="note"><b>No words.</b> The doodle is the only thing on the board, with the write line ready below it. It is wiped off as soon as the first item goes on.</p>
+
+    <h3>The small whiteboard's dot, two ways</h3>
+    <div class="pair"><div><figure id="wb-dot-a"></figure><p class="note"><b>A. A magnet.</b> A small oblong orange magnet with a shadow, so it reads as a fridge magnet, not a round cork-board tack.</p></div><div><figure id="wb-dot-b"></figure><p class="note"><b>B. A marker mark.</b> An orange star drawn in marker, like the cook marked it by hand.</p></div></div>
+    <p class="note"><b>Close-up crops.</b> The small whiteboard is drawn in the kitchen view, so these are crops of the same wall drawn here; the kitchen is not changed yet. The large board above uses option A for pinned items; with B, it would use the star too.</p>
+
+    <h3>Guest</h3>
+    <figure id="wb-guest" style="max-width:640px"></figure>
+    <p class="note"><b>Where a guest differs.</b> The board holds starter items from the starter recipes. Ticking, wiping and reordering work, but nothing is saved: the board is back to the starter items next time. The write line is replaced by "Sign up to write your own list".</p>
+
+    <ol class="qs">
+      <li><b>Empty board:</b> which doodle, A question mark, B eclair or C whisk?</li>
+      <li><b>Pinned mark:</b> A magnet or B marker star, on both the small and the large board?</li>
+      <li><b>Wipe and pin:</b> is the small eraser plus the dashed pin ring on each automatic item clear, or too fussy?</li>
+    </ol>
+  </div>
+</section>
+<script>
+(function () {
+  var GREY = "#8a8780", BLUE = "var(--blue)", OR = "var(--orange)";
+  function tw(t, fs) { return t.length * fs * 0.38; }
+  function hand(x, y, t, fs, col, wt, extra) { return T(x, y, t, "font:" + (wt || 600) + " " + fs + "px var(--font-hand);fill:" + (col || "var(--ink)"), extra); }
+  /* The pinned mark: "mag" = oblong magnet, "star" = marker star */
+  function mark(k, x, y, s) {
+    s = s || 1;
+    if (k === "star") { var p = ""; for (var i = 0; i < 5; i++) { var a = -Math.PI / 2 + i * 4 * Math.PI / 5; p += (i ? " L" : "M") + (x + Math.cos(a) * 11 * s).toFixed(1) + " " + (y + Math.sin(a) * 11 * s).toFixed(1); }
+      return '<path d="' + p + ' Z" style="fill:var(--orange);fill-opacity:.35;stroke:var(--orange);stroke-width:' + (3.2 * s) + ';stroke-linejoin:round;stroke-linecap:round"/>'; }
+    var w = 26 * s, h = 15 * s;
+    return '<rect x="' + (x - w / 2 + 2) + '" y="' + (y - h / 2 + 3) + '" width="' + w + '" height="' + h + '" rx="' + (5 * s) + '" style="fill:var(--ink);opacity:.22"/>' +
+      reg("rect", 'x="' + (x - w / 2) + '" y="' + (y - h / 2) + '" width="' + w + '" height="' + h + '" rx="' + (5 * s) + '"', OR, 1.8) +
+      line("M" + (x - w / 2 + 5 * s) + " " + (y - h / 2 + 4 * s) + " h" + (w * 0.42), 2 * s, 0.75, "#fff");
+  }
+  function autoRing(cx, cy, fs) { return '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + (fs * 1.15) + '" ry="' + (fs * 0.56) + '" transform="rotate(-4 ' + cx + " " + cy + ')" style="fill:none;stroke:' + GREY + ';stroke-width:1.6"/>' + hand(cx, cy + fs * 0.3, "auto", fs, GREY, 600, 'text-anchor="middle"'); }
+  function icon(k, x, y) {
+    if (k === "book") return reg("rect", 'x="' + (x + 3) + '" y="' + (y - 19) + '" width="17" height="21" rx="1.5"', "#fbfaf6", 1.5) + '<rect x="' + (x + 3) + '" y="' + (y - 19) + '" width="5" height="21" style="fill:var(--ink)"/>' + line("M" + (x + 11) + " " + (y - 13) + " h6 M" + (x + 11) + " " + (y - 9) + " h6", 1.2);
+    if (k === "idea") return '<g transform="rotate(-7 ' + (x + 11) + " " + (y - 8) + ')">' + reg("rect", 'x="' + (x + 2) + '" y="' + (y - 17) + '" width="19" height="18"', "var(--custard)", 1.5) + line("M" + (x + 6) + " " + (y - 8) + " h11 M" + (x + 6) + " " + (y - 4) + " h8", 1.1, 0.6) + "</g>";
+    return reg("rect", 'x="' + x + '" y="' + (y - 16) + '" width="25" height="17" rx="1"', "var(--card)", 1.5) + line("M" + (x + 2) + " " + (y - 11) + " h21", 1.2, 1, "#c9442a") + line("M" + (x + 4) + " " + (y - 6) + " h14 M" + (x + 4) + " " + (y - 3) + " h10", 1, 0.6);
+  }
+  function box(x, y, s, ticked) { return line("M" + x + " " + (y + 1) + " l" + s + " -1 l1 " + s + " l-" + (s + 1) + " 1 Z", 2.4, 1, BLUE) + (ticked ? line("M" + (x + 4) + " " + (y + s * 0.5) + " l" + (s * 0.3) + " " + (s * 0.36) + " l" + (s * 0.62) + " -" + (s * 1.05), 3.2, 1, OR) : ""); }
+  function smudge(x, y, w, op) { return line("M" + x + " " + y + " q" + (w / 4) + " -9 " + (w / 2) + " -1 t" + (w / 2) + " -2", 20, op || 0.06, BLUE) + line("M" + (x + 14) + " " + (y + 9) + " q" + (w / 4) + " 6 " + (w / 2) + " 0 t" + (w / 2 - 30) + " 1", 12, (op || 0.06) * 0.8, BLUE); }
+  /* a felt eraser: wooden back, grey felt */
+  function eraser(x, y, on) {
+    return (on ? '<rect x="' + (x - 18) + '" y="' + (y - 17) + '" width="36" height="32" rx="6" style="fill:var(--yellow);stroke:var(--ink);stroke-width:1.2"/>' : "") +
+      reg("rect", 'x="' + (x - 12) + '" y="' + (y - 9) + '" width="24" height="10" rx="3"', "var(--wood)", 1.5) + reg("rect", 'x="' + (x - 12) + '" y="' + (y + 1) + '" width="24" height="6" rx="1"', "#4a4640", 1.4);
+  }
+  function tag(x, y, t) { var w = t.length * 7.4 + 18; return reg("rect", 'x="' + x + '" y="' + (y - 18) + '" width="' + w + '" height="26" rx="4"', "var(--yellow)", 1.6) + T(x + w / 2, y, t, "font:600 14px var(--font-body);fill:var(--ink)", 'text-anchor="middle"'); }
+  function cursor(x, y) { return '<path d="M' + x + " " + y + " l0 24 l6 -6 l5 11 l4 -2 l-5 -10 l8 0 Z" + '" style="fill:#fff;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round"/>'; }
+  function marker(x, y, col, flip) { var b = reg("rect", 'x="' + x + '" y="' + y + '" width="74" height="12" rx="4"', "var(--card)", 1.6) + reg("rect", 'x="' + (x + 14) + '" y="' + y + '" width="34" height="12"', col, 1.4) + reg("rect", 'x="' + (x + 56) + '" y="' + (y - 1) + '" width="22" height="14" rx="3"', col, 1.6);
+    return flip ? '<g transform="translate(' + (2 * x + 78) + ' 0) scale(-1 1)">' + b + "</g>" : b; }
+  function row(B, r, y) {
+    var s = "", fs = B.fs, f2 = Math.round(fs * 0.62), tx = B.sx + 78, px = B.sx + B.sw - 34, ex = px - 50, bs = Math.round(fs * 0.66), w = tw(r.t, fs), my = y - bs * 0.5;
+    if (r.wiped) return smudge(tx - 30, y - 8, w + 70, 0.1) + hand(tx, y, r.t, fs, "var(--ink)", 600, 'opacity=".09"');
+    for (var d = 0; d < 6; d++) s += '<circle cx="' + (B.sx + 18 + (d % 2) * 8) + '" cy="' + (y - bs + 3 + Math.floor(d / 2) * 8) + '" r="2" style="fill:' + GREY + '"/>';
+    s += box(B.sx + 40, y - bs, bs, r.done);
+    if (r.tickOn) s += cursor(B.sx + 40 + bs * 0.6, y - bs * 0.3) + tag(tx + w * 1.12 + 26, y - 4, "Wipe off now");
+    s += lk(tx, y, r.t, fs, r.on, r.t, { cw: 0.38, col: r.done ? GREY : "var(--ink)" });
+    if (r.done) s += line("M" + (tx - 8) + " " + (y - fs * 0.26) + " q" + (w * 0.56) + " -7 " + (w * 1.12 + 14) + " 1", 3, 1, BLUE);
+    var y2 = y + f2 + 8, wx = tx + 34;
+    s += icon(r.k, tx, y2) + hand(wx, y2, r.w, f2, BLUE);
+    wx += tw(r.w, f2) + 18;
+    if (r.why) s += autoRing(wx + f2 * 1.15, y2 - f2 * 0.3, f2 - 1) + hand(wx + f2 * 2.3 + 8, y2, r.why, f2, GREY);
+    else if (r.note) s += hand(wx, y2, r.note, f2, GREY);
+    if (r.pin) s += mark(B.mark || "mag", px, my);
+    else if (r.why) s += '<circle cx="' + px + '" cy="' + my + '" r="10" style="fill:none;stroke:' + GREY + ';stroke-width:1.6;stroke-dasharray:4 3"/>' + T(px, y + 17, "pin", "font:12px var(--font-body);fill:var(--ink-soft)", 'text-anchor="middle"') +
+      eraser(ex, my, r.wipeOn) + T(ex, y + 17, "wipe", "font:12px var(--font-body);fill:var(--ink-soft)", 'text-anchor="middle"') + (r.wipeOn ? cursor(ex + 2, my - 2) + tag(ex - 108, my + 8, "Wipe off") : "");
+    return s;
+  }
+  /* Doodles for the empty board, in marker */
+  function doodle(k, cx, cy) {
+    var M = function (d, w, c) { return line(d, w || 6, 1, c || BLUE); };
+    if (k === "q") return M("M" + (cx - 34) + " " + (cy - 50) + " q4 -42 40 -40 q38 4 34 38 q-4 26 -30 36 q-14 6 -12 36", 9) + '<circle cx="' + (cx + 2) + '" cy="' + (cy + 62) + '" r="7" style="fill:var(--blue)"/>';
+    if (k === "e") { var x0 = cx - 100, x1 = cx + 96, y0 = cy - 24, y1 = cy + 22;
+      return line("M" + (x0 + 4) + " " + (y1 + 18) + " q" + (cx - x0 - 4) + " 14 " + (x1 - x0 - 4) + " 0", 3, 1, BLUE) +
+        M("M" + (x0 + 24) + " " + y0 + " H" + (x1 - 46) + " q8 10 18 4 q10 12 20 2 q14 10 8 24 q0 18 -24 18 H" + (x0 + 24) + " q-26 0 -26 -23 q0 -23 26 -25", 5) +
+        M("M" + (x0 + 30) + " " + (y1 - 9) + " q20 4 40 0 M" + (x0 + 92) + " " + (y1 - 8) + " q20 4 40 0", 2.6) + '<path d="M' + (x0 + 12) + " " + (y0 + 8) + " q4 -8 12 -8 H" + (x1 - 50) + " l-2 10 q-10 10 -20 2 q-12 10 -24 0 q-12 10 -26 0 q-12 10 -26 0 q-12 10 -26 0 q-12 8 -26 2 Z" + '" style="fill:var(--orange);fill-opacity:.35;stroke:var(--orange);stroke-width:4;stroke-linejoin:round"/>' +
+        '<circle cx="' + (x1 + 16) + '" cy="' + (y0 + 4) + '" r="3" style="fill:var(--blue)"/><circle cx="' + (x1 + 26) + '" cy="' + (y0 + 18) + '" r="2.4" style="fill:var(--blue)"/><circle cx="' + (x1 + 12) + '" cy="' + (y0 + 26) + '" r="2" style="fill:var(--blue)"/>'; }
+    if (k === "w") { var w = M("M70 70 L18 18", 10) + M("M72 72 l6 6", 4);
+      for (var i = -2; i <= 2; i++) w += M("M18 18 C" + (-20 + i * 14) + " " + (-10 - i * 14) + " " + (-80 + i * 4) + " " + (-70 - i * 4) + " " + (-52 + i * 10) + " " + (-82 + i * 10) + " S" + (4 - i * 10) + " " + (-4 + i * 10) + " 18 18", 4);
+      return '<g transform="translate(' + (cx - 10) + " " + (cy + 22) + ') rotate(-10) scale(.78)">' + w + "</g>"; }
+  }
+  /* One whiteboard: B = {x, y, w, h, fs, rows, legend, doodle, scroll, guest, min} */
+  function board(B) {
+    var x = B.x, y = B.y, w = B.w, h = B.h, F = 16, sx = B.sx = x + F, sy = y + F, sw = B.sw = w - 2 * F, sh = h - 2 * F, sb = sy + sh, hs = Math.round(B.fs * 1.5), pitch = Math.round(B.fs * 1.95);
+    var s = hatch(x + 8, y + h, w - 4, 9, 0.8) + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="4"', "var(--wood)", 2.6) + grain(x + 20, y + 2, w - 40, F - 3, 5) + grain(x + 20, sb + 2, w - 40, F - 3, 8);
+    s += reg("rect", 'x="' + sx + '" y="' + sy + '" width="' + sw + '" height="' + sh + '"', "var(--wb)", 2.2);
+    [[x, y, sx, sy], [x + w, y, sx + sw, sy], [x, y + h, sx, sb], [x + w, y + h, sx + sw, sb]].forEach(function (c) { s += line("M" + c[0] + " " + c[1] + " L" + c[2] + " " + c[3], 1.4, 0.7); });
+    s += smudge(sx + sw * 0.5, sy + 40, sw * 0.4) + smudge(sx + 60, sb - 70, sw * 0.5, 0.045);
+    s += hand(sx + 30, sy + hs + 4, "Next up", hs, BLUE, 700) + line("M" + (sx + 30) + " " + (sy + hs + 14) + " q" + (hs * 1.3) + " 6 " + (hs * 2.7) + " -3", 3, 1, BLUE);
+    if (B.legend) { var lx = sx + sw - 400, ly = sy + hs - 4; s += mark("mag", lx, ly - 7) + hand(lx + 20, ly, "pinned by you", 21, GREY) + autoRing(lx + 176, ly - 7, 20) + hand(lx + 208, ly, "added for you", 21, GREY); }
+    var r0 = sy + hs + Math.round(B.fs * 1.9), bs = Math.round(B.fs * 0.66), ay = B.ay || (r0 + Math.max(B.rows.length, B.min || 0) * pitch + 12);
+    var rs = ""; if (B.scroll) B.sw -= 34; B.rows.forEach(function (r, i) { rs += row(B, r, r0 + i * pitch); });
+    if (B.scroll) {
+      B.sw = sw; var cy0 = r0 - B.fs * 1.1, cy1 = ay - 44;
+      s += clipTo(sx + 2, cy0, sx + sw - 30, cy1, rs) + line("M" + (sx + 10) + " " + cy1 + " H" + (sx + sw - 34), 1.4, 0.5, GREY);
+      var rx = sx + sw - 16, th = (cy1 - cy0) * 0.55;
+      s += reg("rect", 'x="' + (rx - 3) + '" y="' + cy0 + '" width="6" height="' + (cy1 - cy0) + '" rx="3"', "var(--wb)", 1.3) + reg("rect", 'x="' + (rx - 5) + '" y="' + (cy0 + 2) + '" width="10" height="' + th + '" rx="5"', BLUE, 1.6);
+      var ax = sx + sw - 150; s += line("M" + ax + " " + (cy1 - 46) + " q-6 18 2 36 M" + (ax - 9) + " " + (cy1 - 20) + " l11 11 l8 -14", 3.4, 1, BLUE) + hand(ax + 14, cy1 - 18, B.scroll + " more", 26, BLUE, 700);
+    } else s += rs;
+    if (B.doodle) s += doodle(B.doodle, sx + sw / 2, r0 + 46);
+    if (B.guest) {
+      s += hand(sx + 78, ay, "Sign up to write your own list", B.fs * 0.85, BLUE, 600) + line("M" + (sx + 78) + " " + (ay + 5) + " h" + tw("Sign up to write your own list", B.fs * 0.85), 1.6, 1, BLUE) + line("M" + (sx + 40) + " " + (ay + 12) + " H" + (sx + sw - 30), 1.4, 0.6, GREY);
+      var gx = sx + sw - 230, gy = sy + 22; s += '<g transform="rotate(2 ' + (gx + 100) + " " + (gy + 30) + ')">' + reg("rect", 'x="' + gx + '" y="' + gy + '" width="200" height="58"', "var(--card)", 1.8) + hand(gx + 14, gy + 26, "Guest board", 22, "var(--ink)", 700) + hand(gx + 14, gy + 49, "starter items, not saved", 19, GREY) + tape(gx + 100, gy, 64, 18, -3, 0.75) + "</g>";
+    } else {
+      s += '<path d="M' + (sx + 40) + " " + (ay - bs + 1) + " h" + bs + " v" + bs + " h-" + bs + ' Z" style="fill:none;stroke:' + GREY + ';stroke-width:1.6;stroke-dasharray:4 3"/>' +
+        line("M" + (sx + 80) + " " + (ay - B.fs * 0.8) + " v" + (B.fs * 0.98), 2.6, 1, BLUE) + hand(sx + 88, ay, "Write the next thing…", B.fs, GREY) + line("M" + (sx + 76) + " " + (ay + 9) + " H" + (sx + sw - 116), 1.4, 0.8, GREY) +
+        T(sx + sw - 24, ay + 2, "Enter adds it", "font:13px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"');
+    }
+    var tw2 = Math.max(w * 0.56, 340) / 2, tx0 = x + w / 2 - tw2, tx1 = x + w / 2 + tw2, ty = sb + 5;
+    s += reg("rect", 'x="' + tx0 + '" y="' + ty + '" width="' + (tx1 - tx0) + '" height="15" rx="2"', "var(--wood-hi)", 2.2) + line("M" + (tx0 + 4) + " " + (ty + 10) + " H" + (tx1 - 4), 1.2, 0.5) + hatch(tx0 + 4, ty + 15, tx1 - tx0 - 2, 6, 0.8);
+    s += marker(tx0 + 26, ty - 12, BLUE) + marker(tx0 + 122, ty - 12, OR, 1);
+    s += reg("rect", 'x="' + (tx1 - 104) + '" y="' + (ty - 20) + '" width="78" height="14" rx="3"', "var(--wood)", 1.8) + reg("rect", 'x="' + (tx1 - 104) + '" y="' + (ty - 7) + '" width="78" height="7" rx="1"', "#4a4640", 1.6);
+    return s;
+  }
+  /* Rows. Kitchen wall shows the first three. */
+  var R = {
+    cro: { t: "Croissants · trial 4", k: "book", w: "Trials", why: "open “next:” note" },
+    crc: { t: "Croissants", k: "card", w: "recipe card", why: "edited yesterday" },
+    rp: { t: "Rough puff pastry", k: "book", w: "Trials", why: "edited yesterday" },
+    rpc: { t: "Rough puff pastry", k: "card", w: "recipe card", why: "new card Sunday" },
+    rg: { t: "Rhubarb galette", k: "card", w: "recipe card", pin: 1 },
+    mc: { t: "Miso caramel in the blondies?", k: "idea", w: "idea board", pin: 1 },
+    bl: { t: "Blondies, less sugar", k: "card", w: "recipe card", pin: 1 },
+    bb: { t: "Brown butter cookies", k: "card", w: "recipe card", done: 1, note: "ticked today" }
+  };
+  function x(r, e) { var c = {}, k; for (k in r) c[k] = r[k]; for (k in e) c[k] = e[k]; return c; }
+  function rows(plan) { return plan === "cook" ? [R.crc, R.rpc, x(R.rg, { on: 1 }), R.bl, R.bb] : [R.cro, R.rp, x(R.rg, { on: 1 }), R.mc, R.bb]; }
+  function small(rws, extra, label, vw) { vw = vw || 520; var B = { x: 460, y: 20, w: vw - 32, h: 384, fs: 28, rows: rws, min: 3 }; for (var k in extra) B[k] = extra[k];
+    return svg([444, 444 + vw], board(B), label, 4, B.h + 40); }
+  /* Close-up of the kitchen's small whiteboard (same layout as kitchen.js), with the pinned dot drawn as kind k */
+  function wallCrop(k) {
+    var x0 = 570, s = '<rect x="540" y="100" width="340" height="280" style="fill:var(--plaster)"/>' + reg("rect", 'x="560" y="115" width="320" height="250" rx="4"', "var(--wood)") + reg("rect", 'x="' + x0 + '" y="125" width="248" height="230"', "var(--wb)", 2.2);
+    s += T(x0 + 22, 164, "Next up", "font:700 33px var(--font-hand);fill:var(--blue)") + line("M" + (x0 + 22) + " 172 q48 5 96 -2", 2.4, 1, BLUE);
+    [["Croissants · trial 4", 0], ["Rough puff pastry", 0], ["Rhubarb galette", 1]].forEach(function (it, i) { var y = 210 + i * 34;
+      s += it[1] ? mark(k, x0 + 30, y - 7, k === "star" ? 0.8 : 0.72) : reg("rect", 'x="' + (x0 + 22) + '" y="' + (y - 15) + '" width="15" height="15" rx="2"', "var(--wb)", 1.8);
+      s += T(x0 + 48, y, it[0], "font:600 24px var(--font-hand);fill:" + (it[1] ? "var(--orange-text)" : "var(--ink)")); });
+    s += reg("rect", 'x="' + (x0 + 248) + '" y="125" width="10" height="230"', "var(--wood)", 2);
+    return svg([550, 840], s, k === "star" ? "Small whiteboard close-up: Rhubarb galette marked with an orange marker star" : "Small whiteboard close-up: Rhubarb galette held by an oblong orange magnet", 118, 190);
+  }
+  PLATE.add(function () {
+    var g = function (id) { return document.getElementById(id); }, guestRows = [x(R.bb, { done: 0, note: "starter recipe" }), { t: "Lemon shortbread", k: "card", w: "recipe card", note: "starter recipe" }, x(R.bb, { t: "Banana bread", done: 1, note: "ticked today" })];
+    if (o.plan === "guest") g("wb-open").innerHTML = openOver(board({ x: 468, y: 82, w: 864, h: 612, fs: 34, rows: guestRows, guest: 1, min: 6 }), "The guest whiteboard opened over the dimmed kitchen");
+    else g("wb-open").innerHTML = openOver(board({ x: 468, y: 82, w: 864, h: 612, fs: 34, rows: rows(o.plan), legend: 1 }), "The whiteboard opened over the dimmed kitchen");
+    var wipeR = o.plan === "cook" ? R.rpc : R.rp, top = o.plan === "cook" ? R.crc : R.cro;
+    g("wb-wipe-a").innerHTML = small([top, x(wipeR, { wipeOn: 1 }), R.rg], {}, "Pointing at the eraser beside Rough puff pastry shows Wipe off");
+    g("wb-wipe-b").innerHTML = small([top, { t: wipeR.t, wiped: 1 }, R.rg], {}, "Rough puff pastry wiped off, a faint smudge left");
+    g("wb-tick-a").innerHTML = small([R.rg, x(R.bb, { tickOn: 1 }), R.bl], {}, "Brown butter cookies ticked with a line through; pointing at the tick shows Wipe off now");
+    g("wb-tick-b").innerHTML = small([R.rg, R.bl], { min: 2 }, "Brown butter cookies wiped off at once; Blondies moved up");
+    var many = rows(o.plan === "cook" ? "cook" : "dev").concat([R.bl, { t: "Cardamom knots", k: "idea", w: "idea board", pin: 1 }, { t: "Yuzu curd tart", k: "idea", w: "idea board", pin: 1 }, { t: "Weekend Bakes: pick 3", k: "card", w: "recipe card", pin: 1 }]);
+    g("wb-long").innerHTML = small(many, { h: 580, ay: 552, scroll: 2 }, "A long whiteboard: the list scrolls, with 2 more below and a rail on the right", 620);
+    ["q", "e", "w"].forEach(function (k, i) { g("wb-empty-" + "abc"[i]).innerHTML = small([], { doodle: k, h: 340, min: 3 }, "An empty whiteboard in a new kitchen with a marker doodle"); });
+    g("wb-dot-a").innerHTML = wallCrop("mag");
+    g("wb-dot-b").innerHTML = wallCrop("star");
+    g("wb-guest").innerHTML = small(guestRows, { h: 380, guest: 1 }, "The guest whiteboard: starter items, not saved, with Sign up to write your own list", 620);
+  });
+})();
+</script>
