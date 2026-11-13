@@ -1,0 +1,128 @@
+<section aria-labelledby="h-ideas">
+  <span class="label" id="h-ideas">03 · The idea board</span>
+  <div class="sec-body">
+    <h3>The idea board, opened</h3>
+    <figure id="ideas-open"></figure>
+    <p class="note"><b>Open and type.</b> Clicking the cork in the kitchen opens the board large. A blank note is already pinned at the top left with the cursor in it, so a new idea is just typing a title and pressing Enter. Each note is one idea: a title, sometimes one photo, and a tag.</p>
+    <p class="note"><b>Tack colour is the status.</b> An orange tack means in progress. A blue tack means research. The small key pinned at the top right says so. Pointing at a note makes it glow and its tag turn yellow (shown on "Cardamom knots"). The notes sit in a tidy grid for now, newest first.</p>
+    <h3>One idea, opened</h3>
+    <figure id="ideas-one"></figure>
+    <p class="note"><b>The note comes forward.</b> Clicking a note pulls it forward, still pinned, over the dimmed board. Everything on it can be changed in place: the title, the one photo, the tag, the status and a few lines of notes. Clicking the board behind puts the note back.</p>
+    <p class="note"><b>Three actions.</b> "Start a trial from this" opens a new page in the Trials notebook with the idea's title, notes and photo. "Send to Next up" writes it on the whiteboard. "Delete" takes the note off the board.</p>
+    <div class="pair">
+      <div><h3>An idea with no photo yet</h3><figure id="ideas-nophoto"></figure>
+        <p class="note"><b>A marked spot.</b> A dashed spot the size of a photo says "Add a photo". An idea holds one photo only.</p></div>
+      <div><h3>The new note, close up</h3><figure id="ideas-new"></figure>
+        <p class="note"><b>Ready to add.</b> The blank note starts as research (blue tack). Only the title is needed.</p></div>
+    </div>
+    <h3>What a home cook or guest sees</h3>
+    <figure id="ideas-cook"></figure>
+    <p class="note"><b>Look, don't touch.</b> The same board with sample ideas. There is no blank note and nothing can be changed. The first card says it is a sample and carries the "paid plan" tag. Notes still open to show what an idea holds, without the three actions.</p>
+    <ol class="qs">
+      <li><b>Grid or free placement first?</b> This is a tidy grid, newest first. Is that enough for now, with dragging later?</li>
+      <li><b>Is status by tack colour clear?</b> Orange for in progress, blue for research, with the key in the corner. Or should each note also say the word?</li>
+      <li><b>What should "Start a trial" carry over?</b> Drawn as title, notes and photo. Does the idea then stay on the board, or come off it?</li>
+      <li><b>Should the board have filters?</b> For example by tag or by status. None are drawn. The find bar at the top could do this job instead.</li>
+    </ol>
+  </div>
+</section>
+<script>
+(function () {
+  var HAND = "var(--font-hand)", X0 = 468, Y0 = 92, X1 = 1332, Y1 = 706, ORG = "var(--orange)", BLU = "var(--blue)";
+  var FW = { side: "var(--wood)", top: "var(--wood-dark)", bottom: "var(--wood-hi)" };
+  /* title lines, tag, status (1 = in progress), paper, tilt, picture */
+  var IDEAS = [
+    [["Miso caramel"], "sauce", 1, "var(--card)", -2, "jar"],
+    [["Cardamom knots"], "bread", 1, "var(--yellow)", 1.5, "bun"],
+    [["Yuzu curd tart"], "pastry", 0, "var(--card)", -1, "tart"],
+    [["Black sesame", "shortbread"], "cookies", 0, "var(--amber)", 2, null],
+    [["Earl Grey scones"], "bread", 1, "var(--card)", -1.5, null],
+    [["Rye chocolate", "babka"], "bread", 0, "var(--yellow)", 1, "loaf"],
+    [["Burnt honey", "custard"], "custard", 0, "var(--card)", 2, null],
+    [["Saffron buns"], "bread", 0, "var(--amber)", -2, "bun"],
+    [["Olive oil cake,", "blood orange"], "cakes", 1, "var(--card)", 1, "cake"],
+    [["Malted milk", "cookies"], "cookies", 0, "var(--yellow)", -1, null],
+    [["Brown butter", "madeleines"], "cakes", 1, "var(--card)", 1.5, "cookie"]
+  ];
+  function tack(cx, cy, col, r) { r = r || 8;
+    return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" style="fill:' + col + ';stroke:var(--ink);stroke-width:1.8"/><circle cx="' + (cx - r * 0.34) + '" cy="' + (cy - r * 0.34) + '" r="' + (r * 0.28).toFixed(1) + '" style="fill:#fff;opacity:.8"/>'; }
+  function tape(cx, cy, rot) { return '<rect x="' + (cx - 17) + '" y="' + (cy - 6) + '" width="34" height="12" transform="rotate(' + rot + " " + cx + " " + cy + ')" style="fill:var(--custard);opacity:.8;stroke:var(--ink);stroke-width:1"/>'; }
+  /* A flat drawn picture inside a white-edged photo, k = size */
+  function photo(x, y, w, h, kind, rot) {
+    var cx = x + w / 2, cy = y + h / 2, by = y + h - 9, k = w / 60, s = reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"', "var(--page)", 1.6) +
+      reg("rect", 'x="' + (x + 5) + '" y="' + (y + 5) + '" width="' + (w - 10) + '" height="' + (h - 10) + '"', "var(--plaster)", 1.2) + line("M" + (x + 5) + " " + by + " H" + (x + w - 5), 1.2);
+    function e(rx, ry, dy, fill) { return reg("ellipse", 'cx="' + cx + '" cy="' + (by - dy * k) + '" rx="' + rx * k + '" ry="' + ry * k + '"', fill, 1.5); }
+    if (kind === "jar") s += reg("rect", 'x="' + (cx - 11 * k) + '" y="' + (by - 24 * k) + '" width="' + 22 * k + '" height="' + 24 * k + '" rx="' + 3 * k + '"', "var(--amber)", 1.5) + reg("rect", 'x="' + (cx - 12 * k) + '" y="' + (by - 29 * k) + '" width="' + 24 * k + '" height="' + 6 * k + '" rx="2"', "var(--brass)", 1.5);
+    if (kind === "bun") s += e(17, 12, 12, "var(--amber)") + line("M" + (cx - 9 * k) + " " + (by - 16 * k) + " q" + 9 * k + " " + 9 * k + " " + 18 * k + " 0 M" + (cx - 13 * k) + " " + (by - 9 * k) + " q" + 13 * k + " " + -9 * k + " " + 26 * k + " 0", 1.4);
+    if (kind === "tart") s += e(20, 7, 8, "var(--yellow)") + reg("path", 'd="M' + (cx - 20 * k) + " " + (by - 8 * k) + " q" + 20 * k + " " + 14 * k + " " + 40 * k + ' 0 l' + -3 * k + " " + 7 * k + " h" + -34 * k + ' z"', "var(--cork)", 1.5);
+    if (kind === "loaf") s += reg("path", 'd="M' + (cx - 19 * k) + " " + by + " v" + -13 * k + " q" + 19 * k + " " + -16 * k + " " + 38 * k + " 0 v" + 13 * k + ' z"', "var(--wood)", 1.5) + line("M" + (cx - 9 * k) + " " + (by - 17 * k) + " l" + 5 * k + " " + 6 * k + " M" + cx + " " + (by - 19 * k) + " l" + 5 * k + " " + 6 * k, 1.4);
+    if (kind === "cake") s += reg("rect", 'x="' + (cx - 18 * k) + '" y="' + (by - 17 * k) + '" width="' + 36 * k + '" height="' + 17 * k + '" rx="2"', "var(--custard)", 1.5) + e(18, 5, 17, "var(--orange)");
+    if (kind === "cookie") s += e(13, 9, 9, "var(--cork)") + line("M" + (cx - 6 * k) + " " + (by - 15 * k) + " v" + 11 * k + " M" + cx + " " + (by - 17 * k) + " v" + 15 * k + " M" + (cx + 6 * k) + " " + (by - 15 * k) + " v" + 11 * k, 1.2);
+    return '<g transform="rotate(' + (rot || 0) + " " + cx + " " + cy + ')">' + s + "</g>";
+  }
+  function tag(x, y, t, lbl) { var w = 16 + t.length * 7.4;
+    return reg("rect", (lbl ? 'class="lbl" ' : "") + 'x="' + x + '" y="' + y + '" width="' + w.toFixed(0) + '" height="20" rx="3"', "var(--plaster)", 1.4) +
+      T(x + w / 2, y + 14.5, t.toUpperCase(), "font:700 12px var(--font-label);letter-spacing:.08em;fill:var(--ink)", 'text-anchor="middle"'); }
+  var NW = 184, NH = 150;
+  function slot(i) { return [490 + (i % 4) * 212, 168 + Math.floor(i / 4) * 178]; }
+  function note(i, d, live, on) {
+    var p = slot(i), x = p[0], y = p[1], cx = x + NW / 2, s = reg("rect", 'x="' + x + '" y="' + y + '" width="' + NW + '" height="' + NH + '"', d[3], 2);
+    d[0].forEach(function (t, j) { s += T(x + 14, y + 46 + j * 27, t, "font:700 27px " + HAND + ";fill:var(--ink)"); });
+    if (d[5]) s += photo(x + NW - 76, y + NH - 62, 62, 50, d[5], 4) + tape(x + NW - 45, y + NH - 62, -5);
+    s += tag(x + 12, y + NH - 30, d[1], true);
+    s = '<g transform="rotate(' + d[4] + " " + cx + " " + (y + 9) + ')">' + s + "</g>" + tack(cx, y + 9, d[2] ? ORG : BLU);
+    if (!live) return s;
+    var was = TARGET; if (on) TARGET = d[0].join(" "); s = hot(d[0].join(" "), s, [x, y, NW, NH]); TARGET = was; return s;
+  }
+  function blank(i) { var p = slot(i), x = p[0], y = p[1];
+    return '<g transform="rotate(-1 ' + (x + NW / 2) + " " + (y + 9) + ')">' + reg("rect", 'x="' + x + '" y="' + y + '" width="' + NW + '" height="' + NH + '"', "var(--card)", 2) +
+      line("M" + (x + 16) + " " + (y + 26) + " V" + (y + 52), 2.6, 1, "var(--blue)") + T(x + 24, y + 47, "New idea…", "font:500 27px " + HAND + ";fill:var(--ink-soft)") +
+      line("M" + (x + 14) + " " + (y + 58) + " H" + (x + NW - 14), 1.2, 0.5) + line("M" + (x + 14) + " " + (y + 86) + " H" + (x + NW - 14), 1.2, 0.3) +
+      T(x + 14, y + NH - 14, "Type a title, then Enter", "font:13px var(--font-body);fill:var(--ink-soft)") + "</g>" + tack(x + NW / 2, y + 9, BLU); }
+  function key() { var x = 1070, y = 108;
+    return '<g transform="rotate(1 ' + (x + 120) + " " + y + ')">' + reg("rect", 'x="' + x + '" y="' + y + '" width="240" height="40"', "var(--card)", 1.8) + tack(x + 22, y + 22, ORG, 6) + T(x + 34, y + 29, "in progress", "font:700 22px " + HAND + ";fill:var(--ink)") +
+      tack(x + 142, y + 22, BLU, 6) + T(x + 154, y + 29, "research", "font:700 22px " + HAND + ";fill:var(--ink)") + "</g>" + tack(x + 120, y + 4, "var(--stem)", 6); }
+  function title() { var x = 492;
+    return '<g transform="rotate(-2 ' + (x + 50) + ' 112)">' + reg("rect", 'x="' + x + '" y="104" width="100" height="48"', "var(--card)", 2) + line("M" + (x + 5) + " 118 H" + (x + 95), 1.4, 1, "#c9442a") + T(x + 50, 144, "Ideas", "font:700 30px " + HAND + ";fill:var(--ink)", 'text-anchor="middle"') + "</g>" + tack(x + 50, 108, ORG, 7); }
+  function frame(inner) {
+    return hatch(STAGE.x0 + 4, 714, STAGE.x1 - STAGE.x0 - 8, 8) + reg("rect", 'x="' + STAGE.x0 + '" y="' + STAGE.y0 + '" width="' + (STAGE.x1 - STAGE.x0) + '" height="638" rx="4"', "var(--wood)") + grain(STAGE.x0 + 6, 78, 880, 10, 4) + grain(STAGE.x0 + 6, 702, 880, 8, 7) +
+      recess(X0, Y0, X1, Y1 - 6, 10, "url(#corkp)", FW) + reg("rect", 'x="' + X0 + '" y="' + Y0 + '" width="' + (X1 - X0) + '" height="' + (Y1 - 6 - Y0) + '"', "none", 2.2) + inner; }
+  function boardDev(live) { /* the pointed-at note is drawn first so its glow sits under its neighbours */
+    var s = (live ? note(2, IDEAS[1], true, true) : "") + title() + key() + blank(0);
+    IDEAS.forEach(function (d, i) { if (!(live && i === 1)) s += note(i + 1, d, live); }); return frame(s); }
+  function boardCook() { var p = slot(0), x = p[0], y = p[1], s = title() + key();
+    s += '<g transform="rotate(-1 ' + (x + NW / 2) + " " + (y + 9) + ')">' + reg("rect", 'x="' + x + '" y="' + y + '" width="' + NW + '" height="' + NH + '"', "var(--card)", 2) +
+      T(x + 14, y + 46, "A sample board.", "font:700 25px " + HAND + ";fill:var(--ink)") + T(x + 14, y + 72, "Your own ideas come", "font:500 21px " + HAND + ";fill:var(--ink)") + T(x + 14, y + 94, "with the paid plan.", "font:500 21px " + HAND + ";fill:var(--ink)") + "</g>" + tack(x + NW / 2, y + 9, "var(--stem)");
+    /* the paid tag, always shown here, hung from the card's bottom edge */
+    var tx = x + 72, ty = y + NH - 22;
+    s += '<g transform="rotate(-3 ' + tx + " " + ty + ')">' + reg("rect", 'x="' + (tx - 52) + '" y="' + (ty - 16) + '" width="104" height="30" rx="3"', "var(--yellow)", 1.8) + T(tx + 6, ty + 6, "paid plan", "font:700 20px " + HAND + ";fill:var(--ink)", 'text-anchor="middle"') + "</g>" + tack(tx - 40, ty + 2, "var(--card)", 5);
+    IDEAS.forEach(function (d, i) { s += note(i + 1, d, false); }); return frame(s); }
+  /* One idea pulled forward */
+  function big(hasPhoto) { var x = 650, y = 118, w = 500, h = 572, lx = x + 34, s = "";
+    s += hatch(x + 8, y + h, w - 4, 9) + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"', "var(--card)", 2.4);
+    s += T(lx, y + 92, "Miso caramel", "font:700 56px " + HAND + ";fill:var(--ink)") + line("M" + lx + " " + (y + 106) + " H" + (x + w - 34), 1.4, 0.5);
+    var px = x + w - 204, py = y + 132;
+    if (hasPhoto) s += photo(px, py, 170, 138, "jar", 3) + tape(px + 85, py + 2, -4) + T(px + 85, py + 166, "Change photo", "font:14px var(--font-body);fill:var(--ink-soft);text-decoration:underline", 'text-anchor="middle"');
+    else s += '<rect x="' + px + '" y="' + py + '" width="170" height="138" rx="4" style="fill:none;stroke:var(--ink-soft);stroke-width:2;stroke-dasharray:8 6"/>' + line("M" + (px + 85) + " " + (py + 42) + " v28 M" + (px + 71) + " " + (py + 56) + " h28", 2.4, 1, "var(--ink-soft)") + T(px + 85, py + 102, "Add a photo", "font:600 15px var(--font-body);fill:var(--ink)", 'text-anchor="middle"');
+    s += T(lx, y + 150, "Tag", "font:13px var(--font-body);fill:var(--ink-soft)") + tag(lx, y + 160, "sauce");
+    s += T(lx, y + 216, "Status", "font:13px var(--font-body);fill:var(--ink-soft)");
+    s += reg("rect", 'x="' + (lx - 4) + '" y="' + (y + 226) + '" width="136" height="34" rx="17"', "var(--custard)", 1.8) + tack(lx + 14, y + 243, ORG, 7) + T(lx + 28, y + 251, "in progress", "font:700 23px " + HAND + ";fill:var(--ink)");
+    s += tack(lx + 156, y + 243, BLU, 7) + T(lx + 170, y + 251, "research", "font:500 23px " + HAND + ";fill:var(--ink-soft)");
+    s += T(lx, y + 326, "Notes", "font:13px var(--font-body);fill:var(--ink-soft)");
+    ["White miso, 1 tbsp per cup of sugar?", "Cook the caramel dark, then whisk it in.", "Try it on the blondies, trial 5.", "No extra salt. Miso is salty enough.", ""].forEach(function (t, i) { var ly = y + 362 + i * 34;
+      s += T(lx, ly, t, "font:500 25px " + HAND + ";fill:var(--ink)") + line("M" + lx + " " + (ly + 8) + " H" + (x + w - 34), 1.1, 0.35); });
+    s += T(lx, y + h - 76, "Pinned 11/09/26", "font:13px var(--font-body);fill:var(--ink-soft)");
+    var by = y + h - 56;
+    s += pill(lx, by, 190, "Start a trial from this", true) + pill(lx + 200, by, 140, "Send to Next up") + pill(x + w - 34 - 78, by, 78, "Delete");
+    return '<g transform="rotate(-0.6 ' + (x + w / 2) + " " + (y + 10) + ')">' + s + "</g>" + tack(x + w / 2, y + 12, ORG, 11); }
+  function one(hasPhoto) { return boardDev(false) + '<rect x="' + X0 + '" y="' + Y0 + '" width="' + (X1 - X0) + '" height="' + (Y1 - 6 - Y0) + '" style="fill:#1f1d1a;opacity:.45"/>' + big(hasPhoto); }
+  PLATE.add(function () {
+    function put(id, h) { document.getElementById(id).innerHTML = h; }
+    put("ideas-open", openOver(boardDev(true), "The idea board open over the dimmed kitchen, with a blank note ready", { plan: "dev" }));
+    put("ideas-one", openOver(one(true), "One idea pulled forward over the board", { plan: "dev" }));
+    put("ideas-nophoto", svg([650, 1150], one(false), "An idea with an Add a photo spot", 106, 340));
+    put("ideas-new", svg([476, 916], boardDev(false), "The blank note, close up", 96, 300));
+    put("ideas-cook", openOver(boardCook(), "The idea board as a home cook sees it: a sample, read-only", { plan: "cook" }));
+  });
+})();
+</script>

@@ -1,0 +1,145 @@
+<section aria-labelledby="h-start">
+  <span class="label" id="h-start">09 · Getting started</span>
+  <div class="sec-body">
+    <h3>Sign in</h3>
+    <figure id="start-signin"></figure>
+    <p class="note"><b>One recipe card for everyone.</b> Sign in is its own page, outside the kitchen. The kitchen shows faintly behind so you know where you are going. The card reads like a recipe: what you need (username and password, the two fields the app has today), then the method, where the last step is the button. Two links sit at the foot: one to start a kitchen, one to try it as a guest.</p>
+    <h3>Start a kitchen (sign up)</h3>
+    <figure id="start-signup"></figure>
+    <p class="note"><b>The same card, a little longer.</b> It asks for what the app asks for today: username, email (optional), password, and the password again. There is no plan picker, because every new kitchen starts free, and the card says so in one line. Step 1 is the new question: start with sample recipes and notes, or start empty. "Yes" is picked for you. <b>The yellow slip</b> is clipped on only when you arrive as a guest. It tells you your cards come with you.</p>
+    <h3>A brand-new kitchen with no samples</h3>
+    <figure id="start-empty" class="fx"></figure>
+    <p class="note"><b>What "No, start empty" gives you.</b> The six things you can open, each bare, with the one line it shows the first time you open it. Nothing is hidden: the kitchen looks the same, only empty. Switch the Plan to Home cook to see the paid three. They keep their "paid plan" tag and open to a sample you can look at but not change.</p>
+    <h3>Removing the samples later</h3>
+    <figure id="start-remove"></figure>
+    <p class="note"><b>One go, from the Account menu.</b> The line only shows while samples are still in the kitchen. One click opens the check on the right. It says how many items go and that your own things stay. After that the line leaves the menu.</p>
+    <ol class="qs">
+      <li><b>Is the recipe-card sign-in too cute?</b> If so, I would keep the card and drop the "You'll need" and "Method" headings, leaving a plain form on ruled paper.</li>
+      <li><b>Samples: is "Yes, show me around" the right default?</b> The other way is to make people pick one before the button works.</li>
+      <li><b>Username or email?</b> The app signs in with a username today and email is optional. The card keeps that. Should the new design switch to email only?</li>
+      <li><b>Where do guests land?</b> I assumed the full kitchen with the samples in it, with the recipe box as the one thing they can add to (5 cards, kept 30 days). Or should "Try it as a guest" open the recipe box straight away?</li>
+    </ol>
+  </div>
+</section>
+<script>
+(function () {
+  var BODY = "var(--font-body)", HAND = "var(--font-hand)", SOFT = "var(--ink-soft)";
+  function tape(cx, cy, rot) { return '<rect x="' + (cx - 38) + '" y="' + (cy - 11) + '" width="76" height="22" transform="rotate(' + rot + " " + cx + " " + cy + ')" style="fill:#e8e0c8;opacity:.88;stroke:#b9a77a;stroke-width:1.2"/>'; }
+  /* The kitchen behind, pale, not clickable, cropped below the find bar */
+  function behind(inner, label) { var V = mainVP();
+    return svg(V, '<g style="pointer-events:none" aria-hidden="true">' + scene(V, opts()).replace(/tabindex="0"/g, "") + "</g>" +
+      '<rect x="' + (V[0] - 20) + '" y="60" width="' + (V[1] - V[0] + 40) + '" height="720" style="fill:var(--paper);opacity:.78"/>' + inner, label, 76, 684); }
+  /* A ruled index card: red top line, blue rules, taped at the top corners */
+  function card(x, y, w, h, red) {
+    var s = hatch(x + 10, y + h, w - 2, 9, 0.8) + hatch(x + w, y + 10, 9, h - 1, 0.8) + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="5"', "var(--card)", 2.6);
+    for (var ry = red + 34; ry < y + h - 12; ry += 34) s += line("M" + (x + 2) + " " + ry + " H" + (x + w - 2), 1.2, 1, "#c3d2ec");
+    return s + line("M" + (x + 2) + " " + red + " H" + (x + w - 2), 1.8, 1, "#c9442a") + tape(x + 6, y + 6, -40) + tape(x + w - 6, y + 6, 40);
+  }
+  function head(x, y, title) { return T(x, y + 30, "Trial &amp; Eclair", "font:400 19px var(--font-display);fill:" + SOFT) + T(x, y + 78, title, "font:700 50px " + HAND + ";fill:var(--ink)"); }
+  function cap(x, y, t) { return T(x, y, t, "font:700 14px var(--font-label);letter-spacing:2px;fill:" + SOFT); }
+  /* A field: label above, a white writing line with a heavy underline. kind: "pw" dots, "on" caret */
+  function field(x, y, w, label, val, kind, hint) {
+    var on = kind === "on" || kind === "on-pw", s = T(x, y, label, "font:600 15px " + BODY + ";fill:var(--ink)") + (hint ? T(x + w, y, hint, "font:13px " + BODY + ";fill:" + SOFT, 'text-anchor="end"') : "") +
+      '<rect x="' + x + '" y="' + (y + 8) + '" width="' + w + '" height="38" rx="3" style="fill:var(--page);stroke:' + (on ? "var(--ink)" : "#a9a395") + ";stroke-width:" + (on ? 2 : 1.3) + '"/>' +
+      line("M" + (x + 1) + " " + (y + 46) + " H" + (x + w - 1), 2.8);
+    if (kind === "pw" || kind === "on-pw") for (var i = 0; i < val; i++) s += '<circle cx="' + (x + 18 + i * 15) + '" cy="' + (y + 27) + '" r="4.2" style="fill:var(--ink)"/>';
+    else if (val) s += T(x + 12, y + 36, val, "font:600 26px " + HAND + ";fill:var(--ink)");
+    if (on) s += line("M" + (x + 16 + (val.length ? val.length * 10.6 : val * 15)) + " " + (y + 15) + " v24", 2);
+    return s;
+  }
+  function step(x, y, n) { return T(x, y, n + ".", "font:700 28px " + HAND + ";fill:var(--orange-text)"); }
+  function btn(x, y, w, t) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="46" rx="23"', "var(--yellow)", 2.4) + T(x + w / 2, y + 30, t, "font:600 18px " + BODY + ";fill:var(--ink)", 'text-anchor="middle"'); }
+  /* A question in UI type, then a handwriting link that is always underlined */
+  function ask(xm, y, q, txt, label) { var tw = txt.length * 26 * 0.31;
+    return T(xm - 8, y, q, "font:16px " + BODY + ";fill:" + SOFT, 'text-anchor="end"') + lk(xm, y, txt, 26, false, label, { cw: 0.31 }) + line("M" + xm + " " + (y + 4) + " H" + (xm + tw), 1.6, 1, "var(--blue)"); }
+
+  function signin() {
+    var x = 660, y = 112, w = 480, fx = x + 40, fw = w - 80;
+    return card(x, y, w, 610, y + 96) + head(fx, y + 4, "Sign in") +
+      cap(fx, y + 128, "YOU'LL NEED") + field(fx, y + 160, fw, "Username", "weekendbaker", "on") + field(fx, y + 240, fw, "Password", 9, "pw") +
+      cap(fx, y + 334, "METHOD") + step(fx, y + 372, 1) + T(fx + 30, y + 372, "Fill in both lines.", "font:600 26px " + HAND + ";fill:var(--ink)") +
+      step(fx, y + 428, 2) + btn(fx + 30, y + 396, fw - 30, "Sign in") +
+      line("M" + fx + " " + (y + 478) + " H" + (fx + fw), 1.4, 0.5) +
+      ask(x + 222, y + 520, "New here?", "Start a kitchen", "the sign-up card") + ask(x + 222, y + 562, "Just looking?", "Try it as a guest", "the kitchen as a guest");
+  }
+  function option(x, y, w, t, on) {
+    return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="46" rx="6"', on ? "var(--yellow)" : "var(--page)", on ? 2.6 : 1.6) +
+      '<circle cx="' + (x + 24) + '" cy="' + (y + 23) + '" r="9" style="fill:var(--page);stroke:var(--ink);stroke-width:2"/>' + (on ? '<circle cx="' + (x + 24) + '" cy="' + (y + 23) + '" r="4.6" style="fill:var(--ink)"/>' : "") +
+      T(x + 44, y + 29, t, "font:" + (on ? 600 : 400) + " 17px " + BODY + ";fill:var(--ink)");
+  }
+  function signup() {
+    var x = 600, y = 98, w = 600, fx = x + 40, fw = w - 80, hw = (fw - 24) / 2, x2 = fx + hw + 24;
+    var s = card(x, y, w, 640, y + 96) + head(fx, y + 4, "Start a kitchen") +
+      cap(fx, y + 128, "YOU'LL NEED") + field(fx, y + 158, hw, "Username", "weekendbaker") + field(x2, y + 158, hw, "Email", "", "", "optional") +
+      field(fx, y + 236, hw, "Password", 10, "pw", "8 or more") + field(x2, y + 236, hw, "Password again", 4, "on-pw") +
+      cap(fx, y + 322, "METHOD") + step(fx, y + 358, 1) + T(fx + 30, y + 356, "Start with sample recipes and notes?", "font:600 18px " + BODY + ";fill:var(--ink)") +
+      option(fx + 30, y + 372, hw - 15, "Yes, show me around", true) + option(x2 + 15, y + 372, hw - 15, "No, start empty", false) +
+      T(fx + 30, y + 442, "You can remove the samples later in one go.", "font:15px " + BODY + ";fill:" + SOFT) +
+      step(fx, y + 500, 2) + btn(fx + 30, y + 468, fw - 30, "Start my kitchen") +
+      T(x + w / 2, y + 546, "New kitchens start free. You can try the paid tools for 14 days any time.", "font:14px " + BODY + ";fill:" + SOFT, 'text-anchor="middle"') +
+      line("M" + fx + " " + (y + 566) + " H" + (fx + fw), 1.4, 0.5) + ask(x + 318, y + 610, "Already have a kitchen?", "Sign in", "the sign-in card");
+    /* the guest slip, held on by a paper clip over the card's top edge */
+    var gx = x + w - 236, gy = y + 12;
+    s += '<g transform="rotate(3 ' + (gx + 120) + " " + (gy + 36) + ')">' + reg("rect", 'x="' + gx + '" y="' + gy + '" width="244" height="68"', "var(--custard)", 2) +
+      T(gx + 16, gy + 28, "Your 3 guest cards", "font:700 25px " + HAND + ";fill:var(--ink)") + T(gx + 16, gy + 54, "come with you.", "font:700 25px " + HAND + ";fill:var(--ink)") +
+      line("M" + (gx + 196) + " " + (gy + 30) + " V" + (gy - 22) + " q0 -9 9 -9 t9 9 V" + (gy + 40) + " q0 6 -5.5 6 t-5.5 -6 V" + (gy - 14), 2.4, 1, "#6e6a62") + "</g>";
+    return s;
+  }
+
+  /* ===== The empty kitchen: six small crops of the real objects, bare ===== */
+  function boards(cook) { var L = lay(mainVP()), x = L.bx, FW = { side: "var(--wood)", top: "var(--wood-dark)", bottom: "var(--wood-hi)" };
+    var s = '<rect x="300" y="60" width="1200" height="400" style="fill:var(--plaster)"/>' + hatch(x - 2, 365, L.bw + 4, 14) + reg("rect", 'x="' + (x - 10) + '" y="115" width="' + (L.bw + 20) + '" height="250" rx="4"', "var(--wood)") + grain(x - 6, 116, L.bw + 12, 8, 4) +
+      recess(x, 125, x + L.wbW, 355, 10, "var(--wb)", FW) + reg("rect", 'x="' + x + '" y="125" width="' + L.wbW + '" height="230"', "none", 2.2) +
+      T(x + 22, 164, "Next up", "font:700 33px " + HAND + ";fill:var(--blue)") + line("M" + (x + 22) + " 172 q48 5 96 -2", 2.4, 1, "var(--blue)");
+    var tx = x + L.wbW - 64;
+    s += reg("rect", 'x="' + tx + '" y="344" width="58" height="9" rx="2"', "var(--wood)", 1.8) + reg("rect", 'x="' + (tx + 6) + '" y="337" width="22" height="7" rx="3"', "var(--blue)", 1.4) + reg("rect", 'x="' + (tx + 32) + '" y="337" width="20" height="7" rx="3"', "var(--orange)", 1.4) +
+      reg("rect", 'x="' + (x + L.wbW) + '" y="125" width="10" height="230"', "var(--wood)", 2) +
+      recess(L.cx, 125, L.cx + L.cw, 355, 10, "url(#corkp)", FW) + reg("rect", 'x="' + L.cx + '" y="125" width="' + L.cw + '" height="230"', "none", 2.2) +
+      '<g transform="rotate(-3 ' + (L.cx + 62) + ' 160)">' + reg("rect", 'x="' + (L.cx + 18) + '" y="138" width="88" height="46"', "var(--card)", 2) + line("M" + (L.cx + 22) + " 152 H" + (L.cx + 102), 1.4, 1, "#c9442a") + T(L.cx + 62, 176, "Ideas", "font:700 28px " + HAND + ";fill:var(--ink)", 'text-anchor="middle"') + "</g>" +
+      '<circle cx="' + (L.cx + 62) + '" cy="142" r="7" style="fill:var(--orange);stroke:var(--ink);stroke-width:1.8"/>';
+    return s + (cook ? paidTag(L.cx + L.cw - 64, 336, 5) : ""); }
+  function counter(inner) { return '<rect x="300" y="200" width="1200" height="244" style="fill:var(--plaster)"/>' + reg("rect", 'x="290" y="444" width="1220" height="34"', "var(--wood-hi)", 2.2) + grain(520, 450, 760, 24, 11) + reg("rect", 'x="290" y="478" width="1220" height="40"', "var(--cab)", 2.2) + inner; }
+  function shelf(cook, low) { var L = lay(mainVP()), sx = L.shX, sw = L.shW;
+    return reg("rect", 'x="500" y="440" width="800" height="38"', "var(--wood-hi)", 2.2) + reg("rect", 'x="500" y="478" width="800" height="262"', "var(--cab)", 2.2) +
+      recess(sx, 495, sx + sw, 610, 50, "var(--cab-deep)", { side: "var(--cab-side)", bottom: "var(--wood-hi)" }) + recess(sx, 624, sx + sw, 740, 50, "var(--cab-deep)", { side: "var(--cab-side)", bottom: "color-mix(in srgb, var(--cab-deep) 72%, #fff)" }) +
+      (low ? brassLabel(sx + sw - 70, 650, 104, 28, "References", 19) : brassLabel(sx + sw - 70, 520, 100, 28, "Cookbooks", 19)) +
+      reg("rect", 'x="' + sx + '" y="610" width="' + sw + '" height="14"', "var(--wood)", 2.4) + hatch(sx + 2, 495, sw - 4, 8) + hatch(sx + 2, 624, sw - 4, 8) +
+      reg("rect", 'x="' + sx + '" y="495" width="' + sw + '" height="245"', "none", 3) + (cook && !low ? paidTag(sx + sw - 70, 566, -3) : "") + reg("rect", 'x="500" y="740" width="800" height="30"', "var(--wood-dark)", 2.4); }
+  function empty() { var cook = o.plan === "cook", ob = opts();
+    var cells = [
+      ["Whiteboard", "Nothing next up yet", "456 100 476 280", boards(cook)],
+      ["Idea board", cook ? "Paid plan. Open it to see sample ideas." : "Pin your first idea", "790 100 476 280", boards(cook)],
+      ["Trials notebook", cook ? "Paid plan. Open it to see a sample trial." : "Open to page 1", "530 292 340 200", counter(hatch(634, 470, 140, 6) + notebook(700, ob) + (cook ? paidTag(706, 420, -5) : ""))],
+      ["Recipe box", "Add your first card", "920 292 340 200", counter(closedBox(1090, ob))],
+      ["Cookbooks", cook ? "Paid plan. Open it to see a sample cookbook." : "Make your first cookbook", "688 474 425 250", shelf(cook)],
+      ["References", "Add a book, a blog or a tool you trust", "688 516 425 250", shelf(cook, true)]];
+    var s = "";
+    cells.forEach(function (c, i) { var x = 42 + (i % 3) * 388, y = 30 + Math.floor(i / 3) * 312;
+      s += hatch(x - 6, y + 282, 364, 7, 0.7) + reg("rect", 'x="' + (x - 12) + '" y="' + (y - 12) + '" width="364" height="294" rx="4"', "var(--card)", 2.2) +
+        '<svg x="' + x + '" y="' + y + '" width="340" height="200" viewBox="' + c[2] + '" preserveAspectRatio="xMidYMid slice">' + c[3] + "</svg>" +
+        reg("rect", 'x="' + x + '" y="' + y + '" width="340" height="200"', "none", 2.2) +
+        T(x, y + 232, c[0], "font:400 20px var(--font-display);fill:var(--ink)") + T(x, y + 260, c[1], "font:16px " + BODY + ";fill:" + SOFT); });
+    return svg([0, 1200], s, "A new kitchen with no samples: six empty things, one line each", 0, 640);
+  }
+
+  /* ===== Account menu: remove the samples ===== */
+  function acct(x1) { return reg("rect", 'x="' + (x1 - 148) + '" y="24" width="148" height="44" rx="22"', "var(--card)", 2.4) + '<circle cx="' + (x1 - 125) + '" cy="46" r="12" style="fill:var(--orange);stroke:var(--ink);stroke-width:2"/>' + T(x1 - 104, 53, "Account", "font:17px " + BODY + ";fill:var(--ink)"); }
+  function menu(x1, confirm) { var w = 380, x = x1 - w, h = confirm ? 232 : 150, it = "font:17px " + BODY + ";fill:var(--ink)";
+    var s = hatch(x + 8, 56 + h, w - 2, 8, 0.8) + reg("rect", 'x="' + x + '" y="56" width="' + w + '" height="' + h + '" rx="5"', "var(--card)", 2.4) + T(x + 22, 100, "Settings", it) + line("M" + (x + 12) + " 114 H" + (x1 - 12), 1.2, 0.4);
+    if (!confirm) s += '<rect x="' + (x + 8) + '" y="120" width="' + (w - 16) + '" height="36" rx="4" style="fill:var(--yellow);stroke:var(--ink);stroke-width:1.4"/>' + T(x + 22, 144, "Remove all sample recipes and notes", it);
+    else s += T(x + 22, 144, "Remove all sample recipes and notes", "font:600 17px " + BODY + ";fill:var(--ink)") + T(x + 22, 172, "This removes 12 sample items. Your own stay.", "font:15px " + BODY + ";fill:" + SOFT) +
+      pill(x + 22, 190, 160, "Remove samples", true) + pill(x + 194, 190, 120, "Keep them");
+    var by = confirm ? 244 : 162;
+    return s + line("M" + (x + 12) + " " + by + " H" + (x1 - 12), 1.2, 0.4) + T(x + 22, by + 30, "Sign out", it) + acct(x1); }
+  function remove() {
+    return svg([0, 1200], '<rect x="0" y="0" width="1200" height="330" style="fill:var(--plaster)"/>' + menu(500, false) + menu(1090, true) + arrow(540, 150, 680, 150) +
+      T(610, 128, "one click", "font:600 22px " + HAND + ";fill:var(--ink)", 'text-anchor="middle"'), "Account menu: remove all sample recipes and notes, then the check before it happens", 0, 330);
+  }
+  PLATE.add(function () {
+    document.getElementById("start-signin").innerHTML = behind(signin(), "Sign in, drawn as a recipe card over the pale kitchen");
+    document.getElementById("start-signup").innerHTML = behind(signup(), "Start a kitchen: the sign-up recipe card with the sample data choice");
+    document.getElementById("start-empty").innerHTML = empty();
+    document.getElementById("start-remove").innerHTML = remove();
+  });
+})();
+</script>

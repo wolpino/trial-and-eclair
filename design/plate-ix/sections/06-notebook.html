@@ -1,0 +1,170 @@
+<section aria-labelledby="h-nb">
+  <span class="label" id="h-nb">06 · The Trials notebook, opened</span>
+  <div class="sec-body">
+    <h3>The notebook, open at the last trial you worked on</h3>
+    <figure id="nb-open"></figure>
+    <p class="note"><b>Same book as Plate VIII, with the two faults fixed.</b> Nothing sits on the page number now, and the "+18 mm" note stands above its bar, clear of the taped photo. The paper holds only what the cook wrote. Every button is on one slim strip under the book.</p>
+    <p class="note"><b>Getting around.</b> The folded corners turn the page: back to trial 3, or on to a blank page for trial 5. The paper tabs along the top are the recipes, in A to Z order, and the one in use is white. The orange ribbon marks where you left off, and the book opens there. "Contents" lists every trial. "Add a photo" shows how many of the five photos this session has used.</p>
+    <h3>Contents</h3>
+    <figure id="nb-index"></figure>
+    <p class="note"><b>Every recipe with its trials.</b> Each line has the date and the page. Click a line to open that trial. The yellow line with the ribbon is the one you worked on last. A small stamp shows which trial is published. "New recipe" at the end starts a new tab.</p>
+    <h3>Compare trial 3 with trial 4</h3>
+    <figure id="nb-compare"></figure>
+    <p class="note"><b>The older trial on the left page, the newer on the right.</b> Lines that changed are marked in orange on both pages. Lines that stayed the same are left plain. "Done comparing" goes back to the normal spread.</p>
+    <h3>On a phone</h3>
+    <div class="pair" style="grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),340px))">
+      <div><figure id="nb-phone" style="border:0;background:none;max-width:340px"></figure><p class="note"><b>One page at a time.</b> The photo just taken is taped in. The yellow camera button stays in the corner, below the writing.</p></div>
+      <div><figure id="nb-phone-sheet" style="border:0;background:none;max-width:340px"></figure><p class="note"><b>The camera button.</b> Take a photo now or choose one already on the phone.</p></div>
+    </div>
+    <h3>What a home cook sees</h3>
+    <figure id="nb-cook" style="max-width:640px"></figure>
+    <p class="note"><b>A sample to read, not to write in.</b> The pages turn, but nothing can be changed. The "paid plan" tag is always there, tied to the top of the book. The strip has one button, to see the plans.</p>
+    <ol class="qs">
+      <li><b>Tabs or contents?</b> The main view has both recipe tabs and a Contents button. Keep both, or only one?</li>
+      <li><b>Where does Publish live?</b> It is a stamp on the strip under the book. Is that right, or should it sit only on the Contents page?</li>
+      <li><b>Is Compare needed at first?</b> It could wait until a recipe has two trials, or be left for later.</li>
+      <li><b>Folded corners for turning pages:</b> clear enough, or do you want plain arrows beside the book?</li>
+    </ol>
+  </div>
+</section>
+<script>
+(function () {
+  var HAND = "font:600 23px var(--font-hand);fill:var(--ink)", SOFT = "#c3d2ec", UI = "font:13px var(--font-body);fill:var(--ink-soft)";
+  var PL = "M474 104 Q687 94 900 108 V670 Q687 660 474 668 Z", PR = "M1326 104 Q1113 94 900 108 V670 Q1113 660 1326 668 Z";
+  function by(i) { return 214 + i * 28; }
+  function nbCam(x, y, k) {
+    return '<g transform="translate(' + x + " " + y + ") scale(" + (k || 1) + ')">' + reg("path", 'd="M-14 -7 h7 l3 -5 h8 l3 5 h7 v18 h-28 Z"', "var(--card)", 2) + '<circle cx="0" cy="2" r="5.5" style="fill:none;stroke:var(--ink);stroke-width:2"/></g>';
+  }
+  var TABS = [["Blondies", 500, 78], ["Brown butter cookies", 584, 150], ["Croissants", 962, 88], ["Rhubarb galette", 1056, 118], ["Rough puff pastry", 1180, 128]];
+  /* The open book, pages only. c: tabs (index of the recipe in use, or -1), ribbon, prev, next (captions for the folded corners), nl, nr (page numbers) */
+  function nbBook(c) {
+    var s = "", pl, y, sy;
+    if (c.tabs != null) TABS.forEach(function (t, i) { var on = i === c.tabs;
+      s += reg("rect", 'x="' + t[1] + '" y="' + (on ? 76 : 79) + '" width="' + t[2] + '" height="40" rx="5"', on ? "var(--page)" : i % 2 ? "var(--plaster)" : "var(--custard)", on ? 2.4 : 1.8) +
+        T(t[1] + t[2] / 2, on ? 93 : 95, t[0], "font:" + (on ? 700 : 600) + " 17px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"'); });
+    for (pl = 6; pl >= 1; pl--) s += '<path transform="translate(' + (-2.6 * pl) + " " + (1.3 * pl) + ')" d="' + PL + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>' +
+      '<path transform="translate(' + (2.6 * pl) + " " + (1.3 * pl) + ')" d="' + PR + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>';
+    s += '<path transform="translate(-17 9)" d="' + PL + '" style="fill:none;stroke:var(--ink);stroke-width:2"/><path transform="translate(17 9)" d="' + PR + '" style="fill:none;stroke:var(--ink);stroke-width:2"/>';
+    s += reg("path", 'd="' + PL + '"', "var(--page)", 2.4) + reg("path", 'd="' + PR + '"', "var(--page)", 2.4);
+    for (y = 190; y <= 638; y += 28) s += line("M478 " + y + " H896 M904 " + y + " H1322", 1.3, 1, SOFT);
+    s += line("M852 112 V662", 1.4, 1, "#e3a59a") + line("M948 112 V662", 1.4, 1, "#e3a59a");
+    s += hatch(882, 110, 16, 556, 0.35) + hatch(902, 110, 16, 556, 0.35);
+    for (sy = 132; sy < 650; sy += 46) s += line("M900 " + sy + " v20", 2.4, 1, "#9b968b") + '<circle cx="900" cy="' + (sy - 3) + '" r="1.6" style="fill:#9b968b"/><circle cx="900" cy="' + (sy + 23) + '" r="1.6" style="fill:#9b968b"/>';
+    if (c.ribbon) s += reg("polygon", 'points="861,100 873,100 873,712 867,703 861,712"', "var(--orange)", 1.8);
+    if (c.nl) s += T(c.prev ? 512 : 492, 660, c.nl, "font:600 22px var(--font-hand);fill:var(--ink-soft)");
+    if (c.nr) s += T(c.next ? 1288 : 1308, 660, c.nr, "font:600 22px var(--font-hand);fill:var(--ink-soft)", 'text-anchor="end"');
+    /* folded corners turn the page */
+    if (c.prev) s += '<g role="button" tabindex="0" aria-label="Previous: ' + c.prev + '">' + poly("474,636 506,668 474,668", "#e4e0d4", 1.4) + poly("474,636 506,668 506,636", "var(--custard)", 2) + line("M499 643 l-6 5.5 l6 5.5", 2.2) + T(542, 659, c.prev, UI) + "</g>";
+    if (c.next) s += '<g role="button" tabindex="0" aria-label="Next: ' + c.next + '">' + poly("1326,636 1294,668 1326,668", "#e4e0d4", 1.4) + poly("1326,636 1294,668 1294,636", "var(--custard)", 2) + line("M1301 643 l6 5.5 l-6 5.5", 2.2) + T(1258, 659, c.next, UI, 'text-anchor="end"') + "</g>";
+    return s;
+  }
+  function nbHead(side, date, title) {
+    return side === "l" ? T(492, 136, date, "font:600 21px var(--font-hand);fill:var(--ink)") + T(492, 176, title, "font:700 36px var(--font-hand);fill:var(--ink)")
+      : T(1308, 136, date, "font:600 21px var(--font-hand);fill:var(--ink)", 'text-anchor="end"') + T(958, 176, title, "font:700 34px var(--font-hand);fill:var(--ink)");
+  }
+  function nbPhoto(cx, cy, cap) { var x = cx - 70, y = cy - 60;
+    return '<g transform="rotate(4 ' + cx + " " + cy + ')">' + reg("rect", 'x="' + x + '" y="' + y + '" width="140" height="122"', "#fffdf7", 2) + '<rect x="' + (x + 8) + '" y="' + (y + 8) + '" width="124" height="90" style="fill:#e9b86a"/>' +
+      reg("path", 'd="M' + (cx - 42) + " " + (cy + 18) + " Q" + cx + " " + (cy - 36) + " " + (cx + 42) + " " + (cy + 18) + " Q" + cx + " " + (cy + 2) + " " + (cx - 42) + " " + (cy + 18) + ' Z"', "var(--amber)", 1.8) +
+      line("M" + (cx - 24) + " " + (cy + 8) + " l8 -12 M" + (cx - 7) + " " + (cy + 2) + " l4 -15 M" + (cx + 10) + " " + (cy + 2) + " l-2 -15 M" + (cx + 27) + " " + (cy + 8) + " l-8 -12", 1.3, 0.7) +
+      T(cx, y + 115, cap, "font:600 16px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"') +
+      [-1, 1].map(function (k) { var tx = cx + k * 66, ty = y + 2; return '<rect x="' + (tx - 21) + '" y="' + (ty - 8) + '" width="42" height="16" transform="rotate(' + (k * 30) + " " + tx + " " + ty + ')" style="fill:#e8e0c8;opacity:.9;stroke:#b9a77a;stroke-width:1"/>'; }).join("") + "</g>";
+  }
+  /* Trial 4: the written entry (left) and the crumb sketch, height bars and taped photo (right) */
+  function nbEntry() {
+    var s = nbHead("l", "11/11/26", "Trial 4: croissants") + nbHead("r", "11/11/26", "Crumb, trial 4"), rh = rand(21), h, a, d;
+    ["Goal: a more open honeycomb", "Changed: rest 2 h between folds", null, "Proof 2 h at 24°C", "Bake 18 min at 200°C", "Result: shatter good,", "   honeycomb still thin", "Next: proof at 26°C, colder butter"].forEach(function (t, i) {
+      if (t) s += T(492, by(i), t, i === 7 ? "font:700 23px var(--font-hand);fill:var(--orange-text)" : HAND);
+      else s += T(492, by(i), "Folds:", HAND) + T(554, by(i), "2", HAND) + line("M549 " + (by(i) - 7) + " H569", 2.2) + T(578, by(i), "3 letter folds", HAND);
+    });
+    s += '<ellipse cx="1120" cy="290" rx="112" ry="64" style="fill:none;stroke:var(--ink);stroke-width:2.6"/><ellipse cx="1120" cy="294" rx="97" ry="51" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>';
+    for (h = 0; h < 18; h++) { a = rh() * Math.PI * 2; d = Math.sqrt(rh()) * 0.8;
+      s += '<ellipse cx="' + (1120 + Math.cos(a) * 90 * d).toFixed(1) + '" cy="' + (294 + Math.sin(a) * 46 * d).toFixed(1) + '" rx="' + (4 + rh() * 5).toFixed(1) + '" ry="' + (2.4 + rh() * 2.6).toFixed(1) + '" style="fill:none;stroke:var(--ink);stroke-width:1.3"/>'; }
+    var n = "font:600 21px var(--font-hand);fill:var(--ink)";
+    s += T(1222, 212, "crisp shell", n) + arrow(1244, 220, 1212, 244) + T(958, 396, "holes too small", n) + arrow(1020, 378, 1078, 320) + T(1196, 396, "butter leaked", n) + arrow(1226, 378, 1186, 346);
+    s += T(958, 438, "Height, trial 3 vs 4", "font:700 23px var(--font-hand);fill:var(--ink)");
+    s += T(1050, 482, "+18 mm", "font:700 22px var(--font-hand);fill:var(--orange-text)", 'text-anchor="middle"');
+    s += reg("rect", 'x="978" y="526" width="38" height="52"', "none", 2) + reg("rect", 'x="1031" y="492" width="38" height="86"', "none", 2) + line("M966 578 H1082", 2) + hatch(1032, 493, 36, 84, 0.6) +
+      T(997, 600, "T3", "font:600 19px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"') + T(1050, 600, "T4", "font:600 19px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"');
+    return s + nbPhoto(1216, 534, "trial 4");
+  }
+  /* the strip under the book: every control lives here, off the paper */
+  function nbStamp(x, y, w, text) { var cx = x + w / 2, cy = y + 17;
+    return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="34" rx="5"', "var(--card)", 2) + '<g transform="rotate(-4 ' + cx + " " + cy + ')"><rect x="' + (x + 7) + '" y="' + (y + 5) + '" width="' + (w - 14) + '" height="24" rx="3" style="fill:none;stroke:var(--orange-text);stroke-width:2.4"/><rect x="' + (x + 11) + '" y="' + (y + 8.5) + '" width="' + (w - 22) + '" height="17" rx="1.5" style="fill:none;stroke:var(--orange-text);stroke-width:1"/>' +
+      T(cx, cy + 5, text, "font:700 14px var(--font-label);letter-spacing:2px;fill:var(--orange-text)", 'text-anchor="middle"') + "</g>"; }
+  function nbStrip(left, right) { var s = "", x = 452, Y = 688;
+    function one(it, px) { return it[2] === "stamp" ? nbStamp(px, Y, it[1], it[0]) : it[2] === "cam" ? pill(px, Y, it[1], "", false) + nbCam(px + 24, Y + 16, 0.72) + T(px + 44, Y + 23, it[0], "font:600 15px var(--font-body);fill:var(--ink)")
+      : it[2] === "key" ? pill(px, Y, it[1], "", false) + '<rect x="' + (px + 14) + '" y="' + (Y + 10) + '" width="26" height="14" rx="2" style="fill:var(--orange);opacity:.45"/>' + T(px + 48, Y + 23, it[0], "font:600 15px var(--font-body);fill:var(--ink)") : pill(px, Y, it[1], it[0], it[2] === "on"); }
+    left.forEach(function (it) { s += one(it, x); x += it[1] + 10; });
+    x = 1348; right.slice().reverse().forEach(function (it) { x -= it[1]; s += one(it, x); x -= 10; });
+    return s; }
+  function nbOpen() {
+    return nbBook({ tabs: 2, ribbon: true, prev: "back: trial 3", next: "next: a blank page for trial 5", nl: "12", nr: "13" }) + nbEntry() +
+      nbStrip([["Contents", 100], ["New trial", 100, "on"], ["New recipe", 112]], [["Add a photo · 1 of 5", 196, "cam"], ["Compare with trial 3", 180], ["PUBLISH", 100, "stamp"]]);
+  }
+  /* contents: recipes, their trials, dates, pages */
+  function nbIndex() {
+    var s = nbBook({ ribbon: false, nl: "i", nr: "ii" }) + nbHead("l", "", "Contents") + T(1308, 136, "Trials", "font:600 21px var(--font-hand);fill:var(--ink)", 'text-anchor="end"');
+    var L = [["Blondies", [[1, "9/14/26", 1], [2, "9/20/26", 3, "pub"]]], ["Brown butter cookies", [[1, "10/02/26", 4], [2, "10/09/26", 5]]], ["Croissants", [[1, "10/12/26", 6], [2, "10/19/26", 8], [3, "10/28/26", 10], [4, "11/11/26", 12, "last"]]]],
+      R = [["Rhubarb galette", [[1, "11/02/26", 14], [2, "11/08/26", 16]]], ["Rough puff pastry", [[1, "11/05/26", 18]]]];
+    function col(list, x) { var i = 0;
+      list.forEach(function (r) { s += T(x, by(i), r[0], "font:700 25px var(--font-hand);fill:var(--ink)"); i++;
+        r[1].forEach(function (t) { var y = by(i), last = t[3] === "last";
+          if (last) s += '<rect x="' + (x + 12) + '" y="' + (y - 20) + '" width="336" height="25" rx="3" style="fill:var(--yellow);opacity:.55"/>' + reg("polygon", 'points="' + (x - 14) + "," + (y - 17) + " " + (x + 8) + "," + (y - 17) + " " + (x + 2) + "," + (y - 10) + " " + (x + 8) + "," + (y - 3) + " " + (x - 14) + "," + (y - 3) + '"', "var(--orange)", 1.6);
+          s += T(x + 20, y, "Trial " + t[0], HAND) + T(x + 96, y, t[1], HAND) + '<path d="M' + (x + (t[3] === "pub" ? 262 : 186)) + " " + (y - 4) + " H" + (x + 312) + '" style="stroke:var(--ink-soft);stroke-width:1.6;stroke-dasharray:1 7;stroke-linecap:round"/>' + T(x + 344, y, t[2], HAND, 'text-anchor="end"');
+          if (t[3] === "pub") s += '<g transform="rotate(-3 ' + (x + 216) + " " + (y - 8) + ')"><rect x="' + (x + 178) + '" y="' + (y - 19) + '" width="76" height="20" rx="3" style="fill:none;stroke:var(--orange-text);stroke-width:1.8"/>' + T(x + 216, y - 4.5, "PUBLISHED", "font:700 11px var(--font-label);letter-spacing:1.2px;fill:var(--orange-text)", 'text-anchor="middle"') + "</g>";
+          i++;
+          if (last) { s += T(x + 20, by(i), "last worked on", "font:700 21px var(--font-hand);fill:var(--orange-text)"); i++; } });
+        i++; });
+      return i; }
+    col(L, 492); var n = col(R, 958);
+    s += lk(958, by(n), "+ New recipe", 25, true, "a new recipe");
+    return s + nbStrip([["Back to trial 4", 150], ["New recipe", 112]], []);
+  }
+  /* compare: older trial left, newer right, changed lines in orange */
+  function nbCompare() {
+    var s = nbBook({ ribbon: false, nl: "10", nr: "12" }) + nbHead("l", "10/28/26", "Trial 3: croissants") + nbHead("r", "11/11/26", "Trial 4: croissants");
+    [["Flour 500 g, milk 280 g"], ["Butter block 250 g", "Butter block 280 g, colder"], ["2 letter folds", "3 letter folds"], ["Rest 1 h between folds", "Rest 2 h between folds"], ["Proof 2 h at 24°C"], ["Bake 18 min at 200°C"], ["Result: tight crumb,", "Result: shatter good,"], ["   height 62 mm", "   honeycomb thin, 80 mm"]].forEach(function (r, i) {
+      var ch = r.length > 1, y = by(i);
+      [[492, r[0]], [958, r[1] || r[0]]].forEach(function (c) {
+        if (ch) s += '<rect x="' + (c[0] - 8) + '" y="' + (y - 20) + '" width="' + (c[1].length * 9.3 + 18).toFixed(0) + '" height="25" rx="3" style="fill:var(--orange);opacity:.4"/>';
+        s += T(c[0], y, c[1], HAND); });
+    });
+    return s + nbStrip([["Done comparing", 150], ["Left page: trial 3", 160]], [["orange = changed", 190, "key"], ["5 lines changed", 140]]);
+  }
+  function nbCook() {
+    return nbBook({ ribbon: true, prev: "back", next: "next", nl: "12", nr: "13" }) + nbEntry() + line("M1142 86 Q1122 88 1112 103", 1.6) +
+      '<g data-plan="cook" transform="translate(1142 86) scale(1.9) translate(-860 -84)">' + paidTag(900, 84, -4) + "</g>" +
+      reg("rect", 'x="452" y="688" width="330" height="34" rx="5"', "var(--card)", 2) + T(468, 711, "Sample notebook. Read only.", "font:600 16px var(--font-body);fill:var(--ink)") + pill(1168, 688, 180, "See the paid plan", true);
+  }
+  function nbPhone(state) {
+    var s = reg("rect", 'x="8" y="8" width="374" height="764" rx="48"', "var(--ink)", 2) + '<rect x="20" y="20" width="350" height="740" rx="38" style="fill:var(--page)"/>', y;
+    s += T(48, 52, "9:41", "font:600 15px var(--font-body);fill:var(--ink)") + '<rect x="150" y="32" width="90" height="24" rx="12" style="fill:var(--ink)"/>';
+    s += T(40, 98, "‹ Trials", "font:700 24px var(--font-hand);fill:var(--blue)") + line("M20 114 H370", 1.2, 0.5);
+    for (y = 190; y < 740; y += 30) s += line("M20 " + y + " H370", 1.1, 1, SOFT);
+    s += line("M58 114 V760", 1.2, 1, "#e3a59a") + T(350, 146, "11/12/26", "font:600 18px var(--font-hand);fill:var(--ink)", 'text-anchor="end"') + T(68, 178, "Trial 5: croissants", "font:700 30px var(--font-hand);fill:var(--ink)");
+    ["Proof 2 h at 26°C", "Colder butter, 3 folds", "Result: open honeycomb!"].forEach(function (t, i) { s += T(68, 216 + i * 30, t, "font:600 21px var(--font-hand);fill:" + (i === 2 ? "var(--orange-text)" : "var(--ink)")); });
+    s += '<g transform="rotate(-3 200 420)">' + reg("rect", 'x="92" y="312" width="200" height="200"', "#fffdf7", 2) + '<rect x="102" y="322" width="180" height="150" style="fill:#e9b86a"/>' +
+      reg("path", 'd="M128 440 Q192 350 258 440 Q192 418 128 440 Z"', "var(--amber)", 2) + line("M154 426 l10 -18 M180 418 l6 -22 M206 418 l-2 -22 M232 426 l-10 -18", 1.4, 0.7) +
+      T(192, 500, "trial 5 · just now", "font:600 17px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"') +
+      '<rect x="76" y="302" width="56" height="18" transform="rotate(-28 104 311)" style="fill:#e8e0c8;opacity:.9;stroke:#b9a77a;stroke-width:1"/><rect x="252" y="302" width="56" height="18" transform="rotate(28 280 311)" style="fill:#e8e0c8;opacity:.9;stroke:#b9a77a;stroke-width:1"/></g>';
+    s += T(68, 722, "photo 1 of 5", "font:13px var(--font-body);fill:var(--ink-soft)") + reg("circle", 'cx="314" cy="700" r="34"', "var(--yellow)", 2.6) + nbCam(314, 699, 1.2);
+    if (state === "sheet") {
+      s += '<rect x="20" y="20" width="350" height="740" rx="38" style="fill:#1f1d1a;opacity:.45"/>' + reg("path", 'd="M20 520 Q20 500 40 500 H350 Q370 500 370 520 V722 Q370 760 332 760 H58 Q20 760 20 722 Z"', "var(--card)", 2);
+      s += '<rect x="170" y="510" width="50" height="5" rx="2.5" style="fill:#b9b3a6"/>';
+      [["Take a photo", true], ["Choose from your photos", false], ["Cancel", false]].forEach(function (r, i) { var yy = 560 + i * 62;
+        if (r[1]) s += reg("rect", 'x="36" y="' + (yy - 28) + '" width="318" height="48" rx="10"', "var(--custard)", 1.4);
+        s += (i < 2 ? nbCam(66, yy - 4, 0.9) : "") + T(i < 2 ? 96 : 195, yy + 3, r[0], "font:600 " + (i < 2 ? 21 : 19) + "px var(--font-body);fill:var(--ink)", i < 2 ? "" : 'text-anchor="middle"');
+        if (i < 2) s += line("M36 " + (yy + 30) + " H354", 1, 0.3); });
+    }
+    return '<svg viewBox="0 0 390 780" role="img" aria-label="' + (state === "sheet" ? "The camera button's menu on a phone" : "A Trials page on a phone with a photo just taped in") + '">' + s + "</svg>";
+  }
+  PLATE.add(function () {
+    function put(id, h) { document.getElementById(id).innerHTML = h; }
+    put("nb-open", openOver(nbOpen(), "The Trials notebook open at trial 4 of croissants, with tabs, page corners and a strip of controls"));
+    put("nb-index", openOver(nbIndex(), "The notebook's contents page: every recipe and its trials"));
+    put("nb-compare", openOver(nbCompare(), "Trial 3 and trial 4 side by side with changed lines marked in orange"));
+    put("nb-phone", nbPhone("page")); put("nb-phone-sheet", nbPhone("sheet"));
+    put("nb-cook", openOver(nbCook(), "The home cook's read-only sample notebook with a paid plan tag"));
+  });
+})();
+</script>

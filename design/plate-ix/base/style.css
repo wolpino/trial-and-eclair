@@ -1,0 +1,76 @@
+/* Printed cookbook page, like Plates I–IV: margin labels, a sticky row of choices that redraws every plate.
+   Single theme on purpose: ink on paper, every colour explicit. The evening kitchen is drawn inside the plates. */
+:root {
+  --paper: #fbf4e4; --card: #fffbf2; --ink: #1f1d1a; --ink-soft: #5a5348;
+  --orange: #e8742a; --orange-text: #a8460c; --amber: #f5a23a; --yellow: #f2c230; --stem: #5e8c3a;
+  --cinnamon: #8a4f2a; --cork: #d9a868; --brass: #d4a94f; --rule: #e2d2b4; --custard: #f7e3a6;
+  --blue: #2f4e9a; --wood: #9a6234; --plaster: #eef0df; --cab: #5e8c3a; --page: #fdfdfb; --wb: #fdfcf6;
+  --cab-hi: color-mix(in srgb, var(--cab) 82%, #fff);
+  --cab-deep: color-mix(in srgb, var(--cab) 55%, #000);
+  --cab-side: color-mix(in srgb, var(--cab) 40%, #000);
+  --blue-back: color-mix(in srgb, var(--blue) 72%, #000);
+  --blue-hi: color-mix(in srgb, var(--blue) 78%, #fff);
+  --wood-dark: color-mix(in srgb, var(--wood) 78%, #000);
+  --wood-hi: color-mix(in srgb, var(--wood) 78%, #fff);
+  --font-display: "Young Serif", Georgia, serif;
+  --font-body: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-hand: "Caveat", "Segoe Script", cursive;
+  --font-label: "Archivo Narrow", "Arial Narrow", Arial, sans-serif;
+  color-scheme: light;
+}
+body { background: var(--paper); color: var(--ink); font: 17px/1.6 var(--font-body); margin: 0; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.page { max-width: 1240px; margin: 0 auto; padding-block: 44px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 44px; }
+.label { font: 600 0.78rem/1.2 var(--font-body); font-variant: small-caps; text-transform: lowercase; letter-spacing: 0.14em; color: var(--ink-soft); }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 4.4vw, 2.8rem); line-height: 1.08; }
+h3 { font-size: 1.05rem; line-height: 1.25; }
+p { margin: 0; }
+.intro { max-width: 68ch; color: var(--ink-soft); }
+header { display: grid; gap: 10px; }
+ul.changed { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; max-width: 82ch; font-size: 0.95rem; }
+section { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 12px 28px; border-top: 1.5px solid var(--ink); padding-top: 18px; }
+section > .label { padding-top: 6px; }
+.sec-body { display: grid; gap: 16px; min-width: 0; }
+@media (max-width: 760px) { section { grid-template-columns: minmax(0, 1fr); } }
+.note { font-size: 0.93rem; color: var(--ink-soft); max-width: 76ch; }
+.note b { color: var(--ink); font-weight: 600; }
+figure { margin: 0; border: 1.5px solid var(--ink); background: #fffdf7; min-width: 0; }
+figure svg { width: 100%; height: auto; display: block; }
+.pair { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); }
+.pair > div, .trio > div, .six > div { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.trio { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); align-items: start; }
+.six { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); align-items: start; }
+
+.choices { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-block: 1.5px solid var(--ink); padding-block: 8px; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.choice { display: grid; gap: 3px; }
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button { font: 0.84rem var(--font-body); border: 1.3px solid var(--rule); background: var(--card); padding: 2px 9px; min-height: 32px; cursor: pointer; color: var(--ink); }
+.seg button[aria-pressed="true"] { border-color: var(--ink); box-shadow: 3px 2px 0 var(--orange); }
+.seg button:focus-visible { outline: 2.5px dashed var(--ink); outline-offset: 3px; }
+
+/* Pointing: glow + label, made stronger. Labels never move or hide. */
+.hot { cursor: pointer; outline: none; }
+.lift { transition: transform 0.08s; }
+.hot:active .lift { transform: translate(0, 2px); }
+.fx-glow { opacity: 0; transition: opacity 0.18s; }
+.hot:is(:hover, :focus-visible, .on) .fx-glow { opacity: 1; }
+.hot:is(:hover, :focus-visible, .on) .lbl { fill: var(--yellow) !important; stroke-width: 3px !important; }
+.hot:focus-visible .focus-ring { stroke: var(--ink); }
+.fx-wash, .fx-line { opacity: 0; transition: opacity 0.18s; }
+.hot:is(:hover, :focus-visible, .on) .fx-wash { opacity: 0.5; }
+.hot:is(:hover, :focus-visible, .on) .fx-line { opacity: 1; }
+.lnk { cursor: pointer; outline: none; }
+.lk-hi { opacity: 0; }
+.lnk:is(:hover, :focus-visible, .on) .lk-hi { opacity: 1; }
+.eat { cursor: pointer; outline: none; }
+.eat.done { cursor: default; }
+.eat .ecl { transition: transform 0.12s; }
+.eat:not(.done):is(:hover, :focus-visible) .ecl { transform: translateY(-4px) rotate(-2deg); transform-box: fill-box; transform-origin: center; }
+.eat:focus-visible { outline: 2.5px dashed var(--ink); outline-offset: 4px; }
+.paid { display: none; }
+[data-plan="cook"] .paid { display: inline; }
+@media (prefers-reduced-motion: reduce) { .lift, .fx-glow, .fx-wash, .fx-line { transition: none; } }
+.qgroup { display: grid; gap: 6px; }
+ol.qs, ul.ans { margin: 0; padding-left: 1.3em; display: grid; gap: 7px; max-width: 80ch; }
+ol.qs li::marker { font-weight: 600; }

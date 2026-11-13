@@ -15,7 +15,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 >
 > Your first question: **is this wave an extra round (Plate X) with a final Plate XI after it, or is it the final plate?**
 >
-> Plate IX is https://claude.ai/artifact/APtnqDfCTQb13uLgHnABtf. Sources are local in `design/plate-ix/` (untracked): `BRIEF.md`, `base/` (shared helpers), `kitchen.js`, `sections/NN-name.html` (one per view), `build.cjs` (`node build.cjs` → `dist/index.html`; `--only NN` builds one section), `shots/all.cjs` (Playwright screenshots). Publish the build output with the html/head wrapper stripped, as a new artifact.
+> Plate IX is https://claude.ai/artifact/APtnqDfCTQb13uLgHnABtf. Sources are committed in `design/plate-ix/` (`dist/` and screenshots are ignored): `BRIEF.md`, `base/` (shared helpers), `kitchen.js`, `sections/NN-name.html` (one per view), `build.cjs` (`node build.cjs` → `dist/index.html`; `--only NN` builds one section), `shots/all.cjs` (Playwright screenshots). Publish the build output with the html/head wrapper stripped, as a new artifact.
 >
 > Draw from "Ari's Plate IX notes" below. The public pages (section 08) and equipment spots are on hold: do not redraw them.
 
@@ -60,7 +60,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 3. **After the plates: the phone layout** (then the mark)
 4. **Yes:** the final plate is the reference for the brand sheet, then Task issues
 5. Equipment spots: on hold
-6. Design files: not decided. Recommendation given: commit `design/plate-ix/` without `dist/` and `shots/` (about 300 KB); keep `design/kitchen-starter/` (20 MB PSD) local
+6. **Design files:** `design/plate-ix/` sources are committed (about 300 KB); `design/kitchen-starter/` (20 MB PSD) stays local
 
 ## Ask Ari first
 **The round**
@@ -104,8 +104,6 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 - Username (as the app does now) or email?
 - Samples default; where guests land
 
-**Files**
-- Commit `design/plate-ix/` sources and keep the PSD local?
 
 ## Known issues carried over
 - The floor reads as diagonal stripes near the left and right edges
