@@ -10,6 +10,42 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-12 · Plate IX notes from Ari and the second-wave prompt
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-12` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop) |
+| **Outcome** | handoff only (nothing drawn; no app code) |
+
+### Intent
+Record Ari's first notes on Plate IX and leave a prompt to pick the second wave up later.
+
+### Summary
+- `.cursor/handoffs/NEXT.md` rewritten: pick-up prompt, "Ari's Plate IX notes" (what to draw), wrap-up answers so far, and "Ask Ari first" (every open question, grouped by view)
+- `kitchen-layout` memory has the same answers
+
+### Decisions
+- Fridge cream; no sun patch; tape labels in all-caps marker; ticket rail (lean); normal view crops the window and fridge hinges, extra wide shows them
+- Every view gets developer and home cook versions, plus guest where it differs
+- After the plates: the phone layout, then the mark. The final plate is the brand sheet reference
+- Public pages and equipment spots are on hold
+
+### Open threads
+- Is the second wave an extra round before the final? Ask first
+- `design/plate-ix/` and `design/kitchen-starter/` are still untracked; Ari has not decided
+- Views not drawn yet: Account menu and settings, upgrade, signed-out front page, not-found page
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate IX answers, second wave, director and subagents, floor, window, sink, ticket rail, whiteboard, recipe box arrows, full-screen card, sign in title, developer cook guest views
+**Files:** .cursor/handoffs/NEXT.md, design/plate-ix/BRIEF.md, design/plate-ix/sections/
+**Do not redo:** layout rounds 1–10; Plates II–IX; do not redraw the public pages (on hold)
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent": ask Ari the "Ask Ari first" questions, then plan, then subagents
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-12 · Kitchen Plate IX: wide kitchen and every open view
 
 | Field | Value |

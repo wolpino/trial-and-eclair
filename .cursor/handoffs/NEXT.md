@@ -1,36 +1,120 @@
-# NEXT — 2026-11-12 (Plate IX published; waiting on Ari, then Plate X = final)
+# NEXT — 2026-11-12 (Plate IX answered in part; second wave not started)
 
 ## Goal
-The block layout is final (round 10). Draw the kitchen in the plate style, then use the drawing to help pick the mark.
+The block layout is final (round 10). Draw the kitchen and every view in the plate style, sign the plates off, then the phone layout.
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate IX published; Plate X = final day + evening, then wrap up) → mark → brand sheet → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate IX published; second wave next, maybe one extra round before the final) → phone layout → mark → brand sheet → Task issues → build
 ```
 
 ## Prompt for the next agent
-> Kitchen plate drawing, Plate X (the last plate). Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout`, `visual-direction` and `commit-each-round` memories, and the top entry of `.cursor/session_log.mdc` first. No app code changes.
+> Kitchen plate drawing, second wave of Plate IX. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout`, `visual-direction`, `one-main-session` and `commit-each-round` memories, and the top entry of `.cursor/session_log.mdc` first. No app code changes.
 >
-> Plate IX is https://claude.ai/artifact/APtnqDfCTQb13uLgHnABtf. Its sources are local in `design/plate-ix/` (untracked): `BRIEF.md` (rules every section follows), `base/` (shared helpers, frozen Plate VIII kitchen), `kitchen.js` (Plate IX kitchen), `sections/NN-name.html` (one file per view), `build.cjs` (`node build.cjs` joins them into `dist/index.html`; `--only NN` builds one section), `shot.cjs` and `shots/all.cjs` (Playwright screenshots). Edit a section file, rebuild, proof, then publish `dist/kitchen-plate-ix.html` (the build output with the html/head wrapper stripped; see the session log) as a new artifact for Plate X.
+> Work as before: you are the director. **Ask me a lot of questions first** (the lists under "Ask Ari first" below, in batches), record my answers in the `kitchen-layout` memory, then show me the plan before any subagent starts. One subagent per section file, each briefed by `design/plate-ix/BRIEF.md`.
 >
-> **Wait for Ari's Plate IX answers first.** Each section on the page ends with up to 4 questions (36 in all), and the wrap-up questions below are still open. Record the answers in the `kitchen-layout` memory, then draw Plate X:
-> 1. The final kitchen with Ari's picks only (fridge colour, Recently holder, window whole or cut, floor, tape or brass). Drop the comparison crops.
-> 2. Final day and evening plates of the kitchen.
-> 3. Each open view updated from Ari's answers; evening versions of the open views if Ari wants them.
-> 4. Known issues from Plate IX to fix or confirm: the floor reads as diagonal stripes near the left and right edges; the sun patch is faint on the tile; the fridge hinges fall outside the main view; the idea board draws 2 statuses (the model has 4); references draws 4 kinds (the app has 5); sign-in uses username (as the app does); the open recipe box's action pills float beside the lid; the small whiteboard says "Blondies · trial 4" but the sample data gives trial 4 to Croissants.
+> Your first question: **is this wave an extra round (Plate X) with a final Plate XI after it, or is it the final plate?**
 >
-> Subagents worked well for Plate IX (one per section, each owning one file, briefed by `BRIEF.md`). Ari uses one main session that hands tasks to subagents.
+> Plate IX is https://claude.ai/artifact/APtnqDfCTQb13uLgHnABtf. Sources are local in `design/plate-ix/` (untracked): `BRIEF.md`, `base/` (shared helpers), `kitchen.js`, `sections/NN-name.html` (one per view), `build.cjs` (`node build.cjs` → `dist/index.html`; `--only NN` builds one section), `shots/all.cjs` (Playwright screenshots). Publish the build output with the html/head wrapper stripped, as a new artifact.
+>
+> Draw from "Ari's Plate IX notes" below. The public pages (section 08) and equipment spots are on hold: do not redraw them.
 
-## Questions to wrap up the plates (for Ari)
-1. **What counts as done for the plate drawing?** For example: one day and one evening plate of the final kitchen, plus the open box and open notebook, signed off. After that, changes happen in the build.
-2. **Which open choices must be settled before the build, and which can wait?** Still open: fridge colour, Recently holder, shelf labels (brass or tape), floor strip, window cut or whole, paid-plan tags, colours, plus the per-view questions on Plate IX. (Tile is settled: on by default.)
-3. **After the plates:** the mark next (Ari hoped the drawing would help), or the phone layout?
-4. **Brand sheet:** should the final plate become the reference for the brand sheet (colours, ink line, halftone, fonts), then Task issues for the build?
-5. **Equipment spots:** do anniversary pieces go on the counter ends, the fridge top, the window sill, or a shelf above the board?
-6. **`design/kitchen-starter/` (20 MB) and `design/plate-ix/` (plate sources, small without `dist/` and `shots/`):** commit them, or keep them local?
+## Ari's Plate IX notes (2026-11-12): what to draw
+**Kitchen**
+- Fridge: cream (settled). Recently: ticket rail (Ari's lean). Shelf labels: tape, in an ALL-CAPS marker font
+- No sun patch: take it out
+- Floor is not right yet. Show three: white and black checkerboard, a floor with no pattern, and no floor
+- Window: lower and larger (too small when whole). Try a sink in front of it, as in the inspiration photos
+- Normal view cuts off part of the window and the fridge hinges; an extra-wide view extends to show them whole
+- A tiny bird flies past the window by day and a shooting star by evening, on its own or when the window is clicked
+
+**Whiteboard**
+- New kitchen: under "Next up", a question mark or a doodle, not "Nothing next up yet"
+- The cook can wipe off an automatic item, and it stays away until something new happens on that recipe
+- A ticked item keeps a line through it until the next day. Clicking the tick again is allowed (undo or remove: not worked out; fine for now)
+- More than 6 items: the board scrolls
+- The dot on the small whiteboard must not copy the large board's tacks. Try a magnet, or a mark drawn in marker
+
+**Recipe box**
+- The open box looks wrong with the short bottom: let the body run past the bottom of the screen
+- Next and Back become arrows to the left and right of the card, inside the lid
+- Edit and Delete sit by the title, or in the card's bottom right corner
+- Full screen is an icon, not a word
+- A full-screen card covers the whole screen, with a red X top right to close, and no search bar
+- On a phone the recipe is meant to look like a landscape card; maybe only when full screen
+
+**Sign in and sign up**
+- Needs work. Drop "Start a kitchen". This is the one place for "Trial & Eclair" as a title
+- The card reads as a plain index card. Show a few options, one with the card looking like a recipe card
+
+**Every view**
+- Each view gets a developer version and a home cook version, plus a guest version where it differs
+
+**On hold**
+- Public recipe and cookbook pages: fine for now, revisit later
+- Equipment spots
+
+## Wrap-up answers so far
+1. **Done means:** day and evening plates of the final kitchen, the open views, sign in, and any views still missing (see "Ask Ari first")
+2. Open choices before the build: not answered
+3. **After the plates: the phone layout** (then the mark)
+4. **Yes:** the final plate is the reference for the brand sheet, then Task issues
+5. Equipment spots: on hold
+6. Design files: not decided. Recommendation given: commit `design/plate-ix/` without `dist/` and `shots/` (about 300 KB); keep `design/kitchen-starter/` (20 MB PSD) local
+
+## Ask Ari first
+**The round**
+- Extra round then a final, or is this the final?
+- Evening versions of every open view, or only the kitchen?
+- Which views are still missing? Not drawn yet: the Account menu and settings, the upgrade to the paid plan, the signed-out front page, a not-found page, the phone kitchen (comes after the plates)
+
+**Kitchen**
+- "No pattern" floor: plain boards, or one flat colour?
+- Bird and shooting star: on their own every so often, only on a click, or both?
+- Sink: does it sit on the counter under the window only, or change the cabinets below it too?
+- Extra-wide view: from what width does it start showing the whole window and fridge?
+- Ticket rail: is it the pick, or keep magnets beside it once more?
+
+**Whiteboard**
+- Clicking a tick a second time: un-tick, or remove the item at once?
+- Which doodle for an empty "Next up"? (Offer three)
+
+**Idea board** (the app has 4 statuses: Researching, Testing, Ready to publish, Archived; Plate IX drew 2)
+- Draw all four as tack colours? Do archived ideas stay on the board?
+- Grid or free placement; does each note say its status in words; what "Start a trial" carries over and whether the idea stays; filters
+
+**Cookbooks** (explain again first: Plate IX drew each cookbook as a ringed binder on the cookbooks shelf; that was the agent's choice, kept from the current app. Ari has only decided: one drawn book per real cookbook, cookbooks tier above references, paid plan)
+- Binder or sewn book; shelf first or straight into the last cookbook; where the share link lives; "Use the newest version" on a recipe
+
+**References** (the app has 5 kinds: Cookbook, Blog, Chef / Baker, Article, Tool; Plate IX left out Article)
+- Keep Article as a fifth kind, or fold it into Blog?
+- Card first or link first; order by kind or newest; keep starter references
+
+**Notebook**
+- Tabs, Contents, or both; where Publish lives; Compare now or later; folded corners or arrows
+
+**Recipe box**
+- Edit and Delete: by the title, or bottom right? (Or draw both)
+- Under a letter: arrows only, or a short list of titles as well
+- Blank card to add, or an "Add a card" button too; ticks clear on close; photo on the front
+- Phone: landscape card always, or only full screen?
+
+**Sign in and sign up**
+- What replaces "Start a kitchen"?
+- Username (as the app does now) or email?
+- Samples default; where guests land
+
+**Files**
+- Commit `design/plate-ix/` sources and keep the PSD local?
+
+## Known issues carried over
+- The floor reads as diagonal stripes near the left and right edges
+- The small whiteboard says "Blondies · trial 4" but the sample data gives trial 4 to Croissants
+- Notebook pages are slightly smaller than Plate VIII (line pitch 28) to fit the tabs and control strip
+- A few small comparison crops were not opened after their last change
 
 ## The layout now (final)
-- **Plate IX kitchen (2026-11-12):** wide (300–1500); vintage fridge at the left edge holding "Recently"; one plain door beside it; small window on the right (sun patch by day, moon by night); taller quiet tile ON by default; checkerboard floor strip; tape shelf labels in the main kitchen. Open choices are on the Plate IX page
+- **Plate IX kitchen (2026-11-12):** wide (300–1500); vintage fridge at the left edge holding "Recently"; one plain door beside it; small window on the right (sun patch by day, moon by night); taller quiet tile ON by default; checkerboard floor strip; tape shelf labels in the main kitchen. Changed by "Ari's Plate IX notes" above (no sun patch, cream fridge, lower window, floor still open)
 - **Wall:** one board in the middle: whiteboard on the left ("next up", pinned plus automatic, marker font), cork ideas on the right. Drawn 25 px higher than round 9, above the recipe box and below the notebook's top. Wall above the board stays plain. No oven, no title or name. Plate IX direction: a vintage fridge at the left edge (holds "Recently") and a small window on the right for day/evening light; no pegboard
 - **Counter, middle:** the Lab notebook on a cookbook stand on the whiteboard's side, tall enough to overlap the board's bottom edge. An eclair on a plate in the middle: whole on load, three clicks eat it (crumbs and cream left), back on reload. The recipe box on the cork's side. All three sit close together
 - **Side rule:** the Lab is always on the whiteboard's side and the box on the cork's side. The Lab need not be right under the whiteboard
@@ -49,8 +133,8 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 - **Equipment:** anniversary equipment later (1 month, 6 months, 1 year, yearly; pick one of three). No pegboard at first
 
 ## Still open
-- Equipment spots: follow the visible edges, or a fixed distance from the middle
-- Whether `design/kitchen-starter/` (20 MB PSD) gets committed (still local)
+- Everything under "Ask Ari first"
+- Equipment spots (on hold)
 
 ## Links
 | What | Link |
