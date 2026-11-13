@@ -10,6 +10,44 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-12 · Kitchen Plate IX: wide kitchen and every open view
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-12` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, 9 subagents) |
+| **Outcome** | partial (Plate IX published, waiting on Ari; no app code) |
+
+### Intent
+Draw Plate IX from Ari's Plate VIII notes, and (Ari's request mid-session) mock every view that opens, in one long round built by subagents, because only two rounds are left.
+
+### Summary
+- Plate IX: https://claude.ai/artifact/APtnqDfCTQb13uLgHnABtf
+- Kitchen: wide, vintage fridge left (cream or mint) holding Recently (magnets, rail or fixed tape), one plain door, window right (whole or cut), sun patch by day and moon by night, taller tile, checkerboard floor, tape or brass shelf labels, narrow kitchen once
+- Open views, one section each: whiteboard, idea board, cookbooks (reader and editor), references, Trials notebook (tabs, contents, compare, publish stamp, nothing overlapping), recipe box (open, empty, long, edit in the lid, full-screen card and its back)
+- Also: public `/r` and `/c` pages and the phone recipe page; sign in, sign up with the sample-data question, an empty kitchen, removing samples; the jot list
+- Sources are in `design/plate-ix/` (untracked): shared base from Plate VIII, `BRIEF.md`, one file per section, `build.cjs` joins them into one page. Publish file: `dist/kitchen-plate-ix.html` = `dist/index.html` without the html/head wrapper
+
+### Decisions
+- Ari, before drawing: wide kitchen; tile ON by default; floor on in the main kitchen; main kitchen uses tape labels; light = window + sun patch; left cabinet one plain door; two rounds left (IX, then X = final day and evening)
+- The plate page stays one published file; the real refactor is the port to React components after sign-off
+- One subagent per view, each owning one section file, worked; the kitchen agent also owned `kitchen.js`
+
+### Open threads
+- Ari's answers: up to 4 questions at the end of each Plate IX section, plus the wrap-up questions in NEXT.md
+- Known issues listed in the NEXT.md prompt (floor stripes at the edges, faint sun on tile, hinges off-view, idea statuses 2 vs 4, reference kinds 4 vs 5, username vs email)
+- `design/kitchen-starter/` and `design/plate-ix/` still local
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate IX, open views, whiteboard, idea board, cookbooks binder, references shelf, notebook tabs, recipe box full screen, public pages, sign in card, subagents, design/plate-ix
+**Files:** .cursor/handoffs/NEXT.md, design/plate-ix/BRIEF.md, design/plate-ix/build.cjs, design/plate-ix/kitchen.js, design/plate-ix/sections/
+**Do not redo:** layout rounds 1–10; Plates II–IX
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent" (Plate X), after Ari's Plate IX answers
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-12 · Kitchen Plates VI–VIII and the Plate IX prompt
 
 | Field | Value |
