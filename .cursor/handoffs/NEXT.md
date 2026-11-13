@@ -1,14 +1,16 @@
-# NEXT — 2026-11-12 (Plate IX answered in part; second wave not started)
+# NEXT — 2026-11-13 (Plate X under way, one view at a time)
+
+> **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's Plate IX answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
 ## Goal
 The block layout is final (round 10). Draw the kitchen and every view in the plate style, sign the plates off, then the phone layout.
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate IX published; second wave next, maybe one extra round before the final) → phone layout → mark → brand sheet → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate X, an extra round, drawn one view at a time; Plate XI is the final) → phone layout → mark → brand sheet → Task issues → build
 ```
 
-## Prompt for the next agent
+## Prompt for the next agent (superseded 2026-11-13: follow docs/design/PLAN.md, "How we work")
 > Kitchen plate drawing, second wave of Plate IX. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout`, `visual-direction`, `one-main-session` and `commit-each-round` memories, and the top entry of `.cursor/session_log.mdc` first. No app code changes.
 >
 > Work as before: you are the director. **Ask me a lot of questions first** (the lists under "Ask Ari first" below, in batches), record my answers in the `kitchen-layout` memory, then show me the plan before any subagent starts. One subagent per section file, each briefed by `design/plate-ix/BRIEF.md`.
