@@ -4,8 +4,9 @@
    add --frozen to draw the kitchen behind with the frozen Plate VIII kitchen (agents 2-10 use this) */
 const fs = require("fs"), path = require("path"), D = __dirname, a = process.argv.slice(2);
 const only = a.includes("--only") ? a[a.indexOf("--only") + 1] : null, frozen = a.includes("--frozen");
+const skip = a.includes("--skip") ? a[a.indexOf("--skip") + 1].split(",") : []; /* --skip 03,04: leave out sections still being drawn */
 const rd = (f) => fs.readFileSync(path.join(D, f), "utf8");
-const secs = fs.readdirSync(path.join(D, "sections")).filter((f) => f.endsWith(".html") && (!only || f.startsWith(only))).sort();
+const secs = fs.readdirSync(path.join(D, "sections")).filter((f) => f.endsWith(".html") && (!only || f.startsWith(only)) && !skip.some((k) => f.startsWith(k))).sort();
 const html = "<!doctype html><html><head><meta charset=utf8><meta name=viewport content=\"width=device-width,initial-scale=1\"></head><body>\n" +
   "<title>Kitchen Plate X</title>\n<meta name=\"claude:viewport-fit-sides\" content=\"cover\">\n" +
   "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Young+Serif&family=Archivo+Narrow:wght@700&display=swap\">\n" +
