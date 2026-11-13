@@ -57,9 +57,9 @@
   var SCONE = { t: "Buttermilk scones", meta: "Prep 15 min · Bake 14 min · Makes 8", src: "From: Weekend Bakes",
     ing: ["350 g self-raising flour", "1 tsp baking powder", "85 g cold butter", "3 tbsp caster sugar", "175 ml buttermilk", "1 tsp vanilla", "1 egg, for glazing"],
     steps: ["Rub butter into the flour.", "Stir in sugar, then buttermilk.", "Pat out 4 cm thick.", "Cut 8 rounds. Don't twist.", "Glaze with beaten egg.", "Bake 14 min at 220°C."] };
-  var COOK = { t: "Brown butter cookies", meta: "Prep 20 min · Bake 11 min · Makes 18", src: "Starter recipe", starter: 1,
-    ing: ["115 g butter, browned", "150 g dark brown sugar", "1 egg + 1 yolk", "1 tsp vanilla", "190 g plain flour", "½ tsp soda, ½ tsp salt", "170 g dark chocolate"],
-    steps: ["Brown the butter. Cool 15 min.", "Beat in sugar, egg, yolk, vanilla.", "Fold in flour, soda, salt.", "Stir in the chocolate.", "Chill 1 h. Roll 18 balls.", "Bake 11 min at 180°C."] };
+  var COOK = { t: "Chocolate chip cookies", meta: "Prep 20 min · Bake 12 min · Makes 24", src: "Starter recipe", starter: 1,
+    ing: ["2¼ cups plain flour", "1 tsp soda, 1 tsp salt", "1 cup butter, softened", "¾ cup sugar", "¾ cup brown sugar", "2 eggs, 2 tsp vanilla", "2 cups chocolate chips"],
+    steps: ["Heat the oven to 190°C.", "Whisk flour, soda and salt.", "Cream butter and sugars.", "Beat in eggs and vanilla.", "Stir in flour, then chips.", "Bake 9 to 11 min."] };
 
   /* ---- small icons ---- */
   function btn(cx, cy, r, inner) { return inner; }
@@ -170,7 +170,7 @@
     g("box-next").innerHTML = small(box(SCONE, { pos: "B · 4 of 4", pos2: "C next  ›" }), "The last B card, with the tag saying C is next", 560, 70, 700, 420);
     g("box-add").innerHTML = small(box(BLOND, { glowA: 1 }), "A blank Add a card card standing at the back of the box", 360, 76, 1080, 684);
     g("box-full").innerHTML = svg(mainVP(), fullCard(), "The Blondies card covering the whole screen, with some lines ticked");
-    g("box-guest").innerHTML = openOver(box(COOK, { guest: 1, pos: "B · 3 of 4" }), "Guest box: a starter card with Make it mine, and a slip saying 2 of 5 cards used", { plan: "guest" });
+    g("box-guest").innerHTML = openOver(box(COOK, { guest: 1, pos: "C · 1 of 3" }), "Guest box: a starter card with Make it mine, and a slip saying 2 of 5 cards used", { plan: "guest" });
     g("box-limit").innerHTML = openOver(box(BLOND, { limit: 1, guest: 1 }), "Guest at the limit: the ledge card says all 5 guest cards are used, with Sign up", { plan: "guest" });
   });
 })();
