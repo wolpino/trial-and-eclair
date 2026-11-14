@@ -10,6 +10,45 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-13 · Plate X cookbooks drawn; five views signed off
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-13` (third) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, 5 subagents, at most 2 at once) |
+| **Outcome** | partial (cookbooks drawn and answered; five views signed off; two small picks open; no app code) |
+
+### Intent
+Draw cookbooks (section 04) as the next Plate X view, and settle the five views already drawn.
+
+### Summary
+- Branch `docs/plate-x-cookbooks` from `staging-render`; PR wolpino/trial-and-eclair#172
+- Cookbooks: sewn cloth books at the left of the shelf (page lines front to back), spines close-up → cover → open book; typeset pages (Ari: not handwriting); editor over the kitchen (developer, drag to reorder) and a finished book with no kitchen; developers make books, home cooks and guests read the sample (making one is the paid plan); Share removed
+- Kitchen: the recipe log cabinet rotates between three cats, redrawn cleaner. Whiteboard: red x removes a ticked item, recipe-card link dropped. Recipe box: card fills the lid, lid one colour, arrows outside the box, position tag options A/B
+- New `sections/00-questions.html`: open questions at the top of the page, each linked to its drawing (Ari found figure names hard to find)
+- Details list: cover arrow height, plant, window depth, idea board scroll bar, shelf close-up border
+- Later list: cookbook Share, editor customization, home cooks browsing/saving other developers' cookbooks
+- Plate X page versions 15–19: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt
+
+### Decisions
+- Kitchen, whiteboard, idea board, notebook and recipe box are DONE (Ari, 2026-11-13)
+- Cookbook pages are typeset; handwriting only for what the cook writes
+- Developer sets a cookbook's recipe order
+
+### Open threads
+- Ari to look at the redrawn cats and pick the recipe box position tag (A or B)
+- Ari to look at the cookbook changes (v19); next view is References
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate X, cookbooks, sewn book, typeset, editor vs finished book, three cats, red x, recipe box arrows outside, linked questions
+**Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, design/plate-x/sections/00-questions.html, design/plate-x/sections/04-cookbooks.html, design/plate-x/sections/07-recipe-box.html, design/plate-x/kitchen.js
+**Do not redo:** layout rounds 1–10; Plates II–IX; Plate X sections 01, 02, 03, 06, 07 (signed off) and 04 as drawn (tweak only)
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent (Plate X references, after Ari looks at version 19)"
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-13 · Plate X, settling the five views: kitchen, notebook and recipe box tweaks
 
 | Field | Value |

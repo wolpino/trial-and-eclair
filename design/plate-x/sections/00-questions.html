@@ -1,0 +1,29 @@
+<section aria-labelledby="h-q" id="q-top">
+  <span class="label" id="h-q">Open questions</span>
+  <div class="sec-body">
+    <p class="note"><b>Every open question, in page order.</b> Each link jumps to the drawing it is about; "back to the questions" under a drawing comes back here.</p>
+    <ol class="qs q-links">
+      <li><b>Kitchen, <a href="#k-in-a">the three cats</a>, redrawn.</b> <a href="#k-in-a">A</a> · <a href="#k-in-b">B</a> · <a href="#k-in-c">C</a>. Finished now, or what still looks off?</li>
+      <li><b>Recipe box, <a href="#box-pos-a">where the position tag goes</a>.</b> <a href="#box-pos-a">A: a tag under each arrow</a> (where that arrow goes) · <a href="#box-pos-b">B: one tag above the lid</a>. The other figures use A for now.</li>
+    </ol>
+    <p class="note"><b>Done since the last round:</b> whiteboard link dropped; cookbook spines and roles, no Share, drag to reorder; recipe box lid one colour, arrows outside the box. Kitchen, whiteboard, idea board, notebook and recipe box are marked done.</p>
+  </div>
+</section>
+<style>
+  .q-links a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--yellow); text-decoration-thickness: 3px; text-underline-offset: 3px; }
+  .q-links a:hover, .q-links a:focus-visible { background: var(--yellow); }
+  figure[id], [id^="h-"] { scroll-margin-top: 72px; }
+  a.q-back { display: inline-block; margin-top: 4px; font-size: 0.85rem; color: var(--ink-soft); }
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  /* a "back to the questions" link under each drawing a question points to (after every section has loaded) */
+  var ids = {};
+  document.querySelectorAll(".q-links a").forEach(function (a) { ids[a.getAttribute("href").slice(1)] = 1; });
+  Object.keys(ids).forEach(function (id) {
+    var el = document.getElementById(id); if (!el || el.tagName !== "FIGURE") return;
+    var b = document.createElement("a"); b.href = "#q-top"; b.className = "q-back"; b.textContent = "↑ back to the questions";
+    el.insertAdjacentElement("afterend", b);
+  });
+});
+</script>
