@@ -307,27 +307,34 @@
       function pth(d, fill, sw) { return reg("path", 'd="' + d + '"', fill, sw || 1.8); }
       var W = i1 - i0, STEEL = "#d2d0c8", CHOC = "var(--wood-dark)", s = "";
       if (kind === "cat") {
-        /* a cream mixing bowl with a blue band; a ginger cat curled inside, chin on the rim, tail over the front */
-        var bx = i0 + W * 0.5, by = y1, r = 66, ry = 17, rimY = by - 44, cat = "var(--orange)",
-          wall = "M" + (bx - r) + " " + rimY + " A" + r + " " + ry + " 0 0 0 " + (bx + r) + " " + rimY + " C" + (bx + r - 2) + " " + (by - 10) + " " + (bx + 40) + " " + (by - 2) + " " + (bx + 26) + " " + (by - 2) + " L" + (bx - 26) + " " + (by - 2) + " C" + (bx - 40) + " " + (by - 2) + " " + (bx - r + 2) + " " + (by - 10) + " " + (bx - r) + " " + rimY + "Z";
-        s += shade(bx - 8, by - 1, 64, 5) + el(bx, rimY, r, ry, "color-mix(in srgb, var(--card) 80%, var(--wood))") +
-          el(bx + 6, rimY - 8, 54, 22, cat, 2) +
-          line("M" + (bx + 12) + " " + (rimY - 29) + " q6 10 2 20 M" + (bx + 28) + " " + (rimY - 26) + " q6 9 2 18 M" + (bx - 4) + " " + (rimY - 29) + " q5 9 1 18", 1.6, 0.8) +
-          pth(wall, "var(--card)", 2) + reg("rect", 'x="' + (bx - 26) + '" y="' + (by - 4) + '" width="52" height="4" rx="1.5"', "var(--card)", 1.6) +
-          line("M" + (bx - r + 3) + " " + (rimY + 9) + " Q" + bx + " " + (rimY + 34) + " " + (bx + r - 3) + " " + (rimY + 9), 5, 0.9, "var(--blue)");
-        /* tail along the front rim, then the head resting on it with white paws tucked under the chin */
-        var tail = "M" + (bx + 52) + " " + (rimY - 4) + " C" + (bx + 68) + " " + (rimY + 8) + " " + (bx + 58) + " " + (rimY + 18) + " " + (bx + 36) + " " + (rimY + 16) + " S" + (bx + 8) + " " + (rimY + 17) + " " + (bx - 4) + " " + (rimY + 15);
-        s += line(tail, 12, 1) + line(tail, 8, 1, cat) + line("M" + (bx + 22) + " " + (rimY + 12) + " v8 M" + (bx + 10) + " " + (rimY + 12) + " v8 M" + (bx + 54) + " " + (rimY + 5) + " h7", 1.5, 0.85);
-        var hx = bx - 38, hy = rimY - 3;
-        s += el(hx + 10, hy + 15, 7, 4.5, "var(--card)", 1.5) + el(hx + 22, hy + 15, 7, 4.5, "var(--card)", 1.5) +
-          pth("M" + (hx - 14) + " " + (hy - 8) + " L" + (hx - 15) + " " + (hy - 25) + " L" + (hx - 3) + " " + (hy - 15) + "Z", cat) +
-          pth("M" + (hx + 3) + " " + (hy - 15) + " L" + (hx + 13) + " " + (hy - 25) + " L" + (hx + 14) + " " + (hy - 8) + "Z", cat) +
-          el(hx, hy, 17, 14.5, cat, 2) + pth("M" + (hx - 12) + " " + (hy - 12) + " L" + (hx - 12.5) + " " + (hy - 19) + " L" + (hx - 7) + " " + (hy - 14) + "Z", "var(--card)", 1) +
-          line("M" + (hx - 10) + " " + (hy - 1) + " q3.5 3.5 7 0 M" + (hx + 3) + " " + (hy - 1) + " q3.5 3.5 7 0", 1.6) +
-          pth("M" + (hx - 2) + " " + (hy + 4) + " h4 l-2 2.5Z", "var(--ink)", 1) +
-          line("M" + (hx - 4) + " " + (hy - 11) + " v5 M" + hx + " " + (hy - 12) + " v5 M" + (hx + 4) + " " + (hy - 11) + " v5", 1.3, 0.8) +
-          line("M" + (hx - 8) + " " + (hy + 6) + " h-12 M" + (hx - 8) + " " + (hy + 8) + " l-11 3 M" + (hx + 8) + " " + (hy + 6) + " h12", 0.9, 0.7) +
-          T(hx - 30, hy - 26, "z", "font:700 15px var(--font-hand);fill:var(--ink-soft)") + T(hx - 42, hy - 38, "z", "font:700 11px var(--font-hand);fill:var(--ink-soft)");
+        /* a cream mixing bowl with a blue band; a quiet tabby curled asleep inside, head tucked against the body, tail wrapped round
+           the front over the near rim. Drawn in local units (u, v) about the rim's centre; the near wall is drawn last so it hides the cat's lower edge. */
+        var bx = i0 + W * 0.5, by = y1, r = 66, ry = 17, rimY = by - 44, cat = "color-mix(in srgb, color-mix(in srgb, var(--amber) 55%, var(--wood)) 80%, var(--card))";
+        var R = function (d) { return d.replace(/M (-?[\d.]+) (-?[\d.]+)/g, function (m, u, v) { return "M" + (bx + +u) + " " + (rimY + +v); }); };
+        var Q = function (d) { return d.replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g, function (m, u, v) { return (bx + +u) + " " + (rimY + +v); }); };
+        var wall = "M" + (bx - r) + " " + rimY + " A" + r + " " + ry + " 0 0 0 " + (bx + r) + " " + rimY + " C" + (bx + r - 2) + " " + (by - 10) + " " + (bx + 40) + " " + (by - 2) + " " + (bx + 26) + " " + (by - 2) + " L" + (bx - 26) + " " + (by - 2) + " C" + (bx - 40) + " " + (by - 2) + " " + (bx - r + 2) + " " + (by - 10) + " " + (bx - r) + " " + rimY + "Z";
+        var tail = Q("M 61 12 C 52 14 34 15 14 14 S -14 11 -24 5");
+        s += shade(bx + 8, by - 1, 68, 6) + el(bx, rimY, r, ry, "color-mix(in srgb, var(--card) 80%, var(--wood))", 2) +
+          /* the body: a loaf filling the bowl, rising above the far rim */
+          pth(Q("M -54 14 C -58 -6 -46 -22 -24 -28 C -4 -33 26 -34 44 -25 C 58 -18 62 -4 60 14 Z"), cat, 2.2) +
+          '<path d="' + Q("M 42 -25 C 56 -18 62 -4 60 14 L 46 14 C 50 0 49 -14 42 -25 Z") + '" style="fill:url(#hatch);opacity:.5"/>' +
+          line(Q("M 14 -32 C 32 -28 42 -14 38 6"), 1.4) +
+          line(R("M -6 -31 q3 5 1 9 M 6 -32 q3 5 1 9 M 18 -31 q4 4 3 8 M 28 -27 q4 4 4 8 M 44 -16 q-4 3 -6 7 M 49 -6 q-5 2 -7 6"), 1.2, 0.75) +
+          /* the head, tucked low at the front left: two small ears, eyes shut */
+          pth(Q("M -44 -15 L -47 -29 L -36 -22 Z"), cat, 1.8) + pth(Q("M -22 -24 L -16 -32 L -13 -19 Z"), cat, 1.8) +
+          pth(Q("M -47 -6 C -48 -18 -38 -25 -28 -25 C -17 -25 -10 -18 -10 -8 C -10 1 -18 6 -28 6 C -39 6 -46 1 -47 -6 Z"), cat, 2) +
+          '<path d="' + Q("M -14 -20 C -10 -14 -9 -6 -12 0 C -15 -4 -16 -12 -14 -20 Z") + '" style="fill:url(#hatch);opacity:.45"/>' +
+          line(R("M -44 -23 l 1 4 M -18 -27 l -1 4"), 1, 0.7) +
+          line(R("M -40 -11 q 3 2.2 6 0 M -25 -12 q 3 2.2 6 0"), 1.4) +
+          line(R("M -32 -24 l 0.5 5 M -27 -24 l -0.5 5"), 1.1, 0.7) +
+          /* the tail along the front, its tip under the chin, ringed near the end */
+          line(tail, 11, 1) + line(tail, 7.5, 1, cat) +
+          line(R("M 30 10 l 1 8 M 16 10 l 0.5 8 M 2 9 l 0 7 M -11 6 l -1 6"), 1.1, 0.75) +
+          /* the near wall over the cat's lower edge, with its band and foot; hatching on the right where the bowl turns from the light */
+          pth(wall, "var(--card)", 2.2) +
+          line("M" + (bx - r + 3) + " " + (rimY + 9) + " Q" + bx + " " + (rimY + 34) + " " + (bx + r - 3) + " " + (rimY + 9), 5, 0.9, "var(--blue)") +
+          '<path d="' + Q("M 64 8 C 63 26 46 42 28 42 L 22 42 C 40 37 54 26 57 12 Z") + '" style="fill:url(#hatch);opacity:.35"/>' +
+          reg("rect", 'x="' + (bx - 26) + '" y="' + (by - 4) + '" width="52" height="4" rx="1.5"', "var(--card)", 1.6);
         return at(26, s);
       }
       if (kind === "gear") {
