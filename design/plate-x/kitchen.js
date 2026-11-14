@@ -314,122 +314,140 @@
         return { Q: Q, f: function (d, fill, sw) { return pth(Q(d), fill, sw); }, l: function (d, w, op, col) { return line(Q(d), w || 1.2, op || 1, col); },
           h: function (d, op) { return '<path d="' + Q(d) + '" style="fill:url(#hatch);opacity:' + (op || 0.45) + '"/>'; },
           dash: function (d, op) { return '<path d="' + Q(d) + '" style="fill:none;stroke:var(--ink);stroke-width:.8;stroke-dasharray:2.4 2;opacity:' + (op || 0.6) + '"/>'; },
-          e: function (u, v, rx, ry, fill, sw) { return el(ox + u, oy + v, rx, ry, fill, sw); } };
+          e: function (u, v, rx, ry, fill, sw) { return el(ox + u, oy + v, rx, ry, fill, sw); },
+          p: function (d, fill) { return '<path d="' + Q(d) + '" style="fill:' + fill + '"/>'; }, c: function (d, inner) { return clipIn(Q(d), inner); } };
       }
       /* the front half of an ellipse (rim or base) as two curves, left to right, centre (0, v) */
       function half(rx, v, ry, start) { var c = (0.552 * rx).toFixed(1), q = (0.552 * ry).toFixed(1);
         return (start ? "M " + (-rx) + " " + v + " " : "") + "C " + (-rx) + " " + (v + +q) + " " + (-c) + " " + (v + ry) + " 0 " + (v + ry) + " C " + c + " " + (v + ry) + " " + rx + " " + (v + +q) + " " + rx + " " + v; }
-      /* fur breaking the outline: small coat-filled spikes [u, v, outward angle in degrees, length], their base tucked just inside the line */
-      function tufts(a) { return a.map(function (p) { var n = p[2] * Math.PI / 180, nx = Math.cos(n), ny = Math.sin(n), L = p[3] || 2.4, f = function (k) { return k.toFixed(1); };
-        return "M " + f(p[0] - 1.6 * nx + 1.9 * ny) + " " + f(p[1] - 1.6 * ny - 1.9 * nx) + " L " + f(p[0] + L * nx) + " " + f(p[1] + L * ny) + " L " + f(p[0] - 1.6 * nx - 1.9 * ny) + " " + f(p[1] - 1.6 * ny + 1.9 * nx); }).join(" "); }
+      function ell(rx, v, ry) { var c = (0.552 * rx).toFixed(1), q = (0.552 * ry).toFixed(1);
+        return "M " + (-rx) + " " + v + " " + half(rx, v, ry) + " C " + rx + " " + (v - q).toFixed(1) + " " + c + " " + (v - ry).toFixed(1) + " 0 " + (v - ry).toFixed(1) + " C " + (-c) + " " + (v - ry).toFixed(1) + " " + (-rx) + " " + (v - q).toFixed(1) + " " + (-rx) + " " + v + " Z"; }
+      /* Coat markings as tapered strokes (local units): [x0 y0, x1 y1, x2 y2, x3 y3, width]; wide at the start, to a point at the end.
+         rays() lays them across a rounded body, each one following the curve from outside the outline inwards (the outline clips them). */
+      function F(k) { return (Math.abs(k) < 0.05 ? 0 : k).toFixed(1); }
+      function strp(p) { var nv = function (ax, ay, bx, by, w) { var L = Math.hypot(bx - ax, by - ay) || 1; return [-(by - ay) / L * w, (bx - ax) / L * w]; },
+          a = nv(p[0], p[1], p[2], p[3], p[8] / 2), b = nv(p[2], p[3], p[4], p[5], p[8] * 0.44), c = nv(p[4], p[5], p[6], p[7], p[8] * 0.3), tx = -c[1] / 0.3 / p[8] * 1.33, ty = c[0] / 0.3 / p[8] * 1.33, r = p[8] * 0.3;
+        return "M " + F(p[0] + a[0]) + " " + F(p[1] + a[1]) + " C " + F(p[2] + b[0]) + " " + F(p[3] + b[1]) + " " + F(p[4] + c[0]) + " " + F(p[5] + c[1]) + " " + F(p[6] + c[0]) + " " + F(p[7] + c[1]) +
+          " C " + F(p[6] + c[0] + tx * r) + " " + F(p[7] + c[1] + ty * r) + " " + F(p[6] - c[0] + tx * r) + " " + F(p[7] - c[1] + ty * r) + " " + F(p[6] - c[0]) + " " + F(p[7] - c[1]) +
+          " C " + F(p[4] - c[0]) + " " + F(p[5] - c[1]) + " " + F(p[2] - b[0]) + " " + F(p[3] - b[1]) + " " + F(p[0] - a[0]) + " " + F(p[1] - a[1]) + " Z "; }
+      function rays(cx, cy, ax, ay, angs, r0, r1, bend, w) { return angs.map(function (a) { var p = [], t, g;
+        for (t = 0; t < 4; t++) { g = (a + bend * t / 3) * Math.PI / 180; p.push(cx + ax * (r0 + (r1 - r0) * t / 3) * Math.cos(g), cy + ay * (r0 + (r1 - r0) * t / 3) * Math.sin(g)); }
+        return strp(p.concat(w)); }).join(""); }
+      /* one clip region per call (ids stay unique when the cabinet is drawn more than once on the page) */
+      function clipIn(d, inner) { var id = "kc" + (uidN++); return '<defs><clipPath id="' + id + '"><path d="' + d + '"/></clipPath></defs><g clip-path="url(#' + id + ')">' + inner + "</g>"; }
       var GINGER = "color-mix(in srgb, color-mix(in srgb, var(--amber) 55%, var(--wood)) 80%, var(--card))", GREY = "color-mix(in srgb, var(--ink) 30%, var(--card))",
-        BLACK = "color-mix(in srgb, var(--ink) 82%, var(--card))", WHITE = "var(--card)", PINK = "color-mix(in srgb, var(--orange) 40%, var(--card))",
-        GDK = "color-mix(in srgb, " + GINGER + " 60%, var(--wood-dark))", GRDK = "color-mix(in srgb, var(--ink) 58%, var(--card))";
+        BLACK = "color-mix(in srgb, var(--ink) 86%, var(--card))", WHITE = "var(--card)", PINK = "color-mix(in srgb, var(--orange) 40%, var(--card))",
+        GDK = "color-mix(in srgb, " + GINGER + " 55%, var(--wood-dark))", GRDK = "color-mix(in srgb, var(--ink) 62%, var(--card))", SHEEN = "color-mix(in srgb, var(--card) 55%, var(--ink))";
+      /* A sleeping cat's head, ears and all in one outline, centred on u = cx (local units, chin at v 6). */
+      function sleepHead(g, cx, coat, mark, markCol, lid, muz) {
+        var X = function (d) { return d.replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g, function (m, u, v) { return F(cx + +u) + " " + v; }); };
+        var head = X("M -20.5 -6 C -21 -13 -19.5 -19 -16.5 -22.5 L -17.1 -33.6 C -17.2 -35.6 -15.5 -36.4 -14.1 -35.2 L -6.5 -27.6 C -2.5 -28.8 2.5 -28.8 6.5 -27.6 " +
+          "L 14.1 -35.2 C 15.5 -36.4 17.2 -35.6 17.1 -33.6 L 16.5 -22.5 C 19.5 -19 21 -13 20.5 -6 C 19.9 2 10.5 6 0 6 C -10.5 6 -19.9 2 -20.5 -6 Z");
+        return { outline: head, draw: g.f(head, coat, 2) + g.f(X("M -14.8 -25.4 L -15.2 -32.2 L -9.4 -27.6 Z M 14.8 -25.4 L 15.2 -32.2 L 9.4 -27.6 Z"), PINK, 0.9) +
+          g.c(head, g.p(mark, markCol)) +
+          g.l(X("M -13 -13.5 C -11 -10.8 -7.6 -10.8 -5.6 -13.5 M 5.6 -13.5 C 7.6 -10.8 11 -10.8 13 -13.5"), 1.5, 1, lid) +
+          g.f(X("M -6 -5 C -6 -8.8 -2.4 -10 0 -8.6 C 2.4 -10 6 -8.8 6 -5 C 6 -2.2 3.2 -0.6 0 -0.6 C -3.2 -0.6 -6 -2.2 -6 -5 Z"), muz, 1) +
+          g.f(X("M -2.5 -8.8 L 2.5 -8.8 L 0 -6.4 Z"), PINK, 0.9) + g.l(X("M 0 -6.4 L 0 -4.8 C -1 -3.6 -2.5 -3.8 -3.1 -4.6 M 0 -4.8 C 1 -3.6 2.5 -3.8 3.1 -4.6"), 0.9) +
+          g.l(X("M -6 -4.6 L -19 -6.6 M -6 -3 L -18 -1.4 M 6 -4.6 L 19 -6.6 M 6 -3 L 18 -1.4"), 0.7, 0.6, lid) };
+      }
       var ANIMALS = {
         cat: function () {
-          /* a cream mixing bowl with a blue band; a ginger tabby curled asleep inside, chin on a front paw, tail wrapped round the front.
-             Origin: the rim's centre. The near wall is drawn last so it hides the cat's lower edge. */
-          var bx = i0 + W * 0.5, by = y1, r = 66, ry = 17, rimY = by - 44, C = GINGER, g = kit(bx, rimY), t = "";
-          var wall = "M" + (bx - r) + " " + rimY + " A" + r + " " + ry + " 0 0 0 " + (bx + r) + " " + rimY + " C" + (bx + r - 2) + " " + (by - 10) + " " + (bx + 40) + " " + (by - 2) + " " + (bx + 26) + " " + (by - 2) + " L" + (bx - 26) + " " + (by - 2) + " C" + (bx - 40) + " " + (by - 2) + " " + (bx - r + 2) + " " + (by - 10) + " " + (bx - r) + " " + rimY + "Z";
-          var tail = "M 57 0 C 52 7 32 10 12 9 C -8 8 -10 6 -14 3";
-          t += shade(bx + 8, by - 1, 68, 6) + el(bx, rimY, r, ry, "color-mix(in srgb, var(--card) 80%, var(--wood))", 2) +
-            /* the body: a loaf filling the bowl, rising above the far rim; darker tabby stripes over the back */
-            g.f("M -54 14 C -58 -6 -46 -22 -24 -28 C -4 -33 26 -34 44 -25 C 58 -18 62 -4 60 14 Z", C, 2.2) +
-            g.l("M -4 -31.5 C 0 -26 0 -21 -2 -17 M 8 -33 C 12 -27 12 -21 9 -16 M 20 -33 C 25 -27 25 -20 22 -15 M 31 -30.5 C 36 -25 36 -18 33 -13 M 41 -26.5 C 45 -21 46 -14 43 -9 M 50 -19.5 C 53 -15 54 -9 52 -4", 3.2, 1, GDK) +
-            g.h("M 42 -25 C 56 -18 62 -4 60 14 L 46 14 C 50 0 49 -14 42 -25 Z", 0.5) + g.l("M 14 -32 C 32 -28 42 -14 38 6", 1.4) +
-            g.f(tufts([[-6, -31.6, -95], [34, -29.6, -70], [58.4, -9, -15]]), C, 1.2) +
-            /* the head, tucked low at the front left: ears with pink insides, forehead stripes, a pale muzzle, eyes shut */
-            g.f("M -44 -15 L -47 -29 L -36 -22 Z", C, 1.8) + g.f("M -22 -24 L -16 -32 L -13 -19 Z", C, 1.8) +
-            g.f("M -43.3 -17.8 L -45.1 -26.2 L -38.7 -22 Z", PINK, 0.9) + g.f("M -20 -24.4 L -16.4 -29.2 L -14.6 -21.4 Z", PINK, 0.9) +
-            g.f("M -47 -6 C -48 -18 -38 -25 -28 -25 C -17 -25 -10 -18 -10 -8 C -10 1 -18 6 -28 6 C -39 6 -46 1 -47 -6 Z", C, 2) +
-            g.f(tufts([[-46.4, -1, 165], [-10.6, -1.5, 15]]), C, 1.1) +
-            g.h("M -14 -20 C -10 -14 -9 -6 -12 0 C -15 -4 -16 -12 -14 -20 Z", 0.45) +
-            g.l("M -33 -24.4 L -32 -19 M -28 -25 L -28 -18.6 M -23 -24.4 L -24 -19", 2.2, 1, GDK) +
-            g.f("M -35 -3 C -35 -7 -31 -8 -28.5 -7 C -26 -8 -22 -7 -22 -3 C -22 0 -25 1.6 -28.5 1.6 C -32 1.6 -35 0 -35 -3 Z", "color-mix(in srgb, var(--card) 65%, " + C + ")", 1) +
-            g.l("M -40 -11 C -38 -8.6 -36 -8.6 -34 -11 M -23 -11 C -21 -8.6 -19 -8.6 -17 -11", 1.5) + g.l("M -40 -11 L -41.6 -10 M -17 -11 L -15.4 -10", 1.1) +
-            g.f("M -30.5 -6.4 L -26.5 -6.4 L -28.5 -4.2 Z", PINK, 0.9) + g.l("M -28.5 -4.2 L -28.5 -2.6 C -29.5 -1.4 -30.9 -1.6 -31.5 -2.4 M -28.5 -2.6 C -27.5 -1.4 -26.1 -1.6 -25.5 -2.4", 0.9) +
-            g.l("M -34 -3 L -52 -6 M -34 -1.5 L -51 0.5 M -23 -3 L -5 -6 M -23 -1.5 L -6 0.5", 0.8, 0.6) +
-            /* a front paw under the chin, toes showing */
-            g.f("M -47 9 C -48 4 -42 2 -36 3 C -32 4 -31 8 -33 10.5 L -45 11 C -46.4 11 -47 10 -47 9 Z", C, 1.6) + g.l("M -42.5 10.8 L -42.5 7.6 M -38 10.6 L -38 7.6", 0.9, 0.75) +
-            /* the tail wrapped along the front, its dark tip against the cheek, ringed */
-            g.l(tail, 10.5) + g.l(tail, 7, 1, C) + g.l("M 42 3.6 L 43 10.4 M 28 6 L 28.6 12.6 M 14 5.8 L 14 12.2 M 0 4.8 L -0.6 11", 2.6, 1, GDK) + g.l("M -8 6.2 C -10 5.4 -12 4.4 -13.4 3.4", 5.4, 1, GDK) +
-            /* the near wall over the cat's lower edge: a rolled rim, two cobalt bands, the foot; hatching on the right where the bowl turns */
-            pth(wall, "var(--card)", 2.2) + g.l("M -63 4 C -50 13 -26 17.6 0 17.6 C 26 17.6 50 13 63 4", 0.9, 0.45) +
-            line("M" + (bx - r + 3) + " " + (rimY + 9) + " Q" + bx + " " + (rimY + 34) + " " + (bx + r - 3) + " " + (rimY + 9), 5, 0.9, "var(--blue)") +
-            line("M" + (bx - r + 7) + " " + (rimY + 16) + " Q" + bx + " " + (rimY + 41) + " " + (bx + r - 7) + " " + (rimY + 16), 1.6, 0.9, "var(--blue)") +
-            g.h("M 64 8 C 63 26 46 42 28 42 L 22 42 C 40 37 54 26 57 12 Z", 0.35) +
-            reg("rect", 'x="' + (bx - 26) + '" y="' + (by - 4) + '" width="52" height="4" rx="1.5"', "var(--card)", 1.6);
+          /* Cat A: a ginger tabby curled asleep in a cream mixing bowl, chin on its front paws, tail wrapped round the front.
+             Origin: the rim's centre (the bowl is 44 deep). Order: far rim, cat, then the near wall over the cat's lower edge. */
+          var bx = i0 + W * 0.5, by = y1, rimY = by - 44, C = GINGER, g = kit(bx, rimY), t = "";
+          var body = "M -48 16 C -52 2 -50 -14 -40 -24 C -30 -32 -12 -36 6 -36.5 C 26 -37 42 -32 52 -22 C 60 -14 63 -4 62 6 L 62 16 Z",
+            tailTop = "M 61.4 -8 C 56 -1 40 1.4 20 1.8 C 4 2 -8 1 -18 -1",
+            wall = "M -66 0 C -65 0.8 -63.6 1.4 -62.6 2 " + half(62.6, 2, 13.4) + " C 63.6 1.4 65 0.8 66 0 C 66 18 50 36 30 40 C 20 42 -20 42 -30 40 C -50 36 -66 18 -66 0 Z",
+            head = sleepHead(g, -28.5, C, rays(-28.5, -6, 1, 1, [-112, -90, -68], 26, 15, 0, 3.2) + strp([-56, -10, -50, -10.6, -46, -10.8, -42, -10.4, 3]) + strp([-55, -3, -50, -3.4, -46, -3.8, -43, -4, 2.6]) +
+              strp([-1, -10, -7, -10.6, -11, -10.8, -15, -10.4, 3]) + strp([-2, -3, -7, -3.4, -11, -3.8, -14, -4, 2.6]), GDK, "var(--ink)", "color-mix(in srgb, var(--card) 70%, " + C + ")");
+          t += shade(bx + 8, by - 1, 68, 6) + g.f("M -27 39 L -26 43 C -18 44.6 18 44.6 26 43 L 27 39 Z", "var(--card)", 1.8) +
+            g.e(0, 0, 66, 17, "var(--card)", 2.2) + g.e(0, 1, 62.6, 13.4, "color-mix(in srgb, var(--card) 78%, var(--wood))", 1.2) +
+            g.c(ell(62.6, 1, 13.4), g.h("M -70 -2 L 70 -2 L 70 16 L -70 16 Z", 0.4)) +
+            /* the cat, one rounded mass: the back rises above the far rim, the tail lies along the front */
+            g.f(body, C, 2.2) + g.c(body, g.p(rays(8, 8, 56, 44, [-124, -108, -92, -76, -60, -44, -28], 1.2, 0.74, 4, 5), GDK) +
+              g.h("M 50 -26 C 60 -16 64 -4 62 10 L 50 10 C 54 -2 54 -14 50 -26 Z", 0.45) +
+              g.h(tailTop + " L -18 -7 C -8 -5 4 -4 20 -4 C 40 -4.4 52 -7 57 -14 Z", 0.4) +
+              g.c(tailTop + " L -18 20 L 66 20 Z", g.p(strp([50, -6, 50.4, 0, 50.6, 6, 50.6, 16, 4.4]) + strp([37, -4, 37.2, 2, 37.2, 8, 37, 16, 4.4]) + strp([23, -4, 23, 2, 23, 8, 22.8, 16, 4.4]) + strp([9, -4, 9, 2, 8.8, 8, 8.6, 16, 4.4]), GDK))) +
+            g.l(tailTop, 1.3) + g.l("M 32 1.4 C 29 -8 34 -17 45 -21", 1.3) +
+            head.draw +
+            g.f("M -45 6 C -45 2.4 -41 0.6 -37 0.8 C -33 1 -30.6 3.4 -30.8 6.6 C -31 10.4 -34 12 -38 12 C -42 12 -45 10 -45 6 Z", C, 1.6) +
+            g.f("M -27.6 6.6 C -27.6 3 -24 1.2 -20.4 1.6 C -16.6 2 -14.6 4.4 -15 7.4 C -15.4 10.6 -18 12 -21.6 12 C -25.4 12 -27.6 10 -27.6 6.6 Z", C, 1.6) +
+            g.l("M -40.6 12 L -40.4 9.2 M -35.4 11.8 L -35.4 9 M -23.4 12 L -23.2 9.2 M -18.4 11.8 L -18.4 9", 0.9, 0.8) +
+            /* the near wall: the rim's lip, two cobalt bands, hatching where the bowl turns from the light, the foot */
+            g.f(wall, "var(--card)", 2.2) + g.c(wall, g.l("M -66 9.5 " + half(66, 9.5, 16.5).slice(0), 4.6, 0.95, "var(--blue)") + g.l("M -66 16.5 " + half(66, 16.5, 16.5), 1.6, 0.95, "var(--blue)") +
+              g.h("M 70 -2 L 70 46 L 22 46 C 42 38 56 24 58 4 Z", 0.4)) + g.l("M -66 0 " + half(66, 0, 17), 1.1, 0.7);
           return at(26, t);
         },
         catB: function () {
-          /* a tea towel folded in half (cream, cobalt stripes, fold at the left, stitched hems) and a grey tabby loafed on it, paws tucked, looking out */
-          var ox = i0 + W * 0.52, oy = y1, g = kit(ox, oy), tw = 64, th = 10, td = 52, t = "", BIB = "color-mix(in srgb, var(--card) 75%, " + GREY + ")";
-          t += shade(ox + 6, oy - 1, 70, 6) + block(ox - tw, oy - th, ox + tw, oy, td, { top: "var(--card)", side: "color-mix(in srgb, var(--card) 80%, var(--wood))" });
-          [[-46, 2.4], [-38, 2.4], [-30, 1.1], [30, 1.1], [38, 2.4], [46, 2.4]].forEach(function (u) { var a = P(ox + u[0], oy - th, 0), b = P(ox + u[0], oy - th, td); t += line("M" + a[0] + " " + a[1] + " L" + b[0] + " " + b[1], u[1], 0.9, "var(--blue)"); });
-          t += g.f("M -59 -10 L 64 -10 L 64 0 L -59 0 C -65.5 0 -65.5 -10 -59 -10 Z", "var(--card)", 2) + g.h("M -59 0 C -65.5 0 -65.5 -10 -59 -10 C -62 -8 -62 -2 -59 0 Z", 0.5) +
-            g.l("M -59 -5 C -40 -4 -20 -6 0 -5 C 20 -4 40 -6 63 -5", 1, 0.6) +
-            g.l("M -46 -10 L -46 0 M -38 -10 L -38 0 M 38 -10 L 38 0 M 46 -10 L 46 0", 2.4, 0.9, "var(--blue)") + g.l("M -30 -10 L -30 0 M 30 -10 L 30 0", 1.1, 0.9, "var(--blue)") +
-            g.f("M 51 -10 L 64 -10 L 64 -4.6 Z", "color-mix(in srgb, var(--card) 82%, var(--wood))", 1.2) + g.l("M 55 -9 L 63 -5.6", 0.8, 0.5);
-          var c = kit(ox, oy - th), cat = shade(ox + 4, oy - th - 1, 44, 4) +
-            /* the body: a loaf, haunches either side, darker tabby stripes down the flanks, a pale bib with chest fur under the chin */
-            c.f("M -44 0 C -49 -16 -44 -34 -28 -42 C -16 -48 16 -48 28 -42 C 44 -34 49 -16 44 0 Z", GREY, 2.2) +
-            c.l("M -43.6 -12.4 C -40 -13 -38 -16 -37 -21 M -41.8 -24.4 C -38.6 -26 -36 -29 -34.4 -32.6 M -35.8 -35.2 C -33.4 -36.6 -31.4 -38.6 -30 -40.6 M 43.6 -12.4 C 40 -13 38 -16 37 -21 M 41.8 -24.4 C 38.6 -26 36 -29 34.4 -32.6 M 35.8 -35.2 C 33.4 -36.6 31.4 -38.6 30 -40.6", 3, 1, GRDK) +
-            c.h("M 30 -40 C 43 -32 49 -16 44 0 L 33 0 C 37 -14 37 -28 30 -40 Z", 0.5) +
-            c.l("M -40 -4 C -38 -18 -32 -28 -22 -33 M 40 -4 C 38 -18 32 -28 22 -33", 1.4) +
-            c.f(tufts([[-45.3, -16, 185], [45.3, -16, -5]]), GREY, 1.2) +
-            c.f("M -13 -42 C -14 -26 -8 -8 0 -5 C 8 -8 14 -26 13 -42 Z", BIB, 1.4) +
-            c.l("M -5 -25 L -3 -22 L -1 -25 M 1 -25 L 3 -22 L 5 -25 M -3 -15 L -1 -12 L 1 -15 L 3 -12", 0.9, 0.5) +
-            c.f("M -15 0 C -15 -5 -10 -7 -5 -6 C -2 -5 -1 -2 -1 0 Z", BIB, 1.4) + c.f("M 1 0 C 1 -2 2 -5 5 -6 C 10 -7 15 -5 15 0 Z", BIB, 1.4) +
-            c.l("M -10 0 L -10 -3 M -6 0 L -6 -3.4 M 6 0 L 6 -3.4 M 10 0 L 10 -3", 0.9, 0.75) +
-            /* tail round the right side, along the towel, ringed */
-            c.l("M 43 -8 C 47 -2 40 1 28 1 C 20 1 14 0 10 -1", 9.5) + c.l("M 43 -8 C 47 -2 40 1 28 1 C 20 1 14 0 10 -1", 6.2, 1, GREY) +
-            c.l("M 36 -2 L 36 3.4 M 27 -1.8 L 27 3.6 M 18 -2 L 18 3.4", 2.6, 1, GRDK) + c.l("M 14 -0.4 C 12.6 -0.6 11.4 -0.8 10.4 -1", 4.4, 1, GRDK) +
-            /* the head: ears up with pink insides, eyes open and calm, small nose, whiskers, cheek fur, the tabby M on the forehead */
-            c.f("M -19 -59 L -17 -77 L -6 -69 Z", GREY, 1.8) + c.f("M 19 -59 L 17 -77 L 6 -69 Z", GREY, 1.8) +
-            c.f("M -16.4 -62.5 L -15.6 -72.5 L -9.6 -68.4 Z", PINK, 0.9) + c.f("M 16.4 -62.5 L 15.6 -72.5 L 9.6 -68.4 Z", PINK, 0.9) +
-            c.f("M -21 -52 C -22 -64 -13 -71 0 -71 C 13 -71 22 -64 21 -52 C 20 -41 11 -34 0 -34 C -11 -34 -20 -41 -21 -52 Z", GREY, 2) +
-            c.f(tufts([[-20.4, -46, 165], [20.4, -46, 15], [-12, -36.6, 130, 2], [12, -36.6, 50, 2]]), GREY, 1.1) +
-            c.f("M -7 -42 C -7 -47 -3 -48 0 -47 C 3 -48 7 -47 7 -42 C 6 -38 3 -36 0 -36 C -3 -36 -6 -38 -7 -42 Z", BIB, 1) +
-            c.h("M -10 -36 C -6 -33 6 -33 10 -36 C 8 -30 -8 -30 -10 -36 Z", 0.5) +
-            c.f("M -12 -54 C -10 -57.5 -5 -57.5 -3 -54 C -5 -52 -10 -52 -12 -54 Z", "color-mix(in srgb, var(--yellow) 65%, var(--stem))", 1.2) +
-            c.f("M 3 -54 C 5 -57.5 10 -57.5 12 -54 C 10 -52 5 -52 3 -54 Z", "color-mix(in srgb, var(--yellow) 65%, var(--stem))", 1.2) +
-            c.l("M -7.5 -56.6 L -7.5 -52.6 M 7.5 -56.6 L 7.5 -52.6", 1.6) +
-            c.f("M -2.6 -47.5 L 2.6 -47.5 L 0 -45 Z", PINK, 1) + c.l("M 0 -45 L 0 -43 C -1 -41.6 -3 -41.6 -4 -42.6 M 0 -43 C 1 -41.6 3 -41.6 4 -42.6", 1) +
-            c.l("M -7 -44 L -21 -46 M -7 -43 L -20 -41 M 7 -44 L 21 -46 M 7 -43 L 20 -41", 0.8, 0.55) +
-            c.l("M -4 -69 L -3 -62 M 0 -70 L 0 -62 M 4 -69 L 3 -62 M -21 -52 L -15 -51 M -20 -48 L -15 -47.5 M 21 -52 L 15 -51 M 20 -48 L 15 -47.5", 2, 1, GRDK);
+          /* Cat B: a grey tabby loafed on a folded tea towel, front paws tucked under, looking out. The towel is soft cloth: rounded
+             edges, a slight sag where the cat sits, cobalt stripes running over the fold, a stitched hem. */
+          var ox = i0 + W * 0.52, oy = y1, tw = 62, th = 9, td = 50, t = "", BIB = "color-mix(in srgb, var(--card) 72%, " + GREY + ")";
+          var A = [ox - tw, oy - th], B = [ox + tw, oy - th], Bb = P(ox + tw, oy - th, td), Ab = P(ox - tw, oy - th, td), Ad = P(ox - tw, oy, td), S = function (p) { return F(p[0]) + " " + F(p[1]); };
+          var sag = function (u) { return 2.6 * (1 - (u / tw) * (u / tw)); }, front = "C " + S([ox - 30, oy - th + 3]) + " " + S([ox + 30, oy - th + 3]) + " " + S([B[0] - 1, B[1] + 0.6]);
+          var cloth = "M " + S([Ab[0] + 2, Ab[1]]) + " C " + S([Ab[0] + 40, Ab[1] - 1]) + " " + S([Bb[0] - 40, Bb[1] + 1]) + " " + S([Bb[0] - 2, Bb[1]]) +
+              " C " + S([Bb[0] + 1, Bb[1] + 0.4]) + " " + S([B[0] + 1, B[1] - 3]) + " " + S([B[0] + 1, B[1] + 1]) + " C " + S([B[0] + 3, B[1] + 4]) + " " + S([B[0] + 2, oy - 1]) + " " + S([B[0] - 2, oy]) +
+              " C " + S([ox + 20, oy + 0.8]) + " " + S([ox - 20, oy + 0.2]) + " " + S([A[0] + 3, oy]) + " C " + S([A[0] - 2, oy - 0.5]) + " " + S([Ad[0] + 1, Ad[1] + 1]) + " " + S([Ad[0] - 1, Ad[1] - 1]) +
+              " C " + S([Ad[0] - 2.6, Ad[1] - 3]) + " " + S([Ab[0] - 2, Ab[1] + 1]) + " " + S([Ab[0] + 2, Ab[1]]) + " Z",
+            face = "M " + S([A[0] + 1, A[1] + 1]) + " " + front + " C " + S([B[0] + 3, B[1] + 4]) + " " + S([B[0] + 2, oy - 1]) + " " + S([B[0] - 2, oy]) +
+              " C " + S([ox + 20, oy + 0.8]) + " " + S([ox - 20, oy + 0.2]) + " " + S([A[0] + 3, oy]) + " C " + S([A[0] - 2, oy - 0.5]) + " " + S([A[0] - 2.4, A[1] + 3]) + " " + S([A[0] + 1, A[1] + 1]) + " Z";
+          t += shade(ox + 6, oy - 1, 70, 6) + reg("path", 'd="' + cloth + '"', "var(--card)", 2) +
+            '<path d="' + face + '" style="fill:color-mix(in srgb, var(--card) 86%, var(--wood))"/>' + clipIn(cloth, hatch(Ad[0] - 6, Ab[1] - 2, 9, oy - Ab[1] + 4, 0.35));
+          /* stripes run front to back over the top, then down the folded front */
+          [[-46, 2.6], [-39, 2.6], [-32, 1.1], [32, 1.1], [39, 2.6], [46, 2.6]].forEach(function (u) { var a = P(ox + u[0], oy - th, td), y = oy - th + sag(u[0]);
+            t += clipIn(cloth, line("M" + S(a) + " L" + S([ox + u[0], y]) + " C" + S([ox + u[0], y + 3]) + " " + S([ox + u[0] + 0.3, oy - 2]) + " " + S([ox + u[0], oy + 2]), u[1], 0.9, "var(--blue)")); });
+          t += line("M " + S([A[0] + 1, A[1] + 1]) + " " + front, 1.3) + line("M " + S([A[0] + 2, oy - 4.4]) + " C " + S([ox - 30, oy - 3.4]) + " " + S([ox + 30, oy - 3.4]) + " " + S([B[0] - 1, oy - 4.2]), 1, 0.55) +
+            '<path d="M ' + S([A[0] + 4, A[1] + 4]) + " C " + S([ox - 30, oy - th + 6]) + " " + S([ox + 30, oy - th + 6]) + " " + S([B[0] - 3, B[1] + 3.6]) + '" style="fill:none;stroke:var(--ink);stroke-width:.7;stroke-dasharray:2 1.8;opacity:.5"/>';
+          var c = kit(ox, oy - th), C = GREY;
+          var body = "M -32 0 C -38 -10 -36 -24 -24 -31 C -10 -39 18 -40 36 -34 C 48 -30 56 -18 55 -8 C 54 -1 49 2.6 41 3 C 28 3.8 12 3.6 2 2.6 C -3 2.1 -6 1 -6 0 L -32 0 Z",
+            tailTop = "M 54.6 -11 C 51 -5 40 -4.6 26 -4.6 C 14 -4.6 4 -4.2 -4 -3.4";
+          var X = function (d) { return d.replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g, function (m, u, v) { return F(-18 + +u) + " " + F(-34 + +v); }); };
+          var head = X("M -19 -6 C -19.6 -11 -18.6 -15 -16 -18.4 L -16.8 -30 C -16.8 -32 -15.2 -32.8 -13.8 -31.6 L -6.6 -23.8 C -2.6 -25 2.6 -25 6.6 -23.8 " +
+            "L 13.8 -31.6 C 15.2 -32.8 16.8 -32 16.8 -30 L 16 -18.4 C 18.6 -15 19.6 -11 19 -6 C 18.2 2 10 6.4 0 6.4 C -10 6.4 -18.2 2 -19 -6 Z");
+          var cat = c.h("M -40 1 C -40 -2 -10 -3 20 -2 C 46 -1 60 0 60 3 C 60 6 40 7 10 7 C -20 7 -40 5 -40 1 Z", 0.5) + c.f(body, C, 2.2) +
+            c.c(body, c.p("M -31 -16 C -31 -26 -8 -26 -8 -16 C -8 -6 -14 1 -19.5 1 C -25 1 -31 -6 -31 -16 Z", BIB) +
+              c.p(rays(16, 4, 42, 40, [-100, -84, -68, -52, -36, -20], 1.2, 0.74, 5, 4.6), GRDK) +
+              c.h("M 34 -34 C 48 -28 56 -16 55 0 L 42 0 C 46 -12 44 -24 34 -34 Z", 0.5) + c.h("M -33 -30 C -26 -21 -10 -21 -3 -30 L -3 -20 C -12 -16 -26 -16 -33 -22 Z", 0.4) +
+              c.h("M -40 -2 L -6 -2 L -6 4 L -40 4 Z", 0.35) +
+              c.c(tailTop + " L -6 6 L 60 6 Z", c.p(strp([47, -10, 46.6, -4, 46.4, 0, 46, 6, 4]) + strp([35, -7, 35, -3, 35, 1, 35, 6, 4]) + strp([22, -7, 22, -3, 22, 1, 22, 6, 4]) + strp([9, -7, 9, -3, 9, 1, 9, 6, 4]), GRDK))) +
+            c.l(tailTop, 1.3) + c.l("M 24 2 C 20 -10 26 -22 40 -26.4", 1.3) +
+            c.f("M -28 1 C -28 -2.8 -24.6 -4.6 -21 -4.2 C -17.6 -3.8 -16 -1.6 -16.4 1 Z", BIB, 1.4) + c.f("M -15 1 C -15 -2.8 -11.6 -4.6 -8 -4.2 C -4.6 -3.8 -3 -1.6 -3.4 1 Z", BIB, 1.4) +
+            c.l("M -24 1 L -24 -1.6 M -20 1 L -20 -1.6 M -11 1 L -11 -1.6 M -7 1 L -7 -1.6", 0.8, 0.7) +
+            /* the head, sunk into the shoulders: ears up, eyes open and calm, the tabby M on the forehead, stripes on the cheeks */
+            '<g transform="translate(0 3)">' + c.f(head, C, 2) + c.f(X("M -14.4 -21 L -15 -28 L -9.4 -23.6 Z M 14.4 -21 L 15 -28 L 9.4 -23.6 Z"), PINK, 0.9) +
+            c.c(head, c.p(rays(-18, -40, 1, 1, [-112, -90, -68], 24, 13, 0, 3) + strp([-42, -45, -36, -45.4, -33, -45.6, -29, -45, 3]) + strp([-41, -39, -36, -39.4, -33, -39.6, -30, -39.4, 2.6]) +
+              strp([6, -45, 0, -45.4, -3, -45.6, -7, -45, 3]) + strp([5, -39, 0, -39.4, -3, -39.6, -6, -39.4, 2.6]), GRDK) +
+              c.h("M -34 -32 C -28 -26 -8 -26 -2 -32 L -2 -26 L -34 -26 Z", 0.3)) +
+            c.f("M -29 -44 C -27.4 -46.8 -22.6 -46.8 -21 -44 C -22.6 -41.8 -27.4 -41.8 -29 -44 Z M -15 -44 C -13.4 -46.8 -8.6 -46.8 -7 -44 C -8.6 -41.8 -13.4 -41.8 -15 -44 Z", "color-mix(in srgb, var(--yellow) 65%, var(--stem))", 1.1) +
+            c.l("M -25 -46.2 L -25 -41.9 M -11 -46.2 L -11 -41.9", 1.5) + c.l("M -29 -44 C -27.4 -46.8 -22.6 -46.8 -21 -44 M -15 -44 C -13.4 -46.8 -8.6 -46.8 -7 -44", 1.6) +
+            c.f("M -24 -35 C -24 -38.6 -20.4 -39.6 -18 -38.4 C -15.6 -39.6 -12 -38.6 -12 -35 C -12 -32.4 -14.8 -31 -18 -31 C -21.2 -31 -24 -32.4 -24 -35 Z", BIB, 1) +
+            c.f("M -20.4 -39 L -15.6 -39 L -18 -36.6 Z", PINK, 0.9) + c.l("M -18 -36.6 L -18 -35 C -19 -33.8 -20.5 -34 -21.1 -34.8 M -18 -35 C -17 -33.8 -15.5 -34 -14.9 -34.8", 0.9) +
+            c.l("M -24 -35.6 L -38 -37.6 M -24 -34 L -37 -32.4 M -12 -35.6 L 2 -37.6 M -12 -34 L 1 -32.4", 0.7, 0.55) + "</g>";
           return at(16, t + at(24, cat));
         },
         catC: function () {
-          /* a round banneton (coiled cane, a dusting of flour) with a black and white cat curled asleep in it: black coat, white blaze,
-             muzzle and paws */
-          var ox = i0 + W * 0.47, oy = y1, g = kit(ox, oy), cane = "color-mix(in srgb, var(--cork) 85%, var(--card))", r = 62, rv = -40, ry = 15, t = "";
-          var wall = "M " + (-r) + " " + rv + " " + half(r, rv, ry) + " C " + (r - 1) + " -26 52 -14 46 -11 C 44 -4 24 0 0 0 C -24 0 -44 -4 -46 -11 C -52 -14 " + (-r + 1) + " -26 " + (-r) + " " + rv + " Z";
-          t += shade(ox + 8, oy - 1, 64, 6) + g.e(0, rv, r, ry, "color-mix(in srgb, var(--cork) 70%, var(--wood))", 2) +
-            [0.82, 0.62, 0.42].map(function (f) { return g.e(0, rv + 2 * (1 - f), r * f, ry * f, "none", 1); }).join("").replace(/stroke-width:1;/g, "stroke-width:1;opacity:.55;");
-          /* the cat: body round behind, head tucked at the front right on a white paw, tail round the front left */
-          t += g.f("M -52 -22 C -57 -50 -40 -70 -14 -75 C 10 -79 38 -71 51 -56 C 58 -46 57 -32 54 -22 Z", BLACK, 2.2) +
-            g.l("M -26 -70 C -46 -62 -52 -44 -44 -28", 1.4, 0.45, WHITE) + g.l("M 2 -76 C 20 -74 36 -66 44 -56", 1.2, 0.3, WHITE) +
-            g.l("M -36 -56 L -33 -53 M -22 -64 L -19 -62 M -8 -68 L -5 -66.6 M -40 -42 L -37 -40", 1, 0.35, WHITE) +
-            g.f(tufts([[-44.6, -57.1, -135], [-3.3, -76.1, -95], [55.6, -40, -10]]), BLACK, 1.2) +
-            g.f("M -56 -32 C -48 -24 -30 -24 -12 -27 C -2 -29 4 -32 6 -34", "none", 11) + g.l("M -56 -32 C -48 -24 -30 -24 -12 -27 C -2 -29 4 -32 6 -34", 7.6, 1, BLACK) +
-            g.f("M 2 -30 C 1 -37 9 -40 16 -38 C 21 -36 21 -30 17 -28 L 5 -28 C 3 -28 2 -29 2 -30 Z", WHITE, 1.6) + g.l("M 8 -28 L 8 -31.5 M 12 -28 L 12 -32 M 16 -28 L 16 -31.5", 0.9, 0.7) +
-            g.f("M 13 -55 L 9 -69 L 21 -61 Z", BLACK, 1.8) + g.f("M 35 -62 L 43 -72 L 46 -56 Z", BLACK, 1.8) +
-            g.f("M 13.6 -57.7 L 11.2 -66.1 L 18.3 -61.4 Z", PINK, 0.9) + g.f("M 39.1 -62.7 L 42.3 -68.9 L 44.1 -60.9 Z", PINK, 0.9) +
-            g.f("M 9 -44 C 8 -56 17 -64 28 -64 C 40 -64 48 -56 48 -45 C 48 -36 40 -30 29 -30 C 17 -30 10 -36 9 -44 Z", BLACK, 2) +
-            g.f(tufts([[9.4, -40, 160], [47.6, -40, 20]]), BLACK, 1.1) +
-            g.f("M 27.2 -42 C 27 -48 27.6 -55 28.8 -59 C 30 -55 30.6 -48 30.4 -42 Z", WHITE, 1) +
-            g.f("M 21 -38 C 23 -42 26 -44 28.8 -42 C 31.5 -44 34.5 -42 36.5 -38 C 36.5 -33 33 -31 28.8 -31 C 24.5 -31 21 -33 21 -38 Z", WHITE, 1.3) +
-            g.f("M 26.5 -43.5 L 31 -43.5 L 28.8 -41.2 Z", PINK, 0.9) + g.l("M 28.8 -41.2 L 28.8 -39.6 C 28 -38.6 26.8 -38.8 26.2 -39.4 M 28.8 -39.6 C 29.6 -38.6 30.8 -38.8 31.4 -39.4", 0.8) +
-            g.l("M 18 -48 C 20 -46.4 23 -46.4 25 -48 M 33 -48 C 35 -46.4 38 -46.4 40 -48 M 18 -48 L 16.6 -47 M 40 -48 L 41.4 -47", 1.2, 0.9, WHITE) +
-            g.l("M 21 -38 L 8 -40 M 21 -36.6 L 9 -35 M 36.5 -38 L 49 -40 M 36.5 -36.6 L 48 -35", 0.8, 0.8, WHITE);
-          /* the near wall over everything: coiled cane, rings with the wrap of each coil, flour on the rim; hatching where it turns from the light */
-          t += g.f(wall, cane, 2.2);
-          [0, 0.22, 0.44, 0.66, 0.86].forEach(function (f) { var x = r - (r - 46) * f, v = +(rv + (rv - -11) * -f).toFixed(1), fy = 15 + (11 - 15) * f, k, a, u, w, tk = "";
-            if (f) t += g.l("M " + (-x) + " " + v + " " + half(x, v, fy), 1.1, 0.75);
-            for (k = 1; k < 14; k++) { a = k * Math.PI / 14; u = -x * Math.cos(a); w = v + fy * Math.sin(a) + 3; tk += "M " + (u - 1.2).toFixed(1) + " " + (w - 2).toFixed(1) + " L " + (u + 1.2).toFixed(1) + " " + (w + 2).toFixed(1) + " "; }
-            t += g.l(tk, 0.9, 0.45); });
-          t += g.h("M 58 -30 C 56 -18 46 -6 26 -1 L 18 0 C 36 -6 48 -16 50 -28 Z", 0.45) +
-            [[-50, -31], [-41, -28.4], [-24, -26], [-6, -25.4], [14, -25.6], [33, -27.4], [47, -30], [-32, -21], [6, -18.6], [-14, -12]].map(function (p) { return g.e(p[0], p[1], 1, 0.8, WHITE, 0.01); }).join("");
+          /* Cat C: a black and white cat curled asleep in a round proofing basket (coiled cane, a dusting of flour): black coat, white
+             blaze, muzzle and paws; tail round the front. Origin: the rim's centre (the basket is 40 deep). */
+          var ox = i0 + W * 0.47, oy = y1, rv = oy - 40, g = kit(ox, rv), cane = "color-mix(in srgb, var(--cork) 85%, var(--card))", t = "", C = BLACK;
+          var body = "M 48 16 C 52 2 50 -14 40 -25 C 30 -34 10 -38 -8 -38 C -28 -38 -44 -32 -52 -22 C -58 -14 -59 -4 -57 4 L -52 16 Z",
+            tailTop = "M -57.4 -6 C -53 1 -40 2.4 -20 2.6 C -4 2.8 8 1.6 18 0",
+            wall = "M -62 0 C -61 0.6 -59.4 1.2 -58 1.8 " + half(58, 1.8, 12.4) + " C 59.4 1.2 61 0.6 62 0 C 61 14 54 30 46 35 C 38 39.6 20 40.4 0 40.4 C -20 40.4 -38 39.6 -46 35 C -54 30 -61 14 -62 0 Z",
+            head = sleepHead(g, 28.5, C, "M 0 -28 C -1.4 -21 -1.6 -15 -3 -11 C -7 -9 -8.6 -4 -7 0 C -4 4.4 4 4.4 7 0 C 8.6 -4 7 -9 3 -11 C 1.6 -15 1.4 -21 0 -28 Z".replace(/(-?\d+(?:\.\d+)?) (-?\d+(?:\.\d+)?)/g, function (m, u, v) { return F(28.5 + +u) + " " + v; }), WHITE, "var(--card)", WHITE);
+          t += shade(ox + 8, oy - 1, 64, 6) + g.e(0, 0, 62, 15, cane, 2.2) + g.e(0, 1.8, 58, 12.4, "color-mix(in srgb, var(--cork) 62%, var(--wood))", 1.2) +
+            g.c(ell(58, 1.8, 12.4), g.l("M -46 3 " + half(46, 3, 8.6).replace(/^C/, "C") + " M -34 4 " + half(34, 4, 5.8), 1, 0.5) + g.h("M -64 -2 L 64 -2 L 64 16 L -64 16 Z", 0.35)) +
+            g.l("M -60 0 C -60 -6.6 -33 -12 0 -12 C 33 -12 60 -6.6 60 0", 0.9, 0.5) +
+            g.f(body, C, 2.2) + g.c(body, g.l("M -44 -24 C -34 -33 -16 -36 -2 -35.6 M 14 -34.6 C 26 -32 36 -26 42 -18", 1.4, 0.45, SHEEN) + g.l("M 6 -31 C 1 -24 -1 -14 2 -4", 1.2, 0.8, SHEEN)) +
+            g.l(tailTop, 1.3, 1, SHEEN) + g.l("M -30 2.4 C -27 -8 -32 -17 -43 -22", 1.3, 1, SHEEN) +
+            head.draw +
+            g.f("M 45 6 C 45 2.4 41 0.6 37 0.8 C 33 1 30.6 3.4 30.8 6.6 C 31 10.4 34 12 38 12 C 42 12 45 10 45 6 Z", WHITE, 1.6) +
+            g.f("M 27.6 6.6 C 27.6 3 24 1.2 20.4 1.6 C 16.6 2 14.6 4.4 15 7.4 C 15.4 10.6 18 12 21.6 12 C 25.4 12 27.6 10 27.6 6.6 Z", WHITE, 1.6) +
+            g.l("M 40.6 12 L 40.4 9.2 M 35.4 11.8 L 35.4 9 M 23.4 12 L 23.2 9.2 M 18.4 11.8 L 18.4 9", 0.9, 0.8) +
+            /* the near wall: coils round the basket following its curve, each with a lit lower edge; hatching where it turns from the light */
+            g.f(wall, cane, 2.2);
+          var coils = "", hi = "", k, f, sv, su, fy;
+          for (k = 1; k < 7; k++) { f = k / 7; sv = 1.8 + 33 * f; su = 59 - 14 * f * f; fy = 12.4 - 3 * f;
+            coils += "M " + F(-su) + " " + F(sv) + " " + half(su, +F(sv), +F(fy)) + " "; hi += "M " + F(-su + 1) + " " + F(sv + 1.6) + " " + half(su - 1, +F(sv + 1.6), +F(fy)) + " "; }
+          t += g.c(wall, g.l(hi, 1.2, 0.55, "var(--card)") + g.l(coils, 1.1, 0.75) + g.h("M 66 -2 L 66 44 L 20 44 C 40 38 54 26 56 4 Z", 0.4)) + g.l("M -62 0 " + half(62, 0, 15), 1.1, 0.7) +
+            [[-55, 5], [52, 6], [-44, 16], [-32, 20], [6, 24.6], [-14, 30], [26, 19], [40, 14], [-4, 17], [18, 32]].map(function (p) { return g.e(p[0], p[1], 1, 0.8, WHITE, 0.01); }).join("");
           return at(24, t);
         }
       };

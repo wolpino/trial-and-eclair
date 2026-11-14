@@ -4,7 +4,7 @@
     <h3>The whiteboard, opened</h3>
     <figure id="wb-open"></figure>
     <p class="note"><b>What it is for.</b> "Next up" is a short handwritten list of what the cook will bake next. Everything on it is written by the cook; the app adds nothing. Click the small whiteboard on the kitchen wall and it opens large, with the cursor already in the bottom line. Type and press Enter to add a line. The first three lines match the kitchen wall: Croissants · trial 4, Rough puff pastry, Rhubarb galette.</p>
-    <p class="note"><b>Using it.</b> Tick the box to put a line through an item; a small red x appears after it to remove it now (below). Drag the dots on the left to reorder. When a line names one of the cook's recipes, pointing at the line shows a small "recipe card" link under it that opens that card (shown on Rhubarb galette). The rest of the time every line is plain writing. Developer and Home cook get the same board.</p>
+    <p class="note"><b>Using it.</b> Tick the box to put a line through an item; a small red x appears after it to remove it now (below). Drag the dots on the left to reorder. Every line is plain writing, even when it names a recipe: no links under the lines. Developer and Home cook get the same board.</p>
 
     <h3>Ticking off</h3>
     <div class="pair"><div><figure id="wb-tick-a"></figure><p class="note"><b>Ticked today.</b> A marker line goes through the item and it stays on the board until the next day, so the cook can see what got done. A small red x sits just after its words, a little raised, and shows the whole time the item is ticked. Here the pointer is on it.</p></div><div><figure id="wb-tick-b"></figure><p class="note"><b>The x clicked.</b> The item is wiped off at once, without waiting for tomorrow. The items below move up.</p></div></div>
@@ -35,17 +35,15 @@
   function cursor(x, y) { return '<path d="M' + x + " " + y + " l0 24 l6 -6 l5 11 l4 -2 l-5 -10 l8 0 Z" + '" style="fill:#fff;stroke:var(--ink);stroke-width:1.6;stroke-linejoin:round"/>'; }
   function marker(x, y, col, flip) { var b = reg("rect", 'x="' + x + '" y="' + y + '" width="74" height="12" rx="4"', "var(--card)", 1.6) + reg("rect", 'x="' + (x + 14) + '" y="' + y + '" width="34" height="12"', col, 1.4) + reg("rect", 'x="' + (x + 56) + '" y="' + (y - 1) + '" width="22" height="14" rx="3"', col, 1.6);
     return flip ? '<g transform="translate(' + (2 * x + 78) + ' 0) scale(-1 1)">' + b + "</g>" : b; }
-  /* One handwritten line: grip dots, tick box, the cook's words, and (on point only) a "recipe card" link if it names a recipe */
+  /* One handwritten line: grip dots, tick box, the cook's words. No recipe card link under lines that name a recipe (Ari, 2026-11-13). */
   function row(B, r, y) {
-    var s = "", fs = B.fs, f2 = Math.round(fs * 0.6), tx = B.sx + 78, bs = Math.round(fs * 0.66), w = tw(r.t, fs);
+    var s = "", fs = B.fs, tx = B.sx + 78, bs = Math.round(fs * 0.66), w = tw(r.t, fs);
     for (var d = 0; d < 6; d++) s += '<circle cx="' + (B.sx + 18 + (d % 2) * 8) + '" cy="' + (y - bs + 3 + Math.floor(d / 2) * 8) + '" r="2" style="fill:' + GREY + '"/>';
     s += box(B.sx + 40, y - bs, bs, r.done);
     s += hand(tx, y, r.t, fs, r.done ? GREY : "var(--ink)");
     if (r.done) { var ex = tx + w + 18, ey = y - fs * 0.9, k = Math.max(4, fs * 0.17);
       s += line("M" + (tx - 8) + " " + (y - fs * 0.26) + " q" + (w * 0.56) + " -7 " + (w * 1.12 + 14) + " 1", 3, 1, BLUE) + xMark(ex, ey, k);
       if (r.xOn) s += cursor(ex + 1, ey + 2); }
-    /* the link only shows while the line is pointed at (Ari, 2026-11-13) */
-    if (r.card && r.on) s += lk(tx, y + f2 + 8, "recipe card", f2, r.on, r.card + " recipe card", { cw: 0.4, col: BLUE });
     return s;
   }
   /* The empty board's doodle: a big marker question mark */
@@ -82,23 +80,23 @@
     s += reg("rect", 'x="' + (tx1 - 104) + '" y="' + (ty - 20) + '" width="78" height="14" rx="3"', "var(--wood)", 1.8) + reg("rect", 'x="' + (tx1 - 104) + '" y="' + (ty - 7) + '" width="78" height="7" rx="1"', "#4a4640", 1.6);
     return s;
   }
-  /* Rows: all written by the cook. `card` = the recipe the line names. Kitchen wall shows the first three. */
+  /* Rows: all written by the cook. Kitchen wall shows the first three. */
   var R = {
-    cro: { t: "Croissants · trial 4", card: "Croissants" },
-    rp: { t: "Rough puff pastry", card: "Rough puff pastry" },
-    rg: { t: "Rhubarb galette", card: "Rhubarb galette" },
+    cro: { t: "Croissants · trial 4" },
+    rp: { t: "Rough puff pastry" },
+    rg: { t: "Rhubarb galette" },
     mc: { t: "Miso caramel in the blondies?" },
-    bb: { t: "Brown butter cookies", card: "Brown butter cookies", done: 1 },
-    bl: { t: "Blondies, less sugar", card: "Blondies" }
+    bb: { t: "Brown butter cookies", done: 1 },
+    bl: { t: "Blondies, less sugar" }
   };
   function x(r, e) { var c = {}, k; for (k in r) c[k] = r[k]; for (k in e) c[k] = e[k]; return c; }
   function small(rws, extra, label, vw) { vw = vw || 520; var B = { x: 460, y: 20, w: vw - 32, h: 384, fs: 28, rows: rws, min: 3 }; for (var k in extra) B[k] = extra[k];
     return svg([444, 444 + vw], board(B), label, 4, B.h + 40); }
   PLATE.add(function () {
     var g = function (id) { return document.getElementById(id); },
-      guestRows = [{ t: "Chocolate chip cookies", card: "Chocolate chip cookies" }, { t: "Sunday pancakes", card: "Sunday pancakes" }, { t: "Banana bread", card: "Banana bread", done: 1 }];
+      guestRows = [{ t: "Chocolate chip cookies" }, { t: "Sunday pancakes" }, { t: "Banana bread", done: 1 }];
     if (o.plan === "guest") g("wb-open").innerHTML = openOver(board({ x: 468, y: 82, w: 864, h: 612, fs: 34, rows: guestRows, guest: 1, min: 4 }), "The guest whiteboard opened over the dimmed kitchen");
-    else g("wb-open").innerHTML = openOver(board({ x: 468, y: 82, w: 864, h: 612, fs: 34, rows: [R.cro, R.rp, x(R.rg, { on: 1 }), R.mc, R.bb] }), "The whiteboard opened over the dimmed kitchen");
+    else g("wb-open").innerHTML = openOver(board({ x: 468, y: 82, w: 864, h: 612, fs: 34, rows: [R.cro, R.rp, R.rg, R.mc, R.bb] }), "The whiteboard opened over the dimmed kitchen");
     g("wb-tick-a").innerHTML = small([R.rg, x(R.bb, { xOn: 1 }), R.bl], {}, "Brown butter cookies ticked with a line through and a small red x after it; the pointer is on the x");
     g("wb-tick-b").innerHTML = small([R.rg, R.bl], { min: 2 }, "Brown butter cookies removed at once; Blondies moved up");
     var many = [R.cro, R.rp, R.rg, R.mc, R.bl, { t: "Cardamom knots" }, { t: "Yuzu curd tart" }, { t: "Weekend Bakes: pick 3" }];

@@ -4,16 +4,22 @@
     <h3>The open box, with a card on the ledge</h3>
     <figure id="box-open" class="fx"></figure>
     <p class="note"><b>What changed.</b> The box body now runs past the bottom of the screen, so it reads as a deep box and not a short tray. The lid stands up behind it and the card rests on the walnut ledge inside the lid, filling most of it. A photo is taped to the card front, near the top right. There is no back of the card: where the recipe came from sits under the title, and a card with a note has a small notes box at the bottom.</p>
-    <p class="note"><b>Moving through cards.</b> The round arrows sit on the card itself, over its left and right edges, halfway down. They go back and next through the whole box, A to Z by title. The tag just under the next arrow says where you are: "B · 10 of 15". The square icon in the card's top right corner opens it full screen. The card's writing keeps clear of the arrows.</p>
+    <p class="note"><b>Moving through cards.</b> The round arrows sit outside the box, one left of the lid and one right of it, level with the middle of the card. They go back and next through the whole box, A to Z by title. A small tag under each arrow says where it goes: "B · 9 of 15" under back, "B · 11 of 15" under next (this card is B 10 of 15). The square icon in the card's top right corner opens it full screen. The inside of the lid is one even blue all round the card.</p>
     <p class="note"><b>Edit and Delete</b> are a plain pencil and bin right after the title. <b>Tabs</b> are all one paper; only the letter you are in is orange.</p>
     <p class="note"><b>Same for everyone.</b> The box is free, so Developer and Home cook see exactly this. Switch the Plan to Guest to see the guest slip; the guest figures further down show what else differs.</p>
 
+    <h3>Where the position tag goes: two ways</h3>
+    <div class="pair">
+      <div><figure id="box-pos-a" class="fx"></figure><p class="note"><b>A. A tag under each arrow.</b> Outside the lid, each tag says where its arrow goes: "B · 9 of 15" on the left, "B · 11 of 15" on the right. Both sides match. Used in every other figure.</p></div>
+      <div><figure id="box-pos-b" class="fx"></figure><p class="note"><b>B. One tag above the lid.</b> "B · 10 of 15", centred just above the top of the lid. It has to squeeze between the find bar and the lid and covers the lid's brass pull.</p></div>
+    </div>
+
     <h3>Clicking a letter tab</h3>
     <figure id="box-letter" class="fx"></figure>
-    <p class="note"><b>A list first.</b> Click a letter and the lid card lists that letter's titles. Up to 12 fit in two columns. More than that and the two columns scroll together: here B has 15, the bottom row is cut off and the bar on the right shows there is more. Pick one (Blondies is being pointed at) and its card goes onto the ledge. The arrows and the full-screen icon sit on the list card the same way.</p>
+    <p class="note"><b>A list first.</b> Click a letter and the lid card lists that letter's titles. Up to 12 fit in two columns. More than that and the two columns scroll together: here B has 15, the bottom row is cut off and the bar on the right shows there is more. Pick one (Blondies is being pointed at) and its card goes onto the ledge. The arrows sit outside the lid the same way; their tags say "A list" and "C list", the letters they go to. The full-screen icon sits on the list card.</p>
 
     <div class="pair">
-      <div><h3>Next runs on through the box</h3><figure id="box-next" class="fx"></figure><p class="note"><b>The last B card.</b> The tag reads "B · 15 of 15" and "C next": one more click on the next arrow opens the first C card. Back runs the other way, so from the first B card it goes to the last A card.</p></div>
+      <div><h3>Next runs on through the box</h3><figure id="box-next" class="fx"></figure><p class="note"><b>The last B card.</b> The right tag reads "C · 1 of 9": one more click on the next arrow opens the first C card. The left tag reads "B · 14 of 15". Back runs the other way, so from the first B card it goes to the last A card.</p></div>
       <div><h3>Adding a card</h3><figure id="box-add" class="fx"></figure><p class="note"><b>A blank card at the back.</b> It stands behind Z, taller than the tabs, with a "+ ADD A CARD" tape along its top. Shown as it looks when pointed at. Click it and it lands on the ledge, ready to write on.</p></div>
     </div>
 
@@ -41,8 +47,8 @@
 (function () {
   /* box body: S0..S1 wide, top edge BT, runs past the bottom of the screen; D deep */
   var S0 = 380, S1 = 1420, BT = 608, BB = 800, D = 170, Y = 612, XI0 = S0 + 14, XI1 = S1 - 14;
-  var CX0 = 560, CX1 = 1240, CT = 104, CB = 458, LT = 84, AL = CX0, AR = CX1, AY = 281, PAD = 42, MX = 904;
-  /* the card fills the lid; the arrows sit over its left and right edges, so card text keeps PAD clear of them */
+  var CX0 = 560, CX1 = 1240, CT = 104, CB = 458, LT = 84, AY = 281, PAD = 42, MX = 904;
+  /* the card fills the lid; the round arrows sit outside the lid, left and right, level with the card's middle (AY) */
   var SOFT = "var(--ink-soft)", RULE = "#c3d2ec", RED = "color-mix(in srgb, var(--orange) 35%, #c81e1e)";
   function H(sz, w, col) { return "font:" + (w || 600) + " " + sz + "px var(--font-hand);fill:" + (col || "var(--ink)"); }
   function U(sz, col) { return "font:600 " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"); }
@@ -134,13 +140,17 @@
     var a = P(S0, BT, D), b = P(S1, BT, D), hy = a[1], x0 = a[0], x1 = b[0], s = "";
     [x0 - 7, x1 - 7].forEach(function (x) { s += R(f1(x), f1(hy - 22), 14, 26, "var(--brass)", 1.6, 4); });
     s += reg("path", 'd="M886 ' + (LT + 3) + ' v-10 q14 -8 28 0 v10 Z"', "var(--brass)", 1.8) + R(f1(x0), LT, f1(x1 - x0), f1(hy - LT), "var(--blue)", 3, 5) +
-      recess(x0 + 12, LT + 12, x1 - 12, hy - 10, 34, "var(--blue-hi)", { side: "var(--blue-back)", top: "var(--blue-back)", bottom: "var(--blue)" });
+      recess(x0 + 12, LT + 12, x1 - 12, hy - 10, 34, "var(--blue-back)", { side: "var(--blue-back)", top: "var(--blue-back)", bottom: "var(--blue)" });
     [[x0, 1], [x1, -1]].forEach(function (c) { s += reg("path", 'd="M' + f1(c[0]) + " " + LT + " h" + (22 * c[1]) + " L" + f1(c[0]) + " " + (LT + 22) + ' Z"', "var(--brass)", 1.6); });
-    /* on top of the card: round arrows over its edges, the position tag under the next arrow, full screen in its top right corner */
-    var tag = ctrl.letter || ctrl.limit ? "" : R(AR - 38, AY + 32, 80, ctrl.pos2 ? 44 : 24, "var(--card)", 1.6, 3) + T(AR + 2, AY + 49, ctrl.pos || "B · 10 of 15", LB(13), 'text-anchor="middle"') + (ctrl.pos2 ? T(AR + 2, AY + 69, ctrl.pos2, U(13, "var(--orange-text)"), 'text-anchor="middle"') : "");
+    /* round arrows outside the lid, level with the card's middle; full screen in the card's top right corner.
+       Position tags (option A, Ari 2026-11-13): one under each arrow saying where it goes, two lines so it fits beside the lid.
+       ctrl.tags = [[left line 1, line 2], [right line 1, line 2]]; ctrl.tagB = option B, one tag centred just above the lid. */
+    var al = x0 - 31, ar = x1 + 31, tags = ctrl.limit || ctrl.tagB ? [] : ctrl.tags || (ctrl.letter ? [["A", "list"], ["C", "list"]] : [["B · 9", "of 15"], ["B · 11", "of 15"]]), tg = "";
+    tags.forEach(function (t, k) { var cx = k ? ar : al; tg += R(cx - 27, AY + 32, 54, 40, "var(--card)", 1.6, 3) + T(cx, AY + 49, t[0], LB(12), 'text-anchor="middle"') + T(cx, AY + 65, t[1], LB(11), 'text-anchor="middle"'); });
+    if (ctrl.tagB) tg += R(852, LT - 19, 96, 17, "var(--card)", 1.6, 3) + T(900, LT - 6, ctrl.tagB, LB(11), 'text-anchor="middle"');
     var L0 = CX0 - 12, L1 = CX1 + 12;
     return s + inside + block(L0, CB, L1, CB + 14, 16, { top: "var(--wood-hi)" }) + R(L0, CB, L1 - L0, 14, "var(--wood)", 2) + grain(L0 + 4, CB + 1, L1 - L0 - 8, 12, 5) + hatch(L0 + 2, CB + 14, L1 - L0 - 4, 4, 0.6) +
-      arrowBtn(AL, AY, -1) + arrowBtn(AR, AY, 1) + tag + (ctrl.limit ? "" : fullIcon(CX1 - 30, CT + 30));
+      arrowBtn(al, AY, -1) + arrowBtn(ar, AY, 1) + tg + (ctrl.limit ? "" : fullIcon(CX1 - 30, CT + 30));
   }
 
   /* ---- the body: three rows of letter tabs; the front face runs off the bottom of the screen ---- */
@@ -198,11 +208,13 @@
     var g = function (id) { return document.getElementById(id); }, guest = o.plan === "guest";
     g("box-open").innerHTML = openOver(box(BLOND, { guest: guest }), "The open recipe box with the Blondies card on the ledge in the lid");
     g("box-letter").innerHTML = openOver(box(BLOND, { letter: "B" }), "The lid card listing the fifteen B titles in two columns, scrolling");
-    g("box-next").innerHTML = small(box(SCONE, { pos: "B · 15 of 15", pos2: "C next  ›" }), "The last B card, with the tag saying C is next", 520, 70, 760, 430);
+    g("box-pos-a").innerHTML = small(box(BLOND, {}), "Option A: a tag under each arrow, outside the lid: B 9 of 15 on the left, B 11 of 15 on the right", 446, 14, 908, 470);
+    g("box-pos-b").innerHTML = small(box(BLOND, { tagB: "B · 10 of 15" }), "Option B: one B 10 of 15 tag centred just above the lid", 446, 14, 908, 470);
+    g("box-next").innerHTML = small(box(SCONE, { tags: [["B · 14", "of 15"], ["C · 1", "of 9"]] }), "The last B card; the right arrow's tag says C 1 of 9, the first C card", 446, 70, 908, 430);
     g("box-add").innerHTML = small(box(BLOND, { glowA: 1 }), "A blank Add a card card standing at the back of the box", 360, 76, 1080, 684);
-    g("box-new").innerHTML = openOver(box(CROIS, { edit: 1, pos: "C · new" }), "A new Croissants card on the ledge, filled from trial 4 and open for editing, with Save card and Cancel");
+    g("box-new").innerHTML = openOver(box(CROIS, { edit: 1, tags: [["C · 3", "of 10"], ["C · 5", "of 10"]] }), "A new Croissants card on the ledge, filled from trial 4 and open for editing, with Save card and Cancel");
     g("box-full").innerHTML = svg(mainVP(), fullCard(), "The Blondies card covering the whole screen, with some lines ticked");
-    g("box-guest").innerHTML = openOver(box(COOK, { guest: 1, pos: "C · 1 of 3" }), "Guest box: a starter card with Make it mine, and a slip saying 2 of 5 cards used", { plan: "guest" });
+    g("box-guest").innerHTML = openOver(box(COOK, { guest: 1, tags: [["B · 1", "of 1"], ["S · 1", "of 1"]] }), "Guest box: a starter card with Make it mine, and a slip saying 2 of 5 cards used", { plan: "guest" });
     g("box-limit").innerHTML = openOver(box(BLOND, { limit: 1, guest: 1 }), "Guest at the limit: the ledge card says all 5 guest cards are used, with Sign up", { plan: "guest" });
   });
 })();

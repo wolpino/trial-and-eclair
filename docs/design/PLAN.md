@@ -35,12 +35,12 @@ One view at a time, reviewed as it lands, not all at the end.
 ### Status
 | # | View | Section file | Status |
 |---|------|--------------|--------|
-| 1 | Kitchen (day, evening, extra wide) | 01-kitchen + kitchen.js | waiting on Ari (cabinet rotates Cats A, B, C, more detail, page version 18) |
-| 2 | Recipe box | 07-recipe-box | waiting on Ari (card fills the lid, arrows on the card, full screen top right, v18) |
-| 3 | Whiteboard | 02-whiteboard | waiting on Ari (red x removes an item, v18) |
-| 4 | Trials notebook | 06-notebook | waiting on Ari (number tabs, tags, Make recipe card + dialog drawn 11/13) |
-| 5 | Idea board | 03-ideas | waiting on Ari |
-| 6 | Cookbooks | 04-cookbooks | waiting on Ari (typeset; Share options A/B/C; editor over the kitchen vs finished book, v18) |
+| 1 | Kitchen (day, evening, extra wide) | 01-kitchen + kitchen.js | done (Ari 11/13; cat drawings redrawn v19, one look left) |
+| 2 | Recipe box | 07-recipe-box | done (Ari 11/13; position tag A or B to pick) |
+| 3 | Whiteboard | 02-whiteboard | done (Ari 11/13) |
+| 4 | Trials notebook | 06-notebook | done (Ari 11/13) |
+| 5 | Idea board | 03-ideas | done (Ari 11/13) |
+| 6 | Cookbooks | 04-cookbooks | waiting on Ari (answers drawn v19: spines to one side, roles, no Share, drag to reorder) |
 | 7 | References | 05-references | not started |
 | 8 | Sign in and sign up | 09-start | not started |
 | 9 | Account menu and settings | 11-account | not started |
@@ -84,7 +84,9 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 ### Cookbooks
 - [x] A sewn book, not a binder
 - [x] Clicking the tier opens a close-up of the spines first, then a book
-- [x] Share button on the cover
+- [x] ~~Share button on the cover~~ removed for now (Later list, Ari 2026-11-13)
+- [x] Developers make cookbooks; home cooks and guests read the sample (making one is the paid plan)
+- [x] Editor over the kitchen (developer, drag to reorder); finished book with no kitchen behind
 - [x] Developer, home cook and guest (sample book read-only, paid plan tag)
 
 ### References
@@ -127,7 +129,7 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 - Jot list (section 10): carried as is
 
 ### Ari picks after Plate X
-Floor · sink · Recently holder (Recently stays, Ari 2026-11-13) · what sits inside the recipe log cabinet · small whiteboard dot · empty "Next up" doodle · Edit/Delete spot · how to add a card · sign-in card style · anything the section questions raise.
+Recipe box position tag (A under each arrow, B one above the lid) · cabinet cats' final look · Floor · sink · Recently holder (Recently stays, Ari 2026-11-13) · what sits inside the recipe log cabinet · small whiteboard dot · empty "Next up" doodle · Edit/Delete spot · how to add a card · sign-in card style · anything the section questions raise.
 
 ---
 
@@ -162,7 +164,8 @@ Changes the app needs that came out of the plates. Each becomes one Task issue.
 - Starter references are kept when samples are removed
 - Sign-up asks about sample data (on by default); remove all samples in one go from Account
 - Recipe log (issue #161): lives on a clipboard inside the double cabinet under the counter
-- Whiteboard: a list the cook writes (no automatic items, no pins); tick puts a line through until the next day, re-tick removes (Ari, 2026-11-13)
+- Whiteboard: a list the cook writes (no automatic items, no pins, no recipe-card link); tick puts a line through until the next day; a small red x after a ticked item's name removes it (Ari, 2026-11-13)
+- Cookbooks: only developers make them; the developer sets the recipe order; home cooks read (save and browse later)
 - Kitchen home as drawn (port Plate XI to React components)
 - Every open view as drawn
 - Sign in and sign up as drawn; Account menu; front page; not-found page
@@ -177,6 +180,9 @@ Parked. Not drawn, not built until moved up.
 - Upgrade to the paid plan page
 - Notebook Compare (two trials side by side)
 - Cookbook "Use the newest version" of a recipe
+- Cookbook Share (removed from the cover, Ari 2026-11-13)
+- Cookbook editor customization (covers, colours, layout)
+- Home cooks browse, save and read other developers' cookbooks
 - Idea board filters
 - Customising: kitchen colours and patterns, white marble notebook, plain wall instead of tile, seasonal flowers
 - Recipe log and stains on cards (issue #161 and after)
