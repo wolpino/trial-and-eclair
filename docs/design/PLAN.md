@@ -39,7 +39,7 @@ One view at a time, reviewed as it lands, not all at the end.
 | 3 | Whiteboard | 02-whiteboard | waiting on Ari |
 | 4 | Trials notebook | 06-notebook | waiting on Ari (number tabs, tags, Make recipe card + dialog drawn 11/13) |
 | 5 | Idea board | 03-ideas | waiting on Ari |
-| 6 | Cookbooks | 04-cookbooks | not started |
+| 6 | Cookbooks | 04-cookbooks | waiting on Ari (sewn books, spines → cover → open, drawn 11/13, page version 15) |
 | 7 | References | 05-references | not started |
 | 8 | Sign in and sign up | 09-start | not started |
 | 9 | Account menu and settings | 11-account | not started |
@@ -81,9 +81,10 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 - [x] An idea can hold one photo (Ari, 2026-11-13)
 
 ### Cookbooks
-- [ ] A sewn book, not a binder
-- [ ] Clicking the tier opens a close-up of the spines first, then a book
-- [ ] Share button on the cover
+- [x] A sewn book, not a binder
+- [x] Clicking the tier opens a close-up of the spines first, then a book
+- [x] Share button on the cover
+- [x] Developer, home cook and guest (sample book read-only, paid plan tag)
 
 ### References
 - [ ] Five kinds: Cookbook, Blog, Chef / Baker, Article, Tool (draw Article)
@@ -131,7 +132,7 @@ Floor · sink · Recently holder (Recently stays, Ari 2026-11-13) · what sits i
 
 ### Details list (small changes, drawn together in Plate XI)
 From 2026-11-13: small visual details (a colour, a spacing, a word, a size) go here instead of being redrawn at once. Structure (what is on screen, what a click does) is still decided view by view. The whole list is drawn in one go in Plate XI, and anything about feel on real screens (motion, sizes, touch) is checked again after the build is deployed.
-- (empty)
+- Cookbooks cover: the round next arrow sits higher (y 300) than the notebook and recipe box arrows (y 388); line them up
 
 ## 2. Plate XI (final)
 - [ ] Day kitchen and evening kitchen with every pick

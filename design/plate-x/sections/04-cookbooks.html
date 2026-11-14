@@ -1,0 +1,152 @@
+<section aria-labelledby="h-cb">
+  <span class="label" id="h-cb">04 · The cookbooks, opened</span>
+  <div class="sec-body">
+    <h3>Step 1: the spines, close up</h3>
+    <figure id="cb-spines" class="fx"></figure>
+    <p class="note"><b>What the Cookbooks tier opens.</b> The shelf comes up large with the books standing on it. Each is a sewn book with a rounded cloth spine and two raised bands; the title is stamped up the cloth, and the count of recipes sits small at the foot. From above you can see the page block and the sewn gatherings behind the headband. Click a spine to open that book. New cookbook, under the shelf, adds a blank book to the end of the row.</p>
+
+    <h3>Step 2: the book, at its cover</h3>
+    <figure id="cb-cover" class="fx"></figure>
+    <p class="note"><b>The cover first.</b> A spine opens the book closed, cover up: cloth spine, printed paper board, the title and a small printed plate. Share sits on the cover. Click the cover or the round arrow to open it at the contents.</p>
+
+    <h3>The book open: contents and a recipe</h3>
+    <figure id="cb-open" class="fx"></figure>
+    <p class="note"><b>Left page: contents.</b> The five recipes in the book's order, with the date each was added and its page. Each name turns to its page. The x takes a recipe out of this book only.</p>
+    <p class="note"><b>Right page: one recipe in full.</b> The thread of the sewing shows in the gutter, and the folded gatherings show at the head of the spine. <b>Turning pages.</b> The plain round arrows beside the book, the same as the notebook and recipe box. <b>The strip.</b> Add a recipe and New cookbook.</p>
+    <p class="note"><b>Plans.</b> Switch the Plan to Home cook: the same three steps, with one sample book, Weekend Bakes, read only. No Share, no x, no strip buttons, and the yellow "paid plan" tag on the book. The strip offers "See the paid plan". Guest is the same drawing as Home cook; only that button reads "Sign up".</p>
+
+    <ol class="qs">
+      <li><b>Share on the cover.</b> Where should it open: a small card with the link and Copy, or the system share sheet?</li>
+      <li><b>Spine to cover, then contents.</b> Drawn: a spine opens the book closed, cover up. Or should a spine open straight to the contents page?</li>
+      <li><b>The home cook's sample.</b> Drawn: only Weekend Bakes on the shelf. Should the cook also see the developer's other spines, unopenable?</li>
+      <li><b>Order in the book.</b> Is the order set by the developer (drag on the contents page), or always A to Z?</li>
+    </ol>
+  </div>
+</section>
+<script>
+(function () {
+  var S = STAGE, MID = 'text-anchor="middle"', END = 'text-anchor="end"', SOFT = "var(--ink-soft)", FL = 600, THR = "#8a5a3c";
+  var RC = [["Blondies", "9/20/26", 3], ["Brown butter cookies", "10/09/26", 7], ["Croissants", "11/11/26", 11], ["Rhubarb galette", "11/08/26", 17], ["Rough puff pastry", "11/05/26", 21]];
+  function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 0) + '"', fill, sw || 2); }
+  function H(x, y, t, sz, w, ex, col) { return T(x, y, t, "font:" + (w || 600) + " " + sz + "px var(--font-hand);fill:" + (col || "var(--ink)"), ex || ""); }
+  function U(x, y, t, sz, ex, col, w) { return T(x, y, t, "font:" + (w || 600) + " " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"), ex || ""); }
+  function L(x, y, t, sz, ex, col) { return T(x, y, t, "font:700 " + sz + "px var(--font-label);letter-spacing:.1em;fill:" + (col || "var(--ink)"), ex || ""); }
+  function dk(f, k) { return "color-mix(in srgb, " + f + " " + (k || 66) + "%, #000)"; }
+  function ro() { return o.plan !== "dev"; }
+  /* plain round arrows, the same as the recipe box and notebook */
+  function arrowBtn(cx, cy, dir) { return '<g role="button" tabindex="0" aria-label="' + (dir < 0 ? "Previous" : "Next") + ' page">' + reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="23"', "var(--card)", 2.2) + line("M" + (cx - 4 * dir) + " " + (cy - 10) + " l" + (10 * dir) + " 10 l" + (-10 * dir) + " 10", 3.4) + "</g>"; }
+  /* the strip under the view: developer buttons, or the read-only line and the plan button */
+  function strip(dev) { var Y = 688;
+    if (ro()) return R(452, Y, 250, 34, "var(--card)", 2, 5) + U(466, Y + 23, "Sample cookbook. Read only.", 15) + pill(1168, Y, 180, o.plan === "guest" ? "Sign up" : "See the paid plan", true);
+    return dev || ""; }
+  function paid(x, y, rot) { return '<g transform="translate(' + x + " " + y + ") scale(1.5) translate(-900 -84)\">" + paidTag(900, 84, rot || -4) + "</g>"; }
+
+  /* ---------- 1. the spines ---------- */
+  /* a sewn book standing on the shelf: rounded cloth spine, two raised bands, the title stamped on the cloth */
+  function spine(x, w, hgt, fill, title, n, on, tc) {
+    var y = FL - hgt, cx = x + w / 2, d = 190, i, s = block(x, y + 4, x + w, FL, d, { top: "var(--page)", side: dk(fill) });
+    /* the head: headband just behind the spine, then the gatherings back to the fore-edge */
+    var hb0 = P(x + 3, y + 4, 2), hb1 = P(x + w - 3, y + 4, 2), hb2 = P(x + w - 3, y + 4, 8), hb3 = P(x + 3, y + 4, 8);
+    s += face([hb0, hb1, hb2, hb3], "var(--orange-text)", 1);
+    for (i = 1; i < 7; i++) { var p = P(x + 4, y + 4, 12 + i * 26), q2 = P(x + w - 4, y + 4, 12 + i * 26);
+      s += line("M" + p[0].toFixed(1) + " " + p[1].toFixed(1) + " Q" + ((p[0] + q2[0]) / 2).toFixed(1) + " " + (p[1] - 2.5).toFixed(1) + " " + q2[0].toFixed(1) + " " + q2[1].toFixed(1), 1, 0.7); }
+    /* the rounded spine: a curved head, shading on both flanks of the round */
+    s += reg("path", 'd="M' + x + " " + (y + 8) + " Q" + cx + " " + (y - 6) + " " + (x + w) + " " + (y + 8) + " V" + FL + " H" + x + ' Z"', fill, 2.6) +
+      hatch(x + 2, y + 8, 9, hgt - 10, 0.5) + hatch(x + w - 11, y + 8, 9, hgt - 10, 0.5) + hatch(x + 11, y + 8, w - 22, hgt - 10, 0.1);
+    [y + 36, FL - 52].forEach(function (by) { s += line("M" + (x + 2) + " " + by + " Q" + cx + " " + (by - 5) + " " + (x + w - 2) + " " + by, 2, 1) + line("M" + (x + 2) + " " + (by + 6) + " Q" + cx + " " + (by + 1) + " " + (x + w - 2) + " " + (by + 6), 2, 1); });
+    var cy = (y + 48 + FL - 64) / 2, room = FL - 64 - y - 48 - 16;
+    s += '<g transform="rotate(-90 ' + cx + " " + cy + ')">' + L(cx, cy + 7, title.toUpperCase(), Math.min(20, Math.round(room / title.length / 0.8)), MID, tc) + "</g>" +
+      L(cx, FL - 20, n, 14, MID, tc);
+    s = hot("the cookbook " + title, s, [x, y, w, hgt]);
+    return on ? s.replace('class="hot', 'class="hot on') : s;
+  }
+  /* the kitchen's tape label, written in ALL-CAPS marker */
+  function tapeLbl(cx, cy, text) { var len = text.length * 13 + 34, x0 = cx - len / 2, x1 = cx + len / 2, y0 = cy - 11, p = [], j;
+    for (j = 0; j <= 4; j++) p.push((x1 - (j % 2 ? 3 : 0)) + "," + (y0 + j * 5.5));
+    for (j = 4; j >= 0; j--) p.push((x0 + (j % 2 ? 3 : 0)) + "," + (y0 + j * 5.5));
+    return '<g transform="rotate(-1 ' + cx + " " + cy + ')"><polygon points="' + p.join(" ") + '" style="fill:#eadfb4;fill-opacity:.96;stroke:#b09a62;stroke-width:1;stroke-linejoin:round"/>' +
+      T(cx, cy + 6, text, "font:400 16px 'Permanent Marker', var(--font-hand);letter-spacing:.6px;fill:var(--ink)", MID) + "</g>"; }
+  function bookend(x) { var y = FL - 150;
+    return block(x, y, x + 16, FL, 190, { side: "color-mix(in srgb, var(--brass) 70%, #000)", top: "var(--brass)" }) + R(x, y, 16, 150, "var(--brass)", 2.2, 2) + R(x - 34, FL - 10, 50, 10, "var(--brass)", 2); }
+  function shelf() {
+    var W = S.x1 - S.x0, s = recess(S.x0, S.y0, S.x1, FL, 230, "var(--cab-deep)", { side: "var(--cab-side)", bottom: "var(--wood-hi)" }) + hatch(S.x0, S.y0, W, 12);
+    if (ro()) s += spine(800, 66, 320, "var(--orange)", "Weekend Bakes", "5", true, "var(--ink)") + bookend(870);
+    else s += spine(700, 66, 320, "var(--orange)", "Weekend Bakes", "5", true, "var(--ink)") + spine(768, 54, 346, "var(--blue)", "Laminated", "6", false, "var(--card)") + spine(824, 80, 296, "var(--stem)", "Holiday tin", "2", false, "var(--ink)") + bookend(908);
+    s += R(S.x0, FL, W, 26, "var(--wood)", 2.6) + grain(S.x0, FL + 2, W, 22, 31) + R(S.x0, FL + 26, W, 50, "var(--cab)", 2.6) + hatch(S.x0, FL + 26, W, 7) +
+      tapeLbl(S.cx, FL + 13, "COOKBOOKS") + R(S.x0, S.y0, W, FL + 76 - S.y0, "none", 3);
+    if (ro()) s += line("M860 " + (FL - 300) + " Q880 " + (FL - 296) + " 892 " + (FL - 282), 1.6) + paid(960, FL - 266, 4);
+    return s + strip(pill(452, 688, 150, "New cookbook", true));
+  }
+
+  /* ---------- 2. the cover ---------- */
+  var BX = 662, BY = 104, BW = 476, BH = 560;
+  function cover() {
+    var s = hatch(BX + 10, BY + BH + 4, BW + 10, 12, 0.7), i;
+    /* the page block shows at the fore-edge and the tail, in gatherings */
+    s += R(BX + 8, BY + 8, BW, BH, "var(--page)", 2, 3);
+    for (i = 1; i < 8; i++) s += line("M" + (BX + BW + 2) + " " + (BY + 14 + i * 68) + " h6", 1.2, 0.7) + line("M" + (BX + 26 + i * 58) + " " + (BY + BH + 2) + " v6", 1.2, 0.7);
+    /* the cloth spine wraps onto the board; the board is printed paper */
+    s += R(BX, BY, BW, BH, "var(--custard)", 2.6, 3) + R(BX, BY, 78, BH, "var(--orange)", 2.6, 3) + hatch(BX + 2, BY + 2, 74, BH - 4, 0.14) + line("M" + (BX + 18) + " " + (BY + 4) + " V" + (BY + BH - 4), 1.2, 0.5);
+    var px = BX + 108, pw = BW - 140, cx = px + pw / 2;
+    s += R(px, BY + 30, pw, BH - 60, "none", 2.2) + R(px + 7, BY + 37, pw - 14, BH - 74, "none", 1);
+    s += L(cx, BY + 102, "WEEKEND", 38, MID) + L(cx, BY + 148, "BAKES", 38, MID) + line("M" + (cx - 60) + " " + (BY + 170) + " H" + (cx + 60), 1.6);
+    /* the printed plate: a galette in an oval, hatched */
+    var gy = BY + 300;
+    s += '<ellipse cx="' + cx + '" cy="' + gy + '" rx="118" ry="96" style="fill:var(--card);stroke:var(--ink);stroke-width:2"/>' +
+      '<ellipse cx="' + cx + '" cy="' + (gy + 18) + '" rx="84" ry="38" style="fill:var(--amber);stroke:var(--ink);stroke-width:2"/>' +
+      '<ellipse cx="' + cx + '" cy="' + (gy + 14) + '" rx="56" ry="22" style="fill:var(--orange);stroke:var(--ink);stroke-width:1.6"/>';
+    for (i = 0; i < 9; i++) { var a = -Math.PI + i * Math.PI / 8; s += line("M" + (cx + Math.cos(a) * 58).toFixed(1) + " " + (gy + 16 + Math.sin(a) * 24).toFixed(1) + " l" + (Math.cos(a) * 20).toFixed(1) + " " + (Math.sin(a) * 9).toFixed(1), 1.3, 0.8); }
+    s += line("M" + (cx - 40) + " " + (gy + 8) + " q12 -10 24 0 M" + (cx + 2) + " " + (gy + 14) + " q12 -10 24 0", 1.3, 0.8) + hatch(cx - 84, gy + 44, 168, 16, 0.5);
+    s += U(cx, BY + 428, "Five recipes, each tested until it works", 15, MID, "var(--ink)", 500) + L(cx, BY + 454, "11 · 11 · 26", 14, MID, SOFT);
+    if (!ro()) s += pill(cx - 52, BY + 474, 104, "Share", true);
+    else s += line("M" + (BX + BW - 30) + " " + (BY + 6) + " Q" + (BX + BW - 6) + " " + (BY + 14) + " " + (BX + BW + 10) + " " + (BY + 34), 1.6) + paid(BX + BW + 70, BY + 50, 6);
+    s += arrowBtn(1250, 300, 1);
+    return s + strip();
+  }
+
+  /* ---------- 3. the open book ---------- */
+  var PL = "M480 110 Q690 100 900 116 V672 Q690 662 480 670 Z", PR = "M1320 110 Q1110 100 900 116 V672 Q1110 662 1320 670 Z";
+  function book() {
+    var c = "var(--orange)", s = hatch(470, 684, 870, 10, 0.7), i, k;
+    /* the boards: printed paper, with the cloth spine showing at head and tail */
+    s += R(462, 100, 876, 584, "var(--custard)", 2.6, 6) + R(860, 100, 80, 584, c, 2.4, 2) + hatch(862, 102, 76, 580, 0.14);
+    for (k = 4; k >= 1; k--) s += '<path transform="translate(' + (-2 * k) + " " + (1.2 * k) + ')" d="' + PL + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>' +
+      '<path transform="translate(' + (2 * k) + " " + (1.2 * k) + ')" d="' + PR + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>';
+    s += reg("path", 'd="' + PL + '"', "var(--page)", 2.4) + reg("path", 'd="' + PR + '"', "var(--page)", 2.4) + hatch(880, 114, 18, 556, 0.35) + hatch(902, 114, 18, 556, 0.35);
+    /* the head: headband and the folded gatherings, nested */
+    s += R(887, 110, 26, 6, "var(--orange-text)", 1, 3);
+    for (i = 0; i < 6; i++) s += line("M" + (890 + i * 4) + " 111 v4", 1.2, 1, "var(--custard)");
+    for (i = 1; i <= 4; i++) s += line("M" + (900 - i * 6) + " 116 Q900 " + (116 + i * 5) + " " + (900 + i * 6) + " 116", 1, 0.6);
+    /* the sewing thread in the gutter: long stitches between the stations */
+    for (i = 0; i < 6; i++) { var sy = 162 + i * 88; s += line("M900 " + sy + " v52", 2.2, 1, THR) + '<circle cx="900" cy="' + (sy - 4) + '" r="1.8" style="fill:' + THR + '"/><circle cx="900" cy="' + (sy + 56) + '" r="1.8" style="fill:' + THR + '"/>'; }
+    return s + arrowBtn(400, 388, -1) + arrowBtn(1400, 388, 1);
+  }
+  function contents() {
+    var s = L(500, 146, "WEEKEND BAKES", 15, "", SOFT) + H(500, 196, "Contents", 40, 700) + line("M500 210 H840", 1.4, 0.6) + U(ro() ? 786 : 766, 236, "added", 12, END, SOFT, 500) + U(ro() ? 840 : 812, 236, "page", 12, END, SOFT, 500);
+    RC.forEach(function (r, i) { var y = 276 + i * 58;
+      s += lk(500, y, r[0], 25, i === 2, r[0]) + U(ro() ? 786 : 766, y - 2, r[1], 13, END, SOFT, 500) + H(ro() ? 840 : 812, y, r[2], 23, 600, END);
+      if (!ro()) s += '<g role="button" tabindex="0" aria-label="Take ' + r[0] + ' out of this book">' + reg("circle", 'cx="832" cy="' + (y - 8) + '" r="10"', "var(--card)", 1.6) + line("M828 " + (y - 12) + " l8 8 M836 " + (y - 12) + " l-8 8", 1.8) + "</g>"; });
+    s += U(500, 584, "5 recipes", 14, "", SOFT, 500) + (ro() ? "" : U(500, 604, "The x takes a recipe out of this book only.", 13, "", SOFT, 500));
+    return s + H(690, 656, "i", 20, 600, MID, SOFT);
+  }
+  function recipe() {
+    var X = 950, s = H(X, 160, "Croissants", 44, 700) + U(X, 190, "Makes 12  ·  added 11/11/26", 14, "", SOFT, 500) + L(X, 236, "INGREDIENTS", 13, "", SOFT);
+    ["500 g bread flour", "55 g sugar", "10 g salt", "10 g instant yeast", "300 g milk, cold", "280 g butter, for the block"].forEach(function (t, i) { s += H(X, 266 + i * 28, t, 24); });
+    s += L(X, 452, "STEPS", 13, "", SOFT);
+    ["Mix the dough. Chill overnight.", "Lock in the butter block.", "Three letter folds, 2 h rests.", "Shape. Proof 2 h at 26°C.", "Bake 18 min at 200°C."].forEach(function (t, i) { s += H(X, 482 + i * 30, (i + 1) + ".", 24, 700) + H(X + 26, 482 + i * 30, t, 24); });
+    return s + H(1110, 656, "11", 20, 600, MID, SOFT);
+  }
+  function openBook() {
+    var s = book() + contents() + recipe();
+    if (ro()) s += paid(1222, 156, 4);
+    return s + strip(pill(452, 688, 150, "Add a recipe", true) + pill(612, 688, 150, "New cookbook"));
+  }
+
+  PLATE.add(function () {
+    function put(id, h) { document.getElementById(id).innerHTML = h; }
+    put("cb-spines", openOver(shelf(), "The cookbook shelf close up: books standing with their spines out"));
+    put("cb-cover", openOver(cover(), "Weekend Bakes, closed, cover up, with a Share button on the cover"));
+    put("cb-open", openOver(openBook(), "Weekend Bakes open: contents on the left, Croissants on the right"));
+  });
+})();
+</script>
