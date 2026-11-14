@@ -1,4 +1,4 @@
-# NEXT — 2026-11-13 (Plate X: five views drawn, settling them before cookbooks)
+# NEXT — 2026-11-13 (Plate X: five views settled, cookbooks next)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's Plate IX answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,25 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate X, an extra round, drawn one view at a time; Plate XI is the final) → phone layout → mark → brand sheet → Task issues → build
 ```
 
-## Prompt for the next agent (Plate X, picks up after Ari answers the 2026-11-13 questions)
+## Prompt for the next agent (Plate X cookbooks, picks up 2026-11-13)
+> Kitchen Plate X, next view: **cookbooks** (section 04). Read `docs/design/PLAN.md` ("How we work", status table, the "Cookbooks" checklist, the Details list and Later list), the `kitchen-layout` memory (bottom entries, "Plate X" notes), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes. Work on branch `docs/kitchen-plate-ii-2026-11-11`; PR wolpino/trial-and-eclair#170 into `staging-render` is open, so push each commit to it.
+>
+> Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt (version 14). Republish the same page: `cd design/plate-x && node build.cjs`, strip the `<!doctype…><body>` first line and the closing `</body></html>` from `dist/index.html` into `dist/kitchen-plate-x.html`, then publish with `url` set to that link. While cookbooks is half done, `node build.cjs --skip 04` leaves it out.
+>
+> Work as the director: one subagent draws `sections/04-cookbooks.html`, starting from `design/plate-ix/sections/04-cookbooks.html` (Plate IX drew a binder; that was an agent's choice, not Ari's). Brief it with BRIEF.md plus the cookbook items:
+> - A **sewn book**, not a binder (cloth spine, stitched signatures, a printed cover)
+> - Clicking the COOKBOOKS shelf tier opens a **close-up of the spines** first; clicking a spine opens that book
+> - **Share** on the cover
+> - Developer, home cook and guest versions: cookbooks are paid, so a home cook and a guest see a sample book read-only with the yellow "paid plan" tag (guest: "Sign up" instead of "See the paid plan")
+> - Sample data: cookbook "Weekend Bakes", recipes Blondies, Croissants, Rhubarb galette, Rough puff pastry, Brown butter cookies; dates like 11/11/26
+> - Not now (Later list): "use the newest version" of a recipe; public `/c` pages stay on hold
+> - Match the settled patterns from the other views: plain round arrows for next/previous (as in the recipe box and notebook), pills in the page's UI style, no tape on dialogs, labels never hover-only
+>
+> Check its screenshots before republishing (look for style mismatch, overlaps, things floating). Then show Ari the section and put every question in ONE message, in page order, each with its figure name. Small visual details Ari mentions go on the PLAN.md Details list, not redrawn at once. Commit after each round (section file + PLAN.md status), push, and add a session log entry at the end.
+>
+> Still open from the five settled views: which animal sits in the recipe log cabinet (six options drawn, kitchen section), and Ari's sign-off on kitchen, whiteboard, idea board, notebook and recipe box (mark them done in the PLAN.md status table when Ari says so).
+
+## Prompt for the next agent (superseded 2026-11-13: settling the five views, done)
 > Kitchen Plate X, settling the five views already drawn. Read `docs/design/PLAN.md` ("How we work", status table, Later list), the `kitchen-layout` memory (bottom entries: "Plate X review"), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes.
 >
 > Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt (republish the same page: build with `cd design/plate-x && node build.cjs`, strip the html/head/body wrapper into `dist/kitchen-plate-x.html` as in earlier commits, then publish with `url` set to that link). `node build.cjs --skip NN` leaves out a section still being drawn.

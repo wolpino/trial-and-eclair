@@ -45,7 +45,7 @@ Apply Ari's latest answers to the five drawn Plate X views, republish, and ask e
 **Keywords:** Plate X, recipe log sheet, original green, Make recipe card, replace dialog, number tabs, dusty rose
 **Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, design/plate-x/sections/01-kitchen.html, design/plate-x/kitchen.js, design/plate-x/sections/06-notebook.html, design/plate-x/sections/07-recipe-box.html
 **Do not redo:** layout rounds 1–10; Plates II–IX; Plate X sections 01, 02, 03, 06, 07 as drawn (tweak them, don't redraw)
-**Resume with:** Ari's sign-off on the five views (cabinet contents still open); pick the cabinet animal; then cookbooks (section 04); then the remaining 2026-11-13 questions → tweak → mark the five views done in PLAN.md → cookbooks (section 04)
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent (Plate X cookbooks)"; then the remaining 2026-11-13 questions → tweak → mark the five views done in PLAN.md → cookbooks (section 04)
 <!-- AGENT_CONTEXT_END -->
 
 ---
