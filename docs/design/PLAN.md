@@ -35,8 +35,8 @@ One view at a time, reviewed as it lands, not all at the end.
 ### Status
 | # | View | Section file | Status |
 |---|------|--------------|--------|
-| 1 | Kitchen (day, evening, extra wide) | 01-kitchen + kitchen.js | done (Ari 11/13; cat drawings redrawn v19, one look left) |
-| 2 | Recipe box | 07-recipe-box | done (Ari 11/13; position tag A or B to pick) |
+| 1 | Kitchen (day, evening, extra wide) | 01-kitchen + kitchen.js | done (Ari 11/13; three cats as drawn in v19) |
+| 2 | Recipe box | 07-recipe-box | done (Ari 11/13; position tags under each arrow) |
 | 3 | Whiteboard | 02-whiteboard | done (Ari 11/13) |
 | 4 | Trials notebook | 06-notebook | done (Ari 11/13) |
 | 5 | Idea board | 03-ideas | done (Ari 11/13) |
@@ -129,7 +129,7 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 - Jot list (section 10): carried as is
 
 ### Ari picks after Plate X
-Recipe box position tag (A under each arrow, B one above the lid) · cabinet cats' final look · Floor · sink · Recently holder (Recently stays, Ari 2026-11-13) · what sits inside the recipe log cabinet · small whiteboard dot · empty "Next up" doodle · Edit/Delete spot · how to add a card · sign-in card style · anything the section questions raise.
+Floor · sink · Recently holder (Recently stays, Ari 2026-11-13) · what sits inside the recipe log cabinet · small whiteboard dot · empty "Next up" doodle · Edit/Delete spot · how to add a card · sign-in card style · anything the section questions raise.
 
 ---
 

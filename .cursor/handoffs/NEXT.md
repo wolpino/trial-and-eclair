@@ -10,12 +10,12 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate X, an extra round, drawn one view at a time; Plate XI is the final) → phone layout → mark → brand sheet → Task issues → build
 ```
 
-## Prompt for the next agent (Plate X references, after Ari looks at version 19)
+## Prompt for the next agent (Plate X references, after Ari looks at version 20)
 > Kitchen Plate X, next view: references (section 05). Read `docs/design/PLAN.md` ("How we work", status table, "References" checklist, Details and Later lists), the `kitchen-layout` memory (bottom entries), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes. Work on branch `docs/plate-x-cookbooks` (PR wolpino/trial-and-eclair#172) until it is merged, then branch from `staging-render`.
 >
 > Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt (version 19). Republish: `cd design/plate-x && node build.cjs`, strip the first line and the closing `</body></html>` from `dist/index.html` into `dist/kitchen-plate-x.html`, publish with `url` set to that link.
 >
-> First record Ari's answers to the two open questions on the page (the cats' look; recipe box position tag A or B) and Ari's look at the cookbook changes. Then one new subagent draws `sections/05-references.html` from `design/plate-ix/sections/05-references.html`, briefed with BRIEF.md and the References items. Questions go at the top of the page in `sections/00-questions.html`, each linked to its figure, and in chat in the same order.
+> Cats and recipe box tag A are settled (Ari, 2026-11-13, v20). First ask Ari for a look at the cookbook changes if not given yet. Then one new subagent draws `sections/05-references.html` from `design/plate-ix/sections/05-references.html`, briefed with BRIEF.md and the References items. Questions go at the top of the page in `sections/00-questions.html`, each linked to its figure, and in chat in the same order.
 
 ## Prompt for the next agent (Plate X, picks up after Ari answers the 2026-11-13 questions)
 > Kitchen Plate X, settling the five views already drawn. Read `docs/design/PLAN.md` ("How we work", status table, Later list), the `kitchen-layout` memory (bottom entries: "Plate X review"), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes.
