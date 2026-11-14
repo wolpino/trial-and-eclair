@@ -8,12 +8,6 @@
     <p class="note"><b>Edit and Delete</b> are a plain pencil and bin right after the title. <b>Tabs</b> are all one paper; only the letter you are in is orange.</p>
     <p class="note"><b>Same for everyone.</b> The box is free, so Developer and Home cook see exactly this. Switch the Plan to Guest to see the guest slip; the guest figures further down show what else differs.</p>
 
-    <h3>Where the position tag goes: two ways</h3>
-    <div class="pair">
-      <div><figure id="box-pos-a" class="fx"></figure><p class="note"><b>A. A tag under each arrow.</b> Outside the lid, each tag says where its arrow goes: "B · 9 of 15" on the left, "B · 11 of 15" on the right. Both sides match. Used in every other figure.</p></div>
-      <div><figure id="box-pos-b" class="fx"></figure><p class="note"><b>B. One tag above the lid.</b> "B · 10 of 15", centred just above the top of the lid. It has to squeeze between the find bar and the lid and covers the lid's brass pull.</p></div>
-    </div>
-
     <h3>Clicking a letter tab</h3>
     <figure id="box-letter" class="fx"></figure>
     <p class="note"><b>A list first.</b> Click a letter and the lid card lists that letter's titles. Up to 12 fit in two columns. More than that and the two columns scroll together: here B has 15, the bottom row is cut off and the bar on the right shows there is more. Pick one (Blondies is being pointed at) and its card goes onto the ledge. The arrows sit outside the lid the same way; their tags say "A list" and "C list", the letters they go to. The full-screen icon sits on the list card.</p>
@@ -208,8 +202,6 @@
     var g = function (id) { return document.getElementById(id); }, guest = o.plan === "guest";
     g("box-open").innerHTML = openOver(box(BLOND, { guest: guest }), "The open recipe box with the Blondies card on the ledge in the lid");
     g("box-letter").innerHTML = openOver(box(BLOND, { letter: "B" }), "The lid card listing the fifteen B titles in two columns, scrolling");
-    g("box-pos-a").innerHTML = small(box(BLOND, {}), "Option A: a tag under each arrow, outside the lid: B 9 of 15 on the left, B 11 of 15 on the right", 446, 14, 908, 470);
-    g("box-pos-b").innerHTML = small(box(BLOND, { tagB: "B · 10 of 15" }), "Option B: one B 10 of 15 tag centred just above the lid", 446, 14, 908, 470);
     g("box-next").innerHTML = small(box(SCONE, { tags: [["B · 14", "of 15"], ["C · 1", "of 9"]] }), "The last B card; the right arrow's tag says C 1 of 9, the first C card", 446, 70, 908, 430);
     g("box-add").innerHTML = small(box(BLOND, { glowA: 1 }), "A blank Add a card card standing at the back of the box", 360, 76, 1080, 684);
     g("box-new").innerHTML = openOver(box(CROIS, { edit: 1, tags: [["C · 3", "of 10"], ["C · 5", "of 10"]] }), "A new Croissants card on the ledge, filled from trial 4 and open for editing, with Save card and Cancel");
