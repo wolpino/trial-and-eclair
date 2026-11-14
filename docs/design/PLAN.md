@@ -39,7 +39,7 @@ One view at a time, reviewed as it lands, not all at the end.
 | 3 | Whiteboard | 02-whiteboard | waiting on Ari |
 | 4 | Trials notebook | 06-notebook | waiting on Ari (number tabs, tags, Make recipe card + dialog drawn 11/13) |
 | 5 | Idea board | 03-ideas | waiting on Ari |
-| 6 | Cookbooks | 04-cookbooks | waiting on Ari (sewn books, spines → cover → open, drawn 11/13, page version 15) |
+| 6 | Cookbooks | 04-cookbooks | waiting on Ari (sewn books, spines → cover → open; typeset, not handwritten, page version 16) |
 | 7 | References | 05-references | not started |
 | 8 | Sign in and sign up | 09-start | not started |
 | 9 | Account menu and settings | 11-account | not started |

@@ -28,7 +28,12 @@
   var S = STAGE, MID = 'text-anchor="middle"', END = 'text-anchor="end"', SOFT = "var(--ink-soft)", FL = 600, THR = "#8a5a3c";
   var RC = [["Blondies", "9/20/26", 3], ["Brown butter cookies", "10/09/26", 7], ["Croissants", "11/11/26", 11], ["Rhubarb galette", "11/08/26", 17], ["Rough puff pastry", "11/05/26", 21]];
   function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 0) + '"', fill, sw || 2); }
-  function H(x, y, t, sz, w, ex, col) { return T(x, y, t, "font:" + (w || 600) + " " + sz + "px var(--font-hand);fill:" + (col || "var(--ink)"), ex || ""); }
+  /* a cookbook is typeset, not handwritten: headings in the display serif, the rest in the body serif */
+  function H(x, y, t, sz, w, ex, col) { var d = w === 700; return T(x, y, t, "font:" + (d ? 400 : 500) + " " + Math.round(sz * (d ? 0.72 : 0.7)) + "px " + (d ? "var(--font-display)" : "var(--font-body)") + ";fill:" + (col || "var(--ink)"), ex || ""); }
+  /* a printed link: the same yellow highlight as lk(), in the body serif */
+  function plk(x, by, txt, fs, on, label) { var tw = txt.length * fs * 0.5;
+    return '<g class="lnk' + (on ? " on" : "") + '" tabindex="0" role="link" aria-label="Open ' + label + '"><rect class="lk-hi" x="' + (x - 4) + '" y="' + (by - fs * 0.92) + '" width="' + (tw + 8) + '" height="' + (fs * 1.25) + '" rx="3" style="fill:var(--yellow);stroke:var(--ink);stroke-width:1.2"/>' +
+      T(x, by, txt, "font:500 " + fs + "px var(--font-body);fill:var(--ink)") + '<g class="lk-hi">' + line("M" + x + " " + (by + 4) + " H" + (x + tw), 1.6) + "</g></g>"; }
   function U(x, y, t, sz, ex, col, w) { return T(x, y, t, "font:" + (w || 600) + " " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"), ex || ""); }
   function L(x, y, t, sz, ex, col) { return T(x, y, t, "font:700 " + sz + "px var(--font-label);letter-spacing:.1em;fill:" + (col || "var(--ink)"), ex || ""); }
   function dk(f, k) { return "color-mix(in srgb, " + f + " " + (k || 66) + "%, #000)"; }
@@ -124,7 +129,7 @@
   function contents() {
     var s = L(500, 146, "WEEKEND BAKES", 15, "", SOFT) + H(500, 196, "Contents", 40, 700) + line("M500 210 H840", 1.4, 0.6) + U(ro() ? 786 : 766, 236, "added", 12, END, SOFT, 500) + U(ro() ? 840 : 812, 236, "page", 12, END, SOFT, 500);
     RC.forEach(function (r, i) { var y = 276 + i * 58;
-      s += lk(500, y, r[0], 25, i === 2, r[0]) + U(ro() ? 786 : 766, y - 2, r[1], 13, END, SOFT, 500) + H(ro() ? 840 : 812, y, r[2], 23, 600, END);
+      s += plk(500, y, r[0], 19, i === 2, r[0]) + U(ro() ? 786 : 766, y - 2, r[1], 13, END, SOFT, 500) + H(ro() ? 840 : 812, y, r[2], 23, 600, END);
       if (!ro()) s += '<g role="button" tabindex="0" aria-label="Take ' + r[0] + ' out of this book">' + reg("circle", 'cx="832" cy="' + (y - 8) + '" r="10"', "var(--card)", 1.6) + line("M828 " + (y - 12) + " l8 8 M836 " + (y - 12) + " l-8 8", 1.8) + "</g>"; });
     s += U(500, 584, "5 recipes", 14, "", SOFT, 500) + (ro() ? "" : U(500, 604, "The x takes a recipe out of this book only.", 13, "", SOFT, 500));
     return s + H(690, 656, "i", 20, 600, MID, SOFT);
