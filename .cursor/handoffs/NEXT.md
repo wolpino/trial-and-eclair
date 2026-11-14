@@ -1,4 +1,4 @@
-# NEXT — 2026-11-13 (Plate X under way, one view at a time)
+# NEXT — 2026-11-13 (Plate X: five views drawn, settling them before cookbooks)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's Plate IX answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -9,6 +9,51 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 ```
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate X, an extra round, drawn one view at a time; Plate XI is the final) → phone layout → mark → brand sheet → Task issues → build
 ```
+
+## Prompt for the next agent (Plate X, picks up 2026-11-13)
+> Kitchen Plate X, settling the five views already drawn. Read `docs/design/PLAN.md` ("How we work", status table, Later list), the `kitchen-layout` memory (bottom entries: "Plate X review"), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes.
+>
+> Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt (republish the same page: build with `cd design/plate-x && node build.cjs`, strip the html/head/body wrapper into `dist/kitchen-plate-x.html` as in earlier commits, then publish with `url` set to that link). `node build.cjs --skip NN` leaves out a section still being drawn.
+>
+> Work as the director: one subagent per section file, at most 2 at once, each briefed with BRIEF.md and only its view's changes. Check screenshots before republishing. Commit after each round (section file + PLAN.md status). The earlier subagents are gone; new ones start from the files.
+>
+> **Finish these five views before cookbooks.** Apply Ari's answers below, then put every still-open question for the five views to Ari in ONE message, in page order, each with its figure name.
+
+### Ari's answers to apply (2026-11-13)
+**Kitchen** (`01-kitchen.html`, `kitchen.js`)
+- Concealed hinges: fine for now (no drawing change)
+- ORIGINAL green, not the quieter one: it draws the eye to the recipe log. Drop the quiet-green figure
+- Slim cabinet: done
+- RECIPE LOG tape label moves from the drawer onto the cabinet DOOR. COOKBOOKS label moves left on its shelf edge; REFERENCES too only if it looks better
+- The recipe log clipboard hangs on the INSIDE of the cabinet door, not the back wall. It needs something on it. Suggested: a log sheet headed "Recipe log" with three or four dated rows (date, recipe, a short note, e.g. "11/11 Croissants trial 4 · shatter good"), matching what issue #161 will store (date, notes, substitutions). Draw that and ask
+
+**Trials notebook** (`06-notebook.html`)
+- A weird thick black line runs along the top of the spread: fix it
+- Tabs say "Trial" over and over in a small space. Try numbers only ("1 2 3 4") with the recipe name once (on Contents, or a small header over the tab stack), and ask whether it is clear
+- The small captions under the arrows and on the corners are useful but look wrong (plain body font floating on the dimmed kitchen). Restyle them to fit the plate (e.g. small handwriting on a tag, or set into the page margin)
+- Page numbers move to the centre bottom of each page
+- "Publish" may be the wrong word ("Publish" also suggests the public /r pages). Ari floated finalize / make recipe card / create recipe card. Draw the stamp with two or three wordings; Claude's suggestion is "Make recipe card"
+- Re-publishing: trial 5 REPLACES the trial 4 card. To keep both, the cook saves trial 5 as a different recipe. Draw a small dialog that opens from the stamp (or button) so the cook sees what will happen and chooses: replace the card, or save as a new recipe, or cancel. First-time version too (no card yet: "This makes a Croissants card in your recipe box")
+
+**Recipe box** (`07-recipe-box.html`)
+- Guest limit: DUSTY ROSE (#e3a9ae). Plum too dark. Drop the two-shade figure
+
+**Whiteboard and idea board:** no new answers yet
+
+### Still open after applying the above (ask Ari, all at once, in page order)
+1. Kitchen: is the recipe log sheet (as drawn) the right content? Does the RECIPE LOG label read well on the door?
+2. Whiteboard: is the small eraser plus the dashed pin ring on each automatic item clear, or too fussy?
+3. Idea board: keep the Archived envelope, or no way to see archived ideas?
+4. Idea board: words only, or can an idea hold one photo?
+5. Idea board: when an idea leaves, do the notes after it close the gap (drawn), or stay put until next opened?
+6. Notebook: Publish spot, A stamp beside the title or B button on the strip? And which wording?
+7. Notebook: corners for trials and arrows for recipes, clear, or should one go? Numbers-only tabs clear?
+8. Recipe box: show the notes box on every card even when empty, or only once a card has a note?
+9. Recipe box: is "Make it mine" at the bottom of starter cards the right spot?
+Plus any new question the subagents raise.
+
+### After the five are settled
+Mark them done in PLAN.md, then cookbooks (section 04) as the next view, per the status table.
 
 ## Prompt for the next agent (superseded 2026-11-13: follow docs/design/PLAN.md, "How we work")
 > Kitchen plate drawing, second wave of Plate IX. Read `.cursor/handoffs/NEXT.md`, the `kitchen-layout`, `visual-direction`, `one-main-session` and `commit-each-round` memories, and the top entry of `.cursor/session_log.mdc` first. No app code changes.

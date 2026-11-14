@@ -28,6 +28,8 @@ One view at a time, reviewed as it lands, not all at the end.
 3. Ari reviews only that section. Tweaks go back to the same subagent. The view is done when Ari says so.
 4. While Ari reviews one view, the next one is drawing. At most 2 agents at once, to pace usage.
 5. Commit after each view Ari approves, and update the status table below. Stopping mid-way loses nothing.
+6. Settle the views already drawn before starting new ones (Ari, 2026-11-13: finish kitchen, whiteboard, ideas, notebook and recipe box before cookbooks).
+7. When there are questions, list them all in chat at once, in page order, each with its figure name, so Ari can answer in one go.
 
 ### Status
 | # | View | Section file | Status |
@@ -158,6 +160,7 @@ Changes the app needs that came out of the plates. Each becomes one Task issue.
 
 ## Later list
 Parked. Not drawn, not built until moved up.
+- Accessibility pass on every view (keyboard, screen readers, contrast, reduced motion). Must happen before the build is called done
 - Public recipe (`/r`) and cookbook (`/c`) pages: fine for now, revisit
 - Equipment spots and anniversary equipment (1 month, 6 months, 1 year, yearly)
 - Upgrade to the paid plan page

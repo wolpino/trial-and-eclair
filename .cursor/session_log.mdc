@@ -10,6 +10,47 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-13 · Plate X, one view at a time: five views drawn and reviewed
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-13` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, 5 subagents, at most 2 at once) |
+| **Outcome** | partial (five views drawn and tweaked; Ari's latest answers recorded, not yet drawn; no app code) |
+
+### Intent
+Ask Ari the open Plate IX questions, write one plan of everything left, and draw Plate X one view at a time with review after each.
+
+### Summary
+- `docs/design/PLAN.md`: the one list of what is left (Plate X → XI final → phone → mark → brand sheet → Task issues → build), "How we work", per-view status table, build list, Later list. New ideas go on the Later list unless Ari says "this round"
+- `design/plate-x/` set up from Plate IX (Developer / Home cook / Guest switch, `build.cjs --skip NN`)
+- Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt with kitchen, whiteboard, idea board, Trials notebook and recipe box, each through one to three rounds of Ari's tweaks
+- All answers in the `kitchen-layout` memory ("Plate IX second-wave answers" and the "Plate X review" entries)
+
+### Decisions
+- Plate X is an extra round; Plate XI is the final. Evening for the kitchen only. Missing views to draw: Account and settings, signed-out front page, not-found
+- Kitchen: smaller board, black and white floor, magnets for Recently, sink set into the counter with a drawer line, slim cabinet / shelf / double cabinet (recipe log, #161) / sink cabinet, brass bar pulls, original green, bird and star now and then (about every 5 min in the app) and on click
+- Ideas have no statuses; moving one to a trial archives it. Cookbooks are sewn books. References keep 5 kinds
+- Whiteboard: question mark when empty, marker star for pinned, re-tick removes
+- Recipe box: one tab colour, plain Edit/Delete by the title, blank card at the back, arrows run A to Z, two-column letter lists, no card back (source by the title, notes box), dusty rose guest limit
+- Notebook: tabs are the current recipe's trials; arrows = recipes, corners = trials; re-publishing replaces the card (dialog to choose)
+- Finish the five drawn views before cookbooks; questions go to Ari all at once in page order
+
+### Open threads
+- Ari's 2026-11-13 answers (kitchen labels and log clipboard, notebook line/tabs/captions/page numbers/publish wording and dialog, rose) are recorded but NOT drawn
+- Nine open questions listed in NEXT.md
+- Accessibility pass added to the Later list
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate X, one view at a time, PLAN.md, status table, recipe log cabinet, publish wording, per-recipe tabs, guest limit rose
+**Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, design/plate-x/BRIEF.md, design/plate-x/kitchen.js, design/plate-x/sections/
+**Do not redo:** layout rounds 1–10; Plates II–IX; Plate X sections 01, 02, 03, 06, 07 as drawn (tweak them, don't redraw)
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent (Plate X, picks up 2026-11-13)"
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-12 · Plate IX notes from Ari and the second-wave prompt
 
 | Field | Value |
