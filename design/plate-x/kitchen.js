@@ -296,14 +296,89 @@
     s += cabinet(L.e0, sx, 1, "r", 1) + logCab(sx + sw, c0) + cabinet(c0, c1, 2, "mid", 1) + cabinet(c1, c1 + 240, 1, "l", 1) + line("M" + c0 + " 495 V" + B + " M" + c1 + " 495 V" + B, 2);
     /* The double cabinet holds the recipe log (finished later, issue #161). Closed: one wide drawer and two doors, pulls at the
        inner top corners; a RECIPE LOG tape label sits on the left door and the cabinet glows on point. o.logOpen: the doors swing
-       all the way open, flat against the neighbours, showing their concealed hinge cups; the log hangs on the left door's inside. */
+       all the way open, flat against the neighbours, showing their concealed hinge cups; the log hangs on the left door's inside, and o.inside sits on the cabinet floor. */
+    /* What sits in the open log cabinet (o.inside): "cat" a cat asleep in a mixing bowl, "gear" a stand mixer and nested bowls on
+       sheet pans, "stash" a DO NOT TOUCH tin and chocolate bars at the back. Each thing is drawn flat at the front, then moved back to
+       its depth with at(d): scaling about the vanishing point is exactly what P() does, so the floor line y1 stays on the floor. */
+    function cabInside(kind, i0, i1, y1) {
+      function at(d, s) { var k = 1 - kk(d); return '<g transform="translate(' + VPX + " " + VPY + ") scale(" + k.toFixed(4) + ") translate(" + (-VPX) + " " + (-VPY) + ')">' + s + "</g>"; }
+      function shade(cx, cy, rx, ry) { return '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '" style="fill:url(#hatch);opacity:.55"/>'; }
+      function el(cx, cy, rx, ry, fill, sw) { return reg("ellipse", 'cx="' + cx + '" cy="' + cy + '" rx="' + rx + '" ry="' + ry + '"', fill, sw || 1.8); }
+      function pth(d, fill, sw) { return reg("path", 'd="' + d + '"', fill, sw || 1.8); }
+      var W = i1 - i0, STEEL = "#d2d0c8", CHOC = "var(--wood-dark)", s = "";
+      if (kind === "cat") {
+        /* a cream mixing bowl with a blue band; a ginger cat curled inside, chin on the rim, tail over the front */
+        var bx = i0 + W * 0.5, by = y1, r = 66, ry = 17, rimY = by - 44, cat = "var(--orange)",
+          wall = "M" + (bx - r) + " " + rimY + " A" + r + " " + ry + " 0 0 0 " + (bx + r) + " " + rimY + " C" + (bx + r - 2) + " " + (by - 10) + " " + (bx + 40) + " " + (by - 2) + " " + (bx + 26) + " " + (by - 2) + " L" + (bx - 26) + " " + (by - 2) + " C" + (bx - 40) + " " + (by - 2) + " " + (bx - r + 2) + " " + (by - 10) + " " + (bx - r) + " " + rimY + "Z";
+        s += shade(bx - 8, by - 1, 64, 5) + el(bx, rimY, r, ry, "color-mix(in srgb, var(--card) 80%, var(--wood))") +
+          el(bx + 6, rimY - 8, 54, 22, cat, 2) +
+          line("M" + (bx + 12) + " " + (rimY - 29) + " q6 10 2 20 M" + (bx + 28) + " " + (rimY - 26) + " q6 9 2 18 M" + (bx - 4) + " " + (rimY - 29) + " q5 9 1 18", 1.6, 0.8) +
+          pth(wall, "var(--card)", 2) + reg("rect", 'x="' + (bx - 26) + '" y="' + (by - 4) + '" width="52" height="4" rx="1.5"', "var(--card)", 1.6) +
+          line("M" + (bx - r + 3) + " " + (rimY + 9) + " Q" + bx + " " + (rimY + 34) + " " + (bx + r - 3) + " " + (rimY + 9), 5, 0.9, "var(--blue)");
+        /* tail along the front rim, then the head resting on it with white paws tucked under the chin */
+        var tail = "M" + (bx + 52) + " " + (rimY - 4) + " C" + (bx + 68) + " " + (rimY + 8) + " " + (bx + 58) + " " + (rimY + 18) + " " + (bx + 36) + " " + (rimY + 16) + " S" + (bx + 8) + " " + (rimY + 17) + " " + (bx - 4) + " " + (rimY + 15);
+        s += line(tail, 12, 1) + line(tail, 8, 1, cat) + line("M" + (bx + 22) + " " + (rimY + 12) + " v8 M" + (bx + 10) + " " + (rimY + 12) + " v8 M" + (bx + 54) + " " + (rimY + 5) + " h7", 1.5, 0.85);
+        var hx = bx - 38, hy = rimY - 3;
+        s += el(hx + 10, hy + 15, 7, 4.5, "var(--card)", 1.5) + el(hx + 22, hy + 15, 7, 4.5, "var(--card)", 1.5) +
+          pth("M" + (hx - 14) + " " + (hy - 8) + " L" + (hx - 15) + " " + (hy - 25) + " L" + (hx - 3) + " " + (hy - 15) + "Z", cat) +
+          pth("M" + (hx + 3) + " " + (hy - 15) + " L" + (hx + 13) + " " + (hy - 25) + " L" + (hx + 14) + " " + (hy - 8) + "Z", cat) +
+          el(hx, hy, 17, 14.5, cat, 2) + pth("M" + (hx - 12) + " " + (hy - 12) + " L" + (hx - 12.5) + " " + (hy - 19) + " L" + (hx - 7) + " " + (hy - 14) + "Z", "var(--card)", 1) +
+          line("M" + (hx - 10) + " " + (hy - 1) + " q3.5 3.5 7 0 M" + (hx + 3) + " " + (hy - 1) + " q3.5 3.5 7 0", 1.6) +
+          pth("M" + (hx - 2) + " " + (hy + 4) + " h4 l-2 2.5Z", "var(--ink)", 1) +
+          line("M" + (hx - 4) + " " + (hy - 11) + " v5 M" + hx + " " + (hy - 12) + " v5 M" + (hx + 4) + " " + (hy - 11) + " v5", 1.3, 0.8) +
+          line("M" + (hx - 8) + " " + (hy + 6) + " h-12 M" + (hx - 8) + " " + (hy + 8) + " l-11 3 M" + (hx + 8) + " " + (hy + 6) + " h12", 0.9, 0.7) +
+          T(hx - 30, hy - 26, "z", "font:700 15px var(--font-hand);fill:var(--ink-soft)") + T(hx - 42, hy - 38, "z", "font:700 11px var(--font-hand);fill:var(--ink-soft)");
+        return at(26, s);
+      }
+      if (kind === "gear") {
+        /* left: three sheet pans stacked flat, nested bowls on top. right: a cobalt stand mixer (no badge) */
+        var p0 = i0 + 16, p1 = i0 + 146, pans = "";
+        pans = block(p0, y1 - 15, p1, y1, 54, { top: STEEL, side: "color-mix(in srgb, #d2d0c8 85%, #000)" });
+        [0, 1, 2].forEach(function (k) { pans += reg("rect", 'x="' + p0 + '" y="' + (y1 - 5 * (k + 1)) + '" width="' + (p1 - p0) + '" height="5"', STEEL, 1.4); });
+        var nx = (p0 + p1) / 2 + 4, ny = y1 - 15, nr = 52, top = ny - 38;
+        var bowls = shade(nx - 6, ny - 1, 56, 5) + pth("M" + (nx - nr) + " " + top + " C" + (nx - nr + 2) + " " + (ny - 8) + " " + (nx - 30) + " " + ny + " " + (nx - 20) + " " + ny + " L" + (nx + 20) + " " + ny + " C" + (nx + 30) + " " + ny + " " + (nx + nr - 2) + " " + (ny - 8) + " " + (nx + nr) + " " + top + "Z", "var(--orange)", 2) +
+          el(nx, top, nr, 13, "color-mix(in srgb, var(--orange) 70%, #fff)") + el(nx, top + 5, 41, 10, "var(--card)") + el(nx, top + 9, 30, 7.5, "var(--blue-hi)") + el(nx, top + 12, 18, 4.5, "color-mix(in srgb, var(--blue) 60%, #000)", 1.2);
+        s += at(10, pans) + at(36, bowls);
+        var mx = i1 - 158, B0 = y1, BL = "var(--blue)", mix = shade(mx + 40, B0 - 1, 70, 6) +
+          block(mx, B0 - 12, mx + 116, B0, 30, { top: "var(--blue-hi)", side: "var(--blue-back)" }) + reg("rect", 'x="' + mx + '" y="' + (B0 - 12) + '" width="116" height="12" rx="4"', BL, 2) +
+          pth("M" + (mx + 82) + " " + (B0 - 12) + " L" + (mx + 86) + " " + (B0 - 80) + " L" + (mx + 110) + " " + (B0 - 80) + " L" + (mx + 112) + " " + (B0 - 12) + "Z", BL, 2) +
+          el(mx + 44, B0 - 48, 31, 7, "color-mix(in srgb, #d2d0c8 60%, #000)") + line("M" + (mx + 46) + " " + (B0 - 78) + " V" + (B0 - 52), 3) +
+          pth("M" + (mx + 13) + " " + (B0 - 48) + " A31 7 0 0 0 " + (mx + 75) + " " + (B0 - 48) + " C" + (mx + 73) + " " + (B0 - 22) + " " + (mx + 60) + " " + (B0 - 13) + " " + (mx + 50) + " " + (B0 - 13) + " L" + (mx + 38) + " " + (B0 - 13) + " C" + (mx + 28) + " " + (B0 - 13) + " " + (mx + 15) + " " + (B0 - 22) + " " + (mx + 13) + " " + (B0 - 48) + "Z", STEEL, 2) +
+          line("M" + (mx + 22) + " " + (B0 - 38) + " Q" + (mx + 44) + " " + (B0 - 30) + " " + (mx + 66) + " " + (B0 - 38), 1.2, 0.6, "#fff") +
+          reg("rect", 'x="' + (mx + 12) + '" y="' + (B0 - 106) + '" width="104" height="30" rx="15"', BL, 2) + line("M" + (mx + 28) + " " + (B0 - 100) + " H" + (mx + 96), 1.4, 0.6, "#fff") +
+          reg("circle", 'cx="' + (mx + 22) + '" cy="' + (B0 - 91) + '" r="6"', STEEL, 1.6) + line("M" + (mx + 104) + " " + (B0 - 84) + " l12 -4", 3) + reg("circle", 'cx="' + (mx + 117) + '" cy="' + (B0 - 88) + '" r="3"', STEEL, 1.4);
+        return s + at(20, mix);
+      }
+      /* stash: a tin against the back wall with DO NOT TOUCH taped on it, a bar standing behind it, and a little stack of bars in front;
+         the top bar is opened, foil peeled back, two squares gone */
+      var tx = i0 + W * 0.56, tw = 82, th = 62, tin = "var(--blue)";
+      var back = reg("rect", 'x="' + (tx + tw + 8) + '" y="' + (y1 - 78) + '" width="34" height="78" rx="2"', "var(--orange)", 2) + reg("rect", 'x="' + (tx + tw + 8) + '" y="' + (y1 - 52) + '" width="34" height="22"', "var(--card)", 1.4) +
+        line("M" + (tx + tw + 14) + " " + (y1 - 41) + " h22", 1.2, 0.5);
+      var tinS = shade(tx + tw / 2 - 12, y1 - 1, tw / 2 + 14, 6) + pth("M" + tx + " " + (y1 - th) + " V" + (y1 - 4) + " A" + (tw / 2) + " 7 0 0 0 " + (tx + tw) + " " + (y1 - 4) + " V" + (y1 - th) + "Z", tin, 2) +
+        pth("M" + (tx - 2) + " " + (y1 - th) + " V" + (y1 - th + 10) + " A" + (tw / 2 + 2) + " 8 0 0 0 " + (tx + tw + 2) + " " + (y1 - th + 10) + " V" + (y1 - th) + "Z", "var(--blue-hi)", 2) +
+        el(tx + tw / 2, y1 - th, tw / 2 + 2, 9, "var(--blue-hi)", 2) + el(tx + tw / 2, y1 - th, tw / 2 - 8, 5, "none", 1) +
+        '<g transform="rotate(-4 ' + (tx + tw / 2) + " " + (y1 - 28) + ')">' + tape(tx + tw / 2, y1 - 28, 76, 26, 0, 0.97) + marker(tx + tw / 2, y1 - 31, "Do not", 9.5) + marker(tx + tw / 2, y1 - 20, "touch", 9.5) + "</g>";
+      s += at(44, back) + at(42, tinS);
+      var b0 = i0 + 40, b1 = i0 + 150, bars = shade(b0 + 48, y1 - 1, 66, 5), cols = ["var(--stem)", "var(--orange)", "var(--blue)"];
+      cols.forEach(function (c, k) { var y = y1 - 9 * (k + 1), x0 = b0 + k * 4, x1 = b1 - k * 3, open = k === 2;
+        bars += block(x0, y, x1, y + 9, 34, { top: open ? CHOC : "color-mix(in srgb, " + c + " 75%, #fff)", side: "color-mix(in srgb, " + c + " 70%, #000)" });
+        if (open) { /* the chocolate's top: squares, two missing at the front left; the wrapper still on the right half */
+          var q = function (x, d) { return P(x, y, d); }, gx, gy, A, Bq, C, D, cw = (x1 - x0) / 6;
+          for (gx = 0; gx < 3; gx++) for (gy = 0; gy < 2; gy++) { if (gy === 0 && gx < 2) continue; A = q(x0 + gx * cw + 1.5, gy * 17 + 1.5); Bq = q(x0 + (gx + 1) * cw - 1.5, gy * 17 + 1.5); C = q(x0 + (gx + 1) * cw - 1.5, gy * 17 + 15.5); D = q(x0 + gx * cw + 1.5, gy * 17 + 15.5);
+            bars += face([A, Bq, C, D], "color-mix(in srgb, var(--wood) 70%, #000)", 1); }
+          bars += face([q(x0 + cw * 3, 0), q(x1, 0), q(x1, 34), q(x0 + cw * 3, 34)], "color-mix(in srgb, " + c + " 75%, #fff)", 1.6) + face([q(x0 + cw * 3 - 6, 0), q(x0 + cw * 3 + 2, 0), q(x0 + cw * 3 + 2, 34), q(x0 + cw * 3 - 6, 34)], STEEL, 1.2);
+          bars += reg("rect", 'x="' + x0 + '" y="' + y + '" width="' + (cw * 3 - 6) + '" height="9"', CHOC, 1.6) + reg("rect", 'x="' + (x0 + cw * 3 - 6) + '" y="' + y + '" width="8" height="9"', STEEL, 1.4) + reg("rect", 'x="' + (x0 + cw * 3 + 2) + '" y="' + y + '" width="' + (x1 - x0 - cw * 3 - 2) + '" height="9"', c, 1.6);
+        } else bars += reg("rect", 'x="' + x0 + '" y="' + y + '" width="' + (x1 - x0) + '" height="9"', c, 1.6) + reg("rect", 'x="' + ((x0 + x1) / 2 - 14) + '" y="' + (y + 2) + '" width="28" height="5"', "var(--card)", 1);
+      });
+      return s + at(28, bars);
+    }
     function logCab(a0, a1) {
       var LOG = [["11/11", "Croissants trial 4", "shatter good"], ["11/08", "Blondies", "less sugar"], ["11/05", "Rough puff pastry", "six folds"], ["11/02", "Rhubarb galette", "swapped spelt"]];
       var g = 14, dw = (a1 - a0 - 3 * g) / 2, lx = a0 + g + dw / 2 - 8, out = drawer(a0 + g, a1 - g),
         tag = '<g transform="rotate(-2 ' + lx + ' 602)">' + tape(lx, 602, 128, 20, 0, 0.96, "lbl") + marker(lx, 607.5, "Recipe log", 14) + "</g>";
       if (!o.logOpen) return hot("the recipe log", out + door(a0 + g, 556, dw, true) + tag + door(a0 + 2 * g + dw, 556, dw, false), [a0, 500, a1 - a0, B - 508]);
       var i0 = a0 + g, i1 = a1 - g, y0 = 556, y1 = B - 12, d = 70;
-      out += recess(i0, y0, i1, y1, d, "color-mix(in srgb, var(--wood-hi) 55%, #fff)", { side: "color-mix(in srgb, var(--wood-hi) 40%, #8a6a4a)", top: "color-mix(in srgb, var(--wood) 70%, #000)", bottom: "var(--wood-hi)" }) + reg("rect", 'x="' + i0 + '" y="' + y0 + '" width="' + (i1 - i0) + '" height="' + (y1 - y0) + '"', "none", 2);
+      out += recess(i0, y0, i1, y1, d, "color-mix(in srgb, var(--wood-hi) 55%, #fff)", { side: "color-mix(in srgb, var(--wood-hi) 40%, #8a6a4a)", top: "color-mix(in srgb, var(--wood) 70%, #000)", bottom: "var(--wood-hi)" }, cabInside(o.inside || "cat", i0, i1, y1)) + reg("rect", 'x="' + i0 + '" y="' + y0 + '" width="' + (i1 - i0) + '" height="' + (y1 - y0) + '"', "none", 2);
       /* the clipboard hangs on a screw on the inside of the left door, clear of the hinge cups; the clip holds the log sheet */
       var cx0 = i0 - dw + 9, cw = dw - 46, ct = y0 + 10, ch = y1 - y0 - 16, px = cx0 + 6, pw = cw - 12, mx = cx0 + cw / 2,
         clip = hatch(cx0 + 4, ct + 5, cw, ch, 0.4) + reg("rect", 'x="' + cx0 + '" y="' + ct + '" width="' + cw + '" height="' + ch + '" rx="4"', "var(--wood-hi)", 1.8) +

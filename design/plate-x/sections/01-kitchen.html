@@ -12,8 +12,13 @@
 
     <h3>The recipe log cabinet</h3>
     <figure id="k-log" class="fx" style="max-width:700px"></figure>
-    <p class="note"><b>Open.</b> The RECIPE LOG tape label sits on the left door, and the cabinet glows when you point at it. Clicking opens both doors. The log is a clipboard hung on a screw on the inside of the left door; its clip holds a sheet headed "Recipe log" with one row per bake: the date, the recipe and a short note, such as a substitution. The cabinet itself is finished later, as part of issue #161.</p>
+    <p class="note"><b>Open.</b> The RECIPE LOG tape label sits on the left door, and the cabinet glows when you point at it. Clicking opens both doors. The log is a clipboard hung on a screw on the inside of the left door; its clip holds a sheet headed "Recipe log" with one row per bake: the date, the recipe and a short note, such as a substitution. The clipboard is only a glimpse: clicking it opens the recipe log full size, the way every object opens into its tool, so its small size on the door is fine. The cabinet is no longer empty: shown here, a cat asleep in a mixing bowl.</p>
     <p class="note"><b>Hinges.</b> The doors have concealed hinges, fixed inside the cabinet, so from the front they do not show. Their hinge cups show on the backs of the open doors here.</p>
+    <div class="trio">
+      <div><figure id="k-in-a" class="fx"></figure><p class="note"><b>A Cat.</b> A ginger cat curled up asleep in a mixing bowl, chin on the rim.</p></div>
+      <div><figure id="k-in-b" class="fx"></figure><p class="note"><b>B Kitchen gear.</b> A stand mixer, and nested bowls on a stack of sheet pans.</p></div>
+      <div><figure id="k-in-c" class="fx"></figure><p class="note"><b>C Secret stash.</b> Chocolate bars and a tin taped DO NOT TOUCH, hidden at the back.</p></div>
+    </div>
 
     <h3>Recently on the fridge</h3>
     <figure id="k-rec" class="fx" style="max-width:360px"></figure>
@@ -24,8 +29,7 @@
     <p class="note"><b>Same scale, one above the other.</b> At normal width (top) the left edge cuts off the fridge's hinges and the right edge cuts off part of the window and the sink. From a 1680 px browser (bottom) the kitchen simply extends: the hinges, the whole window and the whole sink show. Nothing in the middle moves.</p>
 
     <ol class="qs">
-      <li><b>Recipe log:</b> is this the right content for the sheet (date, recipe, a short note)?</li>
-      <li><b>Label:</b> does the RECIPE LOG label read well on the door?</li>
+      <li><b>Inside the cabinet:</b> A cat, B kitchen gear or C secret stash? Always the same, or a surprise that changes now and then?</li>
     </ol>
   </div>
 </section>
@@ -36,7 +40,9 @@
   PLATE.add(function () {
     put("k-main", VP, null, "The main kitchen by day");
     put("k-eve", VP, { bites: 0 }, "The kitchen in the evening", null, true);
-    put("k-log", VP, { logOpen: 1 }, "The recipe log cabinet open: a clipboard with the log sheet hangs inside the left door", [855, 1395, 484, 230]);
+    put("k-log", VP, { logOpen: 1, inside: "cat" }, "The recipe log cabinet open: the log sheet hangs inside the left door and a cat sleeps in a bowl inside", [855, 1395, 484, 230]);
+    [["a", "cat", "a cat asleep in a mixing bowl"], ["b", "gear", "a stand mixer and nested bowls on sheet pans"], ["c", "stash", "a tin marked DO NOT TOUCH and chocolate bars"]].forEach(function (v) {
+      put("k-in-" + v[0], VP, { logOpen: 1, inside: v[1] }, "Inside the open recipe log cabinet: " + v[2], [1012, 1372, 540, 166]); });
     put("k-rec", VP, { linkOn: 1 }, "Recently on an index card held by two magnets", [296, 520, 100, 210]);
     put("k-normal", VP, null, "The kitchen at normal width");
     put("k-wide", VPW, null, "The kitchen extra wide");
