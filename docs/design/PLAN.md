@@ -93,7 +93,7 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 ### Trials notebook
 - [x] Tabs and a Contents page
 - [x] ~~Publish is a stamp on the entry~~ now an "Add to recipe box" button on the strip (Ari, 2026-11-13)
-- [x] Page turns: folded corners and arrows
+- [x] Page turns: folded corners for trials. Recipe arrows dropped (Ari, 2026-11-13): other recipes via Contents or the find bar
 - [x] Compare taken out (Later list)
 
 ### Recipe box
