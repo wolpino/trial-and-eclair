@@ -1,0 +1,157 @@
+<section aria-labelledby="h-ideas">
+  <span class="label" id="h-ideas">03 · The idea board</span>
+  <div class="sec-body">
+    <h3>The idea board, opened</h3>
+    <figure id="ideas-open" class="fx"></figure>
+    <p class="note"><b>Open and type.</b> Clicking the cork in the kitchen opens the board large. A blank note is already pinned at the top left with the cursor in it: type a few words, press Enter, and it is pinned. Newest ideas come first.</p>
+    <p class="note"><b>Short notes, plain tacks.</b> Each idea is a short note: a title and a line or two. An idea can also hold one photo, a snapshot of something seen or tried, clipped to the note's corner (shown on "Yuzu curd tart"). Most notes have none. The notes sit in a loose grid, each a little crooked. The tacks are just tacks in the kitchen colours, mixed; they mean nothing. No statuses and no filters. Pointing at a note makes it glow (shown on "Cardamom knots").</p>
+    <p class="note"><b>More than fit.</b> The cork shows as many notes as fit. The last row is cut off by the frame, a slip says how many more there are, and a thin rail on the right shows where you are, like the whiteboard.</p>
+    <p class="note"><b>Plans.</b> Switch the Plan to Home cook or Guest: the same board with sample ideas, read-only. The blank note's place holds a sample card with the yellow "paid plan" tag and a "See the paid plan" link (a guest sees "Sign up"). Notes still open, without the buttons. The figures below are the Developer board.</p>
+
+    <h3>One idea, opened</h3>
+    <figure id="ideas-one"></figure>
+    <p class="note"><b>The note comes forward.</b> Clicking a note pulls it forward, still pinned, over the dimmed board. The title and the few lines can be changed in place. Clicking the board behind puts it back. "Start a trial" opens the Trials notebook at a new trial, with "from the idea: Miso caramel" on its first page (see the notebook section). "Send to Next up" writes it on the whiteboard. "Delete" takes it off for good.</p>
+    <p class="note"><b>One photo.</b> The idea's photo is taped in the corner of the big note. "Add a photo" (or "Change photo" once there is one) sits by the buttons: one photo per idea, no gallery. When the idea becomes a trial, the photo goes with it to the trial's first page.</p>
+
+    <div class="pair">
+      <div><h3>Before: Start a trial on Miso caramel</h3><figure id="ideas-before"></figure></div>
+      <div><h3>After: back on the board, the gap stays</h3><figure id="ideas-after"></figure></div>
+    </div>
+    <p class="note"><b>The idea leaves the board, quietly.</b> Once the trial starts, the Miso caramel note is archived. Back on the board its place is empty and the other notes stay put, so nothing jumps around under the cook's eye. The board tidies up (closes the gap) the next time it is opened, or when a new idea is pinned. The Archived envelope goes from 4 to 5. No "Moved to Trials" trace is left behind: the notebook opening at the new trial already says what happened, and a trace would be one more thing to clear off the cork.</p>
+
+    <h3>The Archived envelope</h3>
+    <figure id="ideas-archived"></figure>
+    <p class="note"><b>A quiet way back.</b> A small envelope pinned in the top right corner holds the archived ideas. Clicking it slides out a card: each idea, the day it left, and a link to the trial it became. It stays small so the board is about new ideas.</p>
+
+  </div>
+</section>
+<script>
+(function () {
+  var HAND = "var(--font-hand)", X0 = 468, Y0 = 92, X1 = 1332, Y1 = 700, BLU = "var(--blue)";
+  var FW = { side: "var(--wood)", top: "var(--wood-dark)", bottom: "var(--wood-hi)" };
+  var PAPER = ["var(--card)", "var(--yellow)", "var(--card)", "var(--amber)", "var(--plaster)"];
+  var TACK = ["var(--blue)", "var(--orange)", "var(--stem)", "var(--wood)", "var(--yellow)"];
+  /* title lines, body lines (short notes, newest first) */
+  var IDEAS = [
+    [["Miso caramel"], ["white miso,", "dark caramel"]],
+    [["Cardamom", "knots"], ["pearl sugar"]],
+    [["Yuzu curd", "tart"], ["nutty crust?"], "tart"],
+    [["Black sesame", "shortbread"], ["for gifts"]],
+    [["Earl Grey", "scones"], ["tea in the cream"]],
+    [["Rye babka"], ["dark chocolate,", "less sugar"]],
+    [["Burnt honey", "custard"], ["set in jars"]],
+    [["Saffron buns"], ["soak saffron", "in warm milk"]],
+    [["Olive oil", "cake"], ["blood orange"]],
+    [["Malted milk", "cookies"], ["chewy middle"]],
+    [["Brown butter", "madeleines"], ["the hump!"]],
+    [["Pistachio", "financiers"], ["for egg whites"]],
+    [["Hazelnut", "praline"], ["in choux"]],
+    [["Lemon thyme", "posset"], ["no bake"]],
+    [["Pear tatin"], ["cardamom too?"]],
+    [["Coffee", "kouign-amann"], []], [["Plum crumble"], []], [["Ginger snaps"], []], [["Fig galette"], []], [["Rose meringues"], []]
+  ];
+  var SAMPLE = IDEAS.slice(0, 14);
+  var NW = 150, NH = 118, r = rand(31), JIT = [];
+  for (var j = 0; j < 30; j++) JIT.push([(r() - 0.5) * 12, (r() - 0.5) * 10, (r() - 0.5) * 6, Math.floor(r() * 5), Math.floor(r() * 5)]);
+  /* place jitter belongs to the slot; paper, tack and tilt belong to the idea (k), so they travel when notes move up */
+  function slot(i, k) { var J = JIT[i]; return [484 + (i % 5) * 164 + J[0], 166 + Math.floor(i / 5) * 146 + J[1], JIT[k == null ? i : k][2]]; }
+  function tack(cx, cy, col, rr) { rr = rr || 7;
+    return '<circle cx="' + cx + '" cy="' + cy + '" r="' + rr + '" style="fill:' + col + ';stroke:var(--ink);stroke-width:1.8"/><circle cx="' + (cx - rr * 0.34) + '" cy="' + (cy - rr * 0.34) + '" r="' + (rr * 0.28).toFixed(1) + '" style="fill:#fff;opacity:.8"/>'; }
+  /* a small print: white border, flat colour picture. kind "tart" (yuzu slice) or "jar" (dark caramel) */
+  function snap(x, y, w, h, kind) { var b = 5, ix = x + b, iy = y + b, iw = w - 2 * b, ih = h - 2 * b - 8, s = "";
+    s += reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"', "var(--page)", 1.6) + reg("rect", 'x="' + ix + '" y="' + iy + '" width="' + iw + '" height="' + ih + '"', "var(--plaster)", 1.2);
+    if (kind === "tart") { var px = ix + iw * 0.06, py = iy + ih * 0.52, qx = ix + iw * 0.94, qy = iy + ih * 0.22, ry = iy + ih * 0.8;
+      s += reg("path", 'd="M' + px + " " + py + " L" + qx + " " + qy + " L" + qx + " " + ry + ' Z"', "var(--yellow)", 1.4) +
+        reg("path", 'd="M' + qx + " " + qy + " L" + (qx + 0.01) + " " + ry + " L" + (qx - 5) + " " + (ry + 1) + " L" + (qx - 5) + " " + (qy + 2) + ' Z"', "var(--amber)", 1.2) +
+        line("M" + px + " " + (py + 2) + " L" + (qx - 5) + " " + (ry + 1), 1.2) + line("M" + (ix + 4) + " " + (iy + ih - 3) + " H" + (ix + iw - 4), 1, 0.5); }
+    else { var jx = ix + iw * 0.28, jw = iw * 0.44, jy = iy + ih * 0.3, jh = ih * 0.62;
+      s += reg("rect", 'x="' + jx + '" y="' + jy + '" width="' + jw + '" height="' + jh + '" rx="5"', "var(--wood)", 1.4) + reg("rect", 'x="' + (jx - 2) + '" y="' + (jy - 9) + '" width="' + (jw + 4) + '" height="10" rx="2"', "var(--brass)", 1.4) +
+        reg("rect", 'x="' + (jx + 4) + '" y="' + (jy + jh * 0.4) + '" width="' + (jw - 8) + '" height="' + (jh * 0.3).toFixed(1) + '"', "var(--card)", 1.1) + line("M" + (jx + 6) + " " + (jy + 6) + " v" + (jh * 0.25).toFixed(1), 2, 0.6, "var(--amber)") +
+        line("M" + (ix + 3) + " " + (jy + jh) + " H" + (ix + iw - 3), 1.1, 0.6); }
+    return s; }
+  function tape(cx, cy, w, rot) { return '<rect x="' + (cx - w / 2) + '" y="' + (cy - 8) + '" width="' + w + '" height="16" transform="rotate(' + rot + " " + cx + " " + cy + ')" style="fill:var(--custard);opacity:.72;stroke:var(--ink);stroke-width:1;stroke-opacity:.35"/>'; }
+  /* a paper clip over an edge at (cx, cy), long axis vertical */
+  function clip(cx, cy) { return line("M" + (cx - 3) + " " + (cy + 10) + " V" + (cy - 12) + " a4 4 0 0 1 8 0 V" + (cy + 14) + " a5.5 5.5 0 0 1 -11 0 V" + (cy - 8), 1.8, 1, "var(--ink-soft)"); }
+  function tackFor(i) { var J = JIT[i + 3], t = TACK[J[4]]; if (t === "var(--yellow)" && PAPER[J[3]] === "var(--yellow)") t = BLU; return t; }
+  function pinned(i, body, k) { var p = slot(i, k), cx = p[0] + NW / 2; return '<g transform="rotate(' + p[2].toFixed(2) + " " + cx + " " + (p[1] + 8) + ')">' + body + "</g>" + tack(cx, p[1] + 8, tackFor(k == null ? i : k)); }
+  function note(i, d, on) {
+    var k = IDEAS.indexOf(d) + 1, p = slot(i), x = p[0], y = p[1], s = reg("rect", 'x="' + x + '" y="' + y + '" width="' + NW + '" height="' + NH + '"', PAPER[JIT[k + 3][3]], 2);
+    d[0].forEach(function (t, k) { s += T(x + 12, y + 40 + k * 25, t, "font:700 25px " + HAND + ";fill:var(--ink)"); });
+    var by = y + 40 + d[0].length * 25 + 2;
+    d[1].forEach(function (t, k) { s += T(x + 12, by + k * 20, t, "font:500 20px " + HAND + ";fill:var(--ink)"); });
+    if (d[2]) { var sx = x + NW - 44, sy = y - 6; s += '<g transform="rotate(7 ' + (sx + 28) + " " + sy + ')">' + snap(sx, sy, 56, 62, d[2]) + "</g>" + clip(sx + 29, sy + 2); }
+    var h = hot(d[0].join(" "), pinned(i, s, k), [x, y, NW, NH]);
+    return on ? h.replace('class="hot"', 'class="hot on"') : h;
+  }
+  function blank(i) { var p = slot(i), x = p[0], y = p[1];
+    return pinned(i, reg("rect", 'x="' + x + '" y="' + y + '" width="' + NW + '" height="' + NH + '"', "var(--card)", 2) +
+      line("M" + (x + 14) + " " + (y + 22) + " V" + (y + 46), 2.6, 1, BLU) + T(x + 21, y + 42, "New idea…", "font:500 25px " + HAND + ";fill:var(--ink-soft)") +
+      line("M" + (x + 12) + " " + (y + 52) + " H" + (x + NW - 12), 1.2, 0.5) + line("M" + (x + 12) + " " + (y + 76) + " H" + (x + NW - 12), 1.2, 0.3) +
+      T(x + 12, y + NH - 12, "Enter pins it", "font:13px var(--font-body);fill:var(--ink-soft)")); }
+  /* read-only: the sample card in the blank note's place */
+  function sample(i) { var p = slot(i), x = p[0], y = p[1], g = o.plan === "guest";
+    var s = pinned(i, reg("rect", 'x="' + x + '" y="' + y + '" width="' + NW + '" height="' + NH + '"', "var(--card)", 2) +
+      T(x + 12, y + 38, "A sample board.", "font:700 22px " + HAND + ";fill:var(--ink)") + T(x + 12, y + 62, "Read only.", "font:500 21px " + HAND + ";fill:var(--ink)") +
+      lk(x + 12, y + 96, g ? "Sign up" : "See the paid plan", 20, false, g ? "Sign up" : "the paid plan"));
+    return s; }
+  function paid(x, y, rot) { return '<g transform="rotate(' + rot + " " + x + " " + y + ')">' + reg("rect", 'x="' + (x - 52) + '" y="' + (y - 16) + '" width="104" height="30" rx="3"', "var(--yellow)", 1.8) +
+    T(x + 6, y + 6, "paid plan", "font:700 20px " + HAND + ";fill:var(--ink)", 'text-anchor="middle"') + "</g>" + tack(x - 40, y, "var(--card)", 5); }
+  function title() { var x = 492;
+    return '<g transform="rotate(-2 ' + (x + 50) + ' 112)">' + reg("rect", 'x="' + x + '" y="102" width="100" height="46"', "var(--card)", 2) + line("M" + (x + 5) + " 116 H" + (x + 95), 1.4, 1, "#c9442a") + T(x + 50, 141, "Ideas", "font:700 30px " + HAND + ";fill:var(--ink)", 'text-anchor="middle"') + "</g>" + tack(x + 50, 107, "var(--orange)", 7); }
+  /* the Archived envelope, small, top right; open = flap up */
+  function envelope(n, open) { var x = 1214, y = 102, w = 84, h = 52, s = "";
+    if (open) s += reg("path", 'd="M' + x + " " + y + " L" + (x + w / 2) + " " + (y - 26) + " L" + (x + w) + " " + y + ' Z"', "var(--custard)", 1.6);
+    s += reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"', "var(--custard)", 1.8);
+    if (!open) s += line("M" + x + " " + y + " L" + (x + w / 2) + " " + (y + 24) + " L" + (x + w) + " " + y, 1.6);
+    s += T(x + w / 2, y + h - 8, "Archived · " + n, "font:600 17px " + HAND + ";fill:var(--ink)", 'text-anchor="middle"');
+    return '<g transform="rotate(3 ' + (x + w / 2) + " " + y + ')">' + s + "</g>" + tack(x + w / 2, y + (open ? -16 : 6), "var(--stem)", 6); }
+  function frame(inner) {
+    return hatch(STAGE.x0 + 4, 714, STAGE.x1 - STAGE.x0 - 8, 8) + reg("rect", 'x="' + STAGE.x0 + '" y="' + STAGE.y0 + '" width="' + (STAGE.x1 - STAGE.x0) + '" height="638" rx="4"', "var(--wood)") + grain(STAGE.x0 + 6, 78, 880, 10, 4) + grain(STAGE.x0 + 6, 702, 880, 8, 7) +
+      recess(X0, Y0, X1, Y1, 10, "url(#corkp)", FW) + reg("rect", 'x="' + X0 + '" y="' + Y0 + '" width="' + (X1 - X0) + '" height="' + (Y1 - Y0) + '"', "none", 2.2) + inner; }
+  /* the scroll cue: a slip pinned low on the right, and a rail */
+  function more(n) { var x = 1146, y = 650, s = "", rx = 1318, c0 = 160, c1 = 690;
+    s += reg("rect", 'x="' + (rx - 3) + '" y="' + c0 + '" width="6" height="' + (c1 - c0) + '" rx="3"', "var(--card)", 1.3) + reg("rect", 'x="' + (rx - 5) + '" y="' + (c0 + 2) + '" width="10" height="' + ((c1 - c0) * 0.62).toFixed(0) + '" rx="5"', BLU, 1.6);
+    s += '<g transform="rotate(-3 ' + (x + 64) + " " + y + ')">' + reg("rect", 'x="' + x + '" y="' + y + '" width="128" height="44"', "var(--card)", 1.8) +
+      line("M" + (x + 22) + " " + (y + 8) + " q-5 14 2 28 M" + (x + 14) + " " + (y + 28) + " l10 9 l7 -12", 3, 1, BLU) + T(x + 40, y + 32, n + " more", "font:700 25px " + HAND + ";fill:" + BLU) + "</g>" + tack(x + 64, y + 4, "var(--orange)", 5);
+    return s; }
+  /* ideas: list shown; ro: read-only; pt: index pointed at; arch: envelope count */
+  function board(ideas, ro, pt, arch) {
+    var s = "", first = ro ? sample(0) : blank(0);
+    if (pt != null) s += note(pt + 1, ideas[pt], true);
+    ideas.forEach(function (d, i) { if (d && i !== pt) s += note(i + 1, d); });
+    s = clipTo(X0 + 2, Y0 + 60, X1 - 24, Y1 - 2, s + first);
+    var rest = ideas.length + 1 - 15;
+    return frame(title() + s + (arch != null ? envelope(arch, false) : "") + (rest > 0 ? more(rest) : "") + (ro ? paid(668, 124, -4) : "")); }
+  function dev() { return board(IDEAS, false, 1, 4); }
+  /* One idea pulled forward */
+  function big() { var x = 670, y = 140, w = 460, h = 440, lx = x + 34, s = "";
+    s += hatch(x + 8, y + h, w - 4, 9) + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"', "var(--card)", 2.4);
+    s += T(lx, y + 88, "Miso caramel", "font:700 54px " + HAND + ";fill:var(--ink)") + line("M" + lx + " " + (y + 104) + " H" + (x + w - 34), 1.4, 0.5);
+    ["White miso, about 1 tbsp", "per cup of sugar.", "Cook the caramel dark.", "Swirl into the blondies?", ""].forEach(function (t, i) { var ly = y + 150 + i * 38;
+      s += T(lx, ly, t, "font:500 28px " + HAND + ";fill:var(--ink)") + line("M" + lx + " " + (ly + 9) + " H" + (x + w - 34), 1.1, 0.35); });
+    var px = x + w - 132, py = y + 22;
+    s += '<g transform="rotate(4 ' + (px + 50) + " " + py + ')">' + snap(px, py, 100, 112, "jar") + "</g>" + tape(px + 52, py + 2, 54, -6);
+    s += T(lx, y + h - 70, "Pinned 11/09/26", "font:13px var(--font-body);fill:var(--ink-soft)");
+    s += T(x + w - 34 - 132, y + h - 76, "One photo per idea", "font:13px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"') + pill(x + w - 34 - 124, y + h - 98, 124, "Change photo");
+    var by = y + h - 54;
+    s += pill(lx, by, 130, "Start a trial", true) + pill(lx + 140, by, 150, "Send to Next up") + pill(x + w - 34 - 78, by, 78, "Delete");
+    return '<g transform="rotate(-0.6 ' + (x + w / 2) + " " + (y + 10) + ')">' + s + "</g>" + tack(x + w / 2, y + 12, tackFor(1), 10); }
+  function dim() { return '<rect x="' + X0 + '" y="' + Y0 + '" width="' + (X1 - X0) + '" height="' + (Y1 - Y0) + '" style="fill:#1f1d1a;opacity:.45"/>'; }
+  /* the archived card, slid out of the open envelope */
+  function archived() { var x = 960, y = 176, w = 340, s = "";
+    var A = [["Miso caramel", "11/12/26", "Trial 1"], ["Brown sugar pavlova", "10/30/26", "Trial 2"], ["Chai snickerdoodles", "10/14/26", "Trial 1"], ["Rose shortbread", "9/22/26", "Trial 3"]];
+    s += reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="218"', "var(--card)", 2) + T(x + 16, y + 34, "Archived ideas", "font:700 26px " + HAND + ";fill:var(--ink)") + line("M" + (x + 16) + " " + (y + 44) + " H" + (x + w - 16), 1.2, 0.5);
+    A.forEach(function (a, i) { var ly = y + 78 + i * 36;
+      s += T(x + 16, ly, a[0], "font:600 21px " + HAND + ";fill:var(--ink)") + T(x + 200, ly, a[1], "font:13px var(--font-body);fill:var(--ink-soft)") + lk(x + 266, ly, a[2], 19, i === 0, a[0] + " " + a[2]); });
+    return '<g transform="rotate(2 ' + (x + w / 2) + " " + y + ')">' + s + "</g>"; }
+  PLATE.add(function () {
+    function put(id, h) { document.getElementById(id).innerHTML = h; }
+    var ro = o.plan !== "dev";
+    put("ideas-open", openOver(ro ? board(SAMPLE, true, null, 2) : dev(), ro ? "The idea board as a " + (o.plan === "guest" ? "guest" : "home cook") + " sees it: sample ideas, read-only, paid plan" : "The idea board open over the dimmed kitchen, a blank note ready to type"));
+    put("ideas-one", openOver(board(IDEAS, false, null, 4) + dim() + big(), "The Miso caramel idea pulled forward over the board", { plan: "dev" }));
+    put("ideas-before", svg([452, 1348], board(IDEAS, false, 0, 4), "Before: the board with Miso caramel, pointed at", 76, 340));
+    put("ideas-after", svg([452, 1348], board([null].concat(IDEAS.slice(1)), false, null, 5), "After: Miso caramel is gone, its place left empty, Archived shows 5", 76, 340));
+    put("ideas-archived", svg([900, 1348], board(IDEAS, false, null, null) + dim() + archived() + envelope(5, true), "The Archived envelope opened: a card of archived ideas with links to their trials", 76, 320));
+  });
+})();
+</script>

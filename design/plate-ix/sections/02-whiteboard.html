@@ -1,0 +1,98 @@
+<section aria-labelledby="h-wb">
+  <span class="label" id="h-wb">02 · The whiteboard</span>
+  <div class="sec-body">
+    <h3>The whiteboard, opened</h3>
+    <figure id="wb-open"></figure>
+    <p class="note"><b>What it is for.</b> "Next up" is the short list of what the cook is working on or will bake next. Click the whiteboard on the kitchen wall and it opens large, with the cursor already in the bottom line. Type and press Enter to add an item. A jot from the find bar can land here too.</p>
+    <p class="note"><b>Pinned or automatic.</b> An item the cook put there holds an orange magnet. An item the app added has a grey "auto" ring and the reason next to it, such as "edited yesterday" or an open "next:" note. Click the dashed ring to pin an automatic item, so it stays. Click a magnet to take it off.</p>
+    <p class="note"><b>Using an item.</b> The words are the link: pointing turns them yellow and underlined, and a click opens the recipe card, the Trials page or the idea named in blue underneath. Tick the square when it is done. Drag the dots on the left to change the order. Switch Plan to Home cook to see the same board with recipe cards only.</p>
+    <div class="trio" id="wb-states">
+      <div><h3>Ticking off</h3><figure id="wb-tick"></figure><p class="note"><b>Three steps, top to bottom.</b> Not done yet. Just ticked: a line goes through it. Later the line is wiped off and only a faint smudge is left.</p></div>
+      <div><h3>Home cook</h3><figure id="wb-cook"></figure><p class="note"><b>Same board, free plan.</b> Every item opens a recipe card. Nothing is locked, so there is no paid label.</p></div>
+      <div><h3>New kitchen</h3><figure id="wb-empty"></figure><p class="note"><b>Empty.</b> A light line says nothing is next up yet. The bottom line is still ready to type into.</p></div>
+    </div>
+    <ol class="qs">
+      <li><b>Removing automatic items:</b> can the cook wipe off an item the app added, and if so should it stay away until something new happens on that recipe?</li>
+      <li><b>After a tick:</b> is a ticked item wiped off at once, or kept with a line through it until tomorrow?</li>
+      <li><b>How many:</b> the board holds 6 items. With more, should it scroll, or should the oldest automatic items drop off?</li>
+      <li><b>The kitchen wall:</b> the small whiteboard shows an orange dot on one item. Should that dot be the magnet (pinned), so the small and large boards agree?</li>
+    </ol>
+  </div>
+</section>
+<script>
+(function () {
+  var GREY = "#8a8780", BLUE = "var(--blue)";
+  function tw(t, fs) { return t.length * fs * 0.38; }
+  function hand(x, y, t, fs, col, wt, extra) { return T(x, y, t, "font:" + (wt || 600) + " " + fs + "px var(--font-hand);fill:" + (col || "var(--ink)"), extra); }
+  function magnet(x, y, r) { return '<circle cx="' + (x + 1.5) + '" cy="' + (y + 2.5) + '" r="' + r + '" style="fill:var(--ink);opacity:.25"/><circle cx="' + x + '" cy="' + y + '" r="' + r + '" style="fill:var(--orange);stroke:var(--ink);stroke-width:1.8"/><circle cx="' + (x - r * 0.3) + '" cy="' + (y - r * 0.3) + '" r="' + (r * 0.26) + '" style="fill:#fff;opacity:.8"/>'; }
+  function autoRing(cx, cy, fs) { return '<ellipse cx="' + cx + '" cy="' + cy + '" rx="' + (fs * 1.15) + '" ry="' + (fs * 0.56) + '" transform="rotate(-4 ' + cx + " " + cy + ')" style="fill:none;stroke:' + GREY + ';stroke-width:1.6"/>' + hand(cx, cy + fs * 0.3, "auto", fs, GREY, 600, 'text-anchor="middle"'); }
+  function icon(k, x, y) {
+    if (k === "book") return reg("rect", 'x="' + (x + 3) + '" y="' + (y - 19) + '" width="17" height="21" rx="1.5"', "#fbfaf6", 1.5) + '<rect x="' + (x + 3) + '" y="' + (y - 19) + '" width="5" height="21" style="fill:var(--ink)"/>' + line("M" + (x + 11) + " " + (y - 13) + " h6 M" + (x + 11) + " " + (y - 9) + " h6", 1.2);
+    if (k === "idea") return '<g transform="rotate(-7 ' + (x + 11) + " " + (y - 8) + ')">' + reg("rect", 'x="' + (x + 2) + '" y="' + (y - 17) + '" width="19" height="18"', "var(--custard)", 1.5) + line("M" + (x + 6) + " " + (y - 8) + " h11 M" + (x + 6) + " " + (y - 4) + " h8", 1.1, 0.6) + "</g>" + '<circle cx="' + (x + 11) + '" cy="' + (y - 17) + '" r="3.6" style="fill:var(--orange);stroke:var(--ink);stroke-width:1.3"/>';
+    return reg("rect", 'x="' + x + '" y="' + (y - 16) + '" width="25" height="17" rx="1"', "var(--card)", 1.5) + line("M" + (x + 2) + " " + (y - 11) + " h21", 1.2, 1, "#c9442a") + line("M" + (x + 4) + " " + (y - 6) + " h14 M" + (x + 4) + " " + (y - 3) + " h10", 1, 0.6);
+  }
+  function box(x, y, s, ticked) { return line("M" + x + " " + (y + 1) + " l" + s + " -1 l1 " + s + " l-" + (s + 1) + " 1 Z", 2.4, 1, BLUE) + (ticked ? line("M" + (x + 4) + " " + (y + s * 0.5) + " l" + (s * 0.3) + " " + (s * 0.36) + " l" + (s * 0.62) + " -" + (s * 1.05), 3.2, 1, "var(--orange)") : ""); }
+  function smudge(x, y, w, op) { return line("M" + x + " " + y + " q" + (w / 4) + " -9 " + (w / 2) + " -1 t" + (w / 2) + " -2", 20, op || 0.06, BLUE) + line("M" + (x + 14) + " " + (y + 9) + " q" + (w / 4) + " 6 " + (w / 2) + " 0 t" + (w / 2 - 30) + " 1", 12, (op || 0.06) * 0.8, BLUE); }
+  function marker(x, y, col, flip) { var b = reg("rect", 'x="' + x + '" y="' + y + '" width="74" height="12" rx="4"', "var(--card)", 1.6) + reg("rect", 'x="' + (x + 14) + '" y="' + y + '" width="34" height="12"', col, 1.4) + reg("rect", 'x="' + (x + 56) + '" y="' + (y - 1) + '" width="22" height="14" rx="3"', col, 1.6);
+    return flip ? '<g transform="translate(' + (2 * x + 78) + ' 0) scale(-1 1)">' + b + "</g>" : b; }
+  function row(B, r, y) {
+    var s = "", fs = B.fs, f2 = Math.round(fs * 0.62), tx = B.sx + 78, px = B.sx + B.sw - 38, bs = Math.round(fs * 0.66), w = tw(r.t, fs);
+    if (r.wiped) return smudge(tx - 30, y - 8, w + 70, 0.09) + hand(tx, y, r.t, fs, "var(--ink)", 600, 'opacity=".1"') + line("M" + (tx - 6) + " " + (y - fs * 0.28) + " h" + (w * 0.5), 2, 0.1, BLUE);
+    for (var d = 0; d < 6; d++) s += '<circle cx="' + (B.sx + 18 + (d % 2) * 8) + '" cy="' + (y - bs + 3 + Math.floor(d / 2) * 8) + '" r="2" style="fill:' + GREY + '"/>';
+    s += box(B.sx + 40, y - bs, bs, r.done);
+    s += lk(tx, y, r.t, fs, r.on, r.t, { cw: 0.38, col: r.done ? GREY : "var(--ink)" });
+    if (r.done) s += line("M" + (tx - 8) + " " + (y - fs * 0.26) + " q" + (w / 2) + " -7 " + (w + 14) + " 1", 3, 1, BLUE);
+    var y2 = y + f2 + 8, wx = tx + 34;
+    s += icon(r.k, tx, y2) + hand(wx, y2, r.w, f2, BLUE);
+    wx += tw(r.w, f2) + 18;
+    if (r.why) s += autoRing(wx + f2 * 1.15, y2 - f2 * 0.3, f2 - 1) + hand(wx + f2 * 2.3 + 8, y2, r.why, f2, GREY);
+    else if (r.note) s += hand(wx, y2, r.note, f2, GREY);
+    if (r.pin) s += magnet(px, y - bs * 0.5, 11);
+    else if (!r.done) s += '<circle cx="' + px + '" cy="' + (y - bs * 0.5) + '" r="10" style="fill:none;stroke:' + GREY + ';stroke-width:1.6;stroke-dasharray:4 3"/>' + T(px, y + 16, "pin", "font:12px var(--font-body);fill:var(--ink-soft)", 'text-anchor="middle"');
+    return s;
+  }
+  /* One whiteboard: B = {x, y, w, h, fs, rows, legend, empty} */
+  function board(B) {
+    var x = B.x, y = B.y, w = B.w, h = B.h, F = 16, sx = B.sx = x + F, sy = y + F, sw = B.sw = w - 2 * F, sh = h - 2 * F, sb = sy + sh, hs = Math.round(B.fs * 1.5), pitch = Math.round(B.fs * 1.95);
+    var s = hatch(x + 8, y + h, w - 4, 9, 0.8) + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="4"', "var(--wood)", 2.6) + grain(x + 20, y + 2, w - 40, F - 3, 5) + grain(x + 20, sb + 2, w - 40, F - 3, 8);
+    s += reg("rect", 'x="' + sx + '" y="' + sy + '" width="' + sw + '" height="' + sh + '"', "var(--wb)", 2.2);
+    [[x, y, sx, sy], [x + w, y, sx + sw, sy], [x, y + h, sx, sb], [x + w, y + h, sx + sw, sb]].forEach(function (c) { s += line("M" + c[0] + " " + c[1] + " L" + c[2] + " " + c[3], 1.4, 0.7); });
+    s += smudge(sx + sw * 0.5, sy + 40, sw * 0.4) + smudge(sx + 60, sb - 70, sw * 0.5, 0.045);
+    s += hand(sx + 30, sy + hs + 4, "Next up", hs, BLUE, 700) + line("M" + (sx + 30) + " " + (sy + hs + 14) + " q" + (hs * 1.3) + " 6 " + (hs * 2.7) + " -3", 3, 1, BLUE);
+    if (B.legend) { var lx = sx + sw - 400, ly = sy + hs - 4; s += magnet(lx, ly - 7, 9) + hand(lx + 16, ly, "pinned by you", 21, GREY) + autoRing(lx + 172, ly - 7, 20) + hand(lx + 204, ly, "added for you", 21, GREY); }
+    var r0 = sy + hs + Math.round(B.fs * 1.9);
+    B.rows.forEach(function (r, i) { s += row(B, r, r0 + i * pitch); });
+    if (B.empty) s += hand(sx + sw / 2, r0 + pitch * 0.9, "Nothing next up yet", Math.round(B.fs * 1.25), BLUE, 600, 'text-anchor="middle" opacity=".32"');
+    /* the add line: cursor already in it */
+    var ay = r0 + Math.max(B.rows.length, B.min || 0) * pitch + 12, bs = Math.round(B.fs * 0.66);
+    s += '<path d="M' + (sx + 40) + " " + (ay - bs + 1) + " h" + bs + " v" + bs + " h-" + bs + ' Z" style="fill:none;stroke:' + GREY + ';stroke-width:1.6;stroke-dasharray:4 3"/>' +
+      line("M" + (sx + 80) + " " + (ay - B.fs * 0.8) + " v" + (B.fs * 0.98), 2.6, 1, BLUE) + hand(sx + 88, ay, "Write the next thing…", B.fs, GREY) + line("M" + (sx + 76) + " " + (ay + 9) + " H" + (sx + sw - 116), 1.4, 0.8, GREY) +
+      T(sx + sw - 24, ay + 2, "Enter adds it", "font:13px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"');
+    /* marker tray, hung on the bottom rail */
+    var tw2 = Math.max(w * 0.56, 340) / 2, tx0 = x + w / 2 - tw2, tx1 = x + w / 2 + tw2, ty = sb + 5;
+    s += reg("rect", 'x="' + tx0 + '" y="' + ty + '" width="' + (tx1 - tx0) + '" height="15" rx="2"', "var(--wood-hi)", 2.2) + line("M" + (tx0 + 4) + " " + (ty + 10) + " H" + (tx1 - 4), 1.2, 0.5) + hatch(tx0 + 4, ty + 15, tx1 - tx0 - 2, 6, 0.8);
+    s += marker(tx0 + 26, ty - 12, BLUE) + marker(tx0 + 122, ty - 12, "var(--orange)", 1);
+    s += reg("rect", 'x="' + (tx1 - 104) + '" y="' + (ty - 20) + '" width="78" height="14" rx="3"', "var(--wood)", 1.8) + reg("rect", 'x="' + (tx1 - 104) + '" y="' + (ty - 7) + '" width="78" height="7" rx="1"', "#4a4640", 1.6);
+    return s;
+  }
+  function rows(plan) {
+    var dev = plan !== "cook";
+    return [
+      dev ? { t: "Croissants: proof at 26°C, colder butter", k: "book", w: "Trials · trial 4", why: "open “next:” note" } : { t: "Croissants: proof a little warmer", k: "card", w: "recipe card", why: "open “next:” note" },
+      { t: "Rhubarb galette for Sunday", k: "card", w: "recipe card", pin: 1, on: 1 },
+      { t: "Blondies: brown the butter longer", k: "card", w: "recipe card", pin: 1 },
+      dev ? { t: "Miso caramel in the blondies?", k: "idea", w: "idea board", pin: 1, note: "jotted from the find bar" } : { t: "Weekend loaf for Mum", k: "card", w: "recipe card", pin: 1, note: "jotted from the find bar" },
+      dev ? { t: "Rough puff pastry", k: "book", w: "Trials · trial 2", why: "edited yesterday" } : { t: "Rough puff pastry", k: "card", w: "recipe card", why: "edited yesterday" },
+      { t: "Brown butter cookies", k: "card", w: "recipe card", done: 1, note: "done today" }
+    ];
+  }
+  function small(rws, extra) { var B = { x: 460, y: 20, w: 470, h: 384, fs: 30, rows: rws, min: 3 }; for (var k in extra) B[k] = extra[k]; return svg([444, 946], board(B), B.label, 4, 424); }
+  PLATE.add(function () {
+    var big = board({ x: 468, y: 82, w: 864, h: 612, fs: 34, rows: rows(o.plan), legend: 1 });
+    document.getElementById("wb-open").innerHTML = openOver(big, "The whiteboard opened over the dimmed kitchen");
+    document.getElementById("wb-tick").innerHTML = small([{ t: "Rhubarb galette", k: "card", w: "recipe card", pin: 1 }, { t: "Brown butter cookies", k: "card", w: "recipe card", done: 1, note: "done today" }, { t: "Rough puff pastry", wiped: 1 }], { label: "An item not done, an item ticked with a line through it, and an item wiped off" });
+    document.getElementById("wb-cook").innerHTML = small([{ t: "Rhubarb galette", k: "card", w: "recipe card", pin: 1 }, { t: "Blondies, less sugar", k: "card", w: "recipe card", pin: 1 }, { t: "Croissants", k: "card", w: "recipe card", why: "edited yesterday" }], { label: "The home cook's whiteboard: every item links to a recipe card" });
+    document.getElementById("wb-empty").innerHTML = small([], { empty: 1, label: "An empty whiteboard in a new kitchen" });
+  });
+})();
+</script>

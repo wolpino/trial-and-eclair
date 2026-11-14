@@ -10,6 +10,201 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-13 · Plate X, settling the five views: kitchen, notebook and recipe box tweaks
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-13` (second) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, 2 subagents at once) |
+| **Outcome** | partial (Ari's 2026-11-13 answers drawn and published; questions sent; no app code) |
+
+### Intent
+Apply Ari's latest answers to the five drawn Plate X views, republish, and ask every open question at once.
+
+### Summary
+- Kitchen (`01-kitchen.html`, `kitchen.js`): original green only, RECIPE LOG tape on the cabinet door, COOKBOOKS label moved left, clipboard with a four-row log sheet on the inside of the door
+- Notebook (`06-notebook.html`): black band fixed, number tabs with a recipe-name tag, tags on the recipe arrows, margin captions, centred page numbers, "Make recipe card" stamp with three wordings, first-time and replace dialogs
+- Recipe box (`07-recipe-box.html`): dusty rose guest limit
+- Plate X page republished (version 9): https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt
+- Second round the same day (version 10): log cabinet contents A cat / B gear / C stash, notebook without tape or name tag and "Add to recipe box" wording, recipe box "new card from the notebook" ready to edit, idea board keeps the gap
+- Version 11: whiteboard simplified to cook-written items only (Ari's yes); automatic items moved to the Later list
+- Version 12: whiteboard link on hover, cat redrawn, notebook strip button + recipe pills, idea photo, notes box only when there is a note
+- Versions 13 and 14: notebook recipe arrows dropped, then back as plain unlabelled arrows; six animal options for the cabinet; PLAN.md details list; Recently stays; PR wolpino/trial-and-eclair#170 opened into staging-render
+
+### Decisions
+- Main wording in the drawings is "Make recipe card" until Ari picks
+- REFERENCES label stays at the right end (the staggered pair read better)
+
+### Open threads
+- Questions to Ari (page order): kitchen log sheet content and door label; whiteboard eraser + pin ring; idea board envelope, photo, closing the gap; notebook stamp spot and wording, dialog wording, corners vs arrows, number tabs and where the recipe name goes; recipe box notes box when empty, Make it mine spot
+- Known rough spot: the notebook's "Croissants" tag overlaps the fridge's Recently note in the dimmed background
+- Cook and guest notebook views checked once by screenshot (cook); guest not screenshotted
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate X, recipe log sheet, original green, Make recipe card, replace dialog, number tabs, dusty rose
+**Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, design/plate-x/sections/01-kitchen.html, design/plate-x/kitchen.js, design/plate-x/sections/06-notebook.html, design/plate-x/sections/07-recipe-box.html
+**Do not redo:** layout rounds 1–10; Plates II–IX; Plate X sections 01, 02, 03, 06, 07 as drawn (tweak them, don't redraw)
+**Resume with:** Ari's sign-off on the five views (cabinet contents still open); pick the cabinet animal; then cookbooks (section 04); then the remaining 2026-11-13 questions → tweak → mark the five views done in PLAN.md → cookbooks (section 04)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-13 · Plate X, one view at a time: five views drawn and reviewed
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-13` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, 5 subagents, at most 2 at once) |
+| **Outcome** | partial (five views drawn and tweaked; Ari's latest answers recorded, not yet drawn; no app code) |
+
+### Intent
+Ask Ari the open Plate IX questions, write one plan of everything left, and draw Plate X one view at a time with review after each.
+
+### Summary
+- `docs/design/PLAN.md`: the one list of what is left (Plate X → XI final → phone → mark → brand sheet → Task issues → build), "How we work", per-view status table, build list, Later list. New ideas go on the Later list unless Ari says "this round"
+- `design/plate-x/` set up from Plate IX (Developer / Home cook / Guest switch, `build.cjs --skip NN`)
+- Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt with kitchen, whiteboard, idea board, Trials notebook and recipe box, each through one to three rounds of Ari's tweaks
+- All answers in the `kitchen-layout` memory ("Plate IX second-wave answers" and the "Plate X review" entries)
+
+### Decisions
+- Plate X is an extra round; Plate XI is the final. Evening for the kitchen only. Missing views to draw: Account and settings, signed-out front page, not-found
+- Kitchen: smaller board, black and white floor, magnets for Recently, sink set into the counter with a drawer line, slim cabinet / shelf / double cabinet (recipe log, #161) / sink cabinet, brass bar pulls, original green, bird and star now and then (about every 5 min in the app) and on click
+- Ideas have no statuses; moving one to a trial archives it. Cookbooks are sewn books. References keep 5 kinds
+- Whiteboard: question mark when empty, marker star for pinned, re-tick removes
+- Recipe box: one tab colour, plain Edit/Delete by the title, blank card at the back, arrows run A to Z, two-column letter lists, no card back (source by the title, notes box), dusty rose guest limit
+- Notebook: tabs are the current recipe's trials; arrows = recipes, corners = trials; re-publishing replaces the card (dialog to choose)
+- Finish the five drawn views before cookbooks; questions go to Ari all at once in page order
+
+### Open threads
+- Ari's 2026-11-13 answers (kitchen labels and log clipboard, notebook line/tabs/captions/page numbers/publish wording and dialog, rose) are recorded but NOT drawn
+- Nine open questions listed in NEXT.md
+- Accessibility pass added to the Later list
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate X, one view at a time, PLAN.md, status table, recipe log cabinet, publish wording, per-recipe tabs, guest limit rose
+**Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, design/plate-x/BRIEF.md, design/plate-x/kitchen.js, design/plate-x/sections/
+**Do not redo:** layout rounds 1–10; Plates II–IX; Plate X sections 01, 02, 03, 06, 07 as drawn (tweak them, don't redraw)
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent (Plate X, picks up 2026-11-13)"
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-12 · Plate IX notes from Ari and the second-wave prompt
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-12` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop) |
+| **Outcome** | handoff only (nothing drawn; no app code) |
+
+### Intent
+Record Ari's first notes on Plate IX and leave a prompt to pick the second wave up later.
+
+### Summary
+- `.cursor/handoffs/NEXT.md` rewritten: pick-up prompt, "Ari's Plate IX notes" (what to draw), wrap-up answers so far, and "Ask Ari first" (every open question, grouped by view)
+- `kitchen-layout` memory has the same answers
+
+### Decisions
+- Fridge cream; no sun patch; tape labels in all-caps marker; ticket rail (lean); normal view crops the window and fridge hinges, extra wide shows them
+- Every view gets developer and home cook versions, plus guest where it differs
+- After the plates: the phone layout, then the mark. The final plate is the brand sheet reference
+- Public pages and equipment spots are on hold
+
+### Open threads
+- Is the second wave an extra round before the final? Ask first
+- `design/plate-ix/` sources committed; `design/kitchen-starter/` stays local (Ari, 2026-11-13)
+- Views not drawn yet: Account menu and settings, upgrade, signed-out front page, not-found page
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate IX answers, second wave, director and subagents, floor, window, sink, ticket rail, whiteboard, recipe box arrows, full-screen card, sign in title, developer cook guest views
+**Files:** .cursor/handoffs/NEXT.md, design/plate-ix/BRIEF.md, design/plate-ix/sections/
+**Do not redo:** layout rounds 1–10; Plates II–IX; do not redraw the public pages (on hold)
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent": ask Ari the "Ask Ari first" questions, then plan, then subagents
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-12 · Kitchen Plate IX: wide kitchen and every open view
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-12` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, 9 subagents) |
+| **Outcome** | partial (Plate IX published, waiting on Ari; no app code) |
+
+### Intent
+Draw Plate IX from Ari's Plate VIII notes, and (Ari's request mid-session) mock every view that opens, in one long round built by subagents, because only two rounds are left.
+
+### Summary
+- Plate IX: https://claude.ai/artifact/APtnqDfCTQb13uLgHnABtf
+- Kitchen: wide, vintage fridge left (cream or mint) holding Recently (magnets, rail or fixed tape), one plain door, window right (whole or cut), sun patch by day and moon by night, taller tile, checkerboard floor, tape or brass shelf labels, narrow kitchen once
+- Open views, one section each: whiteboard, idea board, cookbooks (reader and editor), references, Trials notebook (tabs, contents, compare, publish stamp, nothing overlapping), recipe box (open, empty, long, edit in the lid, full-screen card and its back)
+- Also: public `/r` and `/c` pages and the phone recipe page; sign in, sign up with the sample-data question, an empty kitchen, removing samples; the jot list
+- Sources are in `design/plate-ix/` (untracked): shared base from Plate VIII, `BRIEF.md`, one file per section, `build.cjs` joins them into one page. Publish file: `dist/kitchen-plate-ix.html` = `dist/index.html` without the html/head wrapper
+
+### Decisions
+- Ari, before drawing: wide kitchen; tile ON by default; floor on in the main kitchen; main kitchen uses tape labels; light = window + sun patch; left cabinet one plain door; two rounds left (IX, then X = final day and evening)
+- The plate page stays one published file; the real refactor is the port to React components after sign-off
+- One subagent per view, each owning one section file, worked; the kitchen agent also owned `kitchen.js`
+
+### Open threads
+- Ari's answers: up to 4 questions at the end of each Plate IX section, plus the wrap-up questions in NEXT.md
+- Known issues listed in the NEXT.md prompt (floor stripes at the edges, faint sun on tile, hinges off-view, idea statuses 2 vs 4, reference kinds 4 vs 5, username vs email)
+- `design/kitchen-starter/` and `design/plate-ix/` still local
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate IX, open views, whiteboard, idea board, cookbooks binder, references shelf, notebook tabs, recipe box full screen, public pages, sign in card, subagents, design/plate-ix
+**Files:** .cursor/handoffs/NEXT.md, design/plate-ix/BRIEF.md, design/plate-ix/build.cjs, design/plate-ix/kitchen.js, design/plate-ix/sections/
+**Do not redo:** layout rounds 1–10; Plates II–IX
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent" (Plate X), after Ari's Plate IX answers
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-12 · Kitchen Plates VI–VIII and the Plate IX prompt
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-12` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts) |
+| **Outcome** | partial (Plates VI–VIII published; Plate IX prompt and wrap-up questions written; no code) |
+
+### Intent
+Apply Ari's notes on Plates V–VII and prepare a fresh chat for Plate IX and the wrap-up.
+
+### Summary
+- Plate VI, one-point perspective with construction lines, cork glow, evening from the top edge: https://claude.ai/artifact/PPHHNxUm3q1LiJvrpC9tnJ
+- Plate VII, window + pegboard or narrower, slim notebook, raised board, Recently options: https://claude.ai/artifact/V35qBtVGy4KY3zrTVVUsrY
+- Plate VIII, narrower kitchen, recipe box with a flush lid, Recently on the wall or a fridge, clickable eclair, angle options, phone photos: https://claude.ai/artifact/KGwgZJZ6XQMeRtQTdMr1mR
+- `.cursor/handoffs/NEXT.md` has the Plate IX prompt (all of Ari's Plate VIII notes) and the wrap-up questions
+
+### Decisions
+- One-point perspective, vanishing point x 900, y 230, kept
+- Notebook: black marble, named TRIALS; white marble kept for customising
+- Eclair: whole on load, three clicks eat it, back on reload
+- Recipe box: flush hinged lid (keep)
+- Plate IX direction: a vintage fridge on the left (holds Recently), a small window on the right for day/evening, one thin left cabinet with no towel, probably the wider kitchen again
+- Phones: a camera button on the open notebook page puts a photo straight into an entry
+
+### Open threads
+- Plate IX (prompt in NEXT.md): wide vs narrow, fridge detail, window whole or cut by the edge, Recently holder and tape, tape shelf labels, taller tile, checkerboard floor
+- Wrap-up questions for Ari: what "done" means, what must be settled before the build, mark or phone next, brand sheet, equipment spots, kitchen-starter files
+- `design/kitchen-starter/` (20 MB) still local
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate IX, vintage fridge, window right, one-point perspective, Recently tape, eclair bites, wrap up plates
+**Files:** .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–VIII
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent" (Plate IX), then "Questions to wrap up the plates"
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-11 · Kitchen layout round 10 and Plate II
 
 | Field | Value |
@@ -36,19 +231,24 @@ Draw the whole settled layout with the final tabs, confirm it, then start the pl
 - Plate III (https://claude.ai/artifact/VnwCp1aaWnJX2e3FWJ3ioa): less crowded middle with and without the eclair, whiter notebook options and names (Trials?), open notebook spread, five pointing styles instead of the lift, permanent labels, grow-to-fill sizing, 12 questions
 - Plate IV (https://claude.ai/artifact/BcqU8atxTQmnC45ywnzQa2): composition notebook (no spiral) in softer covers, mixed labels, more detail with a depth switch, glow/label pointing variants, jot menu, backsplash and made-it toggles, evening kitchen for dark mode, fixed middle on wide screens
 - Plate V (https://claude.ai/artifact/13AuDFvrJxoW5XbDYiVydr): stronger glow + label, evening lit from above, composition book closer to real ones, open book redrawn, jot menus A/B, towel on a bar, torn made-this-week note
+- Plate VI (https://claude.ai/artifact/PPHHNxUm3q1LiJvrpC9tnJ): one-point perspective with one vanishing point (x 900, eye level at the board) on every object, with a construction-line plate; glow halo spills past the board frame, paler cork, 'Ideas' underline; evening a warm multiply wash from the top edge; white page edges with lines the long way; jot B only; 'Recently' note taped with linked names
+- Plate VII answers: narrower kitchen (no window, no pegboard); black marble, cover says Trials; taller wall under the board; recipe box with a flush closed lid; 'Recently' up on the wall or a fridge; eclair eaten in three clicks; camera upload for Trials on phones; other angle options?
+- Plate VIII (https://claude.ai/artifact/KGwgZJZ6XQMeRtQTdMr1mR): all of the above, plus angle variants and an evening with a small dark window to compare
+- Plate VI answers: notebook too thick (keep some, no heavy black lines); evening too dark at the bottom; open wall space: window + pegboard or narrower?; board above the box and under the notebook top, more wall below it; page edges on the open book; 'Recently' note not right
+- Plate VII (https://claude.ai/artifact/V35qBtVGy4KY3zrTVVUsrY): slim notebook, board raised 25 px, shallower counter, lighter evening, window + pegboard (both ways) or narrower, fanned page edges on the open book, 'Recently' as ticket rail, clothesline, slate or index card
 - Plate V answers: idea board glow too faint; evening brighter, light from the top of the page, no lamp; notebook page edges white with lines the long way; open book kept; jot B; note held with tape, titled 'Recently', names link; depth is dimensional with consistent perspective
 - Decided: phone after the design; demo data asked at sign-up and removable; jot destination picked by the cook (cork or whiteboard); dark mode is an evening kitchen
 
 ### Open threads
-- Plate VI (prompt in NEXT.md): glow on the idea board, brighter evening light from the top edge, notebook page-edge lines, consistent perspective, the 'Recently' note with tape and links; name and cover still open
+- Plate VIII waiting on Ari: Recently on wall or fridge (which side); recipe box look; when the eclair comes back (reload, an hour, or a logged bake); angle; wall height; evening window; phone photo flow
 - Equipment spots: visible edges or fixed distance from the middle
 - `design/kitchen-starter/` (20 MB) still local
 
 <!-- AGENT_CONTEXT_START -->
 **Keywords:** kitchen layout final, Plate II, plate style, recipe box tabs, lid minimum, mark from the kitchen
 **Files:** .cursor/handoffs/NEXT.md, design/kitchen-starter/README.md
-**Do not redo:** layout rounds 1–10; Plates II–V
-**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent" (Plate VI)
+**Do not redo:** layout rounds 1–10; Plates II–VIII
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent" (after Ari's Plate VIII answers)
 <!-- AGENT_CONTEXT_END -->
 
 ---

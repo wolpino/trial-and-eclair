@@ -1,0 +1,184 @@
+<section aria-labelledby="h-nb">
+  <span class="label" id="h-nb">06 · The Trials notebook, opened</span>
+  <div class="sec-body">
+    <h3>The notebook, open at Croissants trial 4</h3>
+    <figure id="nb-open" class="fx"></figure>
+    <p class="note"><b>No black band on top.</b> The cover no longer peeks out above the pages, so the top of the spread is just the page edges.</p>
+    <p class="note"><b>Tabs are numbers.</b> Contents, then this recipe's trials 1 to 4. The page title already says "Trial 4: croissants", so the tabs carry no name. Left tabs custard, right tabs light green, the selected tab orange.</p>
+    <p class="note"><b>Moving through the book.</b> The folded corners turn to the previous or next trial of this recipe; their words are written in the page margin. The plain round arrows beside the book go to the previous or next recipe, A to Z, the same arrows as the recipe box, with no labels. Contents and the find bar reach any recipe directly. Page numbers sit at the centre bottom of each page.</p>
+    <p class="note"><b>The strip.</b> New trial, Add to recipe box and New recipe on the left, Add a photo on the right. "Add to recipe box" opens the recipe box with a new Croissants card filled in from this trial, open for editing. The card's title is the recipe name; the cook can change it there. The page itself stays clean.</p>
+    <p class="note"><b>Plans.</b> Switch the Plan to Home cook or Guest for the read-only notebook: same sample book, tabs, corners and arrows still work, but no writing buttons, and the yellow "paid plan" tag on the top of the book. Guest is the same drawing as Home cook; only the button reads "Sign up" instead of "See the paid plan".</p>
+
+    <h3>Contents, at the front of the book</h3>
+    <figure id="nb-index" class="fx"></figure>
+    <p class="note"><b>Every recipe and its trials.</b> Click a line to open that trial. The tabs belong to the recipe you worked on last, Croissants, marked "last worked on" in the list. Contents is selected (orange) on the left; trials 1 to 4 are on the right in green. A small inked "IN THE BOX" mark shows which trial is on the card that went into the recipe box.</p>
+
+    <h3>Add to recipe box</h3>
+    <div class="pair">
+      <div><h3>Before</h3><figure id="nb-pub-b"></figure></div>
+      <div><h3>After</h3><figure id="nb-pub-b2"></figure></div>
+    </div>
+    <p class="note"><b>One button, one trial.</b> "Add to recipe box" sits next to New trial. Once added, it reads "In the recipe box 11/11/26" and opens the card. The button belongs to the trial on the page: on trial 5 it says "Add to recipe box" again.</p>
+
+    <h3>Adding a recipe that already has a card</h3>
+    <figure id="nb-make-again" class="fx"></figure>
+    <p class="note"><b>First time, no question.</b> Clicking "Add to recipe box" on trial 4 goes straight to the recipe box with the new card filled in (the recipe box section draws it).</p>
+    <p class="note"><b>Again, from trial 5.</b> Croissants already has a card from trial 4, and one recipe has one card, so clicking the button asks over the dimmed notebook: replace the Croissants card, save trial 5 as a new recipe, or cancel.</p>
+    <p class="note"><b>Then the card opens.</b> Either choice opens the card in the recipe box, ready to edit.</p>
+
+    <div class="pair">
+      <div><h3>Past the last trial</h3><figure id="nb-next"></figure>
+        <p class="note"><b>Turning the corner on the last trial.</b> Trial 4 is Croissants' last trial and has no card yet, so the next page is blank and asks, quietly, "Start trial 5?". Nothing happens unless the cook clicks.</p></div>
+      <div><h3>A trial started from an idea</h3><figure id="nb-idea"></figure>
+        <p class="note"><b>From the idea board.</b> Moving "Miso caramel" to a trial archives the idea (it leaves the board) and starts a new recipe here. Its first page says where it came from, in small writing under the title.</p></div>
+    </div>
+
+  </div>
+</section>
+<script>
+(function () {
+  var HAND = "font:600 23px var(--font-hand);fill:var(--ink)", SOFT = "#c3d2ec", RED = "#e3a59a", INKR = "var(--orange-text)";
+  var LX = 474, RX = 1326, PL = "M474 104 Q687 94 900 108 V670 Q687 660 474 668 Z", PR = "M1326 104 Q1113 94 900 108 V670 Q1113 660 1326 668 Z";
+  var TL = "var(--custard)", TR = "var(--cab-hi)", TS = "var(--orange)";
+  function by(i) { return 214 + i * 28; }
+  function U(sz, col) { return "font:600 " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"); }
+  function H(sz, w, col) { return "font:" + (w || 600) + " " + sz + "px var(--font-hand);fill:" + (col || "var(--ink)"); }
+  function nbCam(x, y, k) {
+    return '<g transform="translate(' + x + " " + y + ") scale(" + (k || 1) + ')">' + reg("path", 'd="M-14 -7 h7 l3 -5 h8 l3 5 h7 v18 h-28 Z"', "var(--card)", 2) + '<circle cx="0" cy="2" r="5.5" style="fill:none;stroke:var(--ink);stroke-width:2"/></g>';
+  }
+  /* Tabs: Contents, then the current recipe's trials. Left of the open page: custard; right: green; selected: orange */
+  /* Tab i: 0 = Contents, 1..n = trial numbers only */
+  function tab(i, left, on) {
+    var t = i ? String(i) : "Contents", y = i ? 224 + (i - 1) * 54 : 128, h = i ? 46 : 50, w = (i ? 54 : 84) + (on ? 8 : 0), x = left ? LX + 10 - w : RX - 10, cx = left ? (x + 460) / 2 : (1340 + x + w) / 2;
+    return '<g role="link" tabindex="0" aria-label="Go to ' + (i ? "trial " + i : t) + '">' + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="5"', on ? TS : left ? TL : TR, on ? 2.4 : 1.8) +
+      T(cx, y + (i ? 32 : 31), t, H(i ? 25 : 17, 700), 'text-anchor="middle"') + "</g>";
+  }
+  /* folded corners: previous / next trial of this recipe; the words are written in the page margin */
+  /* previous / next recipe: plain round arrows beside the book, no labels, the same as the recipe box (Ari, 2026-11-13) */
+  function recArrow(cx, dir) { var cy = 388;
+    return '<g role="button" tabindex="0" aria-label="' + (dir < 0 ? "Previous" : "Next") + ' recipe">' + reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="23"', "var(--card)", 2.2) + line("M" + (cx - 4 * dir) + " " + (cy - 10) + " l" + (10 * dir) + " 10 l" + (-10 * dir) + " 10", 3.4) + "</g>"; }
+  function corner(left, cap) { var x = left ? LX : RX, k = left ? 1 : -1;
+    return '<g role="button" tabindex="0" aria-label="' + (left ? "Back to " : "On to ") + cap + '">' + poly(x + ",636 " + (x + 32 * k) + ",668 " + x + ",668", "#e4e0d4", 1.4) + poly(x + ",636 " + (x + 32 * k) + ",668 " + (x + 32 * k) + ",636", "var(--custard)", 2) +
+      line("M" + (x + 25 * k) + " 643 l" + (-6 * k) + " 5.5 l" + (6 * k) + " 5.5", 2.2) + T(x + 42 * k, 658, cap, H(19, 600, "var(--ink-soft)"), left ? "" : 'text-anchor="end"') + "</g>"; }
+  /* The open book. c: cur (selected tab, or null for no tabs), n (trials), pt/nt (corner captions), nl/nr (page numbers) */
+  function nbBook(c) {
+    var s = "", pl, y, sy, r = rand(7), k, n = c.n || 4, i;
+    /* the black cover: its top edge stays hidden behind the page stack (it used to show as a thick black band) */
+    s += reg("path", 'd="M460 108 Q687 98 900 112 Q1113 98 1340 108 V681 Q1113 672 900 684 Q687 672 460 681 Z"', "var(--ink)", 2);
+    for (k = 0; k < 16; k++) { var mx = r() < 0.5 ? 462 + r() * 10 : 1328 + r() * 10, my = 116 + r() * 554;
+      s += line("M" + mx.toFixed(0) + " " + my.toFixed(0) + " q4 6 -1 12 q-4 6 2 11", 1, 0.55, "#f4efe2"); }
+    if (c.cur != null) { for (i = 0; i <= n; i++) s += tab(i, i <= c.cur, i === c.cur); }
+    for (pl = 5; pl >= 1; pl--) s += '<path transform="translate(' + (-2.2 * pl) + " " + (1.3 * pl) + ')" d="' + PL + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>' +
+      '<path transform="translate(' + (2.2 * pl) + " " + (1.3 * pl) + ')" d="' + PR + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>';
+    s += reg("path", 'd="' + PL + '"', "var(--page)", 2.4) + reg("path", 'd="' + PR + '"', "var(--page)", 2.4);
+    for (y = 190; y <= 638; y += 28) s += line("M478 " + y + " H896 M904 " + y + " H1322", 1.3, 1, SOFT);
+    s += line("M852 112 V662", 1.4, 1, RED) + line("M948 112 V662", 1.4, 1, RED);
+    s += hatch(882, 110, 16, 556, 0.35) + hatch(902, 110, 16, 556, 0.35);
+    for (sy = 132; sy < 650; sy += 46) s += line("M900 " + sy + " v20", 2.4, 1, "#9b968b") + '<circle cx="900" cy="' + (sy - 3) + '" r="1.6" style="fill:#9b968b"/><circle cx="900" cy="' + (sy + 23) + '" r="1.6" style="fill:#9b968b"/>';
+    if (c.nl) s += T(676, 660, c.nl, H(22, 600, "var(--ink-soft)"), 'text-anchor="middle"');
+    if (c.nr) s += T(1124, 660, c.nr, H(22, 600, "var(--ink-soft)"), 'text-anchor="middle"');
+    if (c.pt) s += corner(true, c.pt);
+    if (c.nt) s += corner(false, c.nt);
+    if (c.rec) s += recArrow(352, -1) + recArrow(1448, 1);
+    return s;
+  }
+  function nbHead(side, date, title) {
+    return side === "l" ? T(492, 136, date, H(21)) + T(492, 176, title, H(36, 700)) : T(1308, 136, date, H(21), 'text-anchor="end"') + T(958, 176, title, H(34, 700));
+  }
+  function nbPhoto(cx, cy, cap) { var x = cx - 70, y = cy - 60;
+    return '<g transform="rotate(4 ' + cx + " " + cy + ')">' + reg("rect", 'x="' + x + '" y="' + y + '" width="140" height="122"', "#fffdf7", 2) + '<rect x="' + (x + 8) + '" y="' + (y + 8) + '" width="124" height="90" style="fill:#e9b86a"/>' +
+      reg("path", 'd="M' + (cx - 42) + " " + (cy + 18) + " Q" + cx + " " + (cy - 36) + " " + (cx + 42) + " " + (cy + 18) + " Q" + cx + " " + (cy + 2) + " " + (cx - 42) + " " + (cy + 18) + ' Z"', "var(--amber)", 1.8) +
+      line("M" + (cx - 24) + " " + (cy + 8) + " l8 -12 M" + (cx - 7) + " " + (cy + 2) + " l4 -15 M" + (cx + 10) + " " + (cy + 2) + " l-2 -15 M" + (cx + 27) + " " + (cy + 8) + " l-8 -12", 1.3, 0.7) +
+      T(cx, y + 115, cap, H(16), 'text-anchor="middle"') +
+      [-1, 1].map(function (k) { var tx = cx + k * 66, ty = y + 2; return '<rect x="' + (tx - 21) + '" y="' + (ty - 8) + '" width="42" height="16" transform="rotate(' + (k * 30) + " " + tx + " " + ty + ')" style="fill:#e8e0c8;opacity:.9;stroke:#b9a77a;stroke-width:1"/>'; }).join("") + "</g>";
+  }
+  /* Trial 4: the written entry (left) and the crumb sketch, height bars and taped photo (right) */
+  function nbEntry() {
+    var s = nbHead("l", "11/11/26", "Trial 4: croissants") + nbHead("r", "11/11/26", "Crumb, trial 4"), rh = rand(21), h, a, d;
+    ["Goal: a more open honeycomb", "Changed: rest 2 h between folds", null, "Proof 2 h at 24°C", "Bake 18 min at 200°C", "Result: shatter good,", "   honeycomb still thin", "Next: proof at 26°C, colder butter"].forEach(function (t, i) {
+      if (t) s += T(t.charAt(0) === " " ? 512 : 492, by(i), t.trim(), i === 7 ? H(23, 700, INKR) : HAND);
+      else s += T(492, by(i), "Folds:", HAND) + T(554, by(i), "2", HAND) + line("M549 " + (by(i) - 7) + " H569", 2.2) + T(578, by(i), "3 letter folds", HAND);
+    });
+    s += '<ellipse cx="1120" cy="290" rx="112" ry="64" style="fill:none;stroke:var(--ink);stroke-width:2.6"/><ellipse cx="1120" cy="294" rx="97" ry="51" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>';
+    for (h = 0; h < 18; h++) { a = rh() * Math.PI * 2; d = Math.sqrt(rh()) * 0.8;
+      s += '<ellipse cx="' + (1120 + Math.cos(a) * 90 * d).toFixed(1) + '" cy="' + (294 + Math.sin(a) * 46 * d).toFixed(1) + '" rx="' + (4 + rh() * 5).toFixed(1) + '" ry="' + (2.4 + rh() * 2.6).toFixed(1) + '" style="fill:none;stroke:var(--ink);stroke-width:1.3"/>'; }
+    var n = H(21);
+    s += T(1222, 212, "crisp shell", n) + arrow(1244, 220, 1212, 244) + T(958, 396, "holes too small", n) + arrow(1020, 378, 1078, 320) + T(1196, 396, "butter leaked", n) + arrow(1226, 378, 1186, 346);
+    s += T(958, 438, "Height, trial 3 vs 4", H(23, 700)) + T(1050, 482, "+18 mm", H(22, 700, INKR), 'text-anchor="middle"');
+    s += reg("rect", 'x="978" y="526" width="38" height="52"', "none", 2) + reg("rect", 'x="1031" y="492" width="38" height="86"', "none", 2) + line("M966 578 H1082", 2) + hatch(1032, 493, 36, 84, 0.6) +
+      T(997, 600, "T3", H(19), 'text-anchor="middle"') + T(1050, 600, "T4", H(19), 'text-anchor="middle"');
+    return s + nbPhoto(1216, 534, "trial 4");
+  }
+  /* the strip under the book. pub: "b" (Add to recipe box) or "b-after" (In the recipe box) */
+  function nbStrip(ro, pub) { var Y = 688, s;
+    if (ro) return reg("rect", 'x="452" y="' + Y + '" width="250" height="34" rx="5"', "var(--card)", 2) + T(466, Y + 23, "Sample notebook. Read only.", U(15)) +
+      pill(1168, Y, 180, o.plan === "guest" ? "Sign up" : "See the paid plan", true);
+    s = pill(452, Y, 100, "New trial", true);
+    if (pub === "b") s += pill(562, Y, 170, "Add to recipe box", false) + pill(742, Y, 112, "New recipe", false);
+    else if (pub === "b-after") s += reg("rect", 'x="562" y="' + Y + '" width="214" height="34" rx="17"', "var(--custard)", 2) + T(669, Y + 23, "In the recipe box 11/11/26", U(15), 'text-anchor="middle"') + pill(786, Y, 112, "New recipe", false);
+    return s + pill(1152, Y, 196, "", false) + nbCam(1176, Y + 16, 0.72) + T(1196, Y + 23, "Add a photo · 1 of 5", U(15));
+  }
+  function nbPaid() { return line("M1040 96 Q1030 100 1026 106", 1.6) + '<g transform="translate(1100 98) scale(1.6) translate(-900 -84)">' + paidTag(900, 84, -4) + "</g>"; }
+  function ro() { return o.plan !== "dev"; }
+  var NAV = { rec: 1, cur: 4, pt: "trial 3", nt: "next trial", nl: "12", nr: "13" };
+  function nbOpen() { return nbBook(NAV) + nbEntry() + nbStrip(ro(), "b") + (ro() ? nbPaid() : ""); }
+  /* contents: recipes, their trials, dates, pages */
+  function nbIndex() {
+    var s = nbBook({ rec: 1, cur: 0, nt: "Blondies, trial 1", nl: "i", nr: "ii" }) + nbHead("l", "", "Contents") + T(1308, 136, "Trials", H(21), 'text-anchor="end"');
+    var L = [["Blondies", [[1, "9/14/26", 1], [2, "9/20/26", 3, "pub"]]], ["Brown butter cookies", [[1, "10/02/26", 4], [2, "10/09/26", 5]]], ["Croissants", [[1, "10/12/26", 6], [2, "10/19/26", 8], [3, "10/28/26", 10], [4, "11/11/26", 12, "last"]]]],
+      R = [["Rhubarb galette", [[1, "11/02/26", 14], [2, "11/08/26", 16]]], ["Rough puff pastry", [[1, "11/05/26", 18]]]];
+    function col(list, x) { var i = 0;
+      list.forEach(function (r) { s += T(x, by(i), r[0], H(25, 700)); i++;
+        r[1].forEach(function (t) { var y = by(i), last = t[3] === "last";
+          if (last) s += '<rect x="' + (x + 12) + '" y="' + (y - 20) + '" width="336" height="25" rx="3" style="fill:var(--yellow);opacity:.55"/>';
+          s += lk(x + 20, y, "Trial " + t[0], 23, false, r[0] + " trial " + t[0]) + T(x + 96, y, t[1], HAND) + '<path d="M' + (x + (t[3] === "pub" ? 262 : 186)) + " " + (y - 4) + " H" + (x + 312) + '" style="stroke:var(--ink-soft);stroke-width:1.6;stroke-dasharray:1 7;stroke-linecap:round"/>' + T(x + 344, y, t[2], HAND, 'text-anchor="end"');
+          if (t[3] === "pub") s += '<g transform="rotate(-3 ' + (x + 216) + " " + (y - 8) + ')"><rect x="' + (x + 178) + '" y="' + (y - 19) + '" width="80" height="20" rx="3" style="fill:none;stroke:' + INKR + ';stroke-width:1.8"/>' + T(x + 218, y - 4.5, "IN THE BOX", "font:700 11px var(--font-label);letter-spacing:1.2px;fill:" + INKR, 'text-anchor="middle"') + "</g>";
+          i++;
+          if (last) { s += T(x + 20, by(i), "last worked on", H(21, 700, INKR)); i++; } });
+        i++; });
+      return i; }
+    col(L, 492); var n = col(R, 958);
+    if (!ro()) s += lk(958, by(n), "+ New recipe", 25, false, "a new recipe");
+    return s + (ro() ? nbStrip(true) + nbPaid() : "");
+  }
+  /* past the last trial: a blank page that offers trial 5 */
+  function nbNext() {
+    return nbBook({ cur: 5, pt: "trial 4", nl: "14" }) +
+      T(672, 318, "Start trial 5?", H(38, 700), 'text-anchor="middle"') + T(672, 356, "Trial 4 is the last one so far.", H(22, 600, "var(--ink-soft)"), 'text-anchor="middle"') +
+      pill(602, 384, 140, "Start trial 5", true) + T(672, 450, "or turn back to trial 4", H(20, 600, "var(--ink-soft)"), 'text-anchor="middle"');
+  }
+  /* a new recipe's first page, started from an idea */
+  function nbIdea() {
+    var s = nbBook({ nl: "19" }) + nbHead("l", "11/12/26", "Trial 1: miso caramel") + T(492, 206, "from the idea: Miso caramel", H(18, 600, "var(--ink-soft)"));
+    ["Goal: salty, not bitter", "Sugar 200 g, dry caramel", "Cream 150 g, warm", "White miso 25 g, off heat", "Result: too salty", "Next: miso 15 g"].forEach(function (t, i) { s += T(492, by(i + 1), t, i > 4 ? H(23, 700, INKR) : HAND); });
+    return s;
+  }
+  /* the slip that asks before replacing a card: a dialog card over the dimmed notebook, no tape */
+  function slip(x, y, w, h, inner) {
+    return '<rect x="300" y="76" width="1200" height="646" style="fill:var(--ink);opacity:.22"/>' + hatch(x + 10, y + 10, w, h, 0.5) + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3"', "var(--card)", 2.2) + line("M" + x + " " + (y + 66) + " H" + (x + w), 1.4, 1, RED) + inner;
+  }
+  var SO = H(19, 600, "var(--ink-soft)");
+  function nbMakeAgain() {
+    var s = nbBook({ rec: 1, cur: 5, n: 5, pt: "trial 4", nt: "next trial", nl: "14", nr: "15" }) + nbHead("l", "11/13/26", "Trial 5: croissants") + nbHead("r", "11/13/26", "Crumb, trial 5");
+    ["Goal: a more open honeycomb", "Changed: proof at 26°C,", "   colder butter", "Result: open honeycomb!"].forEach(function (t, i) { s += T(t.charAt(0) === " " ? 512 : 492, by(i), t.trim(), i === 3 ? H(23, 700, INKR) : HAND); });
+    return s + nbPhoto(1216, 534, "trial 5") + nbStrip(false, "b") + slip(590, 222, 620, 352,
+      T(620, 270, "Add trial 5 to the recipe box?", H(32, 700)) + T(620, 320, "Croissants already has a card, made from trial 4 (11/11/26).", SO) +
+      pill(620, 344, 262, "Replace the Croissants card", true) + T(620, 404, "Your Croissants card now shows trial 5.", H(20)) + T(620, 428, "Trial 4 stays in the notebook.", SO) +
+      pill(620, 450, 210, "Save as a new recipe", false) + T(620, 510, "Opens a new card from trial 5 for you to name.", H(20)) + T(620, 534, "The Croissants card stays as it is.", SO) +
+      pill(1074, 516, 104, "Cancel", false));
+  }
+  PLATE.add(function () {
+    function put(id, h) { document.getElementById(id).innerHTML = h; }
+    var dev = o.plan; o.plan = "dev";
+    var NC = { pt: NAV.pt, nl: NAV.nl, nr: NAV.nr }, B1 = nbBook(NC) + nbEntry() + nbStrip(false, "b"), B2 = nbBook(NC) + nbEntry() + nbStrip(false, "b-after");
+    put("nb-next", svg([360, 910], nbNext(), "A blank page after Croissants trial 4 asking: Start trial 5?", 76, 620));
+    put("nb-idea", svg([440, 910], nbIdea(), "The first page of a trial started from the idea Miso caramel", 90, 600));
+    put("nb-make-again", openOver(nbMakeAgain(), "Clicking Add to recipe box on trial 5: replace the Croissants card, save as a new recipe, or cancel"));
+    o.plan = dev;
+    put("nb-open", openOver(nbOpen(), "The Trials notebook open at Croissants trial 4, with trial tabs, corners, recipe arrows and an Add to recipe box button on the strip"));
+    put("nb-index", openOver(nbIndex(), "The notebook's Contents page: every recipe and its trials"));
+    put("nb-pub-b", svg([440, 912], B1, "Before: an Add to recipe box button next to New trial", 580, 156));
+    put("nb-pub-b2", svg([440, 912], B2, "After: the button reads In the recipe box 11/11/26", 580, 156));
+  });
+})();
+</script>

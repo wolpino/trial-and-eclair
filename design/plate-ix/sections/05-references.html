@@ -1,0 +1,128 @@
+<section aria-labelledby="h-ref">
+  <span class="label" id="h-ref">05 · References</span>
+  <div class="sec-body">
+    <h3>The references, opened</h3>
+    <figure id="ref-open"></figure>
+    <p class="note"><b>Her research shelf.</b> Clicking the bottom tier of the kitchen shelf opens this. It holds what she reads and uses, not her own recipes or cookbooks: cookbooks she owns, pastry chefs, blogs and tools. Each real reference is one object, and its shape and colour say what kind it is. The tape tabs under the shelf name the kinds and filter the shelf when clicked. A blank card lies on the desk, so she can add a reference by typing straight away. The same shelf is there on both plans.</p>
+    <h3>One reference pulled out</h3>
+    <figure id="ref-one"></figure>
+    <p class="note"><b>The card.</b> Clicking a spine pulls its card onto the desk and leaves a gap on the shelf. The card shows the title, the kind, the link, her notes, and the ideas and recipes it inspired. The yellow words are links: they open that recipe trial or idea. "Open link" opens the web address in a new tab.</p>
+    <h3>The same card, being edited</h3>
+    <figure id="ref-edit"></figure>
+    <p class="note"><b>Edit.</b> Every part becomes a line to write on. The kind is one of four chips. "Link to an idea or recipe" finds one by name as she types. Delete asks once before it removes the reference. Link and notes can be left empty.</p>
+    <div style="max-width:560px;display:grid;gap:6px"><h3>A new kitchen: nothing on the shelf yet</h3><figure id="ref-empty"></figure></div>
+    <p class="note"><b>Empty.</b> The shelf shows the blank spine, one line of help, and the same blank card on the desk.</p>
+    <ol class="qs">
+      <li><b>Are four kinds right?</b> The app today has five: Cookbook, Blog, Chef / Baker, Article and Tool. I drew four and left Article out. Keep Article as a fifth kind, or fold it into Blog?</li>
+      <li><b>Card first, or link first?</b> I drew: a click on a spine pulls out the card, and "Open link" is on the card. Should a click go straight to the web page instead?</li>
+      <li><b>Shelf order.</b> I grouped the shelf by kind, with each tab under its group. Would you rather have newest first?</li>
+      <li><b>Starter references.</b> The app puts a few on every new shelf, and they can be hidden but not edited. Keep them, or start a new kitchen with the empty shelf drawn here?</li>
+    </ol>
+  </div>
+</section>
+<script>
+(function () {
+  var HAND = "px var(--font-hand);fill:var(--ink)", LAB = "font:700 12px var(--font-label);letter-spacing:.09em;fill:var(--ink-soft)", FLOOR = 330;
+  var KIND = { c: ["Cookbook", "Cookbooks", "var(--blue)"], h: ["Chef", "Chefs", "var(--orange)"], b: ["Blog", "Blogs", "var(--custard)"], t: ["Tool", "Tools", "var(--stem)"] };
+  var ITEMS = [["c", "Laminated Dough", 66, 206], ["c", "The Butter Book", 74, 188], ["c", "Tarts &amp; Galettes", 60, 214],
+    ["h", "Chef Nell", 56, 184], ["h", "Chef Tomas", 56, 198],
+    ["b", "The Proofing Drawer", 34, 222], ["b", "Sunday Crumb", 34, 222], ["b", "Flour Notes", 34, 208],
+    ["t", "Baker's %|calculator", 90, 86], ["t", "Pan size|converter", 90, 72]];
+  /* lay the shelf out once: groups by kind, a gap between groups, the add slot last */
+  var GROUP = {}, ADDX;
+  (function () { var x = 494, last = "c";
+    ITEMS.forEach(function (it) { if (it[0] !== last) { x += 20; last = it[0]; } it.x = x; var g = GROUP[it[0]] = GROUP[it[0]] || [x, x, 0]; g[1] = x + it[2]; g[2]++; x += it[2] + 4; });
+    ADDX = x + 20; })();
+  function txt(len, fs) { return len * fs * 0.42; }
+  function spine(it, front) {
+    var k = it[0], x = it.x, w = it[2], h = it[3], y = FLOOR - h, col = KIND[k][2], cx = x + w / 2, s = "";
+    if (!front) s += block(x, y, x + w, FLOOR, 50, { top: k === "t" ? "color-mix(in srgb, " + col + " 72%, #fff)" : "#f6efdc", side: "color-mix(in srgb, " + col + " 66%, #000)" });
+    s += reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (k === "b" ? 1 : 2.5) + '"', col, 2.2);
+    if (k === "t") { var t = it[1].split("|");
+      return s + line("M" + x + " " + (y + 12) + " H" + (x + w), 1.4, 0.8) + reg("rect", 'class="lbl" x="' + (x + 7) + '" y="' + (y + 20) + '" width="' + (w - 14) + '" height="44" rx="1.5"', "var(--card)", 1.4) +
+        T(cx, y + 38, t[0], "font:700 18" + HAND, 'text-anchor="middle"') + T(cx, y + 57, t[1], "font:600 17" + HAND, 'text-anchor="middle"'); }
+    var fs = k === "b" ? 18 : 22, lw = k === "b" ? w - 8 : 30, pad = k === "h" ? 40 : 24;
+    if (k === "b") s += line("M" + (cx - 3) + " " + (y + 9) + " h6 M" + (cx - 3) + " " + (FLOOR - 9) + " h6", 2, 0.8);
+    else s += line("M" + x + " " + (y + 12) + " H" + (x + w) + " M" + x + " " + (FLOOR - 14) + " H" + (x + w), 1.4, 0.8);
+    if (k === "h") s += reg("circle", 'cx="' + cx + '" cy="' + (y + 26) + '" r="8"', "var(--card)", 1.6);
+    s += reg("rect", 'class="lbl" x="' + (cx - lw / 2) + '" y="' + (y + pad) + '" width="' + lw + '" height="' + (h - pad - 24) + '" rx="1.5"', "var(--card)", 1.4);
+    var ty = y + pad + (h - pad - 24) / 2;
+    return s + T(cx, ty, it[1], "font:700 " + fs + HAND, 'text-anchor="middle" transform="rotate(-90 ' + cx + " " + ty + ') translate(0 ' + (fs * 0.3).toFixed(1) + ')"');
+  }
+  function addSlot(x) { var cx = x + 30, cy = FLOOR - 92;
+    return '<rect x="' + x + '" y="' + (FLOOR - 190) + '" width="60" height="190" rx="2.5" style="fill:var(--card);fill-opacity:.9;stroke:var(--ink);stroke-width:2;stroke-dasharray:7 5"/>' +
+      T(cx, FLOOR - 160, "+", "font:700 30px var(--font-body);fill:var(--ink)", 'text-anchor="middle"') +
+      T(cx, cy, "Add a reference", "font:600 15px var(--font-body);fill:var(--ink)", 'text-anchor="middle" transform="rotate(-90 ' + cx + " " + cy + ') translate(-14 5)"'); }
+  function tab(cx, text, col, on) { var w = txt(text.length, 19) + (col ? 40 : 22), x = cx - w / 2;
+    return '<g transform="rotate(' + (cx % 3 - 1.2) + " " + cx + ' 352)"><rect x="' + x + '" y="339" width="' + w + '" height="26" style="fill:' + (on ? "var(--yellow)" : "#e8e0c8") + ";opacity:.96;stroke:" + (on ? "var(--ink)" : "#b9a77a") + ';stroke-width:1.3"/>' +
+      (col ? reg("rect", 'x="' + (x + 8) + '" y="346" width="12" height="12"', col, 1.3) : "") + T(x + (col ? 26 : 11), 358, text, "font:700 19" + HAND) + "</g>"; }
+  function chip(x, y, text, on, col) { var w = text.length * 8.5 + (col ? 40 : 24);
+    return [reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="28" rx="14"', on ? "var(--yellow)" : "var(--card)", on ? 2.2 : 1.5) + (col ? reg("circle", 'cx="' + (x + 16) + '" cy="' + (y + 14) + '" r="6"', col, 1.3) : "") +
+      T(x + (col ? 28 : 12), y + 19, text, "font:600 14px var(--font-body);fill:var(--ink)"), w]; }
+  function chips(x, y, sel) { var s = ""; ["c", "h", "b", "t"].forEach(function (k) { var c = chip(x, y, KIND[k][0], k === sel, KIND[k][2]); s += c[0]; x += c[1] + 8; }); return s; }
+  function fld(x, y, w, lab, val, fs, cur, ghost) {
+    return T(x, y, lab, LAB) + (val ? T(x, y + 30, val, "font:600 " + fs + "px var(--font-hand);fill:" + (ghost ? "var(--ink-soft)" : "var(--ink)")) : "") + line("M" + x + " " + (y + 37) + " H" + (x + w), 1.2, 0.75) +
+      (cur ? line("M" + (x + (ghost ? -1 : txt(val.length, fs) + 5)) + " " + (y + 10) + " v24", 2.4, 1, "var(--orange)") : ""); }
+  function paper(x, y, w, h, rot, inner) {
+    return '<g transform="rotate(' + rot + " " + (x + w / 2) + " " + (y + h / 2) + ')">' + hatch(x + 7, y + 7, w, h, 0.55) + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3"', "var(--card)", 2.2) + inner + "</g>"; }
+  /* the reference card, read (edit = false) or being edited */
+  function refCard(edit) { var x = 500, y = 394, L = x + 28, R = x + 428, s = line("M" + (x + 404) + " " + (y + 70) + " V" + (y + 292), 1.2, 0.5);
+    if (!edit) {
+      s += line("M" + x + " " + (y + 62) + " H" + (x + 800), 1.4, 1, "#e3a59a");
+      for (var ly = y + 122; ly < y + 300; ly += 30) s += line("M" + (x + 416) + " " + ly + " H" + (x + 788), 1, 1, "#c3d2ec");
+      s += T(L, y + 20, "PULLED FROM THE SHELF", LAB) + T(L, y + 56, "Laminated Dough", "font:700 38" + HAND) + chip(L, y + 80, "Cookbook she owns", false, KIND.c[2])[0];
+      s += T(L, y + 142, "LINK", LAB) + T(L, y + 168, "example.com/laminated-dough", "font:17px var(--font-body);fill:var(--ink)") + line("M" + L + " " + (y + 173) + " h236", 1, 0.7) + pill(L, y + 186, 116, "Open link", true);
+      s += pill(L, y + 258, 80, "Edit") + pill(L + 90, y + 258, 140, "Back on shelf");
+      s += T(R, y + 92, "NOTES", LAB);
+      ["Best chapter on butter temperature.", "p. 84: rest 2 h between folds.", "Her proof is warmer than mine: 26°C."].forEach(function (t, i) { s += T(R, y + 120 + i * 30, t, "font:600 24" + HAND); });
+      s += T(R, y + 222, "INSPIRED", LAB) + lk(R, y + 250, "Croissants, trial 4", 25, true, "Croissants, trial 4") + T(R + 218, y + 250, "recipe", "font:14px var(--font-body);fill:var(--ink-soft)") +
+        lk(R, y + 280, "Cardamom knots", 25, false, "the idea Cardamom knots") + T(R + 166, y + 280, "idea", "font:14px var(--font-body);fill:var(--ink-soft)");
+      return paper(x, y, 800, 312, -0.8, s); }
+    s += fld(L, y + 30, 350, "TITLE", "Laminated Dough", 30, true) + T(L, y + 98, "KIND", LAB) + chips(L, y + 106, "c") + fld(L, y + 164, 350, "LINK (OPTIONAL)", "example.com/laminated-dough", 24);
+    s += pill(L, y + 258, 84, "Save", true) + pill(L + 94, y + 258, 90, "Cancel") + pill(L + 264, y + 258, 86, "Delete");
+    s += fld(R, y + 30, 344, "NOTES (OPTIONAL)", "Best chapter on butter temperature.", 24) + T(R, y + 97, "p. 84: rest 2 h between folds.", "font:600 24" + HAND) + line("M" + R + " " + (y + 104) + " h344", 1.2, 0.75);
+    s += T(R, y + 140, "LINK TO AN IDEA OR RECIPE", LAB);
+    var c1 = chip(R, y + 150, "Croissants, trial 4  ×"), c2 = chip(R + c1[1] + 8, y + 150, "Cardamom knots  ×"); s += c1[0] + c2[0];
+    s += reg("rect", 'x="' + R + '" y="' + (y + 190) + '" width="344" height="34" rx="4"', "var(--page)", 1.8) + '<circle cx="' + (R + 18) + '" cy="' + (y + 206) + '" r="6" style="fill:none;stroke:var(--ink);stroke-width:2"/>' + line("M" + (R + 23) + " " + (y + 211) + " l5 5", 2.2) +
+      T(R + 36, y + 215, "yuz", "font:600 24" + HAND) + line("M" + (R + 70) + " " + (y + 196) + " v22", 2.4, 1, "var(--orange)");
+    s += reg("rect", 'x="' + R + '" y="' + (y + 224) + '" width="344" height="68" rx="4"', "var(--page)", 1.8) + '<rect x="' + (R + 2) + '" y="' + (y + 226) + '" width="340" height="32" style="fill:var(--yellow);opacity:.55"/>' +
+      T(R + 14, y + 249, "Yuzu curd tart", "font:600 24" + HAND) + T(R + 330, y + 247, "idea", "font:14px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"') +
+      T(R + 14, y + 281, "Yuzu shortbread, trial 1", "font:600 24" + HAND) + T(R + 330, y + 279, "recipe", "font:14px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"');
+    return paper(x, y, 800, 312, 0, s); }
+  /* the blank card that is ready when the shelf opens */
+  function addCard() { var x = 500, y = 418, L = x + 26;
+    return paper(x, y, 430, 252, -1, T(L, y + 28, "NEW REFERENCE", LAB) + fld(L, y + 46, 378, "TITLE", "Title of the book, blog, chef or tool", 22, true, true) +
+      T(L, y + 112, "KIND", LAB) + chips(L, y + 120, "c") + fld(L, y + 172, 220, "LINK (OPTIONAL)", "", 22) + pill(x + 286, y + 200, 120, "Add to shelf", true)); }
+  function scrap(x, y, w, lines) { var s = reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + (lines.length * 28 + 22) + '"', "var(--page)", 1.8);
+    lines.forEach(function (t, i) { s += T(x + 16, y + 32 + i * 28, t, "font:600 23" + HAND); });
+    return '<g transform="rotate(2 ' + (x + w / 2) + " " + y + ')">' + s + '<rect x="' + (x + w / 2 - 30) + '" y="' + (y - 9) + '" width="60" height="18" transform="rotate(-4 ' + (x + w / 2) + " " + y + ')" style="fill:#e8e0c8;opacity:.9;stroke:#b9a77a;stroke-width:1"/></g>'; }
+  function pencil(x, y, rot) { return '<g transform="rotate(' + rot + " " + x + " " + y + ')">' + reg("rect", 'x="' + x + '" y="' + (y - 6) + '" width="150" height="12"', "var(--yellow)", 1.8) + line("M" + x + " " + y + " h150", 1, 0.5) +
+    reg("rect", 'x="' + (x + 150) + '" y="' + (y - 6) + '" width="16" height="12" rx="2"', "var(--orange)", 1.8) + poly((x - 22) + "," + y + " " + x + "," + (y - 6) + " " + x + "," + (y + 6), "var(--card)", 1.8) + poly((x - 22) + "," + y + " " + (x - 14) + "," + (y - 2.2) + " " + (x - 14) + "," + (y + 2.2), "var(--ink)", 1) + "</g>"; }
+  /* mode: "open" | "one" | "edit" | "empty" */
+  function view(mode) {
+    var x0 = STAGE.x0, W = STAGE.x1 - x0, empty = mode === "empty", out = mode === "one" || mode === "edit", s = "";
+    s += reg("rect", 'x="' + x0 + '" y="374" width="' + W + '" height="' + (STAGE.y1 - 374) + '"', "var(--wood-hi)", 2.4) + grain(x0 + 10, 390, W - 20, 150, 31) + grain(x0 + 40, 540, W - 60, 170, 32) + hatch(x0 + 2, 375, W - 4, 12, 0.8);
+    s += reg("rect", 'x="' + x0 + '" y="' + STAGE.y0 + '" width="' + W + '" height="' + (374 - STAGE.y0) + '" rx="3"', "var(--wood)", 2.6) + grain(x0 + 8, 78, W - 16, 14, 33) + grain(x0 + 8, 334, W - 16, 36, 34);
+    s += recess(478, 94, 1322, FLOOR, 90, "var(--wood-dark)", { side: "color-mix(in srgb, var(--wood) 62%, #000)", top: "var(--wood-dark)", bottom: "var(--wood-hi)" }, hatch(478, 94, 844, 9)) + reg("rect", 'x="478" y="94" width="844" height="' + (FLOOR - 94) + '"', "none", 2.4);
+    if (empty) s += addSlot(494) + scrap(650, 150, 500, ["Nothing on the shelf yet.", "Add a cookbook you own, a blog,", "a pastry chef or a tool you use."]);
+    else {
+      ITEMS.slice().sort(function (a, b) { return Math.abs(b.x + b[2] / 2 - 900) - Math.abs(a.x + a[2] / 2 - 900); }).forEach(function (it) { if (!(out && it === ITEMS[0])) s += spine(it); });
+      if (out) s += '<rect x="' + ITEMS[0].x + '" y="' + (FLOOR - ITEMS[0][3]) + '" width="' + ITEMS[0][2] + '" height="' + ITEMS[0][3] + '" rx="2.5" style="fill:none;stroke:var(--card);stroke-width:1.6;stroke-dasharray:6 5;opacity:.8"/>' + hatch(ITEMS[0].x + 2, FLOOR - 9, ITEMS[0][2] - 4, 8, 0.7);
+      else { var it = ITEMS[0], keep = TARGET; TARGET = "ref-laminated"; s += hot("ref-laminated", spine(it, true), [it.x, FLOOR - it[3], it[2], it[3]]); TARGET = keep; }
+      s += addSlot(ADDX);
+    }
+    s += tab(510, empty ? "All" : "All " + ITEMS.length, null, true);
+    ["c", "h", "b", "t"].forEach(function (k) { var g = GROUP[k]; s += tab((g[0] + g[1]) / 2 + (k === "c" ? 26 : 0), KIND[k][1] + (empty ? "" : " " + g[2]), KIND[k][2]); });
+    if (out) s += refCard(mode === "edit");
+    else s += addCard() + pencil(1090, 640, -14) + (empty ? "" : scrap(1010, 440, 280, ["Click a spine to pull", "out its card."]));
+    return s;
+  }
+  PLATE.add(function () {
+    var crop = [440, 1360];
+    document.getElementById("ref-open").innerHTML = openOver(view("open"), "The reference shelf open over the dimmed kitchen, one spine pointed at");
+    document.getElementById("ref-one").innerHTML = svg(crop, view("one"), "One reference pulled out as a card on the desk", 64, 670);
+    document.getElementById("ref-edit").innerHTML = svg(crop, view("edit"), "The reference card in edit mode", 320, 414);
+    document.getElementById("ref-empty").innerHTML = svg(crop, view("empty"), "An empty reference shelf with the add spot", 64, 670);
+  });
+})();
+</script>

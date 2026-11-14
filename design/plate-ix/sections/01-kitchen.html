@@ -1,0 +1,72 @@
+<section aria-labelledby="h-k">
+  <span class="label" id="h-k">01 · The kitchen</span>
+  <div class="sec-body">
+    <h3>The main kitchen</h3>
+    <figure id="k-main" class="fx"></figure>
+    <p class="note"><b>What changed.</b> A 1950s fridge stands at the left edge and holds the Recently list. One plain cabinet sits between the fridge and the shelf. A small window on the right wall lets in a patch of sun. The tile is a little taller, the outlet sits inside two tiles, and there is a strip of checkerboard floor. The shelf labels are tape on the front edge of each board. The cork notes carry real idea titles.</p>
+    <p class="note"><b>Try it.</b> Point at an object to see the glow and its yellow label. Click the eclair to take a bite. The third click leaves crumbs. It comes back when you reload. The Plan switch at the top shows the paid tags for a home cook.</p>
+
+    <h3>Day and evening</h3>
+    <div class="pair"><div><figure id="k-day"></figure><p class="note"><b>Day.</b> Pale sky, sun on the tile and counter.</p></div><div><figure id="k-eve"></figure><p class="note"><b>Evening.</b> Dark sky, a moon and stars, no sun patch, a warm wash from the top.</p></div></div>
+
+    <h3>Fridge colour</h3>
+    <div class="pair" style="max-width:720px"><div><figure id="k-fridge"></figure><p class="note"><b>Cream.</b></p></div><div><figure id="k-fridge-mint"></figure><p class="note"><b>Soft mint.</b></p></div></div>
+    <p class="note"><b>The whole fridge.</b> These two show a little more than the kitchen does, so you can see the hinges on the far edge. In the kitchen the left part of the fridge runs off the page. The handle, trim strip, blank badge and grille stay in view.</p>
+
+    <h3>How the Recently list is held</h3>
+    <div class="trio"><div><figure id="k-recent"></figure><p class="note"><b>Magnets.</b> One sheet, two round magnets.</p></div><div><figure id="k-recent-rail"></figure><p class="note"><b>Ticket rail.</b> A steel rail with one small ticket per recipe.</p></div><div><figure id="k-recent-tape"></figure><p class="note"><b>Tape, fixed.</b> One short strip across the top edge, half on the paper and half on the door.</p></div></div>
+    <p class="note"><b>Every name is a link.</b> One name in each picture is shown as it looks when you point at it.</p>
+
+    <h3>The window</h3>
+    <div class="pair"><div><figure id="k-window"></figure><p class="note"><b>Whole.</b> The window sits fully inside the view.</p></div><div><figure id="k-window-cut"></figure><p class="note"><b>Cut.</b> A wider window runs off the page. The edge falls exactly on a glazing bar.</p></div></div>
+
+    <h3>Shelf labels</h3>
+    <div class="pair"><div><figure id="k-shelf"></figure><p class="note"><b>Tape.</b> Hand lettering on tape, stuck to the front edge of the board each row stands on.</p></div><div><figure id="k-shelf-brass"></figure><p class="note"><b>Brass.</b> The holders from Plate VIII.</p></div></div>
+
+    <h3>The floor</h3>
+    <div class="pair"><div><figure id="k-floor-none"></figure><p class="note"><b>Without.</b> The cabinets run down to a plain base, as in Plate VIII.</p></div><div><figure id="k-floor"></figure><p class="note"><b>With.</b> The cabinets are a little shorter to leave room for two rows of tiles.</p></div></div>
+
+    <h3>The narrow kitchen, for comparison</h3>
+    <figure id="k-narrow" style="max-width:620px"></figure>
+    <p class="note"><b>What a narrow screen loses.</b> There is no room for the fridge, so the list is taped to the wall. The window is slimmer and the left side has two doors again.</p>
+
+    <ol class="qs">
+      <li><b>Fridge:</b> cream or soft mint?</li>
+      <li><b>Recently list:</b> magnets, the ticket rail, or tape?</li>
+      <li><b>Window:</b> whole, or cut by the right edge?</li>
+      <li><b>Floor and labels:</b> keep the checkerboard floor? Tape or brass on the shelf?</li>
+    </ol>
+  </div>
+</section>
+<script>
+(function () {
+  function put(id, vp, extra, label, y0, h, eve, svp) { document.getElementById(id).innerHTML = svg(vp, scene(svp || VP, opts(extra), eve), label, y0, h); }
+  PLATE.add(function () {
+    put("k-main", VP, null, "The main kitchen by day");
+    put("k-day", VP, { bites: 0 }, "The kitchen by day");
+    put("k-eve", VP, { bites: 0 }, "The kitchen in the evening", 0, 0, true);
+    var whole = [232, 1500];
+    put("k-fridge", [240, 600], { fridge: "cream" }, "The cream fridge, whole", 56, 704, false, whole);
+    put("k-fridge-mint", [240, 600], { fridge: "mint" }, "The soft mint fridge, whole", 56, 704, false, whole);
+    put("k-recent", [300, 520], { recent: "magnets", linkOn: 1 }, "Recently list held by two magnets", 84, 240);
+    put("k-recent-rail", [300, 520], { recent: "rail", linkOn: 1 }, "Recently list as tickets under a steel rail", 84, 240);
+    put("k-recent-tape", [300, 520], { recent: "tape", linkOn: 1 }, "Recently list held by a strip of tape", 84, 240);
+    put("k-window", [1200, 1500], { win: "whole", bites: 0 }, "The window, whole", 84, 420);
+    put("k-window-cut", [1200, 1500], { win: "cut", bites: 0 }, "The window, cut by the right edge", 84, 420);
+    put("k-shelf", [660, 1140], { shelf: "tape" }, "Shelf with tape labels", 470, 262);
+    put("k-shelf-brass", [660, 1140], { shelf: "brass" }, "Shelf with brass label holders", 470, 262);
+    put("k-floor-none", [300, 1020], { floor: "none" }, "The bottom edge without a floor", 560, 200);
+    put("k-floor", [300, 1020], { floor: "check" }, "The bottom edge with the checkerboard floor", 560, 200);
+    put("k-narrow", VPN, { bites: 0 }, "The narrow kitchen", 0, 0, false, VPN);
+  });
+  /* The eclair: each click (or Enter/Space) takes a bite; the third leaves crumbs. Back whole on reload. */
+  var fig = document.getElementById("k-main");
+  function bite(e) {
+    if (!e.target.closest || !e.target.closest(".eat") || o.bites >= 3) return;
+    if (e.type === "keydown") { if (e.key !== "Enter" && e.key !== " ") return; e.preventDefault(); }
+    o.bites++; PLATE.redraw();
+    var n = fig.querySelector(".eat"); if (n) n.focus();
+  }
+  fig.addEventListener("click", bite); fig.addEventListener("keydown", bite);
+})();
+</script>

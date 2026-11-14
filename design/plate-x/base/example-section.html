@@ -1,0 +1,24 @@
+<!-- EXAMPLE of a section file (sections/NN-name.html). One <section> of markup, then one <script>.
+     Ids and function names must be prefixed with your section's short name so sections never clash. -->
+<section aria-labelledby="h-example">
+  <span class="label" id="h-example">Example</span>
+  <div class="sec-body">
+    <h3>Opened</h3>
+    <figure id="example-open"></figure>
+    <p class="note"><b>Lead-in in bold.</b> One or two plain sentences about what this view shows and why.</p>
+    <div class="pair"><div><h3>A</h3><figure id="example-a"></figure></div><div><h3>B</h3><figure id="example-b"></figure></div></div>
+    <ol class="qs"><li><b>Question for Ari:</b> short, answerable.</li></ol>
+  </div>
+</section>
+<script>
+(function () {
+  function view() { return reg("rect", 'x="' + STAGE.x0 + '" y="' + STAGE.y0 + '" width="' + (STAGE.x1 - STAGE.x0) + '" height="' + (STAGE.y1 - STAGE.y0) + '" rx="6"', "var(--card)", 2.4) +
+    T(STAGE.cx, 200, "An open view", "font:700 40px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"') + pill(STAGE.x1 - 150, STAGE.y1 - 50, 130, "Add", true); }
+  PLATE.add(function () {
+    document.getElementById("example-open").innerHTML = openOver(view(), "Example open view over the dimmed kitchen");
+    /* a crop: svg([x0, x1], inner, label, y0, height) */
+    document.getElementById("example-a").innerHTML = svg([452, 900], view(), "Left half", 76, 330);
+    document.getElementById("example-b").innerHTML = svg([900, 1348], view(), "Right half", 76, 330);
+  });
+})();
+</script>

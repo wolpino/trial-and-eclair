@@ -1,0 +1,137 @@
+<section aria-labelledby="h-cb">
+  <span class="label" id="h-cb">04 · The cookbooks, opened</span>
+  <div class="sec-body">
+    <h3>The shelf: every cookbook, and a blank one to start</h3>
+    <figure id="cb-shelf"></figure>
+    <p class="note"><b>What opens first.</b> Click the cookbook tier in the kitchen and the same shelf comes up large. Each binder is one cookbook. Its spine says the title, how many recipes are in it, and whether it is shared or still a draft. Click a spine to open that cookbook for reading. The blank binder at the end starts a new one.</p>
+    <h3>Reading: the binder open on the counter</h3>
+    <figure id="cb-view"></figure>
+    <p class="note"><b>Left page.</b> The cover page and contents in one: title, description, the share link with a Copy pill, then the numbered recipes. Each recipe name is a link that turns to that page. <b>Right page.</b> One recipe in full. The stamp says which day's copy this is. A cookbook keeps the recipe as it was when it was added, so later changes in the Lab do not show here. <b>Getting around.</b> The tabs on the right edge and the two arrows turn pages. The Edit pill at the top switches to editing.</p>
+    <h3>Editing: same binder, same place</h3>
+    <figure id="cb-edit"></figure>
+    <p class="note"><b>Left page becomes the worksheet.</b> Title and description are boxes you type in. Each recipe is a strip: drag the dots to move it, the x takes it out of this cookbook only. <b>Add a recipe</b> clips a short list of your published recipes to the right page. Adding makes a copy as the recipe is today. <b>Sharing</b> sits under it: the link, Copy share link, and Unpublish (it reads Publish while the cookbook is a draft). <b>Done</b> goes back to reading.</p>
+    <h3>What a home cook or a guest sees</h3>
+    <figure id="cb-cook" style="max-width:640px"></figure>
+    <p class="note"><b>Same binder, a sample inside.</b> Nothing is hidden. The paid plan tag hangs from the name plate the whole time. There is no Edit pill and no share link. Pages still turn.</p>
+    <ol class="qs">
+      <li><b>Binder or bound book?</b> I kept the ringed binder from the current app because pages that come out and move match "reorder and remove". Keep it, or draw a sewn book?</li>
+      <li><b>Open to the shelf, or straight into the last cookbook?</b> Drawn here: the shelf first. With only one cookbook, should it skip the shelf?</li>
+      <li><b>Where does the share link live?</b> Drawn twice: on the cover page when reading (link plus Copy) and in a Sharing card when editing (with Publish or Unpublish). Is one of those enough?</li>
+      <li><b>Updating a recipe in a cookbook.</b> Today the only way is take it out and add it again. Is that fine for now, or do you want a "Use the newest version" pill on each strip?</li>
+    </ol>
+  </div>
+</section>
+<script>
+(function () {
+  var S = STAGE, MID = 'text-anchor="middle"', END = 'text-anchor="end"', SOFT = "var(--ink-soft)", FLOOR = 650;
+  var EN = [["Blondies", "10/03/26"], ["Croissants", "11/11/26"], ["Rhubarb galette", "06/14/26"], ["Rough puff pastry", "09/20/26"]];
+  function h(x, y, t, sz, w, ex, col) { return T(x, y, t, "font:" + (w || 600) + " " + sz + "px var(--font-hand);fill:" + (col || "var(--ink)"), ex || ""); }
+  function b(x, y, t, sz, ex, col, w) { return T(x, y, t, "font:" + (w || 400) + " " + sz + "px var(--font-body);fill:" + (col || SOFT), ex || ""); }
+  function lab(x, y, t) { return T(x, y, t, "font:700 13px var(--font-label);letter-spacing:.12em;fill:" + SOFT); }
+  function rect(x, y, w, hh, fill, sw, rx, extra) { return reg("rect", (extra || "") + ' x="' + x + '" y="' + y + '" width="' + w + '" height="' + hh + '" rx="' + (rx || 0) + '"', fill, sw || 2); }
+  function tape(x, y, rot) { return '<rect x="' + (x - 22) + '" y="' + (y - 8) + '" width="44" height="16" transform="rotate(' + rot + " " + x + " " + y + ')" style="fill:#e8e0c8;opacity:.9;stroke:#b9a77a;stroke-width:1"/>'; }
+  function turn(cx, cy, dir) { return reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="15"', "var(--card)", 2) + line("M" + (cx + 4 * dir * -1) + " " + (cy - 7) + " l" + (7 * dir) + " 7 l" + (-7 * dir) + " 7", 2.4); }
+
+  /* ---------- 1. the shelf ---------- */
+  function spine(x, w, hgt, fill, title, count, state, on) {
+    var y = FLOOR - hgt, cx = x + w / 2, lh = hgt - 186, cy = y + 40 + lh / 2;
+    var s = block(x, y, x + w, FLOOR, 60, { top: "var(--page)", side: "color-mix(in srgb, " + fill + " 66%, #000)" }) + rect(x, y, w, hgt, fill, 2.6, 5) +
+      line("M" + (x + 3) + " " + (y + 20) + " H" + (x + w - 3) + " M" + (x + 3) + " " + (FLOOR - 20) + " H" + (x + w - 3), 1.3, 0.7) +
+      rect(x + 14, y + 40, w - 28, lh, "var(--card)", 2, 3, 'class="lbl"') +
+      '<g transform="rotate(-90 ' + cx + " " + cy + ')">' + h(cx, cy + 12, title, 38, 700, MID) + "</g>" +
+      rect(x + 12, FLOOR - 134, w - 24, 52, "var(--card)", 1.6, 3) + h(cx, FLOOR - 112, count, 21, 600, MID) + h(cx, FLOOR - 90, state, 21, 700, MID, state === "draft" ? "var(--orange-text)" : "var(--ink)") +
+      reg("circle", 'cx="' + cx + '" cy="' + (FLOOR - 50) + '" r="14"', "var(--brass)", 2) + '<circle cx="' + cx + '" cy="' + (FLOOR - 50) + '" r="8" style="fill:var(--ink)"/>';
+    s = hot("the cookbook " + title, s, [x, y, w, hgt]);
+    return on ? s.replace('class="hot', 'class="hot on') : s;
+  }
+  function blank(x, w, hgt) {
+    var y = FLOOR - hgt, cx = x + w / 2, fill = "var(--custard)";
+    var s = block(x, y, x + w, FLOOR, 60, { top: "var(--page)", side: "color-mix(in srgb, " + fill + " 66%, #000)" }) + rect(x, y, w, hgt, fill, 2.6, 6) +
+      line("M" + (x + 26) + " " + (y + 2) + " V" + (FLOOR - 2), 1.6, 0.7) + hatch(x + 2, y + 2, 24, hgt - 4, 0.25) +
+      reg("circle", 'cx="' + (cx + 13) + '" cy="' + (y + 104) + '" r="32"', "var(--yellow)", 2.4) + line("M" + (cx - 1) + " " + (y + 104) + " h28 M" + (cx + 13) + " " + (y + 90) + " v28", 3.2) +
+      rect(x + 48, y + 166, w - 70, 96, "var(--card)", 2, 4, 'class="lbl"') + h(cx + 13, y + 208, "New cookbook", 34, 700, MID) + b(cx + 13, y + 240, "Give it a title to start", 14, MID);
+    return hot("a new cookbook", s, [x, y, w, hgt]);
+  }
+  function shelf() {
+    var W = S.x1 - S.x0, s = recess(S.x0, S.y0, S.x1, FLOOR, 150, "var(--cab-deep)", { side: "var(--cab-side)", bottom: "var(--wood-hi)" }) + hatch(S.x0, S.y0, W, 12);
+    s += spine(565, 120, 430, "var(--orange)", "Weekend Bakes", "4 recipes", "shared", true) + spine(689, 108, 452, "var(--blue-hi)", "Laminated", "6 recipes", "shared") +
+      spine(801, 118, 400, "var(--stem)", "Holiday tin", "2 recipes", "draft") + blank(985, 250, 360);
+    s += rect(S.x0, FLOOR, W, 26, "var(--wood)", 2.6) + grain(S.x0, FLOOR + 2, W, 22, 31) + rect(S.x0, FLOOR + 26, W, S.y1 - FLOOR - 26, "var(--cab)", 2.6) + hatch(S.x0, FLOOR + 26, W, 7) +
+      brassLabel(S.cx, 700, 130, 30, "Cookbooks", 21) + rect(S.x0, S.y0, W, S.y1 - S.y0, "none", 3);
+    return s;
+  }
+
+  /* ---------- the open binder: cover board, two page blocks, three rings ---------- */
+  var RY = [214, 416, 618], PL = 492, PR = 962;
+  function binder(fill, tab) {
+    var dk = "color-mix(in srgb, " + fill + " 68%, #000)", s = hatch(S.x0 + 8, 712, 896, 10, 0.8) + rect(S.x0, S.y0, 896, 638, fill, 2.8, 10) + rect(872, S.y0, 56, 638, dk, 2);
+    for (var t = 0; t < 5; t++) { var ty = 150 + t * 62, cur = t === tab;
+      s += rect(1300, ty, 42, 52, cur ? "var(--yellow)" : "var(--custard)", 2, 5) + (t ? T(1329, ty + 32, t, "font:700 15px var(--font-label);fill:var(--ink)", MID) : line("M1323 " + (ty + 19) + " h12 M1323 " + (ty + 26) + " h12 M1323 " + (ty + 33) + " h12", 1.8)); }
+    for (var i = 3; i >= 0; i--) s += rect(470 - i * 2, 134 + i * 2, 404, 564, "var(--page)", i ? 1 : 2.2, 2) + rect(926 + i * 2, 134 + i * 2, 390, 564, "var(--page)", i ? 1 : 2.2, 2);
+    s += rect(889, 122, 22, 584, "var(--brass)", 2, 6);
+    RY.forEach(function (y) { var d = "M856 " + y + " C856 " + (y - 36) + " 944 " + (y - 36) + " 944 " + y;
+      s += '<circle cx="856" cy="' + y + '" r="6.5" style="fill:' + dk + '"/><circle cx="944" cy="' + y + '" r="6.5" style="fill:' + dk + '"/>' + line(d, 10) + line(d, 5.5, 1, "var(--brass)"); });
+    return s + rect(470, 86, 236, 38, "var(--card)", 2, 3) + h(484, 114, "Weekend Bakes", 30, 700);
+  }
+  function tagAlways(x, y, rot) { return paidTag(x, y, rot).replace('class="paid"', ""); }
+
+  /* ---------- 2 and 4. reading ---------- */
+  function view(mode) {
+    var cook = mode === "cook", s = binder("var(--orange)", 2);
+    s += cook ? line("M706 105 Q730 94 756 104", 1.6) + tagAlways(800, 106, -4) + b(946, 110, "A sample. Read only.", 15, "", "var(--ink)", 600) + pill(1140, 88, 152, "See the paid plan", true)
+      : b(722, 110, "Reading", 15, "", "var(--ink)", 600) + pill(1196, 88, 96, "Edit");
+    s += h(PL, 184, "Weekend Bakes", 44, 700) + h(PL, 218, "Things I bake on a slow Saturday.", 23) + h(PL, 244, "Each one tested until it works.", 23);
+    s += cook ? b(PL, 290, "Your own cookbooks get a link you can share.", 14)
+      : rect(PL, 264, 346, 44, "var(--custard)", 1.6, 4) + b(504, 291, "Share link", 13) + b(576, 292, "/c/weekend-bakes", 16, "", "var(--ink)", 600) + pill(756, 269, 74, "Copy");
+    s += lab(PL, 348, "CONTENTS") + line("M" + PL + " 356 H838", 1.4, 0.6);
+    EN.forEach(function (e, i) { var y = 396 + i * 46;
+      s += h(PL, y, (i + 1) + ".", 28, 700) + lk(526, y, e[0], 28, i === 1, e[0]) + b(838, y - 2, "as of " + e[1], 13, END); });
+    s += b(PL, 590, cook ? "4 recipes." : "4 recipes. Shared since 11/11/26.", 14) + turn(506, 670, -1) + b(672, 675, "Contents", 13, MID);
+    /* right page: one entry in full */
+    s += h(PR, 184, "2. Croissants", 44, 700) + h(PR, 216, "Makes 12", 23, 600, "", SOFT) +
+      '<g transform="rotate(-5 1228 204)"><rect x="1162" y="188" width="132" height="32" rx="3" style="fill:none;stroke:var(--orange-text);stroke-width:2.2"/>' +
+      T(1228, 210, "AS OF 11/11/26", "font:700 15px var(--font-label);letter-spacing:.08em;fill:var(--orange-text)", MID) + "</g>";
+    s += lab(PR, 258, "INGREDIENTS");
+    ["500 g bread flour", "55 g sugar", "10 g salt", "10 g instant yeast", "300 g milk, cold", "280 g butter, for the block"].forEach(function (t, i) { s += h(PR, 286 + i * 27, t, 24); });
+    s += lab(PR, 458, "STEPS");
+    ["Mix the dough. Chill overnight.", "Lock in the butter block.", "Three letter folds. Rest 2 h between.", "Shape. Proof 2 h at 26°C.", "Bake 18 min at 200°C."].forEach(function (t, i) { s += h(PR, 486 + i * 28, (i + 1) + ".", 24, 700) + h(PR + 24, 486 + i * 28, t, 24); });
+    s += b(PR, 630, "This is the copy made when the recipe was added.", 13) + b(PR, 648, "Later changes in the Lab do not change it.", 13) + b(1128, 675, "2 of 4", 13, MID) + turn(1274, 670, 1);
+    return s;
+  }
+
+  /* ---------- 3. editing ---------- */
+  function strip(i, y, lifted) {
+    var e = EN[i], s = rect(PL, y, 346, 44, "var(--card)", lifted ? 2.4 : 1.6, 4);
+    for (var d = 0; d < 6; d++) s += '<circle cx="' + (506 + (d % 2) * 8) + '" cy="' + (y + 14 + Math.floor(d / 2) * 8) + '" r="2.2" style="fill:var(--ink)"/>';
+    return s + h(530, y + 31, (i + 1) + ".", 26, 700) + h(556, y + 31, e[0], 26) + b(790, y + 28, e[1], 13, END) +
+      reg("circle", 'cx="818" cy="' + (y + 22) + '" r="11"', "var(--page)", 1.6) + line("M813 " + (y + 17) + " l10 10 M823 " + (y + 17) + " l-10 10", 2);
+  }
+  function edit() {
+    var s = binder("var(--orange)", 0) + b(722, 110, "Editing", 15, "", "var(--ink)", 600) + pill(1196, 88, 96, "Done", true);
+    s += lab(PL, 160, "TITLE") + rect(PL, 168, 346, 44, "var(--card)", 1.8, 4) + h(504, 200, "Weekend Bakes", 30, 700) + line("M672 178 V204", 2);
+    s += lab(PL, 236, "DESCRIPTION") + rect(PL, 244, 346, 62, "var(--card)", 1.8, 4) + h(504, 268, "Things I bake on a slow Saturday.", 22) + h(504, 294, "Each one tested until it works.", 22);
+    s += lab(PL, 332, "RECIPES, IN ORDER");
+    [0, 1, 3].forEach(function (i) { s += strip(i, 342 + i * 52); });
+    s += '<rect x="' + PL + '" y="446" width="346" height="44" rx="4" style="fill:none;stroke:var(--ink);stroke-width:1.4;stroke-dasharray:6 5"/>' + hatch(PL + 8, 454, 338, 34, 0.5) +
+      '<g transform="translate(10 -5) rotate(-1.6 665 468)">' + strip(2, 446, true) + "</g>";
+    s += b(PL, 574, "Drag the dots to change the order.", 13) + b(PL, 592, "The x takes a recipe out of this cookbook only.", 13) + pill(PL, 612, 150, "Add a recipe", true) + b(654, 634, "4 recipes", 13);
+    /* right page: the picker, clipped on, then sharing */
+    s += '<g transform="rotate(-1.4 1130 280)">' + hatch(972, 158, 330, 266, 0.5) + rect(966, 150, 330, 266, "var(--card)", 2, 2) + lab(982, 180, "YOUR PUBLISHED RECIPES") +
+      rect(978, 190, 306, 42, "var(--custard)", 1.6, 4) + h(990, 220, "Brown butter cookies", 26, 700) + pill(1206, 194, 70, "Add", true) + lab(982, 262, "ALREADY IN THIS COOKBOOK");
+    EN.forEach(function (e, i) { var y = 290 + i * 28; s += line("M984 " + (y - 8) + " l5 6 l9 -13", 2, 0.7) + h(1006, y, e[0], 24, 600, "", SOFT); });
+    s += b(982, 402, "Adding makes a copy as the recipe is today.", 12.5) +
+      line("M1240 172 V136 a9 9 0 0 1 18 0 V184 a5 5 0 0 1 -10 0 V146", 2.4) + "</g>";
+    s += rect(966, 452, 330, 150, "var(--custard)", 2, 3) + tape(980, 454, -28) + tape(1282, 454, 28) + lab(982, 484, "SHARING") + h(982, 514, "Shared since 11/11/26", 25) +
+      b(982, 538, "/c/weekend-bakes", 16, "", "var(--ink)", 600) + pill(982, 554, 150, "Copy share link", true) + pill(1142, 554, 110, "Unpublish");
+    s += b(PR, 634, "While a cookbook is a draft, Unpublish reads Publish.", 13) + b(PR, 652, "To update a recipe: take it out, then add it again.", 13);
+    return s;
+  }
+
+  PLATE.add(function () {
+    document.getElementById("cb-shelf").innerHTML = openOver(shelf(), "The cookbook shelf, large, over the dimmed kitchen");
+    document.getElementById("cb-view").innerHTML = openOver(view(o.plan === "cook" ? "cook" : "read"), "A cookbook open for reading");
+    document.getElementById("cb-edit").innerHTML = openOver(edit(), "The same cookbook in edit mode");
+    document.getElementById("cb-cook").innerHTML = svg([442, 1358], view("cook"), "A sample cookbook, read only, with a paid plan tag", 66, 668);
+  });
+})();
+</script>

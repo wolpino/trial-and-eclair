@@ -1,0 +1,78 @@
+<section aria-labelledby="h-k" id="k-sec">
+  <span class="label" id="h-k">01 · The kitchen</span>
+  <div class="sec-body">
+    <h3>The main kitchen, by day</h3>
+    <figure id="k-main" class="fx"></figure>
+    <p class="note"><b>What changed since your notes.</b> The cabinets keep the original green, so the eye goes to the recipe log. Its RECIPE LOG tape label is now on the left door of the double cabinet, and the COOKBOOKS label has moved left along its shelf edge (REFERENCES stays at the right). The smaller board and the black and white floor are settled. Under the counter, left to right: the fridge, a slim cabinet (now the narrowest), the bookshelf (moved left), the double cabinet for the recipe log (with its pulls at the two inner top corners), and the sink cabinet with its false drawer front. A drawer line runs along the whole run. Brass bar pulls: level on drawers, upright on doors, always on the flat frame of the door.</p>
+    <p class="note"><b>Try it.</b> Click the window and a tiny bird flies past. In this mock it also comes on its own every 20 seconds so you can see it; the app would use a slower timing (to be decided, about every 5 minutes). If your computer is set to reduce motion, it only comes on a click. Click the eclair to take a bite. The Plan switch shows the paid tags for a home cook and a guest, and a guest also gets a small "Guest" tag beside Account.</p>
+
+    <h3>The evening kitchen</h3>
+    <figure id="k-eve" class="fx"></figure>
+    <p class="note"><b>Evening.</b> The same kitchen with a dark sky, a moon and stars in the window and a warm wash from the top. A shooting star crosses the window now and then (every 20 seconds in this mock), and when you click it.</p>
+
+    <h3>The recipe log cabinet</h3>
+    <figure id="k-log" class="fx" style="max-width:700px"></figure>
+    <p class="note"><b>Open.</b> The RECIPE LOG tape label sits on the left door, and the cabinet glows when you point at it. Clicking opens both doors. The log is a clipboard hung on a screw on the inside of the left door; its clip holds a sheet headed "Recipe log" with one row per bake: the date, the recipe and a short note, such as a substitution. The clipboard is only a glimpse: clicking it opens the recipe log full size, the way every object opens into its tool, so its small size on the door is fine. The cabinet is no longer empty: an animal lives on its floor. Shown here, Cat A, a cat asleep in a mixing bowl; the other animals are below.</p>
+    <p class="note"><b>Hinges.</b> The doors have concealed hinges, fixed inside the cabinet, so from the front they do not show. Their hinge cups show on the backs of the open doors here.</p>
+    <h3>Inside the cabinet: animal options</h3>
+    <div class="six">
+      <div><figure id="k-in-a" class="fx"></figure><p class="note"><b>Cat A.</b> A ginger tabby curled asleep in a mixing bowl.</p></div>
+      <div><figure id="k-in-b" class="fx"></figure><p class="note"><b>Cat B.</b> A grey tabby sitting loafed on a folded tea towel, paws tucked, looking out.</p></div>
+      <div><figure id="k-in-c" class="fx"></figure><p class="note"><b>Cat C.</b> A black and white cat curled asleep in a round bread proofing basket.</p></div>
+      <div><figure id="k-in-d" class="fx"></figure><p class="note"><b>Cat D.</b> A ginger cat peeking round a stack of mixing bowls, one paw on the top rim.</p></div>
+      <div><figure id="k-in-e" class="fx"></figure><p class="note"><b>Dog A.</b> A small scruffy terrier curled asleep on a cushion.</p></div>
+      <div><figure id="k-in-f" class="fx"></figure><p class="note"><b>Dog B.</b> A dachshund lying long along the cabinet floor, head on its paws.</p></div>
+    </div>
+
+    <h3>Recently on the fridge</h3>
+    <figure id="k-rec" class="fx" style="max-width:360px"></figure>
+    <p class="note"><b>Magnets, staying on the fridge for now.</b> A clean index card held by two magnets. Each name is a link; Croissants is shown as it looks when you point at it.</p>
+
+    <h3>Normal width and extra wide</h3>
+    <div style="display:grid;gap:12px"><figure id="k-normal" class="fx" style="width:85.714%;justify-self:center"></figure><figure id="k-wide" class="fx"></figure></div>
+    <p class="note"><b>Same scale, one above the other.</b> At normal width (top) the left edge cuts off the fridge's hinges and the right edge cuts off part of the window and the sink. From a 1680 px browser (bottom) the kitchen simply extends: the hinges, the whole window and the whole sink show. Nothing in the middle moves.</p>
+
+    <ol class="qs">
+      <li><b>Inside the cabinet:</b> which animal? The same one always, or a different one now and then?</li>
+    </ol>
+  </div>
+</section>
+<script>
+(function () {
+  /* put(figure id, scene view, options, label, crop [x0, x1, y0, h], evening) */
+  function put(id, svp, extra, label, crop, eve) { var c = crop || [svp[0], svp[1]]; document.getElementById(id).innerHTML = svg([c[0], c[1]], scene(svp, opts(extra), eve), label, c[2], c[3]); }
+  PLATE.add(function () {
+    put("k-main", VP, null, "The main kitchen by day");
+    put("k-eve", VP, { bites: 0 }, "The kitchen in the evening", null, true);
+    put("k-log", VP, { logOpen: 1, inside: "cat" }, "The recipe log cabinet open: the log sheet hangs inside the left door and a cat sleeps in a bowl inside", [855, 1395, 484, 230]);
+    [["a", "cat", "a ginger cat asleep in a mixing bowl"], ["b", "catB", "a grey tabby loafed on a folded tea towel"], ["c", "catC", "a black and white cat asleep in a bread proofing basket"],
+      ["d", "catD", "a cat peeking round a stack of mixing bowls"], ["e", "dogA", "a small terrier asleep on a cushion"], ["f", "dogB", "a dachshund lying along the floor"]].forEach(function (v) {
+      put("k-in-" + v[0], VP, { logOpen: 1, inside: v[1] }, "Inside the open recipe log cabinet: " + v[2], [1012, 1372, 540, 166]); });
+    put("k-rec", VP, { linkOn: 1 }, "Recently on an index card held by two magnets", [296, 520, 100, 210]);
+    put("k-normal", VP, null, "The kitchen at normal width");
+    put("k-wide", VPW, null, "The kitchen extra wide");
+  });
+  var sec = document.getElementById("k-sec");
+  /* The window: a click plays the bird (day) or the shooting star (evening) in that window */
+  function play(win) { win.querySelectorAll(".k-fly animateTransform, .k-fly set, .k-fly > animate").forEach(function (a) { a.beginElement(); }); }
+  function look(e) {
+    var w = e.target.closest && e.target.closest(".k-win"); if (!w) return;
+    if (e.type === "keydown") { if (e.key !== "Enter" && e.key !== " ") return; e.preventDefault(); }
+    play(w);
+  }
+  sec.addEventListener("click", look); sec.addEventListener("keydown", look);
+  /* Now and then on its own: every ~20 s in this mock (the app: slower, about every 5 minutes), unless the reader asks for reduced motion */
+  var calm = window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function all() { sec.querySelectorAll(".k-win").forEach(play); }
+  if (!calm) { setTimeout(all, 2500); setInterval(all, 20000); }
+  /* The eclair: each click (or Enter/Space) takes a bite; the third leaves crumbs. Back whole on reload. */
+  var fig = document.getElementById("k-main");
+  function bite(e) {
+    if (!e.target.closest || !e.target.closest(".eat") || o.bites >= 3) return;
+    if (e.type === "keydown") { if (e.key !== "Enter" && e.key !== " ") return; e.preventDefault(); }
+    o.bites++; PLATE.redraw();
+    var n = fig.querySelector(".eat"); if (n) n.focus();
+  }
+  fig.addEventListener("click", bite); fig.addEventListener("keydown", bite);
+})();
+</script>
