@@ -14,18 +14,16 @@
 
     <div class="pair">
       <div><h3>Before: Start a trial on Miso caramel</h3><figure id="ideas-before"></figure></div>
-      <div><h3>After: back on the board</h3><figure id="ideas-after"></figure></div>
+      <div><h3>After: back on the board, the gap stays</h3><figure id="ideas-after"></figure></div>
     </div>
-    <p class="note"><b>The idea leaves the board, quietly.</b> Once the trial starts, the Miso caramel note is archived. Back on the board it is simply gone; the notes after it move up one place, and the Archived envelope goes from 4 to 5. No "Moved to Trials" trace is left behind: the notebook opening at the new trial already says what happened, and a trace would be one more thing to clear off the cork.</p>
+    <p class="note"><b>The idea leaves the board, quietly.</b> Once the trial starts, the Miso caramel note is archived. Back on the board its place is empty and the other notes stay put, so nothing jumps around under the cook's eye. The board tidies up (closes the gap) the next time it is opened, or when a new idea is pinned. The Archived envelope goes from 4 to 5. No "Moved to Trials" trace is left behind: the notebook opening at the new trial already says what happened, and a trace would be one more thing to clear off the cork.</p>
 
-    <h3>The Archived envelope (small, a question)</h3>
+    <h3>The Archived envelope</h3>
     <figure id="ideas-archived"></figure>
     <p class="note"><b>A quiet way back.</b> A small envelope pinned in the top right corner holds the archived ideas. Clicking it slides out a card: each idea, the day it left, and a link to the trial it became. It stays small so the board is about new ideas.</p>
 
     <ol class="qs">
-      <li><b>Keep the Archived envelope?</b> Or no way to see archived ideas at all, since each trial already says which idea it came from?</li>
       <li><b>Words only?</b> Notes are a title and a line or two. Should an idea still hold one photo, or is that for the notebook?</li>
-      <li><b>When an idea leaves,</b> should the notes after it move up to close the gap (drawn), or stay put until the board is next opened?</li>
     </ol>
   </div>
 </section>
@@ -106,7 +104,7 @@
   function board(ideas, ro, pt, arch) {
     var s = "", first = ro ? sample(0) : blank(0);
     if (pt != null) s += note(pt + 1, ideas[pt], true);
-    ideas.forEach(function (d, i) { if (i !== pt) s += note(i + 1, d); });
+    ideas.forEach(function (d, i) { if (d && i !== pt) s += note(i + 1, d); });
     s = clipTo(X0 + 2, Y0 + 60, X1 - 24, Y1 - 2, s + first);
     var rest = ideas.length + 1 - 15;
     return frame(title() + s + (arch != null ? envelope(arch, false) : "") + (rest > 0 ? more(rest) : "") + (ro ? paid(668, 124, -4) : "")); }
@@ -135,7 +133,7 @@
     put("ideas-open", openOver(ro ? board(SAMPLE, true, null, 2) : dev(), ro ? "The idea board as a " + (o.plan === "guest" ? "guest" : "home cook") + " sees it: sample ideas, read-only, paid plan" : "The idea board open over the dimmed kitchen, a blank note ready to type"));
     put("ideas-one", openOver(board(IDEAS, false, null, 4) + dim() + big(), "The Miso caramel idea pulled forward over the board", { plan: "dev" }));
     put("ideas-before", svg([452, 1348], board(IDEAS, false, 0, 4), "Before: the board with Miso caramel, pointed at", 76, 340));
-    put("ideas-after", svg([452, 1348], board(IDEAS.slice(1), false, null, 5), "After: Miso caramel is gone, the notes moved up, Archived shows 5", 76, 340));
+    put("ideas-after", svg([452, 1348], board([null].concat(IDEAS.slice(1)), false, null, 5), "After: Miso caramel is gone, its place left empty, Archived shows 5", 76, 340));
     put("ideas-archived", svg([900, 1348], board(IDEAS, false, null, null) + dim() + archived() + envelope(5, true), "The Archived envelope opened: a card of archived ideas with links to their trials", 76, 320));
   });
 })();
