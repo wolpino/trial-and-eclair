@@ -4,13 +4,14 @@
     <h3>The idea board, opened</h3>
     <figure id="ideas-open" class="fx"></figure>
     <p class="note"><b>Open and type.</b> Clicking the cork in the kitchen opens the board large. A blank note is already pinned at the top left with the cursor in it: type a few words, press Enter, and it is pinned. Newest ideas come first.</p>
-    <p class="note"><b>Short notes, plain tacks.</b> Each idea is a short note: a title and a line or two. The notes sit in a loose grid, each a little crooked. The tacks are just tacks in the kitchen colours, mixed; they mean nothing. No statuses and no filters. Pointing at a note makes it glow (shown on "Cardamom knots").</p>
+    <p class="note"><b>Short notes, plain tacks.</b> Each idea is a short note: a title and a line or two. An idea can also hold one photo, a snapshot of something seen or tried, clipped to the note's corner (shown on "Yuzu curd tart"). Most notes have none. The notes sit in a loose grid, each a little crooked. The tacks are just tacks in the kitchen colours, mixed; they mean nothing. No statuses and no filters. Pointing at a note makes it glow (shown on "Cardamom knots").</p>
     <p class="note"><b>More than fit.</b> The cork shows as many notes as fit. The last row is cut off by the frame, a slip says how many more there are, and a thin rail on the right shows where you are, like the whiteboard.</p>
     <p class="note"><b>Plans.</b> Switch the Plan to Home cook or Guest: the same board with sample ideas, read-only. The blank note's place holds a sample card with the yellow "paid plan" tag and a "See the paid plan" link (a guest sees "Sign up"). Notes still open, without the buttons. The figures below are the Developer board.</p>
 
     <h3>One idea, opened</h3>
     <figure id="ideas-one"></figure>
     <p class="note"><b>The note comes forward.</b> Clicking a note pulls it forward, still pinned, over the dimmed board. The title and the few lines can be changed in place. Clicking the board behind puts it back. "Start a trial" opens the Trials notebook at a new trial, with "from the idea: Miso caramel" on its first page (see the notebook section). "Send to Next up" writes it on the whiteboard. "Delete" takes it off for good.</p>
+    <p class="note"><b>One photo.</b> The idea's photo is taped in the corner of the big note. "Add a photo" (or "Change photo" once there is one) sits by the buttons: one photo per idea, no gallery. When the idea becomes a trial, the photo goes with it to the trial's first page.</p>
 
     <div class="pair">
       <div><h3>Before: Start a trial on Miso caramel</h3><figure id="ideas-before"></figure></div>
@@ -22,9 +23,6 @@
     <figure id="ideas-archived"></figure>
     <p class="note"><b>A quiet way back.</b> A small envelope pinned in the top right corner holds the archived ideas. Clicking it slides out a card: each idea, the day it left, and a link to the trial it became. It stays small so the board is about new ideas.</p>
 
-    <ol class="qs">
-      <li><b>Words only?</b> Notes are a title and a line or two. Should an idea still hold one photo, or is that for the notebook?</li>
-    </ol>
   </div>
 </section>
 <script>
@@ -37,7 +35,7 @@
   var IDEAS = [
     [["Miso caramel"], ["white miso,", "dark caramel"]],
     [["Cardamom", "knots"], ["pearl sugar"]],
-    [["Yuzu curd", "tart"], ["nutty crust?"]],
+    [["Yuzu curd", "tart"], ["nutty crust?"], "tart"],
     [["Black sesame", "shortbread"], ["for gifts"]],
     [["Earl Grey", "scones"], ["tea in the cream"]],
     [["Rye babka"], ["dark chocolate,", "less sugar"]],
@@ -59,6 +57,21 @@
   function slot(i, k) { var J = JIT[i]; return [484 + (i % 5) * 164 + J[0], 166 + Math.floor(i / 5) * 146 + J[1], JIT[k == null ? i : k][2]]; }
   function tack(cx, cy, col, rr) { rr = rr || 7;
     return '<circle cx="' + cx + '" cy="' + cy + '" r="' + rr + '" style="fill:' + col + ';stroke:var(--ink);stroke-width:1.8"/><circle cx="' + (cx - rr * 0.34) + '" cy="' + (cy - rr * 0.34) + '" r="' + (rr * 0.28).toFixed(1) + '" style="fill:#fff;opacity:.8"/>'; }
+  /* a small print: white border, flat colour picture. kind "tart" (yuzu slice) or "jar" (dark caramel) */
+  function snap(x, y, w, h, kind) { var b = 5, ix = x + b, iy = y + b, iw = w - 2 * b, ih = h - 2 * b - 8, s = "";
+    s += reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '"', "var(--page)", 1.6) + reg("rect", 'x="' + ix + '" y="' + iy + '" width="' + iw + '" height="' + ih + '"', "var(--plaster)", 1.2);
+    if (kind === "tart") { var px = ix + iw * 0.06, py = iy + ih * 0.52, qx = ix + iw * 0.94, qy = iy + ih * 0.22, ry = iy + ih * 0.8;
+      s += reg("path", 'd="M' + px + " " + py + " L" + qx + " " + qy + " L" + qx + " " + ry + ' Z"', "var(--yellow)", 1.4) +
+        reg("path", 'd="M' + qx + " " + qy + " L" + (qx + 0.01) + " " + ry + " L" + (qx - 5) + " " + (ry + 1) + " L" + (qx - 5) + " " + (qy + 2) + ' Z"', "var(--amber)", 1.2) +
+        line("M" + px + " " + (py + 2) + " L" + (qx - 5) + " " + (ry + 1), 1.2) + line("M" + (ix + 4) + " " + (iy + ih - 3) + " H" + (ix + iw - 4), 1, 0.5); }
+    else { var jx = ix + iw * 0.28, jw = iw * 0.44, jy = iy + ih * 0.3, jh = ih * 0.62;
+      s += reg("rect", 'x="' + jx + '" y="' + jy + '" width="' + jw + '" height="' + jh + '" rx="5"', "var(--wood)", 1.4) + reg("rect", 'x="' + (jx - 2) + '" y="' + (jy - 9) + '" width="' + (jw + 4) + '" height="10" rx="2"', "var(--brass)", 1.4) +
+        reg("rect", 'x="' + (jx + 4) + '" y="' + (jy + jh * 0.4) + '" width="' + (jw - 8) + '" height="' + (jh * 0.3).toFixed(1) + '"', "var(--card)", 1.1) + line("M" + (jx + 6) + " " + (jy + 6) + " v" + (jh * 0.25).toFixed(1), 2, 0.6, "var(--amber)") +
+        line("M" + (ix + 3) + " " + (jy + jh) + " H" + (ix + iw - 3), 1.1, 0.6); }
+    return s; }
+  function tape(cx, cy, w, rot) { return '<rect x="' + (cx - w / 2) + '" y="' + (cy - 8) + '" width="' + w + '" height="16" transform="rotate(' + rot + " " + cx + " " + cy + ')" style="fill:var(--custard);opacity:.72;stroke:var(--ink);stroke-width:1;stroke-opacity:.35"/>'; }
+  /* a paper clip over an edge at (cx, cy), long axis vertical */
+  function clip(cx, cy) { return line("M" + (cx - 3) + " " + (cy + 10) + " V" + (cy - 12) + " a4 4 0 0 1 8 0 V" + (cy + 14) + " a5.5 5.5 0 0 1 -11 0 V" + (cy - 8), 1.8, 1, "var(--ink-soft)"); }
   function tackFor(i) { var J = JIT[i + 3], t = TACK[J[4]]; if (t === "var(--yellow)" && PAPER[J[3]] === "var(--yellow)") t = BLU; return t; }
   function pinned(i, body, k) { var p = slot(i, k), cx = p[0] + NW / 2; return '<g transform="rotate(' + p[2].toFixed(2) + " " + cx + " " + (p[1] + 8) + ')">' + body + "</g>" + tack(cx, p[1] + 8, tackFor(k == null ? i : k)); }
   function note(i, d, on) {
@@ -66,6 +79,7 @@
     d[0].forEach(function (t, k) { s += T(x + 12, y + 40 + k * 25, t, "font:700 25px " + HAND + ";fill:var(--ink)"); });
     var by = y + 40 + d[0].length * 25 + 2;
     d[1].forEach(function (t, k) { s += T(x + 12, by + k * 20, t, "font:500 20px " + HAND + ";fill:var(--ink)"); });
+    if (d[2]) { var sx = x + NW - 44, sy = y - 6; s += '<g transform="rotate(7 ' + (sx + 28) + " " + sy + ')">' + snap(sx, sy, 56, 62, d[2]) + "</g>" + clip(sx + 29, sy + 2); }
     var h = hot(d[0].join(" "), pinned(i, s, k), [x, y, NW, NH]);
     return on ? h.replace('class="hot"', 'class="hot on"') : h;
   }
@@ -115,7 +129,10 @@
     s += T(lx, y + 88, "Miso caramel", "font:700 54px " + HAND + ";fill:var(--ink)") + line("M" + lx + " " + (y + 104) + " H" + (x + w - 34), 1.4, 0.5);
     ["White miso, about 1 tbsp", "per cup of sugar.", "Cook the caramel dark.", "Swirl into the blondies?", ""].forEach(function (t, i) { var ly = y + 150 + i * 38;
       s += T(lx, ly, t, "font:500 28px " + HAND + ";fill:var(--ink)") + line("M" + lx + " " + (ly + 9) + " H" + (x + w - 34), 1.1, 0.35); });
+    var px = x + w - 132, py = y + 22;
+    s += '<g transform="rotate(4 ' + (px + 50) + " " + py + ')">' + snap(px, py, 100, 112, "jar") + "</g>" + tape(px + 52, py + 2, 54, -6);
     s += T(lx, y + h - 70, "Pinned 11/09/26", "font:13px var(--font-body);fill:var(--ink-soft)");
+    s += T(x + w - 34 - 132, y + h - 76, "One photo per idea", "font:13px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"') + pill(x + w - 34 - 124, y + h - 98, 124, "Change photo");
     var by = y + h - 54;
     s += pill(lx, by, 130, "Start a trial", true) + pill(lx + 140, by, 150, "Send to Next up") + pill(x + w - 34 - 78, by, 78, "Delete");
     return '<g transform="rotate(-0.6 ' + (x + w / 2) + " " + (y + 10) + ')">' + s + "</g>" + tack(x + w / 2, y + 12, tackFor(1), 10); }
