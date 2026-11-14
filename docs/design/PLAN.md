@@ -153,6 +153,7 @@ From 2026-11-13: small visual details (a colour, a spacing, a word, a size) go h
 - [ ] Phone notebook with the camera button (Plate VIII)
 
 ## 4. Mark
+- Ari (2026-11-13): the mark is "T&E", and it appears in the app (where it sits is decided when drawing the mark). The full name "Trial & Eclair" stays a title only on sign in
 - [ ] Pick a mark. Already dropped: the E of eclairs, the recipe-card mark, crops of the eclair, box and notebook
 
 ## 5. Brand sheet
