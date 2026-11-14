@@ -1,0 +1,32 @@
+<section aria-labelledby="h-q" id="q-top">
+  <span class="label" id="h-q">Open questions</span>
+  <div class="sec-body">
+    <p class="note"><b>Every open question, in page order.</b> Each link jumps to the drawing it is about; "back to the questions" under a drawing comes back here.</p>
+    <ol class="qs q-links">
+      <li><b>Kitchen, cabinet animal.</b> Which animal sits in the recipe log cabinet? <a href="#k-in-a">Cat A</a> · <a href="#k-in-b">Cat B</a> · <a href="#k-in-c">Cat C</a> · <a href="#k-in-d">Cat D</a> · <a href="#k-in-e">Dog E</a> · <a href="#k-in-f">Dog F</a></li>
+      <li><b>Sign-off.</b> Are these five views done? <a href="#h-k">Kitchen</a> · <a href="#h-wb">Whiteboard</a> · <a href="#h-ideas">Idea board</a> · <a href="#h-nb">Notebook</a> · <a href="#h-box">Recipe box</a></li>
+      <li><b>Cookbooks, <a href="#cb-spines">the spines</a>.</b> A home cook sees only the sample Weekend Bakes. Should they also see a developer's other books, unopenable?</li>
+      <li><b>Cookbooks, <a href="#cb-cover">the cover</a>.</b> A spine opens the book closed, cover up. Or should it go straight to the contents page?</li>
+      <li><b>Cookbooks, <a href="#cb-cover">Share on the cover</a>.</b> Should Share open a small card with the link and Copy, or the phone's own share sheet?</li>
+      <li><b>Cookbooks, <a href="#cb-open">the contents page</a>.</b> Does the developer set the order of recipes (drag on the contents page), or is it always A to Z?</li>
+    </ol>
+  </div>
+</section>
+<style>
+  .q-links a { color: var(--ink); text-decoration: underline; text-decoration-color: var(--yellow); text-decoration-thickness: 3px; text-underline-offset: 3px; }
+  .q-links a:hover, .q-links a:focus-visible { background: var(--yellow); }
+  figure[id], [id^="h-"] { scroll-margin-top: 72px; }
+  a.q-back { display: inline-block; margin-top: 4px; font-size: 0.85rem; color: var(--ink-soft); }
+</style>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+  /* a "back to the questions" link under each drawing a question points to (after every section has loaded) */
+  var ids = {};
+  document.querySelectorAll(".q-links a").forEach(function (a) { ids[a.getAttribute("href").slice(1)] = 1; });
+  Object.keys(ids).forEach(function (id) {
+    var el = document.getElementById(id); if (!el || el.tagName !== "FIGURE") return;
+    var b = document.createElement("a"); b.href = "#q-top"; b.className = "q-back"; b.textContent = "↑ back to the questions";
+    el.insertAdjacentElement("afterend", b);
+  });
+});
+</script>

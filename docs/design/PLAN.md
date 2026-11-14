@@ -30,6 +30,7 @@ One view at a time, reviewed as it lands, not all at the end.
 5. Commit after each view Ari approves, and update the status table below. Stopping mid-way loses nothing.
 6. Settle the views already drawn before starting new ones (Ari, 2026-11-13: finish kitchen, whiteboard, ideas, notebook and recipe box before cookbooks).
 7. When there are questions, list them all in chat at once, in page order, each with its figure name, so Ari can answer in one go.
+8. The same questions go at the top of the Plate X page in `sections/00-questions.html`, each linking to its drawing (Ari, 2026-11-13: hard to find the mock-ups otherwise). Replace the list each round; answered questions come off it.
 
 ### Status
 | # | View | Section file | Status |
