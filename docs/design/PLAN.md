@@ -55,29 +55,30 @@ Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt
 Every view gets a **developer** and a **home cook** version, plus **guest** where it differs. Day only, except the kitchen's evening crop.
 
 ### Kitchen
-- [ ] Cream fridge (settled)
-- [ ] Recently: magnets with a better paper (not torn) **and** the ticket rail, side by side
-- [ ] Shelf labels: tape, ALL-CAPS marker font
-- [ ] No sun patch
-- [ ] Floor, four ways: black and white checkerboard, plain boards, one flat colour, no floor
-- [ ] Window lower and larger
-- [ ] Sink in front of the window, two ways: sink cabinet below, and counter only
-- [ ] Normal view crops part of the window and the fridge hinges; extra wide (from 1680 px) shows both whole
-- [ ] A small bird passes the window by day, a shooting star by evening: now and then on its own, and on a window click
-- [ ] One evening kitchen
-- [ ] Fix: floor reads as diagonal stripes at the left and right edges
-- [ ] Fix: small whiteboard says "Blondies · trial 4"; trial 4 is Croissants
+- [x] Cream fridge (settled)
+- [x] Recently: magnets with a better paper (not torn) **and** the ticket rail, side by side
+- [x] Shelf labels: tape, ALL-CAPS marker font
+- [x] No sun patch
+- [x] Floor, four ways: black and white checkerboard, plain boards, one flat colour, no floor
+- [x] Window lower and larger
+- [x] Sink in front of the window, two ways: sink cabinet below, and counter only
+- [x] Normal view crops part of the window and the fridge hinges; extra wide (from 1680 px) shows both whole
+- [x] A small bird passes the window by day, a shooting star by evening: now and then on its own, and on a window click
+- [x] One evening kitchen
+- [x] Fix: floor reads as diagonal stripes at the left and right edges
+- [x] Fix: small whiteboard says "Blondies · trial 4"; trial 4 is Croissants
 
 ### Whiteboard
-- [ ] Empty "Next up" on a new kitchen: three doodles (question mark, little eclair, whisk or spoon)
-- [ ] Wiping an automatic item (it stays away until something new happens on that recipe)
-- [ ] Ticked item keeps a line through until the next day; clicking the tick again removes it at once
-- [ ] More than 6 items: the board scrolls
-- [ ] Small whiteboard's dot, two ways: a magnet, and a marker mark
+- [x] Empty "Next up" on a new kitchen: three doodles (question mark, little eclair, whisk or spoon)
+- [x] ~~Wiping an automatic item~~ dropped: the board holds only what the cook writes (Later list)
+- [x] Ticked item keeps a line through until the next day; clicking the tick again removes it at once
+- [x] More than 6 items: the board scrolls
+- [x] ~~Small whiteboard's dot~~ dropped with pins: plain tick boxes
 
 ### Idea board
-- [ ] No statuses. Plain tacks in the brand colours, notes in a loose grid, no filters
-- [ ] An idea is a short note. Moving it to a trial archives it and it leaves the board
+- [x] No statuses. Plain tacks in the brand colours, notes in a loose grid, no filters
+- [x] An idea is a short note. Moving it to a trial archives it and it leaves the board
+- [ ] An idea can hold one photo (Ari, 2026-11-13)
 
 ### Cookbooks
 - [ ] A sewn book, not a binder
@@ -90,21 +91,21 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 - [ ] Starter references stay even after samples are removed
 
 ### Trials notebook
-- [ ] Tabs and a Contents page
-- [ ] Publish is a stamp on the entry
-- [ ] Page turns: folded corners and arrows
-- [ ] Compare taken out (Later list)
+- [x] Tabs and a Contents page
+- [x] ~~Publish is a stamp on the entry~~ now an "Add to recipe box" button on the strip (Ari, 2026-11-13)
+- [x] Page turns: folded corners and arrows
+- [x] Compare taken out (Later list)
 
 ### Recipe box
-- [ ] Open box body runs past the bottom of the screen
-- [ ] Next and Back are arrows left and right of the card, inside the lid
-- [ ] Edit and Delete, two ways: by the title, and bottom right of the card
-- [ ] Full screen is an icon
-- [ ] Full-screen card covers the whole screen, red X top right, no search bar
-- [ ] Clicking a letter tab shows a short list of its titles
-- [ ] Adding a card, two ways: a blank card at the back, and an "Add a card" button
-- [ ] Ingredient ticks clear when the card closes
-- [ ] Photo on the card front
+- [x] Open box body runs past the bottom of the screen
+- [x] Next and Back are arrows left and right of the card, inside the lid
+- [x] Edit and Delete, two ways: by the title, and bottom right of the card
+- [x] Full screen is an icon
+- [x] Full-screen card covers the whole screen, red X top right, no search bar
+- [x] Clicking a letter tab shows a short list of its titles
+- [x] Adding a card, two ways: a blank card at the back, and an "Add a card" button
+- [x] Ingredient ticks clear when the card closes
+- [x] Photo on the card front
 
 ### Sign in and sign up
 - [ ] "Trial & Eclair" as the title (the one place it appears)
