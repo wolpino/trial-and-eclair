@@ -3,7 +3,7 @@
   <div class="sec-body">
     <h3>The open box, with a card on the ledge</h3>
     <figure id="box-open" class="fx"></figure>
-    <p class="note"><b>What changed.</b> The box body now runs past the bottom of the screen, so it reads as a deep box and not a short tray. The lid stands up behind it and the card rests on the walnut ledge inside the lid. A photo is taped to the card front, top right. There is no back of the card: where the recipe came from sits under the title, and notes have a small box at the bottom.</p>
+    <p class="note"><b>What changed.</b> The box body now runs past the bottom of the screen, so it reads as a deep box and not a short tray. The lid stands up behind it and the card rests on the walnut ledge inside the lid. A photo is taped to the card front, top right. There is no back of the card: where the recipe came from sits under the title, and a card with a note has a small notes box at the bottom.</p>
     <p class="note"><b>Moving through cards.</b> The arrows left and right of the card, inside the lid, go back and next through the whole box, A to Z by title. The tag under the next arrow says where you are: "B · 10 of 15". The square icon above it opens the card full screen.</p>
     <p class="note"><b>Edit and Delete</b> are a plain pencil and bin right after the title. <b>Tabs</b> are all one paper; only the letter you are in is orange.</p>
     <p class="note"><b>Same for everyone.</b> The box is free, so Developer and Home cook see exactly this. Switch the Plan to Guest to see the guest slip; the guest figures further down show what else differs.</p>
@@ -19,14 +19,14 @@
 
     <h3>A new card from the notebook</h3>
     <figure id="box-new" class="fx"></figure>
-    <p class="note"><b>Straight from the stamp.</b> Clicking "ADD TO RECIPE BOX" on a trial's page opens the box with the new card on the ledge, open for editing. There is no dialog first. Everything is filled in from the trial: ingredients, steps, the photo and where it came from. The title starts as the recipe's name and can be changed. <b>Save card</b> puts it in the box under its letter; <b>Cancel</b> leaves the box as it was.</p>
+    <p class="note"><b>Straight from the stamp.</b> Clicking "ADD TO RECIPE BOX" on a trial's page opens the box with the new card on the ledge, open for editing. There is no dialog first. Everything is filled in from the trial: ingredients, steps, the photo and where it came from. The title starts as the recipe's name and can be changed. A new card has no note yet, so there is no notes box, only a small "+ Add a note" link at the foot; the box appears once a note is written. <b>Save card</b> puts it in the box under its letter; <b>Cancel</b> leaves the box as it was.</p>
     <p class="note"><b>Save as a new recipe</b> (from the replace dialog) opens this same card, but with the title selected so the cook names it first. Not drawn.</p>
 
     <h3>The card, full screen</h3>
     <figure id="box-full" class="fx"></figure>
     <p class="note"><b>For cooking from.</b> The card covers the whole screen: no kitchen, no find bar. Large writing you can read from across the counter. The source sits next to the title, the photo on the right and the notes box at the bottom. The red X, top right, goes back to the open box with this card still on the ledge.</p>
     <p class="note"><b>Ticks.</b> Tap an ingredient or a step to tick it off. Here three ingredients and two steps are ticked, and the step you are on is marked in yellow. Ticks clear when the card closes.</p>
-    <p class="note"><b>Notes.</b> A small handwritten box at the bottom of the card, on the ledge and full screen. It holds up to 280 characters and scrolls inside itself when the note is longer than the box. While editing, a small "212 / 280" counter shows in its corner; it is hidden the rest of the time.</p>
+    <p class="note"><b>Notes.</b> A small handwritten box at the bottom of the card, on the ledge and full screen. It only appears once the card has a note; a card without one has a clean foot. To add one, the cook taps Edit (the pencil by the title) and a small "+ Add a note" link shows where the box would be. The box holds up to 280 characters and scrolls inside itself when the note is longer than the box. While editing, a small "212 / 280" counter shows in its corner; it is hidden the rest of the time.</p>
 
     <h3>Guest</h3>
     <figure id="box-guest" class="fx"></figure>
@@ -35,10 +35,6 @@
     <figure id="box-limit" class="fx"></figure>
     <p class="note"><b>One look for guest limits.</b> Anything about the guest limit is a label: cream paper with a dusty rose border and a dusty rose "GUEST LIMIT" band in ink. That is the label on the box, and this card. Dusty rose (#e3a9ae) is used for nothing else, so it always means "guest limits". With all 5 used, the blank card at the back puts this on the ledge instead of a new card. Deleting one of their cards frees a slot.</p>
 
-    <ol class="qs">
-      <li><b>Notes box:</b> show it on every card, even empty (drawn), or only once the card has a note?</li>
-      <li><b>Starter cards:</b> is "Make it mine" at the bottom of the card, where notes would be, the right spot?</li>
-    </ol>
   </div>
 </section>
 <script>
@@ -108,9 +104,10 @@
       if (rc.ing[i]) s += T(x0 + 18, y, rc.ing[i], H(19));
       if (rc.steps[i]) s += T(868, y, (i + 1) + ". " + rc.steps[i], H(19)); }
     s += line("M856 " + (top + 108) + " V" + (r0 + n * 22 - 14), 1.2, 1, RULE);
-    if (o.edit) s += notes(x0 + 12, CB - 52, x1 - x0 - 222, 44, 17, []) + T(x0 + 76, CB - 25, "Add a note…", H(17, 600, SOFT)) +
+    /* the notes box only shows once a card has a note; in edit mode a card without one gets "+ Add a note" */
+    if (o.edit) s += (rc.notes.length ? notes(x0 + 12, CB - 52, x1 - x0 - 222, 44, 17, rc.notes) : T(x0 + 18, CB - 22, "+ Add a note", U(15, "var(--orange-text)") + ";text-decoration:underline")) +
       pill(x1 - 200, CB - 47, 104, "Save card", true) + pill(x1 - 88, CB - 47, 76, "Cancel");
-    else if (!rc.starter) s += notes(x0 + 12, CB - 52, x1 - x0 - 24, 44, 17, rc.notes);
+    else if (rc.notes && rc.notes.length) s += notes(x0 + 12, CB - 52, x1 - x0 - 24, 44, 17, rc.notes);
     return s + photo(x1 - 128, top + 12, 108, 80, 3);
   }
   /* Notes: a small handwritten box at the foot of the card; it scrolls inside itself (max 280 characters). */
@@ -186,7 +183,7 @@
       if (k === 2) s += R(M - 12, y - 34, 470, 45, "var(--yellow)", 1.6, 5);
       s += tick(M, y, d, true) + (d ? "" : T(M + 11, y - 1, k + 1, U(15), 'text-anchor="middle"')) + T(M + 36, y, t, H(32, 600, d ? SOFT : null)) + (d ? line("M" + (M + 34) + " " + (y - 9) + " h" + (t.length * 10.6), 1.6, 0.7) : ""); });
     s += photo(x1 - 236, 150, 196, 146, 3) + T(x1 - 138, 330, "trial 6, cut warm", H(24, 600, SOFT), 'text-anchor="middle"');
-    s += notes(L - 10, 598, x1 - x0 - 100, 104, 28, rc.notes) + T(L, 738, "Tap a line to tick it off. Ticks clear when you close the card.", U(16, SOFT));
+    s += (rc.notes.length ? notes(L - 10, 598, x1 - x0 - 100, 104, 28, rc.notes) : "") + T(L, 738, "Tap a line to tick it off. Ticks clear when you close the card.", U(16, SOFT));
     return s + reg("circle", 'cx="' + (x1 - 52) + '" cy="48" r="26"', RED, 2.4) + line("M" + (x1 - 62) + " 38 l20 20 M" + (x1 - 42) + " 38 l-20 20", 4, 1, "#fff");
   }
   function small(inner, label, x, y, w, h) { var V = mainVP(); return svg([x, x + w], scene(V, opts()) + openFrame(V) + inner, label, y, h); }
