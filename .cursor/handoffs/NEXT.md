@@ -11,7 +11,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 ```
 
 ## Prompt for the next agent (Plate X cookbooks, picks up 2026-11-13)
-> Kitchen Plate X, next view: **cookbooks** (section 04). Read `docs/design/PLAN.md` ("How we work", status table, the "Cookbooks" checklist, the Details list and Later list), the `kitchen-layout` memory (bottom entries, "Plate X" notes), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes. Work on branch `docs/kitchen-plate-ii-2026-11-11`; PR wolpino/trial-and-eclair#170 into `staging-render` is open, so push each commit to it.
+> Kitchen Plate X, next view: **cookbooks** (section 04). Read `docs/design/PLAN.md` ("How we work", status table, the "Cookbooks" checklist, the Details list and Later list), the `kitchen-layout` memory (bottom entries, "Plate X" notes), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes. PR wolpino/trial-and-eclair#170 (Plates VI–X so far) is merged into `staging-render`. Start a new branch from `staging-render` (e.g. `docs/plate-x-cookbooks`), push each commit, and open a PR into `staging-render` when the view is ready for Ari.
 >
 > Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt (version 14). Republish the same page: `cd design/plate-x && node build.cjs`, strip the `<!doctype…><body>` first line and the closing `</body></html>` from `dist/index.html` into `dist/kitchen-plate-x.html`, then publish with `url` set to that link. While cookbooks is half done, `node build.cjs --skip 04` leaves it out.
 >
