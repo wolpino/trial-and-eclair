@@ -125,7 +125,7 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 - Jot list (section 10): carried as is
 
 ### Ari picks after Plate X
-Floor · sink · Recently holder · small whiteboard dot · empty "Next up" doodle · Edit/Delete spot · how to add a card · sign-in card style · anything the section questions raise.
+Floor · sink · Recently holder (and whether Recently stays at all, Ari unsure 2026-11-13) · what sits inside the recipe log cabinet · small whiteboard dot · empty "Next up" doodle · Edit/Delete spot · how to add a card · sign-in card style · anything the section questions raise.
 
 ---
 
@@ -161,7 +161,7 @@ Changes the app needs that came out of the plates. Each becomes one Task issue.
 
 ## Later list
 Parked. Not drawn, not built until moved up.
-- Accessibility pass on every view (keyboard, screen readers, contrast, reduced motion). Must happen before the build is called done
+- Accessibility pass on every view (keyboard, screen readers, contrast, reduced motion). Must happen before the build is called done. Includes the whiteboard's "recipe card" link, which shows only on hover: touch screens and keyboards need another way (tap or focus shows it)
 - Public recipe (`/r`) and cookbook (`/c`) pages: fine for now, revisit
 - Equipment spots and anniversary equipment (1 month, 6 months, 1 year, yearly)
 - Upgrade to the paid plan page
