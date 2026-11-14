@@ -78,7 +78,7 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 ### Idea board
 - [x] No statuses. Plain tacks in the brand colours, notes in a loose grid, no filters
 - [x] An idea is a short note. Moving it to a trial archives it and it leaves the board
-- [ ] An idea can hold one photo (Ari, 2026-11-13)
+- [x] An idea can hold one photo (Ari, 2026-11-13)
 
 ### Cookbooks
 - [ ] A sewn book, not a binder
