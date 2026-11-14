@@ -30,6 +30,7 @@ Apply Ari's latest answers to the five drawn Plate X views, republish, and ask e
 - Second round the same day (version 10): log cabinet contents A cat / B gear / C stash, notebook without tape or name tag and "Add to recipe box" wording, recipe box "new card from the notebook" ready to edit, idea board keeps the gap
 - Version 11: whiteboard simplified to cook-written items only (Ari's yes); automatic items moved to the Later list
 - Version 12: whiteboard link on hover, cat redrawn, notebook strip button + recipe pills, idea photo, notes box only when there is a note
+- Versions 13 and 14: notebook recipe arrows dropped, then back as plain unlabelled arrows; six animal options for the cabinet; PLAN.md details list; Recently stays; PR wolpino/trial-and-eclair#170 opened into staging-render
 
 ### Decisions
 - Main wording in the drawings is "Make recipe card" until Ari picks
@@ -44,7 +45,7 @@ Apply Ari's latest answers to the five drawn Plate X views, republish, and ask e
 **Keywords:** Plate X, recipe log sheet, original green, Make recipe card, replace dialog, number tabs, dusty rose
 **Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, design/plate-x/sections/01-kitchen.html, design/plate-x/kitchen.js, design/plate-x/sections/06-notebook.html, design/plate-x/sections/07-recipe-box.html
 **Do not redo:** layout rounds 1–10; Plates II–IX; Plate X sections 01, 02, 03, 06, 07 as drawn (tweak them, don't redraw)
-**Resume with:** Ari's sign-off on the five views (cabinet contents still open); push the branch and open a PR into staging-render; then the remaining 2026-11-13 questions → tweak → mark the five views done in PLAN.md → cookbooks (section 04)
+**Resume with:** Ari's sign-off on the five views (cabinet contents still open); pick the cabinet animal; then cookbooks (section 04); then the remaining 2026-11-13 questions → tweak → mark the five views done in PLAN.md → cookbooks (section 04)
 <!-- AGENT_CONTEXT_END -->
 
 ---
