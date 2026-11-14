@@ -275,17 +275,15 @@
     s += reg("rect", 'x="' + x0 + '" y="' + YB.toFixed(1) + '" width="' + W + '" height="' + (CTR - YB).toFixed(1) + '"', "var(--wood-hi)", 2.2) + grain(x0, YB + 4, W, CTR - YB - 8, 11) + grain(x0 + 60, YB + 20, W, CTR - YB - 24, 12) +
       reg("rect", 'x="' + x0 + '" y="' + CTR + '" width="' + W + '" height="12"', "var(--wood)") + reg("rect", 'x="' + x0 + '" y="486" width="' + W + '" height="9"', "var(--wood-dark)", 2.4);
     s += sink(o);
-    /* cab: now | quiet (a darker, softer green). Left to right: a slim cabinet, the shelf, a double cabinet, the sink cabinet.
+    /* Left to right: a slim cabinet, the shelf, a double cabinet, the sink cabinet.
        Every cabinet has a drawer line at the top; the sink's is a false front. Pulls are bars: level on drawers, upright on doors. */
-    var quiet = o.cab === "quiet", CB = quiet ? "color-mix(in srgb, var(--cab) 56%, #2c2a22)" : "var(--cab)",
-      DF = quiet ? "color-mix(in srgb, var(--cab) 62%, #2c2a22)" : "var(--cab-hi)", lw = quiet ? 1.6 : 2.2;
+    var CB = "var(--cab)", DF = "var(--cab-hi)", lw = 2.2;
     s += reg("rect", 'x="' + x0 + '" y="495" width="' + (sx - x0) + '" height="' + (B - 495) + '"', CB) + reg("rect", 'x="' + (sx + sw) + '" y="495" width="' + (vp[1] + 20 - sx - sw) + '" height="' + (B - 495) + '"', CB);
     function pull(cx, y, up) { return up ? reg("rect", 'x="' + (cx - 3.5) + '" y="' + y + '" width="7" height="34" rx="3.5"', "var(--brass)", 1.6) + line("M" + (cx - 1) + " " + (y + 5) + " v24", 1.2, 0.7, "#fff")
       : reg("rect", 'x="' + (cx - 17) + '" y="' + y + '" width="34" height="7" rx="3.5"', "var(--brass)", 1.6) + line("M" + (cx - 12) + " " + (y + 2.2) + " h24", 1.2, 0.7, "#fff"); }
     /* a door: a set-in panel framed by a flat 16 wide stile; the pull sits on the stile, clear of the bevel */
     function door(dx, y0, dw, right) { var out = reg("rect", 'x="' + dx + '" y="' + y0 + '" width="' + dw + '" height="' + (B - 12 - y0) + '" rx="4"', DF, lw);
-      if (quiet) out += reg("rect", 'x="' + (dx + 16) + '" y="' + (y0 + 16) + '" width="' + (dw - 32) + '" height="' + (B - 44 - y0) + '"', "none", 1.1);
-      else out += recess(dx + 16, y0 + 16, dx + dw - 16, B - 28, 9, DF, { side: CB, bottom: "color-mix(in srgb, var(--cab-hi) 70%, #fff)" }, hatch(dx + 16, y0 + 16, dw - 32, 6)) +
+      out += recess(dx + 16, y0 + 16, dx + dw - 16, B - 28, 9, DF, { side: CB, bottom: "color-mix(in srgb, var(--cab-hi) 70%, #fff)" }, hatch(dx + 16, y0 + 16, dw - 32, 6)) +
         reg("rect", 'x="' + (dx + 16) + '" y="' + (y0 + 16) + '" width="' + (dw - 32) + '" height="' + (B - 44 - y0) + '"', "none", 1.6);
       return out + pull(right ? dx + dw - 8 : dx + 8, y0 + 20, true); }
     function drawer(a0, a1) { return reg("rect", 'x="' + a0 + '" y="508" width="' + (a1 - a0) + '" height="36" rx="4"', DF, lw) + pull((a0 + a1) / 2, 522.5); }
@@ -296,39 +294,43 @@
       return out; }
     var c0 = XS - 118, c1 = XS + 118, late = "";
     s += cabinet(L.e0, sx, 1, "r", 1) + logCab(sx + sw, c0) + cabinet(c0, c1, 2, "mid", 1) + cabinet(c1, c1 + 240, 1, "l", 1) + line("M" + c0 + " 495 V" + B + " M" + c1 + " 495 V" + B, 2);
-    /* The double cabinet holds the recipe log (finished later, issue #161). Closed: one wide drawer with a RECIPE LOG tape label
-       and two doors, pulls at the inner top corners; it glows on point. o.logOpen: the doors swing all the way open, flat against
-       the neighbours, showing their concealed hinge cups, and inside a clipboard hangs on a hook. */
+    /* The double cabinet holds the recipe log (finished later, issue #161). Closed: one wide drawer and two doors, pulls at the
+       inner top corners; a RECIPE LOG tape label sits on the left door and the cabinet glows on point. o.logOpen: the doors swing
+       all the way open, flat against the neighbours, showing their concealed hinge cups; the log hangs on the left door's inside. */
     function logCab(a0, a1) {
-      var g = 14, dw = (a1 - a0 - 3 * g) / 2, lx = a0 + g + 78, out = drawer(a0 + g, a1 - g) +
-        '<g transform="rotate(-1 ' + lx + ' 526)">' + tape(lx, 526, 140, 19, 0, 0.96, "lbl") + marker(lx, 531.5, "Recipe log", 14) + "</g>";
-      if (!o.logOpen) return hot("the recipe log", out + door(a0 + g, 556, dw, true) + door(a0 + 2 * g + dw, 556, dw, false), [a0, 500, a1 - a0, B - 508]);
-      var i0 = a0 + g, i1 = a1 - g, y0 = 556, y1 = B - 12, d = 70, bk = P(i0, y0, d), bc = P(i1, y1, d), mx = (bk[0] + bc[0]) / 2;
-      /* the hook is just above the opening's top edge (hidden); the clipboard hangs on the back wall where we can see it */
-      var t0 = y0 + 4, clip = hatch(mx - 24, t0 + 6, 54, 70, 0.4) + reg("rect", 'x="' + (mx - 28) + '" y="' + t0 + '" width="56" height="72" rx="4"', "var(--wood-hi)", 1.8) +
-        reg("rect", 'x="' + (mx - 23) + '" y="' + (t0 + 9) + '" width="46" height="58"', "var(--card)", 1.2) +
-        reg("rect", 'x="' + (mx - 12) + '" y="' + (t0 - 3) + '" width="24" height="11" rx="3"', "#d2d0c8", 1.6) +
-        T(mx, t0 + 26, "Recipe log", "font:700 13px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"');
-      for (var l = 0; l < 3; l++) clip += line("M" + (mx - 18) + " " + (t0 + 38 + l * 9) + " H" + (mx + 18), 1, 0.6, "#c3d2ec");
-      out += recess(i0, y0, i1, y1, d, "color-mix(in srgb, var(--wood-hi) 55%, #fff)", { side: "color-mix(in srgb, var(--wood-hi) 40%, #8a6a4a)", top: "color-mix(in srgb, var(--wood) 70%, #000)", bottom: "var(--wood-hi)" }, clip) + reg("rect", 'x="' + i0 + '" y="' + y0 + '" width="' + (i1 - i0) + '" height="' + (y1 - y0) + '"', "none", 2);
+      var LOG = [["11/11", "Croissants trial 4", "shatter good"], ["11/08", "Blondies", "less sugar"], ["11/05", "Rough puff pastry", "six folds"], ["11/02", "Rhubarb galette", "swapped spelt"]];
+      var g = 14, dw = (a1 - a0 - 3 * g) / 2, lx = a0 + g + dw / 2 - 8, out = drawer(a0 + g, a1 - g),
+        tag = '<g transform="rotate(-2 ' + lx + ' 602)">' + tape(lx, 602, 128, 20, 0, 0.96, "lbl") + marker(lx, 607.5, "Recipe log", 14) + "</g>";
+      if (!o.logOpen) return hot("the recipe log", out + door(a0 + g, 556, dw, true) + tag + door(a0 + 2 * g + dw, 556, dw, false), [a0, 500, a1 - a0, B - 508]);
+      var i0 = a0 + g, i1 = a1 - g, y0 = 556, y1 = B - 12, d = 70;
+      out += recess(i0, y0, i1, y1, d, "color-mix(in srgb, var(--wood-hi) 55%, #fff)", { side: "color-mix(in srgb, var(--wood-hi) 40%, #8a6a4a)", top: "color-mix(in srgb, var(--wood) 70%, #000)", bottom: "var(--wood-hi)" }) + reg("rect", 'x="' + i0 + '" y="' + y0 + '" width="' + (i1 - i0) + '" height="' + (y1 - y0) + '"', "none", 2);
+      /* the clipboard hangs on a screw on the inside of the left door, clear of the hinge cups; the clip holds the log sheet */
+      var cx0 = i0 - dw + 9, cw = dw - 46, ct = y0 + 10, ch = y1 - y0 - 16, px = cx0 + 6, pw = cw - 12, mx = cx0 + cw / 2,
+        clip = hatch(cx0 + 4, ct + 5, cw, ch, 0.4) + reg("rect", 'x="' + cx0 + '" y="' + ct + '" width="' + cw + '" height="' + ch + '" rx="4"', "var(--wood-hi)", 1.8) +
+        reg("rect", 'x="' + px + '" y="' + (ct + 10) + '" width="' + pw + '" height="' + (ch - 15) + '"', "var(--card)", 1.2) +
+        reg("rect", 'x="' + (mx - 16) + '" y="' + (ct - 4) + '" width="32" height="15" rx="3"', "#d2d0c8", 1.6) +
+        reg("circle", 'cx="' + mx + '" cy="' + (ct + 3) + '" r="2.6"', "var(--brass)", 1.2) +
+        T(mx, ct + 26, "Recipe log", "font:700 12px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"') + line("M" + (px + 4) + " " + (ct + 30) + " H" + (px + pw - 4), 1, 0.85, "#c9442a");
+      LOG.forEach(function (r, k) { var ry = ct + 43 + k * 19;
+        clip += T(px + 3, ry, r[0], "font:600 8.5px var(--font-hand);fill:var(--ink-soft)") + T(px + 25, ry, r[1], "font:700 9px var(--font-hand);fill:var(--ink)") +
+          T(px + 25, ry + 9, r[2], "font:600 8.5px var(--font-hand);fill:var(--ink-soft)") + line("M" + (px + 2) + " " + (ry + 13) + " H" + (px + pw - 2), 0.8, 0.6, "#c3d2ec"); });
       /* the doors' backs: plain, with two hinge cups each by the hinge edge */
       function back(x, hingeX) { var b = reg("rect", 'x="' + x + '" y="' + y0 + '" width="' + dw + '" height="' + (y1 - y0) + '" rx="4"', DF, lw);
         [y0 + 22, y1 - 22].forEach(function (cy) { b += reg("circle", 'cx="' + hingeX + '" cy="' + cy + '" r="8"', "#d2d0c8", 1.6) + reg("rect", 'x="' + (hingeX - (hingeX > x + dw / 2 ? 20 : -4)) + '" y="' + (cy - 3) + '" width="16" height="6" rx="2"', "#d2d0c8", 1.2); });
         return b; }
-      late += hatch(i0 - dw, y1, dw, 5) + back(i0 - dw, i0 - 14) + back(i1, i1 + 14);
+      late += hatch(i0 - dw, y1, dw, 5) + back(i0 - dw, i0 - 14) + clip + back(i1, i1 + 14);
       return out;
     }
     /* the shelf sits a little left of the vanishing point: both inner walls show (the right one wider), and each tier's floor; the ceilings don't.
        Two boards of the same thickness: the middle one and the bottom rail. Both tier floors are the same pale wood. */
     var m0 = 495 + Math.round((B - 539) * 0.52), m1 = m0 + 22, b0 = B - 22, tH = m0 - 495, lH = b0 - m1, SD = 26;
-    /* with the quieter green the shelf inside goes a warmer, darker brown so the two stay apart */
-    var DEEP = quiet ? "color-mix(in srgb, var(--wood-dark) 34%, #16120d)" : "var(--cab-deep)", SH = { side: quiet ? "color-mix(in srgb, var(--wood-dark) 22%, #0f0c09)" : "var(--cab-side)", bottom: "color-mix(in srgb, var(--wood-hi) 40%, #fff)" };
+    var DEEP = "var(--cab-deep)", SH = { side: "var(--cab-side)", bottom: "color-mix(in srgb, var(--wood-hi) 40%, #fff)" };
     s += reg("rect", 'x="' + sx + '" y="495" width="' + sw + '" height="' + (B - 495) + '"', DEEP) + recess(sx, 495, sx + sw, m0, SD, DEEP, SH) + recess(sx, m1, sx + sw, b0, SD, DEEP, SH);
     [m0, b0].forEach(function (y, k) { s += reg("rect", 'x="' + sx + '" y="' + y + '" width="' + sw + '" height="22"', "var(--wood)", 2.4) + grain(sx + 4, y + 2, sw - 8, 18, 31 + k); });
     /* a book: its top (page edges) and the side facing the centre show */
     function bk(x, y, w, h, fill, rx) { return block(x, y, x + w, y + h, 18, { top: w > h ? "color-mix(in srgb, " + fill + " 72%, #fff)" : "#f6efdc", side: "color-mix(in srgb, " + fill + " 72%, #000)" }) + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 1.5) + '"', fill, 2.2); }
     /* tape on the front edge of the board each row stands on, written in marker */
-    function label(edge, text) { var cx = sx + sw - 96; return '<g transform="rotate(-1 ' + cx + " " + (edge + 11) + ')">' + tape(cx, edge + 11, text.length * 11 + 30, 19, 0, 0.96, "lbl") + marker(cx, edge + 16.5, text, 14) + "</g>"; }
+    function label(edge, text, cx) { return '<g transform="rotate(-1 ' + cx + " " + (edge + 11) + ')">' + tape(cx, edge + 11, text.length * 11 + 30, 19, 0, 0.96, "lbl") + marker(cx, edge + 16.5, text, 14) + "</g>"; }
     var top = "", books = [[22, 18, 0.84, "var(--orange)"], [41, 25, 0.91, "var(--card)"], [67, 16, 0.77, "var(--blue)"], [84, 22, 0.87, "var(--yellow)"]];
     books.forEach(function (b, k) { var bx = sx + b[0], bh = Math.round(b[2] * tH), by = m0 - bh;
       top += bk(bx, by, b[1], bh, b[3]) + line("M" + (bx + 2) + " " + (by + 8) + " H" + (bx + b[1] - 2) + " M" + (bx + 2) + " " + (by + bh - 10) + " H" + (bx + b[1] - 2), 1.2, 0.7);
@@ -336,9 +338,9 @@
     top += bk(sx + 112, m0 - 22, 108, 22, "var(--stem)") + reg("rect", 'x="' + (sx + 128) + '" y="' + (m0 - 18) + '" width="34" height="14"', "var(--card)", 1.2);
     var h1 = Math.round(lH * 0.9), h2 = Math.round(lH * 0.78), low = bk(sx + 22, b0 - h1, 20, h1, "var(--amber)") + bk(sx + 44, b0 - h2, 34, h2, "var(--card)", 2) +
       '<circle cx="' + (sx + 61) + '" cy="' + (b0 - h2 * 0.38).toFixed(1) + '" r="6" style="fill:var(--paper);stroke:var(--ink);stroke-width:1.6"/>' + bk(sx + 84, b0 - 22, 100, 22, "var(--blue)");
-    s += hot("the references", clipTo(sx, m1, sx + sw, b0, low) + label(b0, "References"), [sx + 6, m1 + 4, sw - 12, B - m1 - 8]);
+    s += hot("the references", clipTo(sx, m1, sx + sw, b0, low) + label(b0, "References", sx + sw - 96), [sx + 6, m1 + 4, sw - 12, B - m1 - 8]);
     /* drawn second, so the lower tier's glow never washes over the Cookbooks label */
-    s += hot("the cookbooks", clipTo(sx, 495, sx + sw, m0, top) + label(m0, "Cookbooks"), [sx + 6, 499, sw - 12, m1 - 503]);
+    s += hot("the cookbooks", clipTo(sx, 495, sx + sw, m0, top) + label(m0, "Cookbooks", sx + 110), [sx + 6, 499, sw - 12, m1 - 503]);
     s += hatch(sx + 2, 495, sw - 4, 7) + hatch(sx + 2, m1, sw - 4, 7);
     s += reg("rect", 'x="' + sx + '" y="495" width="' + sw + '" height="' + (B - 495) + '"', "none", 3) + paidTag(sx + sw - 70, 495 + Math.round(tH * 0.56), -3);
     s += late;
@@ -426,8 +428,8 @@
     return s;
   }
   function svg(vp, inner, label, y0, h) { return '<svg viewBox="' + vp[0] + " " + (y0 || 0) + " " + (vp[1] - vp[0]) + " " + (h || 760) + '" role="group" aria-label="' + label + '">' + inner + "</svg>"; }
-  /* Options. floor: check | boards | flat | none. cab: now | quiet. tile: quiet | none. plan: dev | cook | guest. */
-  var o = { cover: "black", name: "Trials", depth: "dim", tile: "quiet", plan: "dev", bites: 0, floor: "check", cab: "now" };
+  /* Options. floor: check | boards | flat | none. tile: quiet | none. plan: dev | cook | guest. */
+  var o = { cover: "black", name: "Trials", depth: "dim", tile: "quiet", plan: "dev", bites: 0, floor: "check" };
   function vpOf() { return VP; }
   function withView(vpy, zf, fn) { var a = VPY, b = ZF; VPY = vpy; ZF = zf; var r = fn(); VPY = a; ZF = b; return r; }
   function opts(extra) { var r = {}; for (var k in o) r[k] = o[k]; for (var e in extra) r[e] = extra[e]; return r; }
