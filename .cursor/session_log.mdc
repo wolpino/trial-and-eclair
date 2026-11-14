@@ -27,6 +27,7 @@ Apply Ari's latest answers to the five drawn Plate X views, republish, and ask e
 - Notebook (`06-notebook.html`): black band fixed, number tabs with a recipe-name tag, tags on the recipe arrows, margin captions, centred page numbers, "Make recipe card" stamp with three wordings, first-time and replace dialogs
 - Recipe box (`07-recipe-box.html`): dusty rose guest limit
 - Plate X page republished (version 9): https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt
+- Second round the same day (version 10): log cabinet contents A cat / B gear / C stash, notebook without tape or name tag and "Add to recipe box" wording, recipe box "new card from the notebook" ready to edit, idea board keeps the gap
 
 ### Decisions
 - Main wording in the drawings is "Make recipe card" until Ari picks
@@ -41,7 +42,7 @@ Apply Ari's latest answers to the five drawn Plate X views, republish, and ask e
 **Keywords:** Plate X, recipe log sheet, original green, Make recipe card, replace dialog, number tabs, dusty rose
 **Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, design/plate-x/sections/01-kitchen.html, design/plate-x/kitchen.js, design/plate-x/sections/06-notebook.html, design/plate-x/sections/07-recipe-box.html
 **Do not redo:** layout rounds 1–10; Plates II–IX; Plate X sections 01, 02, 03, 06, 07 as drawn (tweak them, don't redraw)
-**Resume with:** Ari's answers to the 2026-11-13 questions → tweak → mark the five views done in PLAN.md → cookbooks (section 04)
+**Resume with:** Ari's pick on the whiteboard (cook-written items only?), cabinet contents, notebook wording; then the remaining 2026-11-13 questions → tweak → mark the five views done in PLAN.md → cookbooks (section 04)
 <!-- AGENT_CONTEXT_END -->
 
 ---
