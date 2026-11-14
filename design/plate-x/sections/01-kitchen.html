@@ -12,12 +12,16 @@
 
     <h3>The recipe log cabinet</h3>
     <figure id="k-log" class="fx" style="max-width:700px"></figure>
-    <p class="note"><b>Open.</b> The RECIPE LOG tape label sits on the left door, and the cabinet glows when you point at it. Clicking opens both doors. The log is a clipboard hung on a screw on the inside of the left door; its clip holds a sheet headed "Recipe log" with one row per bake: the date, the recipe and a short note, such as a substitution. The clipboard is only a glimpse: clicking it opens the recipe log full size, the way every object opens into its tool, so its small size on the door is fine. The cabinet is no longer empty: shown here, a cat asleep in a mixing bowl.</p>
+    <p class="note"><b>Open.</b> The RECIPE LOG tape label sits on the left door, and the cabinet glows when you point at it. Clicking opens both doors. The log is a clipboard hung on a screw on the inside of the left door; its clip holds a sheet headed "Recipe log" with one row per bake: the date, the recipe and a short note, such as a substitution. The clipboard is only a glimpse: clicking it opens the recipe log full size, the way every object opens into its tool, so its small size on the door is fine. The cabinet is no longer empty: an animal lives on its floor. Shown here, Cat A, a cat asleep in a mixing bowl; the other animals are below.</p>
     <p class="note"><b>Hinges.</b> The doors have concealed hinges, fixed inside the cabinet, so from the front they do not show. Their hinge cups show on the backs of the open doors here.</p>
-    <div class="trio">
-      <div><figure id="k-in-a" class="fx"></figure><p class="note"><b>A Cat, redrawn.</b> A quiet ginger tabby curled asleep in a mixing bowl, head tucked in and tail wrapped round over the rim, drawn in the same ink line and flat colour as the rest of the kitchen.</p></div>
-      <div><figure id="k-in-b" class="fx"></figure><p class="note"><b>B Kitchen gear.</b> A stand mixer, and nested bowls on a stack of sheet pans.</p></div>
-      <div><figure id="k-in-c" class="fx"></figure><p class="note"><b>C Secret stash.</b> Chocolate bars and a tin taped DO NOT TOUCH, hidden at the back.</p></div>
+    <h3>Inside the cabinet: animal options</h3>
+    <div class="six">
+      <div><figure id="k-in-a" class="fx"></figure><p class="note"><b>Cat A.</b> A ginger tabby curled asleep in a mixing bowl.</p></div>
+      <div><figure id="k-in-b" class="fx"></figure><p class="note"><b>Cat B.</b> A grey tabby sitting loafed on a folded tea towel, paws tucked, looking out.</p></div>
+      <div><figure id="k-in-c" class="fx"></figure><p class="note"><b>Cat C.</b> A black and white cat curled asleep in a round bread proofing basket.</p></div>
+      <div><figure id="k-in-d" class="fx"></figure><p class="note"><b>Cat D.</b> A ginger cat peeking round a stack of mixing bowls, one paw on the top rim.</p></div>
+      <div><figure id="k-in-e" class="fx"></figure><p class="note"><b>Dog A.</b> A small scruffy terrier curled asleep on a cushion.</p></div>
+      <div><figure id="k-in-f" class="fx"></figure><p class="note"><b>Dog B.</b> A dachshund lying long along the cabinet floor, head on its paws.</p></div>
     </div>
 
     <h3>Recently on the fridge</h3>
@@ -29,7 +33,7 @@
     <p class="note"><b>Same scale, one above the other.</b> At normal width (top) the left edge cuts off the fridge's hinges and the right edge cuts off part of the window and the sink. From a 1680 px browser (bottom) the kitchen simply extends: the hinges, the whole window and the whole sink show. Nothing in the middle moves.</p>
 
     <ol class="qs">
-      <li><b>Inside the cabinet:</b> A cat, B kitchen gear or C secret stash? Always the same, or a surprise that changes now and then?</li>
+      <li><b>Inside the cabinet:</b> which animal? The same one always, or a different one now and then?</li>
     </ol>
   </div>
 </section>
@@ -41,7 +45,8 @@
     put("k-main", VP, null, "The main kitchen by day");
     put("k-eve", VP, { bites: 0 }, "The kitchen in the evening", null, true);
     put("k-log", VP, { logOpen: 1, inside: "cat" }, "The recipe log cabinet open: the log sheet hangs inside the left door and a cat sleeps in a bowl inside", [855, 1395, 484, 230]);
-    [["a", "cat", "a cat asleep in a mixing bowl"], ["b", "gear", "a stand mixer and nested bowls on sheet pans"], ["c", "stash", "a tin marked DO NOT TOUCH and chocolate bars"]].forEach(function (v) {
+    [["a", "cat", "a ginger cat asleep in a mixing bowl"], ["b", "catB", "a grey tabby loafed on a folded tea towel"], ["c", "catC", "a black and white cat asleep in a bread proofing basket"],
+      ["d", "catD", "a cat peeking round a stack of mixing bowls"], ["e", "dogA", "a small terrier asleep on a cushion"], ["f", "dogB", "a dachshund lying along the floor"]].forEach(function (v) {
       put("k-in-" + v[0], VP, { logOpen: 1, inside: v[1] }, "Inside the open recipe log cabinet: " + v[2], [1012, 1372, 540, 166]); });
     put("k-rec", VP, { linkOn: 1 }, "Recently on an index card held by two magnets", [296, 520, 100, 210]);
     put("k-normal", VP, null, "The kitchen at normal width");
