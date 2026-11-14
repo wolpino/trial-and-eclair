@@ -151,7 +151,7 @@ Changes the app needs that came out of the plates. Each becomes one Task issue.
 - Starter references are kept when samples are removed
 - Sign-up asks about sample data (on by default); remove all samples in one go from Account
 - Recipe log (issue #161): lives on a clipboard inside the double cabinet under the counter
-- Whiteboard: pinned plus automatic items, wipe, tick with line until the next day, re-tick removes
+- Whiteboard: a list the cook writes (no automatic items, no pins); tick puts a line through until the next day, re-tick removes (Ari, 2026-11-13)
 - Kitchen home as drawn (port Plate XI to React components)
 - Every open view as drawn
 - Sign in and sign up as drawn; Account menu; front page; not-found page
@@ -171,6 +171,7 @@ Parked. Not drawn, not built until moved up.
 - Recipe log and stains on cards (issue #161 and after)
 - Phone photo hand-off by QR code
 - Clickable things that open nothing still react a little
+- Whiteboard suggestions from recent activity (automatic items, wipe, pin). Dropped from Plate X as too fussy
 
 ## Where things are
 - Answers so far: memory `kitchen-layout`, and `.cursor/handoffs/NEXT.md`

@@ -29,7 +29,7 @@
     var x = L.bx, wb = dim ? recess(x, 125, x + L.wbW, 355, 10, "var(--wb)", FW) + reg("rect", 'x="' + x + '" y="125" width="' + L.wbW + '" height="230"', "none", 2.2)
       : reg("rect", 'x="' + x + '" y="125" width="' + L.wbW + '" height="230"', "var(--wb)", 2.2);
     wb += '<rect class="lbl" x="' + (x + 14) + '" y="136" width="116" height="38" rx="3" style="fill:transparent"/>' + T(x + 22, 164, "Next up", "font:700 33px var(--font-hand);fill:var(--blue)") + line("M" + (x + 22) + " 172 q48 5 96 -2", 2.4, 1, "var(--blue)");
-    [["Croissants · trial 4", 0], ["Rough puff pastry", 0], ["Rhubarb galette", 1]].forEach(function (it, i) { var y = 210 + i * 34;
+    [["Croissants · trial 4", 0], ["Rough puff pastry", 0], ["Rhubarb galette", 0]].forEach(function (it, i) { var y = 210 + i * 34;
       wb += it[1] ? star5(x + 30, y - 7, 0.8) : reg("rect", 'x="' + (x + 22) + '" y="' + (y - 15) + '" width="15" height="15" rx="2"', "var(--wb)", 1.8);
       wb += T(x + 48, y, it[0], "font:600 24px var(--font-hand);fill:" + (it[1] ? "var(--orange-text)" : "var(--ink)")); });
     var tx = x + L.wbW - 64;
