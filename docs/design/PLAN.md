@@ -34,10 +34,10 @@ One view at a time, reviewed as it lands, not all at the end.
 ### Status
 | # | View | Section file | Status |
 |---|------|--------------|--------|
-| 1 | Kitchen (day, evening, extra wide) | 01-kitchen + kitchen.js | waiting on Ari |
-| 2 | Recipe box | 07-recipe-box | waiting on Ari |
+| 1 | Kitchen (day, evening, extra wide) | 01-kitchen + kitchen.js | waiting on Ari (original green, log label on the door, log sheet drawn 11/13) |
+| 2 | Recipe box | 07-recipe-box | waiting on Ari (dusty rose applied 11/13) |
 | 3 | Whiteboard | 02-whiteboard | waiting on Ari |
-| 4 | Trials notebook | 06-notebook | waiting on Ari |
+| 4 | Trials notebook | 06-notebook | waiting on Ari (number tabs, tags, Make recipe card + dialog drawn 11/13) |
 | 5 | Idea board | 03-ideas | waiting on Ari |
 | 6 | Cookbooks | 04-cookbooks | not started |
 | 7 | References | 05-references | not started |

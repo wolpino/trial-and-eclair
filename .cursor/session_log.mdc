@@ -10,6 +10,42 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-13 · Plate X, settling the five views: kitchen, notebook and recipe box tweaks
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-13` (second) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, 2 subagents at once) |
+| **Outcome** | partial (Ari's 2026-11-13 answers drawn and published; questions sent; no app code) |
+
+### Intent
+Apply Ari's latest answers to the five drawn Plate X views, republish, and ask every open question at once.
+
+### Summary
+- Kitchen (`01-kitchen.html`, `kitchen.js`): original green only, RECIPE LOG tape on the cabinet door, COOKBOOKS label moved left, clipboard with a four-row log sheet on the inside of the door
+- Notebook (`06-notebook.html`): black band fixed, number tabs with a recipe-name tag, tags on the recipe arrows, margin captions, centred page numbers, "Make recipe card" stamp with three wordings, first-time and replace dialogs
+- Recipe box (`07-recipe-box.html`): dusty rose guest limit
+- Plate X page republished (version 9): https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt
+
+### Decisions
+- Main wording in the drawings is "Make recipe card" until Ari picks
+- REFERENCES label stays at the right end (the staggered pair read better)
+
+### Open threads
+- Questions to Ari (page order): kitchen log sheet content and door label; whiteboard eraser + pin ring; idea board envelope, photo, closing the gap; notebook stamp spot and wording, dialog wording, corners vs arrows, number tabs and where the recipe name goes; recipe box notes box when empty, Make it mine spot
+- Known rough spot: the notebook's "Croissants" tag overlaps the fridge's Recently note in the dimmed background
+- Cook and guest notebook views checked once by screenshot (cook); guest not screenshotted
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate X, recipe log sheet, original green, Make recipe card, replace dialog, number tabs, dusty rose
+**Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, design/plate-x/sections/01-kitchen.html, design/plate-x/kitchen.js, design/plate-x/sections/06-notebook.html, design/plate-x/sections/07-recipe-box.html
+**Do not redo:** layout rounds 1–10; Plates II–IX; Plate X sections 01, 02, 03, 06, 07 as drawn (tweak them, don't redraw)
+**Resume with:** Ari's answers to the 2026-11-13 questions → tweak → mark the five views done in PLAN.md → cookbooks (section 04)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-13 · Plate X, one view at a time: five views drawn and reviewed
 
 | Field | Value |
