@@ -41,10 +41,10 @@ One view at a time, reviewed as it lands, not all at the end.
 | 4 | Trials notebook | 06-notebook | done (Ari 11/13) |
 | 5 | Idea board | 03-ideas | done (Ari 11/13) |
 | 6 | Cookbooks | 04-cookbooks | done (Ari 11/13, v20) |
-| 7 | References | 05-references | drawing |
-| 8 | Sign in and sign up | 09-start | drawing |
-| 9 | Account menu and settings | 11-account | drawing |
-| 10 | Front page and not-found | 12-front | not started |
+| 7 | References | 05-references | waiting on Ari (v21) |
+| 8 | Sign in and sign up | 09-start | waiting on Ari (v21) |
+| 9 | Account menu and settings | 11-account | waiting on Ari (v21) |
+| 10 | Front page and not-found | 12-front | drawing |
 
 Statuses: not started → drawing → waiting on Ari → tweaking → done.
 

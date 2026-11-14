@@ -1,0 +1,111 @@
+<section aria-labelledby="h-acct">
+  <span class="label" id="h-acct">11 · Account and settings</span>
+  <div class="sec-body">
+    <h3>The Account menu, opened</h3>
+    <figure id="acct-menu" class="fx"></figure>
+    <p class="note"><b>Where it sits.</b> Account stays top right of the kitchen, beside the find bar. Click it and a small menu drops down from the button; the button turns yellow while the menu is open. Click anywhere else, or press Esc, to close it. The kitchen is not dimmed: this is a menu, not a view.</p>
+
+    <h3>The three menus, side by side</h3>
+    <div class="trio">
+      <div><h3>Developer</h3><figure id="acct-m-dev"></figure></div>
+      <div><h3>Home cook</h3><figure id="acct-m-cook"></figure></div>
+      <div><h3>Guest</h3><figure id="acct-m-guest"></figure></div>
+    </div>
+    <p class="note"><b>What is in it.</b> The username, the plan as a plain line, then Settings and Sign out. A home cook's plan line says "Home cook, free". There is no upgrade link here (the paid plan page is on the Later list). <b>A guest's menu is different:</b> no username and no Settings. It shows how many of the 5 guest cards are used, "Sign up to keep your cards" (signing up keeps the same kitchen), and Sign in. A small line says guest kitchens are cleared after 30 days without use, as decision 002 asks.</p>
+
+    <h3>Settings, over the kitchen</h3>
+    <figure id="acct-settings" class="fx"></figure>
+    <p class="note"><b>Only what the app really has.</b> Settings opens like every other view, over the dimmed kitchen with Close at the top. Three parts: the username she signs in with (shown, not editable: the app cannot change it today), the plan, and sample data. <b>Sample data</b> explains where the samples came from and has one button, Remove sample data, which takes them all out in one go. For a home cook the plan reads "Home cook, free" and the paid tools are named as a plain line. A guest has no Settings.</p>
+
+    <h3>Remove sample data: the confirm</h3>
+    <figure id="acct-remove" class="fx"></figure>
+    <p class="note"><b>Says plainly what goes and what stays.</b> The button opens a small dialog over Settings. It lists what goes (the developer's: the sample notebook recipes with their trials, the three sample ideas, Weekend Bakes, the sample box cards; a home cook's: the sample box cards). It says what stays: everything she made, and the starter references on her shelf. It cannot be undone, so the safe button, Keep them, comes first and the orange button names the action. Afterwards the Sample data part reads "Sample data removed" and the button is gone.</p>
+  </div>
+</section>
+<script>
+(function () {
+  var MID = 'text-anchor="middle"', SOFT = "var(--ink-soft)", USER = "weekendbaker";
+  function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 0) + '"', fill, sw || 2); }
+  function U(x, y, t, sz, w, col, ex) { return T(x, y, t, "font:" + (w || 500) + " " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"), ex || ""); }
+  function L(x, y, t) { return T(x, y, t, "font:700 14px var(--font-label);letter-spacing:.12em;fill:" + SOFT); }
+  function lines(x, y, arr, sz, gap, col, w) { return arr.map(function (t, i) { return U(x, y + i * gap, t, sz, w, col); }).join(""); }
+  /* a wide button in the plate style; fill decides its weight */
+  function btn(x, y, w, t, fill) { return R(x, y, w, 40, fill || "var(--card)", 2, 20) + U(x + w / 2, y + 26, t, 16, 600, "var(--ink)", MID); }
+
+  /* ===== The Account menu, hanging from the Account button (vp right edge 1500) ===== */
+  function menu(plan) {
+    var x = 1226, w = 254, y = 80, s = "", g = plan === "guest", h = g ? 262 : 192;
+    /* the button, pressed open */
+    s += R(1332, 22, 148, 44, "var(--yellow)", 2.4, 22) + '<circle cx="1355" cy="44" r="12" style="fill:var(--orange);stroke:var(--ink);stroke-width:2"/>' + U(1376, 51, "Account", 17, 400);
+    s += hatch(x + 6, y + 6, w, h, 0.5) + R(x, y, w, h, "var(--card)", 2.4, 8);
+    s += poly((1400) + "," + (y + 1) + " " + 1410 + "," + (y - 10) + " " + 1420 + "," + (y + 1), "var(--card)", 2.4) + line("M1401.5 " + (y + 1.2) + " H1418.5", 3, 1, "var(--card)");
+    if (!g) {
+      s += U(x + 18, y + 34, USER, 19, 700) + U(x + 18, y + 58, plan === "dev" ? "Developer plan" : "Home cook, free", 15, 500, SOFT);
+      s += line("M" + (x + 12) + " " + (y + 76) + " H" + (x + w - 12), 1.4, 0.6);
+      s += R(x + 8, y + 88, w - 16, 44, "var(--yellow)", 1.6, 6) + U(x + 18, y + 116, "Settings", 17, 600);
+      s += U(x + 18, y + 164, "Sign out", 17, 600);
+    } else {
+      s += U(x + 18, y + 34, "Guest", 19, 700) + U(x + 18, y + 58, "2 of 5 cards used", 15, 500, SOFT);
+      s += line("M" + (x + 12) + " " + (y + 76) + " H" + (x + w - 12), 1.4, 0.6);
+      s += btn(x + 14, y + 90, w - 28, "Sign up to keep your cards", "var(--yellow)");
+      s += U(x + 18, y + 162, "Sign in", 17, 600);
+      s += line("M" + (x + 12) + " " + (y + 184) + " H" + (x + w - 12), 1.4, 0.6);
+      s += lines(x + 18, y + 208, ["A guest kitchen is cleared after", "30 days without use."], 13, 18, SOFT);
+    }
+    return s;
+  }
+  function kitchenWith(plan) { var V = mainVP(); return scene(V, opts({ plan: plan })) + menu(plan); }
+
+  /* ===== Settings, a typeset sheet over the dimmed kitchen ===== */
+  var X0 = 600, X1 = 1200, Y0 = 104, Y1 = 700;
+  function settings(plan) {
+    var s = hatch(X0 + 8, Y0 + 8, X1 - X0, Y1 - Y0, 0.45) + R(X0, Y0, X1 - X0, Y1 - Y0, "var(--card)", 2.4, 8), x = X0 + 44, dev = plan === "dev";
+    s += T(x, Y0 + 62, "Settings", "font:400 34px var(--font-display);fill:var(--ink)");
+    function rule(y) { return line("M" + x + " " + y + " H" + (X1 - 44), 1.4, 0.5); }
+    s += rule(Y0 + 88);
+    s += L(x, Y0 + 122, "USERNAME") + U(x, Y0 + 154, USER, 22, 600) + U(x, Y0 + 180, "You sign in with this.", 15, 500, SOFT);
+    s += rule(Y0 + 204);
+    s += L(x, Y0 + 238, "PLAN");
+    if (dev) s += U(x, Y0 + 270, "Developer", 22, 600) + U(x, Y0 + 296, "Every part of the kitchen.", 15, 500, SOFT);
+    else s += U(x, Y0 + 270, "Home cook, free", 22, 600) + lines(x, Y0 + 296, ["The recipe box, whiteboard and references are yours.", "The notebook, idea board and cookbooks are the paid plan;", "you can open their samples to read."], 15, 21, SOFT);
+    var sy = dev ? Y0 + 320 : Y0 + 362;
+    s += rule(sy);
+    s += L(x, sy + 34, "SAMPLE DATA");
+    s += lines(x, sy + 66, dev ? ["Your kitchen started with sample recipes, ideas, a", "cookbook and box cards, to show how things work."] : ["Your recipe box started with a few sample cards,", "to show how it works."], 17, 24);
+    s += btn(x, sy + 106, 220, "Remove sample data");
+    s += U(x, sy + 172, "Starter references on your shelf always stay.", 15, 500, SOFT);
+    return s;
+  }
+  /* ===== The confirm dialog, over Settings ===== */
+  function confirmBox(plan) {
+    var dev = plan === "dev", x0 = 640, x1 = 1160, x = x0 + 34, items = dev ?
+      ["5 sample recipes in the notebook, with their trials", "3 sample ideas on the idea board", "the Weekend Bakes cookbook", "the sample cards in your recipe box"] :
+      ["the sample cards in your recipe box"];
+    var h = dev ? 420 : 340, y0 = (Y0 + Y1 - h) / 2, y1 = y0 + h, s = '<rect x="' + X0 + '" y="' + Y0 + '" width="' + (X1 - X0) + '" height="' + (Y1 - Y0) + '" rx="8" style="fill:#1f1d1a;opacity:.32"/>';
+    s += hatch(x0 + 8, y0 + 8, x1 - x0, h, 0.6) + R(x0, y0, x1 - x0, h, "var(--card)", 2.6, 8);
+    s += T(x, y0 + 50, "Remove all sample data?", "font:400 28px var(--font-display);fill:var(--ink)");
+    s += U(x, y0 + 88, "This takes out, in one go:", 17, 600);
+    items.forEach(function (t, i) { s += '<circle cx="' + (x + 6) + '" cy="' + (y0 + 115 + i * 27) + '" r="3" style="fill:var(--ink)"/>' + U(x + 20, y0 + 120 + i * 27, t, 17); });
+    var ky = y0 + 120 + items.length * 27 + 14;
+    s += U(x, ky, "What stays:", 17, 600) + lines(x, ky + 25, ["everything you made yourself, and the starter", "references on your shelf."], 17, 24);
+    s += U(x, ky + 88, "This cannot be undone.", 17, 700);
+    s += btn(x1 - 404, y1 - 62, 150, "Keep them") + btn(x1 - 238, y1 - 62, 204, "Remove sample data", "var(--orange)");
+    return s;
+  }
+  function guestNote() {
+    return R(X0, 300, X1 - X0, 170, "var(--card)", 2.4, 8) + T(900, 356, "A guest has no Settings", "font:400 28px var(--font-display);fill:var(--ink)", MID) +
+      lines(660, 396, ["Their Account menu has Sign up instead. Signing up gives", "them a username, and then this page."], 17, 25);
+  }
+
+  PLATE.add(function () {
+    var p = o.plan, V = mainVP();
+    document.getElementById("acct-menu").innerHTML = svg(V, kitchenWith(p), "Kitchen with the Account menu open, " + p + " plan");
+    [["dev", "Developer"], ["cook", "Home cook"], ["guest", "Guest"]].forEach(function (q) {
+      document.getElementById("acct-m-" + q[0]).innerHTML = svg([1180, 1500], kitchenWith(q[0]), q[1] + " Account menu, close up", 0, 370);
+    });
+    document.getElementById("acct-settings").innerHTML = openOver(p === "guest" ? guestNote() : settings(p), "Settings open over the dimmed kitchen");
+    document.getElementById("acct-remove").innerHTML = p === "guest" ? openOver(guestNote(), "A guest cannot remove sample data") :
+      openOver(settings(p) + confirmBox(p), "Remove sample data confirm dialog over Settings");
+  });
+})();
+</script>
