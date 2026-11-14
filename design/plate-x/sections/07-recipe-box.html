@@ -1,4 +1,4 @@
-<section aria-labelledby="h-box" style="--guest-a:#c47aa6;--guest-b:#e3a9ae">
+<section aria-labelledby="h-box" style="--guest-a:#e3a9ae">
   <span class="label" id="h-box">07 · The recipe box, opened</span>
   <div class="sec-body">
     <h3>The open box, with a card on the ledge</h3>
@@ -26,16 +26,11 @@
     <h3>Guest</h3>
     <figure id="box-guest" class="fx"></figure>
     <p class="note"><b>Where a guest differs.</b> The box holds the starter recipes, each with a STARTER tape. Starter cards can't be edited or deleted and have no notes, so the bottom of the card holds "Make it mine" (your own copy, which uses a slot). A label stuck on the box front says how many of the 5 guest cards are used.</p>
-    <div class="pair">
-      <div><figure id="box-shade-a" class="fx"></figure><p class="note"><b>A. Berry plum</b> (#c47aa6). Used in the other guest figures.</p></div>
-      <div><figure id="box-shade-b" class="fx"></figure><p class="note"><b>B. Dusty rose</b> (#e3a9ae). Softer; ink reads even more easily on it.</p></div>
-    </div>
     <h3>Guest, at the limit</h3>
     <figure id="box-limit" class="fx"></figure>
-    <p class="note"><b>One look for guest limits.</b> Anything about the guest limit is a label: cream paper with a pink border and a pink "GUEST LIMIT" band in ink. That is the label on the box, and this card. Pink is used for nothing else, so it always means "guest limits". With all 5 used, the blank card at the back puts this on the ledge instead of a new card. Deleting one of their cards frees a slot.</p>
+    <p class="note"><b>One look for guest limits.</b> Anything about the guest limit is a label: cream paper with a dusty rose border and a dusty rose "GUEST LIMIT" band in ink. That is the label on the box, and this card. Dusty rose (#e3a9ae) is used for nothing else, so it always means "guest limits". With all 5 used, the blank card at the back puts this on the ledge instead of a new card. Deleting one of their cards frees a slot.</p>
 
     <ol class="qs">
-      <li><b>Guest limit colour:</b> A berry plum or B dusty rose?</li>
       <li><b>Notes box:</b> show it on every card, even empty (drawn), or only once the card has a note?</li>
       <li><b>Starter cards:</b> is "Make it mine" at the bottom of the card, where notes would be, the right spot?</li>
     </ol>
@@ -151,8 +146,8 @@
     [[S0, 1], [S1, -1]].forEach(function (c) { s += reg("path", 'd="M' + c[0] + " " + BT + " h" + (24 * c[1]) + " L" + c[0] + " " + (BT + 24) + ' Z"', "var(--brass)", 1.8); });
     return s + R(886, BT + 6, 28, 12, "var(--brass)", 1.8, 3) + '<circle cx="900" cy="' + (BT + 12) + '" r="2.6" style="fill:var(--ink)"/>' + brassLabel(900, 690, 168, 50, "Recipes", 32);
   }
-  /* Guest limit look: a stuck-on label, cream with a pink border and a pink GUEST LIMIT band, ink text.
-     The pink lives in one place: --guest-a (berry plum) on this section; --guest-b (dusty rose) is the other shade. */
+  /* Guest limit look: a stuck-on label, cream with a dusty rose border and band, ink text.
+     The colour lives in one place: --guest-a (dusty rose, Ari 2026-11-13) on this section. */
   function gl(x, y, w, h, col) { col = col || "var(--guest-a)";
     return R(x, y, w, h, "var(--card)", 2, 6) + '<rect x="' + (x + 3) + '" y="' + (y + 3) + '" width="' + (w - 6) + '" height="' + (h - 6) + '" rx="4" style="fill:none;stroke:' + col + ';stroke-width:4"/>' +
       R(x + 3, y + 3, w - 6, 24, col, 0, 3) + T(x + 14, y + 20, "GUEST LIMIT", "font:700 14px var(--font-label);letter-spacing:.1em;fill:var(--ink)"); }
@@ -187,8 +182,6 @@
     g("box-add").innerHTML = small(box(BLOND, { glowA: 1 }), "A blank Add a card card standing at the back of the box", 360, 76, 1080, 684);
     g("box-full").innerHTML = svg(mainVP(), fullCard(), "The Blondies card covering the whole screen, with some lines ticked");
     g("box-guest").innerHTML = openOver(box(COOK, { guest: 1, pos: "C · 1 of 3" }), "Guest box: a starter card with Make it mine, and a slip saying 2 of 5 cards used", { plan: "guest" });
-    g("box-shade-a").innerHTML = small(box(COOK, { guest: 1 }), "Guest label in berry plum", 400, 600, 340, 160);
-    g("box-shade-b").innerHTML = small(box(COOK, { guest: 1, shade: "var(--guest-b)" }), "Guest label in dusty rose", 400, 600, 340, 160);
     g("box-limit").innerHTML = openOver(box(BLOND, { limit: 1, guest: 1 }), "Guest at the limit: the ledge card says all 5 guest cards are used, with Sign up", { plan: "guest" });
   });
 })();
