@@ -3,14 +3,14 @@
   <div class="sec-body">
     <h3>The open box, with a card on the ledge</h3>
     <figure id="box-open" class="fx"></figure>
-    <p class="note"><b>What changed.</b> The box body now runs past the bottom of the screen, so it reads as a deep box and not a short tray. The lid stands up behind it and the card rests on the walnut ledge inside the lid. A photo is taped to the card front, top right. There is no back of the card: where the recipe came from sits under the title, and a card with a note has a small notes box at the bottom.</p>
-    <p class="note"><b>Moving through cards.</b> The arrows left and right of the card, inside the lid, go back and next through the whole box, A to Z by title. The tag under the next arrow says where you are: "B · 10 of 15". The square icon above it opens the card full screen.</p>
+    <p class="note"><b>What changed.</b> The box body now runs past the bottom of the screen, so it reads as a deep box and not a short tray. The lid stands up behind it and the card rests on the walnut ledge inside the lid, filling most of it. A photo is taped to the card front, near the top right. There is no back of the card: where the recipe came from sits under the title, and a card with a note has a small notes box at the bottom.</p>
+    <p class="note"><b>Moving through cards.</b> The round arrows sit on the card itself, over its left and right edges, halfway down. They go back and next through the whole box, A to Z by title. The tag just under the next arrow says where you are: "B · 10 of 15". The square icon in the card's top right corner opens it full screen. The card's writing keeps clear of the arrows.</p>
     <p class="note"><b>Edit and Delete</b> are a plain pencil and bin right after the title. <b>Tabs</b> are all one paper; only the letter you are in is orange.</p>
     <p class="note"><b>Same for everyone.</b> The box is free, so Developer and Home cook see exactly this. Switch the Plan to Guest to see the guest slip; the guest figures further down show what else differs.</p>
 
     <h3>Clicking a letter tab</h3>
     <figure id="box-letter" class="fx"></figure>
-    <p class="note"><b>A list first.</b> Click a letter and the lid card lists that letter's titles. Up to 12 fit in two columns. More than that and the two columns scroll together: here B has 15, the bottom row is cut off and the bar on the right shows there is more. Pick one (Blondies is being pointed at) and its card goes onto the ledge.</p>
+    <p class="note"><b>A list first.</b> Click a letter and the lid card lists that letter's titles. Up to 12 fit in two columns. More than that and the two columns scroll together: here B has 15, the bottom row is cut off and the bar on the right shows there is more. Pick one (Blondies is being pointed at) and its card goes onto the ledge. The arrows and the full-screen icon sit on the list card the same way.</p>
 
     <div class="pair">
       <div><h3>Next runs on through the box</h3><figure id="box-next" class="fx"></figure><p class="note"><b>The last B card.</b> The tag reads "B · 15 of 15" and "C next": one more click on the next arrow opens the first C card. Back runs the other way, so from the first B card it goes to the last A card.</p></div>
@@ -41,7 +41,8 @@
 (function () {
   /* box body: S0..S1 wide, top edge BT, runs past the bottom of the screen; D deep */
   var S0 = 380, S1 = 1420, BT = 608, BB = 800, D = 170, Y = 612, XI0 = S0 + 14, XI1 = S1 - 14;
-  var CX0 = 650, CX1 = 1150, CT = 104, CB = 458, LT = 84, AL = 600, AR = 1200, AY = 272;
+  var CX0 = 560, CX1 = 1240, CT = 104, CB = 458, LT = 84, AL = CX0, AR = CX1, AY = 281, PAD = 42, MX = 904;
+  /* the card fills the lid; the arrows sit over its left and right edges, so card text keeps PAD clear of them */
   var SOFT = "var(--ink-soft)", RULE = "#c3d2ec", RED = "color-mix(in srgb, var(--orange) 35%, #c81e1e)";
   function H(sz, w, col) { return "font:" + (w || 600) + " " + sz + "px var(--font-hand);fill:" + (col || "var(--ink)"); }
   function U(sz, col) { return "font:600 " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"); }
@@ -90,25 +91,27 @@
     if (o.letter) return s + listCard(o.letter);
     if (o.limit) return s + limitCard();
     var tw = rc.t.length * (rc.t.length > 12 ? 12.6 : 14);
-    s += T(x0 + 18, top + 38, rc.t, H(rc.t.length > 12 ? 30 : 34, 700)) + T(x0 + 18, top + 63, rc.src, H(18, 600, SOFT)) + T(x0 + 18, top + 88, rc.meta, H(18, 600, SOFT));
-    if (o.edit) s += '<rect x="' + (x0 + 10) + '" y="' + (top + 8) + '" width="' + (tw + 20) + '" height="40" rx="4" style="fill:none;stroke:var(--blue);stroke-width:1.8;opacity:.6"/>' +
-      line("M" + (x0 + 14 + tw) + " " + (top + 14) + " v30", 2, 1);
-    if (rc.starter) s += pill(x1 - 136, CB - 44, 122, "Make it mine", true) + tapeLabel(x0 + 80, top + 2, "starter", -3);
-    else if (!o.edit) s += edIcons(x0 + 34 + tw, top + 28);
-    s += line("M" + (x0 + 1) + " " + (top + 100) + " H" + (x1 - 1), 1.8, 0.85, "var(--orange-text)") + T(x0 + 18, top + 124, "INGREDIENTS", LB(13)) + T(868, top + 124, "DIRECTIONS", LB(13));
+    var xl = x0 + PAD, xr = MX + 14;
+    s += T(xl, top + 38, rc.t, H(rc.t.length > 12 ? 30 : 34, 700)) + T(xl, top + 63, rc.src, H(18, 600, SOFT)) + T(xl, top + 88, rc.meta, H(18, 600, SOFT));
+    if (o.edit) s += '<rect x="' + (xl - 8) + '" y="' + (top + 8) + '" width="' + (tw + 20) + '" height="40" rx="4" style="fill:none;stroke:var(--blue);stroke-width:1.8;opacity:.6"/>' +
+      line("M" + (xl + tw - 4) + " " + (top + 14) + " v30", 2, 1);
+    if (rc.starter) s += pill(x1 - 160, CB - 44, 122, "Make it mine", true) + tapeLabel(xl + 62, top + 2, "starter", -3);
+    else if (!o.edit) s += edIcons(xl + 16 + tw, top + 28);
+    s += line("M" + (x0 + 1) + " " + (top + 100) + " H" + (x1 - 1), 1.8, 0.85, "var(--orange-text)") + T(xl, top + 124, "INGREDIENTS", LB(13)) + T(xr, top + 124, "DIRECTIONS", LB(13));
     var r0 = top + 148, n = Math.max(rc.ing.length, rc.steps.length);
     for (var i = 0; i < n; i++) { var y = r0 + i * 22;
       s += line("M" + (x0 + 1) + " " + (y + 5) + " H" + (x1 - 1), 1.2, 1, RULE);
-      if (o.edit && rc.ing[i]) s += fld(x0 + 12, y - 16, 838 - x0, 18);
-      if (o.edit && rc.steps[i]) s += fld(862, y - 16, x1 - 870, 18);
-      if (rc.ing[i]) s += T(x0 + 18, y, rc.ing[i], H(19));
-      if (rc.steps[i]) s += T(868, y, (i + 1) + ". " + rc.steps[i], H(19)); }
-    s += line("M856 " + (top + 108) + " V" + (r0 + n * 22 - 14), 1.2, 1, RULE);
+      if (o.edit && rc.ing[i]) s += fld(xl - 6, y - 16, MX - 8 - xl, 18);
+      if (o.edit && rc.steps[i]) s += fld(xr - 6, y - 16, x1 - PAD - xr, 18);
+      if (rc.ing[i]) s += T(xl, y, rc.ing[i], H(19));
+      if (rc.steps[i]) s += T(xr, y, (i + 1) + ". " + rc.steps[i], H(19)); }
+    s += line("M" + MX + " " + (top + 108) + " V" + (r0 + n * 22 - 14), 1.2, 1, RULE);
     /* the notes box only shows once a card has a note; in edit mode a card without one gets "+ Add a note" */
-    if (o.edit) s += (rc.notes.length ? notes(x0 + 12, CB - 52, x1 - x0 - 222, 44, 17, rc.notes) : T(x0 + 18, CB - 22, "+ Add a note", U(15, "var(--orange-text)") + ";text-decoration:underline")) +
-      pill(x1 - 200, CB - 47, 104, "Save card", true) + pill(x1 - 88, CB - 47, 76, "Cancel");
-    else if (rc.notes && rc.notes.length) s += notes(x0 + 12, CB - 52, x1 - x0 - 24, 44, 17, rc.notes);
-    return s + photo(x1 - 128, top + 12, 108, 80, 3);
+    if (o.edit) s += (rc.notes.length ? notes(xl - 12, CB - 52, x1 - x0 - 270, 44, 17, rc.notes) : T(xl, CB - 22, "+ Add a note", U(15, "var(--orange-text)") + ";text-decoration:underline")) +
+      pill(x1 - 228, CB - 47, 104, "Save card", true) + pill(x1 - 116, CB - 47, 76, "Cancel");
+    else if (rc.notes && rc.notes.length) s += notes(xl - 12, CB - 52, x1 - x0 - 2 * PAD + 24, 44, 17, rc.notes);
+    /* the photo sits left of the full-screen icon, which has the card's top right corner */
+    return s + photo(x1 - 186, top + 12, 108, 80, 3);
   }
   /* Notes: a small handwritten box at the foot of the card; it scrolls inside itself (max 280 characters). */
   function notes(x, y, w, h, fs, lines) { var s = R(x, y, w, h, "var(--card)", 1.4, 3) + T(x + 10, y + 16, "NOTES", LB(11)), body = "";
@@ -116,14 +119,14 @@
     return s + clipTo(x + 60, y + 2, x + w - 14, y + h - 2, body) + ((lines || []).length < 3 ? "" : R(x + w - 10, y + 5, 5, h - 10, "var(--rule)", 0.8, 2.5) + R(x + w - 10, y + 5, 5, (h - 10) * 0.55, SOFT, 0.8, 2.5)); }
   var BLIST = ["Babka", "Baguette", "Baklava", "Banana bread", "Bara brith", "Battenberg", "Bear claws", "Beignets", "Biscotti", "Blondies", "Blueberry muffins", "Bostock", "Brioche", "Brown butter cookies", "Buttermilk scones"];
   function listCard(L) {
-    var s = T(CX0 + 22, CT + 48, L, "font:700 44px var(--font-label);fill:var(--ink)") + T(CX0 + 62, CT + 44, BLIST.length + " cards", H(22, 600, SOFT)) +
+    var X = CX0 + PAD, s = T(X, CT + 48, L, "font:700 44px var(--font-label);fill:var(--ink)") + T(X + 40, CT + 44, BLIST.length + " cards", H(22, 600, SOFT)) +
       line("M" + (CX0 + 1) + " " + (CT + 62) + " H" + (CX1 - 1), 1.8, 0.85, "var(--orange-text)"), rows = Math.ceil(BLIST.length / 2), body = "";
     for (var k = 0; k < rows + 1; k++) body += line("M" + (CX0 + 1) + " " + (CT + 104 + k * 40) + " H" + (CX1 - 1), 1.2, 1, RULE);
-    BLIST.forEach(function (t, k) { var c = Math.floor(k / rows), x = CX0 + 22 + c * 236, y = CT + 96 + (k % rows) * 40;
+    BLIST.forEach(function (t, k) { var c = Math.floor(k / rows), x = c ? MX + 18 : X, y = CT + 96 + (k % rows) * 40;
       body += T(x, y, "·", H(24)) + lk(x + 14, y, t, 24, t === "Blondies", "the " + t + " card"); });
-    s += clipTo(CX0 + 2, CT + 66, CX1 - 16, CB - 34, body) + line("M900 " + (CT + 70) + " V" + (CB - 36), 1.2, 1, RULE) +
-      R(CX1 - 12, CT + 70, 6, CB - CT - 106, "var(--rule)", 1, 3) + R(CX1 - 12, CT + 70, 6, (CB - CT - 106) * 0.78, SOFT, 1, 3);
-    return s + T(CX0 + 22, CB - 12, "Pick a title to open its card. Scroll for more.", U(14, SOFT));
+    s += clipTo(CX0 + 2, CT + 66, CX1 - PAD, CB - 34, body) + line("M" + MX + " " + (CT + 70) + " V" + (CB - 36), 1.2, 1, RULE) +
+      R(CX1 - PAD - 2, CT + 70, 6, CB - CT - 106, "var(--rule)", 1, 3) + R(CX1 - PAD - 2, CT + 70, 6, (CB - CT - 106) * 0.78, SOFT, 1, 3);
+    return s + T(X, CB - 12, "Pick a title to open its card. Scroll for more.", U(14, SOFT));
   }
 
   /* ---- the lid: a shallow tray standing behind the body, its inside facing us; a ledge near the foot ---- */
@@ -133,8 +136,11 @@
     s += reg("path", 'd="M886 ' + (LT + 3) + ' v-10 q14 -8 28 0 v10 Z"', "var(--brass)", 1.8) + R(f1(x0), LT, f1(x1 - x0), f1(hy - LT), "var(--blue)", 3, 5) +
       recess(x0 + 12, LT + 12, x1 - 12, hy - 10, 34, "var(--blue-hi)", { side: "var(--blue-back)", top: "var(--blue-back)", bottom: "var(--blue)" });
     [[x0, 1], [x1, -1]].forEach(function (c) { s += reg("path", 'd="M' + f1(c[0]) + " " + LT + " h" + (22 * c[1]) + " L" + f1(c[0]) + " " + (LT + 22) + ' Z"', "var(--brass)", 1.6); });
-    s += arrowBtn(AL, AY, -1) + arrowBtn(AR, AY, 1) + (ctrl.letter || ctrl.limit ? "" : R(AR - 40, AY + 34, 80, ctrl.pos2 ? 44 : 24, "var(--card)", 1.6, 3) + T(AR, AY + 51, ctrl.pos || "B · 10 of 15", LB(13), 'text-anchor="middle"') + (ctrl.pos2 ? T(AR, AY + 71, ctrl.pos2, U(13, "var(--orange-text)"), 'text-anchor="middle"') : "")) + (ctrl.limit ? "" : fullIcon(AR, CT + 22));
-    return s + inside + block(600, CB, 1200, CB + 14, 16, { top: "var(--wood-hi)" }) + R(600, CB, 600, 14, "var(--wood)", 2) + grain(604, CB + 1, 592, 12, 5) + hatch(602, CB + 14, 596, 4, 0.6);
+    /* on top of the card: round arrows over its edges, the position tag under the next arrow, full screen in its top right corner */
+    var tag = ctrl.letter || ctrl.limit ? "" : R(AR - 38, AY + 32, 80, ctrl.pos2 ? 44 : 24, "var(--card)", 1.6, 3) + T(AR + 2, AY + 49, ctrl.pos || "B · 10 of 15", LB(13), 'text-anchor="middle"') + (ctrl.pos2 ? T(AR + 2, AY + 69, ctrl.pos2, U(13, "var(--orange-text)"), 'text-anchor="middle"') : "");
+    var L0 = CX0 - 12, L1 = CX1 + 12;
+    return s + inside + block(L0, CB, L1, CB + 14, 16, { top: "var(--wood-hi)" }) + R(L0, CB, L1 - L0, 14, "var(--wood)", 2) + grain(L0 + 4, CB + 1, L1 - L0 - 8, 12, 5) + hatch(L0 + 2, CB + 14, L1 - L0 - 4, 4, 0.6) +
+      arrowBtn(AL, AY, -1) + arrowBtn(AR, AY, 1) + tag + (ctrl.limit ? "" : fullIcon(CX1 - 30, CT + 30));
   }
 
   /* ---- the body: three rows of letter tabs; the front face runs off the bottom of the screen ---- */
@@ -192,7 +198,7 @@
     var g = function (id) { return document.getElementById(id); }, guest = o.plan === "guest";
     g("box-open").innerHTML = openOver(box(BLOND, { guest: guest }), "The open recipe box with the Blondies card on the ledge in the lid");
     g("box-letter").innerHTML = openOver(box(BLOND, { letter: "B" }), "The lid card listing the fifteen B titles in two columns, scrolling");
-    g("box-next").innerHTML = small(box(SCONE, { pos: "B · 15 of 15", pos2: "C next  ›" }), "The last B card, with the tag saying C is next", 560, 70, 700, 420);
+    g("box-next").innerHTML = small(box(SCONE, { pos: "B · 15 of 15", pos2: "C next  ›" }), "The last B card, with the tag saying C is next", 520, 70, 760, 430);
     g("box-add").innerHTML = small(box(BLOND, { glowA: 1 }), "A blank Add a card card standing at the back of the box", 360, 76, 1080, 684);
     g("box-new").innerHTML = openOver(box(CROIS, { edit: 1, pos: "C · new" }), "A new Croissants card on the ledge, filled from trial 4 and open for editing, with Save card and Cancel");
     g("box-full").innerHTML = svg(mainVP(), fullCard(), "The Blondies card covering the whole screen, with some lines ticked");

@@ -7,19 +7,31 @@
 
     <h3>Step 2: the book, at its cover</h3>
     <figure id="cb-cover" class="fx"></figure>
-    <p class="note"><b>The cover first.</b> A spine opens the book closed, cover up: cloth spine, printed paper board, the title and a small printed plate. Share sits on the cover. Click the cover or the round arrow to open it at the contents.</p>
+    <p class="note"><b>The cover first.</b> A spine opens the book closed, cover up: cloth spine, printed paper board, the title and a small printed plate. Share sits on the cover (drawn here as a plain pill; three better looks follow). Click the cover or the round arrow to open it at the contents.</p>
 
-    <h3>The book open: contents and a recipe</h3>
+    <h3>Share on the cover: three ways</h3>
+    <div class="trio">
+      <div><figure id="cb-share-a" class="fx"></figure><p class="note"><b>A. A bookplate.</b> A small printed plate under the date, with a double rule and clipped corners, like an ex libris. Reads as part of the cover print.</p></div>
+      <div><figure id="cb-share-b" class="fx"></figure><p class="note"><b>B. A ribbon tab.</b> A yellow cloth tab tucked under the board, sticking out of the fore-edge. Nothing sits on the cover art at all.</p></div>
+      <div><figure id="cb-share-c" class="fx"></figure><p class="note"><b>C. A corner pill.</b> A small pill with a share mark, in the bottom right corner inside the frame, off the centre line of the art.</p></div>
+    </div>
+
+    <h3>The editor: over the kitchen</h3>
     <figure id="cb-open" class="fx"></figure>
+    <p class="note"><b>This is the editor.</b> The developer's working view: the book opened over the dimmed kitchen, with the find bar and Close at the top, the x on each contents line and the strip below. Here she adds, takes out and orders recipes.</p>
     <p class="note"><b>Left page: contents.</b> The five recipes in the book's order, with the date each was added and its page. Each name turns to its page. The x takes a recipe out of this book only.</p>
     <p class="note"><b>Right page: one recipe in full.</b> The thread of the sewing shows in the gutter, and the folded gatherings show at the head of the spine. <b>Turning pages.</b> The plain round arrows beside the book, the same as the notebook and recipe box. <b>The strip.</b> Add a recipe and New cookbook.</p>
     <p class="note"><b>Plans.</b> Switch the Plan to Home cook: the same three steps, with one sample book, Weekend Bakes, read only. No Share, no x, no strip buttons, and the yellow "paid plan" tag on the book. The strip offers "See the paid plan". Guest is the same drawing as Home cook; only that button reads "Sign up".</p>
 
+    <h3>The finished book</h3>
+    <figure id="cb-final" class="fx"></figure>
+    <p class="note"><b>For reading through.</b> The same book once it is made: full screen, no kitchen and no find bar, lying on a plain linen cloth. The round arrows turn the pages; the red X, top right, goes back, the same as the recipe box's full-screen card. No x, no strip, nothing to edit.</p>
+    <p class="note"><b>Who sees it.</b> This is for the cook reading her own book. Public /c pages are on hold, so whether someone it was shared with sees this same page is a later question. Home cook and Guest see the sample book this way too, with the "paid plan" tag.</p>
+
     <ol class="qs">
-      <li><b>Share on the cover.</b> Where should it open: a small card with the link and Copy, or the system share sheet?</li>
-      <li><b>Spine to cover, then contents.</b> Drawn: a spine opens the book closed, cover up. Or should a spine open straight to the contents page?</li>
-      <li><b>The home cook's sample.</b> Drawn: only Weekend Bakes on the shelf. Should the cook also see the developer's other spines, unopenable?</li>
-      <li><b>Order in the book.</b> Is the order set by the developer (drag on the contents page), or always A to Z?</li>
+      <li><b>Share.</b> Which look: A the bookplate, B the ribbon tab, or C the corner pill?</li>
+      <li><b>The finished book.</b> Is the full-screen book on a plain cloth how a made cookbook should read?</li>
+      <li><b>The editor.</b> Does the editor stay over the dimmed kitchen, as drawn?</li>
     </ol>
   </div>
 </section>
@@ -38,6 +50,9 @@
   function L(x, y, t, sz, ex, col) { return T(x, y, t, "font:700 " + sz + "px var(--font-label);letter-spacing:.1em;fill:" + (col || "var(--ink)"), ex || ""); }
   function dk(f, k) { return "color-mix(in srgb, " + f + " " + (k || 66) + "%, #000)"; }
   function ro() { return o.plan !== "dev"; }
+  /* FIN: drawing the finished book (no edit controls) */
+  var FIN = 0;
+  function noEd() { return ro() || FIN; }
   /* plain round arrows, the same as the recipe box and notebook */
   function arrowBtn(cx, cy, dir) { return '<g role="button" tabindex="0" aria-label="' + (dir < 0 ? "Previous" : "Next") + ' page">' + reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="23"', "var(--card)", 2.2) + line("M" + (cx - 4 * dir) + " " + (cy - 10) + " l" + (10 * dir) + " 10 l" + (-10 * dir) + " 10", 3.4) + "</g>"; }
   /* the strip under the view: developer buttons, or the read-only line and the plan button */
@@ -85,7 +100,27 @@
 
   /* ---------- 2. the cover ---------- */
   var BX = 662, BY = 104, BW = 476, BH = 560;
-  function cover() {
+  /* the share mark: a tray with an arrow coming up out of it */
+  function shareMark(x, y) { return line("M" + (x - 7) + " " + (y - 2) + " v8 h14 v-8 M" + x + " " + (y + 2) + " v-12 M" + (x - 5) + " " + (y - 5) + " l5 -5 l5 5", 1.8); }
+  /* three ways to show Share on the cover (cb-share-a/b/c) */
+  function shareOpt(k, cx) {
+    var y = BY + 476, s;
+    if (k === "A") { var w = 150, h = 46, x = cx - w / 2, c = 8, pts = function (x0, y0, x1, y1, c) { return [[x0 + c, y0], [x1 - c, y0], [x1, y0 + c], [x1, y1 - c], [x1 - c, y1], [x0 + c, y1], [x0, y1 - c], [x0, y0 + c]].map(function (p) { return p.join(","); }).join(" "); };
+      s = poly(pts(x, y, x + w, y + h, c), "var(--card)", 2) + '<polygon points="' + pts(x + 5, y + 5, x + w - 5, y + h - 5, 5) + '" style="fill:none;stroke:var(--ink);stroke-width:1"/>' +
+        shareMark(x + 30, y + 26) + L(x + 48, y + 23, "SHARE", 15) + U(x + 48, y + 38, "this book", 11, "", SOFT, 500);
+      return hot("Share this cookbook", s, [x, y, w, h]); }
+    if (k === "B") { var tx = BX + BW, ty = BY + 440;
+            /* tucked between the pages: drawn before the cover, so the page block and board hold it */
+      s = reg("path", 'd="M' + (tx - 4) + " " + ty + " H" + (tx + 86) + " l-13 23 l13 23 H" + (tx - 4) + ' Z"', "var(--yellow)", 2) +
+        line("M" + (tx + 10) + " " + (ty + 5) + " h66 M" + (tx + 10) + " " + (ty + 41) + " h66", 1, 0.5) + L(tx + 46, ty + 28, "SHARE", 13, MID);
+      return hot("Share this cookbook", s, [tx + 8, ty, 78, 46]); }
+    var x = BX + BW - 160, py = BY + BH - 86, pw = 100;
+    s = reg("rect", 'x="' + x + '" y="' + py + '" width="' + pw + '" height="30" rx="15"', "var(--card)", 2) +
+      '<rect x="' + (x + 3) + '" y="' + (py + 3) + '" width="' + (pw - 6) + '" height="24" rx="12" style="fill:none;stroke:var(--orange-text);stroke-width:1"/>' +
+      shareMark(x + 24, py + 19) + U(x + 40, py + 21, "Share", 15);
+    return hot("Share this cookbook", s, [x, py, pw, 30]);
+  }
+  function cover(share) {
     var s = hatch(BX + 10, BY + BH + 4, BW + 10, 12, 0.7), i;
     /* the page block shows at the fore-edge and the tail, in gatherings */
     s += R(BX + 8, BY + 8, BW, BH, "var(--page)", 2, 3);
@@ -103,10 +138,11 @@
     for (i = 0; i < 9; i++) { var a = -Math.PI + i * Math.PI / 8; s += line("M" + (cx + Math.cos(a) * 58).toFixed(1) + " " + (gy + 16 + Math.sin(a) * 24).toFixed(1) + " l" + (Math.cos(a) * 20).toFixed(1) + " " + (Math.sin(a) * 9).toFixed(1), 1.3, 0.8); }
     s += line("M" + (cx - 40) + " " + (gy + 8) + " q12 -10 24 0 M" + (cx + 2) + " " + (gy + 14) + " q12 -10 24 0", 1.3, 0.8) + hatch(cx - 84, gy + 44, 168, 16, 0.5);
     s += U(cx, BY + 428, "Five recipes, each tested until it works", 15, MID, "var(--ink)", 500) + L(cx, BY + 454, "11 · 11 · 26", 14, MID, SOFT);
-    if (!ro()) s += pill(cx - 52, BY + 474, 104, "Share", true);
+    if (share) s += share === "B" ? "" : shareOpt(share, cx);
+    else if (!ro()) s += pill(cx - 52, BY + 474, 104, "Share", true);
     else s += line("M" + (BX + BW - 30) + " " + (BY + 6) + " Q" + (BX + BW - 6) + " " + (BY + 14) + " " + (BX + BW + 10) + " " + (BY + 34), 1.6) + paid(BX + BW + 70, BY + 50, 6);
     s += arrowBtn(1250, 300, 1);
-    return s + strip();
+    return (share === "B" ? shareOpt("B", cx) : "") + s + strip();
   }
 
   /* ---------- 3. the open book ---------- */
@@ -127,11 +163,11 @@
     return s + arrowBtn(400, 388, -1) + arrowBtn(1400, 388, 1);
   }
   function contents() {
-    var s = L(500, 146, "WEEKEND BAKES", 15, "", SOFT) + H(500, 196, "Contents", 40, 700) + line("M500 210 H840", 1.4, 0.6) + U(ro() ? 786 : 766, 236, "added", 12, END, SOFT, 500) + U(ro() ? 840 : 812, 236, "page", 12, END, SOFT, 500);
+    var s = L(500, 146, "WEEKEND BAKES", 15, "", SOFT) + H(500, 196, "Contents", 40, 700) + line("M500 210 H840", 1.4, 0.6) + U(noEd() ? 786 : 766, 236, "added", 12, END, SOFT, 500) + U(noEd() ? 840 : 812, 236, "page", 12, END, SOFT, 500);
     RC.forEach(function (r, i) { var y = 276 + i * 58;
-      s += plk(500, y, r[0], 19, i === 2, r[0]) + U(ro() ? 786 : 766, y - 2, r[1], 13, END, SOFT, 500) + H(ro() ? 840 : 812, y, r[2], 23, 600, END);
-      if (!ro()) s += '<g role="button" tabindex="0" aria-label="Take ' + r[0] + ' out of this book">' + reg("circle", 'cx="832" cy="' + (y - 8) + '" r="10"', "var(--card)", 1.6) + line("M828 " + (y - 12) + " l8 8 M836 " + (y - 12) + " l-8 8", 1.8) + "</g>"; });
-    s += U(500, 584, "5 recipes", 14, "", SOFT, 500) + (ro() ? "" : U(500, 604, "The x takes a recipe out of this book only.", 13, "", SOFT, 500));
+      s += plk(500, y, r[0], 19, i === 2, r[0]) + U(noEd() ? 786 : 766, y - 2, r[1], 13, END, SOFT, 500) + H(noEd() ? 840 : 812, y, r[2], 23, 600, END);
+      if (!noEd()) s += '<g role="button" tabindex="0" aria-label="Take ' + r[0] + ' out of this book">' + reg("circle", 'cx="832" cy="' + (y - 8) + '" r="10"', "var(--card)", 1.6) + line("M828 " + (y - 12) + " l8 8 M836 " + (y - 12) + " l-8 8", 1.8) + "</g>"; });
+    s += U(500, 584, "5 recipes", 14, "", SOFT, 500) + (noEd() ? "" : U(500, 604, "The x takes a recipe out of this book only.", 13, "", SOFT, 500));
     return s + H(690, 656, "i", 20, 600, MID, SOFT);
   }
   function recipe() {
@@ -147,11 +183,23 @@
     return s + strip(pill(452, 688, 150, "Add a recipe", true) + pill(612, 688, 150, "New cookbook"));
   }
 
+  /* ---------- 4. the finished book: full screen on a plain cloth, nothing to edit ---------- */
+  function finalBook() {
+    var V = mainVP(), x0 = V[0], x1 = V[1], s = R(x0 - 20, -4, x1 - x0 + 40, 772, "var(--plaster)", 0, 0), i;
+    for (i = 0; i < 6; i++) s += line("M" + (x0 - 20) + " " + (36 + i * 6) + " H" + (x1 + 20), 1, 0.12) + line("M" + (x0 - 20) + " " + (724 - i * 6) + " H" + (x1 + 20), 1, 0.12);
+    FIN = 1; s += book() + contents() + recipe(); FIN = 0;
+    if (ro()) s += paid(1222, 156, 4);
+    return s + '<g role="button" tabindex="0" aria-label="Close the book">' + reg("circle", 'cx="' + (x1 - 52) + '" cy="48" r="26"', "color-mix(in srgb, var(--orange) 35%, #c81e1e)", 2.4) + line("M" + (x1 - 62) + " 38 l20 20 M" + (x1 - 42) + " 38 l-20 20", 4, 1, "#fff") + "</g>";
+  }
+  function crop(inner, label) { var V = mainVP(); return svg([640, 1230], scene(V, opts()) + openFrame(V) + inner, label, 330, 360); }
+
   PLATE.add(function () {
     function put(id, h) { document.getElementById(id).innerHTML = h; }
     put("cb-spines", openOver(shelf(), "The cookbook shelf close up: books standing with their spines out"));
     put("cb-cover", openOver(cover(), "Weekend Bakes, closed, cover up, with a Share button on the cover"));
-    put("cb-open", openOver(openBook(), "Weekend Bakes open: contents on the left, Croissants on the right"));
+    ["A", "B", "C"].forEach(function (k) { put("cb-share-" + k.toLowerCase(), crop(cover(k), "Share option " + k + " on the Weekend Bakes cover")); });
+    put("cb-open", openOver(openBook(), "The editor: Weekend Bakes open over the kitchen, contents on the left, Croissants on the right"));
+    put("cb-final", svg(mainVP(), finalBook(), "The finished Weekend Bakes, full screen on a plain cloth, with page arrows and a red Close"));
   });
 })();
 </script>
