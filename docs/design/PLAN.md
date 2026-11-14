@@ -93,7 +93,7 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 ### Trials notebook
 - [x] Tabs and a Contents page
 - [x] ~~Publish is a stamp on the entry~~ now an "Add to recipe box" button on the strip (Ari, 2026-11-13)
-- [x] Page turns: folded corners for trials. Recipe arrows dropped (Ari, 2026-11-13): other recipes via Contents or the find bar
+- [x] Page turns: folded corners for trials; plain round arrows for recipes, no labels, same as the recipe box (Ari, 2026-11-13)
 - [x] Compare taken out (Later list)
 
 ### Recipe box
@@ -125,9 +125,13 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 - Jot list (section 10): carried as is
 
 ### Ari picks after Plate X
-Floor · sink · Recently holder (and whether Recently stays at all, Ari unsure 2026-11-13) · what sits inside the recipe log cabinet · small whiteboard dot · empty "Next up" doodle · Edit/Delete spot · how to add a card · sign-in card style · anything the section questions raise.
+Floor · sink · Recently holder (Recently stays, Ari 2026-11-13) · what sits inside the recipe log cabinet · small whiteboard dot · empty "Next up" doodle · Edit/Delete spot · how to add a card · sign-in card style · anything the section questions raise.
 
 ---
+
+### Details list (small changes, drawn together in Plate XI)
+From 2026-11-13: small visual details (a colour, a spacing, a word, a size) go here instead of being redrawn at once. Structure (what is on screen, what a click does) is still decided view by view. The whole list is drawn in one go in Plate XI, and anything about feel on real screens (motion, sizes, touch) is checked again after the build is deployed.
+- (empty)
 
 ## 2. Plate XI (final)
 - [ ] Day kitchen and evening kitchen with every pick

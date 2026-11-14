@@ -5,9 +5,9 @@
     <figure id="nb-open" class="fx"></figure>
     <p class="note"><b>No black band on top.</b> The cover no longer peeks out above the pages, so the top of the spread is just the page edges.</p>
     <p class="note"><b>Tabs are numbers.</b> Contents, then this recipe's trials 1 to 4. The page title already says "Trial 4: croissants", so the tabs carry no name. Left tabs custard, right tabs light green, the selected tab orange.</p>
-    <p class="note"><b>Moving through the book.</b> The folded corners turn to the previous or next trial of this recipe; their words are written in the page margin. To get to another recipe, use the Contents tab (every recipe and its trials) or the find bar. There are no recipe arrows beside the book: the cook rarely wants the next recipe A to Z while working on one. Page numbers sit at the centre bottom of each page.</p>
+    <p class="note"><b>Moving through the book.</b> The folded corners turn to the previous or next trial of this recipe; their words are written in the page margin. The plain round arrows beside the book go to the previous or next recipe, A to Z, the same arrows as the recipe box, with no labels. Contents and the find bar reach any recipe directly. Page numbers sit at the centre bottom of each page.</p>
     <p class="note"><b>The strip.</b> New trial, Add to recipe box and New recipe on the left, Add a photo on the right. "Add to recipe box" opens the recipe box with a new Croissants card filled in from this trial, open for editing. The card's title is the recipe name; the cook can change it there. The page itself stays clean.</p>
-    <p class="note"><b>Plans.</b> Switch the Plan to Home cook or Guest for the read-only notebook: same sample book, tabs and corners still work, but no writing buttons, and the yellow "paid plan" tag on the top of the book. Guest is the same drawing as Home cook; only the button reads "Sign up" instead of "See the paid plan".</p>
+    <p class="note"><b>Plans.</b> Switch the Plan to Home cook or Guest for the read-only notebook: same sample book, tabs, corners and arrows still work, but no writing buttons, and the yellow "paid plan" tag on the top of the book. Guest is the same drawing as Home cook; only the button reads "Sign up" instead of "See the paid plan".</p>
 
     <h3>Contents, at the front of the book</h3>
     <figure id="nb-index" class="fx"></figure>
@@ -54,6 +54,9 @@
       T(cx, y + (i ? 32 : 31), t, H(i ? 25 : 17, 700), 'text-anchor="middle"') + "</g>";
   }
   /* folded corners: previous / next trial of this recipe; the words are written in the page margin */
+  /* previous / next recipe: plain round arrows beside the book, no labels, the same as the recipe box (Ari, 2026-11-13) */
+  function recArrow(cx, dir) { var cy = 388;
+    return '<g role="button" tabindex="0" aria-label="' + (dir < 0 ? "Previous" : "Next") + ' recipe">' + reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="23"', "var(--card)", 2.2) + line("M" + (cx - 4 * dir) + " " + (cy - 10) + " l" + (10 * dir) + " 10 l" + (-10 * dir) + " 10", 3.4) + "</g>"; }
   function corner(left, cap) { var x = left ? LX : RX, k = left ? 1 : -1;
     return '<g role="button" tabindex="0" aria-label="' + (left ? "Back to " : "On to ") + cap + '">' + poly(x + ",636 " + (x + 32 * k) + ",668 " + x + ",668", "#e4e0d4", 1.4) + poly(x + ",636 " + (x + 32 * k) + ",668 " + (x + 32 * k) + ",636", "var(--custard)", 2) +
       line("M" + (x + 25 * k) + " 643 l" + (-6 * k) + " 5.5 l" + (6 * k) + " 5.5", 2.2) + T(x + 42 * k, 658, cap, H(19, 600, "var(--ink-soft)"), left ? "" : 'text-anchor="end"') + "</g>"; }
@@ -76,6 +79,7 @@
     if (c.nr) s += T(1124, 660, c.nr, H(22, 600, "var(--ink-soft)"), 'text-anchor="middle"');
     if (c.pt) s += corner(true, c.pt);
     if (c.nt) s += corner(false, c.nt);
+    if (c.rec) s += recArrow(352, -1) + recArrow(1448, 1);
     return s;
   }
   function nbHead(side, date, title) {
@@ -116,11 +120,11 @@
   }
   function nbPaid() { return line("M1040 96 Q1030 100 1026 106", 1.6) + '<g transform="translate(1100 98) scale(1.6) translate(-900 -84)">' + paidTag(900, 84, -4) + "</g>"; }
   function ro() { return o.plan !== "dev"; }
-  var NAV = { cur: 4, pt: "trial 3", nt: "next trial", nl: "12", nr: "13" };
+  var NAV = { rec: 1, cur: 4, pt: "trial 3", nt: "next trial", nl: "12", nr: "13" };
   function nbOpen() { return nbBook(NAV) + nbEntry() + nbStrip(ro(), "b") + (ro() ? nbPaid() : ""); }
   /* contents: recipes, their trials, dates, pages */
   function nbIndex() {
-    var s = nbBook({ cur: 0, nt: "Blondies, trial 1", nl: "i", nr: "ii" }) + nbHead("l", "", "Contents") + T(1308, 136, "Trials", H(21), 'text-anchor="end"');
+    var s = nbBook({ rec: 1, cur: 0, nt: "Blondies, trial 1", nl: "i", nr: "ii" }) + nbHead("l", "", "Contents") + T(1308, 136, "Trials", H(21), 'text-anchor="end"');
     var L = [["Blondies", [[1, "9/14/26", 1], [2, "9/20/26", 3, "pub"]]], ["Brown butter cookies", [[1, "10/02/26", 4], [2, "10/09/26", 5]]], ["Croissants", [[1, "10/12/26", 6], [2, "10/19/26", 8], [3, "10/28/26", 10], [4, "11/11/26", 12, "last"]]]],
       R = [["Rhubarb galette", [[1, "11/02/26", 14], [2, "11/08/26", 16]]], ["Rough puff pastry", [[1, "11/05/26", 18]]]];
     function col(list, x) { var i = 0;
@@ -155,7 +159,7 @@
   }
   var SO = H(19, 600, "var(--ink-soft)");
   function nbMakeAgain() {
-    var s = nbBook({ cur: 5, n: 5, pt: "trial 4", nt: "next trial", nl: "14", nr: "15" }) + nbHead("l", "11/13/26", "Trial 5: croissants") + nbHead("r", "11/13/26", "Crumb, trial 5");
+    var s = nbBook({ rec: 1, cur: 5, n: 5, pt: "trial 4", nt: "next trial", nl: "14", nr: "15" }) + nbHead("l", "11/13/26", "Trial 5: croissants") + nbHead("r", "11/13/26", "Crumb, trial 5");
     ["Goal: a more open honeycomb", "Changed: proof at 26°C,", "   colder butter", "Result: open honeycomb!"].forEach(function (t, i) { s += T(t.charAt(0) === " " ? 512 : 492, by(i), t.trim(), i === 3 ? H(23, 700, INKR) : HAND); });
     return s + nbPhoto(1216, 534, "trial 5") + nbStrip(false, "b") + slip(590, 222, 620, 352,
       T(620, 270, "Add trial 5 to the recipe box?", H(32, 700)) + T(620, 320, "Croissants already has a card, made from trial 4 (11/11/26).", SO) +
@@ -171,7 +175,7 @@
     put("nb-idea", svg([440, 910], nbIdea(), "The first page of a trial started from the idea Miso caramel", 90, 600));
     put("nb-make-again", openOver(nbMakeAgain(), "Clicking Add to recipe box on trial 5: replace the Croissants card, save as a new recipe, or cancel"));
     o.plan = dev;
-    put("nb-open", openOver(nbOpen(), "The Trials notebook open at Croissants trial 4, with trial tabs, corners and an Add to recipe box button on the strip"));
+    put("nb-open", openOver(nbOpen(), "The Trials notebook open at Croissants trial 4, with trial tabs, corners, recipe arrows and an Add to recipe box button on the strip"));
     put("nb-index", openOver(nbIndex(), "The notebook's Contents page: every recipe and its trials"));
     put("nb-pub-b", svg([440, 912], B1, "Before: an Add to recipe box button next to New trial", 580, 156));
     put("nb-pub-b2", svg([440, 912], B2, "After: the button reads In the recipe box 11/11/26", 580, 156));
