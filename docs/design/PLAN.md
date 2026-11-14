@@ -44,7 +44,7 @@ One view at a time, reviewed as it lands, not all at the end.
 | 7 | References | 05-references | waiting on Ari (v21) |
 | 8 | Sign in and sign up | 09-start | waiting on Ari (v21) |
 | 9 | Account menu and settings | 11-account | waiting on Ari (v21) |
-| 10 | Front page and not-found | 12-front | drawing |
+| 10 | Front page and not-found | 12-front | waiting on Ari (v22) |
 
 Statuses: not started → drawing → waiting on Ari → tweaking → done.
 
@@ -90,9 +90,9 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 - [x] Developer, home cook and guest (sample book read-only, paid plan tag)
 
 ### References
-- [ ] Five kinds: Cookbook, Blog, Chef / Baker, Article, Tool (draw Article)
-- [ ] Cards, newest first, a kind stamp on each
-- [ ] Starter references stay even after samples are removed
+- [x] Five kinds: Cookbook, Blog, Chef / Baker, Article, Tool (draw Article)
+- [x] Cards, newest first, a kind stamp on each
+- [x] Starter references stay even after samples are removed
 
 ### Trials notebook
 - [x] Tabs and a Contents page
@@ -112,17 +112,17 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 - [x] Photo on the card front
 
 ### Sign in and sign up
-- [ ] "Trial & Eclair" as the title (the one place it appears)
-- [ ] "Sign up" replaces "Start a kitchen"
-- [ ] Username, as the app does now
-- [ ] A few card styles, one that looks like a recipe card
-- [ ] Sample data on by default at sign-up
-- [ ] Guests land in the kitchen
+- [x] "Trial & Eclair" as the title (the one place it appears)
+- [x] "Sign up" replaces "Start a kitchen"
+- [x] Username, as the app does now
+- [x] A few card styles, one that looks like a recipe card
+- [x] Sample data on by default at sign-up
+- [x] Guests land in the kitchen
 
 ### New views (never drawn)
-- [ ] Account menu and settings (incl. remove samples, sign out)
-- [ ] Signed-out front page
-- [ ] Not-found page
+- [x] Account menu and settings (incl. remove samples, sign out)
+- [x] Signed-out front page
+- [x] Not-found page
 
 ### No change in Plate X
 - Public recipe and cookbook pages (section 08): on hold

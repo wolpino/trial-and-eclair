@@ -1,0 +1,130 @@
+<section aria-labelledby="h-fr">
+  <span class="label" id="h-fr">12 · Front page and not found</span>
+  <div class="sec-body">
+    <h3>Three ways to draw the front page</h3>
+    <div class="trio">
+      <div><h3>A · The kitchen behind a card</h3><figure id="fr-a" data-plan="guest"></figure></div>
+      <div><h3>B · The kitchen, with labels</h3><figure id="fr-b" data-plan="guest"></figure></div>
+      <div><h3>C · A plain printed page</h3><figure id="fr-c" data-plan="guest"></figure></div>
+    </div>
+    <p class="note"><b>What someone sees at the site root before signing in.</b> A: the kitchen stands still and pale behind one card that says what the app is and gives the three ways in. B: the kitchen in full colour, nothing dimmed; printed labels point at the notebook, the shelf, the board and the recipe box, and pointing at any of them glows as usual. Clicking an object opens it as a guest. C: no kitchen behind, just a printed page with a small drawing of the counter, like a plate in a cookbook.</p>
+    <p class="note"><b>The name stays small.</b> "Trial &amp; Eclair" is a title only on sign in, so here it is a small printed name at the top left, where the find bar would be on the right. The kitchen itself is the picture.</p>
+
+    <h3>The leading one: A, large</h3>
+    <figure id="fr-front" data-plan="guest"></figure>
+    <p class="note"><b>One card over the still kitchen.</b> The kitchen behind is the sample kitchen a guest would land in, pale and not clickable, with no find bar and no Account. The card says what the app is in one line, then three short lines for the three main things. <b>Three ways in.</b> Sign up is the yellow button, because most people here are new. Sign in sits next to it. "Try it as a guest" is a link under them; it opens the kitchen with the samples in it, and a guest can add up to 5 recipe cards (decision 002).</p>
+    <p class="note"><b>Why A leads.</b> It is the same card on the same pale kitchen as sign in (section 09). Clicking Sign in or Sign up only swaps the card, so the page does not jump. The kitchen behind it says "this is a kitchen" without asking anyone to read.</p>
+
+    <h3>Not found: an empty recipe card</h3>
+    <figure id="fr-nf"></figure>
+    <p class="note"><b>A small, friendly dead end.</b> A blank recipe card lies on a bread board with a pencil, and a printed line says the page is not here. One button goes back. Nothing else on the page, so there is nothing else to get lost in.</p>
+    <h3>Another way: a page torn out of the notebook</h3>
+    <figure id="fr-nf-b"></figure>
+    <p class="note"><b>The same words in the notebook.</b> The left page holds the message; a few torn stubs at the gutter show where a page was. Drawn here as someone signed out sees it.</p>
+    <p class="note"><b>Signed in or signed out.</b> The way back is the only thing that changes. Signed in, the button reads "Back to the kitchen". Signed out, it reads "Go to the front page". Either drawing works with either button.</p>
+    <p class="note"><b>No Plan switch versions.</b> The front page is seen signed out, before anyone has a plan, and the not-found page is the same for every plan. Developer, Home cook and Guest all see these same drawings.</p>
+  </div>
+</section>
+<script>
+(function () {
+  var V = [300, 1500], BODY = "var(--font-body)", SOFT = "var(--ink-soft)", MID = 'text-anchor="middle"', RULE = "#c3d2ec";
+  var CUT = '<rect x="700" y="22" width="400" height="44" rx="22"';
+  function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 0) + '"', fill, sw || 2); }
+  function U(x, y, t, sz, w, col, ex) { return T(x, y, t, "font:" + (w || 400) + " " + sz + "px " + BODY + ";fill:" + (col || "var(--ink)"), ex || ""); }
+  function cap(x, y, t, ex) { return T(x, y, t, "font:700 14px var(--font-label);letter-spacing:.12em;fill:" + SOFT, ex || ""); }
+  function tp(cx, cy, rot, len) { len = len || 76; return '<rect x="' + (cx - len / 2) + '" y="' + (cy - 11) + '" width="' + len + '" height="22" transform="rotate(' + rot + " " + cx + " " + cy + ')" style="fill:#e8e0c8;opacity:.85;stroke:#b9a77a;stroke-width:1.2"/>'; }
+  function btn(x, y, w, t, on, sz) { return '<g role="button" tabindex="0">' + R(x, y, w, 48, on ? "var(--yellow)" : "var(--card)", 2.4, 24) + U(x + w / 2, y + 31, t, sz || 19, 600, null, MID) + "</g>"; }
+  /* a printed link: blue underline, yellow on point */
+  function plk(x, by, txt, fs, label) { var tw = txt.length * fs * 0.45;
+    return '<g class="lnk" tabindex="0" role="link" aria-label="Open ' + label + '"><rect class="lk-hi" x="' + (x - 4) + '" y="' + (by - fs * 0.92) + '" width="' + (tw + 8) + '" height="' + (fs * 1.25) + '" rx="3" style="fill:var(--yellow);stroke:var(--ink);stroke-width:1.2"/>' +
+      U(x, by, txt, fs, 600) + line("M" + x + " " + (by + 4) + " H" + (x + tw), 1.6, 1, "var(--blue)") + "</g>"; }
+  /* the small printed name, top left */
+  function name(x, y) { return T(x || 330, y || 52, "TRIAL &amp; ECLAIR", "font:700 18px var(--font-label);letter-spacing:.16em;fill:var(--ink)"); }
+  /* the kitchen with no find bar and no Account (signed out). quiet = pale and not clickable */
+  function kitchen(quiet, glow) {
+    var s = scene(V, opts({ plan: "guest" })), i = s.indexOf(CUT); if (i > 0) s = s.slice(0, i);
+    if (glow) s = s.replace('class="hot" tabindex="0" role="button" aria-label="Open ' + glow + '"', 'class="hot on" tabindex="0" role="button" aria-label="Try ' + glow + ' as a guest"');
+    if (!quiet) return s;
+    return '<g style="pointer-events:none" aria-hidden="true">' + s.replace(/tabindex="0"/g, "") + "</g>" +
+      '<rect x="' + (V[0] - 20) + '" y="0" width="' + (V[1] - V[0] + 40) + '" height="764" style="fill:var(--paper);opacity:.72"/>';
+  }
+  /* small drawn marks for the three main things */
+  var ICON = {
+    nb: function (x, y) { return R(x, y - 30, 28, 36, "url(#mblack)", 2, 2) + R(x + 5, y - 20, 18, 10, "var(--card)", 1.2); },
+    bd: function (x, y) { return R(x - 4, y - 26, 36, 28, "url(#corkp)", 2, 1) + R(x + 6, y - 20, 14, 14, "var(--card)", 1.2) + reg("circle", 'cx="' + (x + 13) + '" cy="' + (y - 20) + '" r="4"', "var(--orange)", 1.4); },
+    bx: function (x, y) { return R(x - 5, y - 26, 38, 30, "var(--blue)", 2, 2) + line("M" + (x - 5) + " " + (y - 17) + " H" + (x + 33), 1.6) + R(x + 9, y - 21, 10, 8, "var(--brass)", 1.2); } };
+  var ROWS = [["nb", "Trials go in the notebook."], ["bd", "Ideas go on the board."], ["bx", "Recipes you keep go in the box."]];
+  /* A: one card over the still kitchen */
+  function frontA() {
+    var x = 640, y = 104, w = 520, h = 560, cx = x + w / 2, s = kitchen(true) + name();
+    s += hatch(x + 10, y + h, w - 2, 9, 0.8) + hatch(x + w, y + 10, 9, h - 1, 0.8) + R(x, y, w, h, "var(--card)", 2.6, 4) + tp(x + 6, y + 6, -40) + tp(x + w - 6, y + 6, 40);
+    s += U(cx, y + 74, "Work out a recipe,", 34, 600, null, MID) + U(cx, y + 116, "one trial at a time.", 34, 600, null, MID) +
+      U(cx, y + 156, "A kitchen for recipe developers and home cooks.", 18, 400, SOFT, MID) + line("M" + (x + 40) + " " + (y + 186) + " H" + (x + w - 40), 1.4, 0.5);
+    ROWS.forEach(function (r, i) { var ry = y + 238 + i * 52; s += ICON[r[0]](x + 70, ry) + U(x + 124, ry - 6, r[1], 20); });
+    s += line("M" + (x + 40) + " " + (y + 378) + " H" + (x + w - 40), 1.4, 0.5) + btn(x + 40, y + 402, 210, "Sign up", true) + btn(x + 270, y + 402, 210, "Sign in");
+    s += U(cx - 6, y + 496, "Just looking?", 18, 400, SOFT, 'text-anchor="end"') + plk(cx + 2, y + 496, "Try it as a guest", 19, "the kitchen as a guest") +
+      U(cx, y + 528, "No account needed. A guest can add up to 5 recipe cards.", 15, 400, SOFT, MID);
+    return s;
+  }
+  /* B: the kitchen in full, printed labels pointing at four objects */
+  function callout(x, y, w, lines, sx, sy, tx, ty) { var h = 20 + lines.length * 28;
+    var s = line("M" + sx + " " + sy + " L" + tx + " " + ty, 2.2) + reg("circle", 'cx="' + tx + '" cy="' + ty + '" r="5.5"', "var(--ink)", 1) + hatch(x + 6, y + 6, w, h, 0.6) + R(x, y, w, h, "var(--card)", 2.2, 4);
+    lines.forEach(function (t, i) { s += U(x + 14, y + 36 + i * 28, t, 22, i ? 400 : 700); }); return s; }
+  function frontB() {
+    var s = kitchen(false, "the recipe box") + name() + U(800, 52, "Point at anything to look inside.", 20, 600, null, MID) +
+      btn(1010, 20, 176, "Try as a guest", false, 17) + btn(1196, 20, 124, "Sign in", false, 17) + btn(1330, 20, 140, "Sign up", true, 17);
+    s += callout(316, 452, 156, ["Notebook", "every trial"], 472, 486, 650, 404) + callout(316, 566, 156, ["Cookbooks", "you make"], 472, 600, 640, 548) +
+      callout(1240, 84, 232, ["Idea board"], 1240, 108, 1196, 170) + callout(1250, 590, 220, ["Recipe box", "your cards"], 1250, 624, 1130, 452);
+    return s;
+  }
+  /* C: a plain printed page with a small drawing of the counter */
+  function frontC() {
+    var s = '<rect x="' + (V[0] - 20) + '" y="0" width="1240" height="764" style="fill:var(--paper)"/>' + name() +
+      U(900, 150, "Work out a recipe, one trial at a time.", 42, 600, null, MID) + U(900, 196, "A kitchen for recipe developers and home cooks.", 21, 400, SOFT, MID);
+    s += R(552, 230, 696, 248, "var(--card)", 2.4) + '<svg x="562" y="240" width="676" height="228" viewBox="580 272 660 222" preserveAspectRatio="xMidYMid slice">' + kitchen(true).replace(/opacity:\.72/, "opacity:0") + "</svg>" +
+      '<rect x="562" y="240" width="676" height="228" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>' + cap(900, 506, "THE NOTEBOOK, THE IDEA BOARD AND THE RECIPE BOX", MID);
+    s += btn(580, 540, 220, "Sign up", true) + btn(820, 540, 160, "Sign in") + btn(1000, 540, 220, "Try it as a guest") +
+      U(900, 630, "No account needed to try it. A guest can add up to 5 recipe cards.", 17, 400, SOFT, MID);
+    return s;
+  }
+  /* ---- not found ---- */
+  function msg(x, y, back, hs, body) { body = body || ["The link may be old, or what it pointed to", "was deleted."];
+    return cap(x, y, "PAGE NOT FOUND") + U(x, y + 50, "This page is not here.", hs || 40, 600) +
+    U(x, y + 92, body[0], 19, 400, SOFT) + U(x, y + 120, body[1], 19, 400, SOFT) + btn(x, y + 154, back.length * 10.5 + 56, back, true); }
+  function pencil(x, y, rot) {
+    return '<g transform="rotate(' + rot + " " + x + " " + y + ')">' + hatch(x + 4, y + 8, 220, 8, 0.6) + R(x, y - 9, 176, 18, "var(--yellow)", 2) + line("M" + x + " " + y + " H" + (x + 176), 1.2, 0.6) +
+      R(x - 22, y - 9, 22, 18, "var(--brass)", 2) + R(x - 40, y - 9, 18, 18, "var(--orange)", 2, 3) +
+      poly((x + 176) + "," + (y - 9) + " " + (x + 214) + "," + y + " " + (x + 176) + "," + (y + 9), "var(--custard)", 2) + poly((x + 203) + "," + (y - 2.6) + " " + (x + 214) + "," + y + " " + (x + 203) + "," + (y + 2.6), "var(--ink)", 1) + "</g>"; }
+  function notFound() {
+    var s = '<rect x="280" y="0" width="1240" height="640" style="fill:var(--paper)"/>' + name(330, 74), bx = 400, by = 110, bw = 500, bh = 440, cx = 455, cy = 160, cw = 390, ch = 290;
+    /* a walnut bread board with a handle, the blank card lying on it, a pencil beside */
+    s += hatch(338, by + 190, 80, 80, 0.6) + hatch(bx + 12, by + 12, bw, bh, 0.6) + R(332, by + 176, 90, 84, "var(--wood)", 2.6, 34) + reg("circle", 'cx="362" cy="' + (by + 218) + '" r="11"', "var(--paper)", 2.2) +
+      R(bx, by, bw, bh, "var(--wood)", 2.6, 26) + grain(bx + 10, by + 20, bw - 20, 140, 41) + grain(bx + 10, by + 170, bw - 20, 120, 42) + grain(bx + 10, by + 300, bw - 20, 120, 43);
+    var c = hatch(cx + 8, cy + 8, cw, ch, 0.7) + R(cx, cy, cw, ch, "var(--card)", 2.2, 3) + line("M" + (cx + 2) + " " + (cy + 58) + " H" + (cx + cw - 2), 1.8, 0.9, "#c9442a");
+    for (var ry = cy + 92; ry < cy + ch - 10; ry += 32) c += line("M" + (cx + 2) + " " + ry + " H" + (cx + cw - 2), 1.2, 1, RULE);
+    s += '<g transform="rotate(-3 ' + (cx + cw / 2) + " " + (cy + ch / 2) + ')">' + c + "</g>" + pencil(600, 500, -9);
+    return s + msg(990, 210, "Back to the kitchen");
+  }
+  function tornNotebook() {
+    var s = '<rect x="280" y="0" width="1240" height="640" style="fill:var(--paper)"/>' + name(330, 74), x0 = 470, x1 = 1330, y0 = 84, y1 = 568, g = 900;
+    s += hatch(x0 + 10, y0 + 10, x1 - x0, y1 - y0, 0.6) + R(x0, y0, x1 - x0, y1 - y0, "url(#mblack)", 2.6, 6);
+    [[x0 + 16, g - 2], [g + 2, x1 - 16]].forEach(function (p) { var pg = R(p[0], y0 + 14, p[1] - p[0], y1 - y0 - 28, "var(--page)", 2);
+      for (var ry = y0 + 70; ry < y1 - 20; ry += 30) pg += line("M" + (p[0] + 2) + " " + ry + " H" + (p[1] - 2), 1.1, 1, RULE);
+      s += pg; });
+    s += line("M" + (x0 + 60) + " " + (y0 + 16) + " V" + (y1 - 16), 1.4, 0.8, "#c9442a") + line("M" + g + " " + (y0 + 14) + " V" + (y1 - 14), 2.4);
+    /* torn stubs: ragged slivers left in the gutter */
+    [[y0 + 40, 140], [y0 + 210, 110], [y0 + 350, 90]].forEach(function (t, i) { var p = [g + 2 + "," + t[0]], yy = t[0], k = 0;
+      for (yy = t[0]; yy < t[0] + t[1]; yy += 12) p.push((g + 14 + (k++ % 2 ? 9 : 0) + i * 2) + "," + yy);
+      p.push(g + 2 + "," + (t[0] + t[1])); s += hatch(g + 4, t[0] + 4, 18, t[1], 0.4) + poly(p.join(" "), "var(--page)", 1.6); });
+    return s + msg(x0 + 70, y0 + 110, "Go to the front page", 31, ["The link may be old, or what it", "pointed to was deleted."]);
+  }
+  PLATE.add(function () {
+        document.getElementById("fr-a").innerHTML = svg(V, frontA(), "Front page option A: the kitchen behind a card");
+    document.getElementById("fr-b").innerHTML = svg(V, frontB(), "Front page option B: the kitchen with labels");
+    document.getElementById("fr-c").innerHTML = svg(V, frontC(), "Front page option C: a plain printed page");
+    document.getElementById("fr-front").innerHTML = svg(V, frontA(), "The signed-out front page, option A, large");
+    document.getElementById("fr-nf").innerHTML = svg(V, notFound(), "Not found: an empty recipe card on a bread board", 40, 580);
+    document.getElementById("fr-nf-b").innerHTML = svg(V, tornNotebook(), "Not found: a page torn out of the notebook", 40, 580);
+  });
+})();
+</script>
