@@ -17,6 +17,11 @@
       <div><h3>Adding a card</h3><figure id="box-add" class="fx"></figure><p class="note"><b>A blank card at the back.</b> It stands behind Z, taller than the tabs, with a "+ ADD A CARD" tape along its top. Shown as it looks when pointed at. Click it and it lands on the ledge, ready to write on.</p></div>
     </div>
 
+    <h3>A new card from the notebook</h3>
+    <figure id="box-new" class="fx"></figure>
+    <p class="note"><b>Straight from the stamp.</b> Clicking "ADD TO RECIPE BOX" on a trial's page opens the box with the new card on the ledge, open for editing. There is no dialog first. Everything is filled in from the trial: ingredients, steps, the photo and where it came from. The title starts as the recipe's name and can be changed. <b>Save card</b> puts it in the box under its letter; <b>Cancel</b> leaves the box as it was.</p>
+    <p class="note"><b>Save as a new recipe</b> (from the replace dialog) opens this same card, but with the title selected so the cook names it first. Not drawn.</p>
+
     <h3>The card, full screen</h3>
     <figure id="box-full" class="fx"></figure>
     <p class="note"><b>For cooking from.</b> The card covers the whole screen: no kitchen, no find bar. Large writing you can read from across the counter. The source sits next to the title, the photo on the right and the notes box at the bottom. The red X, top right, goes back to the open box with this card still on the ledge.</p>
@@ -62,6 +67,12 @@
     ing: ["2¼ cups plain flour", "1 tsp soda, 1 tsp salt", "1 cup butter, softened", "¾ cup sugar", "¾ cup brown sugar", "2 eggs, 2 tsp vanilla", "2 cups chocolate chips"],
     steps: ["Heat the oven to 190°C.", "Whisk flour, soda and salt.", "Cream butter and sugars.", "Beat in eggs and vanilla.", "Stir in flour, then chips.", "Bake 9 to 11 min."] };
 
+  var CROIS = { t: "Croissants", meta: "Prep 2 days · Bake 18 min · Makes 12", src: "From: my notebook, trial 4 (11/11/26)", notes: [],
+    ing: ["500 g strong flour", "10 g salt", "55 g sugar", "10 g instant yeast", "140 ml cold milk", "140 ml cold water", "280 g butter to laminate"],
+    steps: ["Mix the dough. Chill overnight.", "Lock in the butter.", "3 letter folds, 2 h rest each.", "Roll out, cut, shape 12.", "Proof 2 h at 24°C.", "Bake 18 min at 200°C."] };
+  /* edit mode: a faint dashed field outline */
+  function fld(x, y, w, h) { return '<rect x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="3" style="fill:none;stroke:var(--ink-soft);stroke-width:1;stroke-dasharray:4 3;opacity:.55"/>'; }
+
   /* ---- small icons ---- */
   function btn(cx, cy, r, inner) { return inner; }
   function pencil(cx, cy) { return btn(cx, cy, 15, '<g transform="rotate(-45 ' + cx + " " + cy + ')">' + R(cx - 9, cy - 3.5, 14, 7, "var(--yellow)", 1.4, 1) + reg("path", 'd="M' + (cx + 5) + " " + (cy - 3.5) + " l6 3.5 l-6 3.5 Z" + '"', "var(--custard)", 1.4) + "</g>"); }
@@ -84,22 +95,28 @@
     if (o.limit) return s + limitCard();
     var tw = rc.t.length * (rc.t.length > 12 ? 12.6 : 14);
     s += T(x0 + 18, top + 38, rc.t, H(rc.t.length > 12 ? 30 : 34, 700)) + T(x0 + 18, top + 63, rc.src, H(18, 600, SOFT)) + T(x0 + 18, top + 88, rc.meta, H(18, 600, SOFT));
+    if (o.edit) s += '<rect x="' + (x0 + 10) + '" y="' + (top + 8) + '" width="' + (tw + 20) + '" height="40" rx="4" style="fill:none;stroke:var(--blue);stroke-width:1.8;opacity:.6"/>' +
+      line("M" + (x0 + 14 + tw) + " " + (top + 14) + " v30", 2, 1);
     if (rc.starter) s += pill(x1 - 136, CB - 44, 122, "Make it mine", true) + tapeLabel(x0 + 80, top + 2, "starter", -3);
-    else s += edIcons(x0 + 34 + tw, top + 28);
+    else if (!o.edit) s += edIcons(x0 + 34 + tw, top + 28);
     s += line("M" + (x0 + 1) + " " + (top + 100) + " H" + (x1 - 1), 1.8, 0.85, "var(--orange-text)") + T(x0 + 18, top + 124, "INGREDIENTS", LB(13)) + T(868, top + 124, "DIRECTIONS", LB(13));
     var r0 = top + 148, n = Math.max(rc.ing.length, rc.steps.length);
     for (var i = 0; i < n; i++) { var y = r0 + i * 22;
       s += line("M" + (x0 + 1) + " " + (y + 5) + " H" + (x1 - 1), 1.2, 1, RULE);
+      if (o.edit && rc.ing[i]) s += fld(x0 + 12, y - 16, 838 - x0, 18);
+      if (o.edit && rc.steps[i]) s += fld(862, y - 16, x1 - 870, 18);
       if (rc.ing[i]) s += T(x0 + 18, y, rc.ing[i], H(19));
       if (rc.steps[i]) s += T(868, y, (i + 1) + ". " + rc.steps[i], H(19)); }
     s += line("M856 " + (top + 108) + " V" + (r0 + n * 22 - 14), 1.2, 1, RULE);
-    if (!rc.starter) s += notes(x0 + 12, CB - 52, x1 - x0 - 24, 44, 17, rc.notes);
+    if (o.edit) s += notes(x0 + 12, CB - 52, x1 - x0 - 222, 44, 17, []) + T(x0 + 76, CB - 25, "Add a note…", H(17, 600, SOFT)) +
+      pill(x1 - 200, CB - 47, 104, "Save card", true) + pill(x1 - 88, CB - 47, 76, "Cancel");
+    else if (!rc.starter) s += notes(x0 + 12, CB - 52, x1 - x0 - 24, 44, 17, rc.notes);
     return s + photo(x1 - 128, top + 12, 108, 80, 3);
   }
   /* Notes: a small handwritten box at the foot of the card; it scrolls inside itself (max 280 characters). */
   function notes(x, y, w, h, fs, lines) { var s = R(x, y, w, h, "var(--card)", 1.4, 3) + T(x + 10, y + 16, "NOTES", LB(11)), body = "";
     (lines || []).forEach(function (t, k) { body += T(x + 64, y + fs + k * (fs + 1), t, H(fs)); });
-    return s + clipTo(x + 60, y + 2, x + w - 14, y + h - 2, body) + R(x + w - 10, y + 5, 5, h - 10, "var(--rule)", 0.8, 2.5) + R(x + w - 10, y + 5, 5, (h - 10) * 0.55, SOFT, 0.8, 2.5); }
+    return s + clipTo(x + 60, y + 2, x + w - 14, y + h - 2, body) + ((lines || []).length < 3 ? "" : R(x + w - 10, y + 5, 5, h - 10, "var(--rule)", 0.8, 2.5) + R(x + w - 10, y + 5, 5, (h - 10) * 0.55, SOFT, 0.8, 2.5)); }
   var BLIST = ["Babka", "Baguette", "Baklava", "Banana bread", "Bara brith", "Battenberg", "Bear claws", "Beignets", "Biscotti", "Blondies", "Blueberry muffins", "Bostock", "Brioche", "Brown butter cookies", "Buttermilk scones"];
   function listCard(L) {
     var s = T(CX0 + 22, CT + 48, L, "font:700 44px var(--font-label);fill:var(--ink)") + T(CX0 + 62, CT + 44, BLIST.length + " cards", H(22, 600, SOFT)) +
@@ -180,6 +197,7 @@
     g("box-letter").innerHTML = openOver(box(BLOND, { letter: "B" }), "The lid card listing the fifteen B titles in two columns, scrolling");
     g("box-next").innerHTML = small(box(SCONE, { pos: "B · 15 of 15", pos2: "C next  ›" }), "The last B card, with the tag saying C is next", 560, 70, 700, 420);
     g("box-add").innerHTML = small(box(BLOND, { glowA: 1 }), "A blank Add a card card standing at the back of the box", 360, 76, 1080, 684);
+    g("box-new").innerHTML = openOver(box(CROIS, { edit: 1, pos: "C · new" }), "A new Croissants card on the ledge, filled from trial 4 and open for editing, with Save card and Cancel");
     g("box-full").innerHTML = svg(mainVP(), fullCard(), "The Blondies card covering the whole screen, with some lines ticked");
     g("box-guest").innerHTML = openOver(box(COOK, { guest: 1, pos: "C · 1 of 3" }), "Guest box: a starter card with Make it mine, and a slip saying 2 of 5 cards used", { plan: "guest" });
     g("box-limit").innerHTML = openOver(box(BLOND, { limit: 1, guest: 1 }), "Guest at the limit: the ledge card says all 5 guest cards are used, with Sign up", { plan: "guest" });
