@@ -43,7 +43,7 @@ One view at a time, reviewed as it lands, not all at the end.
 | 6 | Cookbooks | 04-cookbooks | done (Ari 11/13, v20) |
 | 7 | References | 05-references | tweaking (answers 11/14) |
 | 8 | Sign in and sign up | 09-start | tweaking (answers 11/14) |
-| 9 | Account menu and settings | 11-account | waiting on Ari (v21) |
+| 9 | Account menu and settings | 11-account | tweaking (answers 11/14: draw username/password change) |
 | 10 | Front page and not-found | 12-front | tweaking (answers 11/14: front A, not found A) |
 
 Statuses: not started → drawing → waiting on Ari → tweaking → done.
@@ -171,6 +171,7 @@ Changes the app needs that came out of the plates. Each becomes one Task issue.
 - Kitchen home as drawn (port Plate XI to React components)
 - Every open view as drawn
 - Sign in and sign up as drawn; Account menu; front page; not-found page
+- Auth review: change username and password from Settings (drawn in Plate X, Ari 2026-11-14), plus password reset and session rules
 
 ---
 
