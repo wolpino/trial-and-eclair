@@ -1,4 +1,4 @@
-# NEXT — 2026-11-13 (Plate X: every view drawn; 05, 09, 11, 12 waiting on Ari)
+# NEXT — 2026-11-14 (Plate X: every view drawn; 11/14 answers drawn in v23; 05, 09, 11, 12 waiting on sign-off)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,12 +10,12 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate X, an extra round, drawn one view at a time; Plate XI is the final) → phone layout → mark → brand sheet → Task issues → build
 ```
 
-## Prompt for the next agent (Plate X, after Ari answers the v22 questions)
+## Prompt for the next agent (Plate X, after Ari answers the v23 questions)
 > Kitchen Plate X, settling the last four views: references (05), sign in (09), account (11), front page and not found (12). Read `docs/design/PLAN.md` ("How we work", status table, Later and Details lists), the `kitchen-layout` memory (bottom entries), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes. Branch `docs/plate-x-cookbooks` (PR wolpino/trial-and-eclair#172) until merged, then branch from `staging-render`.
 >
-> Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt (version 22). Republish: `cd design/plate-x && node build.cjs`, then `tail -n +2 dist/index.html | sed '$d' > dist/kitchen-plate-x.html`, publish with `url` set to that link.
+> Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt (version 23). Republish: `cd design/plate-x && node build.cjs`, then `tail -n +2 dist/index.html | sed '$d' > dist/kitchen-plate-x.html`, publish with `url` set to that link.
 >
-> The 15 open questions are at the top of the page (`sections/00-questions.html`). Record Ari's answers in the memory, send tweaks to one subagent per section (up to 3 at once), check screenshots, republish, take answered questions off the list. When all four are signed off, Plate X is done: start Plate XI (final, picks only, plus the Details list).
+> The open questions (5 in v23) are at the top of the page (`sections/00-questions.html`). Record Ari's answers in the memory, send tweaks to one subagent per section (up to 3 at once), check screenshots, republish, take answered questions off the list. When all four are signed off, Plate X is done: start Plate XI (final, picks only, plus the Details list).
 
 ## Prompt for the next agent (Plate X references, after Ari looks at version 20) — done 2026-11-13
 > Kitchen Plate X, next view: references (section 05). Read `docs/design/PLAN.md` ("How we work", status table, "References" checklist, Details and Later lists), the `kitchen-layout` memory (bottom entries), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes. Work on branch `docs/plate-x-cookbooks` (PR wolpino/trial-and-eclair#172) until it is merged, then branch from `staging-render`.

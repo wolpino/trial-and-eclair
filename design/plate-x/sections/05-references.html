@@ -3,7 +3,7 @@
   <div class="sec-body">
     <h3>The references, opened</h3>
     <figure id="ref-open"></figure>
-    <p class="note"><b>Her research shelf.</b> Clicking the lower tier of the kitchen shelf (under Cookbooks) opens it large over the dimmed kitchen. It holds what she reads and uses, not her own recipes: a cookbook she owns, a pastry chef, a blog, an article, a tool. Each reference is a card standing on the shelf, <b>newest first</b> from the left, with the date it was added at the foot.</p>
+    <p class="note"><b>Her research shelf.</b> Clicking the lower tier of the kitchen shelf (under Cookbooks) opens it large over the dimmed kitchen. It holds what she reads and uses, not her own recipes: a cookbook she owns, a pastry chef, a blog, an article, a tool. Each reference is a card standing on the shelf, <b>newest first</b> from the left, with the date it was added at the foot. <b>More than fit:</b> the row scrolls sideways. The last card is cut off at the right edge, and plain round arrows at both ends of the shelf move the row, the same arrows as the recipe box and notebook. No kind filters.</p>
     <p class="note"><b>Five kind stamps.</b> Each card carries a printed stamp at the top, one shape and colour per kind: Cookbook (blue, square corners), Blog (amber, round ends), Chef / Baker (orange, cut corners), Article (cinnamon, double line) and Tool (green, notched ends). The title on the card is in her hand, because she wrote it. A blank card lies on the desk, so she can add a reference by typing straight away.</p>
     <h3>One reference pulled out</h3>
     <figure id="ref-one"></figure>
@@ -13,8 +13,10 @@
     <p class="note"><b>Edit.</b> Every part becomes a line to write on. The kind is one of five chips, Article included. "Link to an idea or recipe" finds one by name as she types. Link and notes can be left empty.</p>
     <h3>After "Remove samples": the starters stay</h3>
     <figure id="ref-starters"></figure>
-    <p class="note"><b>Starter references.</b> Every kitchen gets two starter references (here a pan size converter and an article on gluten). They are printed, not handwritten, and marked STARTER at the foot. Removing the sample data from Account takes away the sample references only; the starters stay, after anything she added herself. A new kitchen that signed up without samples looks the same. A starter has no Edit; a signed-in cook can hide one from her own shelf.</p>
-    <p class="note"><b>Who can do what.</b> References are free. A home cook gets exactly the shelf drawn here, the same as a developer, so there is no home cook drawing and no paid tag. A guest is the same too: she can add, edit and delete her own references. The one difference: a guest cannot hide a starter reference (decision 002: guests can't remove starters).</p>
+    <p class="note"><b>Starter references.</b> Every kitchen gets two starter references (here a pan size converter and an article on gluten). They are printed, not handwritten, and marked STARTER at the foot. Removing the sample data from Account takes away the sample references only; the starters stay, after anything she added herself. A new kitchen that signed up without samples looks the same. Pulled out, a starter shows a short printed About, an empty Notes and the link. A signed-in cook (developer or home cook) sees Edit and Delete by its title, the same as her own cards.</p>
+    <div style="max-width:620px;display:grid;gap:6px"><h3>A guest's starter card</h3><figure id="ref-guest"></figure></div>
+    <p class="note"><b>Guest: Hide.</b> A guest sees only "Hide" by a starter's title, no Edit or Delete. Hide takes it off her shelf.</p>
+    <p class="note"><b>Who can do what.</b> References are free. A home cook gets exactly the shelf drawn here, the same as a developer, so there is no home cook drawing and no paid tag. A guest is the same too: she can add, edit and delete her own references. The one difference is the starters: a guest can only hide one, where a signed-in cook can edit or delete it.</p>
   </div>
 </section>
 <script>
@@ -26,8 +28,8 @@
   var ORDER = ["c", "b", "h", "a", "t"];
   /* newest first; "s" = starter (printed, no date) */
   var ITEMS = [["a", "Cold butter,|warm room", "11/12/26"], ["c", "Laminated|Dough", "11/11/26"], ["h", "Chef|Nell", "11/09/26"], ["b", "The|Proofing|Drawer", "11/05/26"],
-    ["t", "Baker's %|calculator", "10/28/26"], ["t", "Pan size|converter", "s"], ["a", "How gluten|works", "s"]];
-  var MINE = [["b", "Sunday|Crumb", "11/13/26"]].concat(ITEMS.slice(5));
+    ["t", "Baker's %|calculator", "10/28/26"], ["c", "The Butter|Book", "10/20/26"], ["b", "Flour|Notes", "10/14/26"], ["t", "Pan size|converter", "s"], ["a", "How gluten|works", "s"]];
+  var MINE = [["b", "Sunday|Crumb", "11/13/26"]].concat(ITEMS.slice(7));
   function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 0) + '"', fill, sw || 2); }
   function U(x, y, t, sz, ex, col, w) { return T(x, y, t, "font:" + (w || 600) + " " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"), ex || ""); }
   function tint(k, p) { return "color-mix(in srgb, " + KIND[k][1] + " " + (p || 34) + "%, var(--card))"; }
@@ -50,10 +52,12 @@
     return s; }
   function shelf(items, mode) {
     var W = S.x1 - S.x0, s = recess(S.x0, S.y0, S.x1, FLOOR, 90, "var(--cab-deep)", { side: "var(--cab-side)", bottom: "var(--wood-hi)" }) + hatch(S.x0, S.y0, W, 12);
-    var last = ""; items.forEach(function (it, i) { var x = 478 + i * (CW + 10), c = card(it, x, i), h = 178 - (i % 3) * 6;
+    var many = items.length > 7, X0 = many ? 518 : 478, last = ""; items.forEach(function (it, i) { var x = X0 + i * (CW + 10), c = card(it, x, i), h = 178 - (i % 3) * 6;
       if (i === 1 && mode === "open") c = hot("the reference Laminated Dough", c, [x, FLOOR - h, CW, h], S.x0 + 2).replace('class="hot', 'class="hot on');
-      if (i === 1 && (mode === "one" || mode === "edit")) c = '<rect x="' + x + '" y="' + (FLOOR - h) + '" width="' + CW + '" height="' + h + '" rx="2" style="fill:none;stroke:var(--card);stroke-width:1.6;stroke-dasharray:6 5;opacity:.8"/>';
+      if (i === 1 && (mode !== "open")) c = '<rect x="' + x + '" y="' + (FLOOR - h) + '" width="' + CW + '" height="' + h + '" rx="2" style="fill:none;stroke:var(--card);stroke-width:1.6;stroke-dasharray:6 5;opacity:.8"/>';
       if (i === 1 && mode === "open") last = c; else s += c; }); s += last;
+    /* more cards than fit: the row scrolls sideways; plain round arrows at both ends, as in the recipe box */
+    if (many) s += arrowBtn(S.x0 + 34, 250, -1) + arrowBtn(S.x1 - 34, 250, 1);
     s += R(S.x0, FLOOR, W, 26, "var(--wood)", 2.6) + grain(S.x0, FLOOR + 2, W, 22, 31) + tapeLbl(S.cx, FLOOR + 13, "REFERENCES");
     return clipTo(S.x0, S.y0, S.x1, FLOOR + 26, s); }
   function tapeLbl(cx, cy, text) { var len = text.length * 13 + 34, x0 = cx - len / 2, x1 = cx + len / 2, y0 = cy - 11, p = [], j;
@@ -102,6 +106,16 @@
   function addCard() { var x = 500, y = 398, L = x + 26;
     return paper(x, y, 430, 290, -1, T(L, y + 28, "NEW REFERENCE", LAB) + fld(L, y + 46, 378, "TITLE", "Title of the book, blog, chef, article or tool", 20, true, true) +
       T(L, y + 112, "KIND", LAB) + chips(L, y + 120, "c") + fld(L, y + 204, 220, "LINK (OPTIONAL)", "", 22) + pill(x + 286, y + 234, 120, "Add to shelf", true)); }
+  function arrowBtn(cx, cy, dir) { return '<g role="button" tabindex="0" aria-label="' + (dir < 0 ? "Earlier" : "Later") + ' references">' + reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="23"', "var(--card)", 2.2) + line("M" + (cx - 4 * dir) + " " + (cy - 10) + " l" + (10 * dir) + " 10 l" + (-10 * dir) + " 10", 3.4) + "</g>"; }
+  /* a starter pulled out: printed, no notes of hers yet; words = the plain words by the title */
+  function starterCard(words) { var x = 500, y = 394, L = x + 28, Rx = x + 428, s = line("M" + (x + 404) + " " + (y + 70) + " V" + (y + 292), 1.2, 0.5) + line("M" + x + " " + (y + 62) + " H" + (x + 800), 1.4, 1, "#e3a59a");
+    for (var ly = y + 232; ly < y + 300; ly += 30) s += line("M" + (x + 416) + " " + ly + " H" + (x + 788), 1, 1, "#c3d2ec");
+    s += T(L, y + 20, "PULLED FROM THE SHELF", LAB) + U(L, y + 52, "Pan size converter", 30);
+    words.forEach(function (w, i) { s += word(L + 290 + i * 42, y + 50, w); });
+    s += stamp(L + 30, y + 92, "t", -2) + T(L + 74, y + 97, "STARTER", LAB) + U(L + 144, y + 97, "in every kitchen", 14, "", SOFT, 500);
+    s += T(L, y + 142, "LINK", LAB) + U(L, y + 168, "example.com/pan-sizes", 17, "", "var(--ink)", 400) + line("M" + L + " " + (y + 173) + " h190", 1, 0.7) + pill(L, y + 186, 116, "Open link", true) + pill(L, y + 258, 140, "Back on shelf");
+    s += T(Rx, y + 92, "ABOUT", LAB) + U(Rx, y + 122, "Scale a recipe from one pan to another:", 17, "", "var(--ink)", 400) + U(Rx, y + 148, "round, square or loaf, by area.", 17, "", "var(--ink)", 400) + T(Rx, y + 204, "NOTES", LAB);
+    return paper(x, y, 800, 312, -0.8, s); }
   /* a printed slip taped to the desk */
   function slip(x, y, w, lines) { var s = R(x, y, w, lines.length * 24 + 22, "var(--page)", 1.8);
     lines.forEach(function (t, i) { s += U(x + 16, y + 30 + i * 24, t, 16, "", "var(--ink)", 500); });
@@ -111,18 +125,20 @@
   /* mode: "open" | "one" | "edit" | "starters" */
   function view(mode) {
     var x0 = S.x0, W = S.x1 - x0, dy = FLOOR + 26, s = R(x0, dy, W, S.y1 - dy, "var(--wood-hi)", 2.4) + grain(x0 + 10, dy + 20, W - 20, 150, 31) + grain(x0 + 40, dy + 170, W - 60, 160, 32) + hatch(x0 + 2, dy + 1, W - 4, 10, 0.8);
-    s += shelf(mode === "starters" ? MINE : ITEMS, mode);
+    var st = mode === "starters" || mode === "guest";
+    s += shelf(st ? MINE : ITEMS, st ? "starters" : mode);
+    if (st) return s + starterCard(mode === "guest" ? ["Hide"] : ["Edit", "Delete"]);
     if (mode === "one" || mode === "edit") return s + refCard(mode === "edit");
     s += addCard() + pencil(1090, 660, -14);
-    return s + (mode === "starters" ? slip(1010, 430, 260, ["Sample data removed.", "Starter references stay.", "Hide one from its card."])
-      : slip(1010, 430, 290, ["Newest first.", "Click a card to pull it out."]));
+    return s + slip(1010, 430, 290, ["Newest first.", "Click a card to pull it out."]);
   }
   PLATE.add(function () {
     function put(id, h) { document.getElementById(id).innerHTML = h; }
-    put("ref-open", openOver(view("open"), "The reference shelf open over the dimmed kitchen: seven cards, newest first, each with a kind stamp; one card pointed at"));
+    put("ref-open", openOver(view("open"), "The reference shelf open over the dimmed kitchen: cards newest first, each with a kind stamp, the row running off the right edge with round arrows at both ends; one card pointed at"));
     put("ref-one", openOver(view("one"), "One reference pulled out as a card on the desk"));
     put("ref-edit", openOver(view("edit"), "The reference card in edit mode with five kind chips"));
-    put("ref-starters", openOver(view("starters"), "The shelf after sample data is removed: her own card and the two starter references"));
+    put("ref-starters", openOver(view("starters"), "The shelf after sample data is removed: her own card and the two starters, one starter pulled out with Edit and Delete"));
+    put("ref-guest", svg([S.x0, S.x1], view("guest"), "A guest's starter card on the desk with only Hide by the title", 380, 342));
   });
 })();
 </script>

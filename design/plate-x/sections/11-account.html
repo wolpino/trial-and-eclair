@@ -15,7 +15,11 @@
 
     <h3>Settings, over the kitchen</h3>
     <figure id="acct-settings" class="fx"></figure>
-    <p class="note"><b>Only what the app really has.</b> Settings opens like every other view, over the dimmed kitchen with Close at the top. Three parts: the username she signs in with (shown, not editable: the app cannot change it today), the plan, and sample data. <b>Sample data</b> explains where the samples came from and has one button, Remove sample data, which takes them all out in one go. For a home cook the plan reads "Home cook, free" and the paid tools are named as a plain line. A guest has no Settings.</p>
+    <p class="note"><b>Only what the app really has.</b> Settings opens like every other view, over the dimmed kitchen with Close at the top. Four parts: the username she signs in with, with Change beside it (it turns into an edit field with Save and Cancel); her password, with Change password; the plan; and sample data. Changing the username and password is design only for now: the app work comes later, in an auth review. <b>Sample data</b> explains where the samples came from and has one button, Remove sample data, which takes them all out in one go. For a home cook the plan reads "Home cook, free" and the paid tools are named as a plain line. A guest has no Settings.</p>
+
+    <h3>Change password</h3>
+    <figure id="acct-password" class="fx"></figure>
+    <p class="note"><b>A plain form over Settings.</b> Change password opens a small dialog over the dimmed Settings sheet, like the remove confirm. Current password, then the new one twice, with one line on what a password needs. Cancel goes back; Save changes it and keeps her signed in. A guest has no password and no Settings.</p>
 
     <h3>Remove sample data: the confirm</h3>
     <figure id="acct-remove" class="fx"></figure>
@@ -57,23 +61,41 @@
   function kitchenWith(plan) { var V = mainVP(); return scene(V, opts({ plan: plan })) + menu(plan); }
 
   /* ===== Settings, a typeset sheet over the dimmed kitchen ===== */
-  var X0 = 600, X1 = 1200, Y0 = 104, Y1 = 700;
-  function settings(plan) {
-    var s = hatch(X0 + 8, Y0 + 8, X1 - X0, Y1 - Y0, 0.45) + R(X0, Y0, X1 - X0, Y1 - Y0, "var(--card)", 2.4, 8), x = X0 + 44, dev = plan === "dev";
-    s += T(x, Y0 + 62, "Settings", "font:400 34px var(--font-display);fill:var(--ink)");
+  var X0 = 600, X1 = 1200, Y0 = 92, Y1 = 714;
+  function settings(plan, bare) {
+    var s = hatch(X0 + 8, Y0 + 8, X1 - X0, Y1 - Y0, 0.45) + R(X0, Y0, X1 - X0, Y1 - Y0, "var(--card)", 2.4, 8), x = X0 + 44, dev = plan === "dev", y = Y0 + 78;
+    s += T(x, Y0 + 56, "Settings", "font:400 34px var(--font-display);fill:var(--ink)");
     function rule(y) { return line("M" + x + " " + y + " H" + (X1 - 44), 1.4, 0.5); }
-    s += rule(Y0 + 88);
-    s += L(x, Y0 + 122, "USERNAME") + U(x, Y0 + 154, USER, 22, 600) + U(x, Y0 + 180, "You sign in with this.", 15, 500, SOFT);
-    s += rule(Y0 + 204);
-    s += L(x, Y0 + 238, "PLAN");
-    if (dev) s += U(x, Y0 + 270, "Developer", 22, 600) + U(x, Y0 + 296, "Every part of the kitchen.", 15, 500, SOFT);
-    else s += U(x, Y0 + 270, "Home cook, free", 22, 600) + lines(x, Y0 + 296, ["The recipe box, whiteboard and references are yours.", "The notebook, idea board and cookbooks are the paid plan;", "you can open their samples to read."], 15, 21, SOFT);
-    var sy = dev ? Y0 + 320 : Y0 + 362;
-    s += rule(sy);
-    s += L(x, sy + 34, "SAMPLE DATA");
-    s += lines(x, sy + 66, dev ? ["Your kitchen started with sample recipes, ideas, a", "cookbook and box cards, to show how things work."] : ["Your recipe box started with a few sample cards,", "to show how it works."], 17, 24);
-    s += btn(x, sy + 106, 220, "Remove sample data");
-    s += U(x, sy + 172, "Starter references on your shelf always stay.", 15, 500, SOFT);
+    s += rule(y);
+    if (bare) return s; /* behind a dialog: only the sheet and its heading, so no text peeks out */
+    s += L(x, y + 30, "USERNAME") + U(x, y + 60, USER, 22, 600) + U(x, y + 84, "You sign in with this.", 15, 500, SOFT) + pill(X1 - 144, y + 38, 100, "Change");
+    y += 104; s += rule(y);
+    s += L(x, y + 30, "PASSWORD") + U(x, y + 62, "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022", 20, 700) + pill(X1 - 214, y + 38, 170, "Change password");
+    y += 82; s += rule(y);
+    s += L(x, y + 30, "PLAN");
+    if (dev) s += U(x, y + 60, "Developer", 22, 600) + U(x, y + 84, "Every part of the kitchen.", 15, 500, SOFT);
+    else s += U(x, y + 60, "Home cook, free", 22, 600) + lines(x, y + 84, ["The recipe box, whiteboard and references are yours.", "The notebook, idea board and cookbooks are the paid plan;", "you can open their samples to read."], 15, 21, SOFT);
+    y += dev ? 104 : 146; s += rule(y);
+    s += L(x, y + 30, "SAMPLE DATA");
+    s += lines(x, y + 60, dev ? ["Your kitchen started with sample recipes, ideas, a", "cookbook and box cards, to show how things work."] : ["Your recipe box started with a few sample cards,", "to show how it works."], 17, 24);
+    s += btn(x, y + 100, 220, "Remove sample data");
+    s += U(x, y + 164, "Starter references on your shelf always stay.", 15, 500, SOFT);
+    return s;
+  }
+  function dimSheet() { return '<rect x="' + X0 + '" y="' + Y0 + '" width="' + (X1 - X0) + '" height="' + (Y1 - Y0) + '" rx="8" style="fill:#1f1d1a;opacity:.32"/>'; }
+  /* ===== Change password: a plain form over Settings ===== */
+  function passwordBox() {
+    var x0 = 640, x1 = 1160, h = 430, y0 = Y0 + 92, x = x0 + 34, fw = x1 - x0 - 68, s = dimSheet();
+    s += hatch(x0 + 8, y0 + 8, x1 - x0, h, 0.6) + R(x0, y0, x1 - x0, h, "var(--card)", 2.6, 8);
+    s += T(x, y0 + 50, "Change password", "font:400 28px var(--font-display);fill:var(--ink)");
+    ["Current password", "New password", "New password again"].forEach(function (t, i) {
+      var fy = y0 + 84 + i * 84;
+      s += U(x, fy, t, 16, 600) + R(x, fy + 10, fw, 40, "var(--page)", 1.8, 4);
+      if (i === 0) s += U(x + 14, fy + 38, "\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022\u2022", 18, 700);
+      if (i === 1) s += line("M" + (x + 14) + " " + (fy + 18) + " V" + (fy + 42), 1.8);
+    });
+    s += U(x, y0 + 84 + 3 * 84 - 10, "At least 8 characters, not all numbers.", 14, 500, SOFT);
+    s += btn(x1 - 314, y0 + h - 62, 130, "Cancel") + btn(x1 - 164, y0 + h - 62, 130, "Save", "var(--yellow)");
     return s;
   }
   /* ===== The confirm dialog, over Settings ===== */
@@ -81,7 +103,7 @@
     var dev = plan === "dev", x0 = 640, x1 = 1160, x = x0 + 34, items = dev ?
       ["5 sample recipes in the notebook, with their trials", "3 sample ideas on the idea board", "the Weekend Bakes cookbook", "the sample cards in your recipe box"] :
       ["the sample cards in your recipe box"];
-    var h = dev ? 420 : 340, y0 = (Y0 + Y1 - h) / 2, y1 = y0 + h, s = '<rect x="' + X0 + '" y="' + Y0 + '" width="' + (X1 - X0) + '" height="' + (Y1 - Y0) + '" rx="8" style="fill:#1f1d1a;opacity:.32"/>';
+    var h = dev ? 420 : 340, y0 = Y0 + 92, y1 = y0 + h, s = dimSheet();
     s += hatch(x0 + 8, y0 + 8, x1 - x0, h, 0.6) + R(x0, y0, x1 - x0, h, "var(--card)", 2.6, 8);
     s += T(x, y0 + 50, "Remove all sample data?", "font:400 28px var(--font-display);fill:var(--ink)");
     s += U(x, y0 + 88, "This takes out, in one go:", 17, 600);
@@ -104,8 +126,10 @@
       document.getElementById("acct-m-" + q[0]).innerHTML = svg([1180, 1500], kitchenWith(q[0]), q[1] + " Account menu, close up", 0, 370);
     });
     document.getElementById("acct-settings").innerHTML = openOver(p === "guest" ? guestNote() : settings(p), "Settings open over the dimmed kitchen");
+    document.getElementById("acct-password").innerHTML = p === "guest" ? openOver(guestNote(), "A guest has no password to change") :
+      openOver(settings(p, true) + passwordBox(), "Change password form over Settings");
     document.getElementById("acct-remove").innerHTML = p === "guest" ? openOver(guestNote(), "A guest cannot remove sample data") :
-      openOver(settings(p) + confirmBox(p), "Remove sample data confirm dialog over Settings");
+      openOver(settings(p, true) + confirmBox(p), "Remove sample data confirm dialog over Settings");
   });
 })();
 </script>

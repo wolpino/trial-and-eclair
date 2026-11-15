@@ -17,7 +17,7 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 | **Session** | `2026-11-13` (fourth) |
 | **Project** | trial-and-eclair |
 | **Mode** | Claude Code (desktop, artifacts, 4 subagents, up to 3 at once) |
-| **Outcome** | partial (all Plate X views drawn; 05, 09, 11, 12 waiting on Ari; no app code) |
+| **Outcome** | partial (all Plate X views drawn, Ari's 11/14 answers drawn in v23; 05, 09, 11, 12 waiting on sign-off; no app code) |
 
 ### Intent
 Draw the remaining Plate X views without waiting for sign-off on each (Ari: keep going, 1–3 agents at a time).
@@ -30,19 +30,21 @@ Draw the remaining Plate X views without waiting for sign-off on each (Ari: keep
 - `12-front.html`: front page options A card over the pale kitchen (leading) / B the kitchen with callouts / C printed page; not found A recipe card on a bread board / B torn notebook page
 - 15 open questions at the top of the page (`00-questions.html`), linked to figures
 - Plate X page versions 21–22: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt
+- Ari's 11/14 answers drawn (v23): references scroll sideways, starters Edit/Delete signed in and Hide for guests; sign in card rests between notebook and box (A–D), headings Ingredients + Method (A–C); account change username/password (drawn now, auth review later); front page A with big title, no tape; not found A, plus over-the-kitchen option
+- PLAN.md: T&E is the mark and appears in the app; Later: review all starter data, theme and show forks left off; Build: auth review
 
 ### Decisions
 - None new from Ari beyond cookbooks signed off. Subagent assumptions to confirm: starter references follow decision 002 (read-only, cook can hide, guest can't); app has no username/password change, so Settings shows username only; theme and "show forks" left out of Account
 
 ### Open threads
-- Ari's answers to the 15 questions (References 4, Sign in 3, Account 4, Front page and not found 4)
+- v23 questions: starter edit = own copy?; sign-in card rest A–D; headings A–C; not found signed in; sign-off of 05, 09, 11, 12
 - Then tweak, sign off, and Plate XI (final, picks only)
 
 <!-- AGENT_CONTEXT_START -->
 **Keywords:** Plate X, references kind stamps, starter references, sign in card styles, account menu, remove sample data, front page, not found
 **Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, design/plate-x/sections/00-questions.html, 05-references.html, 09-start.html, 11-account.html, 12-front.html
 **Do not redo:** layout rounds 1–10; Plates II–IX; Plate X sections 01–04, 06, 07 (signed off); 05, 09, 11, 12 as drawn (tweak only)
-**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent (Plate X, after Ari answers the v22 questions)"
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent (Plate X, after Ari answers the v23 questions)"
 <!-- AGENT_CONTEXT_END -->
 
 ---
