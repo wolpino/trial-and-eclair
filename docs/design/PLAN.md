@@ -41,10 +41,10 @@ One view at a time, reviewed as it lands, not all at the end.
 | 4 | Trials notebook | 06-notebook | done (Ari 11/13) |
 | 5 | Idea board | 03-ideas | done (Ari 11/13) |
 | 6 | Cookbooks | 04-cookbooks | done (Ari 11/13, v20) |
-| 7 | References | 05-references | waiting on Ari (v21) |
-| 8 | Sign in and sign up | 09-start | waiting on Ari (v21) |
+| 7 | References | 05-references | tweaking (answers 11/14) |
+| 8 | Sign in and sign up | 09-start | tweaking (answers 11/14) |
 | 9 | Account menu and settings | 11-account | waiting on Ari (v21) |
-| 10 | Front page and not-found | 12-front | waiting on Ari (v22) |
+| 10 | Front page and not-found | 12-front | tweaking (answers 11/14: front A, not found A) |
 
 Statuses: not started → drawing → waiting on Ari → tweaking → done.
 
@@ -153,7 +153,7 @@ From 2026-11-13: small visual details (a colour, a spacing, a word, a size) go h
 - [ ] Phone notebook with the camera button (Plate VIII)
 
 ## 4. Mark
-- Ari (2026-11-13): the mark is "T&E", and it appears in the app (where it sits is decided when drawing the mark). The full name "Trial & Eclair" stays a title only on sign in
+- Ari (2026-11-13): the mark is "T&E", and it appears in the app (where it sits is decided when drawing the mark). The full name "Trial & Eclair" is a title on sign in and the front page (Ari, 2026-11-14: bigger on the front page)
 - [ ] Pick a mark. Already dropped: the E of eclairs, the recipe-card mark, crops of the eclair, box and notebook
 
 ## 5. Brand sheet
@@ -162,7 +162,8 @@ From 2026-11-13: small visual details (a colour, a spacing, a word, a size) go h
 ## 6. Build list (becomes Task issues)
 Changes the app needs that came out of the plates. Each becomes one Task issue.
 - Idea board: drop the 4 statuses (Researching, Testing, Ready to publish, Archived). An idea is a note; moving it to a trial archives it
-- Starter references are kept when samples are removed
+- Starter references are kept when samples are removed. Signed-in cooks can edit and delete a starter like their own; guests can only hide one (Ari, 2026-11-14)
+- Reference shelf scrolls sideways with round arrows; no kind filters
 - Sign-up asks about sample data (on by default); remove all samples in one go from Account
 - Recipe log (issue #161): lives on a clipboard inside the double cabinet under the counter
 - Whiteboard: a list the cook writes (no automatic items, no pins, no recipe-card link); tick puts a line through until the next day; a small red x after a ticked item's name removes it (Ari, 2026-11-13)
@@ -189,6 +190,8 @@ Parked. Not drawn, not built until moved up.
 - Recipe log and stains on cards (issue #161 and after)
 - Phone photo hand-off by QR code
 - Clickable things that open nothing still react a little
+- Review all the starter and sample data (recipes, ideas, references, cookbook) as one pass (Ari, 2026-11-14)
+- Account: theme switch and "show forks" left out of the drawn Account for now (Ari, 2026-11-14); the app has both today
 - Whiteboard suggestions from recent activity (automatic items, wipe, pin). Dropped from Plate X as too fussy
 
 ## Where things are
