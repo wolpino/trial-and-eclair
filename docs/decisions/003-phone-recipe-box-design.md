@@ -89,3 +89,16 @@ Each item was a choice between the options below; the chosen one is in **Decisio
 
 - The Appearance section is built (dark mode picker, Wild West, tab colours).
 - Testing on a real phone shows the staggered tabs are too small to tap (R1-AC4), or the pinned ingredient band takes too much of a short screen.
+
+## Update 2026-11-17: Phone Plate notes (Ari)
+
+Drawn in the Phone Plate (https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, `design/phone/sections/02-box.html`). Where this disagrees with the sections above, this wins.
+
+- **The box tucks away (a drawer).** By default the recipe card in the lid fills the screen. The box body slides down out of sight, leaving a short wooden strip at the bottom with an "▲ A–Z" pull. Swipe up or tap the pull to bring the tabs out (about a quarter of the screen, one row that scrolls sideways). This replaces the always-showing two staggered rows.
+- **Prev/next arrows** ‹ › sit at the card's left and right edges, as on the wide box.
+- **Add:** a small round wooden + in the bottom strip, lower right beside the A–Z pull. It replaces the floating + over the box. It opens three choices: type it in, from a web address, scan a card (words not final).
+- **Tapping a letter** lifts that tab a few px and turns it #fff7dc; tabs never grow taller. The fan rises as small index cards in the plate style, not plain chips.
+- **No box label** when the drawer is pulled out (the engraved label above is dropped on the phone).
+- **The ☰ menu** uses the body font, not the hand font.
+- **"You are here"** is a full-width yellow band with a bold tag of at least 15 px.
+- **Card View:** still open. Ari leans toward the sideways card (ingredients and steps at once) and is not against upright. Decide before the phone box Task issue.

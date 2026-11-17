@@ -215,6 +215,8 @@ Parked. Not drawn, not built until moved up.
 - Review all the starter and sample data (recipes, ideas, references, cookbook) as one pass (Ari, 2026-11-14)
 - Account: theme switch and "show forks" left out of the drawn Account for now (Ari, 2026-11-14); the app has both today
 - Whiteboard suggestions from recent activity (automatic items, wipe, pin). Dropped from Plate X as too fussy
+- Notebook shows the recipe somewhere (phone and wide kitchen), not only each trial's changes (Ari, 2026-11-17)
+- Saving rules and options: when edits save (Save button, as today, or as you type), and whether unsaved typing is kept on the device until a save goes through. Decide before the Task issues for any editing view, since it shapes every form (Ari, 2026-11-17: come back to this)
 
 ## Where things are
 - Answers so far: memory `kitchen-layout`, and `.cursor/handoffs/NEXT.md`

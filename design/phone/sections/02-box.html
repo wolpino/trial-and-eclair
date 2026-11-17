@@ -1,23 +1,18 @@
 <section id="pb-sec" aria-labelledby="h-pb">
   <span class="label" id="h-pb">02 · The recipe box on a phone</span>
   <div class="sec-body">
-    <h3>The box, retracted: three ways</h3>
-    <p class="note"><b>Ari's note on 003:</b> the open box was about half the screen with the tabs a quarter of it. Now the box is retracted by default and the lid card fills the screen. This changes decision 003 (tabs always showing). Every option has the new ‹ › arrows at the card's edges and the round wooden + above the pull (visible only in the retracted state). Top: retracted. Under each: pulled out.</p>
+    <h3>The box with a drawer</h3>
+    <p class="note"><b>The drawer is the pick (Ari, 11/17).</b> The lid card fills the screen, with ‹ › arrows at its edges for the previous and next card. A short strip of brown wood sits at the bottom with the brass "▲ A–Z" pull and a small round wooden + for a new recipe. This changes decision 003: the tabs are not always showing, and the + sits in the strip, not over the card. Swipe up or tap the pull to bring the tabs out; the tabs say what the box is, so there is no label.</p>
     <div class="pbo">
-      <div><h3>1 · Drawer</h3><figure id="pb-o1"></figure><p class="note"><b>The body slides out of sight.</b> Only a wooden lip with a brass pull "▲ A–Z" peeks up. Swipe up or tap it.</p>
-        <h3>1 · pulled out</h3><figure id="pb-o1-out" class="pbsm"></figure><p class="note">The body is about a quarter of the screen; tabs in one sideways-scrolling row.</p><p class="addr">/box/croissants</p></div>
-      <div><h3>2 · Tab strip</h3><figure id="pb-o2"></figure><p class="note"><b>One thin row of letter tabs</b> along the bottom, scrolling sideways. No box front at all.</p>
-        <h3>2 · a letter tapped</h3><figure id="pb-o2-out" class="pbsm"></figure><p class="note">Tap C and the fan rises over the lid; the + hides.</p><p class="addr">/box/croissants</p></div>
-      <div><h3>3 · Handle</h3><figure id="pb-o3"></figure><p class="note"><b>Just a small wooden tab</b> "Recipes ▲", centred at the bottom edge.</p>
-        <h3>3 · pulled up</h3><figure id="pb-o3-out" class="pbsm"></figure><p class="note">A sheet with the fan and the two staggered tab rows rises from the handle.</p><p class="addr">/box/croissants</p></div>
+      <div><h3>Tucked away</h3><figure id="pb-o1"></figure><p class="addr">/box/croissants</p></div>
+      <div><h3>Pulled out</h3><figure id="pb-o1-out"></figure><p class="addr">/box/croissants</p><p class="note">One row of short tabs scrolls sideways. The + stays in the brown strip under the tabs.</p></div>
     </div>
-    <ol class="qs"><li><b>Question for Ari:</b> Retracting box: 1, 2 or 3?</li></ol>
 
     <div class="phones">
       <div><h3>Add a recipe: the +</h3><figure id="pb-add"></figure><p class="addr">/box/croissants</p>
-        <p class="note"><b>The + opens a small menu with three choices.</b> Wording set 1 (drawn): "Type it in / From a web address / Scan a card". Wording set 2: "Write it / Paste a link / Photograph a card". Ari isn't committed to the words.</p></div>
+        <p class="note"><b>The + in the brown strip opens a small menu that rises from it, with three choices.</b> Wording set 1 (drawn): "Type it in / From a web address / Scan a card". Wording set 2: "Write it / Paste a link / Photograph a card". Ari isn't committed to the words.</p></div>
       <div><h3>Fan, with the drawer pulled out</h3><figure id="pb-fan"></figure><p class="addr">/box/croissants</p>
-        <p class="note"><b>Tab C tapped.</b> Title-only cards rise above the tabs and scroll sideways; the open tab is lifted; the lid is not dimmed and the + is hidden. Tap the tab again to close.</p></div>
+        <p class="note"><b>Tab C tapped.</b> Small index cards fan up from behind the tabs, slightly overlapping, and scroll sideways. The tabs keep their short height; the open tab lifts a few pixels and turns cream. The lid is not dimmed. Tap the tab again to close.</p></div>
       <div><h3>The ☰ menu</h3><figure id="pb-menu"></figure><p class="addr">/box/croissants</p>
         <p class="note"><b>Plain body font</b> (Ari's note: no handwriting in the menu). Sections: your name, Add recipe, View (Simple list), Sign out.</p></div>
       <div><h3>Simple list</h3><figure id="pb-simple"></figure><p class="addr">/box/croissants</p>
@@ -38,9 +33,9 @@
     </div>
   </div>
 </section>
-<style>.pbo{display:grid;gap:18px;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start}.pbo>div,.pbcv>div,.pbah>div,.pba{display:grid;gap:6px;align-content:start;min-width:0}.pbsm{max-width:62%}
+<style>.pbo{display:grid;gap:18px;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;max-width:620px}.pbo>div,.pbcv>div,.pbah>div,.pba{display:grid;gap:6px;align-content:start;min-width:0}
 .pbcv{display:grid;gap:22px;grid-template-columns:minmax(0,1fr) minmax(0,3fr);align-items:start}.pbah{display:grid;gap:18px;grid-template-columns:minmax(0,1fr) minmax(0,2fr);align-items:start}.pbcv figure,.pbo figure{border:0;background:none}
-@media(max-width:900px){.pbcv,.pbah,.pbo{grid-template-columns:minmax(0,1fr)}.pbsm{max-width:100%}}</style>
+@media(max-width:900px){.pbcv,.pbah,.pbo{grid-template-columns:minmax(0,1fr)}}</style>
 <script>
 (function () {
   var CR = { t: "Croissants", src: "From: my notebook, trial 4 (11/11/26)", meta: "Prep 2 days · Bake 18 min · Makes 12",
@@ -61,7 +56,7 @@
   function pl(x, y, w, h, t, fs) { return R(x, y, w, h, "var(--card)", 2.2, h / 2) + T(x + w / 2, y + h / 2 + fs * 0.33, t, H(fs, 700), MID); }
 
   function U(sz, w, col) { return "font:" + (w || 400) + " " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"); }
-  function plus(cx, cy) { return hatch(cx - 18, cy + 20, 40, 6, 0.5) + reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="26"', "var(--wood)", 2.6) + line("M" + (cx - 11) + " " + cy + " h22 M" + cx + " " + (cy - 11) + " v22", 4.4, 1, "#fff7dc"); }
+  function plus(cx, cy) { return reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="22"', "var(--wood-hi)", 2.6) + line("M" + (cx - 9) + " " + cy + " h18 M" + cx + " " + (cy - 9) + " v18", 4, 1, "#3c2210"); }
   function arrows(y) { return [[24, -1], [366, 1]].map(function (a) { return reg("circle", 'cx="' + a[0] + '" cy="' + y + '" r="19"', "var(--card)", 2.2) + line("M" + (a[0] - 3 * a[1]) + " " + (y - 8) + " l" + (8 * a[1]) + " 8 l" + (-8 * a[1]) + " 8", 3); }).join(""); }
   function lidCard(cb, pitch) {
     var x0 = 40, x1 = 350, top = 112, xl = 56, body = "", s = R(x0, top, x1 - x0, cb - top, "var(--page)", 2.2), y;
@@ -82,26 +77,22 @@
       T((x + TW / 2).toFixed(1), y + (front ? 29 : 31), LET[i], "font:700 21px var(--font-label);fill:var(--ink)", MID);
   }
   function stag(open, yb, yf) { var s = "", i; for (i = 1; i < LET.length; i += 2) s += tab(i, 0, 0, yb, yf); for (i = 0; i < LET.length; i += 2) s += i === open ? tab(i, 9, true, yb, yf) : tab(i, 0, 0, yb, yf); return s; }
-  function row(y, open, w) { var s = ""; w = w || 52; LET.forEach(function (c, i) { var x = 14 + i * (w + 6), t = i === open ? 9 : 0;
-    s += reg("path", 'd="M' + x + " " + (y + 90) + " V" + (y + 7 - t) + " q0 -7 7 -7 h" + (w - 14) + " q7 0 7 7 V" + (y + 90) + ' Z"', i === open ? "#fff7dc" : "var(--custard)", 2) + T(x + w / 2, y + 31 - t, c, "font:700 21px var(--font-label);fill:var(--ink)", MID); }); return s; }
+  function row(y, open, w) { var s = ""; w = w || 52; LET.forEach(function (c, i) { var x = 14 + i * (w + 6), t = i === open ? 6 : 0;
+    s += reg("path", 'd="M' + x + " " + (y + 48) + " V" + (y + 7 - t) + " q0 -7 7 -7 h" + (w - 14) + " q7 0 7 7 V" + (y + 48) + ' Z"', i === open ? "#fff7dc" : "var(--custard)", 2) + T(x + w / 2, y + 31 - t, c, "font:700 21px var(--font-label);fill:var(--ink)", MID); }); return s; }
   function chips(y) {
     var s = "";
-    C_CARDS.forEach(function (t, k) { var x = 16 + k * 134, w = t.split(" "), l1 = t, l2 = "";
+    C_CARDS.forEach(function (t, k) { var x = 14 + k * 100, w = t.split(" "), l1 = t, l2 = "", rot = [-4, 2, -2, 4, -3, 3][k % 6];
       if (t.length > 11 && w.length > 1) { l1 = w[0]; l2 = w.slice(1).join(" "); if (w.length > 2) { l1 = w[0] + " " + w[1]; l2 = w[2]; } }
-      s += hatch(x + 3, y + 62, 124, 5, 0.6) + R(x, y, 124, 62, "#fffaf0", 2.2, 5) + T(x + 62, y + (l2 ? 27 : 37), l1, "font:600 14px Georgia,serif;fill:var(--ink)", MID) + (l2 ? T(x + 62, y + 47, l2, "font:600 14px Georgia,serif;fill:var(--ink)", MID) : ""); });
+      s += '<g transform="rotate(' + rot + " " + (x + 59) + " " + (y + 104) + ')">' + hatch(x + 3, y + 3, 118, 104, 0.35) + R(x, y, 118, 106, "#fffaf0", 2.2, 3) + line("M" + (x + 1) + " " + (y + 16) + " H" + (x + 117), 1.8, 0.9, RED) +
+        line("M" + (x + 1) + " " + (y + 46) + " H" + (x + 117), 1.2, 1, RULE) + line("M" + (x + 1) + " " + (y + 70) + " H" + (x + 117), 1.2, 1, RULE) +
+        T(x + 9, y + 41, l1, H(19, 700)) + (l2 ? T(x + 9, y + 65, l2, H(19, 700)) : "") + "</g>"; });
     return s;
   }
-  function pull(cx, cy, w, t) { return R(cx - w / 2, cy - 17, w, 34, "var(--brass)", 2, 6) + T(cx, cy + 6, t, U(17, 700), MID); }
-  function lip() { return R(8, 726, 374, 140, "var(--wood)", 3, 8) + grain(14, 740, 360, 60, 3) + hatch(10, 728, 370, 5, 0.6) + pull(195, 728, 140, "▲ A–Z"); }
-  function drawerOut(open) { var y0 = 600;
-    return R(8, y0, 374, 260, "var(--blue)", 3, 8) + R(18, y0 + 14, 354, 70, "var(--blue-back)", 1.8, 4) + clipTo(19, y0 + 15, 371, y0 + 83, row(y0 + 26, open, 52)) +
-      R(8, y0 + 84, 374, 180, "var(--blue)", 3, 6) + hatch(10, y0 + 86, 370, 6, 0.7) + pull(195, y0, 140, "▼ A–Z") + brassLabel(160, 770, 230, 48, "Ari’s Recipes · est. 2026", 18) + (open == null ? plus(345, 770) : ""); }
-  function strip(open) { return R(8, 706, 374, 160, "var(--blue-back)", 3, 8) + hatch(10, 708, 370, 5, 0.6) + clipTo(9, 709, 381, 844, row(722, open, 46).replace(/M(\d+)/g, "M$1")); }
-  function handle() { return reg("path", 'd="M120 812 V772 q0 -10 10 -10 h130 q10 0 10 10 V812 Z"', "var(--wood)", 2.6) + grain(124, 770, 142, 36, 9) + T(195, 794, "Recipes ▲", U(18, 700, "#fff7dc"), MID); }
-  function sheet() { var y0 = 470;
-    return R(8, y0, 374, 400, "var(--blue)", 3, 14) + R(18, y0 + 18, 354, 206, "var(--blue-back)", 1.8, 4) + clipTo(19, y0 + 19, 371, y0 + 223, chips(y0 + 30)) + stag(2, y0 + 126, y0 + 170) +
-      R(8, y0 + 218, 374, 180, "var(--blue)", 3, 6) + hatch(10, y0 + 220, 370, 6, 0.7) + reg("path", 'd="M120 ' + (y0 + 14) + ' V' + (y0 - 22) + ' q0 -10 10 -10 h130 q10 0 10 10 V' + (y0 + 14) + ' Z"', "var(--wood)", 2.6) + T(195, y0 - 4, "Recipes ▼", U(18, 700, "#fff7dc"), MID) +
-      brassLabel(160, 770, 230, 48, "Ari’s Recipes · est. 2026", 18) + plus(345, 770); }
+  function pull(cx, cy, w, t) { return R(cx - w / 2, cy - 20, w, 40, "var(--brass)", 2, 6) + T(cx, cy + 6, t, U(17, 700), MID); }
+  function trim() { return R(8, 776, 374, 100, "var(--wood)", 3, 8) + grain(14, 790, 360, 40, 3) + hatch(10, 778, 370, 5, 0.6) + pull(195, 778, 140, "▲ A–Z").replace("▲", "▲") + plus(338, 810); }
+  function lip(down) { return trim().replace("▲ A–Z", down ? "▼ A–Z" : "▲ A–Z"); }
+  function drawerOut(open) { var y0 = 650;
+    return R(8, y0, 374, 140, "var(--blue)", 3, 8) + R(18, y0 + 12, 354, 88, "var(--blue-back)", 1.8, 4) + (open != null ? chips(590) : "") + clipTo(19, y0 + 13, 371, y0 + 99, row(y0 + 52, open, 52)) + hatch(10, y0 + 102, 370, 6, 0.6) + lip(true); }
   function menuPanel(items, x, y, w, head) {
     var s = hatch(x + 4, y + 4, w, items.length * 48 + (head ? 0 : 12), 0.45), h = head ? 400 : items.length * 48 + 12; if (head) return menuFull();
     s += R(x, y, w, h, "var(--card)", 2.6, 10);
@@ -114,7 +105,10 @@
     s += T(tx, 126, "ACCOUNT", LB(13)) + T(tx, 158, "Ari", U(24, 700)) + div(176) + T(tx, 202, "ADD RECIPE", LB(13));
     rows.forEach(function (r, i) { var y = 212 + i * 48; s += (i ? div(y) : "") + T(tx, y + 31, r, U(18, 500)) + line("M" + (x + w - 32) + " " + (y + 16) + " l8 8 l-8 8", 2.2, 0.7); });
     return s + div(356) + T(tx, 382, "VIEW", LB(13)) + T(tx, 422, "Simple list", U(18, 500)) + R(x + w - 66, 404, 46, 26, "var(--page)", 2, 13) + '<circle cx="' + (x + w - 53) + '" cy="417" r="9" style="fill:var(--ink-soft);stroke:var(--ink);stroke-width:1.4"/>' + div(444) + T(tx, 476, "Sign out", U(18, 600, "var(--orange-text)")); }
-  var L1 = function (m) { return lid(696, 626, 26, m); };
+  function addMenu() { var x = 182, y = 594, w = 200, h = 156, s = hatch(x + 4, y + 4, w, h, 0.45) + R(x, y, w, h, "var(--card)", 2.6, 10);
+    ["Type it in", "From a web address", "Scan a card"].forEach(function (t, i) { var yy = y + 6 + i * 48; s += (i ? line("M" + (x + 10) + " " + yy + " H" + (x + w - 10), 1.4, 1, "var(--rule)") : "") + T(x + 18, yy + 31, t, U(18, 600)); });
+    return s + poly("330,749 346,749 338,762", "var(--card)", 2); }
+  var L1 = function (m) { return lid(748, 700, 32, m); };
 
   /* ---------- Card View ---------- */
   function band(x, y, w, h) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="4"', "var(--yellow)", 2); }
@@ -154,15 +148,11 @@
 
   PLATE.add(function () {
     function put(id, inner, label, opt) { document.getElementById(id).innerHTML = phone(inner, label, Object.assign({ bg: "var(--paper)" }, opt || {})); }
-    put("pb-o1", L1() + plus(340, 672) + lip(), "Option 1, drawer, retracted: lid card fills the screen, a wooden lip with a brass pull A to Z at the bottom, round wooden plus above it");
-    put("pb-o1-out", L1() + drawerOut(null), "Option 1, drawer pulled out: one sideways-scrolling row of tabs");
-    put("pb-o2", L1() + plus(340, 672) + strip(null), "Option 2, tab strip: one thin row of letter tabs along the bottom");
-    put("pb-o2-out", L1() + chips(640) + strip(2), "Option 2, tab C tapped: the fan rises over the lid");
-    put("pb-o3", lid(730, 690, 30) + plus(340, 780) + handle(), "Option 3, handle: a small wooden tab Recipes at the bottom edge");
-    put("pb-o3-out", lid(730, 690, 30) + sheet(), "Option 3, sheet pulled up with the fan and two staggered rows of tabs");
-    put("pb-add", L1() + plus(340, 672) + lip() + menuPanel(["Type it in", "From a web address", "Scan a card"], 150, 480, 232), "The plus tapped: a small menu with three choices");
-    put("pb-fan", L1() + drawerOut(2).replace("", "") + chips(516), "Tab C tapped with the drawer out: title-only cards rise above the tabs");
-    put("pb-menu", L1(true) + plus(340, 672) + lip() + menuFull(), "The menu in the body font: account name, Add recipe, Simple list switch, Sign out");
+    put("pb-o1", L1() + lip(), "The box tucked away: lid card fills the screen, a short wooden strip at the bottom with a brass pull A to Z and a small round plus");
+    put("pb-o1-out", L1() + drawerOut(null), "The drawer pulled out: one sideways-scrolling row of short tabs above the wooden strip");
+    put("pb-add", L1() + lip() + addMenu(), "The plus tapped: a small menu with three choices rises from it");
+    put("pb-fan", L1() + drawerOut(2), "Tab C tapped: small index cards fan up from behind the tabs");
+    put("pb-menu", L1(true) + lip() + menuFull(), "The menu in the body font: account name, Add recipe, Simple list switch, Sign out");
     put("pb-simple", simple(), "Simple list: letter headings and recipe titles, no wood", { bg: "var(--page)" });
     put("pb-b", cvB(), "Card View B: the recipe as a landscape index card drawn sideways on the upright phone");
     put("pb-a", cvUp(), "Card View A upright: pinned ingredients band, steps scroll under, one step marked you are here", { bg: "var(--page)" });

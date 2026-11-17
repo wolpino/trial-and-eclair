@@ -25,11 +25,11 @@ function phTop(title, opt) {
     T(16, 84, "‹ Kitchen", "font:700 22px var(--font-hand);fill:var(--blue)") +
     T(374, 84, title, "font:700 26px var(--font-hand);fill:var(--ink)", 'text-anchor="end"');
 }
-/* The jot button: yellow, round, bottom right, on the kitchen and on views where it covers nothing. */
+/* The add button (was the jot pencil; Ari 11/17: a plus, like every other place you add something new).
+   Yellow, round, bottom right, on the kitchen and on views where it covers nothing. */
 function phJot(x, y) { x = x || 330; y = y || 750;
   return hatch(x - 22, y + 18, 50, 10, 0.5) + reg("circle", 'cx="' + x + '" cy="' + y + '" r="30"', "var(--yellow)", 2.6) +
-    '<g transform="rotate(45 ' + x + " " + y + ')">' + reg("path", 'd="M' + (x - 5) + " " + (y - 15) + " h10 v22 l-5 9 l-5 -9 Z\"", "var(--card)", 2.2) +
-    line("M" + (x - 5) + " " + (y + 7) + " h10 M" + (x - 5) + " " + (y - 9) + " h10", 1.8) + "</g>"; }
+    line("M" + (x - 12) + " " + y + " H" + (x + 12) + " M" + x + " " + (y - 12) + " V" + (y + 12), 4); }
 /* The web address under a phone drawing, as in Plate XI. */
 function phAddr(path) { return '<p class="addr">' + path + "</p>"; }
 document.head.insertAdjacentHTML("beforeend", "<style>.phones{display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));align-items:start}" +
