@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Phone Plate SIGNED OFF; next: the mark)
+# NEXT — 2026-11-17 (Mark Plate v1 published; waiting on Ari's pick)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,16 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ⏳ → mark → brand sheet → Task issues → build
 ```
 
-## Prompt for the next agent (Phone Plate, after Ari answers) — START HERE
+## Prompt for the next agent (Mark Plate, after Ari answers) — START HERE
+> Mark Plate v1: https://claude.ai/artifact/5baLfL52D5X1pNYCdNgS6F. Sources `design/mark/` (base copied from phone; sections 00 questions, 01 options A–F, 02 in place). Build: `cd design/mark && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/mark-plate.html`, publish to the same URL. One Sonnet subagent per section for tweaks.
+>
+> **Options:** A letterpress serif, B marker on tape, C round stamp (no ring words), D one-stem monogram, E brass label plate, F index-card tab. Claude's pick D (holds at 16 px and as an app icon); runner-up B. Both drawn in place: wide kitchen top left, phone top bar, PWA icon, favicon.
+>
+> **Questions to Ari (page top):** which mark (A–F or none yet); where it sits; ink only or one colour.
+>
+> **After the pick:** record it in PLAN.md "4. Mark" and the kitchen-layout memory, then the brand sheet (PLAN step 5).
+
+## Prompt for the next agent (Phone Plate, after Ari answers) — done 2026-11-17 (signed off v4)
 > Phone Plate v1 is published: https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy. Sources in `design/phone/` (copied base from plate-xi plus `base/phone.js`, the phone frame helper; brief `design/phone/BRIEF.md`). Build: `cd design/phone && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/phone-plate.html`, publish that file to the same URL.
 >
 > **Sections:** 00 questions (director), 01 kitchen (pk), 02 recipe box (pb), 03 notebook (pn), 04 other views (pv), 05 pages without an object (pp). One Sonnet subagent per file for tweaks.

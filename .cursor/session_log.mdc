@@ -10,6 +10,38 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-17 · Mark Plate drawn and published (v1)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-17` (third) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, 1 Sonnet subagent; low usage left) |
+| **Outcome** | success (Mark Plate v1 published; waiting on Ari's pick; no app code) |
+
+### Intent
+Draw options for the T&E mark (PLAN step 4).
+
+### Summary
+- New `design/mark/` (base copied from phone), sections 00 questions, 01 options A–F at big, top-bar, 32 and 16 px, on paper and Prussian, 02 in place (wide kitchen, phone top bar, PWA icon, favicon)
+- Mark Plate page: https://claude.ai/artifact/5baLfL52D5X1pNYCdNgS6F
+
+### Decisions
+- None from Ari yet. Claude's pick: D, one-stem monogram; runner-up B, marker on tape. C has no ring words
+
+### Open threads
+- Ari: which mark, where it sits, ink or one colour
+- Branch `docs/plate-x-cookbooks` still unpushed
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Mark Plate, T&E, monogram, favicon, app icon
+**Files:** design/mark/ (sections 00–02), docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate options as drawn (tweak only)
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt (Mark Plate, after Ari answers)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-17 · Phone Plate drawn and published (v1)
 
 | Field | Value |

@@ -168,6 +168,7 @@ Phone Plate v1 (2026-11-17): https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, 
 ## 4. Mark
 - Ari (2026-11-13): the mark is "T&E", and it appears in the app (where it sits is decided when drawing the mark). The full name "Trial & Eclair" is a title on sign in and the front page (Ari, 2026-11-14: bigger on the front page)
 - [ ] Pick a mark. Already dropped: the E of eclairs, the recipe-card mark, crops of the eclair, box and notebook
+- Mark Plate v1 (2026-11-17): six T&E options A–F, Claude's pick D (one-stem monogram). https://claude.ai/artifact/5baLfL52D5X1pNYCdNgS6F (sources `design/mark/`)
 
 ## 5. Brand sheet
 - [ ] Colours, fonts, line and halftone rules, the mark, kitchen reference from Plate XI
