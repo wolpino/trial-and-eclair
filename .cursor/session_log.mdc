@@ -10,6 +10,44 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-17 · Plate XI drawn and published (the final plate)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-17` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, 5 subagents on a cheaper model, up to 3 at once) |
+| **Outcome** | partial (Plate XI drawn and published; waiting on Ari's sign-off and two confirmations; no app code) |
+
+### Intent
+Draw Kitchen Plate XI, the final plate, from the Plate X picks, as one page with the kitchen in the middle.
+
+### Summary
+- New `design/plate-xi/` (copied from plate-x): the day kitchen in the middle with each object's open view around it, joined by thin lines (`base/xi.js` draws them from the kitchen's own hot areas; lines hide below 1100 px)
+- Row of pages with no kitchen object (front page, sign in, sign up, Account menu, Settings, not found B); evening kitchen; a home cook and guest strip (each section pushes to `XI_STRIP`); loading, error, offline and the paid plan card (new); the Details list, each line linked to its drawing
+- "More" sections 10–19 keep each view's other signed-off states; all option figures and question lists dropped
+- Details: a jar of wooden spoons replaces the sill plant; window set in a recess to the vanishing point with a deeper sill; idea board scroll bar in wood colours; cookbook cover arrow at y 388; shelf close-up has the wood trim
+- Web addresses drawn under every view (Claude's pick): `/kitchen`, `/whiteboard`, `/ideas`, `/notebook/croissants/trial-4`, `/box/croissants`, `/log`, `/cookbooks`, `/references`, `/settings`, `/sign-in`, `/sign-up`, `/`
+- Plate XI page: https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL
+
+### Decisions
+- Recipe box ring card shows Croissants (Plate X used Blondies) so it matches its address
+- Error card adds "Your work is safe." (subagent's line; Ari can cut it)
+
+### Open threads
+- Ari to confirm: web addresses; paid plan card "Switch to Developer"; sign off Plate XI
+- Front page title is 50 px, the same as sign in, as signed off in v24 (the 11/14 note asked for bigger; check with Ari only if it comes up)
+- PR: branch `docs/plate-x-cookbooks` has 11 unpushed commits since PR #173 merged; not pushed
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XI, final plate, ring layout, XI_STRIP, web addresses, paid plan card, loading error offline, details list
+**Files:** design/plate-xi/ (base/xi.js, sections/00–06 director, 10–19 views), docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–X; Plate XI as drawn (tweak only)
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent (Plate XI, after Ari answers)"
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-16 · Plate X signed off (v24); Plate XI layout set; pre-build risks listed
 
 | Field | Value |

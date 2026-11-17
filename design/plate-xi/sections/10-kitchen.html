@@ -1,0 +1,38 @@
+<section aria-labelledby="h-more-k" id="more-k">
+  <span class="label" id="h-more-k">More · Kitchen</span>
+  <div class="sec-body">
+    <h3>The recipe log cabinet: three cats, in turn</h3>
+    <div class="trio">
+      <div><figure id="mk-in-a" class="fx"></figure><p class="note"><b>Cat A.</b> A ginger tabby curled asleep in a cream mixing bowl, chin on a paw, tail wrapped round the front.</p></div>
+      <div><figure id="mk-in-b" class="fx"></figure><p class="note"><b>Cat B.</b> A grey tabby loafed on a folded tea towel, paws tucked, looking out.</p></div>
+      <div><figure id="mk-in-c" class="fx"></figure><p class="note"><b>Cat C.</b> A black and white cat curled asleep in a round bread proofing basket.</p></div>
+    </div>
+    <p class="note"><b>One cat each time.</b> The cabinet rotates between these three. Each time it opens, one of them is inside, a different one from last time. Shown close up here; at full size they sit on the cabinet floor, as in the recipe log tile above.</p>
+
+    <h3>Recently on the fridge</h3>
+    <figure id="mk-rec" class="fx" style="max-width:360px"></figure>
+    <p class="note"><b>Magnets.</b> A clean index card held by two magnets. Each name is a link; Croissants is shown as it looks when you point at it.</p>
+
+    <h3>Normal width and extra wide</h3>
+    <div style="display:grid;gap:12px"><figure id="mk-normal" class="fx" style="width:85.714%;justify-self:center"></figure><figure id="mk-wide" class="fx"></figure></div>
+    <p class="note"><b>Same scale, one above the other.</b> At normal width (top) the left edge cuts off the fridge's hinges and the right edge cuts off part of the window and the sink. From a 1680 px browser (bottom) the kitchen extends: the hinges, the whole window and the whole sink show. Nothing in the middle moves.</p>
+  </div>
+</section>
+<script>
+(function () {
+  function put(id, svp, extra, label, crop, eve) { var c = crop || [svp[0], svp[1]]; document.getElementById(id).innerHTML = svg([c[0], c[1]], scene(svp, opts(extra), eve), label, c[2], c[3]); }
+  var cats = [["a", "cat", "a ginger tabby asleep in a mixing bowl"], ["b", "catB", "a grey tabby loafed on a folded tea towel"], ["c", "catC", "a black and white cat asleep in a bread proofing basket"]];
+  PLATE.add(function () {
+    put("ring-log", VP, { logOpen: 1, inside: "cat" }, "The recipe log cabinet open: the log sheet hangs inside the left door and a cat sleeps in a bowl inside", [855, 1395, 484, 230]);
+    cats.forEach(function (v) { put("mk-in-" + v[0], VP, { logOpen: 1, inside: v[1] }, "Inside the open recipe log cabinet: " + v[2], [1080, 1290, 560, 126]); });
+    put("mk-rec", VP, { linkOn: 1 }, "Recently on an index card held by two magnets", [296, 520, 100, 210]);
+    put("mk-normal", VP, null, "The kitchen at normal width");
+    put("mk-wide", VPW, null, "The kitchen extra wide");
+  });
+  /* Home cook and guest: the same kitchen; paid tags on the notebook, idea board and cookbooks, and a Guest tag by Account */
+  XI_STRIP.push({ order: 10, title: "Kitchen, home cook", plan: "cook", draw: function () { return svg(VP, scene(VP, opts({ plan: "cook" })), "The kitchen as a home cook sees it", 0, 540); },
+    note: "The notebook, idea board and cookbooks carry a small \"paid plan\" tag. They open read-only with sample data. Nothing moves." });
+  XI_STRIP.push({ order: 11, title: "Kitchen, guest", plan: "guest", draw: function () { return svg(VP, scene(VP, opts({ plan: "guest" })), "The kitchen as a guest sees it", 0, 540); },
+    note: "The same paid tags, and a small \"Guest\" tag beside Account." });
+})();
+</script>

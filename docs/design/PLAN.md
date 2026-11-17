@@ -10,8 +10,8 @@ Written 2026-11-13. This is the one list of everything left before the build. If
 
 ## The path
 ```
-Plate X (extra round) → Plate XI (final) → phone layout → mark → brand sheet → Task issues → build
-     ⏳ next                                                                            
+Plate X ✅ → Plate XI (final) → phone layout → mark → brand sheet → Task issues → build
+                ⏳ drawn, waiting on Ari
 ```
 1. **Plate X**: draw Ari's Plate IX notes and the three missing views. Options are still allowed here.
 2. **Plate XI, the final**: no options. Ari's picks from Plate X, drawn once. The kitchen comes in day and evening; the open views are day only.
@@ -143,15 +143,15 @@ From 2026-11-13: small visual details (a colour, a spacing, a word, a size) go h
 
 ## 2. Plate XI (final)
 Layout (Ari, 2026-11-16). One page, new artifact, sources in `design/plate-xi/` copied from `design/plate-x/`. No options anywhere: picks only.
-- [ ] The day kitchen in the middle. Around it, the zoomed-in view of each object (whiteboard, idea board, notebook, recipe box, cookbooks, references, recipe log cabinet), each joined to its object by a thin line
-- [ ] A row below for views with no kitchen object: front page, sign in, sign up, Account menu and Settings, not found
-- [ ] The evening kitchen as one extra image below (evening is the kitchen only)
-- [ ] Developer version drawn. No Developer / Home cook / Guest switch at the top (Claude's pick; Ari asked "what switch": it is the three-way toggle at the top of the Plate X page). A short strip shows only where home cook and guest differ
-- [ ] Loading, error and offline states, and the "paid plan" card (see "Before Task issues")
-- [ ] Every item on the Details list
-- [ ] Picks to apply: sign-in headings A (Ingredients + Method; drop crops B and C); not found B (cookbook with a page ripped out; drop A the index card); sign-in card centred with nothing in front; front page A; everything else as signed off in Plate X v24
+- [x] The day kitchen in the middle. Around it, the zoomed-in view of each object (whiteboard, idea board, notebook, recipe box, cookbooks, references, recipe log cabinet), each joined to its object by a thin line
+- [x] A row below for views with no kitchen object: front page, sign in, sign up, Account menu and Settings, not found
+- [x] The evening kitchen as one extra image below (evening is the kitchen only)
+- [x] Developer version drawn. No Developer / Home cook / Guest switch at the top (Claude's pick; Ari asked "what switch": it is the three-way toggle at the top of the Plate X page). A short strip shows only where home cook and guest differ
+- [x] Loading, error and offline states, and the "paid plan" card (see "Before Task issues")
+- [x] Every item on the Details list (sill: a jar of wooden spoons replaces the plant; window set in a recess)
+- [x] Picks to apply: sign-in headings A (Ingredients + Method; drop crops B and C); not found B (cookbook with a page ripped out; drop A the index card); sign-in card centred with nothing in front; front page A; everything else as signed off in Plate X v24
 - [ ] "TRIAL & ECLAIR" small name becomes the T&E mark where it appears in the app, once the mark exists (step 4); leave as is in Plate XI
-- [ ] Ari signs off. Then this plate is the brand sheet reference
+- [ ] Ari signs off. Then this plate is the brand sheet reference. Drawn 2026-11-17: https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL (sources `design/plate-xi/`)
 
 ## 3. Phone layout
 - [ ] Stacked phone kitchen, jot button bottom right
@@ -172,7 +172,7 @@ Raised 2026-11-16. Ari's answers (2026-11-16) are in each line. "Claude's pick" 
 - [ ] **Web addresses** (Claude's pick, Ari to confirm): every open view, recipe, trial and cookbook gets its own address, and Back closes the open view and returns to the kitchen. Why: refresh keeps your place, links can be saved and shared, and the phone's Back button works. Cheap to do from the start, hard to add later. Write `docs/decisions/` note before Task issues
 - [ ] **Test piece**: build the kitchen plus one open view in React to check scaling (960 to 1680 px) and speed. Ari reviews it BEFORE anything is committed
 - [x] **Evening**: the kitchen only. Open views always use the day look, so nothing in use is hard to read (Ari)
-- [ ] **Loading, error and offline states**: Claude decides, in the plate style, and draws them in Plate XI (Ari). Start from: loading = the view opens at once with faint ruled lines where words will be; error = a small printed card "That didn't load. Try again"; offline = a thin printed strip under the find bar "Offline. Showing what was saved."
+- [x] **Loading, error and offline states** (drawn in Plate XI section 05): Claude decides, in the plate style, and draws them in Plate XI (Ari). Start from: loading = the view opens at once with faint ruled lines where words will be; error = a small printed card "That didn't load. Try again"; offline = a thin printed strip under the find bar "Offline. Showing what was saved."
 - [ ] **"Paid plan" tag** (Claude's pick, Ari to confirm): no payments now. Clicking the tag opens a small card naming what the Developer plan adds, with one button "Switch to Developer" that upgrades a home cook at once, free. A guest sees "Sign up" first. Draw the card in Plate XI. Real payments stay on the Later list
 - [x] **New data** (whiteboard backend, recipe log #161, starter references copy and hide, sample-data flag and removal): done during the build, each as its own Task issue, backend before the view that needs it. Nothing to do now
 

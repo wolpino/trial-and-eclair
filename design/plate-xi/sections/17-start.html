@@ -1,0 +1,83 @@
+<section aria-labelledby="h-ms" id="more-start">
+  <span class="label" id="h-ms">More · Sign in and sign up</span>
+  <div class="sec-body">
+    <h3>Where the guest link goes</h3>
+    <figure id="ms-guest" class="fx"></figure>
+    <p class="note"><b>Guests land in the kitchen.</b> "Try it as a guest" sits at the foot of both cards, on the front page too. One click opens the whole kitchen with the sample data in it, not the recipe box on its own. From there a guest can add up to 5 cards to the recipe box (decision 002).</p>
+    <p class="note"><b>Seen signed out.</b> Sign in, sign up and the front page come before anyone has a plan, so everyone sees the same cards. Each card is upright in the middle of the pale kitchen with only its hatched shadow. Its two printed headings are Ingredients (over the fields) and Method (over the button).</p>
+  </div>
+</section>
+<script>
+(function () {
+  var BODY = "var(--font-body)", SOFT = "var(--ink-soft)", MID = 'text-anchor="middle"', RULE = "#c3d2ec", V = [300, 1500], CUT = '<rect x="700" y="22" width="400" height="44" rx="22"';
+  var HEADS = [["INGREDIENTS", "METHOD"]];
+  function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 0) + '"', fill, sw || 2); }
+  function U(x, y, t, sz, w, col, ex) { return T(x, y, t, "font:" + (w || 400) + " " + sz + "px " + BODY + ";fill:" + (col || "var(--ink)"), ex || ""); }
+  function cap(x, y, t) { return T(x, y, t, "font:700 14px var(--font-label);letter-spacing:.1em;fill:" + SOFT); }
+  /* a printed link: yellow highlight and underline on point */
+  function plk(x, by, txt, fs, on, label) { var tw = txt.length * fs * 0.45;
+    return '<g class="lnk' + (on ? " on" : "") + '" tabindex="0" role="link" aria-label="Open ' + label + '"><rect class="lk-hi" x="' + (x - 4) + '" y="' + (by - fs * 0.92) + '" width="' + (tw + 8) + '" height="' + (fs * 1.25) + '" rx="3" style="fill:var(--yellow);stroke:var(--ink);stroke-width:1.2"/>' +
+      U(x, by, txt, fs, 600) + line("M" + x + " " + (by + 4) + " H" + (x + tw), 1.6, 1, "var(--blue)") + "</g>"; }
+  function ask(xm, y, q, txt, label, on) { return U(xm - 8, y, q, 17, 400, SOFT, 'text-anchor="end"') + plk(xm, y, txt, 18, on, label); }
+  /* a field: printed label above, a white box with a heavy underline. pw draws dots, on = has the caret */
+  function field(x, y, w, label, val, pw, on, hint) {
+    var s = U(x, y, label, 16, 600) + (hint ? U(x + w, y, hint, 14, 400, SOFT, 'text-anchor="end"') : "") +
+      '<rect x="' + x + '" y="' + (y + 8) + '" width="' + w + '" height="38" rx="3" style="fill:var(--page);stroke:' + (on ? "var(--ink)" : "#a9a395") + ";stroke-width:" + (on ? 2 : 1.3) + '"/>' + line("M" + (x + 1) + " " + (y + 46) + " H" + (x + w - 1), 2.6), cx;
+    if (pw) { for (var i = 0; i < val; i++) s += '<circle cx="' + (x + 18 + i * 15) + '" cy="' + (y + 27) + '" r="4.2" style="fill:var(--ink)"/>'; cx = x + 12 + val * 15; }
+    else { s += U(x + 12, y + 34, val, 19); cx = x + 16 + val.length * 9.6; }
+    return s + (on ? line("M" + cx + " " + (y + 15) + " v24", 2) : "");
+  }
+  function btn(x, y, w, t) { return R(x, y, w, 46, "var(--yellow)", 2.4, 23) + U(x + w / 2, y + 30, t, 18, 600, null, MID); }
+  function step(x, y, n) { return U(x, y, n + ".", 20, 700, "var(--orange-text)"); }
+  /* the head, set as on the front page card (section 12): the name as the title, the page name under it */
+  function head(cx, y, sub) { return T(cx, y + 70, "Trial &amp; Eclair", "font:400 50px var(--font-display);fill:var(--ink)", MID) + U(cx, y + 102, sub, 20, 600, SOFT, MID); }
+  /* the lined recipe card: orange rule under the title, blue rules below; only its hatched shadow, no tape */
+  function paper(x, y, w, h) {
+    var s = hatch(x + 10, y + h, w - 2, 9, 0.8) + hatch(x + w, y + 10, 9, h - 1, 0.8) + R(x, y, w, h, "var(--page)", 2.6, 4);
+    for (var ry = y + 154; ry < y + h - 10; ry += 34) s += line("M" + (x + 2) + " " + ry + " H" + (x + w - 2), 1.2, 1, RULE);
+    return s + line("M" + (x + 2) + " " + (y + 120) + " H" + (x + w - 2), 1.8, 0.85, "var(--orange-text)");
+  }
+  /* sign in: the front page card's place and size (x 640, y 92, 520 by 590). hd: which headings. on: the guest link glows */
+  var X = 640, W = 520;
+  function signin(hd, on) {
+    var x = X, y = 92, w = W, fx = x + 40, fw = w - 80, H = HEADS[hd || 0], xm = x + w / 2 - 12;
+    return paper(x, y, w, 590) + head(x + w / 2, y, "Sign in") + cap(fx, y + 152, H[0]) + cap(fx, y + 338, H[1]) + step(fx, y + 386, 1) +
+      field(fx, y + 180, fw, "Username", "weekendbaker", 0, 0) + field(fx, y + 258, fw, "Password", 9, 1, 1) +
+      btn(fx + 30, y + 356, fw - 30, "Sign in") + line("M" + fx + " " + (y + 446) + " H" + (fx + fw), 1.4, 0.5) +
+      ask(xm, y + 496, "New here?", "Sign up", "the sign-up page") + ask(xm, y + 540, "Just looking?", "Try it as a guest", "the kitchen as a guest", on);
+  }
+  function signup() {
+    var x = X, y = 64, w = W, fx = x + 40, fw = w - 80, hw = (fw - 20) / 2, x2 = fx + hw + 20, xm = x + w / 2 + 60;
+    var s = paper(x, y, w, 634) + head(x + w / 2, y, "Sign up") + cap(fx, y + 152, HEADS[0][0]) + field(fx, y + 180, fw, "Username", "weekendbaker", 0, 0) +
+      field(fx, y + 258, hw, "Password", 10, 1, 0, "8 or more") + field(x2, y + 258, hw, "Password again", 4, 1, 1) + cap(fx, y + 338, HEADS[0][1]);
+    /* step 1: the sample data box, ticked by default */
+    s += step(fx, y + 386, 1) + R(fx + 32, y + 366, 24, 24, "var(--page)", 2, 3) + line("M" + (fx + 37) + " " + (y + 378) + " l6 7 l11 -15", 3.2) +
+      U(fx + 68, y + 385, "Start with sample recipes", 19, 600) +
+      U(fx + 68, y + 413, "A few recipes, ideas and notes to look around.", 15, 400, SOFT) + U(fx + 68, y + 436, "Remove them later from Account, all in one go.", 15, 400, SOFT);
+    return s + step(fx, y + 492, 2) + btn(fx + 30, y + 462, fw - 30, "Sign up") + line("M" + fx + " " + (y + 532) + " H" + (fx + fw), 1.4, 0.5) +
+      ask(xm, y + 570, "Already have an account?", "Sign in", "the sign-in page") + ask(xm, y + 610, "Just looking?", "Try it as a guest", "the kitchen as a guest");
+  }
+
+  /* ---- the pale kitchen behind, as on the front page: signed out, so no find bar and no Account; not clickable ---- */
+  function still(s) { return '<g style="pointer-events:none" aria-hidden="true">' + s.replace(/tabindex="0"/g, "") + "</g>"; }
+  function pale() { var k = scene(V, opts({ plan: "guest" })), i = k.indexOf(CUT); if (i > 0) k = k.slice(0, i);
+    return still(k) + '<rect x="' + (V[0] - 20) + '" y="0" width="' + (V[1] - V[0] + 40) + '" height="764" style="fill:var(--paper);opacity:.72"/>'; }
+  function page(inner, label) { return svg(V, pale() + inner, label); }
+
+  /* ---- the guest link, close up, and where it lands ---- */
+  function guest() { var V = mainVP(), s = '<rect x="0" y="0" width="1200" height="360" style="fill:var(--plaster)"/>';
+    s += '<svg x="20" y="70" width="520" height="190" viewBox="620 528 560 205">' + pale() + signin(0, 1) + "</svg>" + R(20, 70, 520, 190, "none", 2.2);
+    s += arrow(560, 165, 680, 165) + T(620, 146, "ONE CLICK", "font:700 15px var(--font-label);letter-spacing:.1em;fill:" + SOFT, MID);
+    s += '<svg x="700" y="40" width="460" height="250" viewBox="' + V[0] + " 0 " + (V[1] - V[0]) + ' 760" preserveAspectRatio="xMidYMid slice">' + still(scene(V, opts({ plan: "guest" }))) + "</svg>" + R(700, 40, 460, 250, "none", 2.4);
+    return svg([0, 1200], s + T(700, 324, "The kitchen, as a guest", "font:400 22px var(--font-display);fill:var(--ink)") + U(30, 296, "The foot of the sign-in card", 16, 400, SOFT),
+      "The guest link at the foot of the sign-in card, and the kitchen it opens", 0, 350);
+  }
+
+  PLATE.add(function () {
+    function put(id, h) { document.getElementById(id).innerHTML = h; }
+    put("row-signin", page(signin(), "Sign in: the lined recipe card, upright in the middle of the pale kitchen"));
+    put("row-signup", page(signup(), "Sign up: the lined recipe card in the middle of the pale kitchen, with Start with sample recipes ticked"));
+    put("ms-guest", guest());
+  });
+})();
+</script>

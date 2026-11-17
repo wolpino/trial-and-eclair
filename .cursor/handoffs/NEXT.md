@@ -1,4 +1,4 @@
-# NEXT — 2026-11-16 (Plate X done; every question answered; next is drawing Plate XI)
+# NEXT — 2026-11-17 (Plate XI drawn; waiting on Ari's sign-off and two confirmations)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,18 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate X, an extra round, drawn one view at a time; Plate XI is the final) → phone layout → mark → brand sheet → Task issues → build
 ```
 
-## Prompt for the next agent (Plate XI, the final plate) — START HERE
+## Prompt for the next agent (Plate XI, after Ari answers) — START HERE
+> Plate XI is drawn and published: https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL (version 1). Sources in `design/plate-xi/` (build: `cd design/plate-xi && node build.cjs`, then `tail -n +2 dist/index.html | sed '$d' > dist/kitchen-plate-xi.html`, publish that file to the same URL).
+>
+> **Waiting on Ari:** (1) web addresses for every view (drawn under each figure; Back returns to `/kitchen`); (2) the paid plan card, "Switch to Developer", free for now (section 05); (3) sign-off of the whole plate.
+>
+> **Page layout:** `00-questions`, `01-kitchen` (ring: kitchen in the middle, views around, lines drawn by `base/xi.js`), `02-row` (front, sign in, sign up, Account, Settings, not found), `03-evening`, `04-plans` (home cook / guest strip, filled from `XI_STRIP`), `05-states`, `06-details`, then "More" sections 10–19, one per view. The director owns 00–04, 06 and `base/`; each "More" file fills its own ring or row figure.
+>
+> **Tweaks:** one subagent per file (cheaper model), brief it with `design/plate-xi/BRIEF.md` and only its file. Check screenshots, republish, commit.
+>
+> **After sign-off:** write the web addresses decision in `docs/decisions/`, then the phone layout (PLAN.md section 3), then the mark (T&E), brand sheet, the React test piece (Ari reviews before any commit), Task issues, build.
+
+## Prompt for the next agent (Plate XI, the final plate) — done 2026-11-17
 > Draw Kitchen Plate XI, the final plate. Everything is decided; do not re-ask settled questions. No app code changes.
 >
 > **Read, in this order:** `docs/design/PLAN.md` sections "2. Plate XI (final)" (the checklist IS the brief), "Before Task issues", "Details list", and the status table; then `design/plate-x/BRIEF.md`; then the bottom entries of the `kitchen-layout` memory only if something is unclear.

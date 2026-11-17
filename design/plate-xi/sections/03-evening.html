@@ -1,0 +1,15 @@
+<section aria-labelledby="h-eve" id="eve-sec">
+  <span class="label" id="h-eve">03 · The evening kitchen</span>
+  <div class="sec-body">
+    <figure id="eve-k" class="fx"></figure>
+    <p class="note"><b>Evening is the kitchen only.</b> A dark sky, the moon and stars in the window, and a warm wash from the top. A shooting star crosses the window now and then, and on a click. Every open view keeps the day look, so nothing you are using is hard to read.</p>
+  </div>
+</section>
+<script>
+(function () {
+  var fig = document.getElementById("eve-k");
+  PLATE.add(function () { fig.innerHTML = svg(VP, scene(VP, opts({ bites: 0 }), true), "The kitchen in the evening"); });
+  fig.addEventListener("click", function (e) { var w = e.target.closest && e.target.closest(".k-win"); if (!w) return;
+    w.querySelectorAll(".k-fly animateTransform, .k-fly set, .k-fly > animate").forEach(function (a) { a.beginElement(); }); });
+})();
+</script>

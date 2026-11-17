@@ -1,0 +1,96 @@
+<section aria-labelledby="h-ss" id="ss-sec">
+  <span class="label" id="h-ss">05 · Loading, error, offline, and the paid plan</span>
+  <div class="sec-body">
+    <p class="note"><b>Small states every view shares.</b> Drawn once here, used by every open view. Day look only.</p>
+
+        <div class="trio">
+      <div><h3>Loading</h3>
+        <figure id="ss-loading" class="fx"></figure>
+        <p class="note"><b>The view opens at once.</b> The page is there straight away, with faint ruled lines where the words will be. Nothing spins and nothing jumps: the words fill in on the lines when they arrive.</p></div>
+      <div><h3>Error</h3>
+        <figure id="ss-error" class="fx"></figure>
+        <p class="note"><b>When a view cannot load.</b> The page stays open and a small printed card is taped on it: "That didn't load." Try again asks once more. No codes, no technical words.</p></div>
+      <div><h3>Offline</h3>
+        <figure id="ss-offline" class="fx"></figure>
+        <p class="note"><b>No connection.</b> A thin printed strip sits just under the find bar and stays there until the connection is back. The kitchen shows what was saved on this device.</p></div>
+    </div>
+    <div class="trio">
+      <div><h3>The "paid plan" tag, home cook</h3>
+        <figure id="ss-paid" class="fx"></figure>
+        <p class="note"><b>Click the tag and a card opens.</b> It names what the Developer plan adds. The button switches the home cook to Developer at once. It is free for now, and nothing needs paying. "Not now" closes the card.</p></div>
+      <div><h3>The "paid plan" tag, guest</h3>
+        <figure id="ss-paid-guest" class="fx"></figure>
+        <p class="note"><b>A guest signs up first.</b> The same card, but the button says "Sign up". Once signed up, the cook is offered the switch to Developer.</p></div>
+    </div>
+  </div>
+</section>
+<script>
+(function () {
+  function H(sz, w, col) { return "font:" + (w || 600) + " " + sz + "px var(--font-hand);fill:" + (col || "var(--ink)"); }
+  function U(sz, col, w) { return "font:" + (w || 500) + " " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"); }
+  function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx == null ? 2 : rx) + '"', fill, sw || 2); }
+  var RULE = "#c3d2ec", SOFT = "var(--ink-soft)";
+  var PX = 520, PW = 760, PY = 100, PH = 600;
+
+  /* a bare page, taped to the screen at both top corners, with ruled lines where words go */
+  function page() {
+    var s = R(PX, PY, PW, PH, "var(--page)", 2.4);
+    s += '<rect x="' + (PX + 40) + '" y="' + (PY + 44) + '" width="300" height="24" rx="4" style="fill:' + RULE + ';opacity:.7"/>';
+    s += '<rect x="' + (PX + 40) + '" y="' + (PY + 80) + '" width="200" height="14" rx="4" style="fill:' + RULE + ';opacity:.55"/>';
+    s += line("M" + (PX + 1) + " " + (PY + 118) + " H" + (PX + PW - 1), 1.8, 0.85, "var(--orange-text)");
+    for (var i = 0; i < 12; i++) {
+      var y = PY + 156 + i * 38, w = [300, 250, 320, 180, 280, 230][i % 6];
+      s += line("M" + (PX + 40) + " " + y + " H" + (PX + 340), 1.2, 1, RULE) + line("M" + (PX + 400) + " " + y + " H" + (PX + PW - 40), 1.2, 1, RULE);
+      s += '<rect x="' + (PX + 44) + '" y="' + (y - 14) + '" width="' + (w - 50) + '" height="9" rx="4" style="fill:' + RULE + ';opacity:.8"/>';
+      s += '<rect x="' + (PX + 404) + '" y="' + (y - 14) + '" width="' + (w + 10) + '" height="9" rx="4" style="fill:' + RULE + ';opacity:.8"/>';
+    }
+    return s + tape(PX + 60, PY + 2, 90, 24, -6, 0.8) + tape(PX + PW - 60, PY + 2, 90, 24, 6, 0.8);
+  }
+
+  function card(x, y, w, h, body) {
+    return R(x, y, w, h, "var(--card)", 2.4, 4) + body;
+  }
+
+  function loading() { return openOver(page(), "A view that has just opened, with ruled lines where the words will be"); }
+
+  function error() {
+    var x = 640, y = 290, w = 320 + 0, h = 190, cx = x + w / 2, s = page();
+    /* printed card taped on the page */
+    s += card(x, y, w, h, T(cx, y + 62, "That didn't load.", "font:700 30px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"') +
+      T(cx, y + 92, "Your work is safe.", H(20, 600, SOFT), 'text-anchor="middle"') + pill(cx - 62, y + 120, 124, "Try again", true));
+    s += tape(x + 40, y + 2, 78, 22, -5, 0.8) + tape(x + w - 40, y + 2, 78, 22, 5, 0.8);
+    return openOver(s, "The same view with a printed card taped on: That didn't load, Try again");
+  }
+
+  function offline() {
+    var V = mainVP(), s = scene(V, opts());
+    var x = 700, w = 400, y = 74;
+    s += R(x, y, w, 30, "var(--custard)", 2, 3) + T(x + w / 2, y + 21, "Offline. Showing what was saved.", "font:600 16px var(--font-body);fill:var(--ink)", 'text-anchor="middle"');
+    s += tape(x + 14, y + 4, 54, 18, -8, 0.8) + tape(x + w - 14, y + 4, 54, 18, 8, 0.8);
+    return svg(V, s, "The kitchen with a thin strip under the find bar: Offline. Showing what was saved.");
+  }
+
+  function paid(guest) {
+    var x = 640, y = 190, w = 520, h = 380, cx = x + w / 2, s = "";
+    s += card(x, y, w, h, "");
+    s += paidTag(x + 80, y + 46, -4).replace('class="paid"', 'class="ptag"');
+    s += T(x + 40, y + 106, "The Developer plan adds", H(32, 700));
+    [["The Trials notebook", "every trial, with photos"], ["The idea board", "ideas pinned and kept"], ["Making cookbooks", "recipes in order, in a book"]].forEach(function (r, i) {
+      var yy = y + 150 + i * 42;
+      s += reg("circle", 'cx="' + (x + 50) + '" cy="' + (yy - 6) + '" r="6"', "var(--yellow)", 1.6) + T(x + 70, yy, r[0], H(24, 700)) + T(x + 70 + r[0].length * 10.6 + 14, yy, r[1], H(19, 600, SOFT));
+    });
+    s += T(x + 40, y + 292, "It is free for now. Nothing to pay.", H(21, 600, SOFT));
+    var bw = guest ? 130 : 200;
+    s += pill(x + 40, y + 316, bw, guest ? "Sign up" : "Switch to Developer", true);
+    s += T(x + 40 + bw + 26, y + 339, "Not now", U(16, SOFT) + ";text-decoration:underline");
+    if (guest) s += T(x + w - 40, y + 339, "Signing up then offers the switch.", H(18, 600, SOFT), 'text-anchor="end"');
+    s += tape(x + 60, y + 2, 84, 22, -5, 0.8) + tape(x + w - 60, y + 2, 84, 22, 5, 0.8);
+    return openOver(s, guest ? "Paid plan card for a guest, with a Sign up button" : "Paid plan card for a home cook, with a Switch to Developer button");
+  }
+
+  PLATE.add(function () {
+    var m = { "ss-loading": loading(), "ss-error": error(), "ss-offline": offline(), "ss-paid": paid(false), "ss-paid-guest": paid(true) };
+    for (var k in m) { var el = document.getElementById(k); if (el) el.innerHTML = m[k]; }
+  });
+})();
+</script>

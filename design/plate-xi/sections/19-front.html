@@ -1,0 +1,82 @@
+<section aria-labelledby="h-mf" id="more-front">
+  <span class="label" id="h-mf">More · Front page and not found</span>
+  <div class="sec-body">
+    <h3>Not found, signed out</h3>
+    <figure id="mf-nf-out" class="fx"></figure>
+    <p class="note"><b>The same book over the pale kitchen.</b> Signed in, the not-found page opens over the dimmed kitchen with "Back to the kitchen". Signed out, the same cookbook sits over the pale kitchen (as on the front page) with "Go to the front page" instead. The right-hand page is ripped out, leaving a torn stub at the gutter; the message is set on the facing page.</p>
+    <p class="note"><b>Same for every plan.</b> The front page and the not-found page are the same for developer, home cook and guest.</p>
+  </div>
+</section>
+<script>
+(function () {
+  var V = [300, 1500], BODY = "var(--font-body)", SOFT = "var(--ink-soft)", MID = 'text-anchor="middle"', RULE = "#c3d2ec";
+  var CUT = '<rect x="700" y="22" width="400" height="44" rx="22"';
+  function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 0) + '"', fill, sw || 2); }
+  function U(x, y, t, sz, w, col, ex) { return T(x, y, t, "font:" + (w || 400) + " " + sz + "px " + BODY + ";fill:" + (col || "var(--ink)"), ex || ""); }
+  function cap(x, y, t, ex) { return T(x, y, t, "font:700 14px var(--font-label);letter-spacing:.12em;fill:" + SOFT, ex || ""); }
+  function tp(cx, cy, rot, len) { len = len || 76; return '<rect x="' + (cx - len / 2) + '" y="' + (cy - 11) + '" width="' + len + '" height="22" transform="rotate(' + rot + " " + cx + " " + cy + ')" style="fill:#e8e0c8;opacity:.85;stroke:#b9a77a;stroke-width:1.2"/>'; }
+  function btn(x, y, w, t, on, sz) { return '<g role="button" tabindex="0">' + R(x, y, w, 48, on ? "var(--yellow)" : "var(--card)", 2.4, 24) + U(x + w / 2, y + 31, t, sz || 19, 600, null, MID) + "</g>"; }
+  /* a printed link: blue underline, yellow on point */
+  function plk(x, by, txt, fs, label) { var tw = txt.length * fs * 0.45;
+    return '<g class="lnk" tabindex="0" role="link" aria-label="Open ' + label + '"><rect class="lk-hi" x="' + (x - 4) + '" y="' + (by - fs * 0.92) + '" width="' + (tw + 8) + '" height="' + (fs * 1.25) + '" rx="3" style="fill:var(--yellow);stroke:var(--ink);stroke-width:1.2"/>' +
+      U(x, by, txt, fs, 600) + line("M" + x + " " + (by + 4) + " H" + (x + tw), 1.6, 1, "var(--blue)") + "</g>"; }
+  /* the kitchen with no find bar and no Account (signed out). quiet = pale and not clickable */
+  function kitchen(quiet, glow) {
+    var s = scene(V, opts({ plan: "guest" })), i = s.indexOf(CUT); if (i > 0) s = s.slice(0, i);
+    if (glow) s = s.replace('class="hot" tabindex="0" role="button" aria-label="Open ' + glow + '"', 'class="hot on" tabindex="0" role="button" aria-label="Try ' + glow + ' as a guest"');
+    if (!quiet) return s;
+    return '<g style="pointer-events:none" aria-hidden="true">' + s.replace(/tabindex="0"/g, "") + "</g>" +
+      '<rect x="' + (V[0] - 20) + '" y="0" width="' + (V[1] - V[0] + 40) + '" height="764" style="fill:var(--paper);opacity:.72"/>';
+  }
+  /* small drawn marks for the three main things */
+  var ICON = {
+    nb: function (x, y) { return R(x, y - 30, 28, 36, "url(#mblack)", 2, 2) + R(x + 5, y - 20, 18, 10, "var(--card)", 1.2); },
+    bd: function (x, y) { return R(x - 4, y - 26, 36, 28, "url(#corkp)", 2, 1) + R(x + 6, y - 20, 14, 14, "var(--card)", 1.2) + reg("circle", 'cx="' + (x + 13) + '" cy="' + (y - 20) + '" r="4"', "var(--orange)", 1.4); },
+    bx: function (x, y) { return R(x - 5, y - 26, 38, 30, "var(--blue)", 2, 2) + line("M" + (x - 5) + " " + (y - 17) + " H" + (x + 33), 1.6) + R(x + 9, y - 21, 10, 8, "var(--brass)", 1.2); } };
+  var ROWS = [["nb", "Trials go in the notebook."], ["bd", "Ideas go on the board."], ["bx", "Recipes you keep go in the box."]];
+  /* A: one card over the still kitchen */
+  function frontA() {
+    var x = 640, y = 92, w = 520, h = 590, cx = x + w / 2, s = kitchen(true);
+    s += hatch(x + 10, y + h, w - 2, 9, 0.8) + hatch(x + w, y + 10, 9, h - 1, 0.8) + R(x, y, w, h, "var(--card)", 2.6, 4);
+    s += T(cx, y + 76, "Trial &amp; Eclair", "font:400 50px var(--font-display);fill:var(--ink)", MID) + line("M" + (x + 150) + " " + (y + 100) + " H" + (x + w - 150), 1.8, 0.85, "var(--orange-text)") +
+      U(cx, y + 144, "Work out a recipe, one trial at a time.", 23, 600, null, MID) +
+      U(cx, y + 176, "A kitchen for recipe developers and home cooks.", 17, 400, SOFT, MID) + line("M" + (x + 40) + " " + (y + 204) + " H" + (x + w - 40), 1.4, 0.5);
+    ROWS.forEach(function (r, i) { var ry = y + 258 + i * 52; s += ICON[r[0]](x + 70, ry) + U(x + 124, ry - 6, r[1], 20); });
+    s += line("M" + (x + 40) + " " + (y + 398) + " H" + (x + w - 40), 1.4, 0.5) + btn(x + 40, y + 422, 210, "Sign up", true) + btn(x + 270, y + 422, 210, "Sign in");
+    s += U(cx - 6, y + 518, "Just looking?", 18, 400, SOFT, 'text-anchor="end"') + plk(cx + 2, y + 518, "Try it as a guest", 19, "the kitchen as a guest") +
+      U(cx, y + 552, "No account needed. A guest can add up to 5 recipe cards.", 15, 400, SOFT, MID);
+    return s;
+  }
+  /* ---- not found (signed in, over the dimmed kitchen) ---- */
+  function H(x, y, t, sz, ex) { return T(x, y, t, "font:400 " + sz + "px var(--font-display);fill:var(--ink)", ex || ""); }
+  var BACK = "Back to the kitchen", BODY2 = ["The link may be old, or what it", "pointed to was deleted."];
+  function nfCard() { var x = 640, y = 206, w = 520, h = 360, L = x + 44, s = hatch(x + 10, y + h, w - 2, 9, 0.8) + hatch(x + w, y + 10, 9, h - 1, 0.8) + R(x, y, w, h, "var(--card)", 2.6, 4);
+    for (var ry = y + 162; ry < y + h - 12; ry += 32) s += line("M" + (x + 2) + " " + ry + " H" + (x + w - 2), 1.2, 1, RULE);
+    s += line("M" + (x + 2) + " " + (y + 130) + " H" + (x + w - 2), 1.8, 0.9, "#c9442a") + cap(L, y + 62, "PAGE NOT FOUND") + U(L, y + 110, "This page is not here.", 36, 600) +
+      U(L, y + 188, BODY2[0] + " pointed to", 19, 400, SOFT) + U(L, y + 220, "was deleted.", 19, 400, SOFT) + btn(L, y + 260, 256, BACK, true);
+    return s; }
+  /* the sewn cookbook from section 04, open; the right page ripped out at the gutter */
+  var PL = "M480 110 Q690 100 900 116 V672 Q690 662 480 670 Z", PR = "M1320 110 Q1110 100 900 116 V672 Q1110 662 1320 670 Z", THR = "#8a5a3c";
+  function nfBook(back) { back = back || BACK; var s = hatch(470, 684, 870, 10, 0.7), i, k;
+    s += R(462, 100, 876, 584, "var(--custard)", 2.6, 6) + R(860, 100, 80, 584, "var(--orange)", 2.4, 2) + hatch(862, 102, 76, 580, 0.14);
+    for (k = 4; k >= 1; k--) s += '<path transform="translate(' + (-2 * k) + " " + (1.2 * k) + ')" d="' + PL + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>' +
+      '<path transform="translate(' + (2 * k) + " " + (1.2 * k) + ')" d="' + PR + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>';
+    s += reg("path", 'd="' + PL + '"', "var(--page)", 2.4) + reg("path", 'd="' + PR + '"', "var(--page)", 2.4) + hatch(880, 114, 18, 556, 0.35) + hatch(902, 114, 18, 556, 0.35);
+    s += R(887, 110, 26, 6, "var(--orange-text)", 1, 3);
+    for (i = 0; i < 6; i++) s += line("M" + (890 + i * 4) + " 111 v4", 1.2, 1, "var(--custard)");
+    /* the torn stub: a ragged strip left in the gutter, its shadow on the page under it */
+    var p = ["902,117"], r = rand(7), yy;
+    for (yy = 117; yy <= 671; yy += 14) p.push((922 + r() * 12).toFixed(1) + "," + yy);
+    p.push("902,671"); s += '<path d="M' + p.slice(1).join(" L") + '" style="fill:none;stroke:var(--ink);stroke-width:6;opacity:.12"/>' + poly(p.join(" "), "var(--page)", 1.8);
+    for (i = 0; i < 6; i++) { var sy = 162 + i * 88; s += line("M900 " + sy + " v52", 2.2, 1, THR) + '<circle cx="900" cy="' + (sy - 4) + '" r="1.8" style="fill:' + THR + '"/><circle cx="900" cy="' + (sy + 56) + '" r="1.8" style="fill:' + THR + '"/>'; }
+    /* the message, typeset on the facing page */
+    var X = 520; s += cap(X, 250, "PAGE NOT FOUND") + H(X, 300, "This page is not here.", 30) + line("M" + X + " 318 H850", 1.4, 0.6) +
+      U(X, 362, BODY2[0], 19, 400, SOFT) + U(X, 390, BODY2[1], 19, 400, SOFT) + btn(X, 424, 256, back, true) + U(690, 656, "14", 15, 400, SOFT, MID);
+    return s; }
+  PLATE.add(function () {
+    document.getElementById("row-front").innerHTML = svg(V, frontA(), "The signed-out front page");
+    document.getElementById("row-nf").innerHTML = openOver(nfBook(), "Not found: a cookbook with a page ripped out, over the dimmed kitchen");
+    document.getElementById("mf-nf-out").innerHTML = svg(V, kitchen(true) + nfBook("Go to the front page"), "Not found, signed out: the cookbook with a page ripped out over the pale kitchen");
+  });
+})();
+</script>
