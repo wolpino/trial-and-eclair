@@ -4,14 +4,15 @@
     <h3>The front page (A, picked)</h3>
     <figure id="fr-front" data-plan="guest"></figure>
     <p class="note"><b>What someone sees at the site root before signing in.</b> One card over the still kitchen. The kitchen behind is the sample kitchen a guest would land in, pale and not clickable, with no find bar and no Account. <b>The name is the title.</b> "Trial &amp; Eclair" heads the card, set the same way as on sign in; the front page and sign in are the two places it appears as a title. Under it, one line on what the app is, then three short lines for the three main things.</p>
-    <p class="note"><b>Three ways in.</b> Sign up is the yellow button, because most people here are new. Sign in sits next to it. "Try it as a guest" is a link under them; it opens the kitchen with the samples in it, and a guest can add up to 5 recipe cards (decision 002). It is the same card on the same pale kitchen as sign in (section 09), so clicking Sign in or Sign up only swaps the card. <b>No tape.</b> The card floats over the kitchen like an open view, with only its hatched shadow; it will rest on the same thing the sign-in card picks (the notebook and/or the recipe box, being drawn in section 09), so the two match.</p>
+    <p class="note"><b>Three ways in.</b> Sign up is the yellow button, because most people here are new. Sign in sits next to it. "Try it as a guest" is a link under them; it opens the kitchen with the samples in it, and a guest can add up to 5 recipe cards (decision 002). It is the same card on the same pale kitchen as sign in (section 09), so clicking Sign in or Sign up only swaps the card. <b>No tape.</b> The card floats over the kitchen like an open view, with only its hatched shadow; centred and upright with nothing in front of it, the same as the sign-in card, so the two match.</p>
 
-    <h3>Not found, signed out: its own page</h3>
-    <figure id="fr-nf"></figure>
-    <p class="note"><b>A small, friendly dead end.</b> A blank recipe card lies on a bread board with a pencil, and a printed line says the page is not here. One button goes back. Signed out, there is no kitchen to show, so it is a plain page with the small name at the top left, and the button reads "Go to the front page".</p>
-    <h3>Not found, signed in: over the dimmed kitchen (maybe)</h3>
-    <figure id="fr-nf-in"></figure>
-    <p class="note"><b>The same card and words, opened like any view.</b> Signed in, the not-found page could open over the dimmed kitchen with the find bar and Close from the frame, the same as every other view. The button reads "Back to the kitchen", and Close does the same thing. Compare it with the plain page above.</p>
+    <h3>Not found, A: an index card over the kitchen</h3>
+    <figure id="fr-nf-a"></figure>
+    <p class="note"><b>A plain index card.</b> It opens like any view: centred and upright over the dimmed kitchen, with the find bar and Close from the frame. No tape and nothing under it. The words are typeset: "Page not found", "This page is not here.", one short line, and "Back to the kitchen". Close does the same as the button.</p>
+    <h3>Not found, B: a cookbook with a page ripped out</h3>
+    <figure id="fr-nf-b"></figure>
+    <p class="note"><b>The cookbook, opened at a missing page.</b> The same sewn book as the cookbooks view (section 04): typeset pages, cloth spine, the thread in the gutter. The right-hand page has been ripped out, leaving a torn stub at the gutter and the blank page under it. The message and "Back to the kitchen" are set on the facing page.</p>
+    <p class="note"><b>Signed out.</b> The same drawing sits over the pale kitchen (as on the front page) with "Go to the front page" in place of "Back to the kitchen"; no separate drawing is needed.</p>
     <p class="note"><b>No Plan switch versions.</b> The front page is seen signed out, before anyone has a plan, and the not-found page is the same for every plan. Developer, Home cook and Guest all see these same drawings.</p>
   </div>
 </section>
@@ -28,8 +29,6 @@
   function plk(x, by, txt, fs, label) { var tw = txt.length * fs * 0.45;
     return '<g class="lnk" tabindex="0" role="link" aria-label="Open ' + label + '"><rect class="lk-hi" x="' + (x - 4) + '" y="' + (by - fs * 0.92) + '" width="' + (tw + 8) + '" height="' + (fs * 1.25) + '" rx="3" style="fill:var(--yellow);stroke:var(--ink);stroke-width:1.2"/>' +
       U(x, by, txt, fs, 600) + line("M" + x + " " + (by + 4) + " H" + (x + tw), 1.6, 1, "var(--blue)") + "</g>"; }
-  /* the small printed name, top left */
-  function name(x, y) { return T(x || 330, y || 52, "TRIAL &amp; ECLAIR", "font:700 18px var(--font-label);letter-spacing:.16em;fill:var(--ink)"); }
   /* the kitchen with no find bar and no Account (signed out). quiet = pale and not clickable */
   function kitchen(quiet, glow) {
     var s = scene(V, opts({ plan: "guest" })), i = s.indexOf(CUT); if (i > 0) s = s.slice(0, i);
@@ -57,32 +56,36 @@
       U(cx, y + 552, "No account needed. A guest can add up to 5 recipe cards.", 15, 400, SOFT, MID);
     return s;
   }
-  /* ---- not found ---- */
-  function msg(x, y, back, hs, body) { body = body || ["The link may be old, or what it pointed to", "was deleted."];
-    return cap(x, y, "PAGE NOT FOUND") + U(x, y + 50, "This page is not here.", hs || 40, 600) +
-    U(x, y + 92, body[0], 19, 400, SOFT) + U(x, y + 120, body[1], 19, 400, SOFT) + btn(x, y + 154, back.length * 10.5 + 56, back, true); }
-  function pencil(x, y, rot) {
-    return '<g transform="rotate(' + rot + " " + x + " " + y + ')">' + hatch(x + 4, y + 8, 220, 8, 0.6) + R(x, y - 9, 176, 18, "var(--yellow)", 2) + line("M" + x + " " + y + " H" + (x + 176), 1.2, 0.6) +
-      R(x - 22, y - 9, 22, 18, "var(--brass)", 2) + R(x - 40, y - 9, 18, 18, "var(--orange)", 2, 3) +
-      poly((x + 176) + "," + (y - 9) + " " + (x + 214) + "," + y + " " + (x + 176) + "," + (y + 9), "var(--custard)", 2) + poly((x + 203) + "," + (y - 2.6) + " " + (x + 214) + "," + y + " " + (x + 203) + "," + (y + 2.6), "var(--ink)", 1) + "</g>"; }
-  function nfBody(back) {
-    var s = "", bx = 400, by = 110, bw = 500, bh = 440, cx = 455, cy = 160, cw = 390, ch = 290;
-    /* a walnut bread board with a handle, the blank card lying on it, a pencil beside */
-    s += hatch(338, by + 190, 80, 80, 0.6) + hatch(bx + 12, by + 12, bw, bh, 0.6) + R(332, by + 176, 90, 84, "var(--wood)", 2.6, 34) + reg("circle", 'cx="362" cy="' + (by + 218) + '" r="11"', "var(--paper)", 2.2) +
-      R(bx, by, bw, bh, "var(--wood)", 2.6, 26) + grain(bx + 10, by + 20, bw - 20, 140, 41) + grain(bx + 10, by + 170, bw - 20, 120, 42) + grain(bx + 10, by + 300, bw - 20, 120, 43);
-    var c = hatch(cx + 8, cy + 8, cw, ch, 0.7) + R(cx, cy, cw, ch, "var(--card)", 2.2, 3) + line("M" + (cx + 2) + " " + (cy + 58) + " H" + (cx + cw - 2), 1.8, 0.9, "#c9442a");
-    for (var ry = cy + 92; ry < cy + ch - 10; ry += 32) c += line("M" + (cx + 2) + " " + ry + " H" + (cx + cw - 2), 1.2, 1, RULE);
-    s += '<g transform="rotate(-3 ' + (cx + cw / 2) + " " + (cy + ch / 2) + ')">' + c + "</g>" + pencil(600, 500, -9);
-    return s + msg(990, 210, back);
-  }
-  function notFound() { return '<rect x="280" y="0" width="1240" height="640" style="fill:var(--paper)"/>' + name(330, 74) + nfBody("Go to the front page"); }
-  /* signed in: the same, on a paper sheet inside the open-view stage, scaled to fit */
-  function notFoundIn() { var S = STAGE;
-    return R(S.x0, S.y0, S.x1 - S.x0, S.y1 - S.y0, "var(--paper)", 2.4, 6) + '<g transform="translate(205 138) scale(.78)">' + nfBody("Back to the kitchen") + "</g>"; }
+  /* ---- not found (signed in, over the dimmed kitchen) ---- */
+  function H(x, y, t, sz, ex) { return T(x, y, t, "font:400 " + sz + "px var(--font-display);fill:var(--ink)", ex || ""); }
+  var BACK = "Back to the kitchen", BODY2 = ["The link may be old, or what it", "pointed to was deleted."];
+  function nfCard() { var x = 640, y = 206, w = 520, h = 360, L = x + 44, s = hatch(x + 10, y + h, w - 2, 9, 0.8) + hatch(x + w, y + 10, 9, h - 1, 0.8) + R(x, y, w, h, "var(--card)", 2.6, 4);
+    for (var ry = y + 162; ry < y + h - 12; ry += 32) s += line("M" + (x + 2) + " " + ry + " H" + (x + w - 2), 1.2, 1, RULE);
+    s += line("M" + (x + 2) + " " + (y + 130) + " H" + (x + w - 2), 1.8, 0.9, "#c9442a") + cap(L, y + 62, "PAGE NOT FOUND") + U(L, y + 110, "This page is not here.", 36, 600) +
+      U(L, y + 188, BODY2[0] + " pointed to", 19, 400, SOFT) + U(L, y + 220, "was deleted.", 19, 400, SOFT) + btn(L, y + 260, 256, BACK, true);
+    return s; }
+  /* the sewn cookbook from section 04, open; the right page ripped out at the gutter */
+  var PL = "M480 110 Q690 100 900 116 V672 Q690 662 480 670 Z", PR = "M1320 110 Q1110 100 900 116 V672 Q1110 662 1320 670 Z", THR = "#8a5a3c";
+  function nfBook() { var s = hatch(470, 684, 870, 10, 0.7), i, k;
+    s += R(462, 100, 876, 584, "var(--custard)", 2.6, 6) + R(860, 100, 80, 584, "var(--orange)", 2.4, 2) + hatch(862, 102, 76, 580, 0.14);
+    for (k = 4; k >= 1; k--) s += '<path transform="translate(' + (-2 * k) + " " + (1.2 * k) + ')" d="' + PL + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>' +
+      '<path transform="translate(' + (2 * k) + " " + (1.2 * k) + ')" d="' + PR + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>';
+    s += reg("path", 'd="' + PL + '"', "var(--page)", 2.4) + reg("path", 'd="' + PR + '"', "var(--page)", 2.4) + hatch(880, 114, 18, 556, 0.35) + hatch(902, 114, 18, 556, 0.35);
+    s += R(887, 110, 26, 6, "var(--orange-text)", 1, 3);
+    for (i = 0; i < 6; i++) s += line("M" + (890 + i * 4) + " 111 v4", 1.2, 1, "var(--custard)");
+    /* the torn stub: a ragged strip left in the gutter, its shadow on the page under it */
+    var p = ["902,117"], r = rand(7), yy;
+    for (yy = 117; yy <= 671; yy += 14) p.push((922 + r() * 12).toFixed(1) + "," + yy);
+    p.push("902,671"); s += '<path d="M' + p.slice(1).join(" L") + '" style="fill:none;stroke:var(--ink);stroke-width:6;opacity:.12"/>' + poly(p.join(" "), "var(--page)", 1.8);
+    for (i = 0; i < 6; i++) { var sy = 162 + i * 88; s += line("M900 " + sy + " v52", 2.2, 1, THR) + '<circle cx="900" cy="' + (sy - 4) + '" r="1.8" style="fill:' + THR + '"/><circle cx="900" cy="' + (sy + 56) + '" r="1.8" style="fill:' + THR + '"/>'; }
+    /* the message, typeset on the facing page */
+    var X = 520; s += cap(X, 250, "PAGE NOT FOUND") + H(X, 300, "This page is not here.", 30) + line("M" + X + " 318 H850", 1.4, 0.6) +
+      U(X, 362, BODY2[0], 19, 400, SOFT) + U(X, 390, BODY2[1], 19, 400, SOFT) + btn(X, 424, 256, BACK, true) + U(690, 656, "14", 15, 400, SOFT, MID);
+    return s; }
   PLATE.add(function () {
     document.getElementById("fr-front").innerHTML = svg(V, frontA(), "The signed-out front page");
-    document.getElementById("fr-nf").innerHTML = svg(V, notFound(), "Not found, signed out: an empty recipe card on a bread board", 40, 580);
-    document.getElementById("fr-nf-in").innerHTML = openOver(notFoundIn(), "Not found, signed in: the empty recipe card over the dimmed kitchen");
+    document.getElementById("fr-nf-a").innerHTML = openOver(nfCard(), "Not found, A: an index card over the dimmed kitchen");
+    document.getElementById("fr-nf-b").innerHTML = openOver(nfBook(), "Not found, B: a cookbook with a page ripped out, over the dimmed kitchen");
   });
 })();
 </script>

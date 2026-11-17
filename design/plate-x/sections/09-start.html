@@ -1,26 +1,17 @@
 <section aria-labelledby="h-st">
   <span class="label" id="h-st">09 · Sign in and sign up</span>
   <div class="sec-body">
-    <h3>Where the card rests: four ways</h3>
-    <div class="pair">
-      <div><h3>A · On the open notebook</h3><figure id="st-a"></figure></div>
-      <div><h3>B · Tucked into the notebook's cover</h3><figure id="st-b"></figure></div>
-      <div><h3>C · Leaning on the recipe box</h3><figure id="st-c"></figure></div>
-      <div><h3>D · On the counter, between the two</h3><figure id="st-d"></figure></div>
-    </div>
-    <p class="note"><b>One card, four places.</b> The card is always the lined recipe card from the box: an orange rule under the title and blue rules below. It is never taped and never floats; it rests on or against something real. A and B look down on the counter. In A the card lies on the Trials notebook, open at a page. In B it is tucked under the notebook's front cover, its corner sticking out. C and D are seen from the front, like the kitchen. In C the card stands on one corner and leans on the closed recipe box. In D it stands upright on the counter against the wall, with the notebook on its stand on the left and the recipe box on the right. The notebook and box are the kitchen's own drawings, made larger. <b>D is used below</b>: the card reads straight on, and both objects frame it.</p>
-
     <h3>Card headings: three ways</h3>
     <div class="trio">
       <div><h3>A · Ingredients, Method</h3><figure id="st-ha"></figure></div>
       <div><h3>B · Ingredients, Steps</h3><figure id="st-hb"></figure></div>
       <div><h3>C · You'll need, Method</h3><figure id="st-hc"></figure></div>
     </div>
-    <p class="note"><b>The two printed headings on the card.</b> The first sits over the fields (username and password), the second over the button. A is the classic recipe-card pair and is used in the drawings below.</p>
+    <p class="note"><b>The two printed headings on the card.</b> Ari is still choosing. The first sits over the fields (username and password), the second over the button. A is the classic recipe-card pair and is used in the drawings below.</p>
 
     <h3>Sign in</h3>
     <figure id="st-signin" class="fx"></figure>
-    <p class="note"><b>Its own page, over the pale kitchen.</b> The card stands on the counter between the notebook and the recipe box. "Trial &amp; Eclair" is the title; this is the only place in the app where the name is a title. Two fields, as the app has now: username and password. All the words are printed. At the foot: "New here? Sign up" and "Just looking? Try it as a guest". The words are "Sign up" and "Sign in"; "Start a kitchen" is gone.</p>
+    <p class="note"><b>Its own page, over the pale kitchen.</b> The lined recipe card sits upright in the middle, with only its hatched shadow: no tape and nothing in front of it. It has the same place and size as the front page card (section 12), so going from the front page to sign in only swaps the card. "Trial &amp; Eclair" is the title; the front page and these two cards are the only places the name is a title. Two fields, as the app has now: username and password. All the words are printed. At the foot: "New here? Sign up" and "Just looking? Try it as a guest". The words are "Sign up" and "Sign in"; "Start a kitchen" is gone.</p>
 
     <h3>Sign up</h3>
     <figure id="st-signup" class="fx"></figure>
@@ -34,12 +25,11 @@
 </section>
 <script>
 (function () {
-  var BODY = "var(--font-body)", SOFT = "var(--ink-soft)", MID = 'text-anchor="middle"', RULE = "#c3d2ec", CT = 700;
+  var BODY = "var(--font-body)", SOFT = "var(--ink-soft)", MID = 'text-anchor="middle"', RULE = "#c3d2ec", V = [300, 1500], CUT = '<rect x="700" y="22" width="400" height="44" rx="22"';
   var HEADS = [["INGREDIENTS", "METHOD"], ["INGREDIENTS", "STEPS"], ["YOU'LL NEED", "METHOD"]];
   function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 0) + '"', fill, sw || 2); }
   function U(x, y, t, sz, w, col, ex) { return T(x, y, t, "font:" + (w || 400) + " " + sz + "px " + BODY + ";fill:" + (col || "var(--ink)"), ex || ""); }
   function cap(x, y, t) { return T(x, y, t, "font:700 14px var(--font-label);letter-spacing:.1em;fill:" + SOFT); }
-  function G(tr, inner) { return '<g transform="' + tr + '">' + inner + "</g>"; }
   /* a printed link: yellow highlight and underline on point */
   function plk(x, by, txt, fs, on, label) { var tw = txt.length * fs * 0.45;
     return '<g class="lnk' + (on ? " on" : "") + '" tabindex="0" role="link" aria-label="Open ' + label + '"><rect class="lk-hi" x="' + (x - 4) + '" y="' + (by - fs * 0.92) + '" width="' + (tw + 8) + '" height="' + (fs * 1.25) + '" rx="3" style="fill:var(--yellow);stroke:var(--ink);stroke-width:1.2"/>' +
@@ -55,60 +45,44 @@
   }
   function btn(x, y, w, t) { return R(x, y, w, 46, "var(--yellow)", 2.4, 23) + U(x + w / 2, y + 30, t, 18, 600, null, MID); }
   function step(x, y, n) { return U(x, y, n + ".", 20, 700, "var(--orange-text)"); }
-  function head(cx, y, sub) { return T(cx, y + 52, "Trial &amp; Eclair", "font:400 40px var(--font-display);fill:var(--ink)", MID) + U(cx, y + 82, sub, 19, 600, SOFT, MID); }
-  /* the lined recipe card: orange rule under the title, blue rules below; its shadow falls right and down */
+  /* the head, set as on the front page card (section 12): the name as the title, the page name under it */
+  function head(cx, y, sub) { return T(cx, y + 70, "Trial &amp; Eclair", "font:400 50px var(--font-display);fill:var(--ink)", MID) + U(cx, y + 102, sub, 20, 600, SOFT, MID); }
+  /* the lined recipe card: orange rule under the title, blue rules below; only its hatched shadow, no tape */
   function paper(x, y, w, h) {
     var s = hatch(x + 10, y + h, w - 2, 9, 0.8) + hatch(x + w, y + 10, 9, h - 1, 0.8) + R(x, y, w, h, "var(--page)", 2.6, 4);
-    for (var ry = y + 138; ry < y + h - 10; ry += 34) s += line("M" + (x + 2) + " " + ry + " H" + (x + w - 2), 1.2, 1, RULE);
-    return s + line("M" + (x + 2) + " " + (y + 104) + " H" + (x + w - 2), 1.8, 0.85, "var(--orange-text)");
+    for (var ry = y + 154; ry < y + h - 10; ry += 34) s += line("M" + (x + 2) + " " + ry + " H" + (x + w - 2), 1.2, 1, RULE);
+    return s + line("M" + (x + 2) + " " + (y + 120) + " H" + (x + w - 2), 1.8, 0.85, "var(--orange-text)");
   }
-  /* sign in. x, y: the card's top left. hd: which pair of headings. on: the guest link glows */
-  function signin(x, y, w, hd, on) {
-    var fx = x + 40, fw = w - 80, H = HEADS[hd || 0], xm = x + w / 2 - 12;
-    return paper(x, y, w, 530) + head(x + w / 2, y, "Sign in") + cap(fx, y + 136, H[0]) + cap(fx, y + 322, H[1]) + step(fx, y + 370, 1) +
-      field(fx, y + 164, fw, "Username", "weekendbaker", 0, 0) + field(fx, y + 242, fw, "Password", 9, 1, 1) +
-      btn(fx + 30, y + 340, fw - 30, "Sign in") + line("M" + fx + " " + (y + 414) + " H" + (fx + fw), 1.4, 0.5) +
-      ask(xm, y + 452, "New here?", "Sign up", "the sign-up page") + ask(xm, y + 494, "Just looking?", "Try it as a guest", "the kitchen as a guest", on);
+  /* sign in: the front page card's place and size (x 640, y 92, 520 by 590). hd: which headings. on: the guest link glows */
+  var X = 640, W = 520;
+  function signin(hd, on) {
+    var x = X, y = 92, w = W, fx = x + 40, fw = w - 80, H = HEADS[hd || 0], xm = x + w / 2 - 12;
+    return paper(x, y, w, 590) + head(x + w / 2, y, "Sign in") + cap(fx, y + 152, H[0]) + cap(fx, y + 338, H[1]) + step(fx, y + 386, 1) +
+      field(fx, y + 180, fw, "Username", "weekendbaker", 0, 0) + field(fx, y + 258, fw, "Password", 9, 1, 1) +
+      btn(fx + 30, y + 356, fw - 30, "Sign in") + line("M" + fx + " " + (y + 446) + " H" + (fx + fw), 1.4, 0.5) +
+      ask(xm, y + 496, "New here?", "Sign up", "the sign-up page") + ask(xm, y + 540, "Just looking?", "Try it as a guest", "the kitchen as a guest", on);
   }
-  function signup(x, y) {
-    var w = 580, fx = x + 40, fw = w - 80, hw = (fw - 24) / 2, x2 = fx + hw + 24, xm = x + w / 2 + 60;
-    var s = paper(x, y, w, 616) + head(x + w / 2, y, "Sign up") + cap(fx, y + 136, HEADS[0][0]) + field(fx, y + 164, fw, "Username", "weekendbaker", 0, 0) +
-      field(fx, y + 242, hw, "Password", 10, 1, 0, "8 or more") + field(x2, y + 242, hw, "Password again", 4, 1, 1) + cap(fx, y + 322, HEADS[0][1]);
+  function signup() {
+    var x = X, y = 64, w = W, fx = x + 40, fw = w - 80, hw = (fw - 20) / 2, x2 = fx + hw + 20, xm = x + w / 2 + 60;
+    var s = paper(x, y, w, 634) + head(x + w / 2, y, "Sign up") + cap(fx, y + 152, HEADS[0][0]) + field(fx, y + 180, fw, "Username", "weekendbaker", 0, 0) +
+      field(fx, y + 258, hw, "Password", 10, 1, 0, "8 or more") + field(x2, y + 258, hw, "Password again", 4, 1, 1) + cap(fx, y + 338, HEADS[0][1]);
     /* step 1: the sample data box, ticked by default */
-    s += step(fx, y + 370, 1) + R(fx + 32, y + 350, 24, 24, "var(--page)", 2, 3) + line("M" + (fx + 37) + " " + (y + 362) + " l6 7 l11 -15", 3.2) +
-      U(fx + 68, y + 369, "Start with sample recipes", 19, 600) +
-      U(fx + 68, y + 397, "A few recipes, ideas and notes to look around.", 16, 400, SOFT) + U(fx + 68, y + 420, "Remove them later from Account, all in one go.", 16, 400, SOFT);
-    return s + step(fx, y + 476, 2) + btn(fx + 30, y + 446, fw - 30, "Sign up") + line("M" + fx + " " + (y + 516) + " H" + (fx + fw), 1.4, 0.5) +
-      ask(xm, y + 552, "Already have an account?", "Sign in", "the sign-in page") + ask(xm, y + 590, "Just looking?", "Try it as a guest", "the kitchen as a guest");
+    s += step(fx, y + 386, 1) + R(fx + 32, y + 366, 24, 24, "var(--page)", 2, 3) + line("M" + (fx + 37) + " " + (y + 378) + " l6 7 l11 -15", 3.2) +
+      U(fx + 68, y + 385, "Start with sample recipes", 19, 600) +
+      U(fx + 68, y + 413, "A few recipes, ideas and notes to look around.", 15, 400, SOFT) + U(fx + 68, y + 436, "Remove them later from Account, all in one go.", 15, 400, SOFT);
+    return s + step(fx, y + 492, 2) + btn(fx + 30, y + 462, fw - 30, "Sign up") + line("M" + fx + " " + (y + 532) + " H" + (fx + fw), 1.4, 0.5) +
+      ask(xm, y + 570, "Already have an account?", "Sign in", "the sign-in page") + ask(xm, y + 610, "Just looking?", "Try it as a guest", "the kitchen as a guest");
   }
 
-  /* ---- front view: the pale kitchen, a counter at the foot, the kitchen's own notebook and box made larger ---- */
+  /* ---- the pale kitchen behind, as on the front page: signed out, so no find bar and no Account; not clickable ---- */
   function still(s) { return '<g style="pointer-events:none" aria-hidden="true">' + s.replace(/tabindex="0"/g, "") + "</g>"; }
-  function pale() { var V = mainVP(); return still(scene(V, opts())) + '<rect x="' + (V[0] - 20) + '" y="0" width="' + (V[1] - V[0] + 40) + '" height="780" style="fill:var(--paper);opacity:.78"/>'; }
-  function counter() { return R(280, CT, 1240, 22, "var(--wood-hi)", 2.4) + grain(290, CT + 2, 1220, 18, 7) + R(280, CT + 22, 1240, 60, "var(--cab)", 2.4) + hatch(282, CT + 22, 1236, 6); }
-  /* the notebook on its stand (its foot sits at y 470) and the closed box (its base at 470), scaled up to stand on this counter */
-  function nb(cx, k) { return still(G("translate(" + (cx - 700 * k) + " " + (CT - 470 * k) + ") scale(" + k + ")", notebook(700, opts()))); }
-  function bx(cx, k) { return still(G("translate(" + (cx - 1090 * k) + " " + (CT - 470 * k) + ") scale(" + k + ")", closedBox(1090, opts()))); }
-  function front(inner, label) { return svg(mainVP(), pale() + counter() + inner, label, 60, 700); }
-  function viewD(on) { return nb(470, 2) + bx(1320, 1.8) + signin(660, CT - 530, 480, 0, on); }
-  function viewC() { /* stands on its bottom right corner, the right edge resting on the box's top left corner */
-    return nb(460, 2) + bx(1250, 1.9) + G("rotate(6 1080 " + CT + ")", signin(600, CT - 530, 480)); }
-
-  /* ---- top view: looking down on the counter's wood ---- */
-  function top(inner, label) { return svg(mainVP(), R(280, 40, 1240, 740, "var(--wood-hi)", 0) + grain(300, 60, 1200, 700, 23) + inner, label, 60, 700); }
-  function ruled(x, y, w, h, n) { var s = R(x, y, w, h, "var(--page)", 2); for (var i = 1; i < n; i++) s += line("M" + (x + 14) + " " + (y + i * h / n) + " H" + (x + w - 14), 1, 1, RULE); return s; }
-  function viewA() { /* the notebook lies open; the card rests on the right page */
-    var s = hatch(352, 742, 820, 10, 0.8) + R(340, 80, 820, 660, "url(#mblack)", 2.6, 6) + ruled(356, 92, 390, 636, 18) + ruled(754, 92, 390, 636, 18) + line("M750 92 V728", 2.4);
-    s += T(380, 150, "Trial 4 · Croissants", "font:700 32px var(--font-hand);fill:var(--ink)") + T(380, 186, "11/11/26", "font:600 26px var(--font-hand);fill:" + SOFT) +
-      T(380, 256, "butter 2°C colder", "font:600 26px var(--font-hand);fill:var(--ink)") + T(380, 292, "3 folds, 2 h rests", "font:600 26px var(--font-hand);fill:var(--ink)");
-    return s + G("translate(800 160) rotate(4) scale(.95)", signin(0, 0, 480)); }
-  function viewB() { /* the card is tucked under the front cover, between the cover and the first page */
-    var nx = 360, ny = 300, w = 470, h = 440;
-    return hatch(nx + 8, ny + h + 4, w + 6, 10, 0.8) + R(nx + 8, ny + 6, w, h, "var(--page)", 1.6, 4) + G("translate(700 100) rotate(7) scale(.95)", signin(0, 0, 480)) + compCover(nx, ny, w, h, opts()); }
+  function pale() { var k = scene(V, opts({ plan: "guest" })), i = k.indexOf(CUT); if (i > 0) k = k.slice(0, i);
+    return still(k) + '<rect x="' + (V[0] - 20) + '" y="0" width="' + (V[1] - V[0] + 40) + '" height="764" style="fill:var(--paper);opacity:.72"/>'; }
+  function page(inner, label) { return svg(V, pale() + inner, label); }
 
   /* ---- the guest link, close up, and where it lands ---- */
   function guest() { var V = mainVP(), s = '<rect x="0" y="0" width="1200" height="360" style="fill:var(--plaster)"/>';
-    s += '<svg x="20" y="70" width="520" height="190" viewBox="640 562 520 190">' + pale() + counter() + viewD(1) + "</svg>" + R(20, 70, 520, 190, "none", 2.2);
+    s += '<svg x="20" y="70" width="520" height="190" viewBox="620 528 560 205">' + pale() + signin(0, 1) + "</svg>" + R(20, 70, 520, 190, "none", 2.2);
     s += arrow(560, 165, 680, 165) + T(620, 146, "ONE CLICK", "font:700 15px var(--font-label);letter-spacing:.1em;fill:" + SOFT, MID);
     s += '<svg x="700" y="40" width="460" height="250" viewBox="' + V[0] + " 0 " + (V[1] - V[0]) + ' 760" preserveAspectRatio="xMidYMid slice">' + still(scene(V, opts({ plan: "guest" }))) + "</svg>" + R(700, 40, 460, 250, "none", 2.4);
     return svg([0, 1200], s + T(700, 324, "The kitchen, as a guest", "font:400 22px var(--font-display);fill:var(--ink)") + U(30, 296, "The foot of the sign-in card", 16, 400, SOFT),
@@ -117,13 +91,9 @@
 
   PLATE.add(function () {
     function put(id, h) { document.getElementById(id).innerHTML = h; }
-    put("st-a", top(viewA(), "A: the sign-in card resting on the open Trials notebook, seen from above"));
-    put("st-b", top(viewB(), "B: the sign-in card tucked under the notebook's front cover, seen from above"));
-    put("st-c", front(viewC(), "C: the sign-in card leaning on the closed recipe box, the notebook beside it"));
-    put("st-d", front(viewD(), "D: the sign-in card standing on the counter between the notebook and the recipe box"));
-    [0, 1, 2].forEach(function (k) { put("st-h" + "abc".charAt(k), svg([640, 1160], signin(660, 120, 480, k), "Headings " + HEADS[k].join(" and ").toLowerCase(), 236, 290)); });
-    put("st-signin", front(viewD(), "Sign in: the lined recipe card standing on the counter between the notebook and the recipe box, over the pale kitchen"));
-    put("st-signup", front(nb(430, 2) + bx(1350, 1.6) + signup(610, CT - 616), "Sign up: the lined recipe card on the counter, with Start with sample recipes ticked"));
+    [0, 1, 2].forEach(function (k) { put("st-h" + "abc".charAt(k), svg([620, 1180], signin(k), "Headings " + HEADS[k].join(" and ").toLowerCase(), 222, 300)); });
+    put("st-signin", page(signin(), "Sign in: the lined recipe card, upright in the middle of the pale kitchen"));
+    put("st-signup", page(signup(), "Sign up: the lined recipe card in the middle of the pale kitchen, with Start with sample recipes ticked"));
     put("st-guest", guest());
   });
 })();

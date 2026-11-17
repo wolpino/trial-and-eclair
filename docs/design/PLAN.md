@@ -41,10 +41,10 @@ One view at a time, reviewed as it lands, not all at the end.
 | 4 | Trials notebook | 06-notebook | done (Ari 11/13) |
 | 5 | Idea board | 03-ideas | done (Ari 11/13) |
 | 6 | Cookbooks | 04-cookbooks | done (Ari 11/13, v20) |
-| 7 | References | 05-references | waiting on Ari (v23) |
-| 8 | Sign in and sign up | 09-start | waiting on Ari (v23) |
-| 9 | Account menu and settings | 11-account | waiting on Ari (v23) |
-| 10 | Front page and not-found | 12-front | waiting on Ari (v23) |
+| 7 | References | 05-references | done (Ari 11/16) |
+| 8 | Sign in and sign up | 09-start | done (Ari 11/16; card centred, nothing in front; headings pick open) |
+| 9 | Account menu and settings | 11-account | done (Ari 11/16) |
+| 10 | Front page and not-found | 12-front | front page done (Ari 11/16); not found A index card / B ripped cookbook, pick open (v24) |
 
 Statuses: not started → drawing → waiting on Ari → tweaking → done.
 

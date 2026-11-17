@@ -10,6 +10,42 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-16 · Plate X signed off (v24); Plate XI layout set; pre-build risks listed
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-16` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, resumed subagents, up to 3 at once) |
+| **Outcome** | partial (every Plate X view signed off; two picks and the Plate XI layout questions open; no app code) |
+
+### Intent
+Draw Ari's 11/14 and 11/16 answers, get the last four views signed off, and find anything that could disrupt the build later.
+
+### Summary
+- v23: references scroll sideways, starters Edit/Delete signed in and Hide for guests; account change username and password (design now, auth review later); front page A with a big "Trial & Eclair", no tape
+- v24: sign-in and sign-up card centred over the pale kitchen, upright, nothing in front; not found as A index card / B cookbook with a page ripped out, both over the kitchen; editing a starter reference makes the cook's own copy
+- PLAN.md: "T&E" is the mark and appears in the app; new "Before Task issues" list (phone layout first, keyboard and screen readers, web addresses and Back, a kitchen test piece, evening for open views, loading/error/offline, paid-plan tag, new data); Later: review all starter data, theme and show forks
+- Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt
+
+### Decisions
+- References, sign in, account, front page signed off (Ari, 2026-11-16)
+- Plate XI layout: the kitchen in the middle, the zoomed-in views around it
+- "Trial & Eclair" is a title on sign in and the front page
+
+### Open threads
+- Picks: sign-in headings (A Ingredients + Method drawn); not found A or B
+- Four Plate XI layout questions put to Ari (sheet vs page, views with no kitchen object, plans, evening)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate X signed off, Plate XI layout, kitchen in the middle, T&E mark, before Task issues, auth review, starter copy
+**Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, design/plate-x/sections/00-questions.html, 05-references.html, 09-start.html, 11-account.html, 12-front.html
+**Do not redo:** layout rounds 1–10; Plates II–IX; every Plate X section (signed off; only the two open picks change)
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent (Plate XI, the final plate)"
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-13 · Plate X: every view drawn (references, sign in, account, front page, not found)
 
 | Field | Value |

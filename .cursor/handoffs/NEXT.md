@@ -1,4 +1,4 @@
-# NEXT — 2026-11-14 (Plate X: every view drawn; 11/14 answers drawn in v23; 05, 09, 11, 12 waiting on sign-off)
+# NEXT — 2026-11-16 (Plate X signed off at v24; two picks and the Plate XI layout questions open)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,14 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate X, an extra round, drawn one view at a time; Plate XI is the final) → phone layout → mark → brand sheet → Task issues → build
 ```
 
-## Prompt for the next agent (Plate X, after Ari answers the v23 questions)
+## Prompt for the next agent (Plate XI, the final plate)
+> Kitchen Plate XI, the final drawing. Read `docs/design/PLAN.md` (status table, "2. Plate XI", Details list, "Before Task issues"), the `kitchen-layout` memory (bottom entries), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes. Branch `docs/plate-x-cookbooks` (PR wolpino/trial-and-eclair#172) until merged, then branch from `staging-render`.
+>
+> Plate X is signed off at version 24 (https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt). Two picks may still be open: sign-in headings (A Ingredients + Method drawn) and not found (A index card / B ripped cookbook).
+>
+> Ari's layout for Plate XI (2026-11-16): the kitchen in the middle, the zoomed-in views around it. Four layout questions were put to Ari (one sheet with lines to each view and click to enlarge; where sign in, front page, not found and Account go; developer on the sheet with a cook/guest strip, or the Plan switch; evening as a second sheet or one extra image). Get the answers before drawing. Plate XI has no options: picks only, plus the Details list. New artifact, new `design/plate-xi/` copied from `design/plate-x/`.
+
+## Prompt for the next agent (Plate X, after Ari answers the v23 questions) — done 2026-11-16
 > Kitchen Plate X, settling the last four views: references (05), sign in (09), account (11), front page and not found (12). Read `docs/design/PLAN.md` ("How we work", status table, Later and Details lists), the `kitchen-layout` memory (bottom entries), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes. Branch `docs/plate-x-cookbooks` (PR wolpino/trial-and-eclair#172) until merged, then branch from `staging-render`.
 >
 > Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt (version 23). Republish: `cd design/plate-x && node build.cjs`, then `tail -n +2 dist/index.html | sed '$d' > dist/kitchen-plate-x.html`, publish with `url` set to that link.
