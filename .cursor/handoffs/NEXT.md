@@ -13,7 +13,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 ## Prompt for the next agent (Plate XI, after Ari answers) — START HERE
 > Plate XI is drawn and published: https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL (version 1). Sources in `design/plate-xi/` (build: `cd design/plate-xi && node build.cjs`, then `tail -n +2 dist/index.html | sed '$d' > dist/kitchen-plate-xi.html`, publish that file to the same URL).
 >
-> **Waiting on Ari:** (1) web addresses for every view (drawn under each figure; Back returns to `/kitchen`); (2) the paid plan card, "Switch to Developer", free for now (section 05); (3) sign-off of the whole plate.
+> **Confirmed by Ari (2026-11-17):** web addresses as drawn under each view (Back returns to `/kitchen`), and the paid plan card with a free "Switch to Developer" (section 05). **Waiting on Ari:** sign-off of the whole plate.
 >
 > **Page layout:** `00-questions`, `01-kitchen` (ring: kitchen in the middle, views around, lines drawn by `base/xi.js`), `02-row` (front, sign in, sign up, Account, Settings, not found), `03-evening`, `04-plans` (home cook / guest strip, filled from `XI_STRIP`), `05-states`, `06-details`, then "More" sections 10–19, one per view. The director owns 00–04, 06 and `base/`; each "More" file fills its own ring or row figure.
 >
