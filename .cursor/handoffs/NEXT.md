@@ -1,4 +1,4 @@
-# NEXT — 2026-11-13 (Plate X: five views signed off, cookbooks drawn, references next)
+# NEXT — 2026-11-17 (Plate XI signed off; next: web addresses decision note, then the phone layout)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,43 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate X, an extra round, drawn one view at a time; Plate XI is the final) → phone layout → mark → brand sheet → Task issues → build
 ```
 
-## Prompt for the next agent (Plate X references, after Ari looks at version 20)
+## Prompt for the next agent (after Plate XI sign-off) — START HERE
+> Plate XI is SIGNED OFF (Ari, 2026-11-17, version 2): https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL. It is the brand sheet reference. Sources in `design/plate-xi/` (build: `cd design/plate-xi && node build.cjs`, then `tail -n +2 dist/index.html | sed '$d' > dist/kitchen-plate-xi.html`, publish that file to the same URL).
+>
+> **Confirmed by Ari (2026-11-17):** web addresses as drawn under each view (Back returns to `/kitchen`), and the paid plan card with a free "Switch to Developer" (section 05). Nothing waits on Ari.
+>
+> **Page layout:** `00-questions`, `01-kitchen` (ring: kitchen in the middle, views around, lines drawn by `base/xi.js`), `02-row` (front, sign in, sign up, Account, Settings, not found), `03-evening`, `04-plans` (home cook / guest strip, filled from `XI_STRIP`), `05-states`, `06-details`, then "More" sections 10–19, one per view. The director owns 00–04, 06 and `base/`; each "More" file fills its own ring or row figure.
+>
+> **Tweaks:** one subagent per file (cheaper model), brief it with `design/plate-xi/BRIEF.md` and only its file. Check screenshots, republish, commit.
+>
+> **Next:** the web addresses decision is written (`docs/decisions/005-web-addresses.md`); next is the phone layout (PLAN.md section 3), then the mark (T&E), brand sheet, the React test piece (Ari reviews before any commit), Task issues, build.
+
+## Prompt for the next agent (Plate XI, the final plate) — done 2026-11-17
+> Draw Kitchen Plate XI, the final plate. Everything is decided; do not re-ask settled questions. No app code changes.
+>
+> **Read, in this order:** `docs/design/PLAN.md` sections "2. Plate XI (final)" (the checklist IS the brief), "Before Task issues", "Details list", and the status table; then `design/plate-x/BRIEF.md`; then the bottom entries of the `kitchen-layout` memory only if something is unclear.
+>
+> **Do:**
+> 1. Branch: stay on `docs/plate-x-cookbooks` (PR wolpino/trial-and-eclair#172) until merged, then branch from `staging-render`.
+> 2. Copy `design/plate-x/` to `design/plate-xi/`. Plate X sections are signed off: reuse their drawing code, remove every option figure, apply the picks listed in PLAN.md.
+> 3. Build ONE page: day kitchen in the middle, each object's zoomed-in view around it joined by a thin line; a row below for front page, sign in, sign up, Account, not found; the evening kitchen as one extra image below; a short strip for home cook and guest differences; loading, error and offline states; the "paid plan" card; the Details list.
+> 4. Work as the director: one subagent per piece, at most 3 at once, each briefed with BRIEF.md and only its piece. Check screenshots yourself before publishing. To save usage, run subagents on a cheaper model.
+> 5. Publish as a NEW artifact (Plate X stays at https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt, version 24). Build: `cd design/plate-xi && node build.cjs`, then `tail -n +2 dist/index.html | sed '$d' > dist/kitchen-plate-xi.html`.
+> 6. Questions, if any, go at the top of the page in `sections/00-questions.html`, each linked to its drawing, and in chat in the same order.
+> 7. After publishing: update the PLAN.md checklist, this file and `.cursor/session_log.mdc`, and commit. Do not push unless asked.
+>
+> **Two things for Ari to confirm when Plate XI is shown** (both drawn as Claude's pick): every view and recipe gets its own web address with Back returning to the kitchen; clicking a "paid plan" tag offers a free one-click switch to Developer (no payments).
+>
+> **After Plate XI is signed off:** phone layout, then the mark (T&E), brand sheet, the React test piece (Ari reviews before any commit), Task issues, build.
+
+## Prompt for the next agent (Plate X, after Ari answers the v23 questions) — done 2026-11-16
+> Kitchen Plate X, settling the last four views: references (05), sign in (09), account (11), front page and not found (12). Read `docs/design/PLAN.md` ("How we work", status table, Later and Details lists), the `kitchen-layout` memory (bottom entries), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes. Branch `docs/plate-x-cookbooks` (PR wolpino/trial-and-eclair#172) until merged, then branch from `staging-render`.
+>
+> Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt (version 23). Republish: `cd design/plate-x && node build.cjs`, then `tail -n +2 dist/index.html | sed '$d' > dist/kitchen-plate-x.html`, publish with `url` set to that link.
+>
+> The open questions (5 in v23) are at the top of the page (`sections/00-questions.html`). Record Ari's answers in the memory, send tweaks to one subagent per section (up to 3 at once), check screenshots, republish, take answered questions off the list. When all four are signed off, Plate X is done: start Plate XI (final, picks only, plus the Details list).
+
+## Prompt for the next agent (Plate X references, after Ari looks at version 20) — done 2026-11-13
 > Kitchen Plate X, next view: references (section 05). Read `docs/design/PLAN.md` ("How we work", status table, "References" checklist, Details and Later lists), the `kitchen-layout` memory (bottom entries), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes. Work on branch `docs/plate-x-cookbooks` (PR wolpino/trial-and-eclair#172) until it is merged, then branch from `staging-render`.
 >
 > Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt (version 19). Republish: `cd design/plate-x && node build.cjs`, strip the first line and the closing `</body></html>` from `dist/index.html` into `dist/kitchen-plate-x.html`, publish with `url` set to that link.

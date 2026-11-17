@@ -10,8 +10,8 @@ Written 2026-11-13. This is the one list of everything left before the build. If
 
 ## The path
 ```
-Plate X (extra round) → Plate XI (final) → phone layout → mark → brand sheet → Task issues → build
-     ⏳ next                                                                            
+Plate X ✅ → Plate XI ✅ → phone layout → mark → brand sheet → Task issues → build
+                                  ⏳ next
 ```
 1. **Plate X**: draw Ari's Plate IX notes and the three missing views. Options are still allowed here.
 2. **Plate XI, the final**: no options. Ari's picks from Plate X, drawn once. The kitchen comes in day and evening; the open views are day only.
@@ -40,11 +40,11 @@ One view at a time, reviewed as it lands, not all at the end.
 | 3 | Whiteboard | 02-whiteboard | done (Ari 11/13) |
 | 4 | Trials notebook | 06-notebook | done (Ari 11/13) |
 | 5 | Idea board | 03-ideas | done (Ari 11/13) |
-| 6 | Cookbooks | 04-cookbooks | waiting on Ari (answers drawn v19: spines to one side, roles, no Share, drag to reorder) |
-| 7 | References | 05-references | not started |
-| 8 | Sign in and sign up | 09-start | not started |
-| 9 | Account menu and settings | 11-account | not started |
-| 10 | Front page and not-found | 12-front | not started |
+| 6 | Cookbooks | 04-cookbooks | done (Ari 11/13, v20) |
+| 7 | References | 05-references | done (Ari 11/16) |
+| 8 | Sign in and sign up | 09-start | done (Ari 11/16; card centred, nothing in front; headings A Ingredients + Method) |
+| 9 | Account menu and settings | 11-account | done (Ari 11/16) |
+| 10 | Front page and not-found | 12-front | done (Ari 11/16; not found = B, cookbook with a page ripped out) |
 
 Statuses: not started → drawing → waiting on Ari → tweaking → done.
 
@@ -90,9 +90,9 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 - [x] Developer, home cook and guest (sample book read-only, paid plan tag)
 
 ### References
-- [ ] Five kinds: Cookbook, Blog, Chef / Baker, Article, Tool (draw Article)
-- [ ] Cards, newest first, a kind stamp on each
-- [ ] Starter references stay even after samples are removed
+- [x] Five kinds: Cookbook, Blog, Chef / Baker, Article, Tool (draw Article)
+- [x] Cards, newest first, a kind stamp on each
+- [x] Starter references stay even after samples are removed
 
 ### Trials notebook
 - [x] Tabs and a Contents page
@@ -112,17 +112,17 @@ Every view gets a **developer** and a **home cook** version, plus **guest** wher
 - [x] Photo on the card front
 
 ### Sign in and sign up
-- [ ] "Trial & Eclair" as the title (the one place it appears)
-- [ ] "Sign up" replaces "Start a kitchen"
-- [ ] Username, as the app does now
-- [ ] A few card styles, one that looks like a recipe card
-- [ ] Sample data on by default at sign-up
-- [ ] Guests land in the kitchen
+- [x] "Trial & Eclair" as the title (the one place it appears)
+- [x] "Sign up" replaces "Start a kitchen"
+- [x] Username, as the app does now
+- [x] A few card styles, one that looks like a recipe card
+- [x] Sample data on by default at sign-up
+- [x] Guests land in the kitchen
 
 ### New views (never drawn)
-- [ ] Account menu and settings (incl. remove samples, sign out)
-- [ ] Signed-out front page
-- [ ] Not-found page
+- [x] Account menu and settings (incl. remove samples, sign out)
+- [x] Signed-out front page
+- [x] Not-found page
 
 ### No change in Plate X
 - Public recipe and cookbook pages (section 08): on hold
@@ -142,10 +142,16 @@ From 2026-11-13: small visual details (a colour, a spacing, a word, a size) go h
 - Cookbooks shelf close-up: give it the brown trim border the full-screen kitchen has (Ari, 2026-11-13)
 
 ## 2. Plate XI (final)
-- [ ] Day kitchen and evening kitchen with every pick
-- [ ] Every open view, final, developer and home cook (and guest where it differs)
-- [ ] Sign in, Account, front page, not-found
-- [ ] Ari signs off. Then this plate is the brand sheet reference
+Layout (Ari, 2026-11-16). One page, new artifact, sources in `design/plate-xi/` copied from `design/plate-x/`. No options anywhere: picks only.
+- [x] The day kitchen in the middle. Around it, the zoomed-in view of each object (whiteboard, idea board, notebook, recipe box, cookbooks, references, recipe log cabinet), each joined to its object by a thin line
+- [x] A row below for views with no kitchen object: front page, sign in, sign up, Account menu and Settings, not found
+- [x] The evening kitchen as one extra image below (evening is the kitchen only)
+- [x] Developer version drawn. No Developer / Home cook / Guest switch at the top (Claude's pick; Ari asked "what switch": it is the three-way toggle at the top of the Plate X page). A short strip shows only where home cook and guest differ
+- [x] Loading, error and offline states, and the "paid plan" card (see "Before Task issues")
+- [x] Every item on the Details list (sill: a jar of wooden spoons replaces the plant; window set in a recess)
+- [x] Picks to apply: sign-in headings A (Ingredients + Method; drop crops B and C); not found B (cookbook with a page ripped out; drop A the index card); sign-in card centred with nothing in front; front page A; everything else as signed off in Plate X v24
+- [ ] "TRIAL & ECLAIR" small name becomes the T&E mark where it appears in the app, once the mark exists (step 4); leave as is in Plate XI
+- [x] Ari signed off (2026-11-17, version 2). Then this plate is the brand sheet reference. Drawn 2026-11-17: https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL (sources `design/plate-xi/`)
 
 ## 3. Phone layout
 - [ ] Stacked phone kitchen, jot button bottom right
@@ -153,15 +159,28 @@ From 2026-11-13: small visual details (a colour, a spacing, a word, a size) go h
 - [ ] Phone notebook with the camera button (Plate VIII)
 
 ## 4. Mark
+- Ari (2026-11-13): the mark is "T&E", and it appears in the app (where it sits is decided when drawing the mark). The full name "Trial & Eclair" is a title on sign in and the front page (Ari, 2026-11-14: bigger on the front page)
 - [ ] Pick a mark. Already dropped: the E of eclairs, the recipe-card mark, crops of the eclair, box and notebook
 
 ## 5. Brand sheet
 - [ ] Colours, fonts, line and halftone rules, the mark, kitchen reference from Plate XI
 
+## Before Task issues: things that could disrupt the build
+Raised 2026-11-16. Ari's answers (2026-11-16) are in each line. "Claude's pick" means Ari asked for a recommendation; it stands unless Ari says otherwise.
+- [x] **Phone layout**: next after Plate XI (Ari: next, or after the brand work. Claude's pick: straight after Plate XI, before the mark, because it shapes how the kitchen is built and the brand work does not). Square it with the Recipe Box phone work (`docs/recipe-box/`)
+- [x] **Keyboard and screen readers**: every kitchen object is a real button or link over the drawing, from the first component. The full accessibility pass stays on the Later list and must happen before the build is called done
+- [x] **Web addresses** (confirmed by Ari 2026-11-17, as drawn in Plate XI): every open view, recipe, trial and cookbook gets its own address, and Back closes the open view and returns to the kitchen. Why: refresh keeps your place, links can be saved and shared, and the phone's Back button works. Cheap to do from the start, hard to add later. Written: `docs/decisions/005-web-addresses.md`
+- [ ] **Test piece**: build the kitchen plus one open view in React to check scaling (960 to 1680 px) and speed. Ari reviews it BEFORE anything is committed
+- [x] **Evening**: the kitchen only. Open views always use the day look, so nothing in use is hard to read (Ari)
+- [x] **Loading, error and offline states** (drawn in Plate XI section 05): Claude decides, in the plate style, and draws them in Plate XI (Ari). Start from: loading = the view opens at once with faint ruled lines where words will be; error = a small printed card "That didn't load. Try again"; offline = a thin printed strip under the find bar "Offline. Showing what was saved."
+- [x] **"Paid plan" tag** (confirmed by Ari 2026-11-17, card as drawn in Plate XI section 05): no payments now. Clicking the tag opens a small card naming what the Developer plan adds, with one button "Switch to Developer" that upgrades a home cook at once, free. A guest sees "Sign up" first. Draw the card in Plate XI. Real payments stay on the Later list
+- [x] **New data** (whiteboard backend, recipe log #161, starter references copy and hide, sample-data flag and removal): done during the build, each as its own Task issue, backend before the view that needs it. Nothing to do now
+
 ## 6. Build list (becomes Task issues)
 Changes the app needs that came out of the plates. Each becomes one Task issue.
 - Idea board: drop the 4 statuses (Researching, Testing, Ready to publish, Archived). An idea is a note; moving it to a trial archives it
-- Starter references are kept when samples are removed
+- Starter references are kept when samples are removed. Signed-in cooks can edit and delete a starter like their own; guests can only hide one (Ari, 2026-11-14). Editing a starter makes the cook's own copy (Ari, 2026-11-16)
+- Reference shelf scrolls sideways with round arrows; no kind filters
 - Sign-up asks about sample data (on by default); remove all samples in one go from Account
 - Recipe log (issue #161): lives on a clipboard inside the double cabinet under the counter
 - Whiteboard: a list the cook writes (no automatic items, no pins, no recipe-card link); tick puts a line through until the next day; a small red x after a ticked item's name removes it (Ari, 2026-11-13)
@@ -169,6 +188,7 @@ Changes the app needs that came out of the plates. Each becomes one Task issue.
 - Kitchen home as drawn (port Plate XI to React components)
 - Every open view as drawn
 - Sign in and sign up as drawn; Account menu; front page; not-found page
+- Auth review: change username and password from Settings (drawn in Plate X, Ari 2026-11-14), plus password reset and session rules
 
 ---
 
@@ -188,6 +208,8 @@ Parked. Not drawn, not built until moved up.
 - Recipe log and stains on cards (issue #161 and after)
 - Phone photo hand-off by QR code
 - Clickable things that open nothing still react a little
+- Review all the starter and sample data (recipes, ideas, references, cookbook) as one pass (Ari, 2026-11-14)
+- Account: theme switch and "show forks" left out of the drawn Account for now (Ari, 2026-11-14); the app has both today
 - Whiteboard suggestions from recent activity (automatic items, wipe, pin). Dropped from Plate X as too fussy
 
 ## Where things are

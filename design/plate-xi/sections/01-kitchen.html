@@ -1,0 +1,42 @@
+<section aria-labelledby="h-k" id="k-sec">
+  <span class="label" id="h-k">01 · The kitchen and its views</span>
+  <div class="sec-body">
+    <div class="ring" id="ring">
+      <svg id="ring-lines" aria-hidden="true"></svg>
+      <div class="tile t-wb"><h3>Whiteboard</h3><figure id="ring-wb" class="fx"></figure><p class="addr">/whiteboard</p><a class="more" href="#more-wb">More of the whiteboard ↓</a></div>
+      <div class="tile t-ideas"><h3>Idea board</h3><figure id="ring-ideas" class="fx"></figure><p class="addr">/ideas</p><a class="more" href="#more-ideas">More of the idea board ↓</a></div>
+      <div class="tile t-nb"><h3>Trials notebook</h3><figure id="ring-nb" class="fx"></figure><p class="addr" id="addr-nb">/notebook/croissants/trial-4</p><a class="more" href="#more-nb">More of the notebook ↓</a></div>
+      <div class="tile t-key"><p class="note"><b>How to read this.</b> Each line runs from an object in the kitchen to what one click on it opens. Every open view sits over the dimmed kitchen; Close, Esc or Back returns to the kitchen.</p></div>
+      <div class="tile t-k"><h3>The kitchen, by day</h3><figure id="ring-k" class="fx"></figure><p class="addr">/kitchen</p><p class="note"><b>Try it.</b> Point at anything for its glow and yellow label. Click the eclair for a bite; click the window for the bird.</p></div>
+      <div class="tile t-box"><h3>Recipe box</h3><figure id="ring-box" class="fx"></figure><p class="addr" id="addr-box">/box/croissants</p><a class="more" href="#more-box">More of the recipe box ↓</a></div>
+      <div class="tile t-log"><h3>Recipe log cabinet</h3><figure id="ring-log" class="fx"></figure><p class="addr">/log</p><a class="more" href="#more-k">More of the kitchen ↓</a></div>
+      <div class="tile t-cb"><h3>Cookbooks</h3><figure id="ring-cb" class="fx"></figure><p class="addr" id="addr-cb">/cookbooks</p><a class="more" href="#more-cb">More of the cookbooks ↓</a></div>
+      <div class="tile t-ref"><h3>References</h3><figure id="ring-ref" class="fx"></figure><p class="addr">/references</p><a class="more" href="#more-ref">More of the references ↓</a></div>
+    </div>
+    <p class="note"><b>Web addresses.</b> Every open view, recipe, trial and cookbook gets its own address, shown under each drawing. Refresh keeps your place, a link can be saved or shared, and the browser's or phone's Back button closes the open view and returns to <code>/kitchen</code>. Signed out, <code>/</code> is the front page. The public recipe and cookbook pages keep <code>/r/…</code> and <code>/c/…</code>.</p>
+  </div>
+</section>
+<script>
+(function () {
+  var fig = document.getElementById("ring-k");
+  PLATE.add(function () {
+    fig.innerHTML = svg(VP, scene(VP, opts()), "The main kitchen by day");
+    requestAnimationFrame(xiLines);
+  });
+  /* The window: a click plays the bird */
+  function play(win) { win.querySelectorAll(".k-fly animateTransform, .k-fly set, .k-fly > animate").forEach(function (a) { a.beginElement(); }); }
+  function look(e) {
+    var w = e.target.closest && e.target.closest(".k-win"); if (!w) return;
+    if (e.type === "keydown") { if (e.key !== "Enter" && e.key !== " ") return; e.preventDefault(); }
+    play(w);
+  }
+  /* The eclair: each click takes a bite; the third leaves crumbs. Back whole on reload. */
+  function bite(e) {
+    if (!e.target.closest || !e.target.closest(".eat") || o.bites >= 3) return;
+    if (e.type === "keydown") { if (e.key !== "Enter" && e.key !== " ") return; e.preventDefault(); }
+    o.bites++; PLATE.redraw();
+    var n = fig.querySelector(".eat"); if (n) n.focus();
+  }
+  ["click", "keydown"].forEach(function (t) { fig.addEventListener(t, look); fig.addEventListener(t, bite); });
+})();
+</script>

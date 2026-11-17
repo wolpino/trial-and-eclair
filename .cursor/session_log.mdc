@@ -10,6 +10,120 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-17 · Plate XI drawn and published (the final plate)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-17` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, 5 subagents on a cheaper model, up to 3 at once) |
+| **Outcome** | success (Plate XI drawn, both picks confirmed, signed off by Ari at version 2; no app code) |
+
+### Intent
+Draw Kitchen Plate XI, the final plate, from the Plate X picks, as one page with the kitchen in the middle.
+
+### Summary
+- New `design/plate-xi/` (copied from plate-x): the day kitchen in the middle with each object's open view around it, joined by thin lines (`base/xi.js` draws them from the kitchen's own hot areas; lines hide below 1100 px)
+- Row of pages with no kitchen object (front page, sign in, sign up, Account menu, Settings, not found B); evening kitchen; a home cook and guest strip (each section pushes to `XI_STRIP`); loading, error, offline and the paid plan card (new); the Details list, each line linked to its drawing
+- "More" sections 10–19 keep each view's other signed-off states; all option figures and question lists dropped
+- Details: a jar of wooden spoons replaces the sill plant; window set in a recess to the vanishing point with a deeper sill; idea board scroll bar in wood colours; cookbook cover arrow at y 388; shelf close-up has the wood trim
+- Web addresses drawn under every view (Claude's pick): `/kitchen`, `/whiteboard`, `/ideas`, `/notebook/croissants/trial-4`, `/box/croissants`, `/log`, `/cookbooks`, `/references`, `/settings`, `/sign-in`, `/sign-up`, `/`
+- Plate XI page: https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL
+
+### Decisions
+- Recipe box ring card shows Croissants (Plate X used Blondies) so it matches its address
+- Error card adds "Your work is safe." (subagent's line; Ari can cut it)
+
+### Open threads
+- Done 2026-11-17: Ari confirmed web addresses and the paid plan card, and signed off Plate XI (v2)
+- Front page title is 50 px, the same as sign in, as signed off in v24 (the 11/14 note asked for bigger; check with Ari only if it comes up)
+- PR: branch `docs/plate-x-cookbooks` has 11 unpushed commits since PR #173 merged; not pushed
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XI, final plate, ring layout, XI_STRIP, web addresses, paid plan card, loading error offline, details list
+**Files:** design/plate-xi/ (base/xi.js, sections/00–06 director, 10–19 views), docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–XI (all signed off)
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent (after Plate XI sign-off)". Decision 005 (web addresses) written 2026-11-17
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-16 · Plate X signed off (v24); Plate XI layout set; pre-build risks listed
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-16` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, resumed subagents, up to 3 at once) |
+| **Outcome** | partial (every Plate X view signed off, all questions answered; Plate XI not started; no app code) |
+
+### Intent
+Draw Ari's 11/14 and 11/16 answers, get the last four views signed off, and find anything that could disrupt the build later.
+
+### Summary
+- v23: references scroll sideways, starters Edit/Delete signed in and Hide for guests; account change username and password (design now, auth review later); front page A with a big "Trial & Eclair", no tape
+- v24: sign-in and sign-up card centred over the pale kitchen, upright, nothing in front; not found as A index card / B cookbook with a page ripped out, both over the kitchen; editing a starter reference makes the cook's own copy
+- PLAN.md: "T&E" is the mark and appears in the app; new "Before Task issues" list (phone layout first, keyboard and screen readers, web addresses and Back, a kitchen test piece, evening for open views, loading/error/offline, paid-plan tag, new data); Later: review all starter data, theme and show forks
+- Plate X page: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt
+
+### Decisions
+- References, sign in, account, front page signed off (Ari, 2026-11-16)
+- Plate XI layout: the kitchen in the middle, the zoomed-in views around it
+- "Trial & Eclair" is a title on sign in and the front page
+
+### Open threads
+- All answered 2026-11-16: headings A, not found B; Plate XI is one page, extra row below, evening kitchen as one image below; evening is kitchen only; Claude decides loading/error/offline; test piece reviewed by Ari before commit
+- Ari to confirm at Plate XI: web addresses for every view, and the free one-click "Switch to Developer" card behind the paid plan tag
+- Plate X option figures (heading crops B/C, not found A) are still on the v24 page; Plate XI drops them
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate X signed off, Plate XI layout, kitchen in the middle, T&E mark, before Task issues, auth review, starter copy
+**Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, design/plate-x/sections/00-questions.html, 05-references.html, 09-start.html, 11-account.html, 12-front.html
+**Do not redo:** layout rounds 1–10; Plates II–IX; every Plate X section (signed off, picks made); do not re-ask anything in PLAN.md
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent (Plate XI, the final plate)"
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-13 · Plate X: every view drawn (references, sign in, account, front page, not found)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-13` (fourth) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, 4 subagents, up to 3 at once) |
+| **Outcome** | partial (all Plate X views drawn, Ari's 11/14 answers drawn in v23; 05, 09, 11, 12 waiting on sign-off; no app code) |
+
+### Intent
+Draw the remaining Plate X views without waiting for sign-off on each (Ari: keep going, 1–3 agents at a time).
+
+### Summary
+- Cookbooks signed off (Ari: fine)
+- `05-references.html`: shelf tier opened, cards newest first with five kind stamps (Article in cinnamon), pulled-out card, edit, starters after "Remove samples"
+- `09-start.html`: card styles A ruled recipe card / B index card / C card in the recipe box; sign in and sign up in A, username, samples ticked by default, guest link lands in the kitchen
+- `11-account.html`: menu per plan (guest: Sign up / Sign in, no Settings), Settings sheet (username read-only, plan, remove sample data), remove dialog
+- `12-front.html`: front page options A card over the pale kitchen (leading) / B the kitchen with callouts / C printed page; not found A recipe card on a bread board / B torn notebook page
+- 15 open questions at the top of the page (`00-questions.html`), linked to figures
+- Plate X page versions 21–22: https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt
+- Ari's 11/14 answers drawn (v23): references scroll sideways, starters Edit/Delete signed in and Hide for guests; sign in card rests between notebook and box (A–D), headings Ingredients + Method (A–C); account change username/password (drawn now, auth review later); front page A with big title, no tape; not found A, plus over-the-kitchen option
+- PLAN.md: T&E is the mark and appears in the app; Later: review all starter data, theme and show forks left off; Build: auth review
+
+### Decisions
+- None new from Ari beyond cookbooks signed off. Subagent assumptions to confirm: starter references follow decision 002 (read-only, cook can hide, guest can't); app has no username/password change, so Settings shows username only; theme and "show forks" left out of Account
+
+### Open threads
+- v23 questions: starter edit = own copy?; sign-in card rest A–D; headings A–C; not found signed in; sign-off of 05, 09, 11, 12
+- Then tweak, sign off, and Plate XI (final, picks only)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate X, references kind stamps, starter references, sign in card styles, account menu, remove sample data, front page, not found
+**Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, design/plate-x/sections/00-questions.html, 05-references.html, 09-start.html, 11-account.html, 12-front.html
+**Do not redo:** layout rounds 1–10; Plates II–IX; Plate X sections 01–04, 06, 07 (signed off); 05, 09, 11, 12 as drawn (tweak only)
+**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent (Plate X, after Ari answers the v23 questions)"
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-13 · Plate X cookbooks drawn; five views signed off
 
 | Field | Value |

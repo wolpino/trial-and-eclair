@@ -1,0 +1,19 @@
+<section aria-labelledby="h-plans" id="plans-sec">
+  <span class="label" id="h-plans">04 · Home cook and guest</span>
+  <div class="sec-body">
+    <p class="note"><b>Only the differences.</b> One kitchen for everyone; nothing hidden, nothing moves. Everything above is the developer's. Here is only what a home cook (free) or a guest sees differently.</p>
+    <div class="strip" id="plans-strip"></div>
+  </div>
+</section>
+<script>
+(function () {
+  PLATE.add(function () {
+    var box = document.getElementById("plans-strip"), keep = o.plan;
+    box.innerHTML = XI_STRIP.slice().sort(function (a, b) { return (a.order || 0) - (b.order || 0); }).map(function (it, i) {
+      o.plan = it.plan || "cook"; var art = ""; try { art = it.draw(); } finally { o.plan = keep; }
+      return '<div data-plan="' + (it.plan || "cook") + '"><h3><span class="tag-plan">' + (it.plan === "guest" ? "guest" : "home cook") + "</span>" + it.title + '</h3><figure id="plan-' + i + '">' + art + "</figure>" +
+        (it.note ? '<p class="note">' + it.note + "</p>" : "") + "</div>";
+    }).join("");
+  });
+})();
+</script>

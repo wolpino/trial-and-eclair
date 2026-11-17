@@ -1,0 +1,144 @@
+<section aria-labelledby="h-ref">
+  <span class="label" id="h-ref">05 · References</span>
+  <div class="sec-body">
+    <h3>The references, opened</h3>
+    <figure id="ref-open"></figure>
+    <p class="note"><b>Her research shelf.</b> Clicking the lower tier of the kitchen shelf (under Cookbooks) opens it large over the dimmed kitchen. It holds what she reads and uses, not her own recipes: a cookbook she owns, a pastry chef, a blog, an article, a tool. Each reference is a card standing on the shelf, <b>newest first</b> from the left, with the date it was added at the foot. <b>More than fit:</b> the row scrolls sideways. The last card is cut off at the right edge, and plain round arrows at both ends of the shelf move the row, the same arrows as the recipe box and notebook. No kind filters.</p>
+    <p class="note"><b>Five kind stamps.</b> Each card carries a printed stamp at the top, one shape and colour per kind: Cookbook (blue, square corners), Blog (amber, round ends), Chef / Baker (orange, cut corners), Article (cinnamon, double line) and Tool (green, notched ends). The title on the card is in her hand, because she wrote it. A blank card lies on the desk, so she can add a reference by typing straight away.</p>
+    <h3>One reference pulled out</h3>
+    <figure id="ref-one"></figure>
+    <p class="note"><b>The card.</b> Clicking a card pulls it onto the desk and leaves a gap on the shelf. It shows the title, the stamp, the date, the link, her notes, and the ideas and recipes it inspired (yellow words open them). Edit and Delete are plain words by the title, the same as the recipe box. Delete asks once. "Open link" opens the web address in a new tab.</p>
+    <h3>The same card, being edited</h3>
+    <figure id="ref-edit"></figure>
+    <p class="note"><b>Edit.</b> Every part becomes a line to write on. The kind is one of five chips, Article included. "Link to an idea or recipe" finds one by name as she types. Link and notes can be left empty.</p>
+    <h3>After "Remove samples": the starters stay</h3>
+    <figure id="ref-starters"></figure>
+    <p class="note"><b>Starter references.</b> Every kitchen gets two starter references (here a pan size converter and an article on gluten). They are printed, not handwritten, and marked STARTER at the foot. Removing the sample data from Account takes away the sample references only; the starters stay, after anything she added herself. A new kitchen that signed up without samples looks the same. Pulled out, a starter shows a short printed About, an empty Notes and the link. A signed-in cook (developer or home cook) sees Edit and Delete by its title, the same as her own cards. Editing a starter makes her own copy; the starter itself never changes for anyone else.</p>
+    <div style="max-width:620px;display:grid;gap:6px"><h3>A guest's starter card</h3><figure id="ref-guest"></figure></div>
+    <p class="note"><b>Guest: Hide.</b> A guest sees only "Hide" by a starter's title, no Edit or Delete. Hide takes it off her shelf.</p>
+    <p class="note"><b>Who can do what.</b> References are free. A home cook gets exactly the shelf drawn here, the same as a developer, so there is no home cook drawing and no paid tag. A guest is the same too: she can add, edit and delete her own references. The one difference is the starters: a guest can only hide one, where a signed-in cook can edit or delete it.</p>
+  </div>
+</section>
+<script>
+(function () {
+  var S = STAGE, MID = 'text-anchor="middle"', END = 'text-anchor="end"', SOFT = "var(--ink-soft)", FLOOR = 350, CW = 112;
+  var HAND = "px var(--font-hand);fill:var(--ink)", LAB = "font:700 12px var(--font-label);letter-spacing:.09em;fill:var(--ink-soft)";
+  /* kind: name, colour, stamp shape */
+  var KIND = { c: ["Cookbook", "var(--blue)"], b: ["Blog", "var(--amber)"], h: ["Chef / Baker", "var(--orange)"], a: ["Article", "var(--cinnamon)"], t: ["Tool", "var(--stem)"] };
+  var ORDER = ["c", "b", "h", "a", "t"];
+  /* newest first; "s" = starter (printed, no date) */
+  var ITEMS = [["a", "Cold butter,|warm room", "11/12/26"], ["c", "Laminated|Dough", "11/11/26"], ["h", "Chef|Nell", "11/09/26"], ["b", "The|Proofing|Drawer", "11/05/26"],
+    ["t", "Baker's %|calculator", "10/28/26"], ["c", "The Butter|Book", "10/20/26"], ["b", "Flour|Notes", "10/14/26"], ["t", "Pan size|converter", "s"], ["a", "How gluten|works", "s"]];
+  var MINE = [["b", "Sunday|Crumb", "11/13/26"]].concat(ITEMS.slice(7));
+  function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 0) + '"', fill, sw || 2); }
+  function U(x, y, t, sz, ex, col, w) { return T(x, y, t, "font:" + (w || 600) + " " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"), ex || ""); }
+  function tint(k, p) { return "color-mix(in srgb, " + KIND[k][1] + " " + (p || 34) + "%, var(--card))"; }
+  /* the printed stamp: a shape per kind, tinted fill, ink line and ink letters */
+  function stamp(cx, cy, k, rot) {
+    var t = KIND[k][0].toUpperCase(), w = t.length * 7.4 + 18, h = 22, x = cx - w / 2, y = cy - h / 2, s, c = 6;
+    if (k === "c") s = R(x, y, w, h, tint(k), 1.8);
+    else if (k === "b") s = R(x, y, w, h, tint(k, 50), 1.8, 11);
+    else if (k === "h") s = poly([x + c, y, x + w - c, y, x + w, y + c, x + w, y + h - c, x + w - c, y + h, x + c, y + h, x, y + h - c, x, y + c].join(" ").replace(/(\S+) (\S+)/g, "$1,$2"), tint(k, 40), 1.8);
+    else if (k === "a") s = R(x, y, w, h, tint(k, 30), 1.8) + R(x + 3, y + 3, w - 6, h - 6, "none", 1);
+    else s = poly([x, y, x + w, y, x + w - 5, cy, x + w, y + h, x, y + h, x + 5, cy].join(" ").replace(/(\S+) (\S+)/g, "$1,$2"), tint(k, 40), 1.8);
+    return '<g transform="rotate(' + rot + " " + cx + " " + cy + ')">' + s + T(cx, cy + 4.5, t, "font:700 12px var(--font-label);letter-spacing:.08em;fill:var(--ink)", MID) + "</g>"; }
+  /* a reference card standing on the shelf, flat to us */
+  function card(it, x, i) {
+    var k = it[0], st = it[2] === "s", h = 178 - (i % 3) * 6, y = FLOOR - h, cx = x + CW / 2, s = hatch(x + 4, FLOOR - 6, CW, 8, 0.6) + R(x, y, CW, h, "var(--card)", 2, 2);
+    s += stamp(cx, y + 24, k, (i % 2 ? 2.5 : -3));
+    it[1].split("|").forEach(function (t, j) { s += st ? U(cx, y + 70 + j * 24, t, 17, MID) : T(cx, y + 72 + j * 26, t, "font:700 22" + HAND, MID); });
+    if (st) s += line("M" + (x + 10) + " " + (FLOOR - 34) + " H" + (x + CW - 10), 1.2, 0.6) + T(cx, FLOOR - 15, "STARTER", LAB, MID);
+    else s += U(cx, FLOOR - 15, "added " + it[2], 12, MID, SOFT, 500);
+    return s; }
+  function shelf(items, mode) {
+    var W = S.x1 - S.x0, s = recess(S.x0, S.y0, S.x1, FLOOR, 90, "var(--cab-deep)", { side: "var(--cab-side)", bottom: "var(--wood-hi)" }) + hatch(S.x0, S.y0, W, 12);
+    var many = items.length > 7, X0 = many ? 518 : 478, last = ""; items.forEach(function (it, i) { var x = X0 + i * (CW + 10), c = card(it, x, i), h = 178 - (i % 3) * 6;
+      if (i === 1 && mode === "open") c = hot("the reference Laminated Dough", c, [x, FLOOR - h, CW, h], S.x0 + 2).replace('class="hot', 'class="hot on');
+      if (i === 1 && (mode !== "open")) c = '<rect x="' + x + '" y="' + (FLOOR - h) + '" width="' + CW + '" height="' + h + '" rx="2" style="fill:none;stroke:var(--card);stroke-width:1.6;stroke-dasharray:6 5;opacity:.8"/>';
+      if (i === 1 && mode === "open") last = c; else s += c; }); s += last;
+    /* more cards than fit: the row scrolls sideways; plain round arrows at both ends, as in the recipe box */
+    if (many) s += arrowBtn(S.x0 + 34, 250, -1) + arrowBtn(S.x1 - 34, 250, 1);
+    s += R(S.x0, FLOOR, W, 26, "var(--wood)", 2.6) + grain(S.x0, FLOOR + 2, W, 22, 31) + tapeLbl(S.cx, FLOOR + 13, "REFERENCES");
+    return clipTo(S.x0, S.y0, S.x1, FLOOR + 26, s); }
+  function tapeLbl(cx, cy, text) { var len = text.length * 13 + 34, x0 = cx - len / 2, x1 = cx + len / 2, y0 = cy - 11, p = [], j;
+    for (j = 0; j <= 4; j++) p.push((x1 - (j % 2 ? 3 : 0)) + "," + (y0 + j * 5.5));
+    for (j = 4; j >= 0; j--) p.push((x0 + (j % 2 ? 3 : 0)) + "," + (y0 + j * 5.5));
+    return '<g transform="rotate(-1 ' + cx + " " + cy + ')"><polygon points="' + p.join(" ") + '" style="fill:#eadfb4;fill-opacity:.96;stroke:#b09a62;stroke-width:1;stroke-linejoin:round"/>' +
+      T(cx, cy + 6, text, "font:400 16px 'Permanent Marker', var(--font-hand);letter-spacing:.6px;fill:var(--ink)", MID) + "</g>"; }
+  function txt(len, fs) { return len * fs * 0.42; }
+  function chip(x, y, text, on, k) { var w = k ? text.length * 8.5 + 40 : text.length * 7.6 + 24;
+    return [reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="28" rx="14"', on ? "var(--yellow)" : "var(--card)", on ? 2.2 : 1.5) + (k ? reg("circle", 'cx="' + (x + 16) + '" cy="' + (y + 14) + '" r="6"', KIND[k][1], 1.3) : "") +
+      U(x + (k ? 28 : 12), y + 19, text, 14), w]; }
+  /* five kinds in two rows */
+  function chips(x, y, sel) { var s = "", cx = x; ORDER.forEach(function (k, i) { if (i === 3) { cx = x; y += 34; } var c = chip(cx, y, KIND[k][0], k === sel, k); s += c[0]; cx += c[1] + 8; }); return s; }
+  function fld(x, y, w, lab, val, fs, cur, ghost) {
+    return T(x, y, lab, LAB) + (val ? T(x, y + 30, val, "font:600 " + fs + "px var(--font-hand);fill:" + (ghost ? SOFT : "var(--ink)")) : "") + line("M" + x + " " + (y + 37) + " H" + (x + w), 1.2, 0.75) +
+      (cur ? line("M" + (x + (ghost ? -1 : txt(val.length, fs) + 5)) + " " + (y + 10) + " v24", 2.4, 1, "var(--orange)") : ""); }
+  function paper(x, y, w, h, rot, inner) {
+    return '<g transform="rotate(' + rot + " " + (x + w / 2) + " " + (y + h / 2) + ')">' + hatch(x + 7, y + 7, w, h, 0.55) + R(x, y, w, h, "var(--card)", 2.2, 3) + inner + "</g>"; }
+  function word(x, y, t) { return '<g role="button" tabindex="0">' + U(x, y, t, 15) + "</g>"; }
+  /* the reference card, read (edit = false) or being edited */
+  function refCard(edit) { var x = 500, y = 394, L = x + 28, Rx = x + 428, s = line("M" + (x + 404) + " " + (y + 70) + " V" + (y + 292), 1.2, 0.5);
+    if (!edit) {
+      s += line("M" + x + " " + (y + 62) + " H" + (x + 800), 1.4, 1, "#e3a59a");
+      for (var ly = y + 122; ly < y + 300; ly += 30) s += line("M" + (x + 416) + " " + ly + " H" + (x + 788), 1, 1, "#c3d2ec");
+      s += T(L, y + 20, "PULLED FROM THE SHELF", LAB) + T(L, y + 54, "Laminated Dough", "font:700 38" + HAND) + word(L + 258, y + 50, "Edit") + word(L + 300, y + 50, "Delete");
+      s += stamp(L + 44, y + 92, "c", -2) + U(L + 104, y + 97, "added 11/11/26", 14, "", SOFT, 500);
+      s += T(L, y + 142, "LINK", LAB) + U(L, y + 168, "example.com/laminated-dough", 17, "", "var(--ink)", 400) + line("M" + L + " " + (y + 173) + " h236", 1, 0.7) + pill(L, y + 186, 116, "Open link", true);
+      s += pill(L, y + 258, 140, "Back on shelf");
+      s += T(Rx, y + 92, "NOTES", LAB);
+      ["The book I own. Best chapter on butter.", "p. 84: rest 2 h between folds.", "Her proof is warmer than mine: 26°C."].forEach(function (t, i) { s += T(Rx, y + 120 + i * 30, t, "font:600 24" + HAND); });
+      s += T(Rx, y + 222, "INSPIRED", LAB) + lk(Rx, y + 250, "Croissants, trial 4", 25, true, "Croissants, trial 4") + U(Rx + 218, y + 250, "recipe", 14, "", SOFT, 400) +
+        lk(Rx, y + 280, "Cardamom knots", 25, false, "the idea Cardamom knots") + U(Rx + 166, y + 280, "idea", 14, "", SOFT, 400);
+      return paper(x, y, 800, 312, -0.8, s); }
+    s += fld(L, y + 30, 350, "TITLE", "Laminated Dough", 30, true) + word(L + 300, y + 30, "Delete") + T(L, y + 98, "KIND", LAB) + chips(L, y + 106, "c") + fld(L, y + 190, 350, "LINK (OPTIONAL)", "example.com/laminated-dough", 24);
+    s += pill(L, y + 262, 84, "Save", true) + pill(L + 94, y + 262, 90, "Cancel");
+    s += fld(Rx, y + 30, 344, "NOTES (OPTIONAL)", "The book I own. Best chapter on butter.", 24) + T(Rx, y + 97, "p. 84: rest 2 h between folds.", "font:600 24" + HAND) + line("M" + Rx + " " + (y + 104) + " h344", 1.2, 0.75);
+    s += T(Rx, y + 140, "LINK TO AN IDEA OR RECIPE", LAB);
+    var c1 = chip(Rx, y + 150, "Croissants, trial 4 ×"), c2 = chip(Rx + c1[1] + 8, y + 150, "Cardamom knots ×"); s += c1[0] + c2[0];
+    s += R(Rx, y + 190, 344, 34, "var(--page)", 1.8, 4) + '<circle cx="' + (Rx + 18) + '" cy="' + (y + 206) + '" r="6" style="fill:none;stroke:var(--ink);stroke-width:2"/>' + line("M" + (Rx + 23) + " " + (y + 211) + " l5 5", 2.2) +
+      T(Rx + 36, y + 215, "yuz", "font:600 24" + HAND) + line("M" + (Rx + 70) + " " + (y + 196) + " v22", 2.4, 1, "var(--orange)");
+    s += R(Rx, y + 224, 344, 68, "var(--page)", 1.8, 4) + '<rect x="' + (Rx + 2) + '" y="' + (y + 226) + '" width="340" height="32" style="fill:var(--yellow);opacity:.55"/>' +
+      T(Rx + 14, y + 249, "Yuzu curd tart", "font:600 24" + HAND) + U(Rx + 330, y + 247, "idea", 14, END, SOFT, 400) +
+      T(Rx + 14, y + 281, "Yuzu shortbread, trial 1", "font:600 24" + HAND) + U(Rx + 330, y + 279, "recipe", 14, END, SOFT, 400);
+    return paper(x, y, 800, 312, 0, s); }
+  /* the blank card that is ready when the shelf opens */
+  function addCard() { var x = 500, y = 398, L = x + 26;
+    return paper(x, y, 430, 290, -1, T(L, y + 28, "NEW REFERENCE", LAB) + fld(L, y + 46, 378, "TITLE", "Title of the book, blog, chef, article or tool", 20, true, true) +
+      T(L, y + 112, "KIND", LAB) + chips(L, y + 120, "c") + fld(L, y + 204, 220, "LINK (OPTIONAL)", "", 22) + pill(x + 286, y + 234, 120, "Add to shelf", true)); }
+  function arrowBtn(cx, cy, dir) { return '<g role="button" tabindex="0" aria-label="' + (dir < 0 ? "Earlier" : "Later") + ' references">' + reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="23"', "var(--card)", 2.2) + line("M" + (cx - 4 * dir) + " " + (cy - 10) + " l" + (10 * dir) + " 10 l" + (-10 * dir) + " 10", 3.4) + "</g>"; }
+  /* a starter pulled out: printed, no notes of hers yet; words = the plain words by the title */
+  function starterCard(words) { var x = 500, y = 394, L = x + 28, Rx = x + 428, s = line("M" + (x + 404) + " " + (y + 70) + " V" + (y + 292), 1.2, 0.5) + line("M" + x + " " + (y + 62) + " H" + (x + 800), 1.4, 1, "#e3a59a");
+    for (var ly = y + 232; ly < y + 300; ly += 30) s += line("M" + (x + 416) + " " + ly + " H" + (x + 788), 1, 1, "#c3d2ec");
+    s += T(L, y + 20, "PULLED FROM THE SHELF", LAB) + U(L, y + 52, "Pan size converter", 30);
+    words.forEach(function (w, i) { s += word(L + 290 + i * 42, y + 50, w); });
+    s += stamp(L + 30, y + 92, "t", -2) + T(L + 74, y + 97, "STARTER", LAB) + U(L + 144, y + 97, "in every kitchen", 14, "", SOFT, 500);
+    s += T(L, y + 142, "LINK", LAB) + U(L, y + 168, "example.com/pan-sizes", 17, "", "var(--ink)", 400) + line("M" + L + " " + (y + 173) + " h190", 1, 0.7) + pill(L, y + 186, 116, "Open link", true) + pill(L, y + 258, 140, "Back on shelf");
+    s += T(Rx, y + 92, "ABOUT", LAB) + U(Rx, y + 122, "Scale a recipe from one pan to another:", 17, "", "var(--ink)", 400) + U(Rx, y + 148, "round, square or loaf, by area.", 17, "", "var(--ink)", 400) + T(Rx, y + 204, "NOTES", LAB);
+    return paper(x, y, 800, 312, -0.8, s); }
+  /* a printed slip taped to the desk */
+  function slip(x, y, w, lines) { var s = R(x, y, w, lines.length * 24 + 22, "var(--page)", 1.8);
+    lines.forEach(function (t, i) { s += U(x + 16, y + 30 + i * 24, t, 16, "", "var(--ink)", 500); });
+    return '<g transform="rotate(1.5 ' + (x + w / 2) + " " + y + ')">' + s + '<rect x="' + (x + w / 2 - 30) + '" y="' + (y - 9) + '" width="60" height="18" transform="rotate(-4 ' + (x + w / 2) + " " + y + ')" style="fill:#e8e0c8;opacity:.9;stroke:#b9a77a;stroke-width:1"/></g>'; }
+  function pencil(x, y, rot) { return '<g transform="rotate(' + rot + " " + x + " " + y + ')">' + R(x, y - 6, 150, 12, "var(--yellow)", 1.8) + line("M" + x + " " + y + " h150", 1, 0.5) +
+    R(x + 150, y - 6, 16, 12, "var(--orange)", 1.8, 2) + poly((x - 22) + "," + y + " " + x + "," + (y - 6) + " " + x + "," + (y + 6), "var(--card)", 1.8) + poly((x - 22) + "," + y + " " + (x - 14) + "," + (y - 2.2) + " " + (x - 14) + "," + (y + 2.2), "var(--ink)", 1) + "</g>"; }
+  /* mode: "open" | "one" | "edit" | "starters" */
+  function view(mode) {
+    var x0 = S.x0, W = S.x1 - x0, dy = FLOOR + 26, s = R(x0, dy, W, S.y1 - dy, "var(--wood-hi)", 2.4) + grain(x0 + 10, dy + 20, W - 20, 150, 31) + grain(x0 + 40, dy + 170, W - 60, 160, 32) + hatch(x0 + 2, dy + 1, W - 4, 10, 0.8);
+    var st = mode === "starters" || mode === "guest";
+    s += shelf(st ? MINE : ITEMS, st ? "starters" : mode);
+    if (st) return s + starterCard(mode === "guest" ? ["Hide"] : ["Edit", "Delete"]);
+    if (mode === "one" || mode === "edit") return s + refCard(mode === "edit");
+    s += addCard() + pencil(1090, 660, -14);
+    return s + slip(1010, 430, 290, ["Newest first.", "Click a card to pull it out."]);
+  }
+  PLATE.add(function () {
+    function put(id, h) { document.getElementById(id).innerHTML = h; }
+    put("ref-open", openOver(view("open"), "The reference shelf open over the dimmed kitchen: cards newest first, each with a kind stamp, the row running off the right edge with round arrows at both ends; one card pointed at"));
+    put("ref-one", openOver(view("one"), "One reference pulled out as a card on the desk"));
+    put("ref-edit", openOver(view("edit"), "The reference card in edit mode with five kind chips"));
+    put("ref-starters", openOver(view("starters"), "The shelf after sample data is removed: her own card and the two starters, one starter pulled out with Edit and Delete"));
+    put("ref-guest", svg([S.x0, S.x1], view("guest"), "A guest's starter card on the desk with only Hide by the title", 380, 342));
+  });
+})();
+</script>
