@@ -1,0 +1,49 @@
+<section id="br-col" aria-labelledby="br2-h">
+  <span class="label" id="br2-h">02 · Colours</span>
+  <div class="sec-body">
+    <p class="note">The picks of 11/08, as Plate XI uses them. The <b>kitchen</b> colours are defaults: a cook can change them later (brand swatches plus a colour wheel). Everything else is fixed. The token name is what the build calls it.</p>
+    <h3>Kitchen (cooks can change these)</h3><div class="sw-grid" id="br2-kit"></div>
+    <h3>Accents</h3><div class="sw-grid" id="br2-acc"></div>
+    <h3>Paper and ink</h3><div class="sw-grid" id="br2-ink"></div>
+    <h3>Materials</h3><div class="sw-grid" id="br2-mat"></div>
+    <h3>Evening and the window</h3>
+    <p class="note">Evening is not a second palette. The day kitchen is drawn, then a warm wash falls from the top edge and is multiplied over it (dusk). Only the window sky changes colour. Open views always use the day look.</p>
+    <div class="sw-grid" id="br2-eve"></div>
+    <h3>Lighter and darker shades</h3>
+    <p class="note">Shades are mixed from the colour, never picked by hand, so they follow a cook's own colour: <b>light</b> = 78% colour + white (cabinets 82%); <b>dark</b> = 78% colour + black; <b>deep</b> (cabinet shadow) = 55% + black; <b>side</b> (cabinet end) = 40% + black; <b>box back</b> = 72% + black.</p>
+    <div class="sw-grid" id="br2-mix"></div>
+    <h3>Text on colour</h3>
+    <p class="note">Contrast worked out on this page (WCAG: 4.5 for body text, 3 for large text and drawn shapes). Orange is a fill only; orange words use the darker "orange text". When a cook picks their own colour, labels on it switch to ink or paper, whichever has more contrast.</p>
+    <div class="scroll"><table class="tbl" id="br2-con"></table></div>
+  </div>
+</section>
+<script>
+(function () {
+  function lum(h) { h = h.replace("#", ""); return [0, 2, 4].map(function (i) { var c = parseInt(h.substr(i, 2), 16) / 255; return c <= 0.03928 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); }).reduce(function (a, c, i) { return a + c * [0.2126, 0.7152, 0.0722][i]; }, 0); }
+  function ratio(a, b) { var x = lum(a), y = lum(b); return (Math.max(x, y) + 0.05) / (Math.min(x, y) + 0.05); }
+  function mix(h, pct, w) { h = h.replace("#", ""); var t = w ? 255 : 0; return "#" + [0, 2, 4].map(function (i) { var v = Math.round(parseInt(h.substr(i, 2), 16) * pct + t * (1 - pct)); return ("0" + v.toString(16)).slice(-2); }).join("").toUpperCase(); }
+  function best(bg) { return ratio("#1F1D1A", bg) >= ratio("#FBF4E4", bg) ? "#1F1D1A" : "#FBF4E4"; }
+  function sw(c) { var fg = best(c[1]); return '<div class="sw"><div class="chip" style="background:' + c[1] + ";color:" + fg + '">Aa<span>' + c[1] + '</span></div><div class="meta"><b>' + c[0] + "</b><code>" + c[2] + "</code><span>" + c[3] + "</span></div></div>"; }
+  var G = {
+    kit: [["Sage white", "#EEF0DF", "--plaster", "The wall. Also the light ground behind the mark."], ["Walnut", "#9A6234", "--wood", "Counter, shelf, board frame, window frame."], ["Stem green", "#5E8C3A", "--cab", "Cabinets."], ["Deep cobalt", "#2F4E9A", "--blue", "The recipe box."]],
+    acc: [["Tulip orange", "#E8742A", "--orange", "Fills only: Account dot, chosen-button shadow, marks on cards. Never text."], ["Orange text", "#A8460C", "--orange-text", "Orange words on paper (Claude's picks, links that need warmth)."], ["Amber", "#F5A23A", "--amber", "Choux of the eclair; glow dots."], ["Dandelion", "#F2C230", "--yellow", "Pointed-at labels, primary buttons, paid plan and Guest tags."]],
+    ink: [["Ink", "#1F1D1A", "--ink", "Every line and all body text."], ["Soft ink", "#5A5348", "--ink-soft", "Placeholders, captions, second lines."], ["Paper", "#FBF4E4", "--paper", "Page ground outside the kitchen."], ["Card", "#FFFBF2", "--card", "Cards, buttons, find bar, labels."], ["Notebook page", "#FDFDFB", "--page", "Notebook and ruled pages."], ["Whiteboard", "#FDFCF6", "--wb", "The whiteboard."], ["Rule", "#E2D2B4", "--rule", "Ruled lines, quiet borders."], ["Prussian", "#24406E", "(mark only)", "Dark ground for the mark and the app icon."]],
+    mat: [["Cork", "#D9A868", "--cork", "The idea board (with brown specks)."], ["Brass", "#D4A94F", "--brass", "Label holders, the box's hasp."], ["Cinnamon", "#8A4F2A", "--cinnamon", "The eclair's chocolate glaze."], ["Custard", "#F7E3A6", "--custard", "The eclair's cream once bitten."]],
+    eve: [["Day sky", "#CFE2EA", "window", "Pale sky and one cloud."], ["Night sky", "#26304D", "window", "Moon and stars."], ["Wash, top", "#FFE6B2", "evening wash", "Warm at the top edge…"], ["Wash, middle", "#F7D9A6", "evening wash", "…35% down…"], ["Wash, low", "#D9C7B4", "evening wash", "…70% down…"], ["Wash, floor", "#AEACBD", "evening wash", "…dusky at the floor. Multiplied."]]
+  };
+  PLATE.add(function () {
+    ["kit", "acc", "ink", "mat", "eve"].forEach(function (k) { document.getElementById("br2-" + k).innerHTML = G[k].map(sw).join(""); });
+    var m = [];
+    [["Cabinet", "#5E8C3A", "cab"], ["Box", "#2F4E9A", "blue"], ["Wood", "#9A6234", "wood"]].forEach(function (c) {
+      var lp = c[2] === "cab" ? 0.82 : 0.78; m.push([c[0] + " light", mix(c[1], lp, 1), "--" + c[2] + "-hi", Math.round(lp * 100) + "% + white"]);
+      m.push([c[0] + " dark", mix(c[1], c[2] === "cab" ? 0.55 : (c[2] === "blue" ? 0.72 : 0.78), 0), "--" + c[2] + (c[2] === "cab" ? "-deep" : (c[2] === "blue" ? "-back" : "-dark")), (c[2] === "cab" ? "55%" : (c[2] === "blue" ? "72%" : "78%")) + " + black"]);
+    });
+    document.getElementById("br2-mix").innerHTML = m.map(sw).join("");
+    var P = [["Ink", "#1F1D1A", "Paper", "#FBF4E4"], ["Soft ink", "#5A5348", "Paper", "#FBF4E4"], ["Orange text", "#A8460C", "Paper", "#FBF4E4"], ["Tulip orange", "#E8742A", "Paper", "#FBF4E4"], ["Ink", "#1F1D1A", "Dandelion", "#F2C230"], ["Ink", "#1F1D1A", "Amber", "#F5A23A"], ["White", "#FFFFFF", "Cobalt", "#2F4E9A"], ["Ink", "#1F1D1A", "Cobalt", "#2F4E9A"], ["Paper", "#FBF4E4", "Stem green", "#5E8C3A"], ["Ink", "#1F1D1A", "Stem green", "#5E8C3A"], ["Ink", "#1F1D1A", "Walnut", "#9A6234"], ["Paper", "#FBF4E4", "Walnut", "#9A6234"], ["Ink", "#1F1D1A", "Cork", "#D9A868"], ["Sage white", "#EEF0DF", "Prussian", "#24406E"]];
+    var h = "<tr><th>Words</th><th>On</th><th>Sample</th><th>Contrast</th><th>Use for</th></tr>";
+    P.forEach(function (p) { var r = ratio(p[1], p[3]), u = r >= 7 ? "any text" : r >= 4.5 ? "any text" : r >= 3 ? "large text and shapes only" : "<b style=\"color:#a3261b\">not for text</b>";
+      h += "<tr><td>" + p[0] + "</td><td>" + p[2] + '</td><td><span style="display:inline-block;padding:2px 10px;border:1px solid var(--rule);background:' + p[3] + ";color:" + p[1] + ';font-weight:600">Croissants</span></td><td>' + r.toFixed(1) + "</td><td>" + u + "</td></tr>"; });
+    document.getElementById("br2-con").innerHTML = h;
+  });
+})();
+</script>

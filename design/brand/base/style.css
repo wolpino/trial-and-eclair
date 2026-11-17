@@ -1,0 +1,135 @@
+/* Printed cookbook page, like Plates I–IV: margin labels, a sticky row of choices that redraws every plate.
+   Single theme on purpose: ink on paper, every colour explicit. The evening kitchen is drawn inside the plates. */
+:root {
+  --paper: #fbf4e4; --card: #fffbf2; --ink: #1f1d1a; --ink-soft: #5a5348;
+  --orange: #e8742a; --orange-text: #a8460c; --amber: #f5a23a; --yellow: #f2c230; --stem: #5e8c3a;
+  --cinnamon: #8a4f2a; --cork: #d9a868; --brass: #d4a94f; --rule: #e2d2b4; --custard: #f7e3a6;
+  --blue: #2f4e9a; --wood: #9a6234; --plaster: #eef0df; --cab: #5e8c3a; --page: #fdfdfb; --wb: #fdfcf6;
+  --cab-hi: color-mix(in srgb, var(--cab) 82%, #fff);
+  --cab-deep: color-mix(in srgb, var(--cab) 55%, #000);
+  --cab-side: color-mix(in srgb, var(--cab) 40%, #000);
+  --blue-back: color-mix(in srgb, var(--blue) 72%, #000);
+  --blue-hi: color-mix(in srgb, var(--blue) 78%, #fff);
+  --wood-dark: color-mix(in srgb, var(--wood) 78%, #000);
+  --wood-hi: color-mix(in srgb, var(--wood) 78%, #fff);
+  --font-display: "Young Serif", Georgia, serif;
+  --font-body: "Iowan Old Style", "Palatino Linotype", Palatino, "Book Antiqua", Georgia, serif;
+  --font-hand: "Caveat", "Segoe Script", cursive;
+  --font-label: "Archivo Narrow", "Arial Narrow", Arial, sans-serif;
+  color-scheme: light;
+}
+body { background: var(--paper); color: var(--ink); font: 17px/1.6 var(--font-body); margin: 0; }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.page { max-width: 1240px; margin: 0 auto; padding-block: 44px 72px; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); display: grid; gap: 44px; }
+.label { font: 600 0.78rem/1.2 var(--font-body); font-variant: small-caps; text-transform: lowercase; letter-spacing: 0.14em; color: var(--ink-soft); }
+h1, h2, h3 { font-family: var(--font-display); font-weight: 400; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(2rem, 4.4vw, 2.8rem); line-height: 1.08; }
+h3 { font-size: 1.05rem; line-height: 1.25; }
+p { margin: 0; }
+.intro { max-width: 68ch; color: var(--ink-soft); }
+header { display: grid; gap: 10px; }
+ul.changed { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; max-width: 82ch; font-size: 0.95rem; }
+section { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 12px 28px; border-top: 1.5px solid var(--ink); padding-top: 18px; }
+section > .label { padding-top: 6px; }
+.sec-body { display: grid; gap: 16px; min-width: 0; }
+@media (max-width: 760px) { section { grid-template-columns: minmax(0, 1fr); } }
+.note { font-size: 0.93rem; color: var(--ink-soft); max-width: 76ch; }
+.note b { color: var(--ink); font-weight: 600; }
+figure { margin: 0; border: 1.5px solid var(--ink); background: #fffdf7; min-width: 0; }
+figure svg { width: 100%; height: auto; display: block; }
+.pair { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 460px), 1fr)); }
+.pair > div, .trio > div, .six > div { display: grid; gap: 6px; align-content: start; min-width: 0; }
+.trio { display: grid; gap: 16px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); align-items: start; }
+.six { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 250px), 1fr)); align-items: start; }
+
+.choices { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-block: 1.5px solid var(--ink); padding-block: 8px; display: flex; flex-wrap: wrap; gap: 8px 20px; }
+.choice { display: grid; gap: 3px; }
+.seg { display: flex; flex-wrap: wrap; gap: 4px; }
+.seg button { font: 0.84rem var(--font-body); border: 1.3px solid var(--rule); background: var(--card); padding: 2px 9px; min-height: 32px; cursor: pointer; color: var(--ink); }
+.seg button[aria-pressed="true"] { border-color: var(--ink); box-shadow: 3px 2px 0 var(--orange); }
+.seg button:focus-visible { outline: 2.5px dashed var(--ink); outline-offset: 3px; }
+
+/* Pointing: glow + label, made stronger. Labels never move or hide. */
+.hot { cursor: pointer; outline: none; }
+.lift { transition: transform 0.08s; }
+.hot:active .lift { transform: translate(0, 2px); }
+.fx-glow { opacity: 0; transition: opacity 0.18s; }
+.hot:is(:hover, :focus-visible, .on) .fx-glow { opacity: 1; }
+.hot:is(:hover, :focus-visible, .on) .lbl { fill: var(--yellow) !important; stroke-width: 3px !important; }
+.hot:focus-visible .focus-ring { stroke: var(--ink); }
+.fx-wash, .fx-line { opacity: 0; transition: opacity 0.18s; }
+.hot:is(:hover, :focus-visible, .on) .fx-wash { opacity: 0.5; }
+.hot:is(:hover, :focus-visible, .on) .fx-line { opacity: 1; }
+.lnk { cursor: pointer; outline: none; }
+.lk-hi { opacity: 0; }
+.lnk:is(:hover, :focus-visible, .on) .lk-hi { opacity: 1; }
+.eat { cursor: pointer; outline: none; }
+.eat.done { cursor: default; }
+.eat .ecl { transition: transform 0.12s; }
+.eat:not(.done):is(:hover, :focus-visible) .ecl { transform: translateY(-4px) rotate(-2deg); transform-box: fill-box; transform-origin: center; }
+.eat:focus-visible { outline: 2.5px dashed var(--ink); outline-offset: 4px; }
+.paid { display: none; }
+[data-plan="cook"] .paid { display: inline; }
+@media (prefers-reduced-motion: reduce) { .lift, .fx-glow, .fx-wash, .fx-line { transition: none; } }
+.qgroup { display: grid; gap: 6px; }
+ol.qs, ul.ans { margin: 0; padding-left: 1.3em; display: grid; gap: 7px; max-width: 80ch; }
+ol.qs li::marker { font-weight: 600; }
+
+/* ===== Plate XI ===== */
+.page { max-width: 1680px; }
+.ring { position: relative; display: grid; gap: 22px 26px; grid-template-columns: repeat(12, minmax(0, 1fr)); --lines: on; }
+.ring > .tile { display: grid; gap: 5px; align-content: start; min-width: 0; position: relative; z-index: 1; }
+.ring .t-wb { grid-column: 1 / 7; } .ring .t-ideas { grid-column: 7 / 13; }
+.ring .t-nb { grid-column: 1 / 4; grid-row: 2; } .ring .t-key { grid-column: 1 / 4; grid-row: 3; align-self: end; }
+.ring .t-k { grid-column: 4 / 10; grid-row: 2 / 4; align-self: center; }
+.ring .t-box { grid-column: 10 / 13; grid-row: 2; } .ring .t-log { grid-column: 10 / 13; grid-row: 3; }
+.ring .t-cb { grid-column: 1 / 7; } .ring .t-ref { grid-column: 7 / 13; }
+.ring .t-k figure { border-width: 2.5px; }
+#ring-lines { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 2; overflow: visible; }
+#ring-lines path { stroke: var(--ink); stroke-width: 1.3; fill: none; }
+#ring-lines circle { fill: var(--card); stroke: var(--ink); stroke-width: 1.3; }
+#ring-lines circle.dot { fill: var(--orange); }
+@media (max-width: 1100px) {
+  .ring { grid-template-columns: minmax(0, 1fr); --lines: off; }
+  .ring > .tile { grid-column: 1 !important; grid-row: auto !important; }
+  .ring .t-k { order: -1; }
+}
+.addr { font: 0.8rem/1.3 ui-monospace, "SF Mono", Menlo, monospace; color: var(--ink-soft); }
+.addr::before { content: "web address  "; font: 600 0.7rem var(--font-body); font-variant: small-caps; letter-spacing: 0.1em; }
+.more { font-size: 0.82rem; color: var(--ink-soft); }
+.row5 { display: grid; gap: 18px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr)); align-items: start; }
+.row5 > div, .strip > div { display: grid; gap: 5px; align-content: start; min-width: 0; }
+.strip { display: grid; gap: 16px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 280px), 1fr)); align-items: start; }
+.tag-plan { font: 600 0.72rem var(--font-body); font-variant: small-caps; letter-spacing: 0.1em; border: 1.3px solid var(--ink); padding: 0 6px; margin-right: 6px; background: var(--card); }
+
+/* ===== Brand sheet ===== */
+.qs .pick { font-weight: 600; color: var(--orange-text); }
+.mk-big { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; justify-content: space-around; background: var(--plaster); padding: 18px; border: 1px solid var(--rule); }
+.mk-big.dk { background: #24406E; }
+.mk-big > div { display: grid; justify-items: center; gap: 6px; }
+.cap { font: 600 .72rem var(--font-body); font-variant: small-caps; letter-spacing: .08em; color: var(--ink-soft); }
+.mk-big.dk .cap { color: #EEF0DF; }
+.mk-big svg, .mk-row svg { display: block; width: auto; max-width: 100%; }
+.mk-row { display: flex; gap: 14px; flex-wrap: wrap; align-items: flex-end; }
+.mk-chip { display: grid; justify-items: start; gap: 4px; }
+.mk-chip > div { display: flex; align-items: center; padding: 8px 12px; border: 1px solid var(--rule); min-height: 30px; }
+.mk-chip.sq > div { padding: 6px; border-radius: 3px; }
+.sw-grid { display: grid; gap: 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); }
+.sw { border: 1.5px solid var(--ink); background: var(--card); display: grid; min-width: 0; }
+.sw .chip { height: 74px; border-bottom: 1.5px solid var(--ink); display: flex; align-items: flex-end; justify-content: space-between; padding: 6px 8px; font: 700 1.1rem var(--font-body); }
+.sw .chip span { font: 600 .7rem var(--font-body); letter-spacing: .04em; }
+.sw .meta { padding: 8px 10px; display: grid; gap: 2px; font-size: .86rem; }
+.sw .meta b { font-weight: 600; font-size: .95rem; }
+.sw code, .tbl code { font: .8rem ui-monospace, Menlo, monospace; color: var(--ink-soft); }
+.tbl { border-collapse: collapse; width: 100%; font-size: .9rem; }
+.tbl th, .tbl td { text-align: left; padding: 6px 10px 6px 0; border-bottom: 1px solid var(--rule); vertical-align: top; }
+.tbl th { font: 600 .74rem var(--font-body); font-variant: small-caps; letter-spacing: .1em; color: var(--ink-soft); border-bottom: 1.5px solid var(--ink); }
+.scroll { overflow-x: auto; }
+.type-row { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.1fr); gap: 10px 24px; border-bottom: 1px solid var(--rule); padding-bottom: 14px; align-items: end; }
+@media (max-width: 760px) { .type-row { grid-template-columns: minmax(0, 1fr); } }
+.type-row .spec { font-size: .88rem; color: var(--ink-soft); display: grid; gap: 3px; }
+.type-row .spec b { color: var(--ink); font-weight: 600; }
+.dodont { display: grid; gap: 14px; grid-template-columns: repeat(auto-fit, minmax(min(100%, 220px), 1fr)); }
+.dodont > div { display: grid; gap: 6px; align-content: start; }
+.tag { font: 700 .72rem var(--font-label); letter-spacing: .1em; text-transform: uppercase; }
+.tag.no { color: #a3261b; } .tag.yes { color: #3d6424; }

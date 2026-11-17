@@ -1,0 +1,51 @@
+<section id="br-mark" aria-labelledby="br1-h">
+  <span class="label" id="br1-h">01 · The mark</span>
+  <div class="sec-body">
+    <p class="note"><b>Eclair G</b> (picked 11/17): a plain eclair, tilted up to the right at the tape's angle (4 degrees). Choux in amber, a chocolate glaze with drips, a white drizzle, and the ink line on top. No letters on it.</p>
+    <div class="pair">
+      <div class="mk-big"><div id="br1-big"></div></div>
+      <div class="mk-big dk"><div id="br1-bigdk"></div></div>
+    </div>
+    <h3>Sizes</h3>
+    <p class="note">Two drawings. <b>Full</b> (above 40 px): hatched shadow, drizzle, four or five drips, 2.8 line. <b>Small</b> (40 px and below): no shadow, no drizzle, three drips, a thicker line so it holds. On a dark ground it gets a paper edge.</p>
+    <div class="mk-row" id="br1-sizes"></div>
+    <h3 id="br-icon">App icon and browser tab</h3>
+    <p class="note">A square cannot hold a wide eclair, so in the icon and the tab it turns to 35 degrees to fill the square. This tilt is for squares only; everywhere else it is 4 degrees.</p>
+    <div class="mk-row" id="br1-icons"></div>
+    <h3>With the title</h3>
+    <p class="note">On sign in and the front page: the eclair beside "Trial &amp; Eclair" in Young Serif. The eclair is as tall as the capitals plus a little, and sits on the same line.</p>
+    <div class="mk-big" style="justify-content:center"><div id="br1-lock" style="display:flex;align-items:center;gap:14px"></div></div>
+    <h3>Rules</h3>
+    <div class="dodont">
+      <div><span class="tag yes">Do</span><p class="note">Leave clear space round it of half its height. Keep the 4-degree tilt (35 in squares). Use the small drawing at 40 px and below.</p></div>
+      <div><span class="tag no">Don't</span><p class="note">Write on it, recolour it to match a cook's kitchen, flip it, straighten it, crop it, or put it on a busy picture.</p></div>
+    </div>
+    <div id="br1-donts" class="mk-row"></div>
+  </div>
+</section>
+<script>
+(function () {
+  var PRUSS = "#24406E";
+  var chip = function (svg, cap, bg, sq) { return '<div class="mk-chip' + (sq ? " sq" : "") + '"><div style="background:' + bg + '">' + svg + '</div><span class="cap">' + cap + "</span></div>"; };
+  function square(size, bg, dark) {
+    var m = MK2.make("G", { ang: -35, sm: size <= 40, dark: dark });
+    return '<svg width="' + size + '" height="' + size + '" viewBox="0 0 240 240" role="img" aria-label="Eclair icon"><rect x="2" y="2" width="236" height="236" rx="54" style="fill:' + bg + ";stroke:#1F1D1A;stroke-width:" + (size <= 40 ? 6 : 3) + '"/><g transform="translate(120 120) scale(.82) translate(-120 -120)">' + m.g + "</g></svg>";
+  }
+  PLATE.add(function () {
+    document.getElementById("br1-big").innerHTML = MK2.sv("G", {}, 150) + '<span class="cap">full, on paper</span>';
+    document.getElementById("br1-bigdk").innerHTML = MK2.sv("G", { dark: true }, 150) + '<span class="cap">full, on Prussian</span>';
+    document.getElementById("br1-sizes").innerHTML =
+      chip(MK2.sv("G", {}, 64), "full, 64", "var(--plaster)") + chip(MK2.sv("G", {}, 28), "top bar, 28 (full)", "var(--plaster)") +
+      chip(MK2.sv("G", { sm: true }, 32), "small, 32", "var(--plaster)") + chip(MK2.sv("G", { sm: true }, 16), "small, 16", "var(--plaster)") +
+      chip(MK2.sv("G", { sm: true, dark: true }, 32), "small, 32, dark", PRUSS) + chip(MK2.sv("G", { sm: true, dark: true }, 16), "small, 16, dark", PRUSS);
+    document.getElementById("br1-icons").innerHTML =
+      chip(square(120, PRUSS, true), "app icon, Prussian (pick)", "var(--card)") + chip(square(120, "#EEF0DF", false), "app icon, paper", "var(--card)") +
+      chip(square(60, PRUSS, true), "home screen, 60", "var(--card)") + chip(square(32, "#EEF0DF", false), "tab, 32 (pick)", "var(--card)") +
+      chip(square(16, "#EEF0DF", false), "tab, 16", "var(--card)") +
+      '<div class="mk-chip"><div style="background:#cfd3c4;flex-direction:column;gap:4px;padding:10px 16px">' + square(60, PRUSS, true) + '<span style="font:600 12px -apple-system,system-ui,sans-serif;color:#1F1D1A">T&amp;E</span></div><span class="cap">home screen label</span></div>';
+    document.getElementById("br1-lock").innerHTML = MK2.sv("G", {}, 46) + '<span style="font:400 44px/1 var(--font-display);color:var(--ink)">Trial &amp; Eclair</span>';
+    var bad = function (o, cap, extra) { var s = MK2.sv("G", o, 40); if (extra) s = s.replace("<svg ", '<svg style="' + extra + '" '); return chip(s, cap, "var(--plaster)"); };
+    document.getElementById("br1-donts").innerHTML = bad({}, "flipped", "transform:scaleX(-1)") + chip('<svg width="86" height="40" viewBox="0 75 240 112" role="img" aria-label="Straightened eclair">' + MK2.make("G", { ang: 0 }).g + "</svg>", "straightened", "var(--plaster)") + bad({}, "recoloured", "filter:hue-rotate(150deg)");
+  });
+})();
+</script>

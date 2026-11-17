@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Mark is eclair G (Ari); next: brand sheet)
+# NEXT — 2026-11-17 (Brand Sheet v1 published; waiting on Ari)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -7,10 +7,17 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ⏳ → mark → brand sheet → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ⏳ → Task issues → build
 ```
 
-## Prompt for the next agent (Mark Plate, after Ari answers) — START HERE
+## Prompt for the next agent (Brand Sheet, after Ari answers) — START HERE
+> Brand Sheet v1: https://claude.ai/artifact/L3p52UdPaAsUBAa77J3gmi. Sources `design/brand/` (base copied from mark; the eclair helper MK2 now lives in `base/mark.js`; kitchen.js is Plate XI's). Sections: 00 questions, 01 mark (sizes, icon, title lockup, rules), 02 colours (tokens, shades, contrast table computed on the page), 03 fonts, 04 line/colour/halftone/hatching, 05 small pieces, 06 kitchen reference (day, evening, construction lines). Build: `cd design/brand && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/brand-sheet.html`, publish to the same URL.
+>
+> **Questions to Ari (page top):** (1) "T&E" only as the home screen label? Claude's pick yes. (2) App icon ground: Prussian (pick) or paper; tab stays paper. (3) Body font: keep Iowan/Palatino/Georgia stack (pick) or load a web font.
+>
+> **Next:** apply answers, get sign-off, record in PLAN step 5, then Task issues (PLAN step 6).
+
+## Prompt for the next agent (Mark Plate, after Ari answers) — done 2026-11-17 (eclair G picked)
 > Mark Plate v1: https://claude.ai/artifact/5baLfL52D5X1pNYCdNgS6F. Sources `design/mark/` (base copied from phone; sections 00 questions, 01 options A–F, 02 in place). Build: `cd design/mark && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/mark-plate.html`, publish to the same URL. One Sonnet subagent per section for tweaks.
 >
 > **Options:** A letterpress serif, B marker on tape, C round stamp (no ring words), D one-stem monogram, E brass label plate, F index-card tab. Claude's pick D (holds at 16 px and as an app icon); runner-up B. Both drawn in place: wide kitchen top left, phone top bar, PWA icon, favicon.

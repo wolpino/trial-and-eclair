@@ -171,7 +171,10 @@ Phone Plate v1 (2026-11-17): https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, 
 - Mark Plate v1 (2026-11-17): six T&E options A–F, Claude's pick D (one-stem monogram). https://claude.ai/artifact/5baLfL52D5X1pNYCdNgS6F (sources `design/mark/`)
 
 ## 5. Brand sheet
-- [ ] Colours, fonts, line and halftone rules, the mark, kitchen reference from Plate XI
+Brand Sheet v1 (2026-11-17): https://claude.ai/artifact/L3p52UdPaAsUBAa77J3gmi, sources `design/brand/` (eclair helper in `base/mark.js`)
+- [x] Colours, fonts, line and halftone rules, the mark, kitchen reference from Plate XI (drawn v1; also small pieces and a contrast table)
+- [ ] Ari answers: T&E under the home screen icon only? App icon ground Prussian or paper? Keep the Apple-first body font?
+- [ ] Ari signs off
 
 ## Before Task issues: things that could disrupt the build
 Raised 2026-11-16. Ari's answers (2026-11-16) are in each line. "Claude's pick" means Ari asked for a recommendation; it stands unless Ari says otherwise.

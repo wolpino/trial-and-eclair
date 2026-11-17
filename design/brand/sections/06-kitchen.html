@@ -1,0 +1,24 @@
+<section id="br-kit" aria-labelledby="br6-h">
+  <span class="label" id="br6-h">06 · Kitchen reference</span>
+  <div class="sec-body">
+    <p class="note">The kitchen as signed off in <a href="https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL">Plate XI</a> (wide screens, every open view) and the <a href="https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy">Phone Plate</a>. Those two pages are the drawings to build from; this sheet only names the rules they follow. Drawn here from the same code.</p>
+    <div class="pair">
+      <div><h3>Day</h3><figure id="br6-day"></figure></div>
+      <div><h3>Evening</h3><figure id="br6-eve"></figure></div>
+    </div>
+    <h3>Construction lines</h3>
+    <p class="note">Every edge going back runs to the one vanishing point (orange dot) on the eye line (dashed). The kitchen scales between 80% (960 px wide) and 140% (1680 px); the middle (notebook, eclair, box) keeps its spacing.</p>
+    <figure id="br6-guides"></figure>
+  </div>
+</section>
+<script>
+(function () {
+  PLATE.add(function () {
+    var V = mainVP();
+    document.getElementById("br6-day").innerHTML = svg(V, scene(V, opts()), "The kitchen by day");
+    document.getElementById("br6-eve").innerHTML = svg(V, scene(V, opts(), true), "The kitchen in the evening");
+    GUIDE = []; var k = scene(V, opts()), g = guides(V); GUIDE = null;
+    document.getElementById("br6-guides").innerHTML = svg(V, '<g style="opacity:.45">' + k + "</g>" + g, "The kitchen with its construction lines");
+  });
+})();
+</script>

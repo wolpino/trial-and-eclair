@@ -10,6 +10,40 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-17 · Brand Sheet drawn and published (v1)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-17` (fourth) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Brand Sheet v1 published; waiting on Ari's three answers; no app code) |
+
+### Intent
+Draw the brand sheet (PLAN step 5) from Plate XI and eclair G.
+
+### Summary
+- New `design/brand/` (base from mark; eclair helper moved to `base/mark.js`; Plate XI kitchen.js)
+- Sections: 00 questions, 01 mark (full and small drawings, icon at 35 degrees, title lockup, do and don't), 02 colours (tokens, mixed shades, contrast table), 03 fonts, 04 line/colour/halftone/hatching, 05 small pieces, 06 kitchen day, evening and construction lines
+- Brand Sheet page: https://claude.ai/artifact/L3p52UdPaAsUBAa77J3gmi
+
+### Decisions
+- Claude's picks pending Ari: "T&E" only as the home screen label; Prussian app icon, paper tab; keep the Apple-first body font stack
+- Prussian is listed as a mark-only colour (the valance left the kitchen in Plate IX)
+
+### Open threads
+- Ari: the three questions at the page top, then sign-off
+- Branch `docs/plate-x-cookbooks` still unpushed; `design/kitchen-starter/` and `design/plate-xi/shots/` untracked, left alone
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Brand Sheet, tokens, contrast, eclair G, app icon, fonts
+**Files:** design/brand/ (base/mark.js, sections 00–06), docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet sections as drawn (tweak only)
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; apply Ari's answers, sign-off, then Task issues
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-17 · Mark Plate drawn and published (v1)
 
 | Field | Value |
