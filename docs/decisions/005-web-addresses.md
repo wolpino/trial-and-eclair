@@ -1,6 +1,6 @@
 # 005: A web address for every view
 
-Date: 2026-11-17. Status: decided. Ari confirmed the addresses and "Back returns to the kitchen" on Plate XI (2026-11-17). The finer rules below (next card replaces the address, names unique per cook, `-2`, old names kept, redirects) are Claude's picks written with this note; they stand unless Ari changes them.
+Date: 2026-11-17. Status: decided. Ari confirmed the addresses and "Back returns to the kitchen" on Plate XI (2026-11-17). The finer rules below (next card replaces the address, names unique per cook, `-2`, old names kept, redirects) were Claude's picks, and Ari confirmed them too (2026-11-17).
 
 ## Context
 
