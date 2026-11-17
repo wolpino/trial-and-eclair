@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Phone Plate v3 published; three questions to Ari)
+# NEXT — 2026-11-17 (Phone Plate v3; Ari's last answers recorded, two small redraws left)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -23,7 +23,9 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 >
 > **v3 (Ari 11/17):** box = drawer (short wooden strip, + in the strip beside ▲ A–Z, no box label pulled out, short tabs on tap, fan as small index cards); add button is a plus everywhere; decision 003 updated. Ari: "same with" was nothing. Later list: notebook shows the recipe; saving rules (decide before editing Task issues).
 >
-> **Open (v3 page top):** Card View B/A/both (Ari leans B); should the add button also offer new recipe / new trial; its name (Add, Quick add, Note or Jot; easy to change later).
+> **Answered (Ari 11/17, after v3):** Card View follows how you hold it, with a keep-sideways button (flexible, revisit later); the add button is "Quick add" and on the kitchen adds an idea, a Next up line, a recipe or a trial; the fan still needs workshopping (Later list, not blocking).
+>
+> **Left to draw (v4, small):** 01 `pk-jot` and `pk-find` → Quick add with four choices, drop `pk-names`/`pk-icons` or mark them settled; 02 Card View → one set with a keep-sideways button, drop the A/B question. Then ask Ari to sign off.
 >
 > **Next:** apply Ari's answers, sign off, then the mark (T&E), brand sheet, React test piece (Ari reviews before any commit), Task issues, build.
 

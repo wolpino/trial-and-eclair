@@ -101,4 +101,5 @@ Drawn in the Phone Plate (https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, `de
 - **No box label** when the drawer is pulled out (the engraved label above is dropped on the phone).
 - **The ☰ menu** uses the body font, not the hand font.
 - **"You are here"** is a full-width yellow band with a bold tag of at least 15 px.
-- **Card View:** still open. Ari leans toward the sideways card (ingredients and steps at once) and is not against upright. Decide before the phone box Task issue.
+- **Card View:** follows the way you hold the phone, with a button to keep it sideways (Ari, 2026-11-17). Build the orientation as one small setting so it can be changed later without reworking Card View.
+- **The fan:** still to workshop (Ari). Build it as its own component so a later redesign replaces only the fan.

@@ -156,10 +156,13 @@ Layout (Ari, 2026-11-16). One page, new artifact, sources in `design/plate-xi/` 
 ## 3. Phone layout
 Phone Plate v1 (2026-11-17): https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, sources `design/phone/`
 - [x] Stacked phone kitchen, jot button bottom right (drawn: day, evening, find list, jot sheet)
-- [ ] Phone recipe card: A any way you hold it (003, Claude's pick) or B always sideways (asked)
+- [x] Phone recipe card: any way you hold it, plus a button to keep it sideways (Ari, 2026-11-17; flexible, can revisit)
+- [x] Recipe box: the drawer (Ari, 2026-11-17; decision 003 updated)
+- [x] Add button: a plus named Quick add; on the kitchen it adds an idea, a Next up line, a recipe or a trial (Ari, 2026-11-17). Not drawn yet
+- [ ] Draw: Quick add sheet with four choices, Card View keep-sideways button
 - [x] Phone notebook with the camera button (drawn)
 - [x] Every other view and page on a phone (drawn)
-- [ ] "Recently" on a phone: top of the find list (Claude's pick, asked)
+- [x] "Recently" on a phone: one chip row at the top of the find list (Ari, 2026-11-17)
 - [ ] Ari signs off
 
 ## 4. Mark
@@ -215,6 +218,7 @@ Parked. Not drawn, not built until moved up.
 - Review all the starter and sample data (recipes, ideas, references, cookbook) as one pass (Ari, 2026-11-14)
 - Account: theme switch and "show forks" left out of the drawn Account for now (Ari, 2026-11-14); the app has both today
 - Whiteboard suggestions from recent activity (automatic items, wipe, pin). Dropped from Plate X as too fussy
+- Workshop the recipe box fan (phone); build it as its own component so it can be swapped (Ari, 2026-11-17)
 - Notebook shows the recipe somewhere (phone and wide kitchen), not only each trial's changes (Ari, 2026-11-17)
 - Saving rules and options: when edits save (Save button, as today, or as you type), and whether unsaved typing is kept on the device until a save goes through. Decide before the Task issues for any editing view, since it shapes every form (Ari, 2026-11-17: come back to this)
 
