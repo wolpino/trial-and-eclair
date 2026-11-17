@@ -41,7 +41,7 @@
   }
   /* The empty board's doodle: a big marker question mark */
   function doodle0(cx, cy) { return line("M" + (cx - 34) + " " + (cy - 50) + " q4 -42 40 -40 q38 4 34 38 q-4 26 -30 36 q-14 6 -12 36", 9, 1, BLUE) + '<circle cx="' + (cx + 2) + '" cy="' + (cy + 62) + '" r="7" style="fill:var(--blue)"/>'; }
-  function doodle(cx, cy) { var s = doodle0(cx, cy - 6).replace(/translate/g, "translate");
+  function doodle(cx, cy) { var s = doodle0(cx, cy - 6);
     /* little eclair, left */
     s += '<g transform="translate(' + (cx - 160) + ' ' + (cy + 20) + ') rotate(-12)">' + line("M-46 -4 q0 -22 46 -22 q46 0 46 22 q0 22 -46 22 q-46 0 -46 -22 Z", 5, 1, BLUE) + line("M-38 -10 q38 -14 76 0", 3, 1, OR) + line("M-30 4 q30 10 60 0", 2.6, 0.9, BLUE) + "</g>";
     /* whisk, right */
