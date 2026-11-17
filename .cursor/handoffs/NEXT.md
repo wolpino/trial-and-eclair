@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Mark Plate v2 published; waiting on Ari's pick)
+# NEXT — 2026-11-17 (Mark is eclair G (Ari); next: brand sheet)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -19,7 +19,11 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 >
 > **v2 (Ari 11/17):** B liked but not yellow, not sold on tape, revisiting T&E, wants the mark from the kitchen (eclair/notebook). Drawn: B on white/black and cobalt with white or dandelion letters, padded vs tight small sizes (01); eclair G plain at the tape angle, H with T&E, I monogram with eclair stem (02); in place (03); v1 kept as 08/09. Claude's picks: cobalt + white padded; G; eclair as icon, T&E as text. Eclair redrawn (kitchen.js helper is private). In-place phones wrap to two rows (fine).
 >
-> **After the pick:** record it in PLAN.md "4. Mark" and the kitchen-layout memory, then the brand sheet (PLAN step 5).
+> **PICKED (Ari 11/17): default to eclair G.** Recorded in PLAN.md step 4.
+>
+> **Next:** brand sheet (PLAN step 5): colours, fonts, line and halftone rules, the mark (G), kitchen reference from Plate XI. Open: whether T&E text stays anywhere, B's tape colour (only if T&E text is used).
+>
+> **After the pick (old note):** record it in PLAN.md "4. Mark" and the kitchen-layout memory, then the brand sheet (PLAN step 5).
 
 ## Prompt for the next agent (Phone Plate, after Ari answers) — done 2026-11-17 (signed off v4)
 > Phone Plate v1 is published: https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy. Sources in `design/phone/` (copied base from plate-xi plus `base/phone.js`, the phone frame helper; brief `design/phone/BRIEF.md`). Build: `cd design/phone && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/phone-plate.html`, publish that file to the same URL.

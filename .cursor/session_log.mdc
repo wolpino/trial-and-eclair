@@ -27,7 +27,7 @@ Draw options for the T&E mark (PLAN step 4).
 - Mark Plate page: https://claude.ai/artifact/5baLfL52D5X1pNYCdNgS6F
 
 ### Decisions
-- None from Ari yet. Claude's pick: D, one-stem monogram; runner-up B, marker on tape. C has no ring words
+- Ari: default mark is eclair G (plain eclair at the tape's angle, no letters)
 
 ### Open threads
 - v2 published same URL from Ari's notes: B recoloured, eclair marks G/H/I, in place. Ari to pick B colour, eclair G/H/I, letters vs eclair vs both
@@ -37,7 +37,7 @@ Draw options for the T&E mark (PLAN step 4).
 **Keywords:** Mark Plate, T&E, monogram, favicon, app icon
 **Files:** design/mark/ (sections 00–02), docs/design/PLAN.md, .cursor/handoffs/NEXT.md
 **Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate options as drawn (tweak only)
-**Resume with:** `.cursor/handoffs/NEXT.md` top prompt (Mark Plate, after Ari answers)
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; mark picked (eclair G), next the brand sheet
 <!-- AGENT_CONTEXT_END -->
 
 ---
