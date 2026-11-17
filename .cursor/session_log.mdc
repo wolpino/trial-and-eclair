@@ -17,7 +17,7 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 | **Session** | `2026-11-17` (second) |
 | **Project** | trial-and-eclair |
 | **Mode** | Claude Code (desktop, artifacts, 5 Sonnet subagents, up to 3 at once) |
-| **Outcome** | success pending sign-off (Phone Plate v4, every answer drawn; no app code) |
+| **Outcome** | success (Phone Plate signed off by Ari at v4; no app code) |
 
 ### Intent
 Fit the signed-off Plate XI kitchen and views to an upright phone (PLAN.md section 3).
@@ -45,7 +45,7 @@ Fit the signed-off Plate XI kitchen and views to an upright phone (PLAN.md secti
 **Keywords:** Phone Plate, phone.js, upright phone, Card View, Recently, jot button
 **Files:** design/phone/ (BRIEF.md, base/phone.js, sections/00–05), docs/design/PLAN.md, .cursor/handoffs/NEXT.md
 **Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate sections as drawn (tweak only)
-**Resume with:** `.cursor/handoffs/NEXT.md`, "Prompt for the next agent (Phone Plate, after Ari answers)"
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; next is the mark (T&E). Phone Plate signed off
 <!-- AGENT_CONTEXT_END -->
 
 ---

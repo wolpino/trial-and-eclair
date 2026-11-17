@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Phone Plate v4: every answer drawn; waiting on Ari's sign-off)
+# NEXT — 2026-11-17 (Phone Plate SIGNED OFF; next: the mark)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -7,7 +7,7 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ⏳ → mark → brand sheet → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ⏳ → mark → brand sheet → Task issues → build
 ```
 
 ## Prompt for the next agent (Phone Plate, after Ari answers) — START HERE
@@ -27,7 +27,9 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 >
 > **v4 (drawn 11/17):** Quick add sheet (Idea, Next up, Recipe, Trial) and "Find or add…"; Card View `pb-cv-up`, `pb-cv-side`, `pb-cv-kept` with the Keep sideways pill. No open questions; page top asks for sign-off.
 >
-> **Next:** apply Ari's answers, sign off, then the mark (T&E), brand sheet, React test piece (Ari reviews before any commit), Task issues, build.
+> **SIGNED OFF by Ari 2026-11-17 (v4).** Small phone tweaks (eclair spot, board lower under the find bar) wait for a later review (PLAN Later list).
+>
+> **Next:** then the mark (T&E), brand sheet, React test piece (Ari reviews before any commit), Task issues, build.
 
 ## Prompt for the next agent (after Plate XI sign-off) — done 2026-11-17 (phone plate drawn)
 > Plate XI is SIGNED OFF (Ari, 2026-11-17, version 2): https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL. It is the brand sheet reference. Sources in `design/plate-xi/` (build: `cd design/plate-xi && node build.cjs`, then `tail -n +2 dist/index.html | sed '$d' > dist/kitchen-plate-xi.html`, publish that file to the same URL).

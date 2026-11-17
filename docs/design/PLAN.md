@@ -163,7 +163,7 @@ Phone Plate v1 (2026-11-17): https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, 
 - [x] Phone notebook with the camera button (drawn)
 - [x] Every other view and page on a phone (drawn)
 - [x] "Recently" on a phone: one chip row at the top of the find list (Ari, 2026-11-17)
-- [ ] Ari signs off
+- [x] Ari signs off (2026-11-17, v4)
 
 ## 4. Mark
 - Ari (2026-11-13): the mark is "T&E", and it appears in the app (where it sits is decided when drawing the mark). The full name "Trial & Eclair" is a title on sign in and the front page (Ari, 2026-11-14: bigger on the front page)
@@ -218,6 +218,7 @@ Parked. Not drawn, not built until moved up.
 - Review all the starter and sample data (recipes, ideas, references, cookbook) as one pass (Ari, 2026-11-14)
 - Account: theme switch and "show forks" left out of the drawn Account for now (Ari, 2026-11-14); the app has both today
 - Whiteboard suggestions from recent activity (automatic items, wipe, pin). Dropped from Plate X as too fussy
+- Phone kitchen small tweaks at a later review: the eclair's spot; the board sitting lower, with more room under the find bar (Ari, 2026-11-17)
 - Workshop the recipe box fan (phone); build it as its own component so it can be swapped (Ari, 2026-11-17)
 - Notebook shows the recipe somewhere (phone and wide kitchen), not only each trial's changes (Ari, 2026-11-17)
 - Saving rules and options: when edits save (Save button, as today, or as you type), and whether unsaved typing is kept on the device until a save goes through. Decide before the Task issues for any editing view, since it shapes every form (Ari, 2026-11-17: come back to this)
