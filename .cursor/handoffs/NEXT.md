@@ -19,7 +19,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 >
 > **Tweaks:** one subagent per file (cheaper model), brief it with `design/plate-xi/BRIEF.md` and only its file. Check screenshots, republish, commit.
 >
-> **Next:** write the web addresses decision in `docs/decisions/`, then the phone layout (PLAN.md section 3), then the mark (T&E), brand sheet, the React test piece (Ari reviews before any commit), Task issues, build.
+> **Next:** the web addresses decision is written (`docs/decisions/005-web-addresses.md`); next is the phone layout (PLAN.md section 3), then the mark (T&E), brand sheet, the React test piece (Ari reviews before any commit), Task issues, build.
 
 ## Prompt for the next agent (Plate XI, the final plate) — done 2026-11-17
 > Draw Kitchen Plate XI, the final plate. Everything is decided; do not re-ask settled questions. No app code changes.
