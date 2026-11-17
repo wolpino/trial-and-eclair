@@ -1,0 +1,90 @@
+<section aria-labelledby="h-pn" id="pn-sec">
+  <span class="label" id="h-pn">03 · The Trials notebook on a phone</span>
+  <div class="sec-body">
+    <p class="note"><b>One ruled page at a time.</b> The wide book shows two pages; the phone shows the page you are on, Croissants trial 4. The notebook is a paid-plan object, drawn here for a developer.</p>
+    <div class="phones">
+      <div><h3>The page</h3><figure id="pn-page"></figure>
+        <p class="note"><b>Trial 4, written up.</b> The yellow camera button takes the Quick add button’s place so they do not stack. Tap "‹ Trial 3" or "Trial 5 ›", or swipe, to turn the page; this replaces the address.</p>
+        <p class="addr">/notebook/croissants/trial-4</p></div>
+      <div><h3>A photo taped in</h3><figure id="pn-photo"></figure>
+        <p class="note"><b>Taken, then taped on.</b> The photo lands on the page with a caption and two bits of tape, as on the wide page.</p>
+        <p class="addr">/notebook/croissants/trial-4</p></div>
+      <div><h3>The camera button</h3><figure id="pn-sheet"></figure>
+        <p class="note"><b>Three choices.</b> "Take a photo", "Choose from your photos" or "Cancel" rise from the bottom over the dimmed page.</p>
+        <p class="addr">/notebook/croissants/trial-4</p></div>
+      <div><h3>The list of trials</h3><figure id="pn-list"></figure>
+        <p class="note"><b>The left-hand page, as a sheet.</b> Tap the page title to see every recipe and its trials; tap a number to go there. The address stays the same until a trial is chosen.</p>
+        <p class="addr">/notebook/croissants/trial-4</p></div>
+    </div>
+  </div>
+</section>
+<script>
+(function () {
+  var HAND = "font:600 22px var(--font-hand);fill:var(--ink)", SOFT = "#c3d2ec", RED = "#e3a59a", INKR = "var(--orange-text)";
+  function H(sz, w, col) { return "font:" + (w || 600) + " " + sz + "px var(--font-hand);fill:" + (col || "var(--ink)"); }
+  function U(sz, col) { return "font:600 " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"); }
+  function cam(x, y, k) { return '<g transform="translate(' + x + " " + y + ") scale(" + k + ')">' + reg("path", 'd="M-14 -7 h7 l3 -5 h8 l3 5 h7 v18 h-28 Z"', "var(--card)", 2) + '<circle cx="0" cy="2" r="5.5" style="fill:none;stroke:var(--ink);stroke-width:2"/></g>'; }
+  function camBtn() { return hatch(308, 768, 50, 10, 0.5) + reg("circle", 'cx="330" cy="750" r="30"', "var(--yellow)", 2.6) + cam(330, 749, 1.15); }
+  function chip(x, y, w, t) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="44" rx="22"', "var(--card)", 2) + T(x + w / 2, y + 29, t, U(16), 'text-anchor="middle"'); }
+  function photo(cx, cy) {
+    return '<g transform="translate(' + cx + " " + cy + ') scale(.82) rotate(-3) translate(' + (-cx) + " " + (-cy) + ')">' + reg("rect", 'x="' + (cx - 82) + '" y="' + (cy - 70) + '" width="164" height="142"', "#fffdf7", 2) + '<rect x="' + (cx - 74) + '" y="' + (cy - 62) + '" width="148" height="104" style="fill:#e9b86a"/>' +
+      reg("path", 'd="M' + (cx - 48) + " " + (cy + 20) + " Q" + cx + " " + (cy - 42) + " " + (cx + 48) + " " + (cy + 20) + " Q" + cx + " " + (cy + 2) + " " + (cx - 48) + " " + (cy + 20) + ' Z"', "var(--amber)", 1.8) +
+      line("M" + (cx - 28) + " " + (cy + 8) + " l8 -13 M" + (cx - 8) + " " + (cy + 2) + " l4 -16 M" + (cx + 12) + " " + (cy + 2) + " l-2 -16 M" + (cx + 30) + " " + (cy + 8) + " l-8 -13", 1.3, 0.7) +
+      T(cx, cy + 62, "trial 4 · just now", H(17), 'text-anchor="middle"') +
+      [-1, 1].map(function (k) { var tx = cx + k * 76, ty = cy - 68; return '<rect x="' + (tx - 24) + '" y="' + (ty - 9) + '" width="48" height="18" transform="rotate(' + (k * 30) + " " + tx + " " + ty + ')" style="fill:#e8e0c8;opacity:.9;stroke:#b9a77a;stroke-width:1"/>'; }).join("") + "</g>";
+  }
+  function page(withPhoto) {
+    var s = phTop("Trials"), y, rh = rand(21), h, a, d;
+    for (y = 186; y <= 800; y += 32) s += line("M0 " + y + " H390", 1.3, 1, SOFT);
+    s += line("M52 101 V844", 1.4, 1, RED);
+    s += T(374, 128, "11/11/26", H(21), 'text-anchor="end"') + T(64, 128, "Croissants", H(21, 600, "var(--ink-soft)"));
+    s += T(64, 175, "Trial 4: croissants", H(32, 700)) + '<path d="M337 160 l9 11 l9 -11 Z" style="fill:var(--ink)"/>' + line("M64 181 H330", 1.6, 0.5, "var(--ink-soft)");
+    ["Goal: a more open honeycomb", "Changed: rest 2 h between folds", null, "Proof 2 h at 24°C", "Bake 18 min at 200°C", "Result: shatter good,", "   honeycomb still thin", "Next: proof at 26°C,", "   colder butter"].forEach(function (t, i) {
+      var by = 213 + i * 32;
+      if (t) s += T(t.charAt(0) === " " ? 84 : 64, by, t.trim(), i > 6 ? H(23, 700, INKR) : HAND);
+      else s += T(64, by, "Folds:", HAND) + T(126, by, "2", HAND) + line("M121 " + (by - 7) + " H141", 2.2) + T(150, by, "3 letter folds", HAND);
+    });
+    s += T(64, 520, "Crumb, trial 4", H(20, 700));
+    s += '<ellipse cx="130" cy="562" rx="66" ry="38" style="fill:none;stroke:var(--ink);stroke-width:2.6"/><ellipse cx="130" cy="565" rx="54" ry="28" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>';
+    for (h = 0; h < 14; h++) { a = rh() * 6.283; d = Math.sqrt(rh()) * 0.8;
+      s += '<ellipse cx="' + (130 + Math.cos(a) * 52 * d).toFixed(1) + '" cy="' + (565 + Math.sin(a) * 26 * d).toFixed(1) + '" rx="' + (3 + rh() * 4).toFixed(1) + '" ry="' + (2 + rh() * 2).toFixed(1) + '" style="fill:none;stroke:var(--ink);stroke-width:1.3"/>'; }
+    s += T(222, 520, "Height, T3 vs T4", H(20, 700)) + reg("rect", 'x="236" y="560" width="28" height="30"', "none", 2) + reg("rect", 'x="280" y="538" width="28" height="52"', "none", 2) + hatch(281, 539, 26, 50, 0.6) + line("M226 590 H320", 2) +
+      T(250, 612, "T3", H(18), 'text-anchor="middle"') + T(294, 612, "T4", H(18), 'text-anchor="middle"') + T(346, 568, "+18 mm", H(21, 700, INKR), 'text-anchor="middle"');
+    if (withPhoto) s += photo(214, 696);
+    /* pager at the foot, clear of the camera button */
+    s += chip(16, 764, 108, "‹ Trial 3") + chip(134, 764, 108, "Trial 5 ›");
+    return s + camBtn();
+  }
+  function dim(y) { return '<rect x="0" y="0" width="390" height="844" style="fill:#1f1d1a;opacity:.45"/>'; }
+  function sheetShape(top) { return reg("path", 'd="M0 ' + (top + 28) + " Q0 " + top + " 28 " + top + " H362 Q390 " + top + " 390 " + (top + 28) + ' V844 H0 Z"', "var(--card)", 2.2) + '<rect x="170" y="' + (top + 10) + '" width="50" height="5" rx="2.5" style="fill:#b9b3a6"/>'; }
+  function sheet() {
+    var s = page(false) + dim() + sheetShape(560);
+    [["Take a photo", 1], ["Choose from your photos", 0], ["Cancel", 2]].forEach(function (r, i) { var y = 596 + i * 66;
+      if (!r[1]) { }
+      if (r[1] === 1) s += reg("rect", 'x="16" y="' + y + '" width="358" height="56" rx="12"', "var(--custard)", 1.4);
+      s += (r[1] < 2 ? cam(48, y + 28, 1.1) : "") + T(r[1] < 2 ? 80 : 195, y + 35, r[0], U(r[1] < 2 ? 20 : 19), r[1] < 2 ? "" : 'text-anchor="middle"');
+      if (i < 2) s += line("M16 " + (y + 62) + " H374", 1, 0.3); });
+    return s;
+  }
+  function list() {
+    var s = page(false) + dim() + sheetShape(128) + T(20, 184, "Contents", H(30, 700)) + T(370, 182, "Trials", H(20, 600, "var(--ink-soft)"), 'text-anchor="end"');
+    var R = [["Blondies", 2], ["Brown butter cookies", 2], ["Croissants", 4], ["Rhubarb galette", 2], ["Rough puff pastry", 1]];
+    R.forEach(function (r, g) { var y = 214 + g * 86, n;
+      s += T(20, y + 18, r[0], H(24, 700));
+      if (r[0] === "Croissants") s += T(370, y + 18, "last worked on", H(20, 700, INKR), 'text-anchor="end"');
+      if (r[0] === "Blondies") s += '<g transform="rotate(-3 330 ' + (y + 10) + ')"><rect x="286" y="' + (y - 2) + '" width="84" height="22" rx="3" style="fill:none;stroke:' + INKR + ';stroke-width:1.8"/>' + T(328, y + 14, "IN THE BOX", "font:700 13px var(--font-label);letter-spacing:1px;fill:" + INKR, 'text-anchor="middle"') + "</g>";
+      for (n = 1; n <= r[1]; n++) {
+        var cur = r[0] === "Croissants" && n === 4, x = 20 + (n - 1) * 56;
+        s += reg("rect", 'x="' + x + '" y="' + (y + 28) + '" width="48" height="44" rx="10"', cur ? "var(--orange)" : "var(--custard)", cur ? 2.4 : 1.8) + T(x + 24, y + 58, String(n), H(26, 700), 'text-anchor="middle"'); }
+    });
+    return s + reg("rect", 'x="16" y="650" width="190" height="48" rx="24"', "var(--card)", 2) + T(111, 681, "+ New recipe", U(17), 'text-anchor="middle"');
+  }
+  PLATE.add(function () {
+    function put(id, inner, label) { document.getElementById(id).innerHTML = phone(inner, label); }
+    put("pn-page", page(false), "The Trials notebook on a phone, Croissants trial 4, one ruled page");
+    put("pn-photo", page(true), "The same page with a photo taped in");
+    put("pn-sheet", sheet(), "The camera button's sheet: Take a photo, Choose from your photos, Cancel");
+    put("pn-list", list(), "The list of recipes and their trials as a sheet over the page");
+  });
+})();
+</script>

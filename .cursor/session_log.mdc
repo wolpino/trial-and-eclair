@@ -10,6 +10,46 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-17 · Phone Plate drawn and published (v1)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-17` (second) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, 5 Sonnet subagents, up to 3 at once) |
+| **Outcome** | success (Phone Plate signed off by Ari at v4; no app code) |
+
+### Intent
+Fit the signed-off Plate XI kitchen and views to an upright phone (PLAN.md section 3).
+
+### Summary
+- New `design/phone/` (base copied from plate-xi) with `base/phone.js`: `phone()` frame 390 × 844 (or sideways), `phTop`, `phJot`, `phAddr`; brief in `design/phone/BRIEF.md`
+- 01 kitchen: day and evening, one screen (board, counter with the box biggest, shelf), find list, jot sheet
+- 02 recipe box per decision 003: open, fan, ☰ menu, Card View A (upright + sideways) and B (always sideways)
+- 03 notebook: one page at a time, camera button and sheet, photo taped in, contents sheet
+- 04 whiteboard, ideas, log, cookbooks (one sideways row), one cookbook, references (one column)
+- 05 front, sign in, sign up, Account sheet, Settings, not found, loading, error, offline, paid plan card
+- Phone Plate page: https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy
+- v2 from Ari's notes: less busy (labels off), three retracting-box options, + for new recipes, jot names and icons, Clear done, log on a notebook page, plain-paper pages, not found stitches, "work is safe" cut
+
+### Decisions
+- None from Ari yet. Claude's picks: Card View A (decision 003); Recently at the top of the find list; no fridge or window on the phone kitchen
+
+### Open threads
+- Ari: box option 1/2/3; Card View; Add wording; Jot name and icon; Recently row; keep unsaved typing; what "same with" meant
+- v3: drawer picked, add button is a plus, 003 updated
+- Answered after v3: Card View any way + keep-sideways button; Quick add adds idea, Next up, recipe, trial; fan to workshop later. Drawn in v4; waiting on sign-off
+- Branch `docs/plate-x-cookbooks` still unpushed
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Phone Plate, phone.js, upright phone, Card View, Recently, jot button
+**Files:** design/phone/ (BRIEF.md, base/phone.js, sections/00–05), docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate sections as drawn (tweak only)
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; next is the mark (T&E). Phone Plate signed off
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-17 · Plate XI drawn and published (the final plate)
 
 | Field | Value |

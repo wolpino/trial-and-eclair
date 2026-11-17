@@ -154,9 +154,16 @@ Layout (Ari, 2026-11-16). One page, new artifact, sources in `design/plate-xi/` 
 - [x] Ari signed off (2026-11-17, version 2). Then this plate is the brand sheet reference. Drawn 2026-11-17: https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL (sources `design/plate-xi/`)
 
 ## 3. Phone layout
-- [ ] Stacked phone kitchen, jot button bottom right
-- [ ] Phone recipe card: landscape always, or only full screen (decide here)
-- [ ] Phone notebook with the camera button (Plate VIII)
+Phone Plate v1 (2026-11-17): https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, sources `design/phone/`
+- [x] Stacked phone kitchen, jot button bottom right (drawn: day, evening, find list, jot sheet)
+- [x] Phone recipe card: any way you hold it, plus a button to keep it sideways (Ari, 2026-11-17; flexible, can revisit)
+- [x] Recipe box: the drawer (Ari, 2026-11-17; decision 003 updated)
+- [x] Add button: a plus named Quick add; on the kitchen it adds an idea, a Next up line, a recipe or a trial (Ari, 2026-11-17). Drawn in v4
+- [x] Draw: Quick add sheet with four choices, Card View keep-sideways button (v4)
+- [x] Phone notebook with the camera button (drawn)
+- [x] Every other view and page on a phone (drawn)
+- [x] "Recently" on a phone: one chip row at the top of the find list (Ari, 2026-11-17)
+- [x] Ari signs off (2026-11-17, v4)
 
 ## 4. Mark
 - Ari (2026-11-13): the mark is "T&E", and it appears in the app (where it sits is decided when drawing the mark). The full name "Trial & Eclair" is a title on sign in and the front page (Ari, 2026-11-14: bigger on the front page)
@@ -211,6 +218,10 @@ Parked. Not drawn, not built until moved up.
 - Review all the starter and sample data (recipes, ideas, references, cookbook) as one pass (Ari, 2026-11-14)
 - Account: theme switch and "show forks" left out of the drawn Account for now (Ari, 2026-11-14); the app has both today
 - Whiteboard suggestions from recent activity (automatic items, wipe, pin). Dropped from Plate X as too fussy
+- Phone kitchen small tweaks at a later review: the eclair's spot; the board sitting lower, with more room under the find bar (Ari, 2026-11-17)
+- Workshop the recipe box fan (phone); build it as its own component so it can be swapped (Ari, 2026-11-17)
+- Notebook shows the recipe somewhere (phone and wide kitchen), not only each trial's changes (Ari, 2026-11-17)
+- Saving rules and options: when edits save (Save button, as today, or as you type), and whether unsaved typing is kept on the device until a save goes through. Decide before the Task issues for any editing view, since it shapes every form (Ari, 2026-11-17: come back to this)
 
 ## Where things are
 - Answers so far: memory `kitchen-layout`, and `.cursor/handoffs/NEXT.md`
