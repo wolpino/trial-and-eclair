@@ -1,0 +1,199 @@
+<section aria-labelledby="h-pv" id="pv-sec">
+  <span class="label" id="h-pv">04 · The other views on a phone</span>
+  <div class="sec-body">
+    <p class="note"><b>Each view takes over the screen.</b> Tap an object in the kitchen and its view fills the phone, with "‹ Kitchen" top left. The wide drawings are signed off; here each one becomes a single column. Nothing new is added.</p>
+    <div class="phones">
+      <div><h3>Whiteboard</h3><figure id="pv-wb"></figure>
+        <p class="note"><b>One column on the board.</b> "Next up", the cook's own lines in marker. Tick a box to strike a line; the small red x wipes it off. Press and drag the dots to reorder. The write line sits at the bottom, with the jot button beside it.</p>
+        <p class="addr">/whiteboard</p></div>
+      <div><h3>Idea board</h3><figure id="pv-ideas"></figure>
+        <p class="note"><b>Notes tacked in one column.</b> The cork scrolls up and down, newest first, with plain tacks and no statuses. The Archived envelope stays pinned top right. A paid-plan object, drawn for a developer.</p>
+        <p class="addr">/ideas</p></div>
+      <div><h3>Recipe log</h3><figure id="pv-log"></figure>
+        <p class="note"><b>The clipboard sheet, as one scrolling column.</b> Date, recipe and a few words, newest first. The sheet runs on past the bottom edge.</p>
+        <p class="addr">/log</p></div>
+    </div>
+    <div class="phones">
+      <div><h3>Cookbooks</h3><figure id="pv-cb"></figure>
+        <p class="note"><b>One row of spines.</b> A single row reads better: the spines keep their height and the stamped titles stay big enough to read. Two rows would halve each book. When the shelf fills, the row scrolls sideways.</p>
+        <p class="addr">/cookbooks</p></div>
+      <div><h3>One cookbook, a page</h3><figure id="pv-cb-one"></figure>
+        <p class="note"><b>Weekend Bakes, one page at a time.</b> Croissants, page 11. The round arrows turn the page; "Contents" jumps to the list.</p>
+        <p class="addr">/cookbooks/weekend-bakes</p></div>
+      <div><h3>The contents page</h3><figure id="pv-cb-toc"></figure>
+        <p class="note"><b>The wide left-hand page.</b> Recipes in the developer's order, with drag dots and an x that takes a recipe out of this book only. A name opens its page.</p>
+        <p class="addr">/cookbooks/weekend-bakes</p></div>
+    </div>
+    <div class="phones">
+      <div><h3>References</h3><figure id="pv-ref"></figure>
+        <p class="note"><b>The shelf row turned upright.</b> One column of cards, newest first, each with its kind stamp: Cookbook, Blog, Chef / Baker, Article, Tool. The two starters sit last, marked STARTER. References are free for everyone.</p>
+        <p class="addr">/references</p></div>
+    </div>
+  </div>
+</section>
+<script>
+(function () {
+  var BLUE = "var(--blue)", OR = "var(--orange)", RED = "#c0392b", GREY = "#8a8780", SOFT = "var(--ink-soft)", MID = 'text-anchor="middle"', END = 'text-anchor="end"';
+  function H(sz, w, col) { return "font:" + (w || 600) + " " + sz + "px var(--font-hand);fill:" + (col || "var(--ink)"); }
+  function U(sz, col, w) { return "font:" + (w || 600) + " " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"); }
+  function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 0) + '"', fill, sw || 2); }
+  function pill44(x, y, w, t, on) { return R(x, y, w, 44, on ? "var(--yellow)" : "var(--card)", 2, 22) + T(x + w / 2, y + 29, t, U(16), MID); }
+  function tack(cx, cy, col, r) { r = r || 7; return '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" style="fill:' + col + ';stroke:var(--ink);stroke-width:1.8"/><circle cx="' + (cx - r * 0.34) + '" cy="' + (cy - r * 0.34) + '" r="' + (r * 0.28).toFixed(1) + '" style="fill:#fff;opacity:.8"/>'; }
+
+  /* ---------- 1. whiteboard ---------- */
+  function wbLine(x, y, t, done) {
+    var s = "", lines = t.split("|"), bs = 24;
+    for (var d = 0; d < 6; d++) s += '<circle cx="' + (x + 6 + (d % 2) * 8) + '" cy="' + (y - 22 + Math.floor(d / 2) * 8) + '" r="2" style="fill:' + GREY + '"/>';
+    s += line("M" + (x + 28) + " " + (y - 21) + " l" + bs + " -1 l1 " + bs + " l-" + (bs + 1) + " 1 Z", 2.4, 1, BLUE);
+    if (done) s += line("M" + (x + 32) + " " + (y - 10) + " l8 9 l14 -24", 3.4, 1, OR);
+    lines.forEach(function (l, i) { s += T(x + 72, y + i * 30, l, H(28, 600, done ? GREY : "var(--ink)")); });
+    if (done) { var w = t.length * 28 * 0.38;
+      s += line("M" + (x + 64) + " " + (y - 8) + " q" + (w * 0.56) + " -7 " + (w * 1.12 + 10) + " 1", 3, 1, BLUE);
+      var ex = x + 72 + w + 24; s += line("M" + (ex - 8) + " " + (y - 26) + " l16 16 M" + (ex + 8) + " " + (y - 26) + " l-16 16", 3, 1, RED); }
+    return s;
+  }
+  function whiteboard() {
+    var s = phTop("Whiteboard"), x = 10, y = 110, w = 370, h = 690, F = 14, sx = x + F, sy = y + F, sw = w - 2 * F, sh = h - 2 * F;
+    s += R(x, y, w, h, "var(--wood)", 2.6, 4) + grain(x + 16, y + 2, w - 32, F - 3, 5) + grain(x + 16, sy + sh + 2, w - 32, F - 3, 8) + R(sx, sy, sw, sh, "var(--wb)", 2.2);
+    s += line("M" + (sx + 120) + " " + (sy + 40) + " q60 -9 120 -1 t110 -2", 20, 0.06, BLUE) + line("M" + (sx + 40) + " " + (sy + sh - 60) + " q80 6 160 0 t120 1", 14, 0.045, BLUE);
+    s += T(sx + 22, sy + 56, "Next up", H(46, 700, BLUE)) + line("M" + (sx + 22) + " " + (sy + 68) + " q70 8 140 -3", 3, 1, BLUE);
+    var rows = [["Croissants · trial 4"], ["Rough puff pastry"], ["Rhubarb galette"], ["Miso caramel in|the blondies?"], ["Brown butter cookies", 1], ["Blondies, less sugar"]], y0 = sy + 130;
+    rows.forEach(function (r) { s += wbLine(sx + 6, y0, r[0], r[1]); y0 += 64 + (r[0].indexOf("|") > -1 ? 30 : 0); });
+    s += '<path d="M' + (sx + 34) + " " + (y0 - 21) + ' h24 v24 h-24 Z" style="fill:none;stroke:' + GREY + ';stroke-width:1.6;stroke-dasharray:4 3"/>' + line("M" + (sx + 78) + " " + (y0 - 20) + " v24", 2.6, 1, BLUE) + T(sx + 86, y0, "Write the next thing…", H(28, 600, GREY)) + line("M" + (sx + 72) + " " + (y0 + 10) + " H" + (sx + sw - 20), 1.4, 0.7, GREY);
+    return s + phJot();
+  }
+
+  /* ---------- 2. idea board ---------- */
+  var IDEAS = [["Miso caramel", ["white miso,", "dark caramel"]], ["Cardamom knots", ["pearl sugar"]], ["Yuzu curd tart", ["nutty crust?"], "tart"], ["Black sesame shortbread", ["for gifts"]],
+    ["Earl Grey scones", ["tea in the cream"]], ["Rye babka", ["dark chocolate,", "less sugar"]], ["Burnt honey custard", ["set in jars"]], ["Saffron buns", ["soak saffron", "in warm milk"]]];
+  var PAPER = ["var(--card)", "var(--yellow)", "var(--card)", "var(--amber)", "var(--plaster)"], TACK = [BLUE, OR, "var(--stem)", "var(--wood)", "var(--yellow)"];
+  function snap(x, y, w, h) { var ix = x + 5, iy = y + 5, iw = w - 10, ih = h - 18;
+    return R(x, y, w, h, "var(--page)", 1.6) + R(ix, iy, iw, ih, "var(--plaster)", 1.2) + reg("path", 'd="M' + (ix + 4) + " " + (iy + ih * 0.55) + " L" + (ix + iw - 4) + " " + (iy + ih * 0.22) + " L" + (ix + iw - 4) + " " + (iy + ih * 0.82) + ' Z"', "var(--yellow)", 1.4); }
+  function tinyScroll(c0, c1, frac) { var x = 376, w = 12;
+    return R(x - w / 2, c0, w, c1 - c0, "var(--wood-dark)", 1.8, 3) + R(x - w / 2 + 2, c0 + 4, w - 4, (c1 - c0 - 8) * frac, "var(--wood-hi)", 1.6, 2); }
+  function ideas() {
+    var s = phTop("Ideas"), r = rand(31), y = 186, W = 276, x = 22;
+    s += R(0, 101, 390, 760, "url(#corkp)", 0) + hatch(0, 101, 390, 8, 0.6);
+    /* archived envelope, top right, as on the wide board */
+    s += '<g transform="rotate(3 340 130)">' + R(300, 116, 78, 48, "var(--custard)", 1.8) + line("M300 116 L339 140 L378 116", 1.6) + T(339, 156, "Archived · 4", H(17, 600), MID) + "</g>" + tack(339, 122, "var(--stem)", 6);
+    /* blank note first */
+    var j0 = (r() - 0.5) * 4;
+    s += '<g transform="rotate(' + j0.toFixed(1) + " " + (x + W / 2) + " " + y + ')">' + R(x, y, W, 96, "var(--card)", 2) + line("M" + (x + 16) + " " + (y + 38) + " v28", 2.6, 1, BLUE) + T(x + 24, y + 62, "New idea…", H(27, 500, SOFT)) + line("M" + (x + 14) + " " + (y + 78) + " H" + (x + W - 14), 1.2, 0.4) + "</g>" + tack(x + W / 2, y + 8, BLUE);
+    y += 96 + 22;
+    IDEAS.forEach(function (d, i) {
+      var body = d[1], h = 50 + body.length * 24 + 16, jx = (r() - 0.5) * 10, rot = (r() - 0.5) * 5, p = PAPER[Math.floor(r() * 5)], tk = TACK[Math.floor(r() * 5)], cx = x + jx + W / 2;
+      if (tk === "var(--yellow)" && p === "var(--yellow)") tk = BLUE;
+      var c = R(x + jx, y, W, h, p, 2) + T(x + jx + 16, y + 42, d[0], H(27, 700));
+      body.forEach(function (t, k) { c += T(x + jx + 16, y + 70 + k * 24, t, H(21, 500)); });
+      if (d[2]) c += '<g transform="rotate(7 ' + (x + jx + W - 44) + " " + (y - 4) + ')">' + snap(x + jx + W - 66, y - 6, 56, 62) + "</g>";
+      s += '<g transform="rotate(' + rot.toFixed(1) + " " + cx + " " + y + ')">' + c + "</g>" + tack(cx, y + 8, tk);
+      y += h + 22;
+    });
+    return s + tinyScroll(176, 830, 0.3) + phJot();
+  }
+
+  /* ---------- 3. recipe log ---------- */
+  var LOG = [["11/11", "Croissants trial 4", "shatter good"], ["11/08", "Blondies", "less sugar"], ["11/05", "Rough puff pastry", "six folds"], ["11/02", "Rhubarb galette", "swapped spelt"],
+    ["10/28", "Croissants trial 3", "proof too short"], ["10/09", "Brown butter cookies", "chill the dough"], ["09/20", "Blondies", "first batch"]];
+  function log() {
+    var s = phTop("Recipe log"), px = 18, pw = 354;
+    s += R(0, 101, 390, 760, "var(--wood-hi)", 0) + grain(6, 108, 378, 700, 17) + hatch(0, 101, 390, 8, 0.5);
+    s += hatch(px + 6, 136, pw, 700, 0.35) + R(px, 130, pw, 720, "var(--card)", 1.6);
+    s += R(165, 114, 60, 24, "#d2d0c8", 1.6, 4) + '<circle cx="195" cy="126" r="3" style="fill:var(--brass);stroke:var(--ink);stroke-width:1.2"/>';
+    s += T(px + 20, 186, "Recipe log", H(36, 700)) + line("M" + (px + 14) + " 202 H" + (px + pw - 14), 1.6, 0.9, "#c9442a");
+    LOG.forEach(function (e, i) { var y = 244 + i * 92;
+      s += T(px + 20, y, e[0], H(23, 700, SOFT)) + T(px + 92, y, e[1], H(29, 700)) + T(px + 92, y + 30, e[2], H(23, 600, SOFT)) + line("M" + (px + 12) + " " + (y + 46) + " H" + (px + pw - 12), 1.1, 0.6, "#c3d2ec"); });
+    s += R(378, 214, 6, 400, "var(--card)", 1.2, 3) + R(377, 216, 8, 110, BLUE, 1.4, 4);
+    return s + phJot();
+  }
+
+  /* ---------- 4. cookbooks ---------- */
+  var FL = 620;
+  function spine(x, w, hgt, fill, title, n, tc) {
+    var y = FL - hgt, cx = x + w / 2, cy = (y + 54 + FL - 58) / 2, room = FL - 58 - y - 54 - 12, fs = Math.min(21, Math.round(room / title.length / 0.8)), s = "";
+    s += R(x, y, w, hgt, fill, 2.6, 4) + hatch(x + 2, y + 6, 9, hgt - 12, 0.5) + hatch(x + w - 11, y + 6, 9, hgt - 12, 0.5) + hatch(x + 11, y + 6, w - 22, hgt - 12, 0.08);
+    [y + 28, FL - 46].forEach(function (b) { s += line("M" + (x + 2) + " " + b + " H" + (x + w - 2), 2, 1) + line("M" + (x + 2) + " " + (b + 6) + " H" + (x + w - 2), 2, 1); });
+    s += '<g transform="rotate(-90 ' + cx + " " + cy + ')">' + T(cx, cy + 7, title.toUpperCase(), "font:700 " + fs + "px var(--font-label);letter-spacing:.1em;fill:" + tc, MID) + "</g>" + T(cx, FL - 14, n, "font:700 15px var(--font-label);fill:" + tc, MID);
+    return s;
+  }
+  function tape(cx, cy, text) { var len = text.length * 13 + 34;
+    return '<g transform="rotate(-1 ' + cx + " " + cy + ')"><rect x="' + (cx - len / 2) + '" y="' + (cy - 12) + '" width="' + len + '" height="26" style="fill:#eadfb4;fill-opacity:.96;stroke:#b09a62;stroke-width:1"/>' + T(cx, cy + 6, text, "font:400 16px 'Permanent Marker', var(--font-hand);letter-spacing:.6px;fill:var(--ink)", MID) + "</g>"; }
+  function shelf() {
+    var s = phTop("Cookbooks");
+    s += R(8, 118, 374, 594, "var(--wood)", 2.6, 4) + grain(24, 120, 342, 12, 41);
+    s += R(22, 132, 346, FL - 132, "var(--cab-deep)", 2.2) + R(22, 132, 16, FL - 132, "var(--cab-side)", 0) + R(352, 132, 16, FL - 132, "var(--cab-side)", 0) + hatch(22, 132, 346, 12, 0.9);
+    s += spine(46, 88, 340, "var(--orange)", "Weekend Bakes", "5", "var(--ink)") + spine(142, 74, 360, "var(--blue)", "Laminated", "6", "var(--card)") + spine(224, 96, 310, "var(--stem)", "Holiday tin", "2", "var(--ink)");
+    s += R(326, FL - 110, 14, 110, "var(--brass)", 2.2, 2) + R(326, FL - 10, 36, 10, "var(--brass)", 2);
+    s += R(22, FL, 346, 24, "var(--wood)", 2.6) + grain(26, FL + 2, 338, 20, 31) + R(22, FL + 24, 346, 56, "var(--cab)", 2.6) + hatch(22, FL + 24, 346, 7) + tape(195, FL + 54, "COOKBOOKS");
+    s += pill44(16, 738, 176, "New cookbook", true);
+    return s + phJot();
+  }
+  /* a cookbook is typeset: display serif headings, body serif text */
+  function HD(sz) { return "font:400 " + sz + "px var(--font-display);fill:var(--ink)"; }
+  function BD(sz, col) { return "font:500 " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"); }
+  function LB(sz) { return "font:700 " + sz + "px var(--font-label);letter-spacing:.1em;fill:var(--ink-soft)"; }
+  function bookPage() {
+    var s = phTop("Weekend Bakes");
+    s += R(0, 101, 390, 743, "var(--custard)", 0) + R(0, 101, 24, 743, "var(--orange)", 0) + hatch(2, 102, 20, 740, 0.14) + line("M24 101 V844", 1.6, 0.8);
+    s += R(30, 114, 336, 700, "var(--page)", 2, 3) + line("M372 126 v676 M377 130 v668", 1.2, 0.5);
+    for (var i = 0; i < 6; i++) s += line("M24 " + (150 + i * 110) + " h8", 2.2, 1, "#8a5a3c");
+    var X = 50, ing = ["500 g bread flour", "55 g sugar", "10 g salt", "10 g instant yeast", "300 g milk, cold", "280 g butter, for the block"], st = ["Mix the dough. Chill overnight.", "Lock in the butter block.", "Three letter folds, 2 h rests.", "Shape. Proof 2 h at 26°C.", "Bake 18 min at 200°C."];
+    s += T(X, 150, "WEEKEND BAKES", LB(13)) + T(X, 202, "Croissants", HD(40)) + T(X, 230, "Makes 12  ·  added 11/11/26", BD(15, SOFT)) + T(X, 276, "INGREDIENTS", LB(13));
+    ing.forEach(function (t, i) { s += T(X, 306 + i * 30, t, BD(19)); });
+    s += T(X, 518, "STEPS", LB(13));
+    st.forEach(function (t, i) { s += T(X, 550 + i * 40, (i + 1) + ".", "font:700 19px var(--font-display);fill:var(--ink)") + T(X + 24, 550 + i * 40, t, BD(19)); });
+    return s + pageNav("11");
+  }
+  function arrowBtn(cx, cy, dir) { return reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="26"', "var(--card)", 2.2) + line("M" + (cx - 4 * dir) + " " + (cy - 10) + " l" + (10 * dir) + " 10 l" + (-10 * dir) + " 10", 3.4); }
+  function pageNav(n) {
+    return arrowBtn(70, 766, -1) + arrowBtn(320, 766, 1) + pill44(135, 744, 120, "Contents") + T(195, 732, n, "font:500 16px var(--font-body);fill:var(--ink-soft)", MID);
+  }
+  function toc() {
+    var s = phTop("Weekend Bakes"), RC = [["Blondies", "9/20/26", 3], ["Brown butter cookies", "10/09/26", 7], ["Croissants", "11/11/26", 11], ["Rhubarb galette", "11/08/26", 17], ["Rough puff pastry", "11/05/26", 21]];
+    s += R(0, 101, 390, 743, "var(--custard)", 0) + R(0, 101, 24, 743, "var(--orange)", 0) + hatch(2, 102, 20, 740, 0.14) + R(30, 114, 336, 700, "var(--page)", 2, 3);
+    s += T(50, 150, "WEEKEND BAKES", LB(13)) + T(50, 202, "Contents", HD(40)) + line("M46 216 H350", 1.4, 0.6) + T(292, 246, "page", BD(14, SOFT), END);
+    RC.forEach(function (r, i) { var y = 288 + i * 76, d;
+      if (i === 2) s += R(52, y - 25, 120, 33, "var(--yellow)", 1.2, 3);
+      for (d = 0; d < 6; d++) s += '<circle cx="' + (40 + (d % 2) * 6) + '" cy="' + (y - 14 + Math.floor(d / 2) * 7) + '" r="1.8" style="fill:var(--ink-soft)"/>';
+      s += T(56, y, r[0], BD(19)) + T(56, y + 28, "added " + r[1], BD(14, SOFT)) + T(292, y, r[2], "font:400 22px var(--font-display);fill:var(--ink)", END) +
+        reg("circle", 'cx="332" cy="' + (y - 6) + '" r="16"', "var(--card)", 1.6) + line("M326 " + (y - 12) + " l12 12 M338 " + (y - 12) + " l-12 12", 1.8); });
+    s += T(50, 690, "5 recipes", BD(14, SOFT)) + pill44(40, 722, 150, "Add a recipe", true) + pill44(200, 722, 160, "New cookbook");
+    return s;
+  }
+
+  /* ---------- 5. references ---------- */
+  var KIND = { c: ["Cookbook", "var(--blue)"], b: ["Blog", "var(--amber)"], h: ["Chef / Baker", "var(--orange)"], a: ["Article", "var(--cinnamon)"], t: ["Tool", "var(--stem)"] };
+  var ITEMS = [["a", "Cold butter, warm room", "11/12/26"], ["c", "Laminated Dough", "11/11/26"], ["h", "Chef Nell", "11/09/26"], ["b", "The Proofing Drawer", "11/05/26"], ["t", "Baker's % calculator", "10/28/26"],
+    ["c", "The Butter Book", "10/20/26"], ["b", "Flour Notes", "10/14/26"], ["t", "Pan size converter", "s"], ["a", "How gluten works", "s"]];
+  function tint(k, p) { return "color-mix(in srgb, " + KIND[k][1] + " " + (p || 34) + "%, var(--card))"; }
+  function stamp(x, cy, k) {
+    var t = KIND[k][0].toUpperCase(), w = t.length * 8.6 + 20, h = 26, y = cy - h / 2, c = 6, s;
+    if (k === "c") s = R(x, y, w, h, tint(k), 1.8);
+    else if (k === "b") s = R(x, y, w, h, tint(k, 50), 1.8, 13);
+    else if (k === "h") s = poly([[x + c, y], [x + w - c, y], [x + w, y + c], [x + w, y + h - c], [x + w - c, y + h], [x + c, y + h], [x, y + h - c], [x, y + c]].join(" "), tint(k, 40), 1.8);
+    else if (k === "a") s = R(x, y, w, h, tint(k, 30), 1.8) + R(x + 3, y + 3, w - 6, h - 6, "none", 1);
+    else s = poly([[x, y], [x + w, y], [x + w - 5, cy], [x + w, y + h], [x, y + h], [x + 5, cy]].join(" "), tint(k, 40), 1.8);
+    return s + T(x + w / 2, cy + 5, t, "font:700 13px var(--font-label);letter-spacing:.08em;fill:var(--ink)", MID);
+  }
+  function refs() {
+    var s = phTop("References");
+    s += R(0, 101, 390, 760, "var(--wood-hi)", 0) + grain(10, 130, 370, 150, 31) + grain(30, 420, 330, 160, 32) + hatch(0, 101, 390, 10, 0.8);
+    s += pill44(16, 116, 190, "+ Add a reference", true) + T(374, 144, "Newest first", U(15, SOFT, 500), END);
+    ITEMS.forEach(function (it, i) { var y = 174 + i * 98, st = it[2] === "s", k = it[0];
+      s += hatch(22, y + 84, 356, 8, 0.6) + R(16, y, 358, 84, "var(--card)", 2, 3) + stamp(30, y + 24, k) +
+        (st ? T(360, y + 30, "STARTER", "font:700 13px var(--font-label);letter-spacing:.09em;fill:var(--ink-soft)", END) + T(30, y + 68, it[1], U(21)) : T(360, y + 29, "added " + it[2], U(15, SOFT, 500), END) + T(30, y + 68, it[1], H(28, 700))); });
+    return s;
+  }
+
+  PLATE.add(function () {
+    function put(id, inner, label) { document.getElementById(id).innerHTML = phone(inner, label); }
+    put("pv-wb", whiteboard(), "The whiteboard on a phone: Next up as one column of handwritten lines, a jot button bottom right");
+    put("pv-ideas", ideas(), "The idea board on a phone: idea notes tacked on cork in one scrolling column");
+    put("pv-log", log(), "The recipe log on a phone: one scrolling column of dated entries on a clipboard sheet");
+    put("pv-cb", shelf(), "The cookbook shelf on a phone: three spines in one row, New cookbook below");
+    put("pv-cb-one", bookPage(), "Weekend Bakes open at the Croissants page, with page arrows and a Contents button");
+    put("pv-cb-toc", toc(), "The Weekend Bakes contents page with drag dots, page numbers and remove buttons");
+    put("pv-ref", refs(), "References on a phone: one column of cards, newest first, each with a kind stamp");
+  });
+})();
+</script>

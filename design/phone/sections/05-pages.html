@@ -1,0 +1,204 @@
+<section aria-labelledby="h-pp" id="pp-sec">
+  <span class="label" id="h-pp">05 · Pages with no kitchen object, on a phone</span>
+  <div class="sec-body">
+    <p class="note"><b>Same pages, one column.</b> Wording and look are the signed-off ones; each card or sheet is fitted to a 390-point screen. Signed-out pages sit over the pale kitchen, the same for every plan.</p>
+    <div class="phones">
+      <div><h3>Front page (signed out)</h3><figure id="pp-front"></figure>
+        <p class="note"><b>One card over the pale kitchen.</b> The name, the three things the app is for, Sign up and Sign in, then "Try it as a guest".</p>
+        <p class="addr">/</p></div>
+      <div><h3>Sign in</h3><figure id="pp-signin"></figure>
+        <p class="note"><b>The recipe card, centred.</b> Fields run the full width of the card and are 44 points tall. The keyboard is not drawn.</p>
+        <p class="addr">/sign-in</p></div>
+      <div><h3>Sign up</h3><figure id="pp-signup"></figure>
+        <p class="note"><b>Sample recipes are ticked by default.</b> The two passwords stack instead of sitting side by side; the guest link stays at the foot.</p>
+        <p class="addr">/sign-up</p></div>
+      <div><h3>Account menu</h3><figure id="pp-account"></figure>
+        <p class="note"><b>A bottom sheet, not a drop-down.</b> Tapping the round Account button on the find bar raises it over the dimmed kitchen; drawn for a developer. Tap the dim kitchen to close.</p>
+        <p class="addr">/kitchen (menu only)</p></div>
+      <div><h3>Settings</h3><figure id="pp-settings"></figure>
+        <p class="note"><b>The same four parts, stacked.</b> Username, Password, Plan and Sample data, each with its button on a full-height row.</p>
+        <p class="addr">/settings</p></div>
+      <div><h3>Not found</h3><figure id="pp-nf"></figure>
+        <p class="note"><b>The cookbook with a page ripped out.</b> Drawn signed out, so the button reads "Go to the front page"; signed in it reads "Back to the kitchen" over the dimmed kitchen.</p>
+        <p class="addr">any unknown address</p></div>
+    </div>
+    <h3>Loading, error, offline, and the paid plan</h3>
+    <div class="phones" id="pp-states">
+      <div><h4>Loading</h4><figure id="pp-loading"></figure>
+        <p class="note"><b>The view opens at once.</b> Faint ruled lines stand where the words will be; nothing spins.</p></div>
+      <div><h4>Error</h4><figure id="pp-error"></figure>
+        <p class="note"><b>A printed card is taped on.</b> "That didn't load." and Try again; no codes.</p></div>
+      <div><h4>Offline</h4><figure id="pp-offline"></figure>
+        <p class="note"><b>A thin strip under the find bar.</b> It stays until the connection is back.</p></div>
+      <div><h4>The "paid plan" tag, home cook</h4><figure id="pp-paid"></figure>
+        <p class="note"><b>A bottom sheet.</b> The button switches to Developer at once; it is free for now. "Not now" closes the sheet.</p></div>
+    </div>
+  </div>
+</section>
+<script>
+(function () {
+  var SOFT = "var(--ink-soft)", MID = 'text-anchor="middle"', RULE = "#c3d2ec";
+  function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx || 0) + '"', fill, sw || 2); }
+  function U(x, y, t, sz, w, col, ex) { return T(x, y, t, "font:" + (w || 400) + " " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"), ex || ""); }
+  function H(sz, w, col) { return "font:" + (w || 600) + " " + sz + "px var(--font-hand);fill:" + (col || "var(--ink)"); }
+  function cap(x, y, t) { return T(x, y, t, "font:700 14px var(--font-label);letter-spacing:.1em;fill:" + SOFT); }
+  function at(sx0, sy0, s, tx, ty, inner) { return '<g transform="translate(' + (tx - sx0 * s).toFixed(2) + " " + (ty - sy0 * s).toFixed(2) + ") scale(" + s + ')">' + inner + "</g>"; }
+  function dim(a) { return '<rect width="390" height="844" style="fill:#1f1d1a;opacity:' + a + '"/>'; }
+  function btn(x, y, w, t, fill, sz) { return '<g role="button" tabindex="0">' + R(x, y, w, 48, fill || "var(--card)", 2.4, 24) + U(x + w / 2, y + 31, t, sz || 18, 600, null, MID) + "</g>"; }
+  function pill(x, y, w, t, on) { return R(x, y, w, 44, on ? "var(--yellow)" : "var(--card)", 2, 22) + U(x + w / 2, y + 28, t, 16, 600, null, MID); }
+  function lines(x, y, arr, sz, gap, col, w) { return arr.map(function (t, i) { return U(x, y + i * gap, t, sz, w || 400, col); }).join(""); }
+  function plk(x, by, txt, fs, label) { var tw = txt.length * fs * 0.45;
+    return '<g class="lnk" tabindex="0" role="link" aria-label="Open ' + label + '"><rect class="lk-hi" x="' + (x - 4) + '" y="' + (by - fs * 0.92) + '" width="' + (tw + 8) + '" height="' + (fs * 1.25) + '" rx="3" style="fill:var(--yellow);stroke:var(--ink);stroke-width:1.2"/>' +
+      U(x, by, txt, fs, 600) + line("M" + x + " " + (by + 4) + " H" + (x + tw), 1.6, 1, "var(--blue)") + "</g>"; }
+  /* a question and its link, centred on cx */
+  function ask(cx, y, q, txt, label) { var qw = q.length * 8.2, lw = txt.length * 8.1 + 8, x0 = cx - (qw + 10 + lw) / 2;
+    return U(x0, y, q, 17, 400, SOFT) + plk(x0 + qw + 10, y, txt, 18, label); }
+
+  /* ---- the kitchen on a phone (as section 01), with no find bar unless asked ---- */
+  function kitchen(plan) {
+    var oo = opts({ plan: plan }), L = lay(VP, oo), YB = 500, s = ""; O = oo; EVE = false;
+    s += '<rect width="390" height="844" style="fill:var(--plaster)"/><rect y="250" width="390" height="230" style="fill:url(#tile9)"/>' + line("M0 250 H390", 1.8, 0.7);
+    s += at(580, 115, 0.6, 3, 112, board(L));
+    s += at(612, 440, 0.975, 0, YB - 29, clipTo(612, 440, 1012, 764, counterAndShelf(L, oo)));
+    var fy = YB - 29 + 324 * 0.975 - 40, k2; for (k2 = 0; k2 < 14; k2++) { s += '<rect x="' + (k2 * 30 - 15) + '" y="' + fy + '" width="30" height="30" style="fill:' + (k2 % 2 ? "#f6efdc" : "#2a2724") + '"/><rect x="' + (k2 * 30 - 15) + '" y="' + (fy + 30) + '" width="30" height="60" style="fill:' + (k2 % 2 ? "#2a2724" : "#f6efdc") + '"/>'; }
+    s += reg("rect", 'x="-4" y="' + (YB - 34) + '" width="398" height="40" ', "var(--wood-hi)", 2.2) + grain(0, YB - 30, 390, 32, 11) + hatch(0, YB - 44, 390, 9, 0.5);
+    s += at(LAB, 470, 1.05, 84, YB - 2, lab(oo)) + at(BOX, 470, 1.2, 284, YB - 2, closedBox(BOX, oo));
+    s += at((LAB + 60 + BOX - 75) / 2, 470, 0.66, 187, YB + 6, eclair((LAB + 60 + BOX - 75) / 2));
+    s += tapeLabel(83, 262, "Whiteboard", -2) + tapeLabel(279, 262, "Idea board", 2) + tapeLabel(82, YB + 12, "Notebook", -2) + tapeLabel(284, YB + 12, "Recipe box", 2);
+    return s;
+  }
+  function pale() { return '<g style="pointer-events:none" aria-hidden="true">' + kitchen("guest").replace(/tabindex="0"/g, "") + "</g>" + '<rect width="390" height="844" style="fill:var(--paper);opacity:.72"/>'; }
+  function findBar(open) {
+    return reg("rect", 'x="16" y="58" width="270" height="44" rx="22"', "var(--card)", 2.4) +
+      '<circle cx="42" cy="79" r="9" style="fill:none;stroke:var(--ink);stroke-width:2.4"/><path d="M49 86 L57 94" style="stroke:var(--ink);stroke-width:2.6;stroke-linecap:round"/>' + T(66, 89, "Find or jot…", "font:500 24px var(--font-hand);fill:var(--ink-soft)") +
+      (open ? '<circle cx="352" cy="80" r="26" style="fill:var(--yellow);stroke:var(--ink);stroke-width:2.4"/>' : "") +
+      '<circle cx="352" cy="80" r="22" style="fill:var(--orange);stroke:var(--ink);stroke-width:2.4"/>' + T(352, 86, "A", "font:700 20px var(--font-hand);fill:var(--card)", MID);
+  }
+  function sheetShape(top) { return reg("path", 'd="M0 ' + (top + 28) + " Q0 " + top + " 28 " + top + " H362 Q390 " + top + " 390 " + (top + 28) + ' V844 H0 Z"', "var(--card)", 2.2) + '<rect x="170" y="' + (top + 10) + '" width="50" height="5" rx="2.5" style="fill:#b9b3a6"/>'; }
+
+  /* ---- the lined recipe card: name as title, page name under it, orange rule, blue rules ---- */
+  var CX = 20, CW = 350, FX = 36, FW = 318;
+  function paper(y, h, sub) {
+    var s = hatch(CX + 10, y + h, CW - 2, 9, 0.8) + hatch(CX + CW, y + 10, 9, h - 1, 0.8) + R(CX, y, CW, h, "var(--page)", 2.6, 4), ry;
+    for (ry = y + 124; ry < y + h - 10; ry += 34) s += line("M" + (CX + 2) + " " + ry + " H" + (CX + CW - 2), 1.2, 1, RULE);
+    return s + line("M" + (CX + 2) + " " + (y + 92) + " H" + (CX + CW - 2), 1.8, 0.85, "var(--orange-text)") +
+      T(195, y + 50, "Trial &amp; Eclair", "font:400 38px var(--font-display);fill:var(--ink)", MID) + U(195, y + 78, sub, 19, 600, SOFT, MID);
+  }
+  function field(y, label, val, pw, on, hint) {
+    var s = U(FX, y, label, 16, 600) + (hint ? U(FX + FW, y, hint, 14, 400, SOFT, 'text-anchor="end"') : "") +
+      '<rect x="' + FX + '" y="' + (y + 8) + '" width="' + FW + '" height="44" rx="3" style="fill:var(--page);stroke:' + (on ? "var(--ink)" : "#a9a395") + ";stroke-width:" + (on ? 2 : 1.3) + '"/>' + line("M" + (FX + 1) + " " + (y + 52) + " H" + (FX + FW - 1), 2.6), cx;
+    if (pw) { for (var i = 0; i < val; i++) s += '<circle cx="' + (FX + 18 + i * 15) + '" cy="' + (y + 30) + '" r="4.2" style="fill:var(--ink)"/>'; cx = FX + 12 + val * 15; }
+    else { s += U(FX + 12, y + 37, val, 19); cx = FX + 16 + val.length * 9.6; }
+    return s + (on ? line("M" + cx + " " + (y + 17) + " v26", 2) : "");
+  }
+  function step(y, n) { return U(FX, y, n + ".", 20, 700, "var(--orange-text)"); }
+  function signin() {
+    var y = 150, h = 504;
+    return paper(y, h, "Sign in") + cap(FX, y + 120, "INGREDIENTS") + field(y + 148, "Username", "weekendbaker", 0, 0) + field(y + 220, "Password", 9, 1, 1) +
+      cap(FX, y + 308, "METHOD") + step(y + 356, 1) + btn(FX + 30, y + 324, FW - 30, "Sign in", "var(--yellow)", 19) + line("M" + FX + " " + (y + 398) + " H" + (FX + FW), 1.4, 0.5) +
+      ask(195, y + 436, "New here?", "Sign up", "the sign-up page") + ask(195, y + 478, "Just looking?", "Try it as a guest", "the kitchen as a guest");
+  }
+  function signup() {
+    var y = 84, h = 672;
+    return paper(y, h, "Sign up") + cap(FX, y + 120, "INGREDIENTS") + field(y + 148, "Username", "weekendbaker", 0, 0) + field(y + 220, "Password", 10, 1, 0, "8 or more") + field(y + 292, "Password again", 4, 1, 1) +
+      cap(FX, y + 376, "METHOD") + step(y + 416, 1) + R(FX + 32, y + 394, 26, 26, "var(--page)", 2, 3) + line("M" + (FX + 38) + " " + (y + 407) + " l6 7 l11 -15", 3.2) +
+      U(FX + 70, y + 415, "Start with sample recipes", 18, 600) + lines(FX + 70, y + 440, ["A few recipes, ideas and notes", "to look around. Remove them later", "from Account, all in one go."], 15, 22, SOFT) +
+      step(y + 534, 2) + btn(FX + 30, y + 502, FW - 30, "Sign up", "var(--yellow)", 19) + line("M" + FX + " " + (y + 574) + " H" + (FX + FW), 1.4, 0.5) +
+      ask(195, y + 608, "Already have one?", "Sign in", "the sign-in page") + ask(195, y + 650, "Just looking?", "Try it as a guest", "the kitchen as a guest");
+  }
+
+  /* ---- the front page ---- */
+  var ICON = {
+    nb: function (x, y) { return R(x, y - 30, 28, 36, "url(#mblack)", 2, 2) + R(x + 5, y - 20, 18, 10, "var(--card)", 1.2); },
+    bd: function (x, y) { return R(x - 4, y - 26, 36, 28, "url(#corkp)", 2, 1) + R(x + 6, y - 20, 14, 14, "var(--card)", 1.2) + reg("circle", 'cx="' + (x + 13) + '" cy="' + (y - 20) + '" r="4"', "var(--orange)", 1.4); },
+    bx: function (x, y) { return R(x - 5, y - 26, 38, 30, "var(--blue)", 2, 2) + line("M" + (x - 5) + " " + (y - 17) + " H" + (x + 33), 1.6) + R(x + 9, y - 21, 10, 8, "var(--brass)", 1.2); } };
+  function front() {
+    var y = 112, h = 626, s = hatch(CX + 10, y + h, CW - 2, 9, 0.8) + hatch(CX + CW, y + 10, 9, h - 1, 0.8) + R(CX, y, CW, h, "var(--card)", 2.6, 4);
+    s += T(195, y + 70, "Trial &amp; Eclair", "font:400 42px var(--font-display);fill:var(--ink)", MID) + line("M90 " + (y + 92) + " H300", 1.8, 0.85, "var(--orange-text)") +
+      U(195, y + 130, "Work out a recipe,", 23, 600, null, MID) + U(195, y + 158, "one trial at a time.", 23, 600, null, MID) +
+      U(195, y + 192, "A kitchen for recipe developers", 16, 400, SOFT, MID) + U(195, y + 214, "and home cooks.", 16, 400, SOFT, MID) + line("M36 " + (y + 238) + " H354", 1.4, 0.5);
+    [["nb", "Trials go in the notebook."], ["bd", "Ideas go on the board."], ["bx", "Recipes you keep go in the box."]].forEach(function (r, i) { var ry = y + 290 + i * 52; s += ICON[r[0]](42, ry) + U(92, ry - 6, r[1], 17); });
+    s += line("M36 " + (y + 420) + " H354", 1.4, 0.5) + btn(36, y + 440, 150, "Sign up", "var(--yellow)") + btn(204, y + 440, 150, "Sign in");
+    s += ask(195, y + 538, "Just looking?", "Try it as a guest", "the kitchen as a guest") +
+      U(195, y + 576, "No account needed. A guest can", 15, 400, SOFT, MID) + U(195, y + 598, "add up to 5 recipe cards.", 15, 400, SOFT, MID);
+    return s;
+  }
+
+  /* ---- the Account menu as a bottom sheet (developer) ---- */
+  function account() {
+    var top = 556, s = kitchen("dev") + findBar(true) + dim(0.45) + sheetShape(top);
+    s += U(24, top + 56, "weekendbaker", 21, 700) + U(24, top + 82, "Developer plan", 15, 500, SOFT) + line("M16 " + (top + 100) + " H374", 1.4, 0.6);
+    s += R(12, top + 112, 366, 52, "var(--yellow)", 1.6, 8) + U(28, top + 146, "Settings", 18, 600);
+    s += U(28, top + 202, "Sign out", 18, 600);
+    return s;
+  }
+
+  /* ---- Settings ---- */
+  function settings() {
+    var s = phTop("Settings"), y = 100;
+    function rule(yy) { return line("M16 " + yy + " H374", 1.4, 0.5); }
+    s += cap(16, y + 36, "USERNAME") + U(16, y + 68, "weekendbaker", 22, 600) + U(16, y + 92, "You sign in with this.", 15, 500, SOFT) + pill(274, y + 44, 100, "Change"); y += 114; s += rule(y);
+    s += cap(16, y + 36, "PASSWORD") + U(16, y + 72, "••••••••••", 20, 700) + pill(204, y + 44, 170, "Change password"); y += 100; s += rule(y);
+    s += cap(16, y + 36, "PLAN") + U(16, y + 68, "Developer", 22, 600) + U(16, y + 92, "Every part of the kitchen.", 15, 500, SOFT); y += 114; s += rule(y);
+    s += cap(16, y + 36, "SAMPLE DATA") + lines(16, y + 68, ["Your kitchen started with sample recipes,", "ideas, a cookbook and box cards, to show", "how things work."], 16, 24, null, 500) +
+      R(16, y + 148, 230, 48, "var(--card)", 2, 24) + U(131, y + 179, "Remove sample data", 16, 600, null, MID) + U(16, y + 226, "Starter references on your shelf always stay.", 15, 500, SOFT);
+    return s;
+  }
+
+  /* ---- not found: the cookbook, upright, the page ripped out at the spine ---- */
+  function nf() {
+    var s = pale(), PG = "M56 170 Q205 162 358 172 V694 Q205 686 56 692 Z", THR = "#8a5a3c", i, k, p = ["62,172"], r = rand(7), yy;
+    s += hatch(20, 716, 350, 10, 0.7) + R(14, 150, 362, 566, "var(--custard)", 2.6, 6) + R(14, 150, 40, 566, "var(--orange)", 2.4, 2) + hatch(16, 152, 36, 562, 0.14);
+    for (k = 3; k >= 1; k--) s += '<path transform="translate(' + (2 * k) + " " + (1.4 * k) + ')" d="' + PG + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>';
+    s += reg("path", 'd="' + PG + '"', "var(--page)", 2.4);
+    for (yy = 172; yy <= 692; yy += 13) p.push((70 + r() * 10).toFixed(1) + "," + yy);
+    p.push("62,692"); s += poly(p.join(" "), "var(--page)", 1.8) + '<path d="M' + p.slice(1).join(" L") + '" style="fill:none;stroke:var(--ink);stroke-width:5;opacity:.1"/>';
+    for (i = 0; i < 6; i++) { var sy = 200 + i * 84; s += line("M34 " + sy + " v50", 2.2, 1, THR) + '<circle cx="34" cy="' + (sy - 4) + '" r="1.8" style="fill:' + THR + '"/><circle cx="34" cy="' + (sy + 54) + '" r="1.8" style="fill:' + THR + '"/>'; }
+    s += cap(88, 264, "PAGE NOT FOUND") + T(88, 316, "This page is", "font:400 32px var(--font-display);fill:var(--ink)") + T(88, 356, "not here.", "font:400 32px var(--font-display);fill:var(--ink)") + line("M88 376 H334", 1.4, 0.6) +
+      U(88, 416, "The link may be old, or what it", 17, 400, SOFT) + U(88, 442, "pointed to was deleted.", 17, 400, SOFT) + btn(88, 474, 246, "Go to the front page", "var(--yellow)", 18) + U(207, 668, "14", 15, 400, SOFT, MID);
+    return s;
+  }
+
+  /* ---- loading, error, offline ---- */
+  function bare() {
+    var s = '<rect width="390" height="844" style="fill:var(--page)"/>' + phTop(" ") + '<rect x="24" y="122" width="200" height="26" rx="4" style="fill:' + RULE + ';opacity:.7"/><rect x="24" y="158" width="130" height="14" rx="4" style="fill:' + RULE + ';opacity:.55"/>' + line("M0 190 H390", 1.8, 0.85, "var(--orange-text)"), i, y;
+    for (i = 0; i < 16; i++) { y = 232 + i * 36; s += line("M24 " + y + " H366", 1.2, 1, RULE) + '<rect x="28" y="' + (y - 14) + '" width="' + [250, 190, 290, 150, 230, 270][i % 6] + '" height="9" rx="4" style="fill:' + RULE + ';opacity:.8"/>'; }
+    return s;
+  }
+  function error() {
+    var x = 40, y = 330, w = 310, h = 210;
+    return bare() + R(x, y, w, h, "var(--card)", 2.4, 4) + T(195, y + 66, "That didn't load.", "font:700 32px var(--font-hand);fill:var(--ink)", MID) + T(195, y + 98, "Your work is safe.", H(21, 600, SOFT), MID) + pill(115, y + 130, 160, "Try again", true) +
+      tape(x + 46, y + 2, 78, 22, -5, 0.8) + tape(x + w - 46, y + 2, 78, 22, 5, 0.8);
+  }
+  function offline() {
+    var x = 16, w = 358, y = 112;
+    return kitchen("dev") + findBar() + phJot(336, 776) + R(x, y, w, 36, "var(--custard)", 2, 3) + U(195, y + 24, "Offline. Showing what was saved.", 15, 600, null, MID) + tape(x + 16, y + 4, 48, 16, -8, 0.8) + tape(x + w - 16, y + 4, 48, 16, 8, 0.8);
+  }
+
+  /* ---- the paid plan card, a bottom sheet over the kitchen ---- */
+  function paid() {
+    var top = 336, s = kitchen("cook") + findBar() + dim(0.5) + sheetShape(top);
+    s += paidTag(90, top + 52, -4).replace('class="paid"', 'class="ptag"') + T(24, top + 110, "The Developer plan adds", H(30, 700));
+    [["The Trials notebook", "every trial, with photos"], ["The idea board", "ideas pinned and kept"], ["Making cookbooks", "recipes in order, in a book"]].forEach(function (r, i) {
+      var yy = top + 156 + i * 60;
+      s += reg("circle", 'cx="34" cy="' + (yy - 6) + '" r="6"', "var(--yellow)", 1.6) + T(54, yy, r[0], H(24, 700)) + T(54, yy + 24, r[1], H(19, 600, SOFT)); });
+    s += T(24, top + 354, "It is free for now. Nothing to pay.", H(21, 600, SOFT)) + R(16, top + 374, 358, 52, "var(--yellow)", 2.6, 26) + U(195, top + 407, "Switch to Developer", 19, 600, null, MID) +
+      U(195, top + 458, "Not now", 17, 500, SOFT, MID + ' style="text-decoration:underline"');
+    return s;
+  }
+
+  PLATE.add(function () {
+    function put(id, inner, label, bg) { document.getElementById(id).innerHTML = phone(inner, label, bg ? { bg: bg } : null); }
+    put("pp-front", pale() + front(), "The signed-out front page: one card over the pale kitchen");
+    put("pp-signin", pale() + signin(), "Sign in: the recipe card centred over the pale kitchen");
+    put("pp-signup", pale() + signup(), "Sign up: the recipe card with Start with sample recipes ticked");
+    put("pp-account", account(), "The Account menu as a bottom sheet over the kitchen, developer");
+    put("pp-settings", settings(), "Settings on a phone: username, password, plan and sample data");
+    put("pp-nf", nf(), "Not found: a cookbook with a page ripped out, over the pale kitchen");
+    put("pp-loading", bare(), "A view that has just opened, with ruled lines where the words will be");
+    put("pp-error", error(), "A printed card taped on the page: That didn't load, Try again");
+    put("pp-offline", offline(), "The kitchen with a strip under the find bar: Offline. Showing what was saved.");
+    put("pp-paid", paid(), "The paid plan card as a bottom sheet with a Switch to Developer button");
+  });
+})();
+</script>

@@ -154,9 +154,13 @@ Layout (Ari, 2026-11-16). One page, new artifact, sources in `design/plate-xi/` 
 - [x] Ari signed off (2026-11-17, version 2). Then this plate is the brand sheet reference. Drawn 2026-11-17: https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL (sources `design/plate-xi/`)
 
 ## 3. Phone layout
-- [ ] Stacked phone kitchen, jot button bottom right
-- [ ] Phone recipe card: landscape always, or only full screen (decide here)
-- [ ] Phone notebook with the camera button (Plate VIII)
+Phone Plate v1 (2026-11-17): https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, sources `design/phone/`
+- [x] Stacked phone kitchen, jot button bottom right (drawn: day, evening, find list, jot sheet)
+- [ ] Phone recipe card: A any way you hold it (003, Claude's pick) or B always sideways (asked)
+- [x] Phone notebook with the camera button (drawn)
+- [x] Every other view and page on a phone (drawn)
+- [ ] "Recently" on a phone: top of the find list (Claude's pick, asked)
+- [ ] Ari signs off
 
 ## 4. Mark
 - Ari (2026-11-13): the mark is "T&E", and it appears in the app (where it sits is decided when drawing the mark). The full name "Trial & Eclair" is a title on sign in and the front page (Ari, 2026-11-14: bigger on the front page)

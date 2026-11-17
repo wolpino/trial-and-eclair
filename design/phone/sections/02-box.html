@@ -1,0 +1,141 @@
+<section id="pb-sec" aria-labelledby="h-pb">
+  <span class="label" id="h-pb">02 · The recipe box on a phone</span>
+  <div class="sec-body">
+    <div class="phones">
+      <div><h3>The box, opened from the kitchen</h3><figure id="pb-open"></figure><p class="addr">/box/croissants</p>
+        <p class="note"><b>The whole screen is the box.</b> No header and no bottom bar. The Croissants card rests on the ledge of the lid, the ☰ sits in the lid's corner, and the tabs run in two staggered rows: A, C, E in front, B, D behind, only for letters that have cards. The floating + is left off here (it shows while you browse tabs).</p></div>
+      <div><h3>Tab C tapped: the fan</h3><figure id="pb-fan"></figure><p class="addr">/box/croissants</p><p class="note"><b>Title-only cards rise above the tabs.</b> They scroll sideways; tap one to put it in the lid, tap the lifted tab again to close. The lid is not dimmed, the open tab is lifted and the + is hidden. The address does not change.</p></div>
+      <div><h3>The ☰ menu</h3><figure id="pb-menu"></figure><p class="addr">/box/croissants</p>
+        <p class="note"><b>One menu, in sections:</b> your name, Add recipe (type, URL, scan), View (Simple list on or off) and Sign out at the bottom.</p></div>
+    </div>
+
+    <h3>Card View: the open question</h3>
+    <ol class="qs"><li><b>Question for Ari:</b> Card View on a phone: A, any way you hold it (decision 003), or B, always a sideways card?</li></ol>
+    <div class="pbcv">
+      <div class="pba">
+        <div class="pbah"><div><h3>A · any way you hold it (Claude's pick)</h3><figure id="pb-a"></figure><p class="addr">/box/croissants</p></div>
+        <div><h3>A · held sideways</h3><figure id="pb-a-side"></figure><p class="addr">/box/croissants</p></div></div>
+        <p class="note"><b>A is what decision 003 settled, and it does not fight the phone.</b> Tap the card and Card View covers the screen however you hold it. Upright, the ingredients sit in a band pinned at the top that folds to one line, the steps scroll under it and one is marked "you are here". The sun keeps the screen awake. Sideways, ingredients are on the left and steps on the right, each scrolling on its own. The red X goes back to the box.</p>
+      </div>
+      <div class="pbb"><h3>B · always a sideways card</h3><figure id="pb-b"></figure><p class="addr">/box/croissants</p>
+        <p class="note"><b>B turns the card, not the screen.</b> The recipe opens as a landscape index card like the wide box's, drawn sideways on the upright phone, so you turn the phone to read it. The card in the lid stays a preview. There is no rotate prompt (decision 004).</p></div>
+    </div>
+  </div>
+</section>
+<style>.pbcv{display:grid;gap:22px;grid-template-columns:minmax(0,3fr) minmax(0,1fr);align-items:start}.pbah{display:grid;gap:18px;grid-template-columns:minmax(0,1fr) minmax(0,2fr);align-items:start}
+.pba>div>div,.pbb,.pbah>div{display:grid;gap:6px;align-content:start;min-width:0}.pba,.pbb{display:grid;gap:8px;align-content:start;min-width:0}.pbcv figure{border:0;background:none}
+@media(max-width:900px){.pbcv,.pbah{grid-template-columns:minmax(0,1fr)}}</style>
+<script>
+(function () {
+  var CR = { t: "Croissants", src: "From: my notebook, trial 4 (11/11/26)", meta: "Prep 2 days · Bake 18 min · Makes 12",
+    ing: ["500 g strong flour", "10 g salt", "55 g sugar", "10 g instant yeast", "140 ml cold milk", "140 ml cold water", "280 g butter to laminate"],
+    steps: ["Mix the dough. Chill overnight.", "Lock in the butter.", "3 letter folds, 2 h rest each.", "Roll out, cut, shape 12.", "Proof 2 h at 24°C.", "Bake 18 min at 200°C."] };
+  var C_CARDS = ["Carrot cake", "Challah", "Cheese scones", "Chocolate babka", "Chocolate chip cookies", "Churros", "Ciabatta", "Cinnamon rolls", "Croissants"];
+  var LET = "ABCDEGHLMPSTW".split(""), RULE = "#c3d2ec", SOFT = "var(--ink-soft)", RED = "color-mix(in srgb, var(--orange) 35%, #c81e1e)";
+  function H(sz, w, col) { return "font:" + (w || 600) + " " + sz + "px var(--font-hand);fill:" + (col || "var(--ink)"); }
+  function LB(sz, col) { return "font:700 " + sz + "px var(--font-label);fill:" + (col || SOFT) + ";letter-spacing:.08em"; }
+  function R(x, y, w, h, fill, sw, rx) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + h + '" rx="' + (rx == null ? 3 : rx) + '"', fill, sw || 2); }
+  var MID = 'text-anchor="middle"', END = 'text-anchor="end"';
+
+  function burger(cx, cy, on) { return reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="22"', on ? "var(--yellow)" : "var(--card)", 2.4) + line("M" + (cx - 9) + " " + (cy - 6) + " h18 M" + (cx - 9) + " " + cy + " h18 M" + (cx - 9) + " " + (cy + 6) + " h18", 2.6); }
+  function sun(cx, cy, on) { var s = reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="20"', on ? "var(--yellow)" : "var(--card)", 2.2) + reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="6"', "var(--card)", 1.8);
+    for (var i = 0; i < 8; i++) { var a = i * Math.PI / 4, c = Math.cos(a), d = Math.sin(a); s += line("M" + (cx + c * 9.5).toFixed(1) + " " + (cy + d * 9.5).toFixed(1) + " L" + (cx + c * 13.5).toFixed(1) + " " + (cy + d * 13.5).toFixed(1), 2); } return s; }
+  function dots(cx, cy) { return reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="20"', "var(--card)", 2.2) + [-8, 0, 8].map(function (d) { return '<circle cx="' + (cx + d) + '" cy="' + cy + '" r="2.6" style="fill:var(--ink)"/>'; }).join(""); }
+  function redx(cx, cy) { return R(cx - 20, cy - 20, 40, 40, RED, 2.4, 8) + line("M" + (cx - 8) + " " + (cy - 8) + " L" + (cx + 8) + " " + (cy + 8) + " M" + (cx + 8) + " " + (cy - 8) + " L" + (cx - 8) + " " + (cy + 8), 3.6, 1, "#fff"); }
+  function pl(x, y, w, h, t, fs) { return R(x, y, w, h, "var(--card)", 2.2, h / 2) + T(x + w / 2, y + h / 2 + fs * 0.33, t, H(fs, 700), MID); }
+
+  /* ---------- the box ---------- */
+  function lidCard() {
+    var x0 = 36, x1 = 354, top = 112, xl = x0 + 18, s = R(x0, top, x1 - x0, 328, "var(--page)", 2.2), body = "";
+    body += T(xl, top + 38, CR.t, H(34, 700)) + T(xl, top + 60, CR.src, H(17, 600, SOFT)) + T(xl, top + 80, CR.meta, H(17, 600, SOFT)) +
+      line("M" + (x0 + 1) + " " + (top + 92) + " H" + (x1 - 1), 1.8, 0.85, "var(--orange-text)") + T(xl, top + 112, "INGREDIENTS", LB(13));
+    CR.ing.forEach(function (t, i) { var y = top + 136 + i * 23; body += line("M" + (x0 + 1) + " " + (y + 5) + " H" + (x1 - 1), 1.2, 1, RULE) + T(xl, y, t, H(18)); });
+    body += T(xl, top + 298, "DIRECTIONS", LB(13)) + T(xl, top + 320, "1. " + CR.steps[0], H(18));
+    return s + clipTo(x0 + 1, top + 1, x1 - 1, top + 327, body);
+  }
+  function lid() {
+    var s = R(8, 52, 374, 416, "var(--blue)", 3, 8) + R(20, 64, 350, 392, "var(--blue-back)", 1.8, 4) + hatch(22, 66, 346, 8, 0.5);
+    s += lidCard();
+    s += R(28, 440, 334, 14, "var(--wood)", 2, 2) + grain(32, 441, 326, 12, 5) + hatch(30, 454, 330, 4, 0.6);
+    [44, 328].forEach(function (x) { s += R(x, 452, 18, 26, "var(--brass)", 1.6, 4); });
+    return s;
+  }
+  var SL = 358 / (LET.length + 1), TW = 2 * SL - 3;
+  function tab(i, lift, open) {
+    var front = i % 2 === 0, x = 16 + i * SL + 1.5, y = (front ? 600 : 556) - (lift || 0), h = front ? 48 : 60, ch = LET[i];
+    return reg("path", 'd="M' + x.toFixed(1) + " " + (y + h) + " V" + (y + 7) + " q0 -7 7 -7 h" + (TW - 14).toFixed(1) + " q7 0 7 7 V" + (y + h) + ' Z"', open ? "#fff7dc" : "var(--custard)", 2) +
+      T((x + TW / 2).toFixed(1), y + (front ? 29 : 31), ch, "font:700 21px var(--font-label);fill:var(--ink)", MID);
+  }
+  function body(open) {
+    var s = R(8, 468, 374, 360, "var(--blue)", 3, 8) + R(18, 478, 354, 176, "var(--blue-back)", 1.8, 4), i;
+    for (i = 0; i < 4; i++) s += R(26, 484 + i * 14, 338, 14, "var(--page)", 1.2, 2);
+    for (i = 1; i < LET.length; i += 2) s += tab(i);
+    for (i = 0; i < LET.length; i += 2) s += i === open ? tab(i, 9, true) : tab(i);
+    /* front: top lip, corner caps, latch, brass label */
+    s += R(8, 648, 374, 190, "var(--blue)", 3, 8) + '<rect x="14" y="654" width="362" height="170" rx="4" style="fill:none;stroke:#fff;stroke-width:1.4;opacity:.35"/>' + hatch(10, 650, 370, 6, 0.7);
+    [[8, 648, 1], [382, 648, -1]].forEach(function (c) { s += reg("path", 'd="M' + c[0] + " " + c[1] + " h" + (14 * c[2]) + " L" + c[0] + " " + (c[1] + 14) + ' Z"', "var(--brass)", 1.4); });
+    s += reg("path", 'd="M185 664 H205 V686 Q195 694 185 686 Z"', "var(--brass)", 1.8) + '<circle cx="195" cy="672" r="2.4" style="fill:var(--ink)"/>' + brassLabel(195, 752, 200, 52, "Recipes", 26);
+    return s;
+  }
+  function chips() {
+    var s = "";
+    C_CARDS.forEach(function (t, k) { var x = 16 + k * 134, w = t.split(" "), l1 = t, l2 = "";
+      if (t.length > 11 && w.length > 1) { l1 = w[0]; l2 = w.slice(1).join(" "); if (w.length > 2) { l1 = w[0] + " " + w[1]; l2 = w[2]; } }
+      s += hatch(x + 3, 546, 124, 5, 0.6) + R(x, 484, 124, 62, "#fffaf0", 2.2, 5) + T(x + 62, l2 ? 511 : 521, l1, "font:600 14px Georgia,serif;fill:var(--ink)", MID) + (l2 ? T(x + 62, 531, l2, "font:600 14px Georgia,serif;fill:var(--ink)", MID) : ""); });
+    return s;
+  }
+  function menuPanel() {
+    var x = 62, w = 320, s = hatch(x + 4, 104, w, 400, 0.45) + R(x, 100, w, 400, "var(--card)", 2.6, 10), tx = x + 20, rows = [["Type it in"], ["Paste a web address"], ["Scan a card or page"]];
+    function div(y) { return line("M" + (x + 10) + " " + y + " H" + (x + w - 10), 1.4, 1, "var(--rule)"); }
+    s += T(tx, 126, "ACCOUNT", LB(13)) + T(tx, 160, "Ari", H(30, 700)) + div(176) + T(tx, 202, "ADD RECIPE", LB(13));
+    rows.forEach(function (r, i) { var y = 212 + i * 48; s += (i ? div(y) : "") + T(tx, y + 32, r[0], H(25)) + line("M" + (x + w - 32) + " " + (y + 16) + " l8 8 l-8 8", 2.2, 0.7); });
+    s += div(356) + T(tx, 382, "VIEW", LB(13)) + T(tx, 424, "Simple list", H(25)) + R(x + w - 66, 404, 46, 26, "var(--page)", 2, 13) + '<circle cx="' + (x + w - 53) + '" cy="417" r="9" style="fill:var(--ink-soft);stroke:var(--ink);stroke-width:1.4"/>' +
+      div(444) + T(tx, 478, "Sign out", H(25, 600, "var(--orange-text)"));
+    return s;
+  }
+  function boxScene(o) { return lid() + body(o.open) + (o.fan ? chips() : "") + (o.menu ? menuPanel() : "") + burger(346, 88, o.menu); }
+
+  /* ---------- Card View ---------- */
+  function stepsUp() {
+    var s = "";
+    CR.steps.forEach(function (t, i) { var top = 188 + i * 92, y = top + 54, here = i === 2;
+      if (here) s += R(14, top + 2, 350, 84, "var(--yellow)", 2, 6).replace("style=\"", "style=\"fill-opacity:.5;") + R(250, top - 8, 112, 22, "var(--card)", 1.6, 4) + T(306, top + 8, "you are here", LB(13, "var(--ink)"), MID);
+      s += line("M16 " + (top + 90) + " H374", 1.2, 1, RULE) + reg("circle", 'cx="38" cy="' + (y - 7) + '" r="16"', "var(--card)", 1.8) + T(38, y - 1, i + 1, H(20, 700), MID) + T(66, y, t, H(24)); });
+    return s + R(379, 192, 5, 548, "var(--rule)", 0.8, 2.5) + R(379, 192, 5, 240, SOFT, 0.8, 2.5);
+  }
+  function cvUp() {
+    return T(16, 86, CR.t, H(32, 700)) + T(16, 110, CR.src, H(17, 600, SOFT)) + dots(246, 76) + sun(296, 76, true) + redx(346, 76) +
+      hatch(16, 170, 358, 6, 0.5) + R(16, 122, 358, 48, "var(--custard)", 2.4, 6) + T(32, 154, "Ingredients (7) ▾", H(25, 700)) + stepsUp() +
+      pl(125, 752, 140, 46, "Turn over", 22);
+  }
+  function cvSide() {
+    var s = T(44, 42, CR.t, H(32, 700)) + T(210, 40, CR.src, H(18, 600, SOFT)) + dots(704, 38) + sun(752, 38, true) + redx(800, 38) + line("M0 64 H844", 1.6, 0.8) +
+      line("M378 74 V372", 1.4, 1, RULE) + T(44, 92, "INGREDIENTS (7)", LB(13)) + T(398, 92, "DIRECTIONS", LB(13));
+    CR.ing.forEach(function (t, i) { var y = 128 + i * 38, tick = i === 1;
+      s += line("M44 " + (y + 9) + " H360", 1.2, 1, RULE) + R(44, y - 17, 22, 22, tick ? "var(--yellow)" : "var(--card)", 1.8, 4) + (tick ? line("M49 " + (y - 6) + " l5 6 l9 -12", 2.6) : "") +
+        T(78, y, t, H(23)) + (tick ? line("M78 " + (y - 6) + " h" + (t.length * 9.2), 2, 0.7) : ""); });
+    CR.steps.forEach(function (t, i) { var y = 128 + i * 46, here = i === 2;
+      if (here) s += R(392, y - 28, 412, 40, "var(--yellow)", 1.8, 5).replace("style=\"", "style=\"fill-opacity:.5;") + R(692, y - 36, 104, 20, "var(--card)", 1.6, 4) + T(744, y - 21, "you are here", LB(13, "var(--ink)"), MID);
+      s += line("M396 " + (y + 9) + " H800", 1.2, 1, RULE) + T(398, y, (i + 1) + ".  " + t, H(23)); });
+    return s;
+  }
+  function cvB() {
+    var W = 744, H0 = 350, s = R(0, 0, W, H0, "var(--page)", 2.4, 6) + T(28, 50, CR.t, H(38, 700)) + T(28, 78, CR.src, H(19, 600, SOFT)) + T(28, 102, CR.meta, H(19, 600, SOFT)) +
+      dots(610, 34) + sun(660, 34, true) + redx(712, 34) + line("M1 116 H" + (W - 1), 1.8, 0.85, "var(--orange-text)") + T(28, 140, "INGREDIENTS", LB(13)) + T(322, 140, "DIRECTIONS", LB(13)) + line("M300 126 V" + (H0 - 12), 1.2, 1, RULE);
+    CR.ing.forEach(function (t, i) { var y = 168 + i * 25; s += line("M1 " + (y + 5) + " H" + (W - 1), 1.2, 1, RULE) + T(28, y, t, H(20)); });
+    CR.steps.forEach(function (t, i) { var y = 168 + i * 25; if (i === 2) s += R(312, y - 18, 280, 25, "var(--yellow)", 1.6, 4).replace("style=\"", "style=\"fill-opacity:.5;"); s += T(322, y, (i + 1) + ". " + t, H(20)); });
+    s += pl(604, 296, 120, 44, "Turn over", 20);
+    return '<rect x="0" y="0" width="390" height="844" style="fill:var(--paper)"/>' + hatch(24, 62, 350, 746, 0.18) + '<g transform="translate(370 58) rotate(90)">' + s + "</g>";
+  }
+
+  PLATE.add(function () {
+    function put(id, inner, label, opt) { document.getElementById(id).innerHTML = phone(inner, label, Object.assign({ bg: "var(--paper)" }, opt || {})); }
+    put("pb-open", boxScene({}), "Recipe box opened from the kitchen: Croissants card in the lid, two staggered rows of letter tabs, latch and brass label");
+    put("pb-fan", boxScene({ fan: true, open: 2 }), "Tab C tapped: a row of title-only cards rises above the tabs and scrolls sideways");
+    put("pb-menu", boxScene({ menu: true }), "The menu: account name, Add recipe by typing, URL or scan, Simple list switch, Sign out");
+    put("pb-a", cvUp(), "Card View upright: pinned ingredients band, steps scroll under, one step marked you are here", { bg: "var(--page)" });
+    put("pb-a-side", cvSide(), "Card View held sideways: ingredients left, steps right", { land: true, bg: "var(--page)" });
+    put("pb-b", cvB(), "Option B: the recipe as a landscape index card drawn sideways on the upright phone");
+  });
+})();
+</script>

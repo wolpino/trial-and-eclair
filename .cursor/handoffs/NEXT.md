@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Plate XI signed off; next: web addresses decision note, then the phone layout)
+# NEXT — 2026-11-17 (Phone Plate v1 published; waiting on Ari's two answers)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -7,10 +7,21 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate X, an extra round, drawn one view at a time; Plate XI is the final) → phone layout → mark → brand sheet → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ⏳ → mark → brand sheet → Task issues → build
 ```
 
-## Prompt for the next agent (after Plate XI sign-off) — START HERE
+## Prompt for the next agent (Phone Plate, after Ari answers) — START HERE
+> Phone Plate v1 is published: https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy. Sources in `design/phone/` (copied base from plate-xi plus `base/phone.js`, the phone frame helper; brief `design/phone/BRIEF.md`). Build: `cd design/phone && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/phone-plate.html`, publish that file to the same URL.
+>
+> **Sections:** 00 questions (director), 01 kitchen (pk), 02 recipe box (pb), 03 notebook (pn), 04 other views (pv), 05 pages without an object (pp). One Sonnet subagent per file for tweaks.
+>
+> **Questions put to Ari (page top):** (1) Card View on a phone: A any way you hold it (decision 003, Claude's pick) or B always a sideways card; (2) "Recently" has no fridge on the phone: Claude's pick is to show it at the top of the find list before typing.
+>
+> **Assumptions to confirm if Ari raises them:** phone kitchen fits one screen (board, counter, shelf; no fridge or window); tape labels added to whiteboard, idea board, notebook and box on the phone; cookbooks in one sideways-scrolling row; Card View keeps the box address `/box/croissants`; three invented older log entries; the notebook page combines the wide spread's entry with its sketch and bars.
+>
+> **Next:** apply Ari's answers, sign off, then the mark (T&E), brand sheet, React test piece (Ari reviews before any commit), Task issues, build.
+
+## Prompt for the next agent (after Plate XI sign-off) — done 2026-11-17 (phone plate drawn)
 > Plate XI is SIGNED OFF (Ari, 2026-11-17, version 2): https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL. It is the brand sheet reference. Sources in `design/plate-xi/` (build: `cd design/plate-xi && node build.cjs`, then `tail -n +2 dist/index.html | sed '$d' > dist/kitchen-plate-xi.html`, publish that file to the same URL).
 >
 > **Confirmed by Ari (2026-11-17):** web addresses as drawn under each view (Back returns to `/kitchen`), and the paid plan card with a free "Switch to Developer" (section 05). Nothing waits on Ari.
