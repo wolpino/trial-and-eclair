@@ -1,10 +1,10 @@
 <section aria-labelledby="h-pp" id="pp-sec">
   <span class="label" id="h-pp">05 · Pages with no kitchen object, on a phone</span>
   <div class="sec-body">
-    <p class="note"><b>Same pages, one column.</b> Wording and look are the signed-off ones; each card or sheet is fitted to a 390-point screen. Signed-out pages sit over the pale kitchen, the same for every plan.</p>
+    <p class="note"><b>Same pages, one column.</b> Wording and look are the signed-off ones; each card or sheet is fitted to a 390-point screen. Signed-out pages sit on plain paper, the same for every plan.</p>
     <div class="phones">
       <div><h3>Front page (signed out)</h3><figure id="pp-front"></figure>
-        <p class="note"><b>One card over the pale kitchen.</b> The name, the three things the app is for, Sign up and Sign in, then "Try it as a guest".</p>
+        <p class="note"><b>One card on plain paper.</b> The name, the three things the app is for, Sign up and Sign in, then "Try it as a guest".</p>
         <p class="addr">/</p></div>
       <div><h3>Sign in</h3><figure id="pp-signin"></figure>
         <p class="note"><b>The recipe card, centred.</b> Fields run the full width of the card and are 44 points tall. The keyboard is not drawn.</p>
@@ -19,7 +19,7 @@
         <p class="note"><b>The same four parts, stacked.</b> Username, Password, Plan and Sample data, each with its button on a full-height row.</p>
         <p class="addr">/settings</p></div>
       <div><h3>Not found</h3><figure id="pp-nf"></figure>
-        <p class="note"><b>The cookbook with a page ripped out.</b> Drawn signed out, so the button reads "Go to the front page"; signed in it reads "Back to the kitchen" over the dimmed kitchen.</p>
+        <p class="note"><b>The cookbook with a page ripped out.</b> The left side runs off the screen so you see the sewn gutter. Drawn signed out, so the button reads "Go to the front page"; signed in it reads "Back to the kitchen".</p>
         <p class="addr">any unknown address</p></div>
     </div>
     <h3>Loading, error, offline, and the paid plan</h3>
@@ -67,7 +67,7 @@
     s += tapeLabel(83, 262, "Whiteboard", -2) + tapeLabel(279, 262, "Idea board", 2) + tapeLabel(82, YB + 12, "Notebook", -2) + tapeLabel(284, YB + 12, "Recipe box", 2);
     return s;
   }
-  function pale() { return '<g style="pointer-events:none" aria-hidden="true">' + kitchen("guest").replace(/tabindex="0"/g, "") + "</g>" + '<rect width="390" height="844" style="fill:var(--paper);opacity:.72"/>'; }
+  function pale() { return '<rect width="390" height="844" style="fill:var(--paper)"/>' + hatch(0, 0, 390, 844, 0.06); }
   function findBar(open) {
     return reg("rect", 'x="16" y="58" width="270" height="44" rx="22"', "var(--card)", 2.4) +
       '<circle cx="42" cy="79" r="9" style="fill:none;stroke:var(--ink);stroke-width:2.4"/><path d="M49 86 L57 94" style="stroke:var(--ink);stroke-width:2.6;stroke-linecap:round"/>' + T(66, 89, "Find or jot…", "font:500 24px var(--font-hand);fill:var(--ink-soft)") +
@@ -147,13 +147,17 @@
 
   /* ---- not found: the cookbook, upright, the page ripped out at the spine ---- */
   function nf() {
-    var s = pale(), PG = "M56 170 Q205 162 358 172 V694 Q205 686 56 692 Z", THR = "#8a5a3c", i, k, p = ["62,172"], r = rand(7), yy;
-    s += hatch(20, 716, 350, 10, 0.7) + R(14, 150, 362, 566, "var(--custard)", 2.6, 6) + R(14, 150, 40, 566, "var(--orange)", 2.4, 2) + hatch(16, 152, 36, 562, 0.14);
+    var s = pale(), PG = "M40 170 Q200 162 358 172 V694 Q200 686 40 692 Z", THR = "#8a5a3c", i, k, p = ["46,172"], r = rand(7), yy;
+    s += hatch(-10, 716, 380, 10, 0.7) + R(-10, 150, 386, 566, "var(--custard)", 2.6, 6);
     for (k = 3; k >= 1; k--) s += '<path transform="translate(' + (2 * k) + " " + (1.4 * k) + ')" d="' + PG + '" style="fill:var(--page);stroke:#a9a395;stroke-width:1"/>';
-    s += reg("path", 'd="' + PG + '"', "var(--page)", 2.4);
-    for (yy = 172; yy <= 692; yy += 13) p.push((70 + r() * 10).toFixed(1) + "," + yy);
-    p.push("62,692"); s += poly(p.join(" "), "var(--page)", 1.8) + '<path d="M' + p.slice(1).join(" L") + '" style="fill:none;stroke:var(--ink);stroke-width:5;opacity:.1"/>';
-    for (i = 0; i < 6; i++) { var sy = 200 + i * 84; s += line("M34 " + sy + " v50", 2.2, 1, THR) + '<circle cx="34" cy="' + (sy - 4) + '" r="1.8" style="fill:' + THR + '"/><circle cx="34" cy="' + (sy + 54) + '" r="1.8" style="fill:' + THR + '"/>'; }
+    /* the left page runs off the screen edge; the fold (gutter) is at x 40 */
+    s += reg("rect", 'x="-10" y="168" width="50" height="526"', "var(--page)", 2.4) + reg("path", 'd="' + PG + '"', "var(--page)", 2.4) + hatch(22, 170, 18, 522, 0.35) + hatch(42, 170, 12, 522, 0.3);
+    /* the sewn fold: a thread down the gutter with short stitch marks across it */
+    s += line("M40 172 V692", 2.2, 1, THR);
+    for (i = 0; i < 12; i++) { var sy = 196 + i * 42; s += line("M28 " + sy + " H52", 2.6, 1, THR) + '<circle cx="28" cy="' + sy + '" r="1.8" style="fill:' + THR + '"/><circle cx="52" cy="' + sy + '" r="1.8" style="fill:' + THR + '"/>'; }
+    /* the ripped page: a ragged stub beside the stitches */
+    for (yy = 172; yy <= 692; yy += 13) p.push((62 + r() * 10).toFixed(1) + "," + yy);
+    p.push("46,692"); s += '<path d="M' + p.slice(1).join(" L") + '" style="fill:none;stroke:var(--ink);stroke-width:5;opacity:.1"/>' + poly(p.join(" "), "var(--page)", 1.8);
     s += cap(88, 264, "PAGE NOT FOUND") + T(88, 316, "This page is", "font:400 32px var(--font-display);fill:var(--ink)") + T(88, 356, "not here.", "font:400 32px var(--font-display);fill:var(--ink)") + line("M88 376 H334", 1.4, 0.6) +
       U(88, 416, "The link may be old, or what it", 17, 400, SOFT) + U(88, 442, "pointed to was deleted.", 17, 400, SOFT) + btn(88, 474, 246, "Go to the front page", "var(--yellow)", 18) + U(207, 668, "14", 15, 400, SOFT, MID);
     return s;
@@ -166,8 +170,8 @@
     return s;
   }
   function error() {
-    var x = 40, y = 330, w = 310, h = 210;
-    return bare() + R(x, y, w, h, "var(--card)", 2.4, 4) + T(195, y + 66, "That didn't load.", "font:700 32px var(--font-hand);fill:var(--ink)", MID) + T(195, y + 98, "Your work is safe.", H(21, 600, SOFT), MID) + pill(115, y + 130, 160, "Try again", true) +
+    var x = 40, y = 330, w = 310, h = 180;
+    return bare() + R(x, y, w, h, "var(--card)", 2.4, 4) + T(195, y + 66, "That didn't load.", "font:700 32px var(--font-hand);fill:var(--ink)", MID) + pill(115, y + 110, 160, "Try again", true) +
       tape(x + 46, y + 2, 78, 22, -5, 0.8) + tape(x + w - 46, y + 2, 78, 22, 5, 0.8);
   }
   function offline() {
@@ -189,12 +193,12 @@
 
   PLATE.add(function () {
     function put(id, inner, label, bg) { document.getElementById(id).innerHTML = phone(inner, label, bg ? { bg: bg } : null); }
-    put("pp-front", pale() + front(), "The signed-out front page: one card over the pale kitchen");
-    put("pp-signin", pale() + signin(), "Sign in: the recipe card centred over the pale kitchen");
+    put("pp-front", pale() + front(), "The signed-out front page: one card on plain paper");
+    put("pp-signin", pale() + signin(), "Sign in: the recipe card centred on plain paper");
     put("pp-signup", pale() + signup(), "Sign up: the recipe card with Start with sample recipes ticked");
     put("pp-account", account(), "The Account menu as a bottom sheet over the kitchen, developer");
     put("pp-settings", settings(), "Settings on a phone: username, password, plan and sample data");
-    put("pp-nf", nf(), "Not found: a cookbook with a page ripped out, over the pale kitchen");
+    put("pp-nf", nf(), "Not found: a cookbook with a page ripped out, on plain paper");
     put("pp-loading", bare(), "A view that has just opened, with ruled lines where the words will be");
     put("pp-error", error(), "A printed card taped on the page: That didn't load, Try again");
     put("pp-offline", offline(), "The kitchen with a strip under the find bar: Offline. Showing what was saved.");

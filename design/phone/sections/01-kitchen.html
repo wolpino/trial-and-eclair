@@ -3,14 +3,27 @@
   <div class="sec-body">
     <div class="phones">
       <div><h3>The kitchen by day</h3><figure id="pk-day"></figure><p class="addr">/kitchen</p>
-        <p class="note"><b>One screen, no scrolling.</b> The wall board sits on top, the counter below it (notebook, eclair, and the recipe box, the largest), then the open shelf. The fridge and window are left out; each object has its tape label and is well over 44 points.</p></div>
+        <p class="note"><b>One screen, no scrolling.</b> The wall board sits on top, the counter below it (notebook, eclair, and the recipe box, the largest), then the open shelf. The fridge and window are left out; the shelf tiers keep their tape labels, and every object is well over 44 points.</p></div>
       <div><h3>The kitchen in the evening</h3><figure id="pk-eve"></figure><p class="addr">/kitchen</p>
         <p class="note"><b>Same kitchen, dusk wash.</b> Only the kitchen turns evening; every open view stays in the day look.</p></div>
-      <div><h3>Find bar tapped, "croi" typed</h3><figure id="pk-find"></figure><p class="addr">/kitchen</p>
-        <p class="note"><b>One list under the bar.</b> The two jot destinations come first, then matching recipes and notebook entries. Cancel puts the bar back.</p></div>
+      <div><h3>Find bar tapped, nothing typed</h3><figure id="pk-recent"></figure><p class="addr">/kitchen</p>
+        <p class="note"><b>Recently, as chips.</b> Three small chips that scroll sideways, and nothing else.</p></div>
+      <div><h3>Find bar, "croi" typed</h3><figure id="pk-find"></figure><p class="addr">/kitchen</p>
+        <p class="note"><b>Three rows.</b> One jot row with its two destinations as chips, then the matching recipe and notebook entry. Cancel puts the bar back.</p></div>
       <div><h3>Jot button tapped</h3><figure id="pk-jot"></figure><p class="addr">/kitchen</p>
         <p class="note"><b>A bottom sheet over the kitchen.</b> Type, choose where it goes, tap Jot it. Dragging the sheet down or tapping the dim kitchen closes it.</p></div>
     </div>
+    <h3>Other names for Jot</h3>
+    <div style="display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));align-items:start">
+      <div style="max-width:260px"><figure id="pk-names"></figure><p class="addr">/kitchen</p></div>
+      <div style="display:grid;gap:10px;align-content:start"><table style="border-collapse:collapse;font-size:1rem;width:100%"><thead><tr style="text-align:left;color:var(--ink-soft);font-size:.85rem"><th style="padding:6px 8px">Name</th><th style="padding:6px 8px">Sheet title</th><th style="padding:6px 8px">Button</th></tr></thead><tbody id="pk-names-list"></tbody></table>
+      <p class="note"><b>Shown on the phone: Jot.</b> The find bar placeholder, the find row and the button label would follow whichever name is picked.</p></div>
+    </div>
+    <ol class="qs"><li><b>Which name?</b> Jot, Note, Scribble, Quick add, Pin it or Idea.</li></ol>
+    <h3>The jot button, six ways</h3>
+    <figure id="pk-icons"></figure>
+    <p class="note"><b>Same yellow round button, 60 px.</b> A is the pencil now on the kitchen.</p>
+    <ol class="qs"><li><b>Which button?</b> (A, the pencil, is OK)</li></ol>
   </div>
 </section>
 <script>
@@ -32,8 +45,6 @@
     /* objects stand on the counter */
     s += at(LAB, 470, 1.05, 84, YB_ - 2, lab(oo)) + at(BOX, 470, 1.2, 284, YB_ - 2, closedBox(BOX, oo));
     s += at((LAB + 60 + BOX - 75) / 2, 470, 0.66, 187, YB_ + 6, eclair((LAB + 60 + BOX - 75) / 2));
-    /* permanent tape labels, on the front of the counter board and the board frame */
-    s += tapeLabel(83, 262, "Whiteboard", -2) + tapeLabel(279, 262, "Idea board", 2) + tapeLabel(82, YB_ + 12, "Notebook", -2) + tapeLabel(284, YB_ + 12, "Recipe box", 2);
     EVE = false; if (eve) s += '<rect width="390" height="844" style="fill:url(#evewash);mix-blend-mode:multiply;pointer-events:none"/>';
     return s;
   }
@@ -55,35 +66,54 @@
       reg("rect", 'x="88" y="694" width="214" height="46" rx="6"', "#fff", 1.2) + T(195, 724, "space", "font:400 17px var(--font-body);fill:var(--ink-soft)", 'text-anchor="middle"') +
       reg("rect", 'x="310" y="694" width="64" height="46" rx="6"', "#aeb1ba", 1.2) + T(342, 724, "return", "font:400 17px var(--font-body);fill:var(--ink)", 'text-anchor="middle"');
   }
+  function chip(x, y, w, t, on) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="44" rx="22"', on ? "var(--custard)" : "var(--card)", 2) + T(x + w / 2, y + 30, t, "font:600 21px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"'); }
+  function card(h, inner) { return hatch(22, 116, 358, h, 0.5) + reg("rect", 'x="16" y="110" width="358" height="' + h + '" rx="10"', "var(--card)", 2.4) + inner; }
+  function recentList() {
+    var s = T(32, 140, "RECENTLY", "font:600 13px var(--font-body);letter-spacing:2px;fill:var(--ink-soft)");
+    s += clipTo(18, 148, 372, 208, chip(32, 154, 124, "Croissants") + chip(164, 154, 156, "Weekend Bakes") + chip(328, 154, 100, "Trial 4"));
+    return card(110, s);
+  }
   function findList() {
-    var x = 16, w = 358, y = 110, row = 50, cur = y + 6, s = "";
-    function head(t) { s += T(x + 16, cur + 22, t, "font:600 13px var(--font-body);letter-spacing:2px;fill:var(--ink-soft)"); cur += 30; }
-    function item(icon, t, sub, on) { if (on) s += reg("rect", 'x="' + (x + 6) + '" y="' + cur + '" width="' + (w - 12) + '" height="' + (row - 4) + '" rx="6"', "var(--custard)", 1.2);
-      s += icon(x + 16, cur + 12) + T(x + 52, cur + 31, t, "font:600 22px var(--font-hand);fill:var(--ink)") + (sub ? T(x + w - 14, cur + 30, sub, "15px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"') : ""); cur += row; }
+    var s = "", row = 56, y = 116;
     function corkI(ix, iy) { return '<rect x="' + ix + '" y="' + iy + '" width="22" height="22" style="fill:url(#corkp);stroke:var(--ink);stroke-width:1.5"/>'; }
-    function wbI(ix, iy) { return reg("rect", 'x="' + ix + '" y="' + iy + '" width="22" height="22"', "var(--wb)", 1.5) + line("M" + (ix + 4) + " " + (iy + 8) + " h13 M" + (ix + 4) + " " + (iy + 14) + " h9", 1.3, 1, "var(--blue)"); }
     function cardI(ix, iy) { return reg("rect", 'x="' + ix + '" y="' + (iy + 3) + '" width="24" height="17" rx="1"', "var(--card)", 1.5) + line("M" + (ix + 2) + " " + (iy + 9) + " h20", 1.1, 1, "#c9442a"); }
     function bookI(ix, iy) { return reg("rect", 'x="' + (ix + 2) + '" y="' + iy + '" width="18" height="23" rx="1.5"', "url(#mblack)", 1.5) + '<rect x="' + (ix + 2) + '" y="' + iy + '" width="4" height="23" style="fill:#1a1917"/>'; }
-    function rule() { cur += 4; s += line("M" + (x + 14) + " " + cur + " H" + (x + w - 14), 1, 0.4); cur += 2; }
-    head("JOT IT"); item(corkI, "Jot “croi” as an idea", "Idea board", true); item(wbI, "Add to next up", "Whiteboard", false); rule();
-    head("RECIPES"); item(cardI, "Croissants", "", false); rule();
-    head("NOTEBOOK"); item(bookI, "Croissants · Trial 4", "", false);
-    return hatch(x + 6, y + 6, w, cur - y + 6, 0.5) + reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="' + (cur - y + 8) + '" rx="10"', "var(--card)", 2.4) + s;
+    s += T(30, y + 36, "Jot “croi” →", "font:700 23px var(--font-hand);fill:var(--ink)") + chip(176, y + 6, 106, "Idea board", true) + chip(288, y + 6, 80, "Next up");
+    s += line("M30 " + (y + row) + " H360", 1, 0.4);
+    s += cardI(30, y + row + 12) + T(66, y + row + 36, "Croissants", "font:600 22px var(--font-hand);fill:var(--ink)") + T(360, y + row + 34, "Recipe", "15px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"');
+    s += bookI(30, y + 2 * row + 10) + T(66, y + 2 * row + 36, "Croissants · Trial 4", "font:600 22px var(--font-hand);fill:var(--ink)") + T(360, y + 2 * row + 34, "Notebook", "15px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"');
+    return card(3 * row + 12, s);
   }
-  function jotSheet() {
+  function jotSheet(title, btn) { title = title || "Jot an idea"; btn = btn || "Jot it";
     var y = 430, s = dim(0.5) + hatch(8, y + 6, 390, 400, 0.4) + reg("rect", 'x="0" y="' + y + '" width="390" height="420" rx="22"', "var(--card)", 2.4);
-    s += reg("rect", 'x="165" y="' + (y + 10) + '" width="60" height="6" rx="3"', "var(--rule)", 1.2) + T(24, y + 56, "Jot an idea", "font:700 30px var(--font-hand);fill:var(--ink)");
+    s += reg("rect", 'x="165" y="' + (y + 10) + '" width="60" height="6" rx="3"', "var(--rule)", 1.2) + T(24, y + 56, title, "font:700 30px var(--font-hand);fill:var(--ink)");
     s += reg("rect", 'x="20" y="' + (y + 74) + '" width="350" height="100" rx="10"', "var(--paper)", 2) + T(44, y + 112, "Jot an idea…", "font:500 24px var(--font-hand);fill:var(--ink-soft)") + line("M36 " + (y + 124) + " V" + (y + 100), 2.2);
     s += T(24, y + 206, "Goes to", "font:600 15px var(--font-body);fill:var(--ink-soft)");
     s += reg("rect", 'x="20" y="' + (y + 218) + '" width="170" height="48" rx="24"', "var(--custard)", 2.4) + T(105, y + 250, "Idea board", "font:700 23px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"') +
       reg("rect", 'x="200" y="' + (y + 218) + '" width="170" height="48" rx="24"', "var(--card)", 2) + T(285, y + 250, "Next up", "font:600 23px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"');
-    s += reg("rect", 'x="20" y="' + (y + 284) + '" width="350" height="52" rx="26"', "var(--yellow)", 2.6) + T(195, y + 319, "Jot it", "font:700 26px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"');
+    s += reg("rect", 'x="20" y="' + (y + 284) + '" width="350" height="52" rx="26"', "var(--yellow)", 2.6) + T(195, y + 319, btn, "font:700 26px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"');
     return s;
+  }
+  function icons() {
+    var g = [], base = function (cx, cy) { return hatch(cx - 22, cy + 18, 50, 10, 0.5) + reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="30"', "var(--yellow)", 2.6); }, out = "";
+    g.push(function (cx, cy) { return phJot(cx, cy); });
+    g.push(function (cx, cy) { return base(cx, cy) + reg("path", 'd="M' + cx + " " + (cy + 16) + " L" + (cx - 10) + " " + (cy - 2) + " L" + (cx - 7) + " " + (cy - 16) + " H" + (cx + 7) + " L" + (cx + 10) + " " + (cy - 2) + ' Z"', "var(--card)", 2.2) + line("M" + cx + " " + (cy + 14) + " V" + (cy - 5), 1.8) + '<circle cx="' + cx + '" cy="' + (cy - 6) + '" r="2.4" style="fill:var(--ink)"/>'; });
+    g.push(function (cx, cy) { return base(cx, cy) + line("M" + (cx - 13) + " " + cy + " H" + (cx + 13) + " M" + cx + " " + (cy - 13) + " V" + (cy + 13), 5.5); });
+    g.push(function (cx, cy) { var x0 = cx - 15, y0 = cy - 15, x1 = cx + 15, y1 = cy + 15; return base(cx, cy) + reg("path", 'd="M' + x0 + " " + y0 + " H" + x1 + " V" + (y1 - 10) + " L" + (x1 - 10) + " " + y1 + " H" + x0 + ' Z"', "var(--card)", 2.2) + reg("path", 'd="M' + x1 + " " + (y1 - 10) + " H" + (x1 - 10) + " V" + y1 + ' Z"', "var(--custard)", 1.8) + line("M" + (x0 + 5) + " " + (y0 + 9) + " H" + (x1 - 5) + " M" + (x0 + 5) + " " + (y0 + 17) + " H" + (x1 - 12), 1.8); });
+    g.push(function (cx, cy) { return base(cx, cy) + '<g transform="rotate(35 ' + cx + " " + cy + ')">' + line("M" + cx + " " + (cy + 4) + " V" + (cy + 19), 2.4) + reg("path", 'd="M' + (cx - 8) + " " + (cy - 8) + " L" + (cx - 5) + " " + (cy + 4) + " H" + (cx + 5) + " L" + (cx + 8) + " " + (cy - 8) + ' Z"', "var(--orange)", 2.2) + reg("rect", 'x="' + (cx - 11) + '" y="' + (cy - 16) + '" width="22" height="9" rx="3"', "var(--orange)", 2.2) + "</g>"; });
+    g.push(function (cx, cy) { return base(cx, cy) + reg("path", 'd="M' + (cx - 16) + " " + (cy - 12) + " H" + (cx + 16) + " Q" + (cx + 20) + " " + (cy - 12) + " " + (cx + 20) + " " + (cy - 8) + " V" + (cy + 6) + " Q" + (cx + 20) + " " + (cy + 10) + " " + (cx + 16) + " " + (cy + 10) + " H" + (cx - 4) + " L" + (cx - 13) + " " + (cy + 18) + " V" + (cy + 10) + " H" + (cx - 16) + " Q" + (cx - 20) + " " + (cy + 10) + " " + (cx - 20) + " " + (cy + 6) + " V" + (cy - 8) + " Q" + (cx - 20) + " " + (cy - 12) + " " + (cx - 16) + " " + (cy - 12) + ' Z"', "var(--card)", 2.2) + line("M" + (cx - 11) + " " + (cy - 3) + " H" + (cx + 11), 2); });
+    g.forEach(function (f, i) { var cx = 60 + i * 110; out += f(cx, 52) + T(cx, 112, "ABCDEF"[i], "font:700 26px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"'); });
+    return '<svg viewBox="0 0 670 130" role="img" aria-label="The jot button six ways, A to F">' + out + "</svg>";
   }
   PLATE.add(function () {
     var put = function (id, inner, label, opt) { document.getElementById(id).innerHTML = phone(inner, label, opt); };
     put("pk-day", kitchen(false) + findBar() + phJot(336, 776), "The kitchen on a phone by day");
     put("pk-eve", kitchen(true) + '<defs><linearGradient id="pkdusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f2a45"/><stop offset="1" stop-color="#2f2a45" stop-opacity="0"/></linearGradient></defs><rect width="390" height="130" style="fill:url(#pkdusk)"/>' + findBar() + phJot(336, 776), "The kitchen on a phone in the evening", { dark: true });
+    put("pk-recent", kitchen(false) + dim(0.45) + recentList() + keyboard() + findBar("|", true), "The find bar tapped with nothing typed: a row of Recently chips");
+    put("pk-names", kitchen(false) + findBar() + jotSheet(), "The jot sheet, for comparing names");
+    document.getElementById("pk-names-list").innerHTML = [["Jot", "Jot an idea", "Jot it"], ["Note", "New note", "Save note"], ["Scribble", "Scribble an idea", "Scribble it"], ["Quick add", "Quick add", "Add"], ["Pin it", "Pin an idea", "Pin it"], ["Idea", "New idea", "Keep it"]].map(function (r, i) {
+      return '<tr style="border-top:1px solid var(--rule)"><td style="padding:8px"><b>' + r[0] + '</b></td><td style="padding:8px">' + r[1] + '</td><td style="padding:8px">' + r[2] + "</td></tr>"; }).join("");
+    document.getElementById("pk-icons").innerHTML = icons();
     put("pk-find", kitchen(false) + dim(0.45) + findList() + keyboard() + findBar("croi|", true), "The find bar tapped with croi typed, the keyboard up and one list under the bar");
     put("pk-jot", kitchen(false) + findBar() + jotSheet(), "The jot button tapped: a bottom sheet with a text box, two choices and a Jot it button");
   });

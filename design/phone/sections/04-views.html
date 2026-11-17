@@ -4,13 +4,16 @@
     <p class="note"><b>Each view takes over the screen.</b> Tap an object in the kitchen and its view fills the phone, with "‹ Kitchen" top left. The wide drawings are signed off; here each one becomes a single column. Nothing new is added.</p>
     <div class="phones">
       <div><h3>Whiteboard</h3><figure id="pv-wb"></figure>
-        <p class="note"><b>One column on the board.</b> "Next up", the cook's own lines in marker. Tick a box to strike a line; the small red x wipes it off. Press and drag the dots to reorder. The write line sits at the bottom, with the jot button beside it.</p>
+        <p class="note"><b>A to-do list that carries over.</b> Nothing clears by itself. Tick a box to strike a line; the small red x wipes that one off. "Clear done" at the foot wipes every ticked line at once. It never clears unticked items. Drag the dots to reorder.</p>
+        <p class="addr">/whiteboard</p></div>
+      <div><h3>After "Clear done"</h3><figure id="pv-wb-clear"></figure>
+        <p class="note"><b>Ticked lines gone.</b> Brown butter cookies is wiped off and the lines below move up. The pill goes away until something else is ticked.</p>
         <p class="addr">/whiteboard</p></div>
       <div><h3>Idea board</h3><figure id="pv-ideas"></figure>
         <p class="note"><b>Notes tacked in one column.</b> The cork scrolls up and down, newest first, with plain tacks and no statuses. The Archived envelope stays pinned top right. A paid-plan object, drawn for a developer.</p>
         <p class="addr">/ideas</p></div>
       <div><h3>Recipe log</h3><figure id="pv-log"></figure>
-        <p class="note"><b>The clipboard sheet, as one scrolling column.</b> Date, recipe and a few words, newest first. The sheet runs on past the bottom edge.</p>
+        <p class="note"><b>A ruled notebook page, as one scrolling column.</b> Red margin, blue rules, dated entries newest first, the way the Trials notebook is written. Older entries scroll up from below.</p>
         <p class="addr">/log</p></div>
     </div>
     <div class="phones">
@@ -18,10 +21,10 @@
         <p class="note"><b>One row of spines.</b> A single row reads better: the spines keep their height and the stamped titles stay big enough to read. Two rows would halve each book. When the shelf fills, the row scrolls sideways.</p>
         <p class="addr">/cookbooks</p></div>
       <div><h3>One cookbook, a page</h3><figure id="pv-cb-one"></figure>
-        <p class="note"><b>Weekend Bakes, one page at a time.</b> Croissants, page 11. The round arrows turn the page; "Contents" jumps to the list.</p>
+        <p class="note"><b>Weekend Bakes, one page at a time.</b> Croissants, page 11. The round arrows turn the page. Contents opens the first page of the cookbook; tapping a spine on the shelf opens Contents too.</p>
         <p class="addr">/cookbooks/weekend-bakes</p></div>
       <div><h3>The contents page</h3><figure id="pv-cb-toc"></figure>
-        <p class="note"><b>The wide left-hand page.</b> Recipes in the developer's order, with drag dots and an x that takes a recipe out of this book only. A name opens its page.</p>
+        <p class="note"><b>The first page of the cookbook.</b> You land here from a tap on a spine, or from the Contents button on any page. Recipes are in the developer's order, with drag dots and an x that takes a recipe out of this book only. A name opens its page.</p>
         <p class="addr">/cookbooks/weekend-bakes</p></div>
     </div>
     <div class="phones">
@@ -52,14 +55,15 @@
       var ex = x + 72 + w + 24; s += line("M" + (ex - 8) + " " + (y - 26) + " l16 16 M" + (ex + 8) + " " + (y - 26) + " l-16 16", 3, 1, RED); }
     return s;
   }
-  function whiteboard() {
+  function whiteboard(clear) {
     var s = phTop("Whiteboard"), x = 10, y = 110, w = 370, h = 690, F = 14, sx = x + F, sy = y + F, sw = w - 2 * F, sh = h - 2 * F;
     s += R(x, y, w, h, "var(--wood)", 2.6, 4) + grain(x + 16, y + 2, w - 32, F - 3, 5) + grain(x + 16, sy + sh + 2, w - 32, F - 3, 8) + R(sx, sy, sw, sh, "var(--wb)", 2.2);
     s += line("M" + (sx + 120) + " " + (sy + 40) + " q60 -9 120 -1 t110 -2", 20, 0.06, BLUE) + line("M" + (sx + 40) + " " + (sy + sh - 60) + " q80 6 160 0 t120 1", 14, 0.045, BLUE);
     s += T(sx + 22, sy + 56, "Next up", H(46, 700, BLUE)) + line("M" + (sx + 22) + " " + (sy + 68) + " q70 8 140 -3", 3, 1, BLUE);
     var rows = [["Croissants · trial 4"], ["Rough puff pastry"], ["Rhubarb galette"], ["Miso caramel in|the blondies?"], ["Brown butter cookies", 1], ["Blondies, less sugar"]], y0 = sy + 130;
-    rows.forEach(function (r) { s += wbLine(sx + 6, y0, r[0], r[1]); y0 += 64 + (r[0].indexOf("|") > -1 ? 30 : 0); });
+    rows.forEach(function (r) { if (clear && r[1]) return; s += wbLine(sx + 6, y0, r[0], r[1]); y0 += 64 + (r[0].indexOf("|") > -1 ? 30 : 0); });
     s += '<path d="M' + (sx + 34) + " " + (y0 - 21) + ' h24 v24 h-24 Z" style="fill:none;stroke:' + GREY + ';stroke-width:1.6;stroke-dasharray:4 3"/>' + line("M" + (sx + 78) + " " + (y0 - 20) + " v24", 2.6, 1, BLUE) + T(sx + 86, y0, "Write the next thing…", H(28, 600, GREY)) + line("M" + (sx + 72) + " " + (y0 + 10) + " H" + (sx + sw - 20), 1.4, 0.7, GREY);
+    if (!clear) s += pill44(sx + 34, 700, 150, "Clear done");
     return s + phJot();
   }
 
@@ -96,14 +100,12 @@
   var LOG = [["11/11", "Croissants trial 4", "shatter good"], ["11/08", "Blondies", "less sugar"], ["11/05", "Rough puff pastry", "six folds"], ["11/02", "Rhubarb galette", "swapped spelt"],
     ["10/28", "Croissants trial 3", "proof too short"], ["10/09", "Brown butter cookies", "chill the dough"], ["09/20", "Blondies", "first batch"]];
   function log() {
-    var s = phTop("Recipe log"), px = 18, pw = 354;
-    s += R(0, 101, 390, 760, "var(--wood-hi)", 0) + grain(6, 108, 378, 700, 17) + hatch(0, 101, 390, 8, 0.5);
-    s += hatch(px + 6, 136, pw, 700, 0.35) + R(px, 130, pw, 720, "var(--card)", 1.6);
-    s += R(165, 114, 60, 24, "#d2d0c8", 1.6, 4) + '<circle cx="195" cy="126" r="3" style="fill:var(--brass);stroke:var(--ink);stroke-width:1.2"/>';
-    s += T(px + 20, 186, "Recipe log", H(36, 700)) + line("M" + (px + 14) + " 202 H" + (px + pw - 14), 1.6, 0.9, "#c9442a");
-    LOG.forEach(function (e, i) { var y = 244 + i * 92;
-      s += T(px + 20, y, e[0], H(23, 700, SOFT)) + T(px + 92, y, e[1], H(29, 700)) + T(px + 92, y + 30, e[2], H(23, 600, SOFT)) + line("M" + (px + 12) + " " + (y + 46) + " H" + (px + pw - 12), 1.1, 0.6, "#c3d2ec"); });
-    s += R(378, 214, 6, 400, "var(--card)", 1.2, 3) + R(377, 216, 8, 110, BLUE, 1.4, 4);
+    var s = phTop("Recipe log"), y;
+    for (y = 186; y <= 800; y += 32) s += line("M0 " + y + " H390", 1.3, 1, "#c3d2ec");
+    s += line("M52 101 V844", 1.4, 1, "#e3a59a");
+    s += T(64, 128, "Recipe log", H(21, 600, SOFT)) + T(64, 175, "What I made, newest first", H(30, 700)) + line("M64 181 H340", 1.6, 0.5, SOFT);
+    LOG.forEach(function (e, i) { var y = 213 + i * 64;
+      s += T(62, y, e[0], H(23, 700, SOFT)) + T(128, y, e[1], H(27, 700)) + T(128, y + 32, e[2], H(23, 600, "var(--orange-text)")); });
     return s + phJot();
   }
 
@@ -124,7 +126,7 @@
     s += R(22, 132, 346, FL - 132, "var(--cab-deep)", 2.2) + R(22, 132, 16, FL - 132, "var(--cab-side)", 0) + R(352, 132, 16, FL - 132, "var(--cab-side)", 0) + hatch(22, 132, 346, 12, 0.9);
     s += spine(46, 88, 340, "var(--orange)", "Weekend Bakes", "5", "var(--ink)") + spine(142, 74, 360, "var(--blue)", "Laminated", "6", "var(--card)") + spine(224, 96, 310, "var(--stem)", "Holiday tin", "2", "var(--ink)");
     s += R(326, FL - 110, 14, 110, "var(--brass)", 2.2, 2) + R(326, FL - 10, 36, 10, "var(--brass)", 2);
-    s += R(22, FL, 346, 24, "var(--wood)", 2.6) + grain(26, FL + 2, 338, 20, 31) + R(22, FL + 24, 346, 56, "var(--cab)", 2.6) + hatch(22, FL + 24, 346, 7) + tape(195, FL + 54, "COOKBOOKS");
+    s += R(22, FL, 346, 24, "var(--wood)", 2.6) + grain(26, FL + 2, 338, 20, 31) + R(22, FL + 24, 346, 56, "var(--cab)", 2.6) + hatch(22, FL + 24, 346, 7);
     s += pill44(16, 738, 176, "New cookbook", true);
     return s + phJot();
   }
@@ -138,15 +140,16 @@
     s += R(30, 114, 336, 700, "var(--page)", 2, 3) + line("M372 126 v676 M377 130 v668", 1.2, 0.5);
     for (var i = 0; i < 6; i++) s += line("M24 " + (150 + i * 110) + " h8", 2.2, 1, "#8a5a3c");
     var X = 50, ing = ["500 g bread flour", "55 g sugar", "10 g salt", "10 g instant yeast", "300 g milk, cold", "280 g butter, for the block"], st = ["Mix the dough. Chill overnight.", "Lock in the butter block.", "Three letter folds, 2 h rests.", "Shape. Proof 2 h at 26°C.", "Bake 18 min at 200°C."];
-    s += T(X, 150, "WEEKEND BAKES", LB(13)) + T(X, 202, "Croissants", HD(40)) + T(X, 230, "Makes 12  ·  added 11/11/26", BD(15, SOFT)) + T(X, 276, "INGREDIENTS", LB(13));
-    ing.forEach(function (t, i) { s += T(X, 306 + i * 30, t, BD(19)); });
-    s += T(X, 518, "STEPS", LB(13));
-    st.forEach(function (t, i) { s += T(X, 550 + i * 40, (i + 1) + ".", "font:700 19px var(--font-display);fill:var(--ink)") + T(X + 24, 550 + i * 40, t, BD(19)); });
+    s += R(44, 124, 150, 44, "var(--card)", 2, 22) + line("M64 138 h18 M64 146 h18 M64 154 h18", 2.4) + T(92, 152, "Contents", U(16));
+    s += T(X, 206, "WEEKEND BAKES", LB(13)) + T(X, 254, "Croissants", HD(40)) + T(X, 280, "Makes 12  ·  added 11/11/26", BD(15, SOFT)) + T(X, 320, "INGREDIENTS", LB(13));
+    ing.forEach(function (t, i) { s += T(X, 348 + i * 28, t, BD(19)); });
+    s += T(X, 524, "STEPS", LB(13));
+    st.forEach(function (t, i) { s += T(X, 554 + i * 34, (i + 1) + ".", "font:700 19px var(--font-display);fill:var(--ink)") + T(X + 24, 554 + i * 34, t, BD(19)); });
     return s + pageNav("11");
   }
   function arrowBtn(cx, cy, dir) { return reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="26"', "var(--card)", 2.2) + line("M" + (cx - 4 * dir) + " " + (cy - 10) + " l" + (10 * dir) + " 10 l" + (-10 * dir) + " 10", 3.4); }
   function pageNav(n) {
-    return arrowBtn(70, 766, -1) + arrowBtn(320, 766, 1) + pill44(135, 744, 120, "Contents") + T(195, 732, n, "font:500 16px var(--font-body);fill:var(--ink-soft)", MID);
+    return arrowBtn(70, 766, -1) + arrowBtn(320, 766, 1) + T(195, 732, n, "font:500 16px var(--font-body);fill:var(--ink-soft)", MID);
   }
   function toc() {
     var s = phTop("Weekend Bakes"), RC = [["Blondies", "9/20/26", 3], ["Brown butter cookies", "10/09/26", 7], ["Croissants", "11/11/26", 11], ["Rhubarb galette", "11/08/26", 17], ["Rough puff pastry", "11/05/26", 21]];
@@ -187,6 +190,7 @@
 
   PLATE.add(function () {
     function put(id, inner, label) { document.getElementById(id).innerHTML = phone(inner, label); }
+    put("pv-wb-clear", whiteboard(1), "The whiteboard after Clear done: the ticked line is gone, the rest unchanged");
     put("pv-wb", whiteboard(), "The whiteboard on a phone: Next up as one column of handwritten lines, a jot button bottom right");
     put("pv-ideas", ideas(), "The idea board on a phone: idea notes tacked on cork in one scrolling column");
     put("pv-log", log(), "The recipe log on a phone: one scrolling column of dated entries on a clipboard sheet");

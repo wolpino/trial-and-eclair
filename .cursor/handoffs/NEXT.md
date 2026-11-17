@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Phone Plate v1 published; waiting on Ari's two answers)
+# NEXT — 2026-11-17 (Phone Plate v2 published; waiting on Ari's answers)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -15,7 +15,9 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 >
 > **Sections:** 00 questions (director), 01 kitchen (pk), 02 recipe box (pb), 03 notebook (pn), 04 other views (pv), 05 pages without an object (pp). One Sonnet subagent per file for tweaks.
 >
-> **Questions put to Ari (page top):** (1) Card View on a phone: A any way you hold it (decision 003, Claude's pick) or B always a sideways card; (2) "Recently" has no fridge on the phone: Claude's pick is to show it at the top of the find list before typing.
+> **v2 (Ari's 11/17 notes drawn):** no tape labels on board/notebook/box; Recently = one chip row at the top of the find list (Ari: seems right, but not too many options); Clear done on Next up (to-do, carries over); recipe log on a notebook page; no COOKBOOKS tape; Contents top left; sign in/up/front/not found on plain paper; not found shows inner stitches; "Your work is safe" cut (today the app saves only on Save); box menu in body font; + for new recipes; bigger "you are here"; Simple list drawn.
+>
+> **Questions to Ari (v2 page top):** retracting box 1 drawer / 2 tab strip / 3 handle; Card View B sideways (Ari leans this way) / A / both; Add wording; a new name for Jot (six); jot button icon A–F; Recently row few enough; keep unsaved typing on the phone (build task). Ari's 01 note "same with …" was cut off: ask what she meant. After her box pick, update decision 003 (her notes override parts of it).
 >
 > **Assumptions to confirm if Ari raises them:** phone kitchen fits one screen (board, counter, shelf; no fridge or window); tape labels added to whiteboard, idea board, notebook and box on the phone; cookbooks in one sideways-scrolling row; Card View keeps the box address `/box/croissants`; three invented older log entries; the notebook page combines the wide spread's entry with its sketch and bars.
 >
