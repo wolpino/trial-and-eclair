@@ -1,4 +1,4 @@
-# NEXT — 2026-11-16 (Plate X signed off at v24; two picks and the Plate XI layout questions open)
+# NEXT — 2026-11-16 (Plate X done; every question answered; next is drawing Plate XI)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,12 +10,23 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ⏳ (Plate X, an extra round, drawn one view at a time; Plate XI is the final) → phone layout → mark → brand sheet → Task issues → build
 ```
 
-## Prompt for the next agent (Plate XI, the final plate)
-> Kitchen Plate XI, the final drawing. Read `docs/design/PLAN.md` (status table, "2. Plate XI", Details list, "Before Task issues"), the `kitchen-layout` memory (bottom entries), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes. Branch `docs/plate-x-cookbooks` (PR wolpino/trial-and-eclair#172) until merged, then branch from `staging-render`.
+## Prompt for the next agent (Plate XI, the final plate) — START HERE
+> Draw Kitchen Plate XI, the final plate. Everything is decided; do not re-ask settled questions. No app code changes.
 >
-> Plate X is signed off at version 24 (https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt). Two picks may still be open: sign-in headings (A Ingredients + Method drawn) and not found (A index card / B ripped cookbook).
+> **Read, in this order:** `docs/design/PLAN.md` sections "2. Plate XI (final)" (the checklist IS the brief), "Before Task issues", "Details list", and the status table; then `design/plate-x/BRIEF.md`; then the bottom entries of the `kitchen-layout` memory only if something is unclear.
 >
-> Ari's layout for Plate XI (2026-11-16): the kitchen in the middle, the zoomed-in views around it. Four layout questions were put to Ari (one sheet with lines to each view and click to enlarge; where sign in, front page, not found and Account go; developer on the sheet with a cook/guest strip, or the Plan switch; evening as a second sheet or one extra image). Get the answers before drawing. Plate XI has no options: picks only, plus the Details list. New artifact, new `design/plate-xi/` copied from `design/plate-x/`.
+> **Do:**
+> 1. Branch: stay on `docs/plate-x-cookbooks` (PR wolpino/trial-and-eclair#172) until merged, then branch from `staging-render`.
+> 2. Copy `design/plate-x/` to `design/plate-xi/`. Plate X sections are signed off: reuse their drawing code, remove every option figure, apply the picks listed in PLAN.md.
+> 3. Build ONE page: day kitchen in the middle, each object's zoomed-in view around it joined by a thin line; a row below for front page, sign in, sign up, Account, not found; the evening kitchen as one extra image below; a short strip for home cook and guest differences; loading, error and offline states; the "paid plan" card; the Details list.
+> 4. Work as the director: one subagent per piece, at most 3 at once, each briefed with BRIEF.md and only its piece. Check screenshots yourself before publishing. To save usage, run subagents on a cheaper model.
+> 5. Publish as a NEW artifact (Plate X stays at https://claude.ai/artifact/Bd3ft4VmtoKDgKRuLae6Lt, version 24). Build: `cd design/plate-xi && node build.cjs`, then `tail -n +2 dist/index.html | sed '$d' > dist/kitchen-plate-xi.html`.
+> 6. Questions, if any, go at the top of the page in `sections/00-questions.html`, each linked to its drawing, and in chat in the same order.
+> 7. After publishing: update the PLAN.md checklist, this file and `.cursor/session_log.mdc`, and commit. Do not push unless asked.
+>
+> **Two things for Ari to confirm when Plate XI is shown** (both drawn as Claude's pick): every view and recipe gets its own web address with Back returning to the kitchen; clicking a "paid plan" tag offers a free one-click switch to Developer (no payments).
+>
+> **After Plate XI is signed off:** phone layout, then the mark (T&E), brand sheet, the React test piece (Ari reviews before any commit), Task issues, build.
 
 ## Prompt for the next agent (Plate X, after Ari answers the v23 questions) — done 2026-11-16
 > Kitchen Plate X, settling the last four views: references (05), sign in (09), account (11), front page and not found (12). Read `docs/design/PLAN.md` ("How we work", status table, Later and Details lists), the `kitchen-layout` memory (bottom entries), `design/plate-x/BRIEF.md`, and the top entry of `.cursor/session_log.mdc`. No app code changes. Branch `docs/plate-x-cookbooks` (PR wolpino/trial-and-eclair#172) until merged, then branch from `staging-render`.
