@@ -142,6 +142,7 @@ From 2026-11-13: small visual details (a colour, a spacing, a word, a size) go h
 - Cookbooks shelf close-up: give it the brown trim border the full-screen kitchen has (Ari, 2026-11-13)
 
 ## 2. Plate XI (final)
+Layout (Ari, 2026-11-16): the kitchen in the middle, the zoomed-in views around it.
 - [ ] Day kitchen and evening kitchen with every pick
 - [ ] Every open view, final, developer and home cook (and guest where it differs)
 - [ ] Sign in, Account, front page, not-found
@@ -159,10 +160,21 @@ From 2026-11-13: small visual details (a colour, a spacing, a word, a size) go h
 ## 5. Brand sheet
 - [ ] Colours, fonts, line and halftone rules, the mark, kitchen reference from Plate XI
 
+## Before Task issues: things that could disrupt the build
+Raised 2026-11-16 when Ari asked what might be forgotten. Each needs a short decision (a `docs/decisions/` note) before the Task issues are written.
+- [ ] Phone layout (step 3) is designed before any kitchen component is built, and squared with the existing Recipe Box phone work (`docs/recipe-box/`)
+- [ ] Keyboard and screen readers: every kitchen object is a real button or link over the drawing, decided up front (the full accessibility pass stays on the Later list)
+- [ ] Web addresses: does each open view and each recipe, trial and cookbook have its own address, and what does the Back button do
+- [ ] How the drawn kitchen is built: one test piece (kitchen + one open view in React) to check scaling from 960 to 1680 px, speed, and how plate drawings become components
+- [ ] Evening: only the kitchen is drawn in evening. What do open views look like in dark mode
+- [ ] Loading, error and offline states: not drawn for any view
+- [ ] What a "paid plan" tag does when clicked, while the upgrade page is on the Later list
+- [ ] New data the plates need: the whiteboard has no backend yet; recipe log (#161); starter references (copy, hide); sample-data flag and removal
+
 ## 6. Build list (becomes Task issues)
 Changes the app needs that came out of the plates. Each becomes one Task issue.
 - Idea board: drop the 4 statuses (Researching, Testing, Ready to publish, Archived). An idea is a note; moving it to a trial archives it
-- Starter references are kept when samples are removed. Signed-in cooks can edit and delete a starter like their own; guests can only hide one (Ari, 2026-11-14)
+- Starter references are kept when samples are removed. Signed-in cooks can edit and delete a starter like their own; guests can only hide one (Ari, 2026-11-14). Editing a starter makes the cook's own copy (Ari, 2026-11-16)
 - Reference shelf scrolls sideways with round arrows; no kind filters
 - Sign-up asks about sample data (on by default); remove all samples in one go from Account
 - Recipe log (issue #161): lives on a clipboard inside the double cabinet under the counter
