@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Mark Plate v1 published; waiting on Ari's pick)
+# NEXT — 2026-11-17 (Mark Plate v2 published; waiting on Ari's pick)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -16,6 +16,8 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 > **Options:** A letterpress serif, B marker on tape, C round stamp (no ring words), D one-stem monogram, E brass label plate, F index-card tab. Claude's pick D (holds at 16 px and as an app icon); runner-up B. Both drawn in place: wide kitchen top left, phone top bar, PWA icon, favicon.
 >
 > **Questions to Ari (page top):** which mark (A–F or none yet); where it sits; ink only or one colour.
+>
+> **v2 (Ari 11/17):** B liked but not yellow, not sold on tape, revisiting T&E, wants the mark from the kitchen (eclair/notebook). Drawn: B on white/black and cobalt with white or dandelion letters, padded vs tight small sizes (01); eclair G plain at the tape angle, H with T&E, I monogram with eclair stem (02); in place (03); v1 kept as 08/09. Claude's picks: cobalt + white padded; G; eclair as icon, T&E as text. Eclair redrawn (kitchen.js helper is private). In-place phones wrap to two rows (fine).
 >
 > **After the pick:** record it in PLAN.md "4. Mark" and the kitchen-layout memory, then the brand sheet (PLAN step 5).
 
