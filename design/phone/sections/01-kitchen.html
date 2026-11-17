@@ -3,27 +3,16 @@
   <div class="sec-body">
     <div class="phones">
       <div><h3>The kitchen by day</h3><figure id="pk-day"></figure><p class="addr">/kitchen</p>
-        <p class="note"><b>One screen, no scrolling.</b> The wall board sits on top, the counter below it (notebook, eclair, and the recipe box, the largest), then the open shelf. The fridge and window are left out; the shelf tiers keep their tape labels, and every object is well over 44 points.</p></div>
+        <p class="note"><b>One screen, no scrolling.</b> The yellow plus bottom right is Quick add. The wall board sits on top, the counter below it (notebook, eclair, and the recipe box, the largest), then the open shelf. The fridge and window are left out; the shelf tiers keep their tape labels, and every object is well over 44 points.</p></div>
       <div><h3>The kitchen in the evening</h3><figure id="pk-eve"></figure><p class="addr">/kitchen</p>
         <p class="note"><b>Same kitchen, dusk wash.</b> Only the kitchen turns evening; every open view stays in the day look.</p></div>
       <div><h3>Find bar tapped, nothing typed</h3><figure id="pk-recent"></figure><p class="addr">/kitchen</p>
         <p class="note"><b>Recently, as chips.</b> Three small chips that scroll sideways, and nothing else.</p></div>
       <div><h3>Find bar, "croi" typed</h3><figure id="pk-find"></figure><p class="addr">/kitchen</p>
-        <p class="note"><b>Three rows.</b> One jot row with its two destinations as chips, then the matching recipe and notebook entry. Cancel puts the bar back.</p></div>
-      <div><h3>Jot button tapped</h3><figure id="pk-jot"></figure><p class="addr">/kitchen</p>
-        <p class="note"><b>A bottom sheet over the kitchen.</b> Type, choose where it goes, tap Jot it. Dragging the sheet down or tapping the dim kitchen closes it.</p></div>
+        <p class="note"><b>Three rows.</b> One add row with four chips that scroll sideways, then the matching recipe and notebook entry. Cancel puts the bar back.</p></div>
+      <div><h3>Quick add (plus) tapped</h3><figure id="pk-jot"></figure><p class="addr">/kitchen</p>
+        <p class="note"><b>Quick add is a bottom sheet over the kitchen.</b> Type, pick one of four, tap Add. Recipe and Trial open their own forms after you pick them; dragging the sheet down or tapping the dim kitchen closes it.</p></div>
     </div>
-    <h3>Other names for Jot</h3>
-    <div style="display:grid;gap:22px;grid-template-columns:repeat(auto-fit,minmax(min(100%,230px),1fr));align-items:start">
-      <div style="max-width:260px"><figure id="pk-names"></figure><p class="addr">/kitchen</p></div>
-      <div style="display:grid;gap:10px;align-content:start"><table style="border-collapse:collapse;font-size:1rem;width:100%"><thead><tr style="text-align:left;color:var(--ink-soft);font-size:.85rem"><th style="padding:6px 8px">Name</th><th style="padding:6px 8px">Sheet title</th><th style="padding:6px 8px">Button</th></tr></thead><tbody id="pk-names-list"></tbody></table>
-      <p class="note"><b>Shown on the phone: Jot.</b> The find bar placeholder, the find row and the button label would follow whichever name is picked.</p></div>
-    </div>
-    <ol class="qs"><li><b>Which name?</b> Jot, Note, Scribble, Quick add, Pin it or Idea.</li></ol>
-    <h3>The jot button, six ways</h3>
-    <figure id="pk-icons"></figure>
-    <p class="note"><b>Same yellow round button, 60 px.</b> Picked (Ari, 11/17): C, the plus, like every other place you add something new. The kitchen now uses it.</p>
-    <p class="note">Settled: the plus.</p>
   </div>
 </section>
 <script>
@@ -52,7 +41,7 @@
     var w = cancel ? 250 : 270;
     return reg("rect", 'x="16" y="58" width="' + w + '" height="44" rx="22"', "var(--card)", 2.4) +
       '<circle cx="42" cy="79" r="9" style="fill:none;stroke:var(--ink);stroke-width:2.4"/><path d="M49 86 L57 94" style="stroke:var(--ink);stroke-width:2.6;stroke-linecap:round"/>' +
-      (text ? T(66, 89, text, "font:600 24px var(--font-hand);fill:var(--ink)") : T(66, 89, "Find or jot…", "font:500 24px var(--font-hand);fill:var(--ink-soft)")) +
+      (text ? T(66, 89, text, "font:600 24px var(--font-hand);fill:var(--ink)") : T(66, 89, "Find or add…", "font:500 24px var(--font-hand);fill:var(--ink-soft)")) +
       (cancel ? T(306, 90, "Cancel", "font:700 22px var(--font-hand);fill:var(--blue)") : '<circle cx="352" cy="80" r="22" style="fill:var(--orange);stroke:var(--ink);stroke-width:2.4"/>' + T(352, 86, "A", "font:700 20px var(--font-hand);fill:var(--card)", 'text-anchor="middle"'));
   }
   function dim(a) { return '<rect width="390" height="844" style="fill:#1f1d1a;opacity:' + a + '"/>'; }
@@ -78,44 +67,28 @@
     function corkI(ix, iy) { return '<rect x="' + ix + '" y="' + iy + '" width="22" height="22" style="fill:url(#corkp);stroke:var(--ink);stroke-width:1.5"/>'; }
     function cardI(ix, iy) { return reg("rect", 'x="' + ix + '" y="' + (iy + 3) + '" width="24" height="17" rx="1"', "var(--card)", 1.5) + line("M" + (ix + 2) + " " + (iy + 9) + " h20", 1.1, 1, "#c9442a"); }
     function bookI(ix, iy) { return reg("rect", 'x="' + (ix + 2) + '" y="' + iy + '" width="18" height="23" rx="1.5"', "url(#mblack)", 1.5) + '<rect x="' + (ix + 2) + '" y="' + iy + '" width="4" height="23" style="fill:#1a1917"/>'; }
-    s += T(30, y + 36, "Jot “croi” →", "font:700 23px var(--font-hand);fill:var(--ink)") + chip(176, y + 6, 106, "Idea board", true) + chip(288, y + 6, 80, "Next up");
+    s += T(30, y + 36, "Add “croi” →", "font:700 23px var(--font-hand);fill:var(--ink)") + clipTo(160, y, 372, y + row, chip(168, y + 6, 66, "Idea", true) + chip(240, y + 6, 92, "Next up") + chip(338, y + 6, 90, "Recipe") + chip(434, y + 6, 80, "Trial"));
     s += line("M30 " + (y + row) + " H360", 1, 0.4);
     s += cardI(30, y + row + 12) + T(66, y + row + 36, "Croissants", "font:600 22px var(--font-hand);fill:var(--ink)") + T(360, y + row + 34, "Recipe", "15px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"');
     s += bookI(30, y + 2 * row + 10) + T(66, y + 2 * row + 36, "Croissants · Trial 4", "font:600 22px var(--font-hand);fill:var(--ink)") + T(360, y + 2 * row + 34, "Notebook", "15px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"');
     return card(3 * row + 12, s);
   }
-  function jotSheet(title, btn) { title = title || "Jot an idea"; btn = btn || "Jot it";
+  function jotSheet() {
     var y = 430, s = dim(0.5) + hatch(8, y + 6, 390, 400, 0.4) + reg("rect", 'x="0" y="' + y + '" width="390" height="420" rx="22"', "var(--card)", 2.4);
-    s += reg("rect", 'x="165" y="' + (y + 10) + '" width="60" height="6" rx="3"', "var(--rule)", 1.2) + T(24, y + 56, title, "font:700 30px var(--font-hand);fill:var(--ink)");
-    s += reg("rect", 'x="20" y="' + (y + 74) + '" width="350" height="100" rx="10"', "var(--paper)", 2) + T(44, y + 112, "Jot an idea…", "font:500 24px var(--font-hand);fill:var(--ink-soft)") + line("M36 " + (y + 124) + " V" + (y + 100), 2.2);
-    s += T(24, y + 206, "Goes to", "font:600 15px var(--font-body);fill:var(--ink-soft)");
-    s += reg("rect", 'x="20" y="' + (y + 218) + '" width="170" height="48" rx="24"', "var(--custard)", 2.4) + T(105, y + 250, "Idea board", "font:700 23px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"') +
-      reg("rect", 'x="200" y="' + (y + 218) + '" width="170" height="48" rx="24"', "var(--card)", 2) + T(285, y + 250, "Next up", "font:600 23px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"');
-    s += reg("rect", 'x="20" y="' + (y + 284) + '" width="350" height="52" rx="26"', "var(--yellow)", 2.6) + T(195, y + 319, btn, "font:700 26px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"');
+    s += reg("rect", 'x="165" y="' + (y + 10) + '" width="60" height="6" rx="3"', "var(--rule)", 1.2) + T(24, y + 54, "Quick add", "font:700 30px var(--font-hand);fill:var(--ink)");
+    s += reg("rect", 'x="20" y="' + (y + 68) + '" width="350" height="84" rx="10"', "var(--paper)", 2) + line("M34 " + (y + 84) + " V" + (y + 108), 2.2) + T(42, y + 104, "What’s new?", "font:500 24px var(--font-hand);fill:var(--ink-soft)");
+    [["Idea", 0, 0, 1], ["Next up", 1, 0], ["Recipe", 0, 1], ["Trial", 1, 1]].forEach(function (c) { var px = 20 + c[1] * 180, py = y + 168 + c[2] * 58;
+      s += reg("rect", 'x="' + px + '" y="' + py + '" width="170" height="48" rx="24"', c[3] ? "var(--custard)" : "var(--card)", c[3] ? 2.4 : 2) + T(px + 85, py + 32, c[0], "font:" + (c[3] ? 700 : 600) + " 23px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"'); });
+    s += reg("rect", 'x="20" y="' + (y + 296) + '" width="350" height="52" rx="26"', "var(--yellow)", 2.6) + T(195, y + 331, "Add", "font:700 26px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"');
     return s;
-  }
-  function icons() {
-    var g = [], base = function (cx, cy) { return hatch(cx - 22, cy + 18, 50, 10, 0.5) + reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="30"', "var(--yellow)", 2.6); }, out = "";
-    g.push(function (cx, cy) { return phJot(cx, cy); });
-    g.push(function (cx, cy) { return base(cx, cy) + reg("path", 'd="M' + cx + " " + (cy + 16) + " L" + (cx - 10) + " " + (cy - 2) + " L" + (cx - 7) + " " + (cy - 16) + " H" + (cx + 7) + " L" + (cx + 10) + " " + (cy - 2) + ' Z"', "var(--card)", 2.2) + line("M" + cx + " " + (cy + 14) + " V" + (cy - 5), 1.8) + '<circle cx="' + cx + '" cy="' + (cy - 6) + '" r="2.4" style="fill:var(--ink)"/>'; });
-    g.push(function (cx, cy) { return base(cx, cy) + line("M" + (cx - 13) + " " + cy + " H" + (cx + 13) + " M" + cx + " " + (cy - 13) + " V" + (cy + 13), 5.5); });
-    g.push(function (cx, cy) { var x0 = cx - 15, y0 = cy - 15, x1 = cx + 15, y1 = cy + 15; return base(cx, cy) + reg("path", 'd="M' + x0 + " " + y0 + " H" + x1 + " V" + (y1 - 10) + " L" + (x1 - 10) + " " + y1 + " H" + x0 + ' Z"', "var(--card)", 2.2) + reg("path", 'd="M' + x1 + " " + (y1 - 10) + " H" + (x1 - 10) + " V" + y1 + ' Z"', "var(--custard)", 1.8) + line("M" + (x0 + 5) + " " + (y0 + 9) + " H" + (x1 - 5) + " M" + (x0 + 5) + " " + (y0 + 17) + " H" + (x1 - 12), 1.8); });
-    g.push(function (cx, cy) { return base(cx, cy) + '<g transform="rotate(35 ' + cx + " " + cy + ')">' + line("M" + cx + " " + (cy + 4) + " V" + (cy + 19), 2.4) + reg("path", 'd="M' + (cx - 8) + " " + (cy - 8) + " L" + (cx - 5) + " " + (cy + 4) + " H" + (cx + 5) + " L" + (cx + 8) + " " + (cy - 8) + ' Z"', "var(--orange)", 2.2) + reg("rect", 'x="' + (cx - 11) + '" y="' + (cy - 16) + '" width="22" height="9" rx="3"', "var(--orange)", 2.2) + "</g>"; });
-    g.push(function (cx, cy) { return base(cx, cy) + reg("path", 'd="M' + (cx - 16) + " " + (cy - 12) + " H" + (cx + 16) + " Q" + (cx + 20) + " " + (cy - 12) + " " + (cx + 20) + " " + (cy - 8) + " V" + (cy + 6) + " Q" + (cx + 20) + " " + (cy + 10) + " " + (cx + 16) + " " + (cy + 10) + " H" + (cx - 4) + " L" + (cx - 13) + " " + (cy + 18) + " V" + (cy + 10) + " H" + (cx - 16) + " Q" + (cx - 20) + " " + (cy + 10) + " " + (cx - 20) + " " + (cy + 6) + " V" + (cy - 8) + " Q" + (cx - 20) + " " + (cy - 12) + " " + (cx - 16) + " " + (cy - 12) + ' Z"', "var(--card)", 2.2) + line("M" + (cx - 11) + " " + (cy - 3) + " H" + (cx + 11), 2); });
-    g.forEach(function (f, i) { var cx = 60 + i * 110; out += f(cx, 52) + T(cx, 112, "ABCDEF"[i], "font:700 26px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"'); });
-    return '<svg viewBox="0 0 670 130" role="img" aria-label="The jot button six ways, A to F">' + out + "</svg>";
   }
   PLATE.add(function () {
     var put = function (id, inner, label, opt) { document.getElementById(id).innerHTML = phone(inner, label, opt); };
     put("pk-day", kitchen(false) + findBar() + phJot(336, 776), "The kitchen on a phone by day");
     put("pk-eve", kitchen(true) + '<defs><linearGradient id="pkdusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f2a45"/><stop offset="1" stop-color="#2f2a45" stop-opacity="0"/></linearGradient></defs><rect width="390" height="130" style="fill:url(#pkdusk)"/>' + findBar() + phJot(336, 776), "The kitchen on a phone in the evening", { dark: true });
     put("pk-recent", kitchen(false) + dim(0.45) + recentList() + keyboard() + findBar("|", true), "The find bar tapped with nothing typed: a row of Recently chips");
-    put("pk-names", kitchen(false) + findBar() + jotSheet(), "The jot sheet, for comparing names");
-    document.getElementById("pk-names-list").innerHTML = [["Jot", "Jot an idea", "Jot it"], ["Note", "New note", "Save note"], ["Scribble", "Scribble an idea", "Scribble it"], ["Quick add", "Quick add", "Add"], ["Pin it", "Pin an idea", "Pin it"], ["Idea", "New idea", "Keep it"]].map(function (r, i) {
-      return '<tr style="border-top:1px solid var(--rule)"><td style="padding:8px"><b>' + r[0] + '</b></td><td style="padding:8px">' + r[1] + '</td><td style="padding:8px">' + r[2] + "</td></tr>"; }).join("");
-    document.getElementById("pk-icons").innerHTML = icons();
     put("pk-find", kitchen(false) + dim(0.45) + findList() + keyboard() + findBar("croi|", true), "The find bar tapped with croi typed, the keyboard up and one list under the bar");
-    put("pk-jot", kitchen(false) + findBar() + jotSheet(), "The jot button tapped: a bottom sheet with a text box, two choices and a Jot it button");
+    put("pk-jot", kitchen(false) + findBar() + jotSheet(), "Quick add tapped: a bottom sheet with a text box, four choices and an Add button");
   });
 })();
 </script>

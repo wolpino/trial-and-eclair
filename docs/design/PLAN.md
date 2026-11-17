@@ -158,8 +158,8 @@ Phone Plate v1 (2026-11-17): https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, 
 - [x] Stacked phone kitchen, jot button bottom right (drawn: day, evening, find list, jot sheet)
 - [x] Phone recipe card: any way you hold it, plus a button to keep it sideways (Ari, 2026-11-17; flexible, can revisit)
 - [x] Recipe box: the drawer (Ari, 2026-11-17; decision 003 updated)
-- [x] Add button: a plus named Quick add; on the kitchen it adds an idea, a Next up line, a recipe or a trial (Ari, 2026-11-17). Not drawn yet
-- [ ] Draw: Quick add sheet with four choices, Card View keep-sideways button
+- [x] Add button: a plus named Quick add; on the kitchen it adds an idea, a Next up line, a recipe or a trial (Ari, 2026-11-17). Drawn in v4
+- [x] Draw: Quick add sheet with four choices, Card View keep-sideways button (v4)
 - [x] Phone notebook with the camera button (drawn)
 - [x] Every other view and page on a phone (drawn)
 - [x] "Recently" on a phone: one chip row at the top of the find list (Ari, 2026-11-17)

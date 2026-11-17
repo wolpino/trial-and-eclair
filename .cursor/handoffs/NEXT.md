@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Phone Plate v3; Ari's last answers recorded, two small redraws left)
+# NEXT — 2026-11-17 (Phone Plate v4: every answer drawn; waiting on Ari's sign-off)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -25,7 +25,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 >
 > **Answered (Ari 11/17, after v3):** Card View follows how you hold it, with a keep-sideways button (flexible, revisit later); the add button is "Quick add" and on the kitchen adds an idea, a Next up line, a recipe or a trial; the fan still needs workshopping (Later list, not blocking).
 >
-> **Left to draw (v4, small):** 01 `pk-jot` and `pk-find` → Quick add with four choices, drop `pk-names`/`pk-icons` or mark them settled; 02 Card View → one set with a keep-sideways button, drop the A/B question. Then ask Ari to sign off.
+> **v4 (drawn 11/17):** Quick add sheet (Idea, Next up, Recipe, Trial) and "Find or add…"; Card View `pb-cv-up`, `pb-cv-side`, `pb-cv-kept` with the Keep sideways pill. No open questions; page top asks for sign-off.
 >
 > **Next:** apply Ari's answers, sign off, then the mark (T&E), brand sheet, React test piece (Ari reviews before any commit), Task issues, build.
 

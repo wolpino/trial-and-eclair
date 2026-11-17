@@ -9,7 +9,7 @@ cream fridge, composition-book notebook, wooden recipe box). Do not invent new f
 ## Folder: /Users/ari/codes/trial-and-eclair/design/phone/
 - `base/phone.js` — READ IT. `phone(inner, label, opt)` draws one phone (390 × 844 upright, or `{land:true}` 844 × 390)
   and clips your drawing to the screen. Safe area y 54–810, side gutter 16. `phTop(title)` is the top bar of a view
-  that takes over the screen ("‹ Kitchen" back + title). `phJot()` is the yellow jot button bottom right.
+  that takes over the screen ("‹ Kitchen" back + title). `phJot()` is the yellow Quick add button (a plus) bottom right.
   `phAddr("/whiteboard")` gives the web address line to put under a figure. Page CSS classes: `.phones` (a grid of
   upright phones), `.land` (a grid of sideways ones). Do not edit phone.js.
 - `base/core.js`, `kitchen.js`, `base/frame.js` — the Plate XI drawing helpers and kitchen. Every function is a global
@@ -24,7 +24,7 @@ cream fridge, composition-book notebook, wooden recipe box). Do not invent new f
 - Upright phone. Tapping a kitchen object takes over the whole screen (decision 004). No rotate prompt.
 - Back: "‹ Kitchen" top left and the phone's own Back both return to the kitchen; moving inside a view (next card,
   next trial) does not add Back steps (decision 005). Put the web address under each figure with `phAddr`.
-- The find-or-jot bar sits at the top of the KITCHEN only. The jot button (yellow, bottom right) shows on the kitchen
+- The find-or-add bar sits at the top of the KITCHEN only. The Quick add button (yellow plus, bottom right) shows on the kitchen
   and on views where it covers nothing.
 - The recipe box view has no header and its own small "+" (decision 003: `/Users/ari/codes/trial-and-eclair/docs/decisions/003-phone-recipe-box-design.md`).
 - Open views use the day look. Evening is the kitchen only.

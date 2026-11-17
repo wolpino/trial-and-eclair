@@ -25,7 +25,7 @@ function phTop(title, opt) {
     T(16, 84, "‹ Kitchen", "font:700 22px var(--font-hand);fill:var(--blue)") +
     T(374, 84, title, "font:700 26px var(--font-hand);fill:var(--ink)", 'text-anchor="end"');
 }
-/* The add button (was the jot pencil; Ari 11/17: a plus, like every other place you add something new).
+/* The Quick add button (was the jot pencil; Ari 11/17: a plus, like every other place you add something new).
    Yellow, round, bottom right, on the kitchen and on views where it covers nothing. */
 function phJot(x, y) { x = x || 330; y = y || 750;
   return hatch(x - 22, y + 18, 50, 10, 0.5) + reg("circle", 'cx="' + x + '" cy="' + y + '" r="30"', "var(--yellow)", 2.6) +

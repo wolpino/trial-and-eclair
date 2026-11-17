@@ -20,21 +20,19 @@
     </div>
 
     <h3>Card View</h3>
-    <ol class="qs"><li><b>Question for Ari:</b> Card View: B sideways, A any way, or both?</li></ol>
-    <p class="note"><b>Ari leans to the sideways card</b> because ingredients and steps show at once, so B is first. A (decision 003: any way you hold it) is second and is still Claude's pick for "does not fight the phone". In every figure the step you are on is a yellow band across the whole step with a bold "▶ you are here".</p>
+    <p class="note"><b>Card View follows the way you hold the phone,</b> and the "⟲ Keep sideways" pill in the card's header row keeps it sideways when the phone is upright. The setting is remembered (Ari, 11/17; can be revisited). In every figure the step you are on is a yellow band across the whole step with a bold "▶ you are here". The sun keeps the screen awake; the red X goes back to the box.</p>
     <div class="pbcv">
-      <div class="pbb"><h3>B · always a sideways card</h3><figure id="pb-b"></figure><p class="addr">/box/croissants</p>
-        <p class="note">The recipe opens as a landscape index card, drawn sideways on the upright phone so you turn the phone to read it. The card in the lid stays a preview. No rotate prompt (decision 004).</p></div>
-      <div class="pba">
-        <div class="pbah"><div><h3>A · upright</h3><figure id="pb-a"></figure><p class="addr">/box/croissants</p></div>
-        <div><h3>A · held sideways</h3><figure id="pb-a-side"></figure><p class="addr">/box/croissants</p></div></div>
-        <p class="note">Tap the card and Card View covers the screen however you hold it. Upright, the ingredients fold into a pinned band and the steps scroll under it; sideways, two columns. The sun keeps the screen awake; the red X goes back to the box.</p>
-      </div>
+      <div><h3>Held upright</h3><figure id="pb-cv-up"></figure><p class="addr">/box/croissants/card</p>
+        <p class="note">The ingredients fold into a band pinned at the top and the steps scroll under it. The pill is off.</p></div>
+      <div><h3>Held sideways</h3><figure id="pb-cv-side"></figure><p class="addr">/box/croissants/card</p>
+        <p class="note">Two columns, ingredients left and steps right, each scrolling on its own. The pill is on here (yellow); turning the phone upright keeps this layout.</p></div>
+      <div><h3>Kept sideways, phone upright</h3><figure id="pb-cv-kept"></figure><p class="addr">/box/croissants/card</p>
+        <p class="note">With the pill on, the sideways card is drawn turned on the upright phone, so you turn the phone to read it. There is no rotate prompt (decision 004). Tap the pill again to go back to following the phone.</p></div>
     </div>
   </div>
 </section>
 <style>.pbo{display:grid;gap:18px;grid-template-columns:repeat(2,minmax(0,1fr));align-items:start;max-width:620px}.pbo>div,.pbcv>div,.pbah>div,.pba{display:grid;gap:6px;align-content:start;min-width:0}
-.pbcv{display:grid;gap:22px;grid-template-columns:minmax(0,1fr) minmax(0,3fr);align-items:start}.pbah{display:grid;gap:18px;grid-template-columns:minmax(0,1fr) minmax(0,2fr);align-items:start}.pbcv figure,.pbo figure{border:0;background:none}
+.pbcv{display:grid;gap:22px;grid-template-columns:minmax(0,1fr) minmax(0,2fr) minmax(0,1fr);align-items:start}.pbah{display:grid;gap:18px;grid-template-columns:minmax(0,1fr) minmax(0,2fr);align-items:start}.pbcv figure,.pbo figure{border:0;background:none}
 @media(max-width:900px){.pbcv,.pbah,.pbo{grid-template-columns:minmax(0,1fr)}}</style>
 <script>
 (function () {
@@ -53,6 +51,7 @@
     for (var i = 0; i < 8; i++) { var a = i * Math.PI / 4, c = Math.cos(a), d = Math.sin(a); s += line("M" + (cx + c * 9.5).toFixed(1) + " " + (cy + d * 9.5).toFixed(1) + " L" + (cx + c * 13.5).toFixed(1) + " " + (cy + d * 13.5).toFixed(1), 2); } return s; }
   function dots(cx, cy) { return reg("circle", 'cx="' + cx + '" cy="' + cy + '" r="20"', "var(--card)", 2.2) + [-8, 0, 8].map(function (d) { return '<circle cx="' + (cx + d) + '" cy="' + cy + '" r="2.6" style="fill:var(--ink)"/>'; }).join(""); }
   function redx(cx, cy) { return R(cx - 20, cy - 20, 40, 40, RED, 2.4, 8) + line("M" + (cx - 8) + " " + (cy - 8) + " L" + (cx + 8) + " " + (cy + 8) + " M" + (cx + 8) + " " + (cy - 8) + " L" + (cx - 8) + " " + (cy + 8), 3.6, 1, "#fff"); }
+  function kp(x, y, on) { return R(x, y, 150, 40, on ? "var(--yellow)" : "var(--card)", 2.2, 20) + T(x + 75, y + 26, "⟲ Keep sideways", U(15, 700), MID); }
   function pl(x, y, w, h, t, fs) { return R(x, y, w, h, "var(--card)", 2.2, h / 2) + T(x + w / 2, y + h / 2 + fs * 0.33, t, H(fs, 700), MID); }
 
   function U(sz, w, col) { return "font:" + (w || 400) + " " + sz + "px var(--font-body);fill:" + (col || "var(--ink)"); }
@@ -115,16 +114,16 @@
   var HERE = function (x, y, anchor) { return T(x, y, "▶ you are here", "font:800 16px var(--font-label);fill:var(--ink);letter-spacing:.04em", anchor || ""); };
   function stepsUp() {
     var s = "";
-    CR.steps.forEach(function (t, i) { var top = 188 + i * 92, y = top + 44, here = i === 2;
-      if (here) s += band(0, top + 2, 390, 84) + HERE(66, top + 74);
-      s += line("M16 " + (top + 90) + " H374", 1.2, 1, RULE) + reg("circle", 'cx="38" cy="' + (y - 7) + '" r="16"', "var(--card)", 1.8) + T(38, y - 1, i + 1, H(20, 700), MID) + T(66, y, t, H(24)); });
-    return s + R(379, 192, 5, 548, "var(--rule)", 0.8, 2.5) + R(379, 192, 5, 240, SOFT, 0.8, 2.5);
+    CR.steps.forEach(function (t, i) { var top = 232 + i * 84, y = top + 42, here = i === 2;
+      if (here) s += band(0, top + 2, 390, 78) + HERE(66, top + 70);
+      s += line("M16 " + (top + 82) + " H374", 1.2, 1, RULE) + reg("circle", 'cx="38" cy="' + (y - 7) + '" r="16"', "var(--card)", 1.8) + T(38, y - 1, i + 1, H(20, 700), MID) + T(66, y, t, H(24)); });
+    return s + R(379, 236, 5, 500, "var(--rule)", 0.8, 2.5) + R(379, 236, 5, 220, SOFT, 0.8, 2.5);
   }
   function cvUp() {
-    return T(16, 86, CR.t, H(32, 700)) + T(16, 110, CR.src, H(17, 600, SOFT)) + dots(246, 76) + sun(296, 76, true) + redx(346, 76) + hatch(16, 170, 358, 6, 0.5) + R(16, 122, 358, 48, "var(--custard)", 2.4, 6) + T(32, 154, "Ingredients (7) ▾", H(25, 700)) + stepsUp() + pl(125, 752, 140, 46, "Turn over", 22);
+    return T(16, 86, CR.t, H(32, 700)) + T(16, 110, CR.src, H(17, 600, SOFT)) + dots(246, 76) + sun(296, 76, true) + redx(346, 76) + kp(16, 120, false) + hatch(16, 218, 358, 6, 0.5) + R(16, 170, 358, 48, "var(--custard)", 2.4, 6) + T(32, 202, "Ingredients (7) ▾", H(25, 700)) + stepsUp() + pl(125, 752, 140, 46, "Turn over", 22);
   }
   function cvSide() {
-    var s = T(44, 42, CR.t, H(32, 700)) + T(210, 40, CR.src, H(18, 600, SOFT)) + dots(704, 38) + sun(752, 38, true) + redx(800, 38) + line("M0 64 H844", 1.6, 0.8) + line("M378 74 V372", 1.4, 1, RULE) + T(44, 92, "INGREDIENTS (7)", LB(13)) + T(398, 92, "DIRECTIONS", LB(13));
+    var s = T(44, 42, CR.t, H(32, 700)) + T(210, 40, CR.src, H(18, 600, SOFT)) + kp(532, 18, true) + dots(704, 38) + sun(752, 38, true) + redx(800, 38) + line("M0 64 H844", 1.6, 0.8) + line("M378 74 V372", 1.4, 1, RULE) + T(44, 92, "INGREDIENTS (7)", LB(13)) + T(398, 92, "DIRECTIONS", LB(13));
     CR.ing.forEach(function (t, i) { var y = 128 + i * 38, tick = i === 1;
       s += line("M44 " + (y + 9) + " H360", 1.2, 1, RULE) + R(44, y - 17, 22, 22, tick ? "var(--yellow)" : "var(--card)", 1.8, 4) + (tick ? line("M49 " + (y - 6) + " l5 6 l9 -12", 2.6) : "") + T(78, y, t, H(23)) + (tick ? line("M78 " + (y - 6) + " h" + (t.length * 9.2), 2, 0.7) : ""); });
     CR.steps.forEach(function (t, i) { var y = 128 + i * 46, here = i === 2; if (here) s += band(380, y - 30, 464, 42) + HERE(800, y - 3, END);
@@ -132,7 +131,7 @@
     return s;
   }
   function cvB() {
-    var W = 744, H0 = 350, s = R(0, 0, W, H0, "var(--page)", 2.4, 6) + T(28, 50, CR.t, H(38, 700)) + T(28, 78, CR.src, H(19, 600, SOFT)) + T(28, 102, CR.meta, H(19, 600, SOFT)) + dots(610, 34) + sun(660, 34, true) + redx(712, 34) + line("M1 116 H" + (W - 1), 1.8, 0.85, "var(--orange-text)") + T(28, 140, "INGREDIENTS", LB(13)) + T(322, 140, "DIRECTIONS", LB(13)) + line("M300 126 V" + (H0 - 12), 1.2, 1, RULE);
+    var W = 744, H0 = 350, s = R(0, 0, W, H0, "var(--page)", 2.4, 6) + T(28, 50, CR.t, H(38, 700)) + T(28, 78, CR.src, H(19, 600, SOFT)) + T(28, 102, CR.meta, H(19, 600, SOFT)) + kp(440, 14, true) + dots(610, 34) + sun(660, 34, true) + redx(712, 34) + line("M1 116 H" + (W - 1), 1.8, 0.85, "var(--orange-text)") + T(28, 140, "INGREDIENTS", LB(13)) + T(322, 140, "DIRECTIONS", LB(13)) + line("M300 126 V" + (H0 - 12), 1.2, 1, RULE);
     CR.ing.forEach(function (t, i) { var y = 168 + i * 25; s += line("M1 " + (y + 5) + " H" + (W - 1), 1.2, 1, RULE) + T(28, y, t, H(20)); });
     CR.steps.forEach(function (t, i) { var y = 168 + i * 25; if (i === 2) s += band(310, y - 19, 433, 27) + HERE(736, y - 1, END); s += T(322, y, (i + 1) + ". " + t, H(20)); });
     s += pl(604, 296, 120, 44, "Turn over", 20);
@@ -154,9 +153,9 @@
     put("pb-fan", L1() + drawerOut(2), "Tab C tapped: small index cards fan up from behind the tabs");
     put("pb-menu", L1(true) + lip() + menuFull(), "The menu in the body font: account name, Add recipe, Simple list switch, Sign out");
     put("pb-simple", simple(), "Simple list: letter headings and recipe titles, no wood", { bg: "var(--page)" });
-    put("pb-b", cvB(), "Card View B: the recipe as a landscape index card drawn sideways on the upright phone");
-    put("pb-a", cvUp(), "Card View A upright: pinned ingredients band, steps scroll under, one step marked you are here", { bg: "var(--page)" });
-    put("pb-a-side", cvSide(), "Card View A held sideways: ingredients left, steps right", { land: true, bg: "var(--page)" });
+    put("pb-cv-up", cvUp(), "Card View held upright: pinned ingredients band, steps scroll under, one step marked you are here, Keep sideways pill off", { bg: "var(--page)" });
+    put("pb-cv-side", cvSide(), "Card View held sideways: ingredients left, steps right, Keep sideways pill on", { land: true, bg: "var(--page)" });
+    put("pb-cv-kept", cvB(), "Keep sideways on with the phone upright: the sideways card drawn turned on the upright phone");
   });
 })();
 </script>
