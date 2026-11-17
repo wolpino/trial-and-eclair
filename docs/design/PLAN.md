@@ -10,8 +10,8 @@ Written 2026-11-13. This is the one list of everything left before the build. If
 
 ## The path
 ```
-Plate X ✅ → Plate XI (final) → phone layout → mark → brand sheet → Task issues → build
-                ⏳ drawn, waiting on Ari
+Plate X ✅ → Plate XI ✅ → phone layout → mark → brand sheet → Task issues → build
+                                  ⏳ next
 ```
 1. **Plate X**: draw Ari's Plate IX notes and the three missing views. Options are still allowed here.
 2. **Plate XI, the final**: no options. Ari's picks from Plate X, drawn once. The kitchen comes in day and evening; the open views are day only.
@@ -151,7 +151,7 @@ Layout (Ari, 2026-11-16). One page, new artifact, sources in `design/plate-xi/` 
 - [x] Every item on the Details list (sill: a jar of wooden spoons replaces the plant; window set in a recess)
 - [x] Picks to apply: sign-in headings A (Ingredients + Method; drop crops B and C); not found B (cookbook with a page ripped out; drop A the index card); sign-in card centred with nothing in front; front page A; everything else as signed off in Plate X v24
 - [ ] "TRIAL & ECLAIR" small name becomes the T&E mark where it appears in the app, once the mark exists (step 4); leave as is in Plate XI
-- [ ] Ari signs off. Then this plate is the brand sheet reference. Drawn 2026-11-17: https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL (sources `design/plate-xi/`)
+- [x] Ari signed off (2026-11-17, version 2). Then this plate is the brand sheet reference. Drawn 2026-11-17: https://claude.ai/artifact/8eaxCBnwujNi1zg945oDBL (sources `design/plate-xi/`)
 
 ## 3. Phone layout
 - [ ] Stacked phone kitchen, jot button bottom right
