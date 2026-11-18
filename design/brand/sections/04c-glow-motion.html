@@ -1,0 +1,50 @@
+<section id="br-gm" aria-labelledby="br4c-h">
+  <span class="label" id="br4c-h">04c · Soft glow with movement (v3)</span>
+  <div class="sec-body">
+    <p class="note">Ari likes movement but not a jump, and prefers the soft glow (P2). Four ways to combine them. Each drawing plays on a loop: resting, pointed at, resting. The movement is slow (0.35 s) and eased, and stops; nothing bounces. Day on the left, evening on the right.</p>
+    <div id="br4c-rows" style="display:grid;gap:22px"></div>
+    <h3 id="br-gm-eve">Evening glow</h3>
+    <p class="note">The evening is a warm wash laid over the whole kitchen, and the glow sits under it, so the same halo comes out dimmer and browner at night. Two choices: keep the day halo (E1), or make the evening halo paler and stronger so it reads like lamplight (E2). Both with G1's slow rise.</p>
+    <div class="pair" id="br4c-eve"></div>
+  </div>
+</section>
+<style>
+.gm .fx-glow { opacity: 1 !important; }
+.gm .fx-glow > rect { fill: #F6CF6E !important; opacity: var(--gmax); --gmax: .5; animation: gmGlow 3.6s ease-in-out infinite; }
+.gm.e2 .fx-glow > rect { fill: #FFF1C4 !important; --gmax: .85; }
+.gm .lbl { animation: gmLbl 3.6s ease-in-out infinite; }
+.gm .lift { transform-box: fill-box; animation: 3.6s ease-out infinite; }
+.gm.g1 .lift { animation-name: gmRise; }
+.gm.g2 .lift { transform-origin: 0% 100%; animation-name: gmLean; }
+.gm.g3 .fx-glow > rect { animation-name: gmBreathe; }
+.gm.g4 .lift { transform-origin: 50% 100%; animation-name: gmGrow; }
+@keyframes gmGlow { 0%, 18% { fill-opacity: 0 } 28%, 78% { fill-opacity: 1 } 88%, 100% { fill-opacity: 0 } }
+@keyframes gmBreathe { 0%, 18% { fill-opacity: 0 } 28% { fill-opacity: 1 } 40% { fill-opacity: .5 } 52% { fill-opacity: 1 } 64% { fill-opacity: .5 } 76% { fill-opacity: 1 } 88%, 100% { fill-opacity: 0 } }
+@keyframes gmLbl { 0%, 20% { fill: var(--card) } 26%, 80% { fill: var(--yellow) } 86%, 100% { fill: var(--card) } }
+@keyframes gmRise { 0%, 18% { transform: translateY(0) } 28%, 78% { transform: translateY(-3px) } 88%, 100% { transform: translateY(0) } }
+@keyframes gmLean { 0%, 18% { transform: rotate(0) } 28%, 78% { transform: rotate(-1.6deg) } 88%, 100% { transform: rotate(0) } }
+@keyframes gmGrow { 0%, 18% { transform: scale(1) } 28%, 78% { transform: scale(1.03) } 88%, 100% { transform: scale(1) } }
+@media (prefers-reduced-motion: reduce) { .gm .fx-glow > rect, .gm .lbl, .gm .lift { animation: none; } .gm .fx-glow > rect { fill-opacity: 1; } .gm .lbl { fill: var(--yellow) !important; } }
+</style>
+<script>
+(function () {
+  var O = [
+    ["g1", "G1 · Soft glow + slow rise", "The box rises 3 px (P5 rose 6, quickly) and the glow fades in. Closest to \"picked up\"."],
+    ["g2", "G2 · Soft glow + lean", "The box tips back 1.6 degrees on its front corner, as if you touched its lid."],
+    ["g3", "G3 · Soft glow that breathes", "The box stays still; the glow fades in and gently pulses while you point. Movement without the object moving."],
+    ["g4", "G4 · Soft glow + swell", "The box grows 3% from its base. Reads as \"coming toward you\"."]
+  ];
+  var n = 0;
+  function uniq(k) { var t = "gm" + (n++); return k.replace(/ id="(m|c)(h\d+)"/g, ' id="$1$2' + t + '"').replace(/url\(#(m|c)(h\d+)\)/g, "url(#$1$2" + t + ")"); }
+  PLATE.add(function () {
+    var day = scene(mainVP(), opts()), eve = scene(mainVP(), opts(), true), V = [940, 1260];
+    n = 0;
+    document.getElementById("br4c-rows").innerHTML = O.map(function (o) {
+      return '<div id="br-' + o[0] + '"><h3>' + o[1] + '</h3><div class="pair" style="margin-top:6px"><figure class="gm ' + o[0] + '">' + svg(V, uniq(day), o[1] + ", day", 300, 260) + '</figure><figure class="gm ' + o[0] + '">' + svg(V, uniq(eve), o[1] + ", evening", 300, 260) + '</figure></div><span class="cap">' + o[2] + "</span></div>";
+    }).join("");
+    document.getElementById("br4c-eve").innerHTML =
+      '<div><h3>E1 · Same halo as day</h3><figure class="gm g1">' + svg(V, uniq(eve), "Evening, day halo", 300, 260) + '</figure><span class="cap">dimmer and browner under the evening wash</span></div>' +
+      '<div><h3>E2 · Paler, stronger halo at night</h3><figure class="gm g1 e2">' + svg(V, uniq(eve), "Evening, lamplight halo", 300, 260) + '</figure><span class="cap">reads like lamplight; same rule, one colour swapped</span></div>';
+  });
+})();
+</script>

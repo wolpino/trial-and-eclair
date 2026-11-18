@@ -1,0 +1,27 @@
+<section id="br-blues" aria-labelledby="br2c-h">
+  <span class="label" id="br2c-h">02c · Box blues (v3)</span>
+  <div class="sec-body">
+    <p class="note">The recipe box colour is the brand colour (Ari, 11/17), and it stays fixed: cooks don't change it. Seven blues from cobalt to denim, five of them evenly spaced between. Each is shown on the counter, as the app icon, and against the green cabinets, walnut and amber eclair it has to sit with.</p>
+    <div class="six" id="br2c-grid"></div>
+  </div>
+</section>
+<script>
+(function () {
+  function mix(h, pct, w) { h = h.replace("#", ""); var t = w ? 255 : 0; return "#" + [0, 2, 4].map(function (i) { var v = Math.round(parseInt(h.substr(i, 2), 16) * pct + t * (1 - pct)); return ("0" + v.toString(16)).slice(-2); }).join("").toUpperCase(); }
+  function lerp(a, b, t) { a = a.replace("#", ""); b = b.replace("#", ""); return "#" + [0, 2, 4].map(function (i) { var v = Math.round(parseInt(a.substr(i, 2), 16) * (1 - t) + parseInt(b.substr(i, 2), 16) * t); return ("0" + v.toString(16)).slice(-2); }).join("").toUpperCase(); }
+  var A = "#2F4E9A", B = "#4F6F9F", names = ["Cobalt (v1)", "Blue 1", "Blue 2", "Blue 3", "Blue 4", "Blue 5", "Denim (v2)"];
+  window.BLUES = names.map(function (n, i) { return [n, lerp(A, B, i / 6)]; });
+  function icon(c) {
+    var m = MK2.make("G", { ang: -35, dark: true });
+    return '<svg width="64" height="64" viewBox="0 0 240 240" role="img" aria-label="Icon"><rect x="2" y="2" width="236" height="236" rx="54" style="fill:' + c + ';stroke:#1F1D1A;stroke-width:5"/><g transform="translate(120 120) scale(.82) translate(-120 -120)">' + m.g + "</g></svg>";
+  }
+  PLATE.add(function () {
+    var k = scene(mainVP(), opts());
+    document.getElementById("br2c-grid").innerHTML = BLUES.map(function (b, i) {
+      var c = b[1], v = "--blue:" + c + ";--blue-hi:" + mix(c, 0.78, 1) + ";--blue-back:" + mix(c, 0.72, 0) + ";";
+      return '<div class="optfig" id="br-blue-' + i + '"><h3>' + (i ? (i < 6 ? "B" + i + " · " : "") : "") + b[0] + '</h3><figure style="' + v + '">' + svg([640, 1230], k, b[0] + " box", 240, 330) + "</figure>" +
+        '<div style="display:flex;gap:10px;align-items:center;margin-top:6px">' + icon(c) + '<div style="display:grid;gap:2px"><span style="display:block;width:120px;height:22px;background:' + c + ';border:1.5px solid var(--ink)"></span><code style="font:.8rem ui-monospace,Menlo,monospace">' + c + "</code></div></div></div>";
+    }).join("");
+  });
+})();
+</script>

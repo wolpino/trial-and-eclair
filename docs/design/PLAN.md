@@ -174,8 +174,11 @@ Phone Plate v1 (2026-11-17): https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, 
 Brand Sheet v1 (2026-11-17): https://claude.ai/artifact/L3p52UdPaAsUBAa77J3gmi, sources `design/brand/` (eclair helper in `base/mark.js`)
 - [x] Colours, fonts, line and halftone rules, the mark, kitchen reference from Plate XI (drawn v1; also small pieces and a contrast table)
 - [x] v2 (Ari 11/17 notes): box colour options (cobalt, denim, faded denim, buttercup), which colour leads, what a cook can recolour (wheel vs swatches), six pointing options
-- [ ] Ari answers v2: box colour, lead colour, recolour scope, pointing, T&E home-screen label, body font
+- [x] Ari answered v2 (11/17): the box colour is the brand colour and stays fixed (a blue between cobalt and denim); cooks change cabinets, fridge, wall and backsplash from swatches plus a custom wheel (the original plan); pointing = soft glow + gentle movement, no jump; idea: TRIAL & ECLAIR in capitals round two sides of the box, & on the corner
+- [x] v3 drawn: seven blues (02c), kitchen colour panel (02d), glow + movement G1–G4 with evening E1/E2 (04c), box wordmark W1–W3 and home label options (01b)
+- [ ] Ari answers v3: which blue, swatch sets, G1–G4 and E1/E2, W1–W3 and where, home label, body font
 - Build note: the whiteboard marker and one tack share --blue with the box; give the marker its own fixed colour
+- Build note: animate the glow with fill-opacity, not opacity (Chrome drops the blurred mask while opacity animates)
 - [ ] Ari signs off
 
 ## Before Task issues: things that could disrupt the build
