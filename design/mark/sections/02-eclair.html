@@ -1,0 +1,35 @@
+<section id="mk2-ecl" aria-labelledby="mk2e-h">
+  <span class="label" id="mk2e-h">02 · Eclair marks</span>
+  <div class="sec-body">
+    <p class="note">This reopens "crops of the eclair", on purpose. The eclair is redrawn here in the kitchen's style (the kitchen's own drawing is private to its file): choux body, chocolate glaze with drips, a white drizzle. G and H sit at the tape's angle (4 degrees, tilted up to the right). Each is shown big, at the top bar (28 px), 32 and 16 px, on paper and on Prussian. The small sizes are bolder, with no hatching.</p>
+    <div class="mk-grid" id="mk2-ecards"></div>
+  </div>
+</section>
+<script>
+(function () {
+  var PAPER = "#EEF0DF", PRUSS = "#24406E";
+  var cell = function (svg, cap, bg, sq) { return '<div class="mk-chip' + (sq ? " sq" : "") + '"><div style="background:' + bg + '">' + svg + '</div><span class="cap">' + cap + "</span></div>"; };
+  var K = [
+    { k: "G", bh: 130, what: "A plain eclair, tilted like the tape. No letters.", hold: "Holds well. At 16 px it is an orange bar with a brown top, and that still says eclair. It is wide, so it is short in a square tab (see the icons below)." },
+    { k: "H", bh: 130, what: "The same eclair with T&amp;E written on the glaze.", hold: "Too busy, as you guessed. Big, it is charming. At 28 px the letters are cramped, and at 16 px they are a smudge, so it turns into G." },
+    { k: "I", bh: 240, what: "T and E share one stem, and the stem is an eclair standing up, with its glaze toward the E.", hold: "Better than expected. The chocolate side and the E's arms read as one shape. At 16 px the eclair is a thin stripe, so it reads as a monogram first and an eclair second. The &amp; drops out." }
+  ];
+  PLATE.add(function () {
+    var h = "";
+    K.forEach(function (c) {
+      var k = c.k, sm = function (o) { return Object.assign({ sm: true }, o); }, dk = { dark: true };
+      h += '<div class="mk-card" id="mk2-' + k + '"><h3>' + k + " · " + MK2.names[k] + '</h3><div class="mk-big"><div>' + MK2.sv(k, {}, c.bh) + '<span class="cap">big, on paper</span></div></div>' +
+        '<div class="mk-big dk"><div>' + MK2.sv(k, dk, c.bh) + '<span class="cap">big, on Prussian</span></div></div><div class="mk-row">' +
+        cell(MK2.sv(k, {}, 28), "top bar 28, paper", "var(--paper)") + cell(MK2.sv(k, dk, 28), "top bar 28, Prussian", PRUSS) +
+        cell(MK2.sv(k, sm({}), 32), "32, paper", "var(--paper)", 1) + cell(MK2.sv(k, sm(dk), 32), "32, Prussian", PRUSS, 1) +
+        cell(MK2.sv(k, sm({}), 16), "16, paper", "var(--paper)", 1) + cell(MK2.sv(k, sm(dk), 16), "16, Prussian", PRUSS, 1) + "</div>" +
+        "<p><b>What it is.</b> " + c.what + "</p><p><b>At 16 px.</b> " + c.hold + "</p>";
+      if (k === "I") h += '<div class="mk-row"><div><div class="mk-big" style="padding:6px">' + MK2.sv("J", {}, 100) + '</div><span class="cap">alternative J: the T\'s bar is the eclair</span></div>' +
+        cell(MK2.sv("J", { sm: true }, 32), "J at 32", "var(--paper)", 1) + cell(MK2.sv("J", { sm: true }, 16), "J at 16", "var(--paper)", 1) + "</div>" +
+        "<p><b>Upright or bar?</b> The upright stem (I) reads better. In J the eclair is a flat bar and looks like a pastry stuck on top of an E, so I stay with the stem.</p>";
+      h += "</div>";
+    });
+    document.getElementById("mk2-ecards").innerHTML = h;
+  });
+})();
+</script>

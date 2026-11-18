@@ -1,0 +1,39 @@
+<section id="br-pieces" aria-labelledby="br5-h">
+  <span class="label" id="br5-h">05 · Small pieces</span>
+  <div class="sec-body">
+    <p class="note">The few pieces of interface that repeat on every screen, drawn the same way as the kitchen: card colour, ink line, round ends.</p>
+    <figure id="br5-fig"></figure>
+    <div class="scroll"><table class="tbl">
+      <tr><th>Piece</th><th>How</th></tr>
+      <tr><td>Find bar</td><td>Card pill, 44 high, 2.4 line; a hand-drawn magnifier; placeholder "Find a recipe or jot an idea…" in Caveat 25, soft ink. Centred at the top.</td></tr>
+      <tr><td>Buttons</td><td>Pills, 34 high (44 on a phone), 2 line, body font 600 at 15. A plain button is card; the one main action is dandelion.</td></tr>
+      <tr><td>Account</td><td>Card pill top right with a tulip orange dot. On an open view it becomes Close.</td></tr>
+      <tr><td>Tags</td><td>Dandelion, small corners. "Guest" in the body font; "paid plan" in Caveat with a little tack hole, tilted a few degrees.</td></tr>
+      <tr><td>Labels on objects</td><td>Brass holder with a card insert and two screws, the name in Caveat 700.</td></tr>
+      <tr><td>Cards and states</td><td>Printed card on paper: error "That didn't load. Try again"; offline strip "Offline. Showing what was saved."; loading shows faint ruled lines where words will be.</td></tr>
+    </table></div>
+  </div>
+</section>
+<script>
+(function () {
+  PLATE.add(function () {
+    var s = "";
+    s += reg("rect", 'x="20" y="22" width="400" height="44" rx="22"', "var(--card)", 2.4) +
+      '<circle cx="50" cy="42" r="9" style="fill:none;stroke:var(--ink);stroke-width:2.4"/><path d="M57 49 L65 57" style="stroke:var(--ink);stroke-width:2.6;stroke-linecap:round"/>' +
+      T(76, 52, "Find a recipe or jot an idea…", "font:500 25px var(--font-hand);fill:var(--ink-soft)");
+    s += reg("rect", 'x="450" y="22" width="148" height="44" rx="22"', "var(--card)", 2.4) + '<circle cx="473" cy="44" r="12" style="fill:var(--orange);stroke:var(--ink);stroke-width:2"/>' + T(494, 51, "Account", "font:17px var(--font-body);fill:var(--ink)");
+    s += reg("rect", 'x="620" y="22" width="148" height="44" rx="22"', "var(--card)", 2.4) + T(694, 51, "Close", "font:18px var(--font-body);fill:var(--ink)", 'text-anchor="middle"');
+    s += pill(20, 100, 120, "Cancel") + pill(152, 100, 120, "Save", true) + T(20, 160, "plain and main button", "font:600 14px var(--font-body);fill:var(--ink-soft)");
+    s += reg("rect", 'x="320" y="104" width="74" height="28" rx="4"', "var(--yellow)", 1.8) + T(357, 124, "Guest", "font:600 16px var(--font-body);fill:var(--ink)", 'text-anchor="middle"');
+    s += paidTag(470, 118, -4).replace('class="paid"', "");
+    s += brassLabel(640, 118, 130, 40, "Recipes", 22);
+    /* error card + offline strip */
+    s += '<g transform="translate(5 6)"><rect x="20" y="190" width="300" height="86" rx="4" style="fill:url(#hatch);opacity:.8"/></g>' + reg("rect", 'x="20" y="190" width="300" height="86" rx="4"', "var(--card)", 2.4) +
+      T(40, 224, "That didn't load.", "font:17px var(--font-body);fill:var(--ink)") + pill(40, 234, 110, "Try again", true);
+    s += reg("rect", 'x="350" y="196" width="420" height="34" rx="3"', "var(--card)", 1.6) + T(366, 219, "Offline. Showing what was saved.", "font:15px var(--font-body);fill:var(--ink)");
+    for (var i = 0; i < 3; i++) s += line("M350 " + (252 + i * 14) + " H" + (700 - i * 90), 6, 0.12);
+    s += T(350, 304, "loading: faint lines where words will be", "font:600 14px var(--font-body);fill:var(--ink-soft)");
+    document.getElementById("br5-fig").innerHTML = '<svg viewBox="0 0 800 320" role="group" aria-label="Find bar, buttons, tags, label and states">' + s + "</svg>";
+  });
+})();
+</script>

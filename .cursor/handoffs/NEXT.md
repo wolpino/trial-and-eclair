@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Phone Plate SIGNED OFF; next: the mark)
+# NEXT — 2026-11-17 (Brand Sheet v4: Blue 3 picked, rest on hold; next Task issues)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -7,10 +7,40 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ⏳ → mark → brand sheet → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Phone Plate, after Ari answers) — START HERE
+## Prompt for the next agent (Brand Sheet, after Ari answers) — START HERE
+> Brand Sheet v1: https://claude.ai/artifact/L3p52UdPaAsUBAa77J3gmi. Sources `design/brand/` (base copied from mark; the eclair helper MK2 now lives in `base/mark.js`; kitchen.js is Plate XI's). Sections: 00 questions, 01 mark (sizes, icon, title lockup, rules), 02 colours (tokens, shades, contrast table computed on the page), 03 fonts, 04 line/colour/halftone/hatching, 05 small pieces, 06 kitchen reference (day, evening, construction lines). Build: `cd design/brand && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/brand-sheet.html`, publish to the same URL.
+>
+> **Questions to Ari (page top):** (1) "T&E" only as the home screen label? Claude's pick yes. (2) App icon ground: Prussian (pick) or paper; tab stays paper. (3) Body font: keep Iowan/Palatino/Georgia stack (pick) or load a web font.
+>
+> **v2 (Ari 11/17):** asked what the valance was (the Prussian scalloped band over the window, 11/08 Kitchen Plate, gone since Plate IX), whether cobalt is too dark (denim? buttercup, her first Cuisinart stand mixer), whether green should lead, doubts about the colour wheel, wants other pointing options than the amber dots. Drawn: 02b colour options (A box colour, B lead colour as icons, C1 cabinets swatches, C2 box swatches, C3 what a wheel lets through) and 04b pointing P1–P6. Questions 1–6 at the page top. Claude's picks: denim box; lead colour = box colour; drop the wheel, box-only swatches; P5 lift + faint P2 halo; T&E home label only; keep body font.
+>
+> **v3 (Ari 11/17 answers):** box colour = brand colour, fixed, somewhere cobalt→denim; cooks recolour cabinets, fridge, wall, backsplash (swatches + custom wheel); soft glow + gentle movement; asked about TRIAL & ECLAIR round two sides of the box with & on the corner. Drawn: 02c seven blues, 02d interactive colour panel (fridge and tile swapped by string replace of #f6efd9/#f4f5ea), 04c G1–G4 loops day+evening and E1/E2, 01b W1–W3 + home label. Claude's picks: Blue 3 #3F5F9D; G1 + E2; W3 on sign in/front/loading; home label "Trial & Eclair".
+>
+> **v4 (Ari 11/17):** Blue 3 #3F5F9D is the box and brand colour (sheet and icon updated, --blue in base/style.css). Lettered box dropped; Ari meant "Trial & Eclair" round the edge of the square icon (on hold). Ari wants as much as possible on hold while building: holds are in PLAN.md "Later list" with the three build rules that keep them safe.
+>
+> **Branch:** `docs/plate-x-cookbooks` is pushed and clean (2026-11-17). Open a PR into `staging-render` when Ari asks.
+>
+> **Next:** Task issues (PLAN step 6), starting with the test piece (kitchen + one open view, Ari reviews before commit). Carry the three build rules into the relevant issues.
+
+## Prompt for the next agent (Mark Plate, after Ari answers) — done 2026-11-17 (eclair G picked)
+> Mark Plate v1: https://claude.ai/artifact/5baLfL52D5X1pNYCdNgS6F. Sources `design/mark/` (base copied from phone; sections 00 questions, 01 options A–F, 02 in place). Build: `cd design/mark && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/mark-plate.html`, publish to the same URL. One Sonnet subagent per section for tweaks.
+>
+> **Options:** A letterpress serif, B marker on tape, C round stamp (no ring words), D one-stem monogram, E brass label plate, F index-card tab. Claude's pick D (holds at 16 px and as an app icon); runner-up B. Both drawn in place: wide kitchen top left, phone top bar, PWA icon, favicon.
+>
+> **Questions to Ari (page top):** which mark (A–F or none yet); where it sits; ink only or one colour.
+>
+> **v2 (Ari 11/17):** B liked but not yellow, not sold on tape, revisiting T&E, wants the mark from the kitchen (eclair/notebook). Drawn: B on white/black and cobalt with white or dandelion letters, padded vs tight small sizes (01); eclair G plain at the tape angle, H with T&E, I monogram with eclair stem (02); in place (03); v1 kept as 08/09. Claude's picks: cobalt + white padded; G; eclair as icon, T&E as text. Eclair redrawn (kitchen.js helper is private). In-place phones wrap to two rows (fine).
+>
+> **PICKED (Ari 11/17): default to eclair G.** Recorded in PLAN.md step 4.
+>
+> **Next:** brand sheet (PLAN step 5): colours, fonts, line and halftone rules, the mark (G), kitchen reference from Plate XI. Open: whether T&E text stays anywhere, B's tape colour (only if T&E text is used).
+>
+> **After the pick (old note):** record it in PLAN.md "4. Mark" and the kitchen-layout memory, then the brand sheet (PLAN step 5).
+
+## Prompt for the next agent (Phone Plate, after Ari answers) — done 2026-11-17 (signed off v4)
 > Phone Plate v1 is published: https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy. Sources in `design/phone/` (copied base from plate-xi plus `base/phone.js`, the phone frame helper; brief `design/phone/BRIEF.md`). Build: `cd design/phone && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/phone-plate.html`, publish that file to the same URL.
 >
 > **Sections:** 00 questions (director), 01 kitchen (pk), 02 recipe box (pb), 03 notebook (pn), 04 other views (pv), 05 pages without an object (pp). One Sonnet subagent per file for tweaks.

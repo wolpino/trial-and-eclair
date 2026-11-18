@@ -1,0 +1,49 @@
+<section id="br-line" aria-labelledby="br4-h">
+  <span class="label" id="br4-h">04 · Line, colour, halftone, hatching</span>
+  <div class="sec-body">
+    <p class="note">The printed cookbook plate: an ink line over flat colour, hatching for shadow, halftone dots for light. Draw back to front (back wall, contents, front panel).</p>
+    <figure id="br4-fig"></figure>
+    <div class="scroll"><table class="tbl">
+      <tr><th>Rule</th><th>How</th></tr>
+      <tr><td>Ink line</td><td>Always ink (#1F1D1A), round ends and joins. <b>3</b> for an object's outline, <b>2.4</b> for bars and buttons, <b>2.2</b> for faces seen in depth, <b>2</b> for details, <b>1.4</b> for hatching and ruled lines.</td></tr>
+      <tr><td>Colour</td><td>Flat, no gradients. Solid things: the colour sits exactly under the line, never off it. Only loose things (notes, petals, light) may drift 1 to 2 px.</td></tr>
+      <tr><td>Hatching</td><td>Shadows: ink lines at 45 degrees, 6 apart, 1.4 wide. A cast shadow is the shape's hatch, moved 5 right and 6 down, at 80%.</td></tr>
+      <tr><td>Halftone</td><td>Light and pointing: amber dots (r 2.7) on an 8 px grid turned 30 degrees, over pale dandelion at 45%. Sunlight uses pale cream dots on a 9 px grid. Light is off by default.</td></tr>
+      <tr><td>Pointing</td><td>Glow + label: the halftone glow spills about 45 px round the object and its label turns dandelion. Pressing drops it 2 px, like a button. Keyboard focus adds a dashed ink ring. No hover-only labels; every label is always there.</td></tr>
+      <tr><td>Depth</td><td>One-point perspective. Every edge going back runs to one vanishing point, x 900, y 230 in the kitchen's drawing (see section 06).</td></tr>
+      <tr><td>Paper</td><td>The page is printed paper: no plate border in the app; printer's marks are for the plates.</td></tr>
+    </table></div>
+  </div>
+</section>
+<script>
+(function () {
+  PLATE.add(function () {
+    var s = "", y = 40, cap = function (x, yy, t) { return T(x, yy, t, "font:600 15px var(--font-body);fill:var(--ink-soft)"); }, head = function (x, t) { return T(x, 30, t, "font:400 20px var(--font-display);fill:var(--ink)"); };
+    /* 1 line widths */
+    s += head(20, "Line widths");
+    [3, 2.4, 2.2, 2, 1.4].forEach(function (w, i) { s += line("M20 " + (66 + i * 30) + " H170", w) + T(184, 71 + i * 30, String(w), "font:15px var(--font-body);fill:var(--ink)"); });
+    /* 2 colour under the line */
+    s += head(250, "Colour under the line");
+    s += reg("rect", 'x="250" y="56" width="90" height="70" rx="4"', "var(--blue)", 3) + cap(250, 150, "yes: on the line");
+    s += '<rect x="378" y="62" width="90" height="70" rx="4" style="fill:var(--blue)"/><rect x="370" y="56" width="90" height="70" rx="4" style="fill:none;stroke:var(--ink);stroke-width:3"/>' + cap(370, 150, "no: off the line");
+    s += T(250, 180, "only loose things drift", "font:700 20px var(--font-hand);fill:var(--ink-soft)");
+    /* 3 hatching */
+    s += head(520, "Hatching for shadow");
+    s += '<g transform="translate(5 6)">' + '<rect x="520" y="56" width="110" height="70" rx="6" style="fill:url(#hatch);opacity:.8"/></g>' + reg("rect", 'x="520" y="56" width="110" height="70" rx="6"', "var(--card)", 3) + T(575, 98, "card", "font:700 22px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"');
+    s += hatch(660, 56, 70, 70) + '<rect x="660" y="56" width="70" height="70" style="fill:none;stroke:var(--ink);stroke-width:1.4"/>' + cap(520, 150, "cast shadow: 5 right, 6 down") + cap(660, 168, "the hatch");
+    /* 4 halftone */
+    s += head(780, "Halftone for light");
+    s += '<rect x="780" y="56" width="90" height="90" style="fill:url(#glowdots)"/>' + cap(780, 168, "glow dots");
+    s += '<rect x="890" y="56" width="90" height="90" style="fill:#cfe2ea"/><rect x="890" y="56" width="90" height="90" style="fill:url(#sun)"/>' + cap(890, 168, "sun dots");
+    /* 5 pointing */
+    var box = function (x, on) { var inner = reg("rect", 'x="' + x + '" y="270" width="120" height="70" rx="4"', "var(--blue)", 3) + reg("rect", 'class="lbl" x="' + (x + 22) + '" y="290" width="76" height="28" rx="2"', on ? "var(--yellow)" : "var(--card)", on ? 3 : 1.6) + T(x + 60, 311, "Recipes", "font:700 20px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"'); return inner; };
+    s += T(20, 235, "Pointing: glow + label", "font:400 20px var(--font-display);fill:var(--ink)");
+    s += box(40, false) + cap(40, 372, "resting");
+    var g = hot("Demo", box(260, true), [260, 270, 120, 70]).replace('class="hot"', 'class="hot on"');
+    s += g + cap(260, 372, "pointed at (try it)");
+    s += '<rect x="476" y="262" width="128" height="86" rx="6" style="fill:none;stroke:var(--ink);stroke-width:2;stroke-dasharray:7 5"/>' + box(480, false) + cap(480, 372, "keyboard focus");
+    s += T(640, 235, "Every label, every time", "font:400 20px var(--font-display);fill:var(--ink)") + T(640, 270, "No hover-only labels. Clickable things", "font:15px var(--font-body);fill:var(--ink)") + T(640, 292, "lift like a button; colour never shifts", "font:15px var(--font-body);fill:var(--ink)") + T(640, 314, "off the line on hover.", "font:15px var(--font-body);fill:var(--ink)");
+    document.getElementById("br4-fig").innerHTML = '<svg viewBox="0 0 1000 395" role="group" aria-label="Line, colour, hatching and halftone samples">' + s + "</svg>";
+  });
+})();
+</script>

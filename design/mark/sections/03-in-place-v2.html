@@ -1,0 +1,67 @@
+<section id="mk2-place" aria-labelledby="mk2p-h">
+  <span class="label" id="mk2p-h">03 · In place</span>
+  <div class="sec-body">
+    <p class="note">Three marks in the app: <b>B (ii)</b> blue tape with white letters, padded (the best of the B set); <b>G</b> the plain eclair; <b>I</b> the eclair monogram. Each sits where the tape sat in v1, at the same angle: the middle of the phone top bar, and top left of the wide kitchen.</p>
+    <h3>Phone, top bar of a view</h3>
+    <div class="phones" style="max-width:720px"><div id="mk2p-ph-B"></div><div id="mk2p-ph-G"></div><div id="mk2p-ph-I"></div></div>
+    <h3>Wide kitchen, top left</h3>
+    <div class="trio"><div><h3>B (ii)</h3><figure id="mk2p-w-B"></figure></div><div><h3>G</h3><figure id="mk2p-w-G"></figure></div><div><h3>I</h3><figure id="mk2p-w-I"></figure></div></div>
+    <h3>App icon and browser tab</h3>
+    <p class="note">A square cannot hold a wide eclair, so the eclair in the icon and tab (G) is turned 35 degrees to fill the square. It is an icon-only tilt.</p>
+    <figure id="mk2p-icons"></figure>
+    <h3 id="mk2-title">Next to the title</h3>
+    <p class="note">"Trial &amp; Eclair" as on sign in and the front page, with the eclair beside it, and again with the eclair above it.</p>
+    <div class="pair"><figure id="mk2p-t1"></figure><figure id="mk2p-t2"></figure></div>
+  </div>
+</section>
+<script>
+(function () {
+  var PRUSS = "#24406E", COBALT = "#2F4E9A", PAPER = "#EEF0DF";
+  var OPT = { B: { pad: true, tape: COBALT, ink: "#FFFFFF" }, G: {}, I: {} };
+  function wide(k) {
+    var V = mainVP(), m = MK2.at(k, OPT[k], V[0] + 26, 16, k === "I" ? 46 : (k === "G" ? 54 : 46));
+    return svg([V[0], V[0] + 500], scene(V, opts()) + m.s, "Top left of the wide kitchen with mark " + k, 0, 150);
+  }
+  function phoneView(k) {
+    var h = 34, m = MK2.at(k, OPT[k], 0, 0, h), x = 195 - m.w / 2, body = "";
+    for (var i = 0; i < 6; i++) body += line("M32 " + (170 + i * 52) + " H358", 1.4, 0.35);
+    return phone(phTop("Cookbooks") + MK2.at(k, OPT[k], x, 56, h).s + body, "Phone view with mark " + k);
+  }
+  function icons() {
+    var s = "", W = 900, H = 340;
+    /* mark fitted inside a square: B by width, G tilted to fill, I by height */
+    var fit = { B: [{}, 0.44], G: [{ ang: -35 }, 0.8], I: [{}, 0.62] };
+    var sq = function (k, x, y, size, bg, o) {
+      var f = fit[k], oo = Object.assign({}, OPT[k], f[0], o), mh = size * f[1], m = MK2.at(k, oo, 0, 0, mh), cx = x + size / 2, cy = y + size / 2;
+      return reg("rect", 'x="' + x + '" y="' + y + '" width="' + size + '" height="' + size + '" rx="' + (size * 0.225) + '"', bg, 2.4) + MK2.at(k, oo, cx - m.w / 2, cy - mh / 2, mh).s;
+    };
+    s += T(20, 34, "Phone home screen icon (rounded square)", "font:700 22px var(--font-hand);fill:var(--ink)");
+    s += sq("B", 30, 50, 130, "var(--paper)") + sq("G", 190, 50, 130, "var(--paper)") + sq("G", 350, 50, 130, PRUSS, { dark: true }) + sq("I", 510, 50, 130, "var(--paper)") + sq("I", 670, 50, 130, PRUSS, { dark: true });
+    s += T(30, 205, "home screen, 60 px", "font:15px var(--font-body);fill:var(--ink-soft)");
+    s += sq("B", 30, 215, 60, "var(--paper)", { sm: true }) + sq("G", 110, 215, 60, "var(--paper)", { sm: true }) + sq("I", 190, 215, 60, "var(--paper)", { sm: true });
+    var tab = function (k, x) {
+      var oo = Object.assign({ sm: true }, OPT[k], k === "G" ? { ang: -35 } : {}), m = MK2.at(k, oo, 0, 0, 16);
+      return reg("path", 'd="M' + x + " 320 V288 Q" + x + " 272 " + (x + 14) + " 272 H" + (x + 226) + " Q" + (x + 240) + " 272 " + (x + 240) + " 288 V320 Z\"", "var(--card)", 2) + MK2.at(k, oo, x + 14, 287, 16).s +
+        T(x + 14 + m.w + 8, 301, "Trial &amp; Eclair", "font:15px var(--font-body);fill:var(--ink)");
+    };
+    s += T(360, 250, "Browser tab (16 px)", "font:700 22px var(--font-hand);fill:var(--ink)");
+    s += line("M330 320 H890", 2) + tab("B", 340) + tab("G", 580);
+    return '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="App icon and browser tab with marks B, G and I">' + s + "</svg>";
+  }
+  function title(stack) {
+    var s, W = 760, H = stack ? 230 : 150, mk = MK2.at("G", {}, 0, 0, 80);
+    if (!stack) s = MK2.at("G", {}, 24, 30, 84).s + T(24 + 84 * 240 / 112 + 16, 96, "Trial &amp; Eclair", "font:400 52px 'Young Serif',Georgia,serif;fill:var(--ink)");
+    else s = MK2.at("G", {}, W / 2 - 84 * 240 / 112 / 2, 14, 84).s + T(W / 2, 170, "Trial &amp; Eclair", "font:400 52px 'Young Serif',Georgia,serif;fill:var(--ink)", 'text-anchor="middle"') + T(W / 2, 208, "recipes, tested and tasted", "font:700 24px var(--font-hand);fill:var(--ink-soft)", 'text-anchor="middle"');
+    return '<svg viewBox="0 0 ' + W + " " + H + '" role="img" aria-label="Trial and Eclair title with the eclair mark">' + s + "</svg>";
+  }
+  PLATE.add(function () {
+    ["B", "G", "I"].forEach(function (k) {
+      document.getElementById("mk2p-w-" + k).innerHTML = wide(k);
+      document.getElementById("mk2p-ph-" + k).innerHTML = phoneView(k);
+    });
+    document.getElementById("mk2p-icons").innerHTML = icons();
+    document.getElementById("mk2p-t1").innerHTML = title(false);
+    document.getElementById("mk2p-t2").innerHTML = title(true);
+  });
+})();
+</script>

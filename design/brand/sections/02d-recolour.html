@@ -1,0 +1,53 @@
+<section id="br-recol" aria-labelledby="br2d-h">
+  <span class="label" id="br2d-h">02d · Kitchen colours (v3)</span>
+  <div class="sec-body">
+    <p class="note">The original plan, as Ari chose: cooks change the <b>cabinets, fridge, wall and backsplash</b>. Each offers five swatches chosen to sit with the walnut, the ink line and the blue box, plus a custom colour wheel at the end. The box stays the brand blue. <b>Try it:</b> click the swatches and the kitchen redraws.</p>
+    <div class="recol">
+      <div class="recol-panel" id="br2d-panel"></div>
+      <figure id="br2d-kit"></figure>
+    </div>
+    <p class="note"><b>The custom wheel</b> (the rainbow swatch) opens a colour picker. Two guards keep it from looking off: labels on the chosen colour switch to ink or paper automatically, and shades (door panels, shadows) are mixed from the chosen colour so the drawing still holds together.</p>
+  </div>
+</section>
+<style>
+.recol { display: grid; gap: 18px; grid-template-columns: minmax(0, 300px) minmax(0, 1fr); align-items: start; }
+@media (max-width: 900px) { .recol { grid-template-columns: minmax(0, 1fr); } }
+.recol-panel { border: 1.5px solid var(--ink); background: var(--card); padding: 14px; display: grid; gap: 12px; }
+.recol-panel h4 { margin: 0; font: 400 1.05rem var(--font-display); }
+.recol-row { display: grid; gap: 5px; }
+.recol-row .nm { font: 600 .8rem var(--font-body); }
+.recol-row .sws { display: flex; gap: 6px; flex-wrap: wrap; }
+.recol-row button { width: 34px; height: 34px; border-radius: 50%; border: 1.5px solid var(--ink); cursor: pointer; padding: 0; }
+.recol-row button[aria-pressed="true"] { box-shadow: 0 0 0 3px var(--card), 0 0 0 5px var(--ink); }
+.recol-row button.wheel { background: conic-gradient(#e8742a, #f2c230, #5e8c3a, #2f9a9a, #2f4e9a, #8a4fb0, #c9502f, #e8742a); }
+.recol-row button:focus-visible { outline: 2.5px dashed var(--ink); outline-offset: 3px; }
+</style>
+<script>
+(function () {
+  function mix(h, pct, w) { h = h.replace("#", ""); var t = w ? 255 : 0; return "#" + [0, 2, 4].map(function (i) { var v = Math.round(parseInt(h.substr(i, 2), 16) * pct + t * (1 - pct)); return ("0" + v.toString(16)).slice(-2); }).join(""); }
+  var ROWS = [
+    ["cab", "Cabinets", [["Stem green", "#5E8C3A"], ["Sage", "#8FA876"], ["Buttercup", "#F2DC8C"], ["Cream", "#E9DFC4"], ["Walnut", "#9A6234"]]],
+    ["fridge", "Fridge", [["Cream enamel", "#F6EFD9"], ["Buttercup", "#F2DC8C"], ["Mint", "#CFE3C8"], ["Tomato", "#C9502F"], ["White", "#FBFAF6"]]],
+    ["wall", "Wall", [["Sage white", "#EEF0DF"], ["Cream", "#F6EFDC"], ["Butter", "#F7E9B8"], ["Pale blue", "#DCE6EE"], ["Blush", "#F3DCCF"]]],
+    ["tile", "Backsplash", [["Quiet tile", "#F4F5EA"], ["White", "#FBFAF6"], ["Sage", "#DDE6D2"], ["Butter", "#F7EBC2"], ["Pale blue", "#D6E1EE"]]]
+  ];
+  var WHEEL = { cab: "#B0399A", fridge: "#2F9A9A", wall: "#F0C8E8", tile: "#C8F0D8" };
+  var pick = { cab: "#5E8C3A", fridge: "#F6EFD9", wall: "#EEF0DF", tile: "#F4F5EA" };
+  function draw() {
+    var k = scene(mainVP(), opts()).split("#f6efd9").join(pick.fridge).split("#dad1b4").join(mix(pick.fridge, 0.86, 0)).split("#e9e0c5").join(mix(pick.fridge, 0.94, 0)).split("#f4f5ea").join(pick.tile);
+    var c = pick.cab, v = "--cab:" + c + ";--cab-hi:" + mix(c, 0.82, 1) + ";--cab-deep:" + mix(c, 0.55, 0) + ";--cab-side:" + mix(c, 0.4, 0) + ";--plaster:" + pick.wall + ";";
+    var f = document.getElementById("br2d-kit"); f.setAttribute("style", v); f.innerHTML = svg(mainVP(), k, "Kitchen with the chosen colours");
+    document.querySelectorAll("#br2d-panel button").forEach(function (b) { b.setAttribute("aria-pressed", String(pick[b.dataset.k] === b.dataset.c)); });
+  }
+  PLATE.add(function () {
+    var h = "<h4>Kitchen colours</h4>";
+    ROWS.forEach(function (r) {
+      h += '<div class="recol-row"><span class="nm">' + r[1] + '</span><div class="sws">' + r[2].map(function (s) { return '<button type="button" data-k="' + r[0] + '" data-c="' + s[1] + '" style="background:' + s[1] + '" aria-label="' + r[1] + ": " + s[0] + '" title="' + s[0] + '"></button>'; }).join("") +
+        '<button type="button" class="wheel" data-k="' + r[0] + '" data-c="' + WHEEL[r[0]] + '" aria-label="' + r[1] + ': custom colour" title="Custom (the drawing shows one example)"></button></div></div>';
+    });
+    var p = document.getElementById("br2d-panel"); p.innerHTML = h;
+    p.onclick = function (e) { var b = e.target.closest("button"); if (!b) return; pick[b.dataset.k] = b.dataset.c; draw(); };
+    draw();
+  });
+})();
+</script>

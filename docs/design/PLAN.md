@@ -10,7 +10,7 @@ Written 2026-11-13. This is the one list of everything left before the build. If
 
 ## The path
 ```
-Plate X ✅ → Plate XI ✅ → phone layout → mark → brand sheet → Task issues → build
+Plate X ✅ → Plate XI ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues → build
                                   ⏳ next
 ```
 1. **Plate X**: draw Ari's Plate IX notes and the three missing views. Options are still allowed here.
@@ -167,10 +167,20 @@ Phone Plate v1 (2026-11-17): https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, 
 
 ## 4. Mark
 - Ari (2026-11-13): the mark is "T&E", and it appears in the app (where it sits is decided when drawing the mark). The full name "Trial & Eclair" is a title on sign in and the front page (Ari, 2026-11-14: bigger on the front page)
-- [ ] Pick a mark. Already dropped: the E of eclairs, the recipe-card mark, crops of the eclair, box and notebook
+- [x] Pick a mark. **Ari (2026-11-17): eclair G** (plain eclair at the tape's angle, no letters) is the default mark. Mark Plate v2. Already dropped: the E of eclairs, the recipe-card mark, crops of the eclair, box and notebook
+- Mark Plate v1 (2026-11-17): six T&E options A–F, Claude's pick D (one-stem monogram). https://claude.ai/artifact/5baLfL52D5X1pNYCdNgS6F (sources `design/mark/`)
 
 ## 5. Brand sheet
-- [ ] Colours, fonts, line and halftone rules, the mark, kitchen reference from Plate XI
+Brand Sheet v1 (2026-11-17): https://claude.ai/artifact/L3p52UdPaAsUBAa77J3gmi, sources `design/brand/` (eclair helper in `base/mark.js`)
+- [x] Colours, fonts, line and halftone rules, the mark, kitchen reference from Plate XI (drawn v1; also small pieces and a contrast table)
+- [x] v2 (Ari 11/17 notes): box colour options (cobalt, denim, faded denim, buttercup), which colour leads, what a cook can recolour (wheel vs swatches), six pointing options
+- [x] Ari answered v2 (11/17): the box colour is the brand colour and stays fixed (a blue between cobalt and denim); cooks change cabinets, fridge, wall and backsplash from swatches plus a custom wheel (the original plan); pointing = soft glow + gentle movement, no jump; idea: TRIAL & ECLAIR in capitals round two sides of the box, & on the corner
+- [x] v3 drawn: seven blues (02c), kitchen colour panel (02d), glow + movement G1–G4 with evening E1/E2 (04c), box wordmark W1–W3 and home label options (01b)
+- [x] Ari (11/17, v4): box and brand blue = Blue 3 #3F5F9D (also the app icon ground). Lettered box dropped (Ari meant the name round the edge of the square icon). Everything else on hold: see the Later list
+- [x] Brand sheet done for the build (v4, Ari 11/17: hold the rest, at least while building)
+- Build note: the whiteboard marker and one tack share --blue with the box; give the marker its own fixed colour
+- Build note: animate the glow with fill-opacity, not opacity (Chrome drops the blurred mask while opacity animates)
+- [ ] Ari signs off
 
 ## Before Task issues: things that could disrupt the build
 Raised 2026-11-16. Ari's answers (2026-11-16) are in each line. "Claude's pick" means Ari asked for a recommendation; it stands unless Ari says otherwise.
@@ -200,6 +210,7 @@ Changes the app needs that came out of the plates. Each becomes one Task issue.
 ---
 
 ## Later list
+- **Brand holds (Ari, 2026-11-17):** exact swatch sets and the custom wheel; pointing movement G1–G4 (build uses G1 until then) and evening glow E1/E2; home-screen name and "Trial & Eclair" round the icon's edge; body font. Safe to hold only if the build names every colour (fridge and backsplash included), gives the whiteboard marker its own blue, and writes pointing in one place
 Parked. Not drawn, not built until moved up.
 - Accessibility pass on every view (keyboard, screen readers, contrast, reduced motion). Must happen before the build is called done. Includes the whiteboard's "recipe card" link, which shows only on hover: touch screens and keyboards need another way (tap or focus shows it)
 - Public recipe (`/r`) and cookbook (`/c`) pages: fine for now, revisit

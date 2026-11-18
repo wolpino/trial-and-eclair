@@ -1,0 +1,108 @@
+<section id="mk-opts" aria-labelledby="mk-h">
+  <span class="label" id="mk-h">v1 options</span>
+  <div class="sec-body">
+    <h3>v1 options: six T&amp;E marks (kept as drawn, not trimmed)</h3>
+    <p class="note">Each one is shown big (ink only, then with one colour), then at the app top bar (28 px) on paper and on Prussian, the browser tab icon (32 px and 16 px), and 16 px on Prussian. The small sizes are redrawn bolder, with no hatching, as a real icon would be.</p>
+    <div class="mk-grid" id="mk-cards"></div>
+  </div>
+</section>
+<style>
+.mk-grid{display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr))}
+.mk-card{display:grid;gap:8px;align-content:start;min-width:0;border:1.5px solid var(--ink);background:#fffdf7;padding:14px}
+.mk-card h3{font-size:1.15rem}
+.mk-big{display:flex;gap:10px;flex-wrap:wrap;align-items:center;justify-content:space-around;background:var(--plaster);padding:10px;border:1px solid var(--rule)}
+.mk-big svg,.mk-row svg{display:block;width:auto;max-width:100%}
+.mk-row{display:flex;gap:14px;flex-wrap:wrap;align-items:flex-end}
+.mk-row figcaption,.mk-row .cap{font:600 .72rem var(--font-body);font-variant:small-caps;letter-spacing:.08em;color:var(--ink-soft);margin-top:4px}
+.mk-chip{display:grid;justify-items:start}
+.mk-chip>div{display:flex;align-items:center;padding:8px 12px;border:1px solid var(--rule);min-height:30px}
+.mk-chip.sq>div{padding:6px;border-radius:3px}
+.mk-card p{margin:0;font-size:.93rem}
+.mk-card p b{font-weight:600}
+</style>
+<script>
+(function () {
+  var PAPER = "#EEF0DF", COBALT = "#2F4E9A", PRUSS = "#24406E", TAPE = "#F2C230", PLATEC = "#F5A23A";
+  /* One mark = {vw, vh, g}. o: col (flat colour or null), dark (bare-letter marks flip to paper line), sm (bolder, no hatching) */
+  window.MK = {
+    names: { A: "Letterpress", B: "Marker on tape", C: "Round stamp", D: "One-stem monogram", E: "Brass plate", F: "Index tab" },
+    ownCol: { A: COBALT, B: TAPE, C: COBALT, D: COBALT, E: PLATEC, F: COBALT },
+    make: function (k, o) {
+      o = o || {}; var sm = !!o.sm, m = sm ? 2.4 : 1, S = function (n) { return (n * m).toFixed(2); };
+      var INKC = "#1F1D1A", I = o.dark && (k === "A" || k === "D") ? PAPER : INKC, col = o.col || null, g = "", hp = o.dark && (k === "A" || k === "D") ? "url(#mk-hatchP)" : "url(#hatch)";
+      var st = function (fill, sw, extra) { return "fill:" + fill + ";stroke:" + I + ";stroke-width:" + S(sw) + ";stroke-linejoin:round;stroke-linecap:round;" + (extra || ""); };
+      if (k === "A") {
+        var tx = function (x, y, fill, stroke) { return '<text x="' + x + '" y="' + y + '" text-anchor="middle" style="font:400 100px \'Young Serif\',Georgia,serif;letter-spacing:-2px;fill:' + fill + ";" + (stroke ? "stroke:" + I + ";stroke-width:" + S(2.5) + ";stroke-linejoin:round" : "") + '">T<tspan style="font-size:124px">&amp;</tspan>E</text>'; };
+        if (!sm) g += tx(126, 118, hp, false);
+        g += tx(sm ? 120 : 120, sm ? 116 : 112, col || I, !!col);
+        return { vw: 252, vh: 150, g: '<g transform="translate(6 0)">' + g + "</g>" };
+      }
+      if (k === "B") {
+        var p = "M12 26 L228 26", y; for (y = 26; y < 122; y += 12) p += " L" + (y % 24 === 2 ? 222 : 228) + " " + (y + 6);
+        p = "M12 26 H228"; var z = [[222, 38], [228, 50], [222, 62], [228, 74], [222, 86], [228, 98], [222, 110], [228, 122]]; z.forEach(function (q) { p += " L" + q[0] + " " + q[1]; }); p += " H12"; z.slice().reverse().forEach(function (q) { p += " L" + (240 - q[0]) + " " + q[1]; }); p += " Z";
+        g += '<g transform="rotate(-4 120 75)">' + (sm ? "" : '<path d="' + p + '" transform="translate(5 6)" style="fill:url(#hatch);opacity:.8"/>') +
+          '<path d="' + p + '" style="' + st(col || "var(--card)", 2.6) + '"/>' +
+          '<text x="120" y="104" text-anchor="middle" style="font:700 ' + (sm ? 112 : 96) + 'px Caveat,cursive;fill:#1F1D1A">T&amp;E</text></g>';
+        return { vw: 240, vh: 150, g: g };
+      }
+      if (k === "C") {
+        var dots = ""; if (!sm) for (var i = 0; i < 30; i++) { var a = i / 30 * Math.PI * 2; dots += '<circle cx="' + (120 + 105 * Math.cos(a)).toFixed(1) + '" cy="' + (120 + 105 * Math.sin(a)).toFixed(1) + '" r="2.3" style="fill:#1F1D1A"/>'; }
+        g += (sm ? "" : '<circle cx="127" cy="127" r="110" style="fill:url(#hatch);opacity:.8"/>') + '<circle cx="120" cy="120" r="110" style="' + st(col || "var(--card)", 4) + '"/>' +
+          (sm ? "" : '<circle cx="120" cy="120" r="97" style="' + st("none", 1.6) + '"/>' + dots) +
+          '<text x="120" y="' + (sm ? 148 : 144) + '" text-anchor="middle" style="font:400 ' + (sm ? 92 : 76) + 'px \'Young Serif\',Georgia,serif;letter-spacing:-1px;fill:' + (col ? "var(--card)" : "#1F1D1A") + '">T&amp;E</text>';
+        return { vw: 240, vh: 240, g: g };
+      }
+      if (k === "D") {
+        var d = "M20 20 H200 V52 H122 V90 H180 V118 H122 V148 H200 V180 H90 V52 H20 Z";
+        g += (sm ? "" : '<path d="' + d + '" transform="translate(6 6)" style="fill:' + hp + ';opacity:.85"/>') + '<path d="' + d + '" style="' + st(col || I, 3) + '"/>' +
+          '<text x="55" y="' + (sm ? 172 : 168) + '" text-anchor="middle" style="font:400 ' + (sm ? 84 : 66) + 'px \'Young Serif\',Georgia,serif;fill:' + I + '">&amp;</text>';
+        return { vw: 220, vh: 200, g: g };
+      }
+      if (k === "E") {
+        g += (sm ? "" : '<rect x="12" y="26" width="228" height="110" rx="10" style="fill:url(#hatch);opacity:.8"/>') +
+          '<rect x="6" y="20" width="228" height="110" rx="10" style="' + st(col || "var(--paper)", 3) + '"/>' +
+          (col || sm ? "" : '<rect x="6" y="20" width="228" height="110" rx="10" style="fill:url(#hatch);opacity:.18"/>') +
+          '<rect x="22" y="33" width="196" height="84" rx="4" style="' + st("var(--card)", 1.8) + '"/>' +
+          '<circle cx="14" cy="75" r="' + (sm ? 3.4 : 3.6) + '" style="fill:#1F1D1A"/><circle cx="226" cy="75" r="' + (sm ? 3.4 : 3.6) + '" style="fill:#1F1D1A"/>' +
+          '<text x="120" y="' + (sm ? 107 : 103) + '" text-anchor="middle" style="font:700 ' + (sm ? 92 : 80) + 'px Caveat,cursive;fill:#1F1D1A;stroke:#1F1D1A;stroke-width:.8">T&amp;E</text>';
+        return { vw: 240, vh: 150, g: g };
+      }
+      /* F */
+      var t = "M20 136 V46 Q20 18 48 18 H192 Q220 18 220 46 V136 Z";
+      g += (sm ? "" : '<path d="' + t + '" transform="translate(6 6)" style="fill:url(#hatch);opacity:.8"/>') + '<path d="' + t + '" style="' + st(col || "var(--card)", 3) + '"/>' +
+        (sm ? "" : '<path d="M32 118 H208" style="fill:none;stroke:#1F1D1A;stroke-width:1.2;opacity:.5"/>') +
+        '<text x="122" y="' + (sm ? 108 : 100) + '" text-anchor="middle" style="font:700 ' + (sm ? 104 : 88) + 'px \'Archivo Narrow\',Arial Narrow,sans-serif;letter-spacing:' + (sm ? 2 : 6) + 'px;fill:' + (col ? "var(--card)" : "#1F1D1A") + '">T&amp;E</text>';
+      return { vw: 240, vh: 150, g: g };
+    },
+    /* a standalone svg, h pixels tall */
+    sv: function (k, o, h) { var r = this.make(k, o); return '<svg width="' + (h * r.vw / r.vh).toFixed(1) + '" height="' + h + '" viewBox="0 0 ' + r.vw + " " + r.vh + '" role="img" aria-label="T&amp;E mark ' + k + '">' + r.g + "</svg>"; },
+    /* nested inside another drawing: top-left x,y, h tall; returns {s, w} */
+    at: function (k, o, x, y, h) { var r = this.make(k, o), w = h * r.vw / r.vh; return { w: w, s: '<svg x="' + x + '" y="' + y + '" width="' + w.toFixed(1) + '" height="' + h + '" viewBox="0 0 ' + r.vw + " " + r.vh + '" overflow="visible">' + r.g + "</svg>" }; }
+  };
+  document.body.insertAdjacentHTML("afterbegin", '<svg width="0" height="0" style="position:absolute" aria-hidden="true" focusable="false"><defs><pattern id="mk-hatchP" width="6" height="6" patternUnits="userSpaceOnUse" patternTransform="rotate(45)"><line x1="0" y1="0" x2="0" y2="6" style="stroke:#EEF0DF;stroke-width:1.4"/></pattern></defs></svg>');
+
+  var NOTES = {
+    A: ["Young Serif letters, the ampersand a little bigger, a hatched shadow behind.", "The thin parts of the serifs and the shadow go to mush; at 16 px it is a grey smudge you can barely read."],
+    B: ["Marker hand on a strip of tape, like the shelf labels.", "The tape colour carries it. The letters stay bold and readable at 16 px, though the zigzag ends disappear."],
+    C: ["A round stamp: T&E in a ring. No words around the ring.", "The ring eats a third of the space, so the letters shrink. At 16 px they are specks in a circle."],
+    D: ["T and E share one stem. A small & is tucked under the T's bar.", "One solid shape, so it keeps its outline at 16 px. The & turns into a dot there, which is fine."],
+    E: ["A brass label plate, like the one on the recipe box, with T&E stamped in.", "The plate frame and screws blur out. At 16 px it is a yellow box with scribble in it."],
+    F: ["An index card tab (just the tab) with T&E in tall narrow capitals.", "The tab shape holds. The letters are narrow and tight, so they only just read at 16 px."]
+  };
+  PLATE.add(function () {
+    var h = "", ks = ["A", "B", "C", "D", "E", "F"];
+    ks.forEach(function (k) {
+      var c = MK.ownCol[k], bar = function (o, bg) { return '<div class="mk-chip"><div style="background:' + bg + '">' + MK.sv(k, o, 28) + "</div></div>"; };
+      h += '<div class="mk-card" id="mk-' + k + '"><h3>' + k + " · " + MK.names[k] + '</h3><div class="mk-big">' + MK.sv(k, {}, 240) + MK.sv(k, { col: c }, 240) + "</div>" +
+        '<div class="mk-row">' +
+        '<div class="mk-chip"><div style="background:var(--paper)">' + MK.sv(k, { col: c, sm: false }, 28) + '</div><span class="cap">top bar 28, paper</span></div>' +
+        '<div class="mk-chip"><div style="background:' + PRUSS + '">' + MK.sv(k, { dark: true, col: (k === "A" || k === "D" || k === "C" || k === "F") ? null : c }, 28) + '</div><span class="cap">top bar 28, Prussian</span></div>' +
+        '<div class="mk-chip sq"><div style="background:var(--paper)">' + MK.sv(k, { col: c, sm: true }, 32) + '</div><span class="cap">tab 32</span></div>' +
+        '<div class="mk-chip sq"><div style="background:var(--paper)">' + MK.sv(k, { col: c, sm: true }, 16) + '</div><span class="cap">tab 16</span></div>' +
+        '<div class="mk-chip sq"><div style="background:' + PRUSS + '">' + MK.sv(k, { dark: true, sm: true, col: (k === "A" || k === "D" || k === "C" || k === "F") ? null : c }, 16) + '</div><span class="cap">16, Prussian</span></div></div>' +
+        "<p><b>What it is.</b> " + NOTES[k][0] + "</p><p><b>At 16 px.</b> " + NOTES[k][1] + "</p></div>";
+    });
+    document.getElementById("mk-cards").innerHTML = h;
+  });
+})();
+</script>
