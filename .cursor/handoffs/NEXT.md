@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Brand Sheet v1 published; waiting on Ari)
+# NEXT — 2026-11-17 (Brand Sheet v2 published; waiting on Ari)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -15,7 +15,9 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 >
 > **Questions to Ari (page top):** (1) "T&E" only as the home screen label? Claude's pick yes. (2) App icon ground: Prussian (pick) or paper; tab stays paper. (3) Body font: keep Iowan/Palatino/Georgia stack (pick) or load a web font.
 >
-> **Next:** apply answers, get sign-off, record in PLAN step 5, then Task issues (PLAN step 6).
+> **v2 (Ari 11/17):** asked what the valance was (the Prussian scalloped band over the window, 11/08 Kitchen Plate, gone since Plate IX), whether cobalt is too dark (denim? buttercup, her first Cuisinart stand mixer), whether green should lead, doubts about the colour wheel, wants other pointing options than the amber dots. Drawn: 02b colour options (A box colour, B lead colour as icons, C1 cabinets swatches, C2 box swatches, C3 what a wheel lets through) and 04b pointing P1–P6. Questions 1–6 at the page top. Claude's picks: denim box; lead colour = box colour; drop the wheel, box-only swatches; P5 lift + faint P2 halo; T&E home label only; keep body font.
+>
+> **Next:** apply answers, get sign-off, record in PLAN step 5 and visual-direction memory (colour picks change), then Task issues (PLAN step 6).
 
 ## Prompt for the next agent (Mark Plate, after Ari answers) — done 2026-11-17 (eclair G picked)
 > Mark Plate v1: https://claude.ai/artifact/5baLfL52D5X1pNYCdNgS6F. Sources `design/mark/` (base copied from phone; sections 00 questions, 01 options A–F, 02 in place). Build: `cd design/mark && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/mark-plate.html`, publish to the same URL. One Sonnet subagent per section for tweaks.

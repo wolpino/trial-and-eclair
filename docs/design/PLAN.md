@@ -173,7 +173,9 @@ Phone Plate v1 (2026-11-17): https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, 
 ## 5. Brand sheet
 Brand Sheet v1 (2026-11-17): https://claude.ai/artifact/L3p52UdPaAsUBAa77J3gmi, sources `design/brand/` (eclair helper in `base/mark.js`)
 - [x] Colours, fonts, line and halftone rules, the mark, kitchen reference from Plate XI (drawn v1; also small pieces and a contrast table)
-- [ ] Ari answers: T&E under the home screen icon only? App icon ground Prussian or paper? Keep the Apple-first body font?
+- [x] v2 (Ari 11/17 notes): box colour options (cobalt, denim, faded denim, buttercup), which colour leads, what a cook can recolour (wheel vs swatches), six pointing options
+- [ ] Ari answers v2: box colour, lead colour, recolour scope, pointing, T&E home-screen label, body font
+- Build note: the whiteboard marker and one tack share --blue with the box; give the marker its own fixed colour
 - [ ] Ari signs off
 
 ## Before Task issues: things that could disrupt the build

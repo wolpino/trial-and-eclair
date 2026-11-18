@@ -1,0 +1,52 @@
+<section id="br-copt" aria-labelledby="br2b-h">
+  <span class="label" id="br2b-h">02b · Colour options (v2)</span>
+  <div class="sec-body">
+    <p class="note">From Ari's 11/17 notes: is cobalt too dark, could the box be denim or buttercup (Ari's first stand mixer was Cuisinart's buttercup yellow), should green lead because the cabinets are the biggest area, and is a colour wheel a good idea. Each option is the real kitchen with only that colour changed. The buttercup here is a soft butter yellow matched by eye; it is not Cuisinart's own colour value.</p>
+
+    <h3 id="br-box">A · The recipe box colour</h3>
+    <div class="six" id="br2b-box"></div>
+    <p class="note"><b>Buttercup vs dandelion.</b> Buttercup is the paler, softer yellow; dandelion (labels when pointed at, the main button, tags) is the bright one. A buttercup box would sit next to dandelion labels and the yellow note on the cork, so the box would read as one more yellow thing, not the centre.</p>
+
+    <h3 id="br-lead">B · Which colour leads (app icon, and the brand's one colour)</h3>
+    <p class="note">Prussian was never in the box. It was the valance (the scalloped band over the window in the 11/08 Kitchen Plate), and the Mark Plate kept it only as a dark ground. Nothing ties it to the kitchen now. The lead colour could instead come from the kitchen itself: the box (the heart of the app) or the cabinets (the biggest area).</p>
+    <div class="mk-row" id="br2b-lead"></div>
+
+    <h3 id="br-pick">C · What a cook can recolour</h3>
+    <p class="note">A colour wheel lets any colour in, and most of them fight the ink line, the walnut and the green. Fixed swatches can each be checked against the rest of the kitchen first. Below: one swatch set for the cabinets, one for the box, and what a wheel lets through.</p>
+    <div class="pair">
+      <div><h3>C1 · Cabinets only, five swatches</h3><div class="six" id="br2b-cab"></div></div>
+      <div><h3>C2 · Box only, five swatches ("your stand mixer colour")</h3><div class="six" id="br2b-boxsw"></div></div>
+    </div>
+    <div><h3>C3 · A colour wheel lets these through</h3><div class="six" id="br2b-wheel"></div></div>
+    <p class="note"><b>Found while drawing:</b> the whiteboard's "Next up" marker and one tack share the box's colour, so a lime box makes lime marker writing. In the build the marker gets its own fixed blue.</p>
+  </div>
+</section>
+<style>
+.optfig figure { position: relative; }
+.optfig .cap { display: block; margin-top: 2px; }
+.optfig h3 { font-size: .98rem; }
+</style>
+<script>
+(function () {
+  function mix(h, pct, w) { h = h.replace("#", ""); var t = w ? 255 : 0; return "#" + [0, 2, 4].map(function (i) { var v = Math.round(parseInt(h.substr(i, 2), 16) * pct + t * (1 - pct)); return ("0" + v.toString(16)).slice(-2); }).join(""); }
+  function boxVars(c) { return "--blue:" + c + ";--blue-hi:" + mix(c, 0.78, 1) + ";--blue-back:" + mix(c, 0.72, 0) + ";"; }
+  function cabVars(c) { return "--cab:" + c + ";--cab-hi:" + mix(c, 0.82, 1) + ";--cab-deep:" + mix(c, 0.55, 0) + ";--cab-side:" + mix(c, 0.4, 0) + ";"; }
+  function crop(vars, x0, x1, y0, h, label) { return '<figure style="' + vars + '">' + svg([x0, x1], scene(mainVP(), opts()), label, y0, h) + "</figure>"; }
+  function card(t, cap, fig, id) { return '<div class="optfig"' + (id ? ' id="' + id + '"' : "") + "><h3>" + t + "</h3>" + fig + '<span class="cap">' + cap + "</span></div>"; }
+  var BOX = [["A1 · Cobalt (now)", "#2F4E9A", "Deep; the darkest thing on the counter after the notebook."], ["A2 · Denim", "#4F6F9F", "A washed mid blue. Still stands out from the sage wall."], ["A3 · Faded denim", "#7393BC", "Softer and friendlier; the box reads lighter than the cabinets."], ["A4 · Buttercup", "#F2DC8C", "Warm and soft. Close to the wall in value, so the box stands out less."]];
+  var CAB = [["Stem green (now)", "#5E8C3A"], ["Sage", "#8FA876"], ["Denim", "#4F6F9F"], ["Buttercup", "#F2DC8C"], ["Cream", "#E9DFC4"]];
+  var BOXSW = [["Cobalt", "#2F4E9A"], ["Denim", "#4F6F9F"], ["Buttercup", "#F2DC8C"], ["Tomato", "#C9502F"], ["Cream", "#E9DFC4"]];
+  var WHEEL = [["Magenta cabinets", cabVars("#B0399A")], ["Lime box", boxVars("#9BE32C")], ["Teal cabinets, purple box", cabVars("#1E9C9A") + boxVars("#7A3FC2")]];
+  function icon(bg, dark, cap) {
+    var m = MK2.make("G", { ang: -35, dark: dark });
+    return '<div class="mk-chip"><div style="background:var(--card)"><svg width="120" height="120" viewBox="0 0 240 240" role="img" aria-label="Icon on ' + cap + '"><rect x="2" y="2" width="236" height="236" rx="54" style="fill:' + bg + ';stroke:#1F1D1A;stroke-width:3"/><g transform="translate(120 120) scale(.82) translate(-120 -120)">' + m.g + '</g></svg></div><span class="cap">' + cap + "</span></div>";
+  }
+  PLATE.add(function () {
+    document.getElementById("br2b-box").innerHTML = BOX.map(function (b, i) { return card(b[0], b[2], crop(boxVars(b[1]), 640, 1230, 240, 330, b[0]), "br-box-" + (i + 1)); }).join("");
+    document.getElementById("br2b-lead").innerHTML = icon("#24406E", true, "B1 · Prussian (v1)") + icon("#2F4E9A", true, "B2 · Cobalt, the box") + icon("#4F6F9F", true, "B3 · Denim, the box") + icon("#5E8C3A", true, "B4 · Stem green, the cabinets") + icon("#EEF0DF", false, "B5 · Sage white, the wall");
+    document.getElementById("br2b-cab").innerHTML = CAB.map(function (c) { return card(c[0], c[1], crop(cabVars(c[1]), 300, 1500, 0, 760, c[0] + " cabinets")); }).join("");
+    document.getElementById("br2b-boxsw").innerHTML = BOXSW.map(function (c) { return card(c[0], c[1], crop(boxVars(c[1]), 640, 1230, 240, 330, c[0] + " box")); }).join("");
+    document.getElementById("br2b-wheel").innerHTML = WHEEL.map(function (c) { return card(c[0], "possible with a wheel", crop(c[1], 300, 1500, 0, 760, c[0])); }).join("");
+  });
+})();
+</script>
