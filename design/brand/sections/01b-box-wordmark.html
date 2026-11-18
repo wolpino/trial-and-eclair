@@ -1,9 +1,7 @@
 <section id="br-wm" aria-labelledby="br1b-h">
-  <span class="label" id="br1b-h">01b · TRIAL &amp; ECLAIR on the box (v3)</span>
+  <span class="label" id="br1b-h">01b · The name and the icon (on hold)</span>
   <div class="sec-body">
-    <p class="note">Ari's idea: the name in capitals round two sides of the recipe box, TRIAL on one side, ECLAIR on the other, and the ampersand on the corner between them. The box is turned corner-on here so both sides show. It is a drawing for big places (sign in, the front page, the loading screen), next to or instead of the plain title. It does not hold at icon size, so the eclair stays the icon.</p>
-    <div class="trio" id="br1b-opts"></div>
-    <div class="mk-row" id="br1b-small"></div>
+    <p class="note">Ari meant the name running round the edge of the square app icon, not lettering on a box (the box drawings from v3 are dropped). On hold: at home-screen size (about 60 px) the letters would be too small to read, so it is for larger places if it comes back.</p>
     <h3 id="br-label">The name under the home screen icon</h3>
     <p class="note">This label is plain text the phone draws, not artwork, so it can't be the box. Phones cut it off after roughly 12 letters (it depends on the phone and text size). "T&amp;E" would only appear here. The three choices, as a phone shows them:</p>
     <div class="home" id="br1b-home"></div>
@@ -45,11 +43,6 @@
   ];
   PLATE.add(function () {
     var blue = (window.BLUES && BLUES[3][1]) || "#3F5F9D";
-    document.getElementById("br1b-opts").innerHTML = O.map(function (o) {
-      var x = Object.assign({ blue: blue }, o[2]);
-      return '<div id="' + o[0] + '"><h3>' + o[1] + '</h3><figure style="background:var(--plaster);padding:10px">' + box(x) + '</figure><span class="cap">' + o[3] + "</span></div>";
-    }).join("");
-    document.getElementById("br1b-small").innerHTML = [96, 48, 28].map(function (h) { return '<div class="mk-chip"><div style="background:var(--plaster);height:' + (h + 12) + 'px">' + box({ blue: blue, badge: true }).replace('width="100%"', 'height="' + h + '"') + '</div><span class="cap">' + h + " px tall" + (h < 50 ? ", too small to read" : "") + "</span></div>"; }).join("");
     var ic = function () { var m = MK2.make("G", { ang: -35, dark: true }); return '<svg width="60" height="60" viewBox="0 0 240 240" aria-hidden="true"><rect x="2" y="2" width="236" height="236" rx="54" style="fill:' + blue + ';stroke:#1F1D1A;stroke-width:4"/><g transform="translate(120 120) scale(.82) translate(-120 -120)">' + m.g + "</g></svg>"; };
     document.getElementById("br1b-home").innerHTML = [["T&amp;E", "short"], ["Trial &amp; Eclair", "full name, may be cut off"], ["Trial&amp;Eclair", "no spaces, 12 letters"]].map(function (l) { return "<div>" + ic() + "<span>" + l[0] + "</span><em>" + l[1] + "</em></div>"; }).join("");
   });

@@ -35,6 +35,7 @@ Draw the brand sheet (PLAN step 5) from Plate XI and eclair G.
 - Ari: the three questions at the page top, then sign-off
 - v2 same URL from Ari's notes: colour options (box cobalt/denim/faded denim/buttercup, lead colour, recolour scope incl. wheel risk) and pointing options P1–P6; six questions at the top
 - Found: whiteboard marker and a tack use --blue (box colour); marker needs its own colour in the build
+- v4: Blue 3 #3F5F9D picked (box, brand, icon); lettered box dropped; rest put on hold (PLAN Later list) with build rules
 - v3 same URL: Ari fixed box colour = brand colour, recolour = cabinets/fridge/wall/backsplash + wheel, soft glow + movement. Drawn seven blues, colour panel, G1–G4 day/evening, TRIAL & ECLAIR box W1–W3
 - Branch `docs/plate-x-cookbooks` still unpushed; `design/kitchen-starter/` and `design/plate-xi/shots/` untracked, left alone
 
@@ -42,7 +43,7 @@ Draw the brand sheet (PLAN step 5) from Plate XI and eclair G.
 **Keywords:** Brand Sheet, tokens, contrast, eclair G, app icon, fonts
 **Files:** design/brand/ (base/mark.js, sections 00–06), docs/design/PLAN.md, .cursor/handoffs/NEXT.md
 **Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet sections as drawn (tweak only)
-**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; apply Ari's answers, sign-off, then Task issues
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; brand sheet done (v4, holds on Later list); next Task issues
 <!-- AGENT_CONTEXT_END -->
 
 ---

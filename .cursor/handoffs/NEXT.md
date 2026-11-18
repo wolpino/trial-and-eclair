@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Brand Sheet v3 published; waiting on Ari)
+# NEXT — 2026-11-17 (Brand Sheet v4: Blue 3 picked, rest on hold; next Task issues)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -7,7 +7,7 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 
 ## Map
 ```
-style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ⏳ → Task issues → build
+style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
 ## Prompt for the next agent (Brand Sheet, after Ari answers) — START HERE
@@ -19,7 +19,9 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 >
 > **v3 (Ari 11/17 answers):** box colour = brand colour, fixed, somewhere cobalt→denim; cooks recolour cabinets, fridge, wall, backsplash (swatches + custom wheel); soft glow + gentle movement; asked about TRIAL & ECLAIR round two sides of the box with & on the corner. Drawn: 02c seven blues, 02d interactive colour panel (fridge and tile swapped by string replace of #f6efd9/#f4f5ea), 04c G1–G4 loops day+evening and E1/E2, 01b W1–W3 + home label. Claude's picks: Blue 3 #3F5F9D; G1 + E2; W3 on sign in/front/loading; home label "Trial & Eclair".
 >
-> **Next:** apply answers, sign-off, record in PLAN step 5 and the visual-direction memory, then Task issues (PLAN step 6).
+> **v4 (Ari 11/17):** Blue 3 #3F5F9D is the box and brand colour (sheet and icon updated, --blue in base/style.css). Lettered box dropped; Ari meant "Trial & Eclair" round the edge of the square icon (on hold). Ari wants as much as possible on hold while building: holds are in PLAN.md "Later list" with the three build rules that keep them safe.
+>
+> **Next:** Task issues (PLAN step 6), starting with the test piece (kitchen + one open view, Ari reviews before commit). Carry the three build rules into the relevant issues.
 
 ## Prompt for the next agent (Mark Plate, after Ari answers) — done 2026-11-17 (eclair G picked)
 > Mark Plate v1: https://claude.ai/artifact/5baLfL52D5X1pNYCdNgS6F. Sources `design/mark/` (base copied from phone; sections 00 questions, 01 options A–F, 02 in place). Build: `cd design/mark && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/mark-plate.html`, publish to the same URL. One Sonnet subagent per section for tweaks.

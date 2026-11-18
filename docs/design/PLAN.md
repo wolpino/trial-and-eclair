@@ -10,7 +10,7 @@ Written 2026-11-13. This is the one list of everything left before the build. If
 
 ## The path
 ```
-Plate X ✅ → Plate XI ✅ → phone layout → mark → brand sheet → Task issues → build
+Plate X ✅ → Plate XI ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues → build
                                   ⏳ next
 ```
 1. **Plate X**: draw Ari's Plate IX notes and the three missing views. Options are still allowed here.
@@ -176,7 +176,8 @@ Brand Sheet v1 (2026-11-17): https://claude.ai/artifact/L3p52UdPaAsUBAa77J3gmi, 
 - [x] v2 (Ari 11/17 notes): box colour options (cobalt, denim, faded denim, buttercup), which colour leads, what a cook can recolour (wheel vs swatches), six pointing options
 - [x] Ari answered v2 (11/17): the box colour is the brand colour and stays fixed (a blue between cobalt and denim); cooks change cabinets, fridge, wall and backsplash from swatches plus a custom wheel (the original plan); pointing = soft glow + gentle movement, no jump; idea: TRIAL & ECLAIR in capitals round two sides of the box, & on the corner
 - [x] v3 drawn: seven blues (02c), kitchen colour panel (02d), glow + movement G1–G4 with evening E1/E2 (04c), box wordmark W1–W3 and home label options (01b)
-- [ ] Ari answers v3: which blue, swatch sets, G1–G4 and E1/E2, W1–W3 and where, home label, body font
+- [x] Ari (11/17, v4): box and brand blue = Blue 3 #3F5F9D (also the app icon ground). Lettered box dropped (Ari meant the name round the edge of the square icon). Everything else on hold: see the Later list
+- [x] Brand sheet done for the build (v4, Ari 11/17: hold the rest, at least while building)
 - Build note: the whiteboard marker and one tack share --blue with the box; give the marker its own fixed colour
 - Build note: animate the glow with fill-opacity, not opacity (Chrome drops the blurred mask while opacity animates)
 - [ ] Ari signs off
@@ -209,6 +210,7 @@ Changes the app needs that came out of the plates. Each becomes one Task issue.
 ---
 
 ## Later list
+- **Brand holds (Ari, 2026-11-17):** exact swatch sets and the custom wheel; pointing movement G1–G4 (build uses G1 until then) and evening glow E1/E2; home-screen name and "Trial & Eclair" round the icon's edge; body font. Safe to hold only if the build names every colour (fridge and backsplash included), gives the whiteboard marker its own blue, and writes pointing in one place
 Parked. Not drawn, not built until moved up.
 - Accessibility pass on every view (keyboard, screen readers, contrast, reduced motion). Must happen before the build is called done. Includes the whiteboard's "recipe card" link, which shows only on hover: touch screens and keyboards need another way (tap or focus shows it)
 - Public recipe (`/r`) and cookbook (`/c`) pages: fine for now, revisit

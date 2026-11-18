@@ -4,7 +4,7 @@
   --paper: #fbf4e4; --card: #fffbf2; --ink: #1f1d1a; --ink-soft: #5a5348;
   --orange: #e8742a; --orange-text: #a8460c; --amber: #f5a23a; --yellow: #f2c230; --stem: #5e8c3a;
   --cinnamon: #8a4f2a; --cork: #d9a868; --brass: #d4a94f; --rule: #e2d2b4; --custard: #f7e3a6;
-  --blue: #2f4e9a; --wood: #9a6234; --plaster: #eef0df; --cab: #5e8c3a; --page: #fdfdfb; --wb: #fdfcf6;
+  --blue: #3f5f9d; --wood: #9a6234; --plaster: #eef0df; --cab: #5e8c3a; --page: #fdfdfb; --wb: #fdfcf6;
   --cab-hi: color-mix(in srgb, var(--cab) 82%, #fff);
   --cab-deep: color-mix(in srgb, var(--cab) 55%, #000);
   --cab-side: color-mix(in srgb, var(--cab) 40%, #000);
@@ -105,7 +105,7 @@ ol.qs li::marker { font-weight: 600; }
 /* ===== Brand sheet ===== */
 .qs .pick { font-weight: 600; color: var(--orange-text); }
 .mk-big { display: flex; gap: 18px; flex-wrap: wrap; align-items: center; justify-content: space-around; background: var(--plaster); padding: 18px; border: 1px solid var(--rule); }
-.mk-big.dk { background: #24406E; }
+.mk-big.dk { background: #3F5F9D; }
 .mk-big > div { display: grid; justify-items: center; gap: 6px; }
 .cap { font: 600 .72rem var(--font-body); font-variant: small-caps; letter-spacing: .08em; color: var(--ink-soft); }
 .mk-big.dk .cap { color: #EEF0DF; }
