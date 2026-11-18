@@ -37,7 +37,7 @@ Draw the brand sheet (PLAN step 5) from Plate XI and eclair G.
 - Found: whiteboard marker and a tack use --blue (box colour); marker needs its own colour in the build
 - v4: Blue 3 #3F5F9D picked (box, brand, icon); lettered box dropped; rest put on hold (PLAN Later list) with build rules
 - v3 same URL: Ari fixed box colour = brand colour, recolour = cabinets/fridge/wall/backsplash + wheel, soft glow + movement. Drawn seven blues, colour panel, G1–G4 day/evening, TRIAL & ECLAIR box W1–W3
-- Branch `docs/plate-x-cookbooks` still unpushed; `design/kitchen-starter/` and `design/plate-xi/shots/` untracked, left alone
+- Branch `docs/plate-x-cookbooks` pushed 2026-11-17 with everything committed, including `design/kitchen-starter/` and `design/plate-xi/shots/` (Ari: commit and push all)
 
 <!-- AGENT_CONTEXT_START -->
 **Keywords:** Brand Sheet, tokens, contrast, eclair G, app icon, fonts

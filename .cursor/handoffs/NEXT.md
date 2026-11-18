@@ -21,6 +21,8 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 >
 > **v4 (Ari 11/17):** Blue 3 #3F5F9D is the box and brand colour (sheet and icon updated, --blue in base/style.css). Lettered box dropped; Ari meant "Trial & Eclair" round the edge of the square icon (on hold). Ari wants as much as possible on hold while building: holds are in PLAN.md "Later list" with the three build rules that keep them safe.
 >
+> **Branch:** `docs/plate-x-cookbooks` is pushed and clean (2026-11-17). Open a PR into `staging-render` when Ari asks.
+>
 > **Next:** Task issues (PLAN step 6), starting with the test piece (kitchen + one open view, Ari reviews before commit). Carry the three build rules into the relevant issues.
 
 ## Prompt for the next agent (Mark Plate, after Ari answers) — done 2026-11-17 (eclair G picked)
