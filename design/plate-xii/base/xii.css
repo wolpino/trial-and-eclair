@@ -11,3 +11,12 @@
 .recol .dot { width: 14px; height: 14px; border: 1.3px solid var(--ink); display: inline-block; }
 .v2a { --cab: #6f93b3; --wall: #f6efdc; }
 .v2b { --cab: #9bb6ca; --wall: #f6efdc; }
+/* v3: the traced kitchen */
+.tk { --cab: #6D8C97; --wall: #F6E9CB; position: relative; border: 1.5px solid var(--ink); background: var(--wall); }
+.tk svg { display: block; width: 100%; height: auto; }
+.tk .tk-hit { position: absolute; inset: 0; height: 100%; }
+.tk-hit rect { fill: transparent; stroke: transparent; stroke-width: 1.6; stroke-dasharray: 6 4; }
+.tk-hit [role="button"] { cursor: pointer; outline: none; }
+.tk-hit [role="button"]:focus-visible rect { stroke: var(--ink); }
+.tk-art g.lit { filter: drop-shadow(0 0 2px #f2c230) drop-shadow(0 0 7px #f5a23a); }
+.tk-say { font-size: .9rem; color: var(--ink-soft); min-height: 1.6em; }

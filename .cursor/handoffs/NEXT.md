@@ -19,6 +19,8 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 >
 > **v2 (11/19):** Ari liked neither v1 and sent Kittl "recipe board one point options" (A balanced, B wide suite). Redrawn in true one-point perspective in `kitchen-xii2.js` (`XII2.A()`/`XII2.B()`; S(x,y,d) puts a room point on screen, L(d,…) draws a flat group at depth d; eye at 900,330). More detail: panelled doors, brass pulls, book spines, food photos, full Buttercup, checked floor through the kneehole. Questions: A/B (pick B); cookbooks/references (pick B's two shelves); whiteboard on the board (pick yes); tall cupboard = fridge (pick yes); cabinet colour. v1 sections renamed 08/09 with their own ids.
 >
+> **v3 (11/19):** Ari asked to make her vector trace work. `design/plate-xii/traced/`: `source.svg` (Ari's trace), `clean.cjs` (OBJ boxes sort paths into objects; SCRIB boxes clear writing per object; blues -> var(--blue)/var(--cab) shades; first path = wall -> var(--wall)), `view.cjs out.png [cab] [wall]` renders it. Section `005-traced.html` lays hit rects (same viewBox) over it; hover/focus adds `.lit` (drop-shadow glow) to that object's groups. Build injects `traced/kitchen.svg` at `<!--TRACED-->`. Open: traced (v3) or plate (v2)?
+>
 > **Next:** draw Ari's pick properly (evening, phone layout, Plate XI extras), then Task issues (PLAN step 6). Plate XI's kitchen is replaced only if Ari picks.
 
 ## Prompt for the next agent (Brand Sheet, after Ari answers) — done (v4)

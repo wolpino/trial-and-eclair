@@ -1,0 +1,73 @@
+<section id="tk" aria-labelledby="tk-h">
+  <span class="label" id="tk-h">00b · v3 · Your traced kitchen, working</span>
+  <div class="sec-body">
+    <h3>Ari's vector trace of Kittl A, made usable</h3>
+    <p class="note">This is your SVG, cleaned by a script (<code>traced/clean.cjs</code>), not redrawn. Point at or Tab to the box, notebook, cork board, whiteboard, the two halves of the book cubby, or the drawer stack (recipe log). Each one glows and says what it would open. The cabinets and wall take any colour below; the box keeps Blue 3.</p>
+    <div class="tk" id="tk-k">
+      <!--TRACED-->
+      <svg class="tk-hit" viewBox="6 5 856 479" aria-label="Kitchen objects">
+        <g role="button" tabindex="0" aria-label="Open the recipe box" data-for="box"><rect x="30" y="205" width="160" height="160" rx="8"/></g>
+        <g role="button" tabindex="0" aria-label="Open the notebook" data-for="notebook"><rect x="255" y="308" width="203" height="68" rx="8"/></g>
+        <g role="button" tabindex="0" aria-label="Open the idea board" data-for="ideas"><rect x="188" y="130" width="258" height="174" rx="6"/></g>
+        <g role="button" tabindex="0" aria-label="Open the whiteboard" data-for="whiteboard"><rect x="452" y="130" width="140" height="170" rx="6"/></g>
+        <g role="button" tabindex="0" aria-label="Open the cookbooks" data-for="cookbooks"><rect x="410" y="5" width="150" height="115" rx="6"/></g>
+        <g role="button" tabindex="0" aria-label="Open the references" data-for="references"><rect x="560" y="5" width="104" height="115" rx="6"/></g>
+        <g role="button" tabindex="0" aria-label="Open the recipe log" data-for="log"><rect x="594" y="388" width="176" height="96" rx="6"/></g>
+      </svg>
+    </div>
+    <p class="tk-say" id="tk-say" aria-live="polite">Nothing open.</p>
+    <div class="recol">
+      <div class="choice"><span class="cap">Cabinets</span><div class="seg" id="tk-cab">
+        <button data-v="" aria-pressed="true"><span class="dot" style="background:#6D8C97"></span>as traced</button>
+        <button data-v="#5e8c3a"><span class="dot" style="background:#5e8c3a"></span>stem green</button>
+        <button data-v="#c9b48a"><span class="dot" style="background:#c9b48a"></span>oat</button>
+        <button data-v="#b5553a"><span class="dot" style="background:#b5553a"></span>terracotta</button>
+        <button data-v="#3a3a40"><span class="dot" style="background:#3a3a40"></span>charcoal</button>
+      </div></div>
+      <div class="choice"><span class="cap">Wall</span><div class="seg" id="tk-wall">
+        <button data-v="" aria-pressed="true"><span class="dot" style="background:#F6E9CB"></span>as traced</button>
+        <button data-v="#eef0df"><span class="dot" style="background:#eef0df"></span>sage white</button>
+        <button data-v="#dfe9ee"><span class="dot" style="background:#dfe9ee"></span>sky</button>
+        <button data-v="#f3d9cf"><span class="dot" style="background:#f3d9cf"></span>blush</button>
+      </div></div>
+    </div>
+    <h3>What the script did</h3>
+    <ul class="ans">
+      <li><b>Sorted</b> all 1,365 shapes into objects by where they sit, keeping the paint order, so each object can be lit as one.</li>
+      <li><b>Box:</b> its shapes now use Blue 3 shades, so it stays the brand blue when the cabinets change. Polaroid backgrounds keep their own blue.</li>
+      <li><b>Recolour:</b> the 8 traced cabinet blues became shades of one cabinet colour; the wall became one wall colour.</li>
+      <li><b>Cleared</b> about 480 traced scribbles: the whiteboard, the notes, the notebook pages, the box tabs and the book titles. The app will write the real text.</li>
+      <li><b>Cropped</b> the dark frame from the trace and rounded the numbers: 286 KB, about 90 KB as sent over the web (the plate drawing is about 30 KB).</li>
+    </ul>
+    <h3>What it can't do yet</h3>
+    <ul class="ans">
+      <li><b>Glow only, no movement.</b> The ink lines are a few huge shapes shared by the whole kitchen, so one object can't lift without leaving its outline behind.</li>
+      <li><b>No fridge, no window seat for the spoon jar, no labels on the log drawers.</b> These need drawing in the same style (in Kittl, or by hand on top).</li>
+      <li><b>One fixed picture.</b> A wider screen scales it or shows plain wall at the sides; it can't reveal more kitchen. The phone needs its own trace (Kittl's closer crop would suit).</li>
+      <li><b>Evening</b> would be a tinted layer on top, not a redrawn evening.</li>
+      <li>A few faint marks are left beside the mixer head; easy to clear by hand.</li>
+    </ul>
+  </div>
+</section>
+<script>
+(function () {
+  var k = document.getElementById("tk-k"), say = document.getElementById("tk-say");
+  function lit(obj, on) { k.querySelectorAll('.tk-art g[data-obj="' + obj + '"]').forEach(function (g) { g.classList.toggle("lit", on); }); }
+  k.querySelectorAll("[data-for]").forEach(function (b) {
+    var obj = b.dataset.for, name = b.getAttribute("aria-label").replace("Open ", "");
+    ["mouseenter", "focus"].forEach(function (e) { b.addEventListener(e, function () { lit(obj, true); }); });
+    ["mouseleave", "blur"].forEach(function (e) { b.addEventListener(e, function () { lit(obj, false); }); });
+    function go() { say.textContent = "Would open " + name + " (its own web address, Back returns to the kitchen)."; }
+    b.addEventListener("click", go); b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+  });
+  function wire(id, prop) {
+    var seg = document.getElementById(id);
+    seg.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      seg.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      if (b.dataset.v) k.style.setProperty(prop, b.dataset.v); else k.style.removeProperty(prop);
+    });
+  }
+  wire("tk-cab", "--cab"); wire("tk-wall", "--wall");
+})();
+</script>

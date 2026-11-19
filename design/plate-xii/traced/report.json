@@ -1,0 +1,33 @@
+{
+ "total": 1365,
+ "dropped": 477,
+ "byObj": {
+  "box": 48,
+  "room": 221,
+  "log": 24,
+  "knee": 35,
+  "window": 48,
+  "pin": 64,
+  "notebook": 27,
+  "mixer": 109,
+  "flour": 50,
+  "whiteboard": 11,
+  "references": 32,
+  "cookbooks": 78,
+  "ideas": 140
+ },
+ "big": [
+  [
+   2,
+   "#0D0C0B",
+   868,
+   472
+  ],
+  [
+   1069,
+   "#272625",
+   868,
+   486
+  ]
+ ]
+}

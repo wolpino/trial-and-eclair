@@ -8,6 +8,6 @@ const html = "<!doctype html><html><head><meta charset=utf8><meta name=viewport 
   "<link rel=\"preconnect\" href=\"https://fonts.googleapis.com\">\n<link rel=\"stylesheet\" href=\"https://fonts.googleapis.com/css2?family=Caveat:wght@500;700&family=Young+Serif&family=Archivo+Narrow:wght@700&display=swap\">\n" +
   "<style>\n" + rd("base/style.css") + "\n" + rd("base/xii.css") + "\n</style>\n" + rd("base/header.html") +
   "<script>\n" + rd("base/core.js") + "\n" + rd("base/mark.js") + "\n" + rd("kitchen-xii.js") + "\n" + rd("kitchen-xii2.js") + "\n</script>\n" +
-  secs.map((f) => "<!-- " + f + " -->\n" + rd("sections/" + f)).join("\n") + "\n</main>\n<script>PLATE.start();</script>\n</body></html>\n";
+  secs.map((f) => "<!-- " + f + " -->\n" + rd("sections/" + f).replace("<!--TRACED-->", rd("traced/kitchen.svg"))).join("\n") + "\n</main>\n<script>PLATE.start();</script>\n</body></html>\n";
 fs.writeFileSync(path.join(D, "dist", "index.html"), html);
 console.log("dist/index.html (" + secs.join(", ") + ", " + Math.round(html.length / 1024) + " KB)");
