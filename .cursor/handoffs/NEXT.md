@@ -10,7 +10,23 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII, after Ari answers) — START HERE
+## Prompt for the next agent (Plate XII v4: iterate the traced kitchen) — START HERE
+> Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (v3). Ari picked the **traced kitchen** direction (section 00b). Sources `design/plate-xii/traced/`: `source.svg` (Ari's trace of Kittl A, never edit), `clean.cjs` (OBJ boxes sort paths into objects by position, paint order kept; SCRIB boxes clear writing per object; blues -> var(--blue)/var(--cab) shades; first path = wall -> var(--wall); writes `kitchen.svg` + `report.json`), `view.cjs out.png [cab] [wall]` to check a render. Page section `sections/005-traced.html` lays hit rects (same viewBox `6 5 856 479`) over the art; hover/focus adds `.lit` (drop-shadow glow). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`, publish to the same URL.
+>
+> **Ari's answers (11/19):**
+> - Objects don't need to lift; glow only is fine.
+> - No fridge: it was always an extra image. Ari wants the Recently list taken off, so nothing needs the fridge back.
+> - Cabinets default **stem green** (#5e8c3a).
+> - Labels "cookbooks" and "references" on the **outer (front) edge of the cubby's lower shelf**, the board below the books, each under its half.
+> - One wall cupboard **open** (the top-left one, or the one to its right): door swung fully open or cracked open a little, a **baking log on a clipboard** hanging on the inside of the door. Ask Ari or draw both open amounts. Likely the clipboard becomes the recipe log button (the drawer stack then plain); confirm with Ari.
+> - A **version with the recipe box and mixer swapped**.
+> - Add the **eclair** (mark G style, on a plate, in the trace's look) and the other small changes: clear the leftover marks beside the mixer head, spoon jar on the window sill, the whiteboard marker in its own colour.
+>
+> **Order:** 1) **split the ink first**: the outlines live in two huge paths (#0D0C0B 868x472 and #272625 868x486, paths 2 and 1069 in report "big"). Split them into subpaths (each `M ... Z`), give each subpath to the object whose box holds it, keep paint order. Must look identical (diff a render before and after). This makes objects self-contained, so they can move (needed for the swap) and recolour cleanly. 2) cabinets stem green by default. 3) clear mixer marks. 4) shelf-edge labels. 5) box/mixer swap as a second version (both shown). 6) eclair, spoon jar, marker. 7) open cupboard with clipboard (new drawing in the trace's style: thick dark wobbly outline, trace's own colours, flat two-tone shading; the door's inside face in perspective, dark interior with a shelf or two, clipboard with blank ruled sheet). Big new pieces may look a little cleaner than the trace; if it shows, Ari can make the piece in Kittl and trace it, and the script splices it in.
+>
+> Put the questions at the page top, linked to the drawings (Ari's rule). Commit and log after the round.
+
+## Prompt for the next agent (Plate XII, after Ari answers) — superseded by v4 prompt
 > Plate XII v1: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Sources `design/plate-xii/` (base/core.js and mark.js copied from brand; drawing in `kitchen-xii.js`, `XII.A()` / `XII.B()`, scene 1800 x 860, normal view crops x 200..1600). Build: `cd design/plate-xii && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`, publish to the same URL. Shots: `node shot.cjs dist/index.html shots/vN "#xa-fig"`.
 >
 > **Why:** Ari's Kittl kitchens (desktop 1 corner view, desktop 2 straight on) are AI raster images: gibberish text, baked colours, no separate objects. Used as mood only. Straight on makes the kitchen stretch (wider = more wall) and keeps buttons as rectangles.
