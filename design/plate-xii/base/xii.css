@@ -12,7 +12,7 @@
 .v2a { --cab: #6f93b3; --wall: #f6efdc; }
 .v2b { --cab: #9bb6ca; --wall: #f6efdc; }
 /* v3: the traced kitchen */
-.tk { --cab: #6D8C97; --wall: #F6E9CB; position: relative; border: 1.5px solid var(--ink); background: var(--wall); }
+.tk { --cab: #5e8c3a; --wall: #F6E9CB; position: relative; border: 1.5px solid var(--ink); background: var(--wall); }
 .tk svg { display: block; width: 100%; height: auto; }
 .tk .tk-hit { position: absolute; inset: 0; height: 100%; }
 .tk-hit rect { fill: transparent; stroke: transparent; stroke-width: 1.6; stroke-dasharray: 6 4; }
@@ -20,3 +20,9 @@
 .tk-hit [role="button"]:focus-visible rect { stroke: var(--ink); }
 .tk-art g.lit { filter: drop-shadow(0 0 2px #f2c230) drop-shadow(0 0 7px #f5a23a); }
 .tk-say { font-size: .9rem; color: var(--ink-soft); min-height: 1.6em; }
+/* v4: cupboard states; the log button follows the cupboard */
+.tk[data-cup="open"] [data-obj="cup-ajar"], .tk[data-cup="ajar"] [data-obj="cup-open"], .tk[data-cup="ajar"] [data-obj="clip"],
+.tk[data-cup="closed"] [data-obj="cup-open"], .tk[data-cup="closed"] [data-obj="clip"], .tk[data-cup="closed"] [data-obj="cup-ajar"] { display: none; }
+.tk[data-cup="open"] .tk-hit [data-when]:not([data-when="open"]), .tk[data-cup="ajar"] .tk-hit [data-when]:not([data-when="ajar"]),
+.tk[data-cup="closed"] .tk-hit [data-when]:not([data-when="closed"]) { display: none; }
+#tk .k-fig { margin: 14px 0 0; }

@@ -189,8 +189,8 @@ Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop
 - [x] v2 (2026-11-19, same URL): one-point redraw. A = Kittl A (wall cubby, window on the back wall); B = Kittl B (tall cupboard, two-tier shelf, whiteboard on the cork board, window in the right wall, counter returns). Drawing in `kitchen-xii2.js`; v1 kept at the bottom
 - [x] v3 (2026-11-19, same URL): Ari's own vector trace of Kittl A (`traced/source.svg`) cleaned by `traced/clean.cjs`: shapes sorted into objects by position (paint order kept), box on Blue 3 shades, cabinets on --cab, wall on --wall, ~480 scribbles cleared, frame cropped (286 KB, ~90 KB gzipped). Buttons, glow (no movement: the ink is a few shared shapes), recolour, all working. Missing: fridge, log drawer labels, phone trace; fixed width
 - [x] Ari (11/19): **traced direction picked.** Glow only (no lift). No fridge (it was an extra image); take the Recently list off. Cabinets stem green. Wants: cookbooks/references labels on the cubby's lower shelf edge; one wall cupboard open (top left or the next one) with a baking log on a clipboard inside the door; a version with box and mixer swapped; the eclair and small fixes
-- [ ] v4: split the ink, then the items above (see NEXT.md)
-- [ ] Ari: A or B or mix; where cookbooks and references go; whiteboard on its own or on the board; tall cupboard becomes the fridge (B); first cabinet colour
+- [x] v4 (2026-11-19, same URL): ink split per object by masks (diff vs v3: only cleared marks and sub-pixel edges); stem green default; mixer marks cleared; shelf-edge labels; eclair on a plate; spoon jar on the sill; tomato-capped marker; cupboard open wide or cracked with a baking-log clipboard; B = box and mixer swapped (`traced/add.cjs`, `kitchen-swap.svg`)
+- [ ] Ari (v4 questions): cupboard open wide or cracked; clipboard as the recipe log button; A or B; keep the small pieces as drawn
 - If picked, this replaces the Plate XI kitchen drawing (views and phone follow), so settle it before the test piece
 
 ## Before Task issues: things that could disrupt the build

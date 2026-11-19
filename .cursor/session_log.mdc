@@ -10,6 +10,41 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-19 · Plate XII v4: traced kitchen split, swap, cupboard (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v4) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v4 published; four questions to Ari; no app code) |
+
+### Intent
+Follow the NEXT.md v4 prompt: split the ink, stem green, clear mixer marks, shelf labels, box/mixer swap, eclair, spoon jar, marker, open cupboard with clipboard.
+
+### Summary
+- The "ink" was not outlines: a few huge dark shapes (paths 2, 3, 74, 133, 620, 684, 1069) under everything; path 1069 is one subpath, so splitting by M...Z could not work. `clean.cjs` now splits each with SVG masks: an object takes the ink under its own shapes grown 3 units; the room keeps the rest (room cut-out grown less, so pieces overlap: no seam). Diff vs v3: only the cleared marks and sub-pixel edge AA
+- Reclass rules (MOVE_TO): counter wood under the mixer -> room, whiteboard specks left of the head -> whiteboard
+- `kitchen-swap.svg`: box +488, mixer -490, moved on top; old spots patched (wall/wood from the object's grown shape, counter edge line, grain, whiteboard lower right redrawn from x 505)
+- New `traced/add.cjs`: shelf labels, eclair G on a plate, spoon jar on the sill, tomato-capped marker on the tray, cupboard (left door of the pair, hinge x 132.7) open 100 degrees with clipboard or cracked 26 degrees with the clipboard edge peeking; one-point projection, VP (434,240), f 900
+- Page 005: one control row (cupboard open/cracked/closed, cabinets, wall) drives A and B; log button = clipboard / door / drawers by cupboard state. Shots in `design/plate-xii/shots/v4/`
+- Size ~650 KB per kitchen (masks); page 1.4 MB
+
+### Decisions
+- Claude's picks pending Ari: open wide; clipboard is the log button; A (box left); keep labels/eclair/jar/marker as drawn
+
+### Open threads
+- Ari: the four questions at the page top
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v4, traced, ink masks, swap, cupboard, clipboard
+**Files:** design/plate-xii/traced/ (clean.cjs, add.cjs, kitchen.svg, kitchen-swap.svg), sections/00-questions.html, sections/005-traced.html, .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v4 as drawn (tweak only); the ink split
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v4 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Plate XII drawn and published (v1)
 
 | Field | Value |

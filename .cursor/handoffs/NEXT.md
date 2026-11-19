@@ -1,4 +1,4 @@
-# NEXT — 2026-11-17 (Brand Sheet v4: Blue 3 picked, rest on hold; next Task issues)
+# NEXT — 2026-11-19 (Plate XII v4 published: traced kitchen, waiting on Ari)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,14 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII v4: iterate the traced kitchen) — START HERE
+## Prompt for the next agent (Plate XII, after Ari answers v4) — START HERE
+> Plate XII v4: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Sources `design/plate-xii/traced/`: `source.svg` (never edit), `clean.cjs` (sorts paths into objects; MOVE_TO reclass rules; splits the dark underlay "ink" per object with SVG masks, INK_GROW 6, room cut-out grown 3 so pieces overlap; SWAP moves box +488 / mixer -490; writes `kitchen.svg` and `kitchen-swap.svg`; `--plain` = split only, for diffing), `add.cjs` (new pieces in the trace's style: shelf labels, eclair, spoon jar, marker, cupboard open/ajar + clipboard, swap patches), `view.cjs out.png [cab] [wall] [svg] [open|ajar|closed]`. Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`, publish to the same URL (read the live version first if this session hasn't).
+>
+> **Questions (page top), Claude's picks:** cupboard open wide (pick) or cracked; clipboard = recipe log button, drawers plain (pick yes); A box left (pick) or B swapped; labels/eclair/jar/marker as drawn (pick keep).
+>
+> **After answers:** drop the unpicked cupboard state and layout, record picks in PLAN.md 5b and the kitchen-layout memory. Then: evening (tint layer), phone crop, wider screens, and size (masks add ~300 KB per kitchen; could drop masks for objects that never move). Then Task issues (PLAN step 6).
+
+## Prompt for the next agent (Plate XII v4: iterate the traced kitchen) — done 2026-11-19 (v4 published)
 > Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (v3). Ari picked the **traced kitchen** direction (section 00b). Sources `design/plate-xii/traced/`: `source.svg` (Ari's trace of Kittl A, never edit), `clean.cjs` (OBJ boxes sort paths into objects by position, paint order kept; SCRIB boxes clear writing per object; blues -> var(--blue)/var(--cab) shades; first path = wall -> var(--wall); writes `kitchen.svg` + `report.json`), `view.cjs out.png [cab] [wall]` to check a render. Page section `sections/005-traced.html` lays hit rects (same viewBox `6 5 856 479`) over the art; hover/focus adds `.lit` (drop-shadow glow). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`, publish to the same URL.
 >
 > **Ari's answers (11/19):**
