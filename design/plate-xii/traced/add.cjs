@@ -1,7 +1,7 @@
-/* New pieces drawn on top of Ari's trace, in its look: thick dark outline, flat two-tone colour, the trace's own colours.
-   Units are the source's (868 x 489). opts(v) returns what clean.cjs needs for version v ("a" as traced, "b" swapped):
-   defs, patch (drawn after the room, before moved objects), end (groups drawn last, each [obj, svg]). */
-const INK = "#0D0C0B", WOOD = "#CF9A64", WOOD_L = "#D0975F", GRAIN = "#A87548", PAPER = "#FAF8E8", RULE = "#C9C3B5";
+/* New pieces drawn on top of Ari's trace, in its look: dark outline, flat two-tone colour, the trace's own colours.
+   Units are the source's (868 x 489). opts(v) returns what clean.cjs needs: end = groups drawn last, each { obj, svg, top };
+   top: true = drawn after the added height on top (the open cupboard sits partly in it). */
+const INK = "#0D0C0B", WOOD_L = "#D0975F", PAPER = "#FAF8E8", RULE = "#C9C3B5";
 const f1 = (n) => (+n.toFixed(1)).toString();
 let seed = 7; const rnd = () => ((seed = (seed * 16807) % 2147483647) / 2147483647);
 /* a closed shape through points with a slight hand wobble on each side, as in the trace */
@@ -13,57 +13,59 @@ function wob(pts, amp) {
   }
   return d + "Z";
 }
-const P = (d, fill, sw, extra) => '<path d="' + d + '" style="fill:' + fill + (sw ? ";stroke:" + INK + ";stroke-width:" + sw + ";stroke-linejoin:round" : "") + '"' + (extra || "") + "/>";
+const P = (d, fill, sw) => '<path d="' + d + '" style="fill:' + fill + (sw ? ";stroke:" + INK + ";stroke-width:" + sw + ";stroke-linejoin:round" : "") + '"/>';
 const cab = (pct, to) => "color-mix(in srgb,var(--cab) " + pct + "%," + (to || "#1f1d1a") + ")";
-const lens = (x0, x1, y, t, c) => '<path d="M' + f1(x0) + " " + f1(y) + " Q" + f1((x0 + x1) / 2) + " " + f1(y - t) + " " + f1(x1) + " " + f1(y) + " Q" + f1((x0 + x1) / 2) + " " + f1(y + t * 0.6) + " " + f1(x0) + " " + f1(y) + 'Z" style="fill:' + (c || GRAIN) + '"/>';
 
-/* ---- shelf labels on the front edge of the cubby's lower shelf (board y 105.6..113.2) ---- */
-const label = (x, t) => '<text x="' + x + '" y="111.7" text-anchor="middle" style="font:700 6.2px \'Archivo Narrow\',\'Arial Narrow\',sans-serif;letter-spacing:.9px;fill:#2a1a0e">' + t + "</text>";
-const LABELS = [["cookbooks", label(491, "COOKBOOKS")], ["references", label(606, "REFERENCES")]];
-
-/* ---- the eclair (mark G) on a plate, on the counter between the notebook and the mixer ---- */
+/* ---- the eclair (mark G) on a plate, at the front of the counter between the notebook and the mixer.
+        As long as the pencil (~64), and plump ---- */
 function eclair() {
-  const cx = 489, cy = 340;
-  let s = '<ellipse cx="' + cx + '" cy="' + (cy + 4) + '" rx="27" ry="6.2" style="fill:' + INK + '"/>' +
-    '<ellipse cx="' + cx + '" cy="' + (cy + 3) + '" rx="25.3" ry="5" style="fill:' + PAPER + '"/>' +
-    '<ellipse cx="' + cx + '" cy="' + (cy + 3.3) + '" rx="17" ry="3" style="fill:#E7E1CF"/>';
-  /* the eclair at the tape's angle (-4 degrees), 38 x 11 */
-  const L = 38, H = 11, x0 = cx - L / 2, y0 = cy - H + 1.5;
-  let g = '<rect x="' + (x0 - 1.1) + '" y="' + (y0 - 1.1) + '" width="' + (L + 2.2) + '" height="' + (H + 2.2) + '" rx="4.6" style="fill:' + INK + '"/>' +
-    '<rect x="' + x0 + '" y="' + y0 + '" width="' + L + '" height="' + H + '" rx="3.6" style="fill:#F5A23A"/>' +
-    '<rect x="' + x0 + '" y="' + (y0 + H * 0.7) + '" width="' + L + '" height="' + (H * 0.3) + '" rx="2" style="fill:#D9822A"/>';
-  /* chocolate glaze with drips */
-  let d = "M" + (x0 + 1) + " " + (y0 + 0.6) + " H" + (x0 + L - 1) + " Q" + (x0 + L + 0.2) + " " + (y0 + 1) + " " + (x0 + L - 0.5) + " " + (y0 + 5);
-  const n = 4, w = (L - 1.5) / n, dr = [0.5, 0.2, 0.62, 0.28];
-  for (let i = n - 1; i >= 0; i--) d += " Q" + f1(x0 + 0.75 + i * w + w / 2) + " " + f1(y0 + 5 + H * dr[i] * 0.55) + " " + f1(x0 + 0.75 + i * w) + " " + f1(y0 + 5);
-  d += " Q" + (x0 - 0.2) + " " + (y0 + 1) + " " + (x0 + 1) + " " + (y0 + 0.6) + "Z";
-  g += P(d, "#5E3218", 0.9) + '<path d="M' + (x0 + 6) + " " + (y0 + 2.6) + ' q1.6 -1.3 3.2 0 t3.2 0 t3.2 0 t3.2 0 t3.2 0 t3.2 0 t3.2 0" style="fill:none;stroke:#FFF4DC;stroke-width:.9;stroke-linecap:round"/>' +
-    '<path d="M' + (x0 + 4) + " " + (y0 + 1.6) + " h9" + '" style="stroke:#8A4F2A;stroke-width:.9;stroke-linecap:round"/>';
+  const cx = 494, cy = 360, L = 62, H = 19;
+  let s = '<ellipse cx="' + cx + '" cy="' + (cy + 3) + '" rx="42" ry="9.4" style="fill:' + INK + '"/>' +
+    '<ellipse cx="' + cx + '" cy="' + (cy + 2.2) + '" rx="40.2" ry="8" style="fill:' + PAPER + '"/>' +
+    '<ellipse cx="' + cx + '" cy="' + (cy + 2.6) + '" rx="28" ry="5" style="fill:#E7E1CF"/>';
+  const x0 = cx - L / 2, y0 = cy - H + 1, rx = H * 0.46;
+  let g = '<rect x="' + (x0 - 1.6) + '" y="' + (y0 - 1.6) + '" width="' + (L + 3.2) + '" height="' + (H + 3.2) + '" rx="' + (rx + 1.6) + '" style="fill:' + INK + '"/>' +
+    '<rect x="' + x0 + '" y="' + y0 + '" width="' + L + '" height="' + H + '" rx="' + rx + '" style="fill:#F5A23A"/>' +
+    '<path d="M' + (x0 + 3) + " " + (y0 + H * 0.72) + " H" + (x0 + L - 3) + " Q" + (x0 + L) + " " + (y0 + H * 0.74) + " " + (x0 + L - 3.5) + " " + (y0 + H - 1.2) + " H" + (x0 + 3.5) + " Q" + x0 + " " + (y0 + H * 0.74) + " " + (x0 + 3) + " " + (y0 + H * 0.72) + 'Z" style="fill:#D9822A"/>';
+  /* chocolate glaze over the top half, with drips */
+  const yb = y0 + H * 0.5, n = 5, w = (L - 4) / n, dr = [0.32, 0.12, 0.38, 0.18, 0.28];
+  let d = "M" + (x0 + rx * 0.5) + " " + (y0 + 0.9) + " H" + (x0 + L - rx * 0.5) + " Q" + (x0 + L + 0.4) + " " + (y0 + 1.5) + " " + (x0 + L - 1.4) + " " + yb;
+  for (let i = n - 1; i >= 0; i--) d += " Q" + f1(x0 + 2 + i * w + w / 2) + " " + f1(yb + H * dr[i]) + " " + f1(x0 + 2 + i * w) + " " + f1(yb);
+  d += " Q" + (x0 - 0.4) + " " + (y0 + 1.5) + " " + (x0 + rx * 0.5) + " " + (y0 + 0.9) + "Z";
+  g += P(d, "#5E3218", 1.2);
+  g += '<path d="M' + (x0 + 7) + " " + (y0 + 3.2) + " Q" + (x0 + L / 2) + " " + (y0 + 1.8) + " " + (x0 + L - 12) + " " + (y0 + 3) + '" style="fill:none;stroke:#8A4F2A;stroke-width:1.6;stroke-linecap:round"/>';
+  g += '<path d="M' + (x0 + 9) + " " + (y0 + 6.2) + (" q2.3 -2 4.6 0 t4.6 0").repeat(5) + '" style="fill:none;stroke:#FFF4DC;stroke-width:1.3;stroke-linecap:round;stroke-linejoin:round"/>';
   s += '<g transform="rotate(-4 ' + cx + " " + cy + ')">' + g + "</g>";
   return s;
 }
 
-/* ---- spoon jar on the window sill (sill top y ~244) ---- */
+/* ---- spoon jar on the window sill (sill top y ~244): a cream crock, two wooden spoons, a whisk and a tomato spatula ---- */
 function jar() {
-  const x = 808, b = 245.5, w = 17, h = 19;
+  const x = 784, b = 246, w = 30, h = 32, top = b - h;
   let s = "";
-  /* spoons and a whisk behind the rim */
-  s += P(wob([[x + 3, b - h + 2], [x + 1.5, b - h - 20], [x + 3.4, b - h - 20.5], [x + 5, b - h + 2]], .2), WOOD_L, 1.1);
-  s += '<ellipse cx="' + (x + 2.3) + '" cy="' + (b - h - 24) + '" rx="3.2" ry="4.8" transform="rotate(-6 ' + (x + 2.3) + " " + (b - h - 24) + ')" style="fill:' + WOOD_L + ";stroke:" + INK + ';stroke-width:1.1"/>';
-  s += '<path d="M' + (x + 9) + " " + (b - h + 1) + " L" + (x + 9.5) + " " + (b - h - 13) + '" style="stroke:' + INK + ';stroke-width:2.4;stroke-linecap:round"/><path d="M' + (x + 9) + " " + (b - h + 1) + " L" + (x + 9.5) + " " + (b - h - 13) + '" style="stroke:#9C9892;stroke-width:1.1;stroke-linecap:round"/>';
-  for (const k of [-3.2, 0, 3.2]) s += '<path d="M' + (x + 9.5) + " " + (b - h - 12) + " Q" + (x + 9.5 + k * 1.6) + " " + (b - h - 22) + " " + (x + 9.5 + k * 0.3) + " " + (b - h - 27) + '" style="fill:none;stroke:' + INK + ';stroke-width:.9"/>';
-  s += P(wob([[x + 13, b - h + 2], [x + 15.5, b - h - 15], [x + 17.2, b - h - 14.6], [x + 15, b - h + 2]], .2), "#B17A4B", 1.1);
-  s += '<ellipse cx="' + (x + 16.6) + '" cy="' + (b - h - 17.5) + '" rx="2.6" ry="3.8" transform="rotate(10 ' + (x + 16.6) + " " + (b - h - 17.5) + ')" style="fill:#B17A4B;stroke:' + INK + ';stroke-width:1.1"/>';
-  /* the crock: cream stoneware with a sage band */
-  const body = wob([[x - 1, b - h], [x + w + 1, b - h], [x + w, b - 2], [x + w - 1.5, b], [x + 0.5, b], [x - 0.5, b - 2]], .3);
-  s += P(body, "#EFE6CF", 1.6);
-  s += '<path d="M' + (x + w * 0.62) + " " + (b - h + 1.5) + " L" + (x + w - 0.4) + " " + (b - h + 1.5) + " L" + (x + w - 1) + " " + (b - 1.2) + " L" + (x + w * 0.66) + " " + (b - 1.2) + 'Z" style="fill:#D9CDAF"/>';
-  s += '<rect x="' + (x - 0.4) + '" y="' + (b - h * 0.62) + '" width="' + (w + 0.6) + '" height="3.2" style="fill:#8BA07A"/>';
-  s += '<ellipse cx="' + (x + w / 2) + '" cy="' + (b - h) + '" rx="' + (w / 2 + 1.2) + '" ry="1.6" style="fill:#3a332b;stroke:' + INK + ';stroke-width:1.2"/>';
+  const spoon = (x1, y1, x2, y2, bw, bh, col) => {   /* handle from the rim (x1,y1) up to the bowl at (x2,y2) */
+    const a = Math.atan2(y2 - y1, x2 - x1) * 180 / Math.PI + 90, nx = Math.cos(a * Math.PI / 180) * 1.6, ny = Math.sin(a * Math.PI / 180) * 1.6;
+    return P(wob([[x1 - nx, y1 - ny], [x2 - nx * .7, y2 - ny * .7], [x2 + nx * .7, y2 + ny * .7], [x1 + nx, y1 + ny]], .2), col, 1.3) +
+      '<ellipse cx="' + f1(x2) + '" cy="' + f1(y2 - bh * 0.8) + '" rx="' + bw + '" ry="' + bh + '" transform="rotate(' + f1(a - 90) + " " + f1(x2) + " " + f1(y2 - bh * 0.8) + ')" style="fill:' + col + ";stroke:" + INK + ';stroke-width:1.3"/>';
+  };
+  s += spoon(x + 7, top + 3, x + 1, top - 32, 5, 7.2, WOOD_L);
+  /* whisk: handle and wire loops */
+  s += '<path d="M' + (x + 15) + " " + (top + 3) + " L" + (x + 15.5) + " " + (top - 14) + '" style="stroke:' + INK + ';stroke-width:4;stroke-linecap:round"/><path d="M' + (x + 15) + " " + (top + 3) + " L" + (x + 15.5) + " " + (top - 14) + '" style="stroke:#B5AA92;stroke-width:2;stroke-linecap:round"/>';
+  for (const k of [-5, -1.8, 1.8, 5]) s += '<path d="M' + (x + 15.5) + " " + (top - 13) + " Q" + (x + 15.5 + k * 1.9) + " " + (top - 30) + " " + (x + 15.5) + " " + (top - 41) + '" style="fill:none;stroke:' + INK + ';stroke-width:1.1"/>';
+  /* spatula */
+  s += P(wob([[x + 22, top + 3], [x + 26, top - 18], [x + 28.4, top - 17.6], [x + 25, top + 3]], .2), "#B17A4B", 1.3);
+  s += P(wob([[x + 23.5, top - 17], [x + 32.5, top - 15.4], [x + 34.5, top - 29], [x + 26.5, top - 31]], .3), "#C8473A", 1.3);
+  s += spoon(x + 12, top + 3, x + 9, top - 22, 4, 5.8, "#B17A4B");
+  /* the crock: cream stoneware, a sage band, darker right side */
+  s += P(wob([[x - 1.5, top], [x + w + 1.5, top], [x + w + 0.5, b - 4], [x + w - 2.5, b], [x + 2.5, b], [x - 0.5, b - 4]], .4), "#EFE6CF", 1.9);
+  s += P("M" + (x + w * 0.66) + " " + (top + 2) + " L" + (x + w) + " " + (top + 2) + " L" + (x + w - 0.6) + " " + (b - 4) + " L" + (x + w - 2.8) + " " + (b - 1.5) + " L" + (x + w * 0.7) + " " + (b - 1.5) + "Z", "#DCCFAF");
+  s += P(wob([[x - 0.9, b - h * 0.62], [x + w + 0.9, b - h * 0.62], [x + w + 0.8, b - h * 0.62 + 5], [x - 0.8, b - h * 0.62 + 5]], .2), "#8BA07A", 0.9);
+  s += '<ellipse cx="' + (x + w / 2) + '" cy="' + top + '" rx="' + (w / 2 + 2) + '" ry="2.6" style="fill:#3a332b;stroke:' + INK + ';stroke-width:1.6"/>';
+  s += '<path d="M' + (x + 3) + " " + (top + 5) + " V" + (b - 6) + '" style="stroke:#FFFBEF;stroke-width:1.6;stroke-linecap:round;opacity:.8"/>';
   return s;
 }
 
-/* ---- whiteboard marker on the bottom tray, its own colour (tomato cap, cream barrel) ---- */
+/* ---- whiteboard marker on the bottom tray: cream barrel, tomato cap and band ---- */
 function marker() {
   const x = 470, y = 288.6;
   return '<g transform="rotate(-2 ' + x + " " + y + ')">' +
@@ -73,100 +75,58 @@ function marker() {
     '<path d="M' + x + " " + (y + 0.6) + " L" + (x - 3) + " " + (y + 2.1) + " L" + x + " " + (y + 3.6) + 'Z" style="fill:#3a3a40;stroke:' + INK + ';stroke-width:.8;stroke-linejoin:round"/></g>';
 }
 
-/* ---- the wall cupboard right of the top-left one: its door hinges on the left (x 132.7), 132.7 wide, y -3..102.5 ---- */
-const DOOR = { x0: 132.7, W: 132.7, yt: -3, yb: 102.5 }, VP = [434, 240], F = 900;
+/* ---- the open wall cupboard: left door of the pair, hinge on its left (x 132.7), 132.7 wide; with the taller frame the
+        door runs from above the top edge (y -48) to y 102.5. Swung 125 degrees so its inside faces us and the clipboard keeps
+        its shape. One-point projection: vanishing point (434, 240), viewer 900 units back ---- */
+const DOOR = { x0: 132.7, W: 132.7, yt: -48, yb: 102.5 }, VP = [434, 240], F = 900, TH = 125, H_DOOR = DOOR.yb - DOOR.yt;
 function proj(X, Y, Z) { const s = F / (F - Z); return [VP[0] + (X - VP[0]) * s, VP[1] + (Y - VP[1]) * s]; }
-/* a point on the door at (u across from the hinge, v down), door swung th degrees, n = offset off the inside face */
-function on(th, u, v, n) { const t = th * Math.PI / 180, X = DOOR.x0 + u * DOOR.W * Math.cos(t) + (n || 0) * Math.sin(t), Z = u * DOOR.W * Math.sin(t) - (n || 0) * Math.cos(t); return proj(X, DOOR.yt + v * (DOOR.yb - DOOR.yt), Z); }
-function interior(v, k) {
-  const x0 = DOOR.x0, x1 = x0 + DOOR.W, y1 = DOOR.yb, dep = 60, bk = (X, Y) => proj(X, Y, -dep);
-  const b0 = bk(x0, -3), b1 = bk(x1, y1);
-  const cid = v + "-op-" + k;   /* everything inside stays inside the opening */
-  let s = '<clipPath id="' + cid + '"><rect x="' + x0 + '" y="-10" width="' + DOOR.W + '" height="' + (y1 + 10) + '"/></clipPath><g clip-path="url(#' + cid + ')">';
-  s += P(wob([[x0, -6], [x1, -6], [x1, y1 + 4], [x0, y1 + 4]], .3), cab(30));   /* back wall seen through the opening */
-  s += P("M" + x0 + " 0 L" + f1(b0[0]) + " 0 L" + f1(b0[0]) + " " + f1(bk(x0, y1)[1]) + " L" + x0 + " " + y1 + "Z", cab(44));   /* left side wall */
-  /* one shelf: front edge, and its underside running back */
-  const sy = 50, u0 = bk(x0, sy + 3.5), u1 = bk(x1, sy + 3.5);
-  s += P("M" + x0 + " " + (sy + 3.5) + " L" + x1 + " " + (sy + 3.5) + " L" + f1(u1[0]) + " " + f1(u1[1]) + " L" + f1(u0[0]) + " " + f1(u0[1]) + "Z", cab(52));
-  /* jars and tins on the shelf, then on the floor (their feet hidden by the front rail) */
-  const jar = (x, w, top, bot, lid, glass) => P(wob([[x, top + 3], [x + w, top + 3], [x + w, bot], [x, bot]], .25), glass, 1.3) + P(wob([[x - 0.8, top], [x + w + 0.8, top], [x + w + 0.8, top + 3.6], [x - 0.8, top + 3.6]], .15), lid, 1.1);
-  s += jar(150, 17, 18, sy, "#C8473A", "#E9DDBE") + jar(172, 13, 26, sy, "#B17A4B", "#EFE6CF") + jar(214, 22, 14, sy, "#9C9892", "#D8C9A4") + jar(242, 13, 24, sy, "#8BA07A", "#EFE6CF");
-  s += P("M" + x0 + " " + sy + " H" + x1 + " V" + (sy + 3.5) + " H" + x0 + "Z", cab(66), 1.3);
+/* a point on the door at (u across from the hinge, v down), n = offset off the inside face */
+function on(u, v, n) { const t = TH * Math.PI / 180; n = n || 0; return proj(DOOR.x0 + u * DOOR.W * Math.cos(t) + n * Math.sin(t), DOOR.yt + v * H_DOOR, u * DOOR.W * Math.sin(t) - n * Math.cos(t)); }
+function interior(v) {
+  const x0 = DOOR.x0, x1 = x0 + DOOR.W, y1 = DOOR.yb, dep = 60, bk = (X, Y) => proj(X, Y, -dep), cid = v + "-op";
+  let s = '<clipPath id="' + cid + '"><rect x="' + x0 + '" y="' + (DOOR.yt - 10) + '" width="' + DOOR.W + '" height="' + (y1 - DOOR.yt + 10) + '"/></clipPath><g clip-path="url(#' + cid + ')">';
+  s += P(wob([[x0, DOOR.yt - 6], [x1, DOOR.yt - 6], [x1, y1 + 4], [x0, y1 + 4]], .3), cab(30));   /* back wall */
+  const b0 = bk(x0, DOOR.yt), b1 = bk(x0, y1);
+  s += P("M" + x0 + " " + (DOOR.yt - 6) + " L" + f1(b0[0]) + " " + (DOOR.yt - 6) + " L" + f1(b1[0]) + " " + f1(b1[1]) + " L" + x0 + " " + y1 + "Z", cab(44));   /* left side wall */
+  const jar = (x, w, t, bot, lid, glass) => P(wob([[x, t + 3], [x + w, t + 3], [x + w, bot], [x, bot]], .25), glass, 1.3) + P(wob([[x - 0.8, t], [x + w + 0.8, t], [x + w + 0.8, t + 3.6], [x - 0.8, t + 3.6]], .15), lid, 1.1);
+  const shelf = (sy) => { const u0 = bk(x0, sy + 3.5), u1 = bk(x1, sy + 3.5); return P("M" + x0 + " " + (sy + 3.5) + " L" + x1 + " " + (sy + 3.5) + " L" + f1(u1[0]) + " " + f1(u1[1]) + " L" + f1(u0[0]) + " " + f1(u0[1]) + "Z", cab(52)); };
+  const edge = (sy) => P("M" + x0 + " " + sy + " H" + x1 + " V" + (sy + 3.5) + " H" + x0 + "Z", cab(66), 1.3);
+  /* top shelf (y 3): tins and a stack of bowls; middle shelf (y 52): jars; floor: flour tin, sugar jar, a box of cases */
+  s += shelf(3) + jar(146, 22, -30, 3, "#9C9892", "#D8C9A4") + jar(174, 14, -18, 3, "#C8473A", "#EFE6CF") +
+    P(wob([[200, -6], [240, -6], [236, 3], [204, 3]], .3), "#EFE6CF", 1.3) + P(wob([[203, -13], [237, -13], [233, -6], [207, -6]], .3), "#8BA07A", 1.3) + P(wob([[206, -20], [234, -20], [230, -13], [210, -13]], .3), "#F0C86A", 1.3) +
+    jar(246, 14, -22, 3, "#B17A4B", "#E9DDBE") + edge(3);
+  s += shelf(52) + jar(150, 17, 20, 52, "#C8473A", "#E9DDBE") + jar(172, 13, 28, 52, "#B17A4B", "#EFE6CF") + jar(214, 22, 16, 52, "#9C9892", "#D8C9A4") + jar(242, 13, 26, 52, "#8BA07A", "#EFE6CF") + edge(52);
   s += jar(158, 30, 70, y1 + 2, "#E0B450", "#F0C86A") + jar(206, 15, 64, y1 + 2, "#B17A4B", "#E9DDBE") + jar(226, 26, 80, y1 + 2, "#9C9892", "#CFC8B8");
-  s += "</g>" + P(wob([[x0, -6], [x1, -6], [x1, y1], [x0, y1]], .3), "none", 2.4);
+  s += "</g>" + P(wob([[x0, DOOR.yt - 6], [x1, DOOR.yt - 6], [x1, y1], [x0, y1]], .3), "none", 2.4);
   return s;
 }
-function clipboard(th, uL, uR) {
-  const q = (pts, n) => pts.map((p) => on(th, p[0], p[1], n));
-  let s = P(wob(q([[uL, .33], [uR, .33], [uR, .97], [uL, .97]], 1), .4), "#B57D4B", 1.6);
-  const pu = (a) => uL + (uR - uL) * a;
-  s += P(wob(q([[pu(.09), .39], [pu(.91), .39], [pu(.91), .93], [pu(.09), .93]], 1.2), .3), PAPER, .9);
-  for (let v = .5; v < .91; v += .052) { const a = on(th, pu(.16), v, 1.3), b = on(th, pu(.84), v, 1.3); s += '<path d="M' + f1(a[0]) + " " + f1(a[1]) + " L" + f1(b[0]) + " " + f1(b[1]) + '" style="stroke:' + RULE + ';stroke-width:.7"/>'; }
-  { const a = on(th, pu(.16), .45, 1.3), b = on(th, pu(.62), .45, 1.3); s += '<path d="M' + f1(a[0]) + " " + f1(a[1]) + " L" + f1(b[0]) + " " + f1(b[1]) + '" style="stroke:#9C9892;stroke-width:1.1"/>'; }
-  s += P(wob(q([[pu(.36), .3], [pu(.64), .3], [pu(.64), .37], [pu(.36), .37]], 1.6), .2), "#C5BEB0", 1.1);
-  const n = on(th, pu(.5), .23, 0), c = on(th, pu(.5), .3, 1.6);
-  s += '<path d="M' + f1(n[0]) + " " + f1(n[1]) + " L" + f1(c[0] - 2) + " " + f1(c[1]) + " M" + f1(n[0]) + " " + f1(n[1]) + " L" + f1(c[0] + 2) + " " + f1(c[1]) + '" style="stroke:#3a332b;stroke-width:.8"/><circle cx="' + f1(n[0]) + '" cy="' + f1(n[1]) + '" r="1.3" style="fill:#9A6A2E;stroke:' + INK + ';stroke-width:.7"/>';
+/* clipboard: a real one is about 9 x 12.5 in; here 66 wide, 92 tall on the door */
+function clipboard() {
+  const uL = .2, uR = uL + 66 / DOOR.W, vT = .36, vB = vT + 92 / H_DOOR, q = (pts, n) => pts.map((p) => on(p[0], p[1], n));
+  const pu = (a) => uL + (uR - uL) * a, pv = (a) => vT + (vB - vT) * a;
+  let s = P(wob(q([[uL, vT], [uR, vT], [uR, vB], [uL, vB]], 1), .4), "#B57D4B", 1.7);
+  s += P(wob(q([[pu(.08), pv(.07)], [pu(.92), pv(.07)], [pu(.92), pv(.96)], [pu(.08), pv(.96)]], 1.2), .3), PAPER, 1);
+  for (let a = .2; a < .93; a += .065) { const p1 = on(pu(.16), pv(a), 1.3), p2 = on(pu(.84), pv(a), 1.3); s += '<path d="M' + f1(p1[0]) + " " + f1(p1[1]) + " L" + f1(p2[0]) + " " + f1(p2[1]) + '" style="stroke:' + RULE + ';stroke-width:.8"/>'; }
+  { const p1 = on(pu(.16), pv(.13), 1.3), p2 = on(pu(.6), pv(.13), 1.3); s += '<path d="M' + f1(p1[0]) + " " + f1(p1[1]) + " L" + f1(p2[0]) + " " + f1(p2[1]) + '" style="stroke:#9C9892;stroke-width:1.3"/>'; }
+  s += P(wob(q([[pu(.3), pv(-.025)], [pu(.7), pv(-.025)], [pu(.66), pv(.075)], [pu(.34), pv(.075)]], 1.6), .2), "#C5BEB0", 1.2);
+  const n = on(pu(.5), vT - .08, 0), c1 = on(pu(.4), pv(-.02), 1.6), c2 = on(pu(.6), pv(-.02), 1.6);
+  s += '<path d="M' + f1(c1[0]) + " " + f1(c1[1]) + " L" + f1(n[0]) + " " + f1(n[1]) + " L" + f1(c2[0]) + " " + f1(c2[1]) + '" style="fill:none;stroke:#3a332b;stroke-width:.9"/><circle cx="' + f1(n[0]) + '" cy="' + f1(n[1]) + '" r="1.6" style="fill:#9A6A2E;stroke:' + INK + ';stroke-width:.8"/>';
   return s;
 }
-/* swung fully open: the inside face shows, clipboard hanging on it */
 function cupOpen(v) {
-  const th = 100, c = (u, v) => on(th, u, v, 0), t = 3.2;
-  let door = interior(v, "o");
-  const e = (v) => on(th, 1, v, -t);   /* the door's thickness at the free edge */
+  const c = (u, vv) => on(u, vv, 0), t = 3.2, e = (vv) => on(1, vv, -t);
+  let door = interior(v);
   door += P(wob([c(1, 0), e(0), e(1), c(1, 1)], .2), cab(60), 1.6);
   door += P(wob([c(0, 0), c(1, 0), c(1, 1), c(0, 1)], .5), cab(84), 2.2);
-  door += P(wob([c(.62, .02), c(.98, .02), c(.98, .98), c(.62, .98)], .2), cab(92, "#fff"));   /* light on the outer half */
-  door += P(wob([c(.08, .1), c(.92, .1), c(.92, .92), c(.08, .92)], .3), "none", .9);
-  return { door, clip: clipboard(th, .2, .82) };
-}
-/* cracked open: the outside face shows, the clipboard's edge peeks out of the gap */
-function cupAjar(v) {
-  const th = 26, c = (u, v) => on(th, u, v, 0), t = 3.2;
-  let s = interior(v, "a");
-  s += clipboard(th, .78, 1.12);
-  const e = (v) => on(th, 1, v, t);
-  s += P(wob([c(1, 0), e(0), e(1), c(1, 1)], .2), cab(62), 1.6);
-  s += P(wob([c(0, 0), c(1, 0), c(1, 1), c(0, 1)], .5), "var(--cab)", 2.2);
-  s += P(wob([c(.12, .05), c(.88, .05), c(.88, .84), c(.12, .84)], .3), cab(88), 1.4);
-  s += P(wob([c(.16, .08), c(.84, .08), c(.84, .81), c(.16, .81)], .3), "var(--cab)", .8);
-  const k = c(.9, .9); s += '<circle cx="' + f1(k[0]) + '" cy="' + f1(k[1]) + '" r="3.6" style="fill:#9A6A2E;stroke:' + INK + ';stroke-width:1.4"/><circle cx="' + f1(k[0] + 0.8) + '" cy="' + f1(k[1] - 0.9) + '" r="1.3" style="fill:#C8963F"/>';
-  return s;
-}
-
-/* ---- patches for the swap: fill where the box and mixer stood (wall above the counter's back edge, wood below),
-        and finish the whiteboard's lower right corner, which the mixer always hid ---- */
-function patch(v) {
-  const id = (s) => v + "-" + s, mk = (o, c, cl) => '<g clip-path="url(#' + id(cl) + ')"><use href="#' + id("mk-" + o) + '" fill="' + c + '" stroke="' + c + '" stroke-width="12" stroke-linejoin="round"/></g>';
-  let s = '<g clip-path="url(#' + id("pt-box") + ')">' + mk("box", "var(--wall)", "up") + mk("box", WOOD_L, "dn") + "</g>";
-  s += '<g clip-path="url(#' + id("pt-mixer") + ')">' + mk("mixer", "var(--wall)", "up") + mk("mixer", WOOD, "dn") + "</g>";
-  s += '<rect x="22" y="315.3" width="166" height="1.7" style="fill:' + INK + '"/><rect x="512" y="315.4" width="166" height="1.7" style="fill:' + INK + '"/>';
-  s += lens(40, 96, 326, 1.2) + lens(110, 170, 333, 1.1) + lens(60, 120, 345, 1.3) + lens(525, 590, 327, 1.1) + lens(600, 670, 337, 1.2) + lens(540, 610, 349, 1.2);
-  /* the whiteboard's right part, which the mixer hid (redrawn to match, from x 505 on) */
-  s += '<g clip-path="url(#' + id("pt-wb") + ')">' +
-    '<rect x="453" y="133.2" width="139.5" height="163.8" rx="7" style="fill:' + INK + '"/>' +
-    '<rect x="455.4" y="135.4" width="134.7" height="159.5" rx="5" style="fill:#C5BEB0"/>' +
-    '<rect x="461.8" y="138.9" width="122.2" height="152.4" style="fill:' + INK + '"/>' +
-    '<rect x="463" y="139.8" width="120" height="150.8" style="fill:#FAF8E8"/>' +
-    '<path d="M582.5 135.4 H586 Q590.1 135.4 590.1 139.4 V142.6 H582.5 Z" style="fill:#595858;stroke:' + INK + ';stroke-width:1"/>' +
-    '<path d="M582.5 289.6 H590.1 V291.5 Q590.1 294.9 586.5 294.9 H582.5 Z" style="fill:#595858;stroke:' + INK + ';stroke-width:1"/></g>';
-  return s;
-}
-function patchDefs(v) {
-  const id = (s) => v + "-" + s;
-  return '<clipPath id="' + id("up") + '"><rect x="-10" y="-10" width="900" height="326.2"/></clipPath>' +
-    '<clipPath id="' + id("dn") + '"><rect x="-10" y="316.2" width="900" height="200"/></clipPath>' +
-    '<clipPath id="' + id("pt-box") + '"><rect x="0" y="150" width="187.5" height="230"/></clipPath>' +
-    '<clipPath id="' + id("pt-mixer") + '"><rect x="500" y="150" width="178.5" height="230"/></clipPath>' +
-    '<clipPath id="' + id("pt-wb") + '"><rect x="505" y="125" width="94" height="180"/></clipPath>';
+  door += P(wob([c(.66, .01), c(.99, .01), c(.99, .99), c(.66, .99)], .2), cab(91, "#fff"));   /* light on the outer part */
+  door += P(wob([c(.07, .05), c(.93, .05), c(.93, .95), c(.07, .95)], .3), "none", .9);
+  return door;
 }
 
 module.exports = {
   opts(v) {
     seed = 7;
-    const cupA = cupOpen(v);
-    const end = LABELS.map((l) => ({ obj: l[0], svg: l[1] }))
-      .concat([{ obj: "whiteboard", svg: marker() }, { obj: "eclair", svg: eclair() }, { obj: "jar", svg: jar() },
-        { obj: "cup-open", svg: cupA.door }, { obj: "clip", svg: cupA.clip }, { obj: "cup-ajar", svg: cupAjar(v) }]);
-    return v === "b" ? { defs: patchDefs(v), patch: patch(v), end } : { end };
+    return { end: [{ obj: "whiteboard", svg: marker() }, { obj: "eclair", svg: eclair() }, { obj: "jar", svg: jar() },
+      { obj: "cup-open", svg: cupOpen(v), top: true }, { obj: "clip", svg: clipboard(), top: true }] };
   },
 };

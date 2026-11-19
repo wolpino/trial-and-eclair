@@ -6,8 +6,9 @@
    - gives the recipe box its own blue (Blue 3 shades), cabinets follow --cab, the wall follows --wall
    - deletes the traced scribbles where the app will write (whiteboard, notes, notebook pages, box tabs, book spines)
    - adds the new pieces from add.cjs (eclair, spoon jar, marker, shelf labels, open cupboard)
-   - writes two versions: kitchen.svg (as traced) and kitchen-swap.svg (recipe box and mixer swapped)
-   node traced/clean.cjs  -> traced/kitchen.svg, traced/kitchen-swap.svg (+ traced/report.json) */
+   - shows more wall cupboard: the frame now ends at the bottom of the middle drawer (TOP units cut off below) and the same
+     height is added on top: the wall cupboards are stretched upward, the cubby gets one more compartment of books
+   node traced/clean.cjs  -> traced/kitchen.svg (+ traced/report.json); --plain = split only, at the old frame */
 const { chromium } = require("/Users/ari/codes/trial-and-eclair/frontend/node_modules/playwright");
 const fs = require("fs"), path = require("path"), D = __dirname;
 const ADD = require("./add.cjs");
@@ -29,8 +30,7 @@ const SCRIB = [
   [418, 18, 660, 108, 9, .72, "cookbooks references"],     /* titles on the book spines */
 ];
 const INK_GROW = 6;   /* stroke width that grows an object's shapes into its ink mask (3 units each side) */
-/* the swap: recipe box and mixer change places along the counter; both keep their depth (y) */
-const SWAP = { mixer: -490, box: 488 };
+const TOP = 44;   /* units moved from the bottom of the frame to the top (bottom = middle drawer's bottom, y 440) */
 /* shapes inside an object's box that belong elsewhere: [object, test(shape, cx, cy, hue), new object] */
 const WOODY = (h) => { const [hu, s, l] = hsl(h); return hu > .06 && hu < .1 && s > .3 && l > .35 && l < .7; };
 const MOVE_TO = [
@@ -44,6 +44,21 @@ const MAIN = hsl("#6D8C97")[2];
 function shade(v, h) { const l = hsl(h)[2]; return l >= MAIN ? "color-mix(in srgb," + v + " " + Math.round(100 - (l - MAIN) / (1 - MAIN) * 100) + "%,#fff)" : "color-mix(in srgb," + v + " " + Math.round(100 - (MAIN - l) / MAIN * 100) + "%,#1f1d1a)"; }
 const r1 = (d) => d.replace(/-?\d*\.\d+/g, (n) => (+(+n).toFixed(1)).toString());
 const r0 = (d) => d.replace(/-?\d*\.\d+/g, (n) => Math.round(+n).toString());
+/* the added height on top, made from the picture itself (a <use> of the whole scene, clipped):
+   wall cupboards: the band y 5..55 has only upright lines (stiles, panel edges), so it is stretched up to the new top;
+   cubby: the compartment above is the books compartment moved up one shelf, with the books flipped so they don't repeat;
+   wall above the window: plain wall */
+const CAB_X = 410.3, CUB = [410.3, 666], CUB_IN = [422, 653], CUB_PITCH = 95.3, CUB_SHELF = 10.3;
+function extend(id) {
+  const y0 = 5 - TOP - 2, K = (55 - y0) / 50, T = 55 - 55 * K, cx = (CUB_IN[0] + CUB_IN[1]) / 2, use = '<use href="#' + id("scene") + '"';
+  return '<clipPath id="' + id("x-cab") + '"><rect x="-5" y="' + y0 + '" width="' + (CAB_X + 5) + '" height="' + (55 - y0) + '"/></clipPath>' +
+    '<clipPath id="' + id("x-cub") + '"><rect x="' + CUB[0] + '" y="' + y0 + '" width="' + (CUB[1] - CUB[0]) + '" height="' + (CUB_SHELF - y0) + '"/></clipPath>' +
+    '<clipPath id="' + id("x-cubi") + '"><rect x="' + CUB_IN[0] + '" y="' + y0 + '" width="' + (CUB_IN[1] - CUB_IN[0]) + '" height="' + (CUB_SHELF - y0) + '"/></clipPath>' +
+    '<rect x="' + (CUB[1] - 2) + '" y="' + y0 + '" width="210" height="' + (7 - y0) + '" style="fill:var(--wall)"/>' +
+    '<g clip-path="url(#' + id("x-cab") + ')">' + use + ' transform="matrix(1 0 0 ' + K.toFixed(4) + " 0 " + T.toFixed(2) + ')"/></g>' +
+    '<g clip-path="url(#' + id("x-cub") + ')">' + use + ' transform="translate(0 ' + (-CUB_PITCH) + ')"/></g>' +
+    '<g clip-path="url(#' + id("x-cubi") + ')">' + use + ' transform="translate(' + (2 * cx) + " " + (-CUB_PITCH) + ') scale(-1 1)"/></g>';
+}
 (async () => {
   const src = fs.readFileSync(path.join(D, "source.svg"), "utf8");
   const b = await chromium.launch(), p = await b.newPage();
@@ -89,22 +104,19 @@ const r0 = (d) => d.replace(/-?\d*\.\d+/g, (n) => Math.round(+n).toString());
         objs.concat("room").forEach((o) => out.push([o === "room" ? "room" : o, '<path d="' + d + '" fill="' + q.fill + '" mask="url(#' + id("ink-" + o) + ')"/>']));
         return;
       }
-      if (opts.before && opts.before[it.obj] && !opts.before[it.obj].done) { opts.before[it.obj].done = 1; out.push([opts.before[it.obj].obj, opts.before[it.obj].svg]); }
       out.push([it.obj, '<path d="' + r1(q.d) + '" style="fill:' + fillOf(it) + '"' + ATTRS(q) + "/>"]);
     });
-    /* moved objects come out of the flow and go on top, shifted */
-    const move = opts.move || {}, moved = {};
-    const flow = out.filter((e) => { if (move[e[0]] === undefined) return true; (moved[e[0]] = moved[e[0]] || []).push(e[1]); return false; });
     const runs = (list) => { let s = "", cur = null; list.forEach((e) => { if (e[0] !== cur) { if (cur) s += "</g>"; s += '<g data-obj="' + e[0] + '">'; cur = e[0]; } s += e[1]; }); return s + (cur ? "</g>" : ""); };
-    let svg = runs(flow) + (opts.patch ? '<g data-obj="room">' + opts.patch + "</g>" : "");
-    Object.keys(moved).forEach((o) => { svg += '<g transform="translate(' + move[o] + ' 0)">' + runs(moved[o].map((el) => [o, el])) + "</g>"; });
-    svg += (opts.end || []).map((a) => '<g data-obj="' + a.obj + '">' + a.svg + "</g>").join("");
-    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="6 5 856 479" class="tk-art" aria-hidden="true">' + defs + svg + "</svg>";
+    const grp = (list) => list.map((a) => '<g data-obj="' + a.obj + '">' + a.svg + "</g>").join("");
+    let svg = '<g id="' + id("all") + '"><g id="' + id("scene") + '">' + runs(out) + grp((opts.end || []).filter((a) => !a.top)) + "</g>";
+    if (opts.top !== false) svg += extend(id);
+    svg += grp((opts.end || []).filter((a) => a.top)) + "</g>";   /* "all" is reused by the close-ups on the page */
+    const vb = opts.top === false ? "6 5 856 479" : "6 " + (5 - TOP) + " 856 479";
+    return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + vb + '" class="tk-art" aria-hidden="true">' + defs + svg + "</svg>";
   }
   const plain = process.argv.includes("--plain");   /* --plain: split only, nothing added (for the before/after check) */
-  const A = build("a", plain ? {} : ADD.opts("a"));
+  const A = build("a", plain ? { top: false } : ADD.opts("a"));
   fs.writeFileSync(path.join(D, "kitchen.svg"), A);
-  if (!plain) { const B = build("b", Object.assign(ADD.opts("b"), { move: SWAP })); fs.writeFileSync(path.join(D, "kitchen-swap.svg"), B); }
   fs.writeFileSync(path.join(D, "report.json"), JSON.stringify(rep, null, 1));
   console.log(JSON.stringify(rep), Math.round(A.length / 1024) + " KB");
 })();

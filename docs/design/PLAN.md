@@ -190,7 +190,15 @@ Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop
 - [x] v3 (2026-11-19, same URL): Ari's own vector trace of Kittl A (`traced/source.svg`) cleaned by `traced/clean.cjs`: shapes sorted into objects by position (paint order kept), box on Blue 3 shades, cabinets on --cab, wall on --wall, ~480 scribbles cleared, frame cropped (286 KB, ~90 KB gzipped). Buttons, glow (no movement: the ink is a few shared shapes), recolour, all working. Missing: fridge, log drawer labels, phone trace; fixed width
 - [x] Ari (11/19): **traced direction picked.** Glow only (no lift). No fridge (it was an extra image); take the Recently list off. Cabinets stem green. Wants: cookbooks/references labels on the cubby's lower shelf edge; one wall cupboard open (top left or the next one) with a baking log on a clipboard inside the door; a version with box and mixer swapped; the eclair and small fixes
 - [x] v4 (2026-11-19, same URL): ink split per object by masks (diff vs v3: only cleared marks and sub-pixel edges); stem green default; mixer marks cleared; shelf-edge labels; eclair on a plate; spoon jar on the sill; tomato-capped marker; cupboard open wide or cracked with a baking-log clipboard; B = box and mixer swapped (`traced/add.cjs`, `kitchen-swap.svg`)
-- [ ] Ari (v4 questions): cupboard open wide or cracked; clipboard as the recipe log button; A or B; keep the small pieces as drawn
+- [x] **Decided (Ari, 2026-11-19, on v4):** cabinets stem green; cupboard open wide; the clipboard is the recipe log button (drawers plain); box and mixer stay where traced (B dropped). New pieces may be cleaner than the trace
+- [x] v5 (2026-11-19, same URL): frame ends at the middle drawer's bottom, that height added on top (wall cupboards stretched, cubby gets a second book row); open cupboard with two shelves and a clipboard in true proportion; eclair pencil-length and plump; spoon jar twice the size; close-ups; shelf labels off; the book shelf is one button
+- [ ] Ari (v5 questions): one Library view for cookbooks and references, its name, no shelf labels; the taller frame; the close-ups
+
+### Product changes from the plates (apply in one pass)
+Changes to the product that come out of the drawings. Kept here as they come up and applied together to `docs/PRD.md`, the README and the Task issues when Plate XII is signed off (before Task issues), so the plan is edited once and stays consistent.
+- [ ] **Library** (Ari 2026-11-19, name not settled): the book shelf opens one view holding both the cook's cookbooks (their published collections) and references (research shelf). Touches PRD sections 2, 5 and 7, the Phase UI tables, Plate XI's two views and their web addresses (decision 005)
+- [ ] **Recipe log on a clipboard** in the open wall cupboard, not the drawer stack
+- [ ] **No fridge, no Recently list** (Plate XII v3)
 - If picked, this replaces the Plate XI kitchen drawing (views and phone follow), so settle it before the test piece
 
 ## Before Task issues: things that could disrupt the build

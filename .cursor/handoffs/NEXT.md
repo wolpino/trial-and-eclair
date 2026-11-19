@@ -1,4 +1,4 @@
-# NEXT — 2026-11-19 (Plate XII v4 published: traced kitchen, waiting on Ari)
+# NEXT — 2026-11-19 (Plate XII v5 published: taller traced kitchen, waiting on Ari)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,16 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII, after Ari answers v4) — START HERE
+## Prompt for the next agent (Plate XII, after Ari answers v5) — START HERE
+> Plate XII v5: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Same sources and build as below, minus the swap (removed). New in `clean.cjs`: TOP 44 (frame ends at the middle drawer's bottom, viewBox `6 -39 856 479`), `extend()` builds the added top from the scene itself (cupboard band stretched, cubby row moved up and flipped). `add.cjs`: marker, eclair, spoon jar, open cupboard (125 degrees, two shelves) and clipboard. Page close-ups reuse `#a-all`.
+>
+> **Decided (Ari 11/19):** stem green; cupboard open wide; clipboard = recipe log button; box and mixer stay; new pieces may be cleaner than the trace.
+>
+> **Questions (page top):** one Library view for cookbooks + references, its name (pick Library), no shelf labels; taller frame OK; close-ups OK.
+>
+> **Product changes:** keep adding to PLAN.md "Product changes from the plates"; apply them to PRD, README and Task issues in one pass when Plate XII is signed off.
+
+## Prompt for the next agent (Plate XII, after Ari answers v4) — done (v5)
 > Plate XII v4: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Sources `design/plate-xii/traced/`: `source.svg` (never edit), `clean.cjs` (sorts paths into objects; MOVE_TO reclass rules; splits the dark underlay "ink" per object with SVG masks, INK_GROW 6, room cut-out grown 3 so pieces overlap; SWAP moves box +488 / mixer -490; writes `kitchen.svg` and `kitchen-swap.svg`; `--plain` = split only, for diffing), `add.cjs` (new pieces in the trace's style: shelf labels, eclair, spoon jar, marker, cupboard open/ajar + clipboard, swap patches), `view.cjs out.png [cab] [wall] [svg] [open|ajar|closed]`. Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`, publish to the same URL (read the live version first if this session hasn't).
 >
 > **Questions (page top), Claude's picks:** cupboard open wide (pick) or cracked; clipboard = recipe log button, drawers plain (pick yes); A box left (pick) or B swapped; labels/eclair/jar/marker as drawn (pick keep).

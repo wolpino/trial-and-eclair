@@ -10,6 +10,39 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-19 · Plate XII v5: taller kitchen, cupboard, eclair, jar (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v5) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v5 published; three questions to Ari; no app code) |
+
+### Intent
+Apply Ari's v4 answers: taller wall cupboards (crop at the drawer), clipboard proportions, eclair and spoon jar size, drop B and the other cupboard states.
+
+### Summary
+- `clean.cjs`: swap code removed; TOP 44: viewBox `6 -39 856 479`; `extend()` reuses the scene with <use>: cupboards band y 5..55 stretched up, cubby book row moved up 95.3 and flipped, plain wall above the window. Whole drawing wrapped in `#a-all` for close-ups
+- `add.cjs`: cupboard door now y -48..102.5, swung 125 degrees; two shelves; clipboard 66 x 92; eclair 62 x 19 on a 84-wide plate; spoon jar 30 x 32 with spoons, whisk, tomato spatula; labels, ajar door and swap patches removed
+- Page: one kitchen, colour controls, library button (whole cubby), clipboard button, four close-ups; PLAN.md gets "Product changes from the plates"
+
+### Decisions
+- Ari: stem green; open wide; clipboard = recipe log; box and mixer stay; cleaner new pieces are fine
+- Product changes go on one list in PLAN.md, applied to PRD/README/Task issues in one pass at Plate XII sign-off
+
+### Open threads
+- Ari: Library name (pick Library), no shelf labels; taller frame; close-ups
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v5, traced, taller frame, library, clipboard
+**Files:** design/plate-xii/traced/ (clean.cjs, add.cjs, kitchen.svg), sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v5 as drawn (tweak only); the ink split
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v5 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Plate XII v4: traced kitchen split, swap, cupboard (published)
 
 | Field | Value |

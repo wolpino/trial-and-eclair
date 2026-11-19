@@ -4,7 +4,7 @@ const fs = require("fs"), path = require("path");
 (async () => {
   const [out, cab, wall, file, cup] = process.argv.slice(2);
   const svg = fs.readFileSync(path.join(__dirname, file || "kitchen.svg"), "utf8");
-  const hide = { open: ["cup-ajar"], ajar: ["cup-open", "clip"], closed: ["cup-open", "clip", "cup-ajar"] }[cup || "closed"].map((o) => '[data-obj="' + o + '"]').join(",");
+  const hide = "[data-obj=none]";
   const b = await chromium.launch(), p = await b.newPage({ viewport: { width: 1200, height: 671 }, deviceScaleFactor: 1.5 });
   await p.setContent('<style>:root{--blue:#3F5F9D;--cab:' + (cab || "#5e8c3a") + ';--wall:' + (wall || "#F6E9CB") + '}body{margin:0;background:var(--wall)}svg{width:1200px;display:block}' + hide + '{display:none}</style>' + svg);
   await p.screenshot({ path: out }); await b.close();
