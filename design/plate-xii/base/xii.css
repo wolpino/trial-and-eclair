@@ -1,0 +1,11 @@
+/* ===== Plate XII ===== */
+:root { --wall: var(--plaster); --splash: #f4f5ea; --fridge: #f6efd9; }
+.optA { --cab: #5f8aa8; }
+.optB { --cab: #5e8c3a; }
+.k-fig { position: relative; }
+.k-fig figcaption { font-size: .84rem; color: var(--ink-soft); padding: 6px 10px; border-top: 1px solid var(--rule); }
+.from { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; font-size: .92rem; max-width: 80ch; }
+.from .src { font: 600 .7rem var(--font-body); font-variant: small-caps; letter-spacing: .08em; border: 1.2px solid var(--ink); padding: 0 5px; margin-right: 4px; background: var(--card); }
+.recol { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: end; }
+.recol .seg button { display: inline-flex; align-items: center; gap: 6px; }
+.recol .dot { width: 14px; height: 14px; border: 1.3px solid var(--ink); display: inline-block; }

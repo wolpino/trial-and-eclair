@@ -10,7 +10,16 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Brand Sheet, after Ari answers) — START HERE
+## Prompt for the next agent (Plate XII, after Ari answers) — START HERE
+> Plate XII v1: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Sources `design/plate-xii/` (base/core.js and mark.js copied from brand; drawing in `kitchen-xii.js`, `XII.A()` / `XII.B()`, scene 1800 x 860, normal view crops x 200..1600). Build: `cd design/plate-xii && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`, publish to the same URL. Shots: `node shot.cjs dist/index.html shots/vN "#xa-fig"`.
+>
+> **Why:** Ari's Kittl kitchens (desktop 1 corner view, desktop 2 straight on) are AI raster images: gibberish text, baked colours, no separate objects. Used as mood only. Straight on makes the kitchen stretch (wider = more wall) and keeps buttons as rectangles.
+>
+> **Questions (page top):** A, B or mix (pick A + B's eclair plate and magnets); keep the island with cookbook cubbies and recipe log drawers (pick keep); first cabinet colour steel blue or stem green (pick green); spiral open or composition standing (pick composition).
+>
+> **Next:** draw Ari's pick properly (evening, phone layout, Plate XI extras), then Task issues (PLAN step 6). Plate XI's kitchen is replaced only if Ari picks.
+
+## Prompt for the next agent (Brand Sheet, after Ari answers) — done (v4)
 > Brand Sheet v1: https://claude.ai/artifact/L3p52UdPaAsUBAa77J3gmi. Sources `design/brand/` (base copied from mark; the eclair helper MK2 now lives in `base/mark.js`; kitchen.js is Plate XI's). Sections: 00 questions, 01 mark (sizes, icon, title lockup, rules), 02 colours (tokens, shades, contrast table computed on the page), 03 fonts, 04 line/colour/halftone/hatching, 05 small pieces, 06 kitchen reference (day, evening, construction lines). Build: `cd design/brand && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/brand-sheet.html`, publish to the same URL.
 >
 > **Questions to Ari (page top):** (1) "T&E" only as the home screen label? Claude's pick yes. (2) App icon ground: Prussian (pick) or paper; tab stays paper. (3) Body font: keep Iowan/Palatino/Georgia stack (pick) or load a web font.

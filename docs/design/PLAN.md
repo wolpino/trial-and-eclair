@@ -182,6 +182,12 @@ Brand Sheet v1 (2026-11-17): https://claude.ai/artifact/L3p52UdPaAsUBAa77J3gmi, 
 - Build note: animate the glow with fill-opacity, not opacity (Chrome drops the blurred mask while opacity animates)
 - [ ] Ari signs off
 
+## 5b. Plate XII: kitchen straight on (from Ari's Kittl studies)
+Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop 2: straight on, island with cubbies and log drawers). Kittl output is a flat AI image (gibberish text, baked colours), so it is a mood reference only, redrawn in plate shapes.
+- [x] v1 (2026-11-19, https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj, `design/plate-xii/`): A = desktop 1 seen straight on; B = desktop 2 tidied; extra-wide stretch and a cabinet/wall recolour test
+- [ ] Ari: A, B or a mix; keep the island; first cabinet colour; spiral or composition notebook
+- If picked, this replaces the Plate XI kitchen drawing (views and phone follow), so settle it before the test piece
+
 ## Before Task issues: things that could disrupt the build
 Raised 2026-11-16. Ari's answers (2026-11-16) are in each line. "Claude's pick" means Ari asked for a recommendation; it stands unless Ari says otherwise.
 - [x] **Phone layout**: next after Plate XI (Ari: next, or after the brand work. Claude's pick: straight after Plate XI, before the mark, because it shapes how the kitchen is built and the brand work does not). Square it with the Recipe Box phone work (`docs/recipe-box/`)

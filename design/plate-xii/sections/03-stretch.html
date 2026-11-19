@@ -1,0 +1,42 @@
+<section id="xr" aria-labelledby="xr-h">
+  <span class="label" id="xr-h">03 · Stretch and recolour</span>
+  <div class="sec-body">
+    <p class="note">Why straight on helps: a wider screen just shows more wall. The normal view crops the fridge; from 1680 px the whole fridge and the far cabinets show. Same drawing, wider frame. The middle (notebook, box, log) never moves.</p>
+    <div class="pair">
+      <div><h3>A, extra wide (1680 px and up)</h3><figure class="k-fig optA" id="xr-a"></figure></div>
+      <div><h3>B, extra wide</h3><figure class="k-fig optB" id="xr-b"></figure></div>
+    </div>
+    <div class="recol">
+      <div class="choice"><span class="cap">Cabinets</span><div class="seg" id="xr-cab">
+        <button data-v="" aria-pressed="true">as drawn</button>
+        <button data-v="#5f8aa8"><span class="dot" style="background:#5f8aa8"></span>steel blue</button>
+        <button data-v="#5e8c3a"><span class="dot" style="background:#5e8c3a"></span>stem green</button>
+        <button data-v="#c9b48a"><span class="dot" style="background:#c9b48a"></span>oat</button>
+        <button data-v="#b5553a"><span class="dot" style="background:#b5553a"></span>terracotta</button>
+      </div></div>
+      <div class="choice"><span class="cap">Wall</span><div class="seg" id="xr-wall">
+        <button data-v="" aria-pressed="true">sage white</button>
+        <button data-v="#f7e9d0"><span class="dot" style="background:#f7e9d0"></span>cream</button>
+        <button data-v="#dfe9ee"><span class="dot" style="background:#dfe9ee"></span>sky</button>
+      </div></div>
+    </div>
+    <p class="note">Each surface is one named colour, so recolouring is one setting. The box stays Blue 3 whatever the cabinets do.</p>
+  </div>
+</section>
+<script>
+PLATE.add(function () {
+  document.getElementById("xr-a").innerHTML = XII.svg("0 0 1800 860", XII.A(), "Option A, extra wide");
+  document.getElementById("xr-b").innerHTML = XII.svg("0 0 1800 860", XII.B(), "Option B, extra wide");
+});
+(function () {
+  function wire(id, prop) {
+    var seg = document.getElementById(id);
+    seg.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      seg.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      document.querySelectorAll(".k-fig").forEach(function (f) { if (b.dataset.v) f.style.setProperty(prop, b.dataset.v); else f.style.removeProperty(prop); });
+    });
+  }
+  wire("xr-cab", "--cab"); wire("xr-wall", "--wall");
+})();
+</script>

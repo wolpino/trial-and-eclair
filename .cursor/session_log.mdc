@@ -10,6 +10,38 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-19 · Plate XII drawn and published (v1)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v1 published; waiting on Ari's four answers; no app code) |
+
+### Intent
+Redraw the kitchen straight on from Ari's two Kittl studies: A takes the most from desktop 1, B tidies desktop 2.
+
+### Summary
+- Reviewed the Kittl HTML exports: one AI JPEG each (~1 MB), gibberish text, teal box #3B7A9E, lettered box, div hotspots. Mood only
+- New `design/plate-xii/`: 00 questions, 01 A, 02 B, 03 extra wide + cabinet/wall recolour test
+- Plate XII page: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj
+
+### Decisions
+- None from Ari yet. Claude's picks: A with B's eclair plate and magnets; keep the island; stem green cabinets; composition notebook
+
+### Open threads
+- Ari: the four questions at the page top
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII, Kittl, straight on, island, recipe log drawers
+**Files:** design/plate-xii/ (kitchen-xii.js, sections 00–03), docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII options as drawn (tweak only)
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-17 · Brand Sheet drawn and published (v1)
 
 | Field | Value |
