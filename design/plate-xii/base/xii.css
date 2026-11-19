@@ -9,3 +9,5 @@
 .recol { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: end; }
 .recol .seg button { display: inline-flex; align-items: center; gap: 6px; }
 .recol .dot { width: 14px; height: 14px; border: 1.3px solid var(--ink); display: inline-block; }
+.v2a { --cab: #6f93b3; --wall: #f6efdc; }
+.v2b { --cab: #9bb6ca; --wall: #f6efdc; }

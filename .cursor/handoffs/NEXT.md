@@ -17,6 +17,8 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 >
 > **Questions (page top):** A, B or mix (pick A + B's eclair plate and magnets); keep the island with cookbook cubbies and recipe log drawers (pick keep); first cabinet colour steel blue or stem green (pick green); spiral open or composition standing (pick composition).
 >
+> **v2 (11/19):** Ari liked neither v1 and sent Kittl "recipe board one point options" (A balanced, B wide suite). Redrawn in true one-point perspective in `kitchen-xii2.js` (`XII2.A()`/`XII2.B()`; S(x,y,d) puts a room point on screen, L(d,…) draws a flat group at depth d; eye at 900,330). More detail: panelled doors, brass pulls, book spines, food photos, full Buttercup, checked floor through the kneehole. Questions: A/B (pick B); cookbooks/references (pick B's two shelves); whiteboard on the board (pick yes); tall cupboard = fridge (pick yes); cabinet colour. v1 sections renamed 08/09 with their own ids.
+>
 > **Next:** draw Ari's pick properly (evening, phone layout, Plate XI extras), then Task issues (PLAN step 6). Plate XI's kitchen is replaced only if Ari picks.
 
 ## Prompt for the next agent (Brand Sheet, after Ari answers) — done (v4)

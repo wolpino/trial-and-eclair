@@ -185,7 +185,9 @@ Brand Sheet v1 (2026-11-17): https://claude.ai/artifact/L3p52UdPaAsUBAa77J3gmi, 
 ## 5b. Plate XII: kitchen straight on (from Ari's Kittl studies)
 Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop 2: straight on, island with cubbies and log drawers). Kittl output is a flat AI image (gibberish text, baked colours), so it is a mood reference only, redrawn in plate shapes.
 - [x] v1 (2026-11-19, https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj, `design/plate-xii/`): A = desktop 1 seen straight on; B = desktop 2 tidied; extra-wide stretch and a cabinet/wall recolour test
-- [ ] Ari: A, B or a mix; keep the island; first cabinet colour; spiral or composition notebook
+- [x] Ari (11/19): liked neither v1; sent two one-point Kittl "recipe board" studies and asked for more detail
+- [x] v2 (2026-11-19, same URL): one-point redraw. A = Kittl A (wall cubby, window on the back wall); B = Kittl B (tall cupboard, two-tier shelf, whiteboard on the cork board, window in the right wall, counter returns). Drawing in `kitchen-xii2.js`; v1 kept at the bottom
+- [ ] Ari: A or B or mix; where cookbooks and references go; whiteboard on its own or on the board; tall cupboard becomes the fridge (B); first cabinet colour
 - If picked, this replaces the Plate XI kitchen drawing (views and phone follow), so settle it before the test piece
 
 ## Before Task issues: things that could disrupt the build
