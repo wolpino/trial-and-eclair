@@ -25,6 +25,21 @@
         <button data-v="#eef0df"><span class="dot" style="background:#eef0df"></span>sage white</button>
         <button data-v="#dfe9ee"><span class="dot" style="background:#dfe9ee"></span>sky</button>
         <button data-v="#f3d9cf"><span class="dot" style="background:#f3d9cf"></span>blush</button>
+        <button data-v="#FBF8F1"><span class="dot" style="background:#FBF8F1"></span>W1 warm white</button>
+        <button data-v="#F6EEDB"><span class="dot" style="background:#F6EEDB"></span>W2 cream</button>
+        <button data-v="#F4F2EC"><span class="dot" style="background:#F4F2EC"></span>W3 soft white</button>
+      </div></div>
+      <div class="choice"><span class="cap">Light (evening)</span><div class="seg" data-pick="lt" data-eve>
+        <button data-v="2700" aria-pressed="true"><span class="dot" style="background:#FFA957"></span>L2700 2700K</button>
+        <button data-v="2200"><span class="dot" style="background:#FF932C"></span>L2200 2200K amber</button>
+        <button data-v="3000"><span class="dot" style="background:#FFB46B"></span>L3000 3000K</button>
+        <button data-v="4000"><span class="dot" style="background:#FFD1A3"></span>L4000 4000K neutral</button>
+      </div></div>
+      <div class="choice"><span class="cap">Glow</span><div class="seg" data-glow>
+        <button data-v="#FFFFFF #EDC48C" aria-pressed="true"><span class="dot" style="background:#FFF4DC"></span>G1 warm white</button>
+        <button data-v="#DCE5F5 #6F88BE"><span class="dot" style="background:#8FA6D4"></span>G2 brand blue</button>
+        <button data-v="#E2EFD3 #7FA65C"><span class="dot" style="background:#A8C98A"></span>G3 stem green</button>
+        <button data-v="#f2c230 #f5a23a"><span class="dot" style="background:#f2c230"></span>G4 yellow (now)</button>
       </div></div>
     </div>
 
@@ -44,6 +59,14 @@
       <figcaption><b>Kitchen.</b> Click the rack: the first two clicks take an eclair each, the next two take bites out of the last one, and the fifth finishes it. Try the time of day: the rainbows move, and in the evening they're gone and the window goes to dusk.</figcaption>
     </figure>
     <p class="tk-say" id="tk-say" aria-live="polite">Nothing open.</p>
+
+    <h3 id="tk-walls-h">Wall colours</h3>
+    <div class="tk-walls" id="tk-walls">
+      <figure style="--wall:#FBF8F1"><svg viewBox="6 -39 856 479" role="img" aria-label="Kitchen with W1 warm white wall"><use href="#a-all"/></svg><figcaption><b>W1 warm white</b> #FBF8F1</figcaption></figure>
+      <figure style="--wall:#F6EEDB"><svg viewBox="6 -39 856 479" role="img" aria-label="Kitchen with W2 cream wall"><use href="#a-all"/></svg><figcaption><b>W2 cream</b> #F6EEDB</figcaption></figure>
+      <figure style="--wall:#F4F2EC"><svg viewBox="6 -39 856 479" role="img" aria-label="Kitchen with W3 soft white wall"><use href="#a-all"/></svg><figcaption><b>W3 soft white</b> #F4F2EC</figcaption></figure>
+      <figure style="--wall:#F6E9CB"><svg viewBox="6 -39 856 479" role="img" aria-label="Kitchen with the wall as traced"><use href="#a-all"/></svg><figcaption><b>As traced</b> #F6E9CB (for comparison)</figcaption></figure>
+    </div>
 
     <h3 id="tk-close">Close up</h3>
     <div class="tk-zooms" id="tk-zooms">
@@ -78,7 +101,7 @@
     };
     b.addEventListener("click", go); b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
   });
-  var pick = { ecl: "0", sill: "3", sun: "am", tidy: "1", pl: "1", wb: "next" };
+  var pick = { ecl: "0", sill: "3", sun: "am", tidy: "1", pl: "1", wb: "next", lt: "2700" };
   function apply() {
     sec.classList.toggle("dusk", pick.sun === "eve"); k.classList.toggle("tidy", pick.tidy === "1");
     k.querySelectorAll("[data-var]").forEach(function (g) {
@@ -96,6 +119,18 @@
       var b = e.target.closest("button"); if (!b) return;
       seg.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
       sec.style.setProperty(seg.dataset.set, b.dataset.v);
+    });
+  });
+  /* v13: choosing a light warmth switches to evening so it shows (runs after the pick handler) */
+  sec.querySelectorAll("#tk-ctl [data-eve]").forEach(function (seg) {
+    seg.addEventListener("click", function (e) { if (e.target.closest("button") && pick.sun !== "eve") { pick.sun = "eve"; apply(); } });
+  });
+  /* v13: glow colour, two vars (inner, outer) */
+  sec.querySelectorAll("#tk-ctl [data-glow]").forEach(function (seg) {
+    seg.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return; var g = b.dataset.v.split(" ");
+      seg.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      sec.style.setProperty("--glow1", g[0]); sec.style.setProperty("--glow2", g[1]);
     });
   });
 })();
