@@ -1,0 +1,32 @@
+/* ===== Plate XII ===== */
+:root { --wall: var(--plaster); --splash: #f4f5ea; --fridge: #f6efd9; }
+.optA { --cab: #5f8aa8; }
+.optB { --cab: #5e8c3a; }
+.k-fig { position: relative; }
+.k-fig figcaption { font-size: .84rem; color: var(--ink-soft); padding: 6px 10px; border-top: 1px solid var(--rule); }
+.from { margin: 0; padding-left: 1.2em; display: grid; gap: 4px; font-size: .92rem; max-width: 80ch; }
+.from .src { font: 600 .7rem var(--font-body); font-variant: small-caps; letter-spacing: .08em; border: 1.2px solid var(--ink); padding: 0 5px; margin-right: 4px; background: var(--card); }
+.recol { display: flex; flex-wrap: wrap; gap: 8px 22px; align-items: end; }
+.recol .seg button { display: inline-flex; align-items: center; gap: 6px; }
+.recol .dot { width: 14px; height: 14px; border: 1.3px solid var(--ink); display: inline-block; }
+.v2a { --cab: #6f93b3; --wall: #f6efdc; }
+.v2b { --cab: #9bb6ca; --wall: #f6efdc; }
+/* v3: the traced kitchen */
+#tk { --cab: #5e8c3a; --wall: #F6E9CB; }
+.tk { position: relative; border: 1.5px solid var(--ink); background: var(--wall); }
+.tk svg { display: block; width: 100%; height: auto; }
+.tk .tk-hit { position: absolute; inset: 0; height: 100%; }
+.tk-hit rect { fill: transparent; stroke: transparent; stroke-width: 1.6; stroke-dasharray: 6 4; }
+.tk-hit [role="button"] { cursor: pointer; outline: none; }
+.tk-hit [role="button"]:focus-visible rect { stroke: var(--ink); }
+.tk-art g.lit { filter: drop-shadow(0 0 2px #f2c230) drop-shadow(0 0 7px #f5a23a); }
+.tk-say { font-size: .9rem; color: var(--ink-soft); min-height: 1.6em; }
+/* v5: close-ups reuse the kitchen drawing */
+#tk .k-fig { margin: 0; }
+.tk-zooms { display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 14px; align-items: start; }
+.tk-zooms figure { margin: 0; border: 1.5px solid var(--ink); background: var(--wall); }
+.tk-zooms svg { display: block; width: 100%; height: auto; aspect-ratio: auto; }
+.tk-zooms figcaption { font-size: .84rem; color: var(--ink-soft); padding: 6px 10px; border-top: 1px solid var(--rule); background: var(--card); }
+.tk-zooms figure.on { outline: 3px solid var(--orange); outline-offset: 2px; }
+.tk-zooms figure:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.tidy [data-obj="flour"], .tidy [data-obj="pin"] { display: none; }

@@ -1,0 +1,312 @@
+<title>Kitchen Progression</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Young+Serif&family=Figtree:wght@400;600&family=Caveat:wght@600&display=swap">
+<style>
+/* Layout: a plate-room contact sheet. Sticky reel bar with the picked strip, then each design stage as a chapter; look-alike shots sit together in a dashed tray. */
+:root {
+  --paper: #f6f0e2; --card: #fffaf0; --ink: #22201c; --muted: #6a6152; --rule: #e0d4bb;
+  --blue: #3f5f9d; --walnut: #7a5434; --stem: #4f7a3a; --off: rgba(34, 32, 28, 0.42); --shade: rgba(24, 22, 19, 0.97);
+  --display: "Young Serif", Georgia, serif; --body: "Figtree", system-ui, sans-serif; --hand: "Caveat", "Comic Sans MS", cursive;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) { --paper: #1b1916; --card: #25221d; --ink: #f0e8d8; --muted: #b5a993; --rule: #3a342b; --blue: #9fb6e6; --walnut: #d7a77b; --stem: #9cc485; --off: rgba(10, 9, 8, 0.55); --shade: rgba(8, 7, 6, 0.96); color-scheme: dark; }
+}
+:root[data-theme="dark"] { --paper: #1b1916; --card: #25221d; --ink: #f0e8d8; --muted: #b5a993; --rule: #3a342b; --blue: #9fb6e6; --walnut: #d7a77b; --stem: #9cc485; --off: rgba(10, 9, 8, 0.55); --shade: rgba(8, 7, 6, 0.96); color-scheme: dark; }
+
+body { background: var(--paper); color: var(--ink); font: 16px/1.5 var(--body); }
+.wrap { max-width: 1320px; margin: 0 auto; padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.top { padding-block: 40px 18px; display: grid; gap: 8px; }
+.eyebrow { margin: 0; font: 600 0.74rem var(--body); letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+h1 { margin: 0; font: 400 clamp(2rem, 5vw, 3.2rem)/1.05 var(--display); text-wrap: balance; }
+.intro { margin: 0; max-width: 68ch; color: var(--muted); }
+.note { margin: 0; font: 600 1.3rem var(--hand); color: var(--blue); }
+
+.bar { position: sticky; top: env(safe-area-inset-top, 0px); z-index: 5; background: var(--paper); border-block: 1px solid var(--rule); }
+body::before { content: ""; position: fixed; inset: 0 0 auto; height: env(safe-area-inset-top, 0px); z-index: 10; background: var(--paper); }
+.bar .wrap { display: grid; gap: 8px; padding-block: 10px; }
+.controls { display: flex; flex-wrap: wrap; gap: 8px 14px; align-items: center; }
+.count { font: 600 0.95rem var(--body); font-variant-numeric: tabular-nums; }
+.count b { color: var(--blue); }
+.save { font-size: 0.82rem; color: var(--muted); }
+.spacer { flex: 1 1 auto; }
+button, select { font: 600 0.88rem var(--body); color: var(--ink); background: var(--card); border: 1px solid var(--rule); border-radius: 999px; padding: 7px 14px; cursor: pointer; }
+button:hover { border-color: var(--blue); }
+button:focus-visible, select:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+button.primary { background: var(--blue); color: var(--paper); border-color: var(--blue); }
+.seg { display: inline-flex; border: 1px solid var(--rule); border-radius: 999px; overflow: hidden; }
+.seg button { border: 0; border-radius: 0; background: transparent; }
+.seg button[aria-pressed="true"] { background: var(--ink); color: var(--paper); }
+.strip { display: flex; gap: 4px; overflow-x: auto; scrollbar-width: thin; padding-bottom: 2px; }
+.strip button { all: unset; cursor: pointer; flex: 0 0 auto; line-height: 0; border: 1px solid var(--rule); }
+.strip button:focus-visible { outline: 2px solid var(--blue); }
+.strip img { height: 40px; width: auto; display: block; }
+
+.chapter { padding-block: 32px 8px; display: grid; gap: 14px; scroll-margin-top: 140px; }
+.chapter + .chapter { border-top: 1px dashed var(--rule); }
+.ch-head { display: flex; flex-wrap: wrap; align-items: baseline; gap: 4px 14px; }
+.date { margin: 0; font: 600 1.25rem var(--hand); color: var(--walnut); }
+h2 { margin: 0; font: 400 clamp(1.35rem, 3vw, 1.8rem)/1.15 var(--display); }
+.ch-n { font-size: 0.85rem; color: var(--muted); font-variant-numeric: tabular-nums; }
+.grid { display: grid; gap: 16px 14px; grid-template-columns: repeat(auto-fill, minmax(min(100%, 260px), 1fr)); align-items: start; }
+.tray { border: 1.5px dashed var(--rule); border-radius: 6px; padding: 10px 12px 14px; display: grid; gap: 8px; }
+.tray > p { margin: 0; font: 600 1.1rem var(--hand); color: var(--muted); }
+.tray .grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 200px), 1fr)); gap: 12px; }
+
+.shot { margin: 0; display: grid; gap: 5px; min-width: 0; }
+.frame { position: relative; line-height: 0; border: 1px solid var(--rule); background: var(--card); }
+.frame .open { all: unset; cursor: zoom-in; display: block; }
+.frame .open:focus-visible { outline: 2px solid var(--blue); outline-offset: 2px; }
+.frame img { width: 100%; height: auto; display: block; transition: opacity 0.15s ease, filter 0.15s ease; }
+.shot.off .frame img { opacity: 0.45; filter: grayscale(0.7); }
+.pick { position: absolute; top: 6px; right: 6px; line-height: 1; padding: 5px 10px; font-size: 0.8rem; background: var(--card); }
+.pick[aria-pressed="true"] { background: var(--stem); border-color: var(--stem); color: var(--paper); }
+.shot figcaption { font-size: 0.82rem; color: var(--muted); line-height: 1.35; }
+.shot.off figcaption { color: var(--off); }
+body.picked-only .shot.off, body.picked-only .tray.empty, body.picked-only .chapter.empty { display: none; }
+body.picked-only .tray { border-color: transparent; padding: 0; }
+body.picked-only .tray > p { display: none; }
+
+footer { padding-block: 32px 56px; color: var(--muted); font-size: 0.88rem; border-top: 1px solid var(--rule); margin-top: 32px; }
+
+dialog { border: 0; padding: 0; margin: 0; background: transparent; max-width: 100vw; max-height: 100vh; width: 100vw; height: 100vh; }
+dialog::backdrop { background: var(--shade); }
+.pl { height: 100%; box-sizing: border-box; display: grid; grid-template-rows: auto 1fr auto; gap: 10px; color: #f0e8d8;
+  padding: max(14px, env(safe-area-inset-top, 0px)) max(16px, env(safe-area-inset-right, 0px)) max(14px, env(safe-area-inset-bottom, 0px)) max(16px, env(safe-area-inset-left, 0px)); }
+.pl-head { display: flex; flex-wrap: wrap; gap: 4px 14px; align-items: baseline; justify-content: center; text-align: center; }
+.pl-head .st { font: 400 1.2rem var(--display); }
+.pl-head .dt { font: 600 1.15rem var(--hand); color: #d7a77b; }
+.pl-head .ct { font-size: 0.85rem; color: #b5a993; font-variant-numeric: tabular-nums; }
+.stage { position: relative; min-height: 0; display: grid; }
+.stage img { grid-area: 1 / 1; max-width: 100%; max-height: 100%; width: auto; height: auto; place-self: center; object-fit: contain; background: #fff; transition: opacity 0.45s ease; }
+.pl-cap { margin: 0; text-align: center; font-size: 0.95rem; color: #e6dcc8; min-height: 1.5em; }
+.pl-bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
+.pl-bar button, .pl-bar select { background: #f0e8d8; color: #22201c; border-color: #f0e8d8; }
+.pl-bar label { font-size: 0.85rem; color: #b5a993; display: inline-flex; gap: 6px; align-items: center; }
+.new { position: absolute; top: 6px; left: 6px; line-height: 1; padding: 4px 8px; font: 600 0.72rem var(--body); letter-spacing: 0.06em; text-transform: uppercase; background: var(--walnut); color: var(--paper); border-radius: 999px; }
+.jump { color: var(--blue); font-weight: 600; }
+.eclairs { padding-block: 40px 8px; display: grid; gap: 14px; border-top: 1px solid var(--rule); margin-top: 32px; scroll-margin-top: 140px; }
+.eclairs h2 { font-size: clamp(1.6rem, 4vw, 2.3rem); }
+.eclairs .lede { margin: 0; max-width: 68ch; color: var(--muted); }
+.eclairs .grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 16px 12px; }
+.ecl-date { display: block; font: 600 1rem var(--hand); color: var(--walnut); }
+@media (prefers-reduced-motion: reduce) { .stage img, .frame img { transition: none; } }
+</style>
+
+<div class="wrap top">
+  <p class="eyebrow">Trial &amp; Eclair · design archive</p>
+  <h1>Kitchen Progression</h1>
+  <p class="intro">Every full-kitchen drawing from the first app kitchen to Plate XII v9, oldest first, with your own AI and Kittl studies in between where they came in. Shots that look alike sit together in a dashed tray. Tap <b>Use</b> to put a shot in or out of the reel, then press <b>Play reel</b> to watch the picks in order. Your picks save to this page, so Claude can turn them into a GIF.</p>
+  <p class="note">Shots marked New were added after your first picks and start out of the reel. <a class="jump" href="#eclairs">Every eclair is at the bottom.</a></p>
+</div>
+
+<div class="bar"><div class="wrap">
+  <div class="controls">
+    <span class="count" id="count">…</span>
+    <span class="save" id="save" aria-live="polite"></span>
+    <span class="spacer"></span>
+    <div class="seg" role="group" aria-label="Show">
+      <button type="button" id="show-all" aria-pressed="true">All shots</button>
+      <button type="button" id="show-picked" aria-pressed="false">Picked only</button>
+    </div>
+    <button type="button" id="reset">Back to my starting picks</button>
+    <button type="button" class="primary" id="play">Play reel</button>
+  </div>
+  <div class="strip" id="strip" aria-label="Picked shots in order"></div>
+</div></div>
+
+<main class="wrap" id="main"><p class="intro">Loading the kitchens…</p></main>
+<section class="wrap eclairs" id="eclairs" aria-labelledby="ecl-h">
+  <header class="ch-head"><h2 id="ecl-h">Every eclair</h2><span class="ch-n" id="ecl-n"></span></header>
+  <p class="lede">Each eclair on its own, oldest first: the block placeholder, the plate-style eclairs, your references, the marks, and the Plate XII options and bites. Click one to step through them large. These aren't part of the kitchen reel.</p>
+  <div class="grid" id="ecl-grid"></div>
+</section>
+<footer class="wrap">Sources: the round and plate pages (rendered again from their published versions), Plates X–XII and the Brand Sheet rendered at each saved version in <code>design/</code>, and the kitchen archive page. Your studies come from your <code>trial-and-eclair- visuals/thekitchens</code> folder. Rebuild with <code>design/progression/build.py</code> and <code>eclairs.py</code>.</footer>
+
+<dialog id="player" aria-label="Kitchen reel">
+  <div class="pl">
+    <div class="pl-head"><span class="dt" id="pl-dt"></span><span class="st" id="pl-st"></span><span class="ct" id="pl-ct"></span></div>
+    <div class="stage" id="pl-stage"><img id="pl-a" alt=""><img id="pl-b" alt="" style="opacity:0"></div>
+    <p class="pl-cap" id="pl-cap"></p>
+    <div class="pl-bar">
+      <button type="button" id="pl-prev">Previous</button>
+      <button type="button" id="pl-toggle">Pause</button>
+      <button type="button" id="pl-next">Next</button>
+      <label for="pl-speed">Each shot
+        <select id="pl-speed"><option value="600">0.6 s</option><option value="1000">1 s</option><option value="1500" selected>1.5 s</option><option value="2500">2.5 s</option><option value="4000">4 s</option></select>
+      </label>
+      <button type="button" id="pl-pickout">Leave this one out</button>
+      <button type="button" id="pl-close">Close</button>
+    </div>
+  </div>
+</dialog>
+
+<script>
+(() => {
+  const $ = (id) => document.getElementById(id);
+  let items = [], byId = {}, picked = new Set(), defaults = new Set(), speed = 1500, eclairs = [];
+  let db = null, docRef = null, dirty = false, writing = false, saveTimer = 0;
+  const LS = "kitchen-progression-picks";
+
+  const order = () => items.filter((x) => picked.has(x.id));
+
+  function lsLoad() { try { const v = JSON.parse(localStorage.getItem(LS) || "null"); return v; } catch (e) { return null; } }
+  function lsSave() { try { localStorage.setItem(LS, JSON.stringify({ picked: [...picked], speed })); } catch (e) {} }
+
+  function applyState(s) {
+    if (!s || !Array.isArray(s.picked)) return;
+    picked = new Set(s.picked.filter((id) => byId[id]));
+    if (s.speed) { speed = +s.speed; $("pl-speed").value = String(speed); }
+  }
+
+  function setSave(t) { $("save").textContent = t; }
+  function queueSave() {
+    lsSave(); dirty = true;
+    if (!docRef) { setSave("Saved in this browser only"); return; }
+    setSave("Saving…"); clearTimeout(saveTimer); saveTimer = setTimeout(flush, 700);
+  }
+  async function flush() {
+    if (writing || !dirty) return;
+    writing = true; dirty = false;
+    try { await docRef.set({ picked: order().map((x) => x.id), speed, updated: new Date().toISOString() }); setSave(dirty ? "Saving…" : "Saved"); }
+    catch (e) { setSave("Couldn't save to the page; kept in this browser"); }
+    writing = false; if (dirty) flush();
+  }
+
+  function render() {
+    const main = $("main"); main.textContent = "";
+    const stages = []; items.forEach((x) => { const last = stages[stages.length - 1]; if (!last || last.stage !== x.stage) stages.push({ stage: x.stage, date: x.date, list: [x] }); else last.list.push(x); });
+    stages.forEach((st, si) => {
+      const sec = document.createElement("section"); sec.className = "chapter"; sec.id = "s" + si;
+      const head = document.createElement("header"); head.className = "ch-head";
+      head.innerHTML = '<p class="date"></p><h2></h2><span class="ch-n"></span>';
+      head.children[0].textContent = st.date; head.children[1].textContent = st.stage; sec.append(head);
+      let run = null;
+      for (let i = 0; i < st.list.length; ) {
+        const x = st.list[i];
+        if (x.group) {
+          const g = []; while (i < st.list.length && st.list[i].group === x.group) g.push(st.list[i++]);
+          if (g.length > 1) {
+            const tray = document.createElement("div"); tray.className = "tray"; tray.dataset.group = x.group;
+            const p = document.createElement("p"); tray.append(p);
+            const grid = document.createElement("div"); grid.className = "grid"; g.forEach((y) => grid.append(card(y))); tray.append(grid);
+            sec.append(tray); run = null; continue;
+          }
+          if (!run) { run = document.createElement("div"); run.className = "grid"; sec.append(run); }
+          run.append(card(g[0])); continue;
+        }
+        if (!run) { run = document.createElement("div"); run.className = "grid"; sec.append(run); }
+        run.append(card(x)); i++;
+      }
+      main.append(sec);
+    });
+    refresh();
+  }
+
+  function card(x) {
+    const f = document.createElement("figure"); f.className = "shot"; f.dataset.id = x.id;
+    f.innerHTML = '<div class="frame"><button type="button" class="open"><img loading="lazy" decoding="async"></button><button type="button" class="pick"></button></div><figcaption></figcaption>';
+    const img = f.querySelector("img"); img.src = x.src; img.alt = x.stage + ": " + x.caption; img.width = x.w; img.height = x.h;
+    f.querySelector(".open").setAttribute("aria-label", "View large: " + x.caption);
+    f.querySelector(".open").addEventListener("click", () => openPlayer(x.id, false));
+    f.querySelector(".pick").addEventListener("click", () => toggle(x.id));
+    f.querySelector("figcaption").textContent = x.caption;
+    if (x.new) { const n = document.createElement("span"); n.className = "new"; n.textContent = "New"; f.querySelector(".frame").append(n); }
+    return f;
+  }
+
+  function renderEclairs(list) {
+    eclairs = list; const g = $("ecl-grid"); g.textContent = "";
+    $("ecl-n").textContent = list.length + " eclairs";
+    list.forEach((x) => {
+      const f = document.createElement("figure"); f.className = "shot";
+      f.innerHTML = '<div class="frame"><button type="button" class="open"><img loading="lazy" decoding="async"></button></div><figcaption><span class="ecl-date"></span><span class="ecl-cap"></span></figcaption>';
+      const img = f.querySelector("img"); img.src = x.src; img.alt = x.stage + ": " + x.caption; img.width = x.w; img.height = x.h;
+      f.querySelector(".open").setAttribute("aria-label", "View large: " + x.stage + ", " + x.caption);
+      f.querySelector(".open").addEventListener("click", () => openList(eclairs, x.id));
+      f.querySelector(".ecl-date").textContent = x.date + " \u00b7 " + x.stage;
+      f.querySelector(".ecl-cap").textContent = x.caption;
+      g.append(f);
+    });
+  }
+
+  function toggle(id) { if (picked.has(id)) picked.delete(id); else picked.add(id); refresh(); queueSave(); }
+
+  function refresh() {
+    document.querySelectorAll("#main .shot").forEach((f) => {
+      const on = picked.has(f.dataset.id); f.classList.toggle("off", !on);
+      const b = f.querySelector(".pick"); b.setAttribute("aria-pressed", on); b.textContent = on ? "\u2713 Use" : "Use";
+      b.setAttribute("aria-label", (on ? "In the reel: " : "Left out: ") + byId[f.dataset.id].caption);
+    });
+    document.querySelectorAll(".tray").forEach((t) => {
+      const ids = [...t.querySelectorAll(".shot")].map((f) => f.dataset.id), n = ids.filter((id) => picked.has(id)).length;
+      t.querySelector("p").textContent = "Look alike \u00b7 " + n + " of " + ids.length + " in the reel"; t.classList.toggle("empty", !n);
+    });
+    document.querySelectorAll(".chapter").forEach((c) => {
+      const ids = [...c.querySelectorAll(".shot")].map((f) => f.dataset.id), n = ids.filter((id) => picked.has(id)).length;
+      c.querySelector(".ch-n").textContent = n + " of " + ids.length + " picked"; c.classList.toggle("empty", !n);
+    });
+    const o = order(); $("count").innerHTML = "<b>" + o.length + "</b> of " + items.length + " in the reel";
+    const strip = $("strip"); strip.textContent = "";
+    o.forEach((x) => { const b = document.createElement("button"); b.type = "button"; b.title = x.stage + ": " + x.caption;
+      b.setAttribute("aria-label", "Jump to " + x.stage + ": " + x.caption);
+      const im = document.createElement("img"); im.src = x.src; im.alt = ""; im.loading = "lazy"; b.append(im);
+      b.addEventListener("click", () => { const f = document.querySelector('.shot[data-id="' + x.id + '"]'); if (f) f.scrollIntoView({ block: "center", behavior: matchMedia("(prefers-reduced-motion: reduce)").matches ? "auto" : "smooth" }); });
+      strip.append(b); });
+    $("play").disabled = !o.length;
+  }
+
+  /* player */
+  let seq = [], at = 0, playing = false, timer = 0, front = "pl-a";
+  function show(i) {
+    at = (i + seq.length) % seq.length; const x = seq[at];
+    const back = front === "pl-a" ? "pl-b" : "pl-a", bi = $(back), fi = $(front);
+    bi.onload = () => { bi.style.opacity = "1"; fi.style.opacity = "0"; front = back; };
+    bi.src = x.src; bi.alt = x.stage + ": " + x.caption;
+    $("pl-st").textContent = x.stage; $("pl-dt").textContent = x.date; $("pl-cap").textContent = x.caption;
+    $("pl-ct").textContent = (at + 1) + " / " + seq.length;
+    $("pl-pickout").hidden = !byId[x.id] || byId[x.id] !== x;
+    $("pl-pickout").textContent = picked.has(x.id) ? "Leave this one out" : "Use this one";
+    const n = seq[(at + 1) % seq.length]; if (n) { const pre = new Image(); pre.src = n.src; }
+  }
+  function tick() { clearTimeout(timer); if (playing) timer = setTimeout(() => { show(at + 1); tick(); }, speed); }
+  function setPlaying(p) { playing = p; $("pl-toggle").textContent = p ? "Pause" : "Play"; tick(); }
+  function openPlayer(id, play) { openList(play || picked.has(id) ? order() : items, id, play); }
+  function openList(list, id, play) {
+    seq = list;
+    if (!seq.length) return;
+    $("pl-a").style.opacity = "1"; $("pl-b").style.opacity = "0"; front = "pl-a"; $("pl-a").src = "";
+    $("player").showModal(); show(Math.max(0, seq.findIndex((x) => x.id === id))); setPlaying(!!play);
+  }
+  $("play").addEventListener("click", () => { const o = order(); if (o.length) openPlayer(o[0].id, true); });
+  $("pl-prev").addEventListener("click", () => { show(at - 1); tick(); });
+  $("pl-next").addEventListener("click", () => { show(at + 1); tick(); });
+  $("pl-toggle").addEventListener("click", () => setPlaying(!playing));
+  $("pl-close").addEventListener("click", () => $("player").close());
+  $("pl-pickout").addEventListener("click", () => { toggle(seq[at].id); show(at); });
+  $("pl-speed").addEventListener("change", (e) => { speed = +e.target.value; queueSave(); tick(); });
+  $("player").addEventListener("close", () => { playing = false; clearTimeout(timer); });
+  $("player").addEventListener("keydown", (e) => {
+    if (e.key === "ArrowRight") { show(at + 1); tick(); } else if (e.key === "ArrowLeft") { show(at - 1); tick(); }
+    else if (e.key === " " && e.target.tagName !== "BUTTON" && e.target.tagName !== "SELECT") { e.preventDefault(); setPlaying(!playing); }
+  });
+
+  $("show-all").addEventListener("click", () => { document.body.classList.remove("picked-only"); $("show-all").setAttribute("aria-pressed", "true"); $("show-picked").setAttribute("aria-pressed", "false"); });
+  $("show-picked").addEventListener("click", () => { document.body.classList.add("picked-only"); $("show-all").setAttribute("aria-pressed", "false"); $("show-picked").setAttribute("aria-pressed", "true"); });
+  $("reset").addEventListener("click", () => { picked = new Set(defaults); refresh(); queueSave(); });
+
+  fetch("eclairs.json").then((r) => r.json()).then(renderEclairs).catch(() => { $("ecl-grid").textContent = "The eclairs did not load. Reload the page to try again."; });
+  fetch("items.json").then((r) => r.json()).then((list) => {
+    items = list; list.forEach((x) => { byId[x.id] = x; if (x.on) defaults.add(x.id); });
+    picked = new Set(defaults); applyState(lsLoad()); render();
+    setSave("Connecting…");
+    const fallback = setTimeout(() => { if (!docRef) setSave("Saved in this browser only"); }, 10000);
+    (window.claude ? claude.use("db") : Promise.resolve(null)).then(async (d) => {
+      if (!d) { clearTimeout(fallback); setSave("Saved in this browser only"); return; }
+      db = d; docRef = db.doc("picks/main");
+      try { const s = await docRef.get(); clearTimeout(fallback); if (s.exists) { applyState(s.data()); refresh(); } setSave("Saved"); }
+      catch (e) { clearTimeout(fallback); docRef = null; setSave("Saved in this browser only"); }
+    }).catch(() => { clearTimeout(fallback); setSave("Saved in this browser only"); });
+  }).catch((e) => { $("main").innerHTML = '<p class="intro">The kitchen list did not load. Reload the page to try again.</p>'; });
+})();
+</script>

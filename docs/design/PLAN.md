@@ -182,6 +182,41 @@ Brand Sheet v1 (2026-11-17): https://claude.ai/artifact/L3p52UdPaAsUBAa77J3gmi, 
 - Build note: animate the glow with fill-opacity, not opacity (Chrome drops the blurred mask while opacity animates)
 - [ ] Ari signs off
 
+## 5b. Plate XII: kitchen straight on (from Ari's Kittl studies)
+Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop 2: straight on, island with cubbies and log drawers). Kittl output is a flat AI image (gibberish text, baked colours), so it is a mood reference only, redrawn in plate shapes.
+- [x] v1 (2026-11-19, https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj, `design/plate-xii/`): A = desktop 1 seen straight on; B = desktop 2 tidied; extra-wide stretch and a cabinet/wall recolour test
+- [x] Ari (11/19): liked neither v1; sent two one-point Kittl "recipe board" studies and asked for more detail
+- [x] v2 (2026-11-19, same URL): one-point redraw. A = Kittl A (wall cubby, window on the back wall); B = Kittl B (tall cupboard, two-tier shelf, whiteboard on the cork board, window in the right wall, counter returns). Drawing in `kitchen-xii2.js`; v1 kept at the bottom
+- [x] v3 (2026-11-19, same URL): Ari's own vector trace of Kittl A (`traced/source.svg`) cleaned by `traced/clean.cjs`: shapes sorted into objects by position (paint order kept), box on Blue 3 shades, cabinets on --cab, wall on --wall, ~480 scribbles cleared, frame cropped (286 KB, ~90 KB gzipped). Buttons, glow (no movement: the ink is a few shared shapes), recolour, all working. Missing: fridge, log drawer labels, phone trace; fixed width
+- [x] Ari (11/19): **traced direction picked.** Glow only (no lift). No fridge (it was an extra image); take the Recently list off. Cabinets stem green. Wants: cookbooks/references labels on the cubby's lower shelf edge; one wall cupboard open (top left or the next one) with a baking log on a clipboard inside the door; a version with box and mixer swapped; the eclair and small fixes
+- [x] v4 (2026-11-19, same URL): ink split per object by masks (diff vs v3: only cleared marks and sub-pixel edges); stem green default; mixer marks cleared; shelf-edge labels; eclair on a plate; spoon jar on the sill; tomato-capped marker; cupboard open wide or cracked with a baking-log clipboard; B = box and mixer swapped (`traced/add.cjs`, `kitchen-swap.svg`)
+- [x] **Decided (Ari, 2026-11-19, on v4):** cabinets stem green; cupboard open wide; the clipboard is the recipe log button (drawers plain); box and mixer stay where traced (B dropped). New pieces may be cleaner than the trace
+- [x] v5 (2026-11-19, same URL): frame ends at the middle drawer's bottom, that height added on top (wall cupboards stretched, cubby gets a second book row); open cupboard with two shelves and a clipboard in true proportion; eclair pencil-length and plump; spoon jar twice the size; close-ups; shelf labels off; the book shelf is one button
+- [x] Ari (on v5, 11/19): taller frame and cupboard approved; clipboard needs depth; spoon jar replaced by plants/flowers or a sun catcher; eclair redone in the trace's style, tried in other spots
+- [x] v6 (2026-11-19, same URL): clipboard shadow and edge; eclairs E1–E5; spots P1 (by the box), P2 (two notebooks under the open one), P3 (eclair on closed notebooks); sills S1 basil, S2 flowers, S3 sun catcher with rainbows; picks switchable on the page, close-ups clickable
+- [x] **Decided (Ari, on v6):** eclair E1 with a bite, at P1 (between the box and the notebook); window like her reference (basil, crystal mobile, rainbow beams) but keep four panes; composition notebooks wanted somewhere; open notebook needs something more; bring the reference box's details over
+- [x] v7 (2026-11-19, same URL): bitten E1 at P1; bushy basil, four-crystal mobile, rainbow beams; frame sage or cream; composition books under the open notebook or in front of the whiteboard; notebook tabs, ribbon, photo, doodle; box wear, tab letters, optional RECIPES
+- [x] **Decided (Ari, on v7):** window frame coloured, but not that sage; no basil (something that brings light; florals in the trace's style are OK); eclair is E1 whole, and clicking takes a bite, a second bite, then it is gone until the page reloads (as in an earlier version)
+- [x] v8 (2026-11-19, same URL): frame in any colour (walnut default; oak, cabinet green, deep green, buttercup, tomato, Blue 3); sill L1 glass bottles, L2 lemons, L3 jar of flowers; eclair eaten in three clicks
+- [x] **Window frame walnut** (Ari 2026-11-19); swatches removed, `--trim` #7A4E2D on #tk
+- [x] **Decided (Ari, on v8):** composition books in front of the whiteboard; tabs on the open notebook, no taped photo; RECIPES on the box; a title on the clipboard sheet; an "Ideas" paper on the board; bottles in the style of her glass studies (window not teal); rainbows move with the time of day instead of a sun patch, none in the evening
+- [x] v9 (2026-11-19, same URL): bottles B1–B4 from her studies redrawn in the trace's look; crystals as her hexagonal prisms; rainbows by time (morning, midday, afternoon, evening = dusk glass and a dim); books flat at the plates' angle; "Baking log", "Ideas", RECIPES; flour and pin can be taken away
+- [x] **Decided (Ari, on v9):** B4 was a misclick: likes B1 (bigger) and B2 (with a second bottle); composition books should look like her reference picture (thick page block); eclairs cooling on a wire rack instead of a plate, still taken or eaten by clicks
+- [x] v10 (2026-11-19, same URL): rack with three eclairs, one taken per click; B1 trio at .56; B2 decanter + amber bottle; compBook redrawn (back cover, page block, spine wrap, dense marble, double-bordered label)
+- [x] **Decided (Ari, 2026-11-19, after v10):** the book shelf view is called **Library**; "Baking log" is wrong because not every recipe is baking (title still to pick: Claude's pick "Kitchen log"; others "Recipe log", "Log")
+- [ ] **Next (new chat):** port Ari's vector traces into the kitchen like her glass studies: `design/plate-xii/refs/eclair-rack.svg` (eclairs on the cooling rack) and `refs/comp-journals.svg` (stacked composition journals), both 400 x 266 Kittl crops with a background card to strip. Ari also meant to send new bottle SVGs; they were not attached, ask for them
+- [ ] Ari (still open from v10): B1 or B2 (pick B1, unless the new bottle SVGs replace both); one eclair taken per click or bites (pick taken); flour and pin; clipboard title; times of day
+
+### Product changes from the plates (apply in one pass)
+Changes to the product that come out of the drawings. Kept here as they come up and applied together to `docs/PRD.md`, the README and the Task issues when Plate XII is signed off (before Task issues), so the plan is edited once and stays consistent.
+- [ ] **Library** (Ari 2026-11-19; name **Library** picked 11/19): the book shelf opens one view holding both the cook's cookbooks (their published collections) and references (research shelf). Touches PRD sections 2, 5 and 7, the Phase UI tables, Plate XI's two views and their web addresses (decision 005)
+- [ ] **Saved cookbooks** (Ari 2026-11-19, later version): a cook can save other users' published cookbooks; they sit on the same shelf as their own cookbooks. Needs a saved-cookbook model and a phase in the PRD; the Library view leaves room for them
+- [ ] **Recipe log on a clipboard** in the open wall cupboard, not the drawer stack
+- [ ] **No fridge, no Recently list** (Plate XII v3)
+- [ ] **Rainbows follow the cook's clock**: morning, midday, afternoon angles; evening has none, the window glass goes to dusk and the room dims
+- [ ] **Eclair easter egg**: three eclairs cool on a rack in the kitchen; each click takes one, a reload puts them back; nothing saved
+- If picked, this replaces the Plate XI kitchen drawing (views and phone follow), so settle it before the test piece
+
 ## Before Task issues: things that could disrupt the build
 Raised 2026-11-16. Ari's answers (2026-11-16) are in each line. "Claude's pick" means Ari asked for a recommendation; it stands unless Ari says otherwise.
 - [x] **Phone layout**: next after Plate XI (Ari: next, or after the brand work. Claude's pick: straight after Plate XI, before the mark, because it shapes how the kitchen is built and the brand work does not). Square it with the Recipe Box phone work (`docs/recipe-box/`)

@@ -10,6 +10,331 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-19 · Kitchen Progression gallery (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (progression) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, one subagent) |
+| **Outcome** | success (gallery published; picks waiting on Ari; no app code) |
+
+### Intent
+Ari: there will be many kitchen versions; collect every full-kitchen shot (old and current) as a GIF or a gallery showing the progression, grouping look-alikes and erring on including them, so she can pick which to use.
+
+### Summary
+- 142 full-kitchen shots, oldest first: October app kitchen, style pair, tuning corner, Plate I, mark sketch, kitchen starter, Rounds 1-10, Plates II-VIII (re-rendered from their artifacts by a subagent), Plate IX shots, Plates X/XI/XII and Brand Sheet rendered at every git commit with unchanged renders dropped
+- `design/progression/`: `build.py` (item list, groups, default picks; needs the scratchpad renders to rebuild), `items.json`, `img/`, `index.html`
+- Page: look-alike trays, Use toggles, picked strip, Play reel (speed 0.6-4 s); picks save to the artifact db at `picks/main` {picked, speed}
+- 62 of 142 picked by default (one or two per tray)
+
+### Open threads
+- Added 2026-11-19: Ari's studies (15, from Desktop/trial-and-eclair- visuals/thekitchens, slotted in by file time between Plate XII v1-v3, marked New and out of her reel), Plate XII v10, and an Every eclair section (51: kitchen crops via `eclairs.py`, pasted refs, mark/brand/Plate VIII/XII close-ups from a subagent). Only 9 images were pasted in chat in 3 days, none a whole kitchen
+- Done 2026-11-19: Ari picked 47; `make_gif.py` + `picks.json` -> `kitchen-progression.gif` (960 px, 1.5 s a shot, 7.6 MB). Re-pick: copy `picks/main` into picks.json and rerun
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** kitchen progression, gallery, reel, GIF
+**Files:** design/progression/ (build.py, items.json, img/, index.html)
+**Do not redo:** the renders and dedupe (142 items); Plate XII v1-v9 as drawn
+**Resume with:** new kitchen versions: add to build.py, republish https://claude.ai/artifact/E4xdK2o9H9iYMPpM8M7Juw, rerun make_gif.py; Plate XII still waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-19 · Plate XII: Ari's answers after v10, vector traces filed (no new version)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (wrap-up) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop) |
+| **Outcome** | success (answers recorded, traces filed, handoff written; Ari moving to a new chat) |
+
+### Intent
+Ari: yes to Library; "Baking log" doesn't fit (not all recipes are baking); sent vector traces of the eclair rack and the composition journals (and meant to send bottles); asked to save everything before a new chat.
+
+### Summary
+- Copied the traces to `design/plate-xii/refs/eclair-rack.svg` and `refs/comp-journals.svg`
+- PLAN.md, NEXT.md (new START HERE for v11), kitchen-layout memory updated
+- Bottle SVGs were not attached; next chat asks for them
+
+### Decisions
+- Ari: the book shelf view is Library; the clipboard title must not say baking
+
+### Open threads
+- Port the two traces (v11); pick a log title; bottles SVGs; B1/B2, taken vs bites, flour and pin, times of day
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII, Library, vector traces, eclair rack, composition journals
+**Files:** design/plate-xii/refs/, traced/add.cjs (LOG_TITLE, rack, stackFront), docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v10 as drawn (tweak only); the ink split; taller frame
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt (Plate XII v11)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-19 · Plate XII v10: cooling rack, bottles, composition books (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v10) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v10 published; questions to Ari; no app code) |
+
+### Intent
+Ari: "B4 carafe and flask" was a misclick (an uncommitted B4-only change was discarded with git checkout). Likes B1 but small, B2 with another bottle; books like her reference picture; eclairs cooling on a rack, gone by clicks.
+
+### Summary
+- `add.cjs`: studies 1 and 2 only, SILL_FIT scale per study (B1 .56; B2 .5 with the trio's amber bottle beside the decanter); rack(n) (flatQuad wire rack, three eclairBody at 26 degrees, n taken leave crumbs) replaces eclair(n); compBook redrawn (back cover, two-layer page block with lines, spine wrap, dense marble, double label); flatQuad takes k (.36 for books and rack)
+- Page: B1/B2 buttons, rack is the click target (tested: three clicks, then button gone; no errors)
+
+### Decisions
+- Ari: eclairs on a cooling rack, gone by clicks; bottles B1 or B2 only
+
+### Open threads
+- Ari: B1 or B2, take vs bite, books (vector?), flour and pin, clipboard title, times of day, Library name
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v10, cooling rack, composition books, glass bottles
+**Files:** design/plate-xii/traced/add.cjs, sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v10 as drawn (tweak only); the ink split; taller frame
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v10 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-19 · Plate XII v9: glass studies, rainbows by time, words (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v9) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v9 published; questions to Ari; no app code) |
+
+### Intent
+Ari on v8: books in front of the whiteboard (fix perspective), tabs yes, photo no; bottles like her vector glass studies (`~/Downloads/code.html`, studies 1, 2, 4 + an image of 3) but in the kitchen's style, window not teal; crystals nearly there; RECIPES yes; clipboard sheet title; "Ideas" paper; show without flour and pin; rainbows move through the day, then dark.
+
+### Summary
+- `add.cjs`: studies 1–4 as SILL (her paths in her 800x600 units, scaled .42 into the left pane; restyled: flat fill, 4.4 outline, darker side via clip, highlight); prism()/mobile() after her crystals; SUN beams am/noon/pm, `sun-eve` dim + `.dusk` glass vars (`GLASS`); flatQuad() books at the plates' .27 depth; clipboard title by affine fit (reversed: the door face runs right to left); ideasNote(); tidyPatch() fills wall and counter behind flour and pin (`.tidy` hides them)
+- Options left: sill, sun, tidy (ecl by clicks). Decided ones fixed (books n2, extras without photo, box label)
+- Checked: evening + tidy and midday screenshots, no page errors
+
+### Decisions
+- Ari: books in front of the whiteboard; tabs, no photo; RECIPES; titles on clipboard and board; bottles in her study style; rainbows by time of day
+
+### Open threads
+- Ari: bottles (pick B1), flour and pin, clipboard title, times of day, Library name
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v9, glass bottles, rainbows time of day, dusk, Baking log, Ideas
+**Files:** design/plate-xii/traced/ (clean.cjs, add.cjs, kitchen.svg, closeups.html), sections/00-questions.html, sections/005-traced.html, base/xii.css, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v9 as drawn (tweak only); the ink split; taller frame
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v9 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-19 · Plate XII v8: eclair bites, frame colour, sill light (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v8) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v8 published; questions to Ari; no app code) |
+
+### Intent
+Ari on v7: colour the window frame but not that sage (brown?); no basil, something that brings light (florals OK in the trace's style); "bitten" meant the old click-to-bite eclair: whole E1, a bite per click, gone on the third until reload.
+
+### Summary
+- `TRIM` is now [mix %, toward]: on `.trim-on`, every traced frame shade = color-mix(var(--trim), ...); page swatches set `--trim` (walnut default)
+- Sill options L1 bottles / L2 lemons / L3 jar of flowers (`SILL`, drawn at 1.3x via atSill); crystal mobile and beams kept
+- Eclair: `eclair(n)`, n = 0..3 as `ecl-N` options; bite depth grows with n; page button takes a bite per click and removes itself at 3 (tested: states advance, no errors)
+- PLAN.md product list: eclair easter egg
+
+### Decisions
+- Ari: frame coloured (not sage); no basil; eclair whole, eaten by clicks
+- Ari: window frame walnut (swatches removed after)
+
+### Open threads
+- Ari: sill (pick L1), books spot, notebook extras, RECIPES, Library name
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v8, eclair bites, window frame colour, sill bottles
+**Files:** design/plate-xii/traced/ (clean.cjs, add.cjs, kitchen.svg, closeups.html), sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v8 as drawn (tweak only); the ink split; taller frame
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v8 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-19 · Plate XII v7: window, composition books, box details (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v7) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v7 published; five questions to Ari; no app code) |
+
+### Intent
+Ari on v6: E1 but eaten, at P1; her reference window (basil, crystal mobile, rainbows) without six-over-six panes; composition notebooks stacked somewhere; the open notebook feels like it misses something; bring over details of the reference recipe box.
+
+### Summary
+- `add.cjs` options now: nb (n1 under the open notebook / n2 in front of the whiteboard / 0), nbx (extras), box (1 as traced / 2 worn + tab letters / 3 + RECIPES). Eclair fixed: E1 + bite + crumbs at (222, 362). Window: basil(), mobile() (four prisms on a ring), beams() (gradient-masked rainbow bands)
+- Sage frame: window fills use `var(--trim-HEX, HEX)`; kitchen.svg carries `.trim-sage{...}`; page toggles the class on #tk
+- compBook(): black cover, curly white marble strokes, spine tape, optional label; nbExtras(): tabs, ribbon, taped photo, pencil doodle; boxWear()/boxLabel() on the front face via matrix(1 -0.136 0 1 93 307)
+
+### Decisions
+- Ari: E1 bitten at P1; basil + mobile + rainbows; four panes
+
+### Open threads
+- Ari: composition books spot, sage frame, RECIPES, notebook extras, Library name
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v7, sun catcher, basil, composition notebook, recipe box wear
+**Files:** design/plate-xii/traced/ (clean.cjs, add.cjs, kitchen.svg, closeups.html), sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v7 as drawn (tweak only); the ink split; taller frame
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v7 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-19 · Plate XII v6: eclairs, spots, sills (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v6) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v6 published; four questions to Ari; no app code) |
+
+### Intent
+Ari on v5: taller frame and cupboard good; clipboard needs depth; five eclairs in the image's style; replace the spoon jar (plants, flowers, sun catcher); try the eclair by the box, with notebooks stacked under the open one, or on notebooks in front of the whiteboard. Later version: saved cookbooks on the same shelf.
+
+### Summary
+- `add.cjs`: variants as `<g data-var="ecl-N spot-pX">` / `sill-N` (DEF shows first); plate() and eclairBody() with five ECL presets (bite uses a mask); SPOT p1/p2/p3; stack under the notebook masked by `a-mk-notebook` so it reads as underneath; sills basil/flowers/crystal (rainbow arcs); clipboard shadow and board edge; spoon jar removed
+- Variant groups are `top: true` (outside `#a-scene`) so close-ups (`traced/closeups.html`, built into the page) draw each option over a clean scene
+- Page: Eclair / Spot / Sill buttons, clickable close-ups; PLAN.md product list adds saved cookbooks
+
+### Decisions
+- Ari: taller frame and open cupboard approved; saved cookbooks (later) share the shelf with the cook's own
+
+### Open threads
+- Ari: eclair (pick E1), spot (pick P2), sill (pick S3), Library name (pick Library)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v6, eclair variants, sill, sun catcher, notebook stack
+**Files:** design/plate-xii/traced/ (clean.cjs, add.cjs, kitchen.svg, closeups.html), sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v6 as drawn (tweak only); the ink split; taller frame
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v6 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-19 · Plate XII v5: taller kitchen, cupboard, eclair, jar (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v5) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v5 published; three questions to Ari; no app code) |
+
+### Intent
+Apply Ari's v4 answers: taller wall cupboards (crop at the drawer), clipboard proportions, eclair and spoon jar size, drop B and the other cupboard states.
+
+### Summary
+- `clean.cjs`: swap code removed; TOP 44: viewBox `6 -39 856 479`; `extend()` reuses the scene with <use>: cupboards band y 5..55 stretched up, cubby book row moved up 95.3 and flipped, plain wall above the window. Whole drawing wrapped in `#a-all` for close-ups
+- `add.cjs`: cupboard door now y -48..102.5, swung 125 degrees; two shelves; clipboard 66 x 92; eclair 62 x 19 on a 84-wide plate; spoon jar 30 x 32 with spoons, whisk, tomato spatula; labels, ajar door and swap patches removed
+- Page: one kitchen, colour controls, library button (whole cubby), clipboard button, four close-ups; PLAN.md gets "Product changes from the plates"
+
+### Decisions
+- Ari: stem green; open wide; clipboard = recipe log; box and mixer stay; cleaner new pieces are fine
+- Product changes go on one list in PLAN.md, applied to PRD/README/Task issues in one pass at Plate XII sign-off
+
+### Open threads
+- Ari: Library name (pick Library), no shelf labels; taller frame; close-ups
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v5, traced, taller frame, library, clipboard
+**Files:** design/plate-xii/traced/ (clean.cjs, add.cjs, kitchen.svg), sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v5 as drawn (tweak only); the ink split
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v5 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-19 · Plate XII v4: traced kitchen split, swap, cupboard (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v4) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v4 published; four questions to Ari; no app code) |
+
+### Intent
+Follow the NEXT.md v4 prompt: split the ink, stem green, clear mixer marks, shelf labels, box/mixer swap, eclair, spoon jar, marker, open cupboard with clipboard.
+
+### Summary
+- The "ink" was not outlines: a few huge dark shapes (paths 2, 3, 74, 133, 620, 684, 1069) under everything; path 1069 is one subpath, so splitting by M...Z could not work. `clean.cjs` now splits each with SVG masks: an object takes the ink under its own shapes grown 3 units; the room keeps the rest (room cut-out grown less, so pieces overlap: no seam). Diff vs v3: only the cleared marks and sub-pixel edge AA
+- Reclass rules (MOVE_TO): counter wood under the mixer -> room, whiteboard specks left of the head -> whiteboard
+- `kitchen-swap.svg`: box +488, mixer -490, moved on top; old spots patched (wall/wood from the object's grown shape, counter edge line, grain, whiteboard lower right redrawn from x 505)
+- New `traced/add.cjs`: shelf labels, eclair G on a plate, spoon jar on the sill, tomato-capped marker on the tray, cupboard (left door of the pair, hinge x 132.7) open 100 degrees with clipboard or cracked 26 degrees with the clipboard edge peeking; one-point projection, VP (434,240), f 900
+- Page 005: one control row (cupboard open/cracked/closed, cabinets, wall) drives A and B; log button = clipboard / door / drawers by cupboard state. Shots in `design/plate-xii/shots/v4/`
+- Size ~650 KB per kitchen (masks); page 1.4 MB
+
+### Decisions
+- Claude's picks pending Ari: open wide; clipboard is the log button; A (box left); keep labels/eclair/jar/marker as drawn
+
+### Open threads
+- Ari: the four questions at the page top
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v4, traced, ink masks, swap, cupboard, clipboard
+**Files:** design/plate-xii/traced/ (clean.cjs, add.cjs, kitchen.svg, kitchen-swap.svg), sections/00-questions.html, sections/005-traced.html, .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v4 as drawn (tweak only); the ink split
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v4 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-19 · Plate XII drawn and published (v1)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v1 published; waiting on Ari's four answers; no app code) |
+
+### Intent
+Redraw the kitchen straight on from Ari's two Kittl studies: A takes the most from desktop 1, B tidies desktop 2.
+
+### Summary
+- Reviewed the Kittl HTML exports: one AI JPEG each (~1 MB), gibberish text, teal box #3B7A9E, lettered box, div hotspots. Mood only
+- New `design/plate-xii/`: 00 questions, 01 A, 02 B, 03 extra wide + cabinet/wall recolour test
+- Plate XII page: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj
+
+### Decisions
+- None from Ari yet. Claude's picks: A with B's eclair plate and magnets; keep the island; stem green cabinets; composition notebook
+
+### Open threads
+- v3 (same URL): Ari's vector trace of Kittl A made usable by `traced/clean.cjs` (objects, Blue 3 box, recolour, scribbles cleared, buttons + glow). Ari: traced or plate direction
+- Ari liked neither v1; v2 (same URL) redrawn in one-point perspective from two new Kittl studies, with more detail. Ari: five questions at the page top (Claude picks B)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII, Kittl, straight on, island, recipe log drawers
+**Files:** design/plate-xii/ (kitchen-xii.js, sections 00–03), docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII options as drawn (tweak only)
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-17 · Brand Sheet drawn and published (v1)
 
 | Field | Value |

@@ -1,0 +1,461 @@
+[
+{
+"id": "k-05-3c-eclair",
+"src": "ecl/k-05-3c-eclair.jpg",
+"w": 360,
+"h": 182,
+"stage": "Round 5",
+"date": "11 Nov",
+"caption": "A block that says eclair on a plate"
+},
+{
+"id": "k-11-kitchen-1400",
+"src": "ecl/k-11-kitchen-1400.jpg",
+"w": 360,
+"h": 180,
+"stage": "Plate II",
+"date": "11 Nov",
+"caption": "Bitten, crumbs on a blue-rim plate"
+},
+{
+"id": "k-12-with-eclair",
+"src": "ecl/k-12-with-eclair.jpg",
+"w": 360,
+"h": 202,
+"stage": "Plate III",
+"date": "11 Nov",
+"caption": "Bitten, a little smaller"
+},
+{
+"id": "k-13-test-kitchen",
+"src": "ecl/k-13-test-kitchen.jpg",
+"w": 360,
+"h": 180,
+"stage": "Plate IV",
+"date": "11 Nov",
+"caption": "Bitten, on the counter"
+},
+{
+"id": "k-15-test-kitchen",
+"src": "ecl/k-15-test-kitchen.jpg",
+"w": 360,
+"h": 180,
+"stage": "Plate VI",
+"date": "11 Nov",
+"caption": "Bitten, plate seen from above (one-point)"
+},
+{
+"id": "c-archive-round9-13-eclair-on-plate",
+"src": "ecl/c-archive-round9-13-eclair-on-plate.jpg",
+"w": 405,
+"h": 174,
+"stage": "Mark rounds (archive)",
+"date": "11 Nov",
+"caption": "Logo tile: eclair on a plate"
+},
+{
+"id": "k-17-test-kitchen",
+"src": "ecl/k-17-test-kitchen.jpg",
+"w": 378,
+"h": 180,
+"stage": "Plate VIII",
+"date": "12 Nov",
+"caption": "Whole, longer"
+},
+{
+"id": "c-p8-whole",
+"src": "ecl/c-p8-whole.jpg",
+"w": 680,
+"h": 284,
+"stage": "Plate VIII",
+"date": "12 Nov",
+"caption": "Whole, on a plate"
+},
+{
+"id": "c-p8-bite1",
+"src": "ecl/c-p8-bite1.jpg",
+"w": 680,
+"h": 348,
+"stage": "Plate VIII",
+"date": "12 Nov",
+"caption": "Bite 1 of 3"
+},
+{
+"id": "c-p8-bite2",
+"src": "ecl/c-p8-bite2.jpg",
+"w": 680,
+"h": 348,
+"stage": "Plate VIII",
+"date": "12 Nov",
+"caption": "Bite 2 of 3"
+},
+{
+"id": "c-p8-gone",
+"src": "ecl/c-p8-gone.jpg",
+"w": 680,
+"h": 212,
+"stage": "Plate VIII",
+"date": "12 Nov",
+"caption": "Gone: crumbs and cream"
+},
+{
+"id": "k-k-main",
+"src": "ecl/k-k-main.jpg",
+"w": 360,
+"h": 180,
+"stage": "Plate IX",
+"date": "12 Nov",
+"caption": "Whole, by the box"
+},
+{
+"id": "k-plate-x-33-2354ebf-k-wide",
+"src": "ecl/k-plate-x-33-2354ebf-k-wide.jpg",
+"w": 360,
+"h": 180,
+"stage": "Plate X",
+"date": "13 Nov",
+"caption": "Whole, Plate X kitchen"
+},
+{
+"id": "c-p11-whiteboard-doodle",
+"src": "ecl/c-p11-whiteboard-doodle.jpg",
+"w": 396,
+"h": 264,
+"stage": "Plate XI",
+"date": "17 Nov",
+"caption": "Marker doodle on the whiteboard"
+},
+{
+"id": "c-phone-kitchen-eclair",
+"src": "ecl/c-phone-kitchen-eclair.jpg",
+"w": 427,
+"h": 175,
+"stage": "Phone Plate v4",
+"date": "17 Nov",
+"caption": "Kitchen eclair on the phone"
+},
+{
+"id": "c-mark-g-plain",
+"src": "ecl/c-mark-g-plain.jpg",
+"w": 580,
+"h": 284,
+"stage": "Mark Plate v2",
+"date": "17 Nov",
+"caption": "Mark G, plain eclair"
+},
+{
+"id": "c-mark-g-prussian",
+"src": "ecl/c-mark-g-prussian.jpg",
+"w": 580,
+"h": 284,
+"stage": "Mark Plate v2",
+"date": "17 Nov",
+"caption": "Mark G on Prussian"
+},
+{
+"id": "c-mark-g-small",
+"src": "ecl/c-mark-g-small.jpg",
+"w": 642,
+"h": 300,
+"stage": "Mark Plate v2",
+"date": "17 Nov",
+"caption": "Mark G, small drawing"
+},
+{
+"id": "c-mark-h-letters",
+"src": "ecl/c-mark-h-letters.jpg",
+"w": 580,
+"h": 284,
+"stage": "Mark Plate v2",
+"date": "17 Nov",
+"caption": "Mark H, T&E on the glaze"
+},
+{
+"id": "c-mark-i-monogram",
+"src": "ecl/c-mark-i-monogram.jpg",
+"w": 552,
+"h": 504,
+"stage": "Mark Plate v2",
+"date": "17 Nov",
+"caption": "Mark I, eclair monogram"
+},
+{
+"id": "c-mark-i-monogram-prussian",
+"src": "ecl/c-mark-i-monogram-prussian.jpg",
+"w": 552,
+"h": 504,
+"stage": "Mark Plate v2",
+"date": "17 Nov",
+"caption": "Mark I on Prussian"
+},
+{
+"id": "c-mark-j-monogram",
+"src": "ecl/c-mark-j-monogram.jpg",
+"w": 572,
+"h": 520,
+"stage": "Mark Plate v2",
+"date": "17 Nov",
+"caption": "Mark J, eclair as the T's bar"
+},
+{
+"id": "c-mark-g-icon-paper",
+"src": "ecl/c-mark-g-icon-paper.jpg",
+"w": 360,
+"h": 360,
+"stage": "Mark Plate v2",
+"date": "17 Nov",
+"caption": "App icon, G at 35 degrees"
+},
+{
+"id": "c-mark-g-icon-prussian",
+"src": "ecl/c-mark-g-icon-prussian.jpg",
+"w": 360,
+"h": 360,
+"stage": "Mark Plate v2",
+"date": "17 Nov",
+"caption": "App icon on Prussian"
+},
+{
+"id": "c-brand-w3-eclair-on-box",
+"src": "ecl/c-brand-w3-eclair-on-box.jpg",
+"w": 740,
+"h": 508,
+"stage": "Brand Sheet v3",
+"date": "17 Nov",
+"caption": "W3 \u00b7 eclair on the box lid"
+},
+{
+"id": "c-brand-icon-brand-blue",
+"src": "ecl/c-brand-icon-brand-blue.jpg",
+"w": 360,
+"h": 360,
+"stage": "Brand Sheet v4",
+"date": "17 Nov",
+"caption": "App icon on brand blue"
+},
+{
+"id": "study-kittl-b",
+"src": "ecl/study-kittl-b.jpg",
+"w": 360,
+"h": 180,
+"stage": "Your Kittl studies",
+"date": "19 Nov",
+"caption": "Kittl study: eclair on the island"
+},
+{
+"id": "k-plate-xii-00-d10bf43-xb-fig-svg",
+"src": "ecl/k-plate-xii-00-d10bf43-xb-fig-svg.jpg",
+"w": 360,
+"h": 190,
+"stage": "Plate XII v1",
+"date": "19 Nov",
+"caption": "Flat eclair, white zigzag"
+},
+{
+"id": "k-plate-xii-03-8e28fc4-tk-a-tk",
+"src": "ecl/k-plate-xii-03-8e28fc4-tk-a-tk.jpg",
+"w": 360,
+"h": 225,
+"stage": "Plate XII v4",
+"date": "19 Nov",
+"caption": "First traced-style eclair, white zigzag"
+},
+{
+"id": "k-plate-xii-04-02efd3b-tk-a-tk",
+"src": "ecl/k-plate-xii-04-02efd3b-tk-a-tk.jpg",
+"w": 360,
+"h": 233,
+"stage": "Plate XII v5",
+"date": "19 Nov",
+"caption": "Long, white zigzag"
+},
+{
+"id": "pasted-whole",
+"src": "ecl/pasted-whole.jpg",
+"w": 360,
+"h": 186,
+"stage": "Pasted in chat",
+"date": "19 Nov",
+"caption": "Your reference: glossy eclair on a china plate"
+},
+{
+"id": "pasted-bitten",
+"src": "ecl/pasted-bitten.jpg",
+"w": 360,
+"h": 202,
+"stage": "Pasted in chat",
+"date": "19 Nov",
+"caption": "Your reference: bitten, custard showing"
+},
+{
+"id": "pasted-logo",
+"src": "ecl/pasted-logo.jpg",
+"w": 666,
+"h": 344,
+"stage": "Pasted in chat",
+"date": "19 Nov",
+"caption": "Eclair wordmark"
+},
+{
+"id": "pasted-counter",
+"src": "ecl/pasted-counter.jpg",
+"w": 360,
+"h": 170,
+"stage": "Pasted in chat",
+"date": "19 Nov",
+"caption": "On the counter between Trials and the box"
+},
+{
+"id": "k-plate-xii-05-5fa6ccf-tk-a-tk",
+"src": "ecl/k-plate-xii-05-5fa6ccf-tk-a-tk.jpg",
+"w": 360,
+"h": 221,
+"stage": "Plate XII v6",
+"date": "19 Nov",
+"caption": "E1 by the mixer"
+},
+{
+"id": "c-xii-v6-e1",
+"src": "ecl/c-xii-v6-e1.jpg",
+"w": 900,
+"h": 391,
+"stage": "Plate XII v6",
+"date": "19 Nov",
+"caption": "E1 \u00b7 glossy, like the logo"
+},
+{
+"id": "c-xii-v6-e2",
+"src": "ecl/c-xii-v6-e2.jpg",
+"w": 900,
+"h": 391,
+"stage": "Plate XII v6",
+"date": "19 Nov",
+"caption": "E2 \u00b7 cream at the end, floral plate"
+},
+{
+"id": "c-xii-v6-e3",
+"src": "ecl/c-xii-v6-e3.jpg",
+"w": 900,
+"h": 391,
+"stage": "Plate XII v6",
+"date": "19 Nov",
+"caption": "E3 \u00b7 plump, gold-rimmed plate"
+},
+{
+"id": "c-xii-v6-e4",
+"src": "ecl/c-xii-v6-e4.jpg",
+"w": 900,
+"h": 391,
+"stage": "Plate XII v6",
+"date": "19 Nov",
+"caption": "E4 \u00b7 mark G: drizzle, sage plate"
+},
+{
+"id": "c-xii-v6-e5",
+"src": "ecl/c-xii-v6-e5.jpg",
+"w": 900,
+"h": 391,
+"stage": "Plate XII v6",
+"date": "19 Nov",
+"caption": "E5 \u00b7 bitten, with crumbs"
+},
+{
+"id": "k-plate-xii-06-3e4832d-tk-a-tk",
+"src": "ecl/k-plate-xii-06-3e4832d-tk-a-tk.jpg",
+"w": 360,
+"h": 220,
+"stage": "Plate XII v7",
+"date": "19 Nov",
+"caption": "E1 bitten, at P1"
+},
+{
+"id": "k-plate-xii-08-61b193d-tk-a-tk",
+"src": "ecl/k-plate-xii-08-61b193d-tk-a-tk.jpg",
+"w": 360,
+"h": 220,
+"stage": "Plate XII v8",
+"date": "19 Nov",
+"caption": "E1 whole, eaten by clicks"
+},
+{
+"id": "c-xii-v8-bite1",
+"src": "ecl/c-xii-v8-bite1.jpg",
+"w": 900,
+"h": 430,
+"stage": "Plate XII v8",
+"date": "19 Nov",
+"caption": "E1, bite 1 of 3"
+},
+{
+"id": "c-xii-v8-bite2",
+"src": "ecl/c-xii-v8-bite2.jpg",
+"w": 900,
+"h": 430,
+"stage": "Plate XII v8",
+"date": "19 Nov",
+"caption": "E1, bite 2 of 3"
+},
+{
+"id": "c-xii-v8-bite3",
+"src": "ecl/c-xii-v8-bite3.jpg",
+"w": 900,
+"h": 430,
+"stage": "Plate XII v8",
+"date": "19 Nov",
+"caption": "Gone: plate and crumbs"
+},
+{
+"id": "k-plate-xii-09-c6859d3-tk-a-tk",
+"src": "ecl/k-plate-xii-09-c6859d3-tk-a-tk.jpg",
+"w": 360,
+"h": 220,
+"stage": "Plate XII v9",
+"date": "19 Nov",
+"caption": "E1 by the box"
+},
+{
+"id": "pasted-rack",
+"src": "ecl/pasted-rack.jpg",
+"w": 360,
+"h": 171,
+"stage": "Pasted in chat",
+"date": "19 Nov",
+"caption": "Three eclairs on a cooling rack"
+},
+{
+"id": "c-xii-v10-rack0",
+"src": "ecl/c-xii-v10-rack0.jpg",
+"w": 900,
+"h": 379,
+"stage": "Plate XII v10",
+"date": "19 Nov",
+"caption": "Three eclairs on the cooling rack"
+},
+{
+"id": "c-xii-v10-rack1",
+"src": "ecl/c-xii-v10-rack1.jpg",
+"w": 900,
+"h": 379,
+"stage": "Plate XII v10",
+"date": "19 Nov",
+"caption": "Rack, one taken"
+},
+{
+"id": "c-xii-v10-rack2",
+"src": "ecl/c-xii-v10-rack2.jpg",
+"w": 900,
+"h": 379,
+"stage": "Plate XII v10",
+"date": "19 Nov",
+"caption": "Rack, two taken"
+},
+{
+"id": "c-xii-v10-rack3",
+"src": "ecl/c-xii-v10-rack3.jpg",
+"w": 900,
+"h": 379,
+"stage": "Plate XII v10",
+"date": "19 Nov",
+"caption": "Rack, all gone"
+}
+]
