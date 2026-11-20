@@ -18,7 +18,7 @@ const cab = (pct, to) => "color-mix(in srgb,var(--cab) " + pct + "%," + (to || "
 
 /* ---- options on the page: each is a <g data-var="key-value ..."> shown only when every key matches the page's choice.
         DEF = what shows first (Claude's picks). ---- */
-const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19) */
+const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1", pl: "1", wb: "next" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19) */
 function V(tokens, svg) {
   const on = tokens.split(" ").every((t) => { const i = t.indexOf("-"); return t.slice(i + 1).split("|").includes(DEF[t.slice(0, i)]); });   /* "ecl-0|1" = ecl is 0 or 1 */
   return '<g data-var="' + tokens + '"' + (on ? "" : ' style="display:none"') + ">" + svg + "</g>";
@@ -265,11 +265,43 @@ function boxLabel() {
   return '<g transform="matrix(1 -0.136 0 1 93 307)"><text x="46.5" y="33" text-anchor="middle" style="font:700 12.5px \'Archivo Narrow\',\'Arial Narrow\',sans-serif;letter-spacing:1.2px;fill:#1E2B48">RECIPES</text></g>';
 }
 
-/* ---- "Ideas" at the top of the big white note on the cork board ---- */
+/* ---- "Ideas" at the top of the big white note on the cork board (v13: larger, fills the note's top band) ---- */
 function ideasNote() {
-  return '<text x="221" y="166" transform="rotate(-5 221 166)" style="font:700 12px Caveat,\'Segoe Script\',cursive;fill:#2a2622">Ideas</text>' +
-    '<path d="M221 168.6 q12 -1.6 24 -2.4" transform="rotate(-5 221 166)" style="fill:none;stroke:#2a2622;stroke-width:.8;stroke-linecap:round"/>';
+  const t = ' transform="rotate(-4 217 172)"';
+  return '<text x="217" y="172"' + t + ' style="font:700 19px Caveat,\'Segoe Script\',cursive;fill:#2a2622">Ideas</text>' +
+    '<path d="M217 175.6 q17 -1.8 35 -2.6"' + t + ' style="fill:none;stroke:#2a2622;stroke-width:1.1;stroke-linecap:round"/>';
 }
+
+/* ---- v13 shelf plaques: brass label holders with a cream card, screwed to the board fronts (they overhang the thin boards a
+        little, as real ones do). Boards: middle front y ~10-16, bottom front y ~106-112.5; cookbooks x 410-560, references 560-664.
+        pl-1 "The Library" centred on the bottom board; pl-2 "The Library" left half + "Reference Library" right half;
+        pl-3 "Cookbooks" on the middle board, "References" on the bottom board ---- */
+const SHELF = { mid: 13, bot: 109.3 };
+function plaque(cx, cy, label, fs) {
+  fs = fs || 7.6; const tw = label.length * (fs * .56 + .7), w = tw + 15, h = fs + 6.4, x0 = cx - w / 2, y0 = cy - h / 2;   /* tw: the caps' width, fixed by textLength */
+  return '<g class="plaque">' +
+    '<path d="M' + f1(x0 + 1.2) + " " + f1(y0 + h + .9) + " H" + f1(x0 + w + .4) + '" style="stroke:#3d2614;stroke-width:1.2;opacity:.45"/>' +   /* its shadow on the board */
+    P(wob([[x0, y0], [x0 + w, y0], [x0 + w, y0 + h], [x0, y0 + h]], .12), "#D4A94F", 1.2) +
+    '<path d="M' + f1(x0 + 1.4) + " " + f1(y0 + 1.3) + " H" + f1(x0 + w - 1.4) + '" style="stroke:#F0D58C;stroke-width:.8"/>' +   /* light on the top lip */
+    P(wob([[x0 + 4.4, y0 + 2], [x0 + w - 4.4, y0 + 2], [x0 + w - 4.4, y0 + h - 2], [x0 + 4.4, y0 + h - 2]], .08), "#FAF3DC", .7) +
+    [x0 + 2.2, x0 + w - 2.2].map((x) => '<circle cx="' + f1(x) + '" cy="' + f1(cy) + '" r=".9" style="fill:#8A6A28"/>').join("") +
+    '<text x="' + f1(cx) + '" y="' + f1(cy + fs * .36) + '" text-anchor="middle" textLength="' + f1(tw - .7) + '" lengthAdjust="spacingAndGlyphs" style="font:700 ' + fs + 'px \'Archivo Narrow\',\'Arial Narrow\',sans-serif;letter-spacing:.7px;fill:' + INK + '">' + label.toUpperCase() + "</text></g>";
+}
+const PLAQUES = {
+  1: () => plaque(537, SHELF.bot, "The Library", 8.2),
+  2: () => plaque(485, SHELF.bot, "The Library") + plaque(603, SHELF.bot, "Reference Library", 6.8),
+  3: () => plaque(537, SHELF.mid, "Cookbooks") + plaque(537, SHELF.bot, "References"),
+};
+const shelfPlaques = () => Object.keys(PLAQUES).map((k) => V("pl-" + k, PLAQUES[k]())).join("");
+
+/* ---- v13 whiteboard heading in the marker's own red, top left of the board, underlined like the Ideas note ---- */
+const WB = { next: "Next up", up: "Upcoming", today: "Today", todo: "To do" }, WB_INK = "#B8392E";
+function wbHead(k) {
+  const t = ' transform="rotate(-2 472 166)"';
+  return '<text x="472" y="166"' + t + ' style="font:700 21px Caveat,\'Segoe Script\',cursive;fill:' + WB_INK + ';stroke:' + WB_INK + ';stroke-width:.35;stroke-linejoin:round">' + WB[k] + "</text>" +
+    '<path d="M471 170.4 q' + f1(WB[k].length * 4.4) + " -1.2 " + f1(WB[k].length * 8.8) + ' -.6"' + t + ' style="fill:none;stroke:' + WB_INK + ';stroke-width:1.5;stroke-linecap:round;opacity:.9"/>';
+}
+const wbHeads = () => Object.keys(WB).map((k) => V("wb-" + k, wbHead(k))).join("");
 
 /* ---- without the flour and rolling pin (tidy-1): wall and counter filled where they stood ---- */
 function tidyPatch(v) {
@@ -326,11 +358,12 @@ function clipboard() {
   s += P(wob(q([[uL, vB], [uR, vB], [uR, vB + .022], [uL, vB + .022]], 1), .2), "#7E4F2C", 1.4) + P(wob(q([[uL, vT], [uL, vB + .022], [uL - .012, vB + .02], [uL - .012, vT + .004]], 1), .1), "#8A5A33", 1.2);
   s += P(wob(q([[uL, vT], [uR, vT], [uR, vB], [uL, vB]], 3), .4), "#B57D4B", 1.7);
   s += P(wob(q([[pu(.08), pv(.07)], [pu(.92), pv(.07)], [pu(.92), pv(.96)], [pu(.08), pv(.96)]], 3.2), .3), PAPER, 1);
-  for (let a = .2; a < .93; a += .065) { const p1 = on(pu(.16), pv(a), 1.3), p2 = on(pu(.84), pv(a), 1.3); s += '<path d="M' + f1(p1[0]) + " " + f1(p1[1]) + " L" + f1(p2[0]) + " " + f1(p2[1]) + '" style="stroke:' + RULE + ';stroke-width:.8"/>'; }
+  for (let a = .275; a < .93; a += .065) { const p1 = on(pu(.16), pv(a), 1.3), p2 = on(pu(.84), pv(a), 1.3); s += '<path d="M' + f1(p1[0]) + " " + f1(p1[1]) + " L" + f1(p2[0]) + " " + f1(p2[1]) + '" style="stroke:' + RULE + ';stroke-width:.8"/>'; }
   { /* the sheet's title, laid on the door's plane (an affine fit from three points on it); the inside face runs right to left from the hinge, so the text starts at the far side */
-    const o = on(pu(.86), pv(.155), 3.4), ex = on(pu(.14), pv(.155), 3.4), ey = on(pu(.86), pv(.155) + 10 / H_DOOR, 3.4), W = (uR - uL) * DOOR.W * .72;
+    /* v13: bigger (15 units), spanning 76% of the sheet; textLength fits it to the span whatever the font measures */
+    const o = on(pu(.875), pv(.215), 3.4), ex = on(pu(.135), pv(.215), 3.4), ey = on(pu(.875), pv(.215) + 10 / H_DOOR, 3.4), W = (uR - uL) * DOOR.W * .74;
     const m = [(ex[0] - o[0]) / W, (ex[1] - o[1]) / W, (ey[0] - o[0]) / 10, (ey[1] - o[1]) / 10, o[0], o[1]].map((n) => +n.toFixed(4));
-    s += '<text transform="matrix(' + m.join(" ") + ')" x="0" y="0" style="font:700 11px Caveat,\'Segoe Script\',cursive;fill:#2a2622">' + LOG_TITLE + "</text>"; }
+    s += '<text transform="matrix(' + m.join(" ") + ')" x="0" y="0" textLength="' + f1(W) + '" lengthAdjust="spacingAndGlyphs" style="font:700 15px Caveat,\'Segoe Script\',cursive;fill:#2a2622">' + LOG_TITLE + "</text>"; }
   s += P(wob(q([[pu(.3), pv(-.025)], [pu(.7), pv(-.025)], [pu(.66), pv(.075)], [pu(.34), pv(.075)]], 1.6), .2), "#C5BEB0", 1.2);
   const n = on(pu(.5), vT - .08, 0), c1 = on(pu(.4), pv(-.02), 1.6), c2 = on(pu(.6), pv(-.02), 1.6);
   s += '<path d="M' + f1(c1[0]) + " " + f1(c1[1]) + " L" + f1(n[0]) + " " + f1(n[1]) + " L" + f1(c2[0]) + " " + f1(c2[1]) + '" style="fill:none;stroke:#3a332b;stroke-width:.9"/><circle cx="' + f1(n[0]) + '" cy="' + f1(n[1]) + '" r="1.6" style="fill:#9A6A2E;stroke:' + INK + ';stroke-width:.8"/>';
@@ -369,6 +402,7 @@ module.exports = {
       { obj: "box", svg: boxWear() + boxLabel(), top: true },
       { obj: "eclair", svg: rack(), top: true },
       { obj: "window", svg: Object.keys(SUN).map((k) => V("sun-" + k, beams(v, k))).join("") + mobile() + Object.keys(SILL).map((k) => V("sill-" + k, SILL[k][1]())).join(""), top: true },
+      { obj: "cookbooks", svg: shelfPlaques(), top: true }, { obj: "whiteboard", svg: wbHeads(), top: true },   /* v13 text: under the dusk wash */
       { obj: "dusk", svg: V("sun-eve", '<rect x="0" y="-60" width="868" height="560" style="fill:#2B2A4A;opacity:.2;mix-blend-mode:multiply"/>'), top: true },
       { obj: "cup-open", svg: cupOpen(v), top: true }, { obj: "clip", svg: clipboard(), top: true }] };
   },
@@ -379,9 +413,11 @@ module.exports = {
       ...Object.keys(SILL).map((k) => ({ key: "sill" + k, title: "B" + k + " · " + SILL[k][0], vb: "716 20 150 236", svg: beams(v + "z" + k, "am") + mobile() + SILL[k][1]() })),
       { key: "rack", title: "Your eclairs on your cooling rack (click the rack in the kitchen: two taken, two bites out of the last, then gone)", vb: "684 300 182 70", svg: '<use href="#a-all"/>' },
       { key: "nb2", title: "Your composition journals, the size of the notebook closed", vb: "210 292 330 80", svg: '<use href="#a-all"/>' },
-      { key: "clip", title: "The clipboard: “" + LOG_TITLE + "” at the top of the sheet", vb: "40 -39 120 145", svg: cupOpen(v + "z") + clipboard() },
+      { key: "clip", title: "The clipboard: “" + LOG_TITLE + "” at the top of the sheet", vb: "40 -26 84 72", svg: cupOpen(v + "z") + clipboard() },
       { key: "box", title: "Recipe box with RECIPES, worn paint, tab letters", vb: "26 200 170 170", svg: boxWear() + boxLabel() },
-      { key: "ideas", title: "“Ideas” on the big note", vb: "190 128 140 90", svg: ideasNote() },
+      { key: "ideas", title: "“Ideas” on the big note", vb: "200 140 90 54", svg: ideasNote() },
+      ...Object.keys(PLAQUES).map((k) => ({ key: "pl" + k, title: "P" + k + " · " + ["", "“The Library” on the bottom shelf", "“The Library” and “Reference Library”, one per half", "“Cookbooks” on the middle shelf, “References” on the bottom"][k], vb: "404 0 268 124", svg: PLAQUES[k]() })),
+      { key: "wb", title: "Whiteboard heading (follows the Whiteboard heading choice above)", vb: "452 130 142 70", svg: '<use href="#a-all"/>' },
     ];
   },
 };
