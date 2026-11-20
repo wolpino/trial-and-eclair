@@ -192,11 +192,14 @@ Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop
 - [x] v4 (2026-11-19, same URL): ink split per object by masks (diff vs v3: only cleared marks and sub-pixel edges); stem green default; mixer marks cleared; shelf-edge labels; eclair on a plate; spoon jar on the sill; tomato-capped marker; cupboard open wide or cracked with a baking-log clipboard; B = box and mixer swapped (`traced/add.cjs`, `kitchen-swap.svg`)
 - [x] **Decided (Ari, 2026-11-19, on v4):** cabinets stem green; cupboard open wide; the clipboard is the recipe log button (drawers plain); box and mixer stay where traced (B dropped). New pieces may be cleaner than the trace
 - [x] v5 (2026-11-19, same URL): frame ends at the middle drawer's bottom, that height added on top (wall cupboards stretched, cubby gets a second book row); open cupboard with two shelves and a clipboard in true proportion; eclair pencil-length and plump; spoon jar twice the size; close-ups; shelf labels off; the book shelf is one button
-- [ ] Ari (v5 questions): one Library view for cookbooks and references, its name, no shelf labels; the taller frame; the close-ups
+- [x] Ari (on v5, 11/19): taller frame and cupboard approved; clipboard needs depth; spoon jar replaced by plants/flowers or a sun catcher; eclair redone in the trace's style, tried in other spots
+- [x] v6 (2026-11-19, same URL): clipboard shadow and edge; eclairs E1–E5; spots P1 (by the box), P2 (two notebooks under the open one), P3 (eclair on closed notebooks); sills S1 basil, S2 flowers, S3 sun catcher with rainbows; picks switchable on the page, close-ups clickable
+- [ ] Ari (v6 questions): eclair E1–E5 (pick E1); spot (pick P2); sill (pick S3); Library name (pick Library)
 
 ### Product changes from the plates (apply in one pass)
 Changes to the product that come out of the drawings. Kept here as they come up and applied together to `docs/PRD.md`, the README and the Task issues when Plate XII is signed off (before Task issues), so the plan is edited once and stays consistent.
 - [ ] **Library** (Ari 2026-11-19, name not settled): the book shelf opens one view holding both the cook's cookbooks (their published collections) and references (research shelf). Touches PRD sections 2, 5 and 7, the Phase UI tables, Plate XI's two views and their web addresses (decision 005)
+- [ ] **Saved cookbooks** (Ari 2026-11-19, later version): a cook can save other users' published cookbooks; they sit on the same shelf as their own cookbooks. Needs a saved-cookbook model and a phase in the PRD; the Library view leaves room for them
 - [ ] **Recipe log on a clipboard** in the open wall cupboard, not the drawer stack
 - [ ] **No fridge, no Recently list** (Plate XII v3)
 - If picked, this replaces the Plate XI kitchen drawing (views and phone follow), so settle it before the test piece

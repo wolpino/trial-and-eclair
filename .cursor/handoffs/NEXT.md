@@ -1,4 +1,4 @@
-# NEXT — 2026-11-19 (Plate XII v5 published: taller traced kitchen, waiting on Ari)
+# NEXT — 2026-11-19 (Plate XII v6 published: eclairs, spots, sills; waiting on Ari)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,14 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII, after Ari answers v5) — START HERE
+## Prompt for the next agent (Plate XII, after Ari answers v6) — START HERE
+> Plate XII v6: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Build as below; `clean.cjs` also writes `traced/closeups.html` (build puts it at `<!--CLOSEUPS-->`). In `add.cjs`, options are `<g data-var>` groups (DEF = shown first): eclair ECL 1–5 × SPOT p1/p2/p3, the notebook stacks (p2 under the open notebook via a mask, p3 in front of the whiteboard), SILL 1–3. Page buttons and close-ups switch them.
+>
+> **Questions (page top):** eclair (pick E1), spot (pick P2), sill (pick S3), Library name (pick Library).
+>
+> **After answers:** set DEF to the picks and delete the other options (code and page buttons), keep the close-ups only if Ari wants them. Then evening, phone crop, size. Product list in PLAN.md (Library, saved cookbooks, clipboard log, no fridge/Recently) goes into the PRD in one pass at sign-off.
+
+## Prompt for the next agent (Plate XII, after Ari answers v5) — done (v6)
 > Plate XII v5: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Same sources and build as below, minus the swap (removed). New in `clean.cjs`: TOP 44 (frame ends at the middle drawer's bottom, viewBox `6 -39 856 479`), `extend()` builds the added top from the scene itself (cupboard band stretched, cubby row moved up and flipped). `add.cjs`: marker, eclair, spoon jar, open cupboard (125 degrees, two shelves) and clipboard. Page close-ups reuse `#a-all`.
 >
 > **Decided (Ari 11/19):** stem green; cupboard open wide; clipboard = recipe log button; box and mixer stay; new pieces may be cleaner than the trace.

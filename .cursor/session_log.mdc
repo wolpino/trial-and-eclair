@@ -10,6 +10,38 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-19 · Plate XII v6: eclairs, spots, sills (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v6) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v6 published; four questions to Ari; no app code) |
+
+### Intent
+Ari on v5: taller frame and cupboard good; clipboard needs depth; five eclairs in the image's style; replace the spoon jar (plants, flowers, sun catcher); try the eclair by the box, with notebooks stacked under the open one, or on notebooks in front of the whiteboard. Later version: saved cookbooks on the same shelf.
+
+### Summary
+- `add.cjs`: variants as `<g data-var="ecl-N spot-pX">` / `sill-N` (DEF shows first); plate() and eclairBody() with five ECL presets (bite uses a mask); SPOT p1/p2/p3; stack under the notebook masked by `a-mk-notebook` so it reads as underneath; sills basil/flowers/crystal (rainbow arcs); clipboard shadow and board edge; spoon jar removed
+- Variant groups are `top: true` (outside `#a-scene`) so close-ups (`traced/closeups.html`, built into the page) draw each option over a clean scene
+- Page: Eclair / Spot / Sill buttons, clickable close-ups; PLAN.md product list adds saved cookbooks
+
+### Decisions
+- Ari: taller frame and open cupboard approved; saved cookbooks (later) share the shelf with the cook's own
+
+### Open threads
+- Ari: eclair (pick E1), spot (pick P2), sill (pick S3), Library name (pick Library)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v6, eclair variants, sill, sun catcher, notebook stack
+**Files:** design/plate-xii/traced/ (clean.cjs, add.cjs, kitchen.svg, closeups.html), sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v6 as drawn (tweak only); the ink split; taller frame
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v6 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Plate XII v5: taller kitchen, cupboard, eclair, jar (published)
 
 | Field | Value |

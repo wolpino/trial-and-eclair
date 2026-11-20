@@ -117,6 +117,10 @@ function extend(id) {
   const plain = process.argv.includes("--plain");   /* --plain: split only, nothing added (for the before/after check) */
   const A = build("a", plain ? { top: false } : ADD.opts("a"));
   fs.writeFileSync(path.join(D, "kitchen.svg"), A);
+  if (!plain) {   /* close-ups for the page: each option drawn over a <use> of the kitchen scene */
+    const C = ADD.closeups().map((c) => '<figure data-pick="' + c.group + "-" + c.key + '"><svg viewBox="' + c.vb + '" role="img" aria-label="' + c.title + '"><use href="#a-scene"/>' + c.svg + "</svg><figcaption>" + c.title + "</figcaption></figure>");
+    fs.writeFileSync(path.join(D, "closeups.html"), C.join("\n"));
+  }
   fs.writeFileSync(path.join(D, "report.json"), JSON.stringify(rep, null, 1));
   console.log(JSON.stringify(rep), Math.round(A.length / 1024) + " KB");
 })();
