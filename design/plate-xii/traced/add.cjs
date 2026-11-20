@@ -88,18 +88,47 @@ const RACK2 = PORT("rack2"), JOURNALS = PORT("journals"), W2L = PORT("bottles-w2
 /* reusing a port twice needs its own ids */
 const reid = (svg, sfx) => svg.replace(/id="([^"]+)"/g, 'id="$1' + sfx + '"').replace(/url\(#([^)]+)\)/g, "url(#$1" + sfx + ")");
 /* her full cooling rack with three eclairs (refs/eclair-rack2.svg), on the counter under the window where the flour and rolling
-   pin were. Under the eclairs, where her rack is hidden, a wire patch in her colours, so a taken eclair leaves rack. The rack is
+   pin were. Under the eclairs, where her rack is hidden, her wire grid redrawn to her measure (rackGrid), so a taken eclair
+   leaves rack. The rack is
    drawn once; eclair i shows while fewer than i+1 are taken (data-var "ecl-0|1.."), its crumbs after. Taken from the left. */
 const RACK_FIT = { x: 692, y: 362, k: .27 };   /* her rack's left (x 41) and front rim (y 284) -> the kitchen counter */
+/* her rack's wires, measured off refs/eclair-rack2.svg where they show (her units). Cross wires run level (RACK_H, her y);
+   the long wires lean back to the left, each its own slope as she drew them: [x where it meets y 274, dx per unit of y].
+   Her long wires are two-tone (dark edges, grey core) and lie over the cross wires; between them her shaded counter, in
+   bands of her three tones. Her back rim is cut at y 160 (grey 161 to 164.6, dark to 166.6). */
+const RACK_H = [172.5, 181.5, 186, 191.2, 196, 201, 208.3, 213.7, 218.2, 222.7, 227.2, 232.7, 238, 244.5, 249.5, 255, 260.5, 265.5, 271];
+/* the middle of her rim's inner dark line, all round; and her rack between that rim and e1 */
+const RACK_IN = [[56.3, 166], [536, 166], [549, 175], [561, 185], [581, 205], [601, 225], [610, 235], [617.6, 245], [623, 255], [622, 265], [617.6, 270], [609.6, 274], [600, 277], [153.7, 277]];
+const RACK_LEFT = [[56.3, 166], [125, 166], [113, 187], [125, 211], [153, 231], [187, 248], [220, 268], [230, 277], [153.7, 277]];
+const RACK_D = [[191.4, .94], [233.6, .96], [274.2, .97], [306.5, .99], [341.9, 1.12], [374, 1.05], [410.2, 1], [441.9, .93], [477.9, 1.14], [511, 1.1], [544.3, 1.08], [583.2, 1.06], [618, 1.05], [652, 1.05]];
+const RACK_BAND = ["#C9A284", "#CFA882", "#C09879", "#C9A284", "#C09879", "#CFA882"];
+const RACK_INK = "#2B160F";
+function rackGrid() {
+  let s = "", y0 = 160;
+  RACK_H.forEach((y, i) => { s += '<rect x="40" y="' + y0 + '" width="600" height="' + f1(y - y0 + .5) + '" fill="' + RACK_BAND[i % RACK_BAND.length] + '"/>'; y0 = y; });
+  s += '<rect x="40" y="' + y0 + '" width="600" height="' + f1(290 - y0) + '" fill="' + RACK_BAND[0] + '"/>';
+  s += '<path d="' + RACK_H.map((y) => "M40 " + y + "H640").join("") + '" stroke="' + RACK_INK + '" stroke-width="1.3"/>';
+  const d = RACK_D.map(([x, k]) => "M" + f1(x + k * (156 - 274)) + " 156L" + f1(x + k * (290 - 274)) + " 290").join("");
+  s += '<path d="' + d + '" stroke="' + RACK_INK + '" stroke-width="6.4"/><path d="' + d + '" stroke="#C7AF9C" stroke-width="2.6"/>';
+  return s + '<rect x="40" y="156" width="600" height="10.6" fill="' + RACK_INK + '"/><rect x="40" y="161" width="600" height="3.6" fill="#D8CFC8"/>';
+}
 function rack() {
   const id = "rk" + (++uid), q = RACK2.clip.rack, rp = (a) => a.map((p) => p.join(" ")).join(" ");
-  const wire = (d) => '<path d="' + d + '" stroke="#2B160F" stroke-width="3.4" stroke-linecap="round"/><path d="' + d + '" stroke="#D8CCC4" stroke-width="1.5"/>';
-  let s = '<clipPath id="' + id + '"><polygon points="' + rp(q) + '"/></clipPath><g clip-path="url(#' + id + ')"><rect x="40" y="155" width="600" height="135" fill="#C9A284"/>';
-  for (let y = 170; y < 284; y += 9) s += wire("M40 " + y + "H640");
-  for (let t = 0; t <= 1; t += 1 / 18) s += wire("M" + (46 + t * 495) + " 160 L" + (143 + t * 480) + " 284");
-  s += "</g>" + reid(RACK2.parts.rack, id);
-  const crumbs = (cx, cy) => [[-40, 6, 5], [-12, -8, 3.8], [16, 10, 4.4], [46, -2, 3.2], [0, 20, 3.4], [-62, 16, 3]].map(([dx, dy, r]) => '<circle cx="' + (cx + dx) + '" cy="' + (cy + dy) + '" r="' + r + '" fill="' + (r > 3.6 ? "#E5B866" : "#4A2517") + '" stroke="#2B160F" stroke-width="1.1"/>').join("");
+  const grid = rackGrid(), crumbs = (cx, cy) => [[-40, 6, 5], [-12, -8, 3.8], [16, 10, 4.4], [46, -2, 3.2], [0, 20, 3.4], [-62, 16, 3]].map(([dx, dy, r]) => '<circle cx="' + (cx + dx) + '" cy="' + (cy + dy) + '" r="' + r + '" fill="' + (r > 3.6 ? "#E5B866" : "#4A2517") + '" stroke="#2B160F" stroke-width="1.1"/>').join("");
   const spots = [[200, 210], [343, 210], [477, 210]], r = (a, b) => [0, 1, 2, 3, 4, 5].filter((v) => v >= a && v <= b).join("|");
+  /* under everything: her grid continued over the whole rack, so it shows where her eclairs hid her rack (and through the bites) */
+  let s = '<clipPath id="' + id + '"><polygon points="' + rp(q) + '"/></clipPath><g clip-path="url(#' + id + ')">' + grid + "</g>" + reid(RACK2.parts.rack, id);
+  /* once an eclair is gone the grid goes on top too, over a band round its outline (wider down-left) where her rack still
+     has the eclair's edge and its speckled shadow; for e1 also out to her left rim, for the bitten e3 out to her right rim.
+     With all three gone it fills her whole rack inside the rim, so the rack reads as one: seams only at her rim's inner
+     line, which is dark like the wires. */
+  const band = (k) => ["", " transform=\"translate(-10 9)\"", " transform=\"translate(-22 20)\""].map((t) => '<polygon points="' + rp(RACK2.clip[k]) + '"' + t + ' fill="#fff" stroke="#fff" stroke-width="16" stroke-linejoin="round"/>').join("");
+  s += '<clipPath id="' + id + 'in"><polygon points="' + rp(RACK_IN) + '"/><rect x="70" y="160" width="460" height="7"/></clipPath>';   /* inside her rim, and her back rim (the eclairs cut it) */
+  const zone = (tok, n, shapes) => V(tok, '<mask id="' + id + n + '" maskUnits="userSpaceOnUse" x="30" y="100" width="620" height="200">' + shapes +
+    '</mask><g mask="url(#' + id + n + ')"><g clip-path="url(#' + id + 'in)">' + grid + "</g></g>");
+  s += zone("ecl-1|2|3|4", "z1", band("e1") + '<polygon points="' + rp(RACK_LEFT) + '" fill="#fff"/>') + zone("ecl-2|3|4", "z2", band("e2")) +
+    zone("ecl-3|4", "z3b", '<polygon points="508 166 ' + rp(RACK_IN.slice(1, -1)) + ' 505 277" fill="#fff"/>') +   /* the bitten end, out to her right rim */
+    zone("ecl-5", "z3", '<rect x="30" y="100" width="620" height="200" fill="#fff"/>');
   /* ecl 0..5: e1 taken at 1, e2 at 2, then two bites out of e3 (3, 4), all gone at 5 */
   ["e1", "e2"].forEach((k, i) => { s += V("ecl-" + r(i + 1, 5), crumbs(...spots[i])) + V("ecl-" + r(0, i), reid(RACK2.parts[k], id)); });
   s += V("ecl-5", crumbs(...spots[2])) + V("ecl-" + r(0, 4), bitten(reid(RACK2.parts.e3, id), id));
