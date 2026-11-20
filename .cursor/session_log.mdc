@@ -10,6 +10,52 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-20 · Plate XII v16: rainbows by time of day, glow options, cupboard and window fixes (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20T00:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts; continued from compacted session) |
+| **Outcome** | completed (Plate XII v16 published; questions to Ari; no app code) |
+
+### Intent
+Draw Plate XII v16 from Ari's v15 notes: no pointing movement, time-of-day rainbows, cupboard interior in trace ink style, window and stray marks fixed, glow options in new colours.
+
+### Summary
+- Pointing: removed C1/C2 movement rules entirely; added G1 green and G2 amber glow vars; default is G2 amber; B3 sticker dilate radii fixed (5.0/6.4) to close the cream-band gap from v15
+- Rainbows: full rewrite — R1/R2/R3 controls gone; all three types (beams, partial beams, scattered flecks + curved spots) always on; am/pm add a warm golden room wash (screen blend from crystal position); noon is crisper without wash; eve has no rainbows
+- Cupboard interior: stroke widths and wob amplitudes raised throughout `interior()` and `jar()` to match the trace's thick wobbly ink style
+- Window: overlay strokes added in `windowFix()` for even line weight on top, right and inner-left frame edges
+- Above box lid: wall-colour rect patched in `opts()` before the box decoration to cover stray traced marks
+- Published to artifact JpRfR1F4DZCy9ctDCezeZj (v17, 2.4 MB); two questions open: pointing pick (G2 amber recommended) and crystal pick (K2 recommended)
+
+### Decisions
+- **No pointing movement** — Ari confirmed (v15 notes); C1/C2 dropped permanently
+- **Time-of-day rainbows** — R1/R2/R3 wrappers replaced by one renderer per time of day; room wash only for am/pm
+- **B3 dilate 5.0/6.4** — matches INK_GROW=6 so cream band is flush to ink outline
+
+### Changes
+- `design/plate-xii/traced/add.cjs` — rainbow rewrite, roomWash(), glow vars, cupboard line weights, window overlay, wall patch above box lid; DEF removes r1/r2/r3
+- `design/plate-xii/traced/clean.cjs` — halo-st filter dilate radii 5.0/6.4
+- `design/plate-xii/base/xii.css` — C1/C2/pick rules removed; g1/g2 glow vars added
+- `design/plate-xii/sections/005-traced.html` — data-pt="g2", new controls, v16 changelog
+- `design/plate-xii/sections/00-questions.html` — two questions (pointing, crystal)
+- `design/plate-xii/traced/closeups.html` — rb-am closeup replaces rs1/rs2/rs3
+- `design/plate-xii/traced/kitchen.svg` — rebuilt by clean.cjs
+
+### Open threads
+- Ari's two questions: pointing (B3/G1/G2) and crystal (K1–K5)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v16, rainbows by time of day, room wash, glow pointing, B3 sticker fixed, cupboard ink style, window even weight
+**Files:** design/plate-xii/traced/add.cjs, design/plate-xii/traced/clean.cjs, design/plate-xii/base/xii.css, design/plate-xii/sections/005-traced.html, design/plate-xii/sections/00-questions.html
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v16 as drawn; pointing movement (dropped); R1/R2/R3 controls (replaced by time-of-day)
+**Resume with:** Ari's answers to v16 questions (pointing + crystal); then next round or task issues
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-20 · Plate XII v15 notes filed (notes mode); plate-round skill updated
 
 | Field | Value |

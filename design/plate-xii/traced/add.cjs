@@ -18,7 +18,7 @@ const cab = (pct, to) => "color-mix(in srgb,var(--cab) " + pct + "%," + (to || "
 
 /* ---- options on the page: each is a <g data-var="key-value ..."> shown only when every key matches the page's choice.
         DEF = what shows first (Claude's picks). ---- */
-const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1", cr: "2", r1: "1", r2: "1", r3: "1" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19); v15: crystal K2, all three kinds of rainbow on */
+const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1", cr: "2" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19); v16: rainbows always all three kinds, by time of day */
 function V(tokens, svg) {
   const on = tokens.split(" ").every((t) => { const i = t.indexOf("-"); return t.slice(i + 1).split("|").includes(DEF[t.slice(0, i)]); });   /* "ecl-0|1" = ecl is 0 or 1 */
   return '<g data-var="' + tokens + '"' + (on ? "" : ' style="display:none"') + ">" + svg + "</g>";
@@ -359,12 +359,28 @@ const PART = {
   noon: [[822, 122, 690, 300, .85], [822, 124, 846, 374, .75], [822, 124, 640, 346, .65]],
   pm: [[822, 116, 760, 16, .85], [822, 118, 642, 96, .75], [822, 114, 706, -24, .65]],
 };
+/* v16 room wash: a warm golden screen-blend overlay from the crystal/window, dramatic in the morning and afternoon */
+function roomWash(v) {
+  const id = v + "-wash" + (++uid);
+  return '<defs><radialGradient id="' + id + '" cx="822" cy="100" r="750" gradientUnits="userSpaceOnUse">' +
+    '<stop offset="0" stop-color="#FFD88A" stop-opacity=".46"/>' +
+    '<stop offset=".45" stop-color="#FFBE5A" stop-opacity=".22"/>' +
+    '<stop offset="1" stop-color="#FFB840" stop-opacity="0"/>' +
+    '</radialGradient></defs>' +
+    '<rect x="-10" y="-60" width="900" height="560" fill="url(#' + id + ')" style="mix-blend-mode:screen;pointer-events:none"/>';
+}
 function rainbows(v) {
   const defs = '<defs><filter id="' + v + '-rbblur" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation=".75"/></filter>' +
     '<pattern id="' + v + '-rbdot" width="2.3" height="2.3" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><circle cx="1.15" cy="1.15" r="1.02" fill="#fff"/></pattern>' +
     '<mask id="' + v + '-rbdots" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1100" height="700"><rect x="-100" y="-100" width="1100" height="700" fill="url(#' + v + '-rbdot)"/></mask></defs>';
+  /* v16: no R1/R2/R3 controls — all types always on, varied by time of day.
+     am + pm: dramatic room wash + all three kinds; noon: beams + flecks only (no wash); eve: nothing */
   return defs + '<g class="rb"><g class="rb-turn">' + Object.keys(SUN).map((k) =>
-    V("sun-" + k, beams(v, k) + V("r2-1", beams(v, k, PART[k], true)) + V("r1-1", '<g class="rb-spots">' + scatter(k) + "</g>") + V("r3-1", '<g class="rb-spots">' + things(k) + "</g>"))).join("") + "</g></g>";
+    V("sun-" + k,
+      (k !== "noon" ? roomWash(v) : "") +
+      beams(v, k) + beams(v, k, PART[k], true) +
+      '<g class="rb-spots">' + scatter(k) + things(k) + "</g>"
+    )).join("") + "</g></g>";
 }
 /* rainbow beams from the crystals; they move with the time of day (sun-am, sun-noon, sun-pm), none in the evening */
 const SUN = {
@@ -391,7 +407,9 @@ function windowFix() {
   return '<rect x="702.9" y="80" width="7" height="161.5" style="fill:' + side + '"/>' +
     '<rect x="706.2" y="80" width=".8" height="161.5" style="fill:' + INK + '"/><rect x="709.6" y="80" width="1.2" height="161.5" style="fill:' + INK + '"/>' +
     '<rect x="699" y="254.4" width="165.4" height="14" style="fill:var(--wall)"/>' +
-    P("M713 253.6 H864.6 V261.4 H717.6 Q713.4 261.4 713 257.4Z", dark, 1.5) + '<path d="M716.5 255.4 H864" style="stroke:' + side + ';stroke-width:.9"/>';
+    P("M713 253.6 H864.6 V261.4 H717.6 Q713.4 261.4 713 257.4Z", dark, 1.5) + '<path d="M716.5 255.4 H864" style="stroke:' + side + ';stroke-width:.9"/>' +
+    /* v16: even up frame outline — overlay clean INK strokes on top/right/left-inner edges at consistent weight */
+    '<path d="M710.4 31.4 H864 M864 31.4 V241.2 M710.4 31.4 V80" style="fill:none;stroke:' + INK + ';stroke-width:1.6;stroke-linecap:round"/>';
 }
 /* v15: the lid's front edge (at the top now it is open) had a shapeless brown nub: it is the latch tab, in brass */
 function lidTab() {
@@ -551,13 +569,13 @@ function jar(cx, b, w, h, kind, lvl, lid, label) {
   for (let i = 0; i < w * (b - lv) / 9; i++) s += '<circle cx="' + f1(x0 + rnd() * w) + '" cy="' + f1(lv + 1 + rnd() * (b - lv)) + '" r="' + f1(.25 + rnd() * .35) + '" style="fill:' + sp + '"/>';
   s += '<path d="M' + f1(x0 + w * .16) + " " + f1(tb + 2.5) + " V" + f1(b - 3) + '" style="stroke:#fff;stroke-width:' + f1(Math.max(1, w * .07)) + ';stroke-linecap:round;opacity:.75"/>' +
     '<path d="M' + f1(x1 - w * .13) + " " + f1(tb + 3) + " V" + f1(tb + 3 + h * .22) + '" style="stroke:#fff;stroke-width:.8;stroke-linecap:round;opacity:.6"/></g>';
-  s += '<path d="' + body + '" style="fill:none;stroke:' + INK + ';stroke-width:1.2;stroke-linejoin:round"/>';
+  s += '<path d="' + body + '" style="fill:none;stroke:' + INK + ';stroke-width:2.2;stroke-linejoin:round"/>';
   const [lc, ll] = LIDS[lid], lx0 = cx - w * .44, lx1 = cx + w * .44;
-  s += P("M" + f1(lx0) + " " + f1(t + .6) + " Q" + f1(lx0) + " " + f1(t) + " " + f1(lx0 + .6) + " " + f1(t) + " H" + f1(lx1 - .6) + " Q" + f1(lx1) + " " + f1(t) + " " + f1(lx1) + " " + f1(t + .6) + " V" + f1(tb) + " Q" + f1(cx) + " " + f1(tb + w * .04) + " " + f1(lx0) + " " + f1(tb) + "Z", lc, 1.1) +
+  s += P("M" + f1(lx0) + " " + f1(t + .6) + " Q" + f1(lx0) + " " + f1(t) + " " + f1(lx0 + .6) + " " + f1(t) + " H" + f1(lx1 - .6) + " Q" + f1(lx1) + " " + f1(t) + " " + f1(lx1) + " " + f1(t + .6) + " V" + f1(tb) + " Q" + f1(cx) + " " + f1(tb + w * .04) + " " + f1(lx0) + " " + f1(tb) + "Z", lc, 1.8) +
     '<path d="M' + f1(lx0 + .8) + " " + f1(t + .9) + " H" + f1(lx1 - .8) + '" style="stroke:' + ll + ';stroke-width:.8"/>';
   if (label) {
     const lw = w * .7, lhh = Math.min(h * .3, w * .36), ly = b - h * .42, fs = lhh * .82;
-    s += P(wob([[cx - lw / 2, ly - lhh / 2], [cx + lw / 2, ly - lhh / 2 - .3], [cx + lw / 2, ly + lhh / 2], [cx - lw / 2, ly + lhh / 2 + .2]], .25), "#EFE3C4", .8) +
+    s += P(wob([[cx - lw / 2, ly - lhh / 2], [cx + lw / 2, ly - lhh / 2 - .3], [cx + lw / 2, ly + lhh / 2], [cx - lw / 2, ly + lhh / 2 + .2]], .3), "#EFE3C4", 1.2) +
       '<text x="' + f1(cx) + '" y="' + f1(ly + fs * .34) + '" text-anchor="middle" textLength="' + f1(Math.min(lw * .84, label.length * fs * .44)) + '" lengthAdjust="spacingAndGlyphs" style="font:700 ' + f1(fs) + 'px Caveat,\'Segoe Script\',cursive;fill:#2a2622">' + label + "</text>";
   }
   return s;
@@ -570,12 +588,12 @@ function interior(v) {
   let s = '<clipPath id="' + cid + '"><rect x="' + x0 + '" y="' + (y0 - 10) + '" width="' + DOOR.W + '" height="' + (y1 - y0 + 10) + '"/></clipPath><g clip-path="url(#' + cid + ')">';
   /* back wall: planks, and the shade each shelf casts on it */
   s += poly([B(x0, y0), B(x1 + 40, y0), B(x1 + 40, y1), B(x0, y1)], WD.back);
-  [x0 + 44, x0 + 88].forEach((X) => { s += line(B(X, y0), B(X, y1), WD.seam, .8); });
+  [x0 + 44, x0 + 88].forEach((X) => { s += line(B(X, y0), B(X, y1), WD.seam, 1.4); });
   [y0, 3, 52].forEach((sy) => { const y = sy === y0 ? y0 : sy + 3.5; s += poly([B(x0, y), B(x1 + 40, y), B(x1 + 40, y + 9), B(x0, y + 9)], WD.backD); });
   /* left side wall, darker under each shelf; the ceiling */
   s += poly([[x0, y0], B(x0, y0), B(x0, y1), [x0, y1]], WD.side);
   [3, 52].forEach((sy) => { s += poly([[x0, sy + 3.5], B(x0, sy + 3.5), B(x0, sy + 12), [x0, sy + 9]], WD.sideD); });
-  s += poly([[x0, y0], [x1, y0], B(x1, y0), B(x0, y0)], WD.ceil) + line(B(x0, y0), B(x0, y1), INK, .9) + line(B(x0, y0), B(x1 + 40, y0), INK, .9);
+  s += poly([[x0, y0], [x1, y0], B(x1, y0), B(x0, y0)], WD.ceil) + line(B(x0, y0), B(x0, y1), INK, 1.4) + line(B(x0, y0), B(x1 + 40, y0), INK, 1.4);
   /* jars, back to front. Top shelf: spices and a tin; middle: flour, sugar, cocoa (a vanilla jar behind); floor: oats, pecans, salt */
   s += at(-30, jar(157, 3, 10, 14, "herbs", .78, "black") + jar(170, 3, 10, 16, "paprika", .7, "red") + jar(183, 3, 10, 15, "cinnamon", .74, "brass") + jar(196, 3, 9, 17, "pepper", .8, "steel") +
     jar(214, 3, 17, 23, "turmeric", .64, "cream") + jar(235, 3, 14, 19, "herbs", .55, "steel") + jar(254, 3, 14, 18, "paprika", .66, "black"));
@@ -585,9 +603,9 @@ function interior(v) {
   /* the shelves over the jars: underside first, then the front edge with light on its top */
   [3, 52].forEach((sy) => {
     s += poly([[x0, sy + 3.5], [x1, sy + 3.5], B(x1, sy + 3.5), B(x0, sy + 3.5)], WD.under) +
-      P(wob([[x0, sy], [x1, sy], [x1, sy + 3.5], [x0, sy + 3.5]], .15), WD.lip, 1.2) + line([x0 + 1, sy + .9], [x1 - 1, sy + .9], WD.lipL, .9);
+      P(wob([[x0, sy], [x1, sy], [x1, sy + 3.5], [x0, sy + 3.5]], .3), WD.lip, 2.0) + line([x0 + 1, sy + .9], [x1 - 1, sy + .9], WD.lipL, .9);
   });
-  s += "</g>" + P(wob([[x0, y0 - 6], [x1, y0 - 6], [x1, y1], [x0, y1]], .3), "none", 2.4);
+  s += "</g>" + P(wob([[x0, y0 - 6], [x1, y0 - 6], [x1, y1], [x0, y1]], .4), "none", 3.2);
   return s;
 }
 /* v15: the door's two hinges, on the frame at the hinge side */
@@ -674,7 +692,7 @@ module.exports = {
     return { end: [{ obj: "whiteboard", svg: marker() }, { obj: "ideas", svg: ideasNote() },
       { obj: "room", svg: V("tidy-1", tidyPatch(v)), top: true },
       { obj: "notebook", svg: nbExtras(), top: true, shift: true }, { obj: "notebook", svg: stackFront(), top: true },
-      { obj: "box", svg: boxWear() + boxLabel() + lidTab(), top: true },
+      { obj: "box", svg: '<rect x="52" y="192" width="98" height="20" style="fill:var(--wall)"/>' + boxWear() + boxLabel() + lidTab(), top: true },
       { obj: "eclair", svg: rack(), top: true },
       { obj: "window", svg: windowFix() + rainbows(v) + crystals() + Object.keys(SILL).map((k) => V("sill-" + k, SILL[k][1]())).join(""), top: true },
       { obj: "cookbooks", svg: shelfPlaques(), top: true }, { obj: "whiteboard", svg: wbHead(), top: true },   /* v13 text: under the dusk wash */
@@ -685,12 +703,10 @@ module.exports = {
   /* close-ups for the page, drawn over a <use> of the kitchen scene */
   closeups(v) {
     seed = 11;
-    const am = (z) => beams(v + z, "am") + beams(v + z, "am", PART.am, true) + scatter("am") + things("am");
+    const amAll = (z) => beams(v + z, "am") + beams(v + z, "am", PART.am, true) + '<g class="rb-spots">' + scatter("am") + things("am") + "</g>";
     return [
       ...Object.keys(CRYSTALS).map((k) => ({ key: "cr" + k, pick: "cr-" + k, title: "K" + k + " · " + CRYSTALS[k][0] + " (click to hang it in the kitchen)", vb: "766 22 112 162", svg: CRYSTALS[k][1]() })),
-      { key: "rs1", pick: "rs-s1", title: "S1 · Soft: the light blurred a little at its edges", vb: "520 120 190 150", svg: '<g filter="url(#a-rbblur)">' + am("r1") + "</g>" },
-      { key: "rs2", pick: "rs-s2", title: "S2 · Printed: crisp flat stripes, like the beams in v14", vb: "520 120 190 150", svg: am("r2") },
-      { key: "rs3", pick: "rs-s3", title: "S3 · Halftone: the same light in printed dots", vb: "520 120 190 150", svg: '<g mask="url(#a-rbdots)">' + am("r3") + "</g>" },
+      { key: "rb-am", title: "Morning rainbows: beams, scattered flecks, spots on curved surfaces (the room wash shows in the full kitchen)", vb: "520 120 190 150", svg: '<g filter="url(#a-rbblur)">' + amAll("rb") + "</g>" },
       { key: "cup", title: "The open cupboard after your pantry picture: wood inside, jars with real labels, hinges, the Kitchen log where it was", vb: "0 -40 290 150", svg: cupOpen(v + "z2") + clipboard() },
       ...Object.keys(SILL).map((k) => ({ key: "sill" + k, title: "B" + k + " · " + SILL[k][0], vb: "716 20 150 236", svg: beams(v + "z" + k, "am") + CRYSTALS[DEF.cr][1]() + SILL[k][1]() })),
       { key: "rack", title: "Your eclairs on your cooling rack (click the rack in the kitchen: two taken, two bites out of the last, then gone)", vb: "684 300 182 70", svg: '<use href="#a-all"/>' },

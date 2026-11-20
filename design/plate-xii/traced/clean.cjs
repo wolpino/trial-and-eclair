@@ -100,7 +100,8 @@ function halos(id, parts, SH) {
     '<filter id="' + id("halo-k") + '"><feFlood flood-color="#000"/><feComposite in2="SourceAlpha" operator="in"/></filter>' +
     /* v15 B3 sticker: a crisp cream band round the outline with a thin ink edge, like a die-cut sticker (the page swaps it in by CSS) */
     '<filter id="' + id("halo-st") + '" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">' +
-    '<feMorphology in="SourceAlpha" operator="dilate" radius="2.6" result="c"/><feMorphology in="SourceAlpha" operator="dilate" radius="3.5" result="e"/>' +
+    /* v16: radii tuned to INK_GROW=6 so cream sits flush against the traced ink outline with no visible gap */
+    '<feMorphology in="SourceAlpha" operator="dilate" radius="5.0" result="c"/><feMorphology in="SourceAlpha" operator="dilate" radius="6.4" result="e"/>' +
     '<feFlood flood-color="#0D0C0B"/><feComposite in2="e" operator="in" result="ink"/><feFlood flood-color="#FFFDF4"/><feComposite in2="c" operator="in" result="cream"/>' +
     '<feMerge><feMergeNode in="ink"/><feMergeNode in="cream"/></feMerge><feComposite in2="SourceAlpha" operator="out"/></filter>';
   Object.keys(HALO_CLIP).forEach((o) => { s += '<clipPath id="' + id("halo-c-" + o) + '"><polygon points="' + HALO_CLIP[o].map((p) => p.join(" ")).join(" ") + '"/></clipPath>'; });

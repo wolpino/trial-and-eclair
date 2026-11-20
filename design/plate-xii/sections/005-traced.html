@@ -1,21 +1,15 @@
-<section id="tk" class="trim-on" style="--trim:#7A4E2D" data-pt="pick" data-rs="s1" aria-labelledby="tk-h">
-  <span class="label" id="tk-h">00b · v15 · Your traced kitchen</span>
+<section id="tk" class="trim-on" style="--trim:#7A4E2D" data-pt="g2" data-rs="s1" aria-labelledby="tk-h">
+  <span class="label" id="tk-h">00b · v16 · Your traced kitchen</span>
   <div class="sec-body">
-    <h3>Pointing options, crystals and rainbows, the pantry cupboard, fixes</h3>
+    <h3>Rainbows by time of day, new glow colours, cupboard and window fixes</h3>
     <p class="note">Still your SVG, cleaned by <code>traced/clean.cjs</code>; the new pieces are drawn on top by <code>traced/add.cjs</code>. Point at or Tab to the box, notebook, cork board, whiteboard, the book shelf, the clipboard (recipe log) or the rack; click to feel the press. Click the crystal in the window to turn it.</p>
     <div class="recol" id="tk-ctl">
       <div class="choice"><span class="cap">Pointing</span><div class="seg" data-attr="pt">
-        <button data-v="v14">v14 warm white</button><button data-v="b2">B2 shadow</button><button data-v="b3">B3 sticker</button><button data-v="c1">C1 rise</button><button data-v="c2">C2 press</button><button data-v="pick" aria-pressed="true">Claude's pick</button>
+        <button data-v="v14">warm white</button><button data-v="b2">B2 shadow</button><button data-v="b3">B3 sticker</button><button data-v="g1">G1 green</button><button data-v="g2" aria-pressed="true">G2 amber</button>
       </div></div>
       <div class="choice"><span class="cap">Crystal <small>(click it in the window to turn it)</small></span><div class="seg" data-pick="cr">
         <button data-v="1">K1 teardrop</button><button data-v="2" aria-pressed="true">K2 faceted ball</button><button data-v="3">K3 octagon chain</button><button data-v="4">K4 quartz point</button><button data-v="5">K5 mobile (now)</button>
       </div></div>
-      <div class="choice"><span class="cap">Rainbow look</span><div class="seg" data-attr="rs">
-        <button data-v="s1" aria-pressed="true">S1 soft</button><button data-v="s2">S2 printed</button><button data-v="s3">S3 halftone</button>
-      </div></div>
-      <div class="choice"><span class="cap">R1 small spots</span><div class="seg" data-pick="r1"><button data-v="1" aria-pressed="true">on</button><button data-v="0">off</button></div></div>
-      <div class="choice"><span class="cap">R2 partial beams</span><div class="seg" data-pick="r2"><button data-v="1" aria-pressed="true">on</button><button data-v="0">off</button></div></div>
-      <div class="choice"><span class="cap">R3 bent over things</span><div class="seg" data-pick="r3"><button data-v="1" aria-pressed="true">on</button><button data-v="0">off</button></div></div>
       <div class="choice"><span class="cap">Time of day</span><div class="seg" data-pick="sun">
         <button data-v="am" aria-pressed="true">morning</button><button data-v="noon">midday</button><button data-v="pm">afternoon</button><button data-v="eve">evening</button>
       </div></div>
@@ -48,7 +42,7 @@
           <g role="button" tabindex="0" aria-label="Turn the crystal" data-turn><rect x="806" y="28" width="32" height="124" rx="6"/></g>
         </svg>
       </div>
-      <figcaption><b>Kitchen.</b> Click the crystal: it turns and the rainbows sweep round the room and settle. Try the time of day: everything moves with the sun, and in the evening the rainbows are gone. The rack still takes two eclairs, two bites, then it's empty.</figcaption>
+      <figcaption><b>Kitchen.</b> Click the crystal: it turns and the rainbows sweep round the room and settle. Try the time of day: in the morning and afternoon there is a warm golden wash; at midday it is crisper; in the evening the rainbows are gone. The rack still takes two eclairs, two bites, then it's empty.</figcaption>
     </figure>
     <p class="tk-say" id="tk-say" aria-live="polite">Nothing open.</p>
 
@@ -61,13 +55,11 @@
 
     <h3>What changed this round</h3>
     <ul class="ans">
-      <li><b>Pointing:</b> five ways to compare, switch them above and point at things. <b>B2</b> a soft shadow behind instead of light; <b>B3</b> a die-cut sticker outline; <b>C1</b> the object rises slowly (with the v14 glow); <b>C2</b> it presses down when you click (with the v14 glow); <b>Claude's pick</b> a honey glow, the rise, and the press.</li>
-      <li><b>Crystals:</b> K1 teardrop, K2 faceted ball, K3 octagon chain, K4 quartz point, K5 your mobile. Click the crystal in the window to turn it.</li>
-      <li><b>Rainbows:</b> on top of the two main beams, R1 small spots strewn round the room, R2 shorter beams that fade early, R3 spots that bend over an edge or curve round something (the mixer, the bowl, the counter's edge, the shelf). Three looks: soft, printed, halftone. All of them follow the time of day.</li>
-      <li><b>Open cupboard:</b> redrawn from your pantry picture: warm wood inside, two shelves seen from below, glass jars (Flour, Sugar, Cocoa, Oats, Pecans, Salt, spices) sitting back from the shelf edges, two hinges. The dishes are gone. The Kitchen log stays where it was: it already hangs low enough to fit the door.</li>
-      <li><b>Book spines:</b> the blue books are back (the traced blues had been following the cabinet colour, so they turned green), and every spine's colour is a little stronger.</li>
-      <li><b>Window:</b> the frame's left side is one clean walnut face (it had a faded strip and notches), and under the sill the shapeless apron with its grey streak is now a plain walnut board.</li>
-      <li><b>Recipe box:</b> the brown nub on the open lid's top edge is the latch tab now, in brass. The pale grey sliver on the cork board's left edge is wood.</li>
+      <li><b>Pointing — no movement:</b> C1 rise and C2 press are gone. Two new options alongside B3 sticker: <b>G1 green</b> a soft refracted light in the colour of the green glass bottle; <b>G2 amber</b> the same warmth as the morning room wash. B3 sticker now has the cream band flush tight to the ink outline (the gaps from v15 are fixed).</li>
+      <li><b>Rainbows — by time of day:</b> all three kinds (beams, scattered flecks, spots on curved surfaces) are always on; what changes is the light itself. Morning and afternoon bring a dramatic warm golden wash from the crystal across the whole room; midday is crisper without the wash; evening has no rainbows. The R1/R2/R3 and look controls are gone.</li>
+      <li><b>Open cupboard interior:</b> the jar outlines, lid edges, shelf boards, back-wall seams and door outline are now redrawn in the trace's thick wobbly ink style, to match the rest of the kitchen.</li>
+      <li><b>Window frame:</b> the top, right and inner-left frame edges are overlaid with clean even strokes so the outline weight matches the other items.</li>
+      <li><b>Above the box lid:</b> the wall just above the open lid is patched with wall colour, covering any stray marks.</li>
     </ul>
   </div>
 </section>
