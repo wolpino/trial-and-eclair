@@ -10,6 +10,36 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-20 · Kitchen Progression: Story view (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20` (progression story) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts) |
+| **Outcome** | success (Story view published; lines waiting on Ari's corrections; no app code) |
+
+### Intent
+Ari wanted a change log starting from her current picks and the eclairs, unsure it was the right thing. Agreed: not a change log (that is for shipped releases) but a design story built from her picks, no backfill.
+
+### Summary
+- `design/progression/story.json`: one line per kitchen (what changed since the last pick, drafted from the session log and round notes) and a 30-step eclair strand, each step anchored to a gallery item
+- Page: All shots / Story switch (`#story`). Story lists picks live from `picks/main` (43 now), a "Not in your picks" note where stages were skipped, eclair steps under the kitchen they came with (or the next pick after)
+- Ari's picks now 43 (Plates X, XI, Brand Sheet dropped; studies added); the GIF still shows the old 47
+
+### Open threads
+- Ari to correct any line; Plate XII v11-v13 are not in the gallery yet
+- Each new round: add its kitchen to build.py, a line to story.json when Ari picks it
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** kitchen progression, story, design history, eclair strand
+**Files:** design/progression/ (story.json, index.html, build.py, eclairs.py)
+**Do not redo:** the renders and dedupe; the story lines unless Ari corrects them
+**Resume with:** add Plate XII v11-v13 to build.py and story.json, republish https://claude.ai/artifact/E4xdK2o9H9iYMPpM8M7Juw; remake the GIF from picks/main if Ari asks
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Plate XII v13: journals square, bites, evening light, labels, glow and wall options (published)
 
 | Field | Value |
