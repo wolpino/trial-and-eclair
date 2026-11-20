@@ -10,6 +10,40 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-19 · Plate XII v11: Ari's rack, journals and bottles ported (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v11) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v11 published; questions to Ari; no app code) |
+
+### Intent
+Ari: follow the NEXT.md top prompt (port her eclair-rack and composition-journal traces) and use the three bottle SVGs attached this time (trio, fluted decanter, carafe + flask).
+
+### Summary
+- Bottle SVGs filed as `design/plate-xii/refs/bottles-{trio,decanter,pair}.svg`
+- New `traced/port.cjs` -> `traced/ports/*.json`: keep mode for bottles (window colours dropped, ink by mask), clip mode for rack and journals (outline polygons; rack top from pixels; desk colours dropped so her underlay outlines the journals)
+- `add.cjs`: rack() uses her eclairs and rack (E3 = her E2 again, drawn wire patch under them, data-var `a|b` alternatives also in the page's apply()); stackFront() is her journals; sill B1 her trio, B2 her decanter + the trio's amber; LOG_TITLE "Kitchen log"; old glass/compBook-stack code for these removed (compBook helpers left)
+- Tested: three clicks take the eclairs, button gone, no console errors; day and evening checked; page 1.7 MB
+
+### Decisions
+- Carafe and flask (old B4) filed, not shown (Ari called B4 a misclick); asked
+- Her halftone shadow under the journals left out (it was on the desk); flat shadow instead
+
+### Open threads
+- Ari: B1 or B2; B3 carafe; rack and journals OK; taken vs bites; flour and pin; log title; times of day
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v11, port.cjs, vector traces, eclair rack, journals, bottles
+**Files:** design/plate-xii/traced/port.cjs, traced/ports/, traced/add.cjs, refs/, sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v11 as drawn (tweak only); the ink split; taller frame; the ports (rerun port.cjs only if a ref changes)
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v11 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Kitchen Progression gallery (published)
 
 | Field | Value |

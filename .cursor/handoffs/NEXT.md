@@ -1,4 +1,4 @@
-# NEXT — 2026-11-19 (Plate XII v10 published; Ari sent vector traces of the rack and journals; next chat ports them)
+# NEXT — 2026-11-19 (Plate XII v11 published: Ari's rack, journals and bottles ported; waiting on Ari)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,16 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII v11: port Ari's rack and journal vectors) — START HERE
+## Prompt for the next agent (Plate XII, after Ari answers v11) — START HERE
+> Plate XII v11: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (the live page is v11). Load the `plate-round` and `kitchen-plate-style` skills. Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session, then publish to the same URL.
+>
+> **New in v11:** `traced/port.cjs` cuts pieces out of Ari's Kittl traces in `refs/` and writes `traced/ports/*.json` (her units; committed, so rerun only when a ref or PIECES changes: `node traced/port.cjs [piece] [--check dir]`). Two modes: **keep** (bottles: her shapes inside a box minus WINDOW colours/dropIdx, each part takes the dark underlay under its own shapes through a mask) and **clip** (rack, journals: her whole drawing clipped to outline polygons, because glaze and marble are the same dark underlay as the outlines; rack's top edge comes from her picture's pixels, `top`). In `add.cjs`: `rack()` = drawn wire patch + her rack (+ a `<use>` copy carried right, rim corner drawn) + E1, E2, E3 (= `<use>` of E2 moved by STEP 148); eclair i shows with data-var `ecl-0|..|i` (the `|` = any of, in V() and the page's apply()), crumbs after. `RACK_FIT`, `JOURNAL_FIT`, `BOTTLES` (scale .62, her sill y 300) place them. `LOG_TITLE` = "Kitchen log". Page 1.7 MB.
+>
+> **Questions (page top), Claude's picks:** B1 trio (pick) or B2 decanter + amber; carafe and flask (old B4, sent again) as B3 (pick no, filed in refs/); rack port OK (pick yes); one taken per click (pick) or bites; journals OK, halftone shadow left out (pick yes); flour and pin; clipboard title Kitchen log (pick) / Recipe log / Log; times of day.
+>
+> **After answers:** set DEF, drop the losing bottle (and its port if unused) and the tidy toggle; keep the time-of-day control. Then phone crop and size; product list in PLAN.md into the PRD in one pass at sign-off.
+
+## Prompt for the next agent (Plate XII v11: port Ari's rack and journal vectors) — done (v11)
 > Plate XII v10: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (the live page is v10). Load the `plate-round` and `kitchen-plate-style` skills. Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session, then publish to the same URL.
 >
 > **Ari's answers after v10 (11/19):** the shelf view is **Library**. "Baking log" is wrong because not every recipe is baking: change `LOG_TITLE` in `traced/add.cjs` and offer a few (Claude's pick "Kitchen log"; also "Recipe log", "Log").

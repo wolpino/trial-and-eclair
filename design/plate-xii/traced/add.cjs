@@ -20,7 +20,7 @@ const cab = (pct, to) => "color-mix(in srgb,var(--cab) " + pct + "%," + (to || "
         DEF = what shows first (Claude's picks). ---- */
 const DEF = { ecl: "0", sill: "1", sun: "am", tidy: "0" };
 function V(tokens, svg) {
-  const on = tokens.split(" ").every((t) => { const i = t.indexOf("-"); return DEF[t.slice(0, i)] === t.slice(i + 1); });
+  const on = tokens.split(" ").every((t) => { const i = t.indexOf("-"); return t.slice(i + 1).split("|").includes(DEF[t.slice(0, i)]); });   /* "ecl-0|1" = ecl is 0 or 1 */
   return '<g data-var="' + tokens + '"' + (on ? "" : ' style="display:none"') + ">" + svg + "</g>";
 }
 let uid = 0;
@@ -82,21 +82,45 @@ function eclairBody(cx, base, L, H, o) {
 }
 let biteN = 0;
 const ECL = { L: 23, H: 9.5, o: { ridges: 1 } };
-/* a wire cooling rack between the box and the notebook, three eclairs on it. n = how many have been taken (0..3);
-   the page takes one per click, a reload puts them back */
-function rack(n) {
-  const q = flatQuad(226, 351, 86, 62, 0, .36), wire = (a, b) => '<path d="M' + f1(a[0]) + " " + f1(a[1]) + " L" + f1(b[0]) + " " + f1(b[1]) + '" style="stroke:' + INK + ';stroke-width:1.5"/><path d="M' + f1(a[0]) + " " + f1(a[1]) + " L" + f1(b[0]) + " " + f1(b[1]) + '" style="stroke:#C5BEB0;stroke-width:.6"/>';
-  let s = P("M" + q.map((p) => f1(p[0] + 2) + " " + f1(p[1] + 3.4)).join(" L") + "Z", "#B17A4B");   /* shadow on the counter */
-  for (const c of q) s += '<path d="M' + f1(c[0]) + " " + f1(c[1]) + " v2.6" + '" style="stroke:' + INK + ';stroke-width:1.6;stroke-linecap:round"/>';
-  for (let i = 1; i < 10; i++) s += wire(onQuad(q, i / 10, 0), onQuad(q, i / 10, 1));
-  for (let i = 1; i < 4; i++) s += wire(onQuad(q, 0, i / 4), onQuad(q, 1, i / 4));
-  s += '<path d="M' + q.map((p) => f1(p[0]) + " " + f1(p[1])).join(" L") + 'Z" style="fill:none;stroke:' + INK + ';stroke-width:2.4;stroke-linejoin:round"/><path d="M' + q.map((p) => f1(p[0]) + " " + f1(p[1])).join(" L") + 'Z" style="fill:none;stroke:#D9D4C8;stroke-width:1;stroke-linejoin:round"/>';
-  const spots = [[204, 354], [227, 353], [250, 352]];
-  spots.forEach((p, i) => {
-    if (i < n) { for (const c of [[-6, -1], [3, 0.6], [7, -1.8], [-2, 1.2]]) s += '<circle cx="' + f1(p[0] + c[0]) + '" cy="' + f1(p[1] + c[1]) + '" r=".8" style="fill:' + CHOUX_D + '"/>'; return; }
-    s += '<g transform="rotate(26 ' + p[0] + " " + p[1] + ')">' + eclairBody(p[0], p[1], ECL.L, ECL.H, ECL.o) + "</g>";
-  });
-  return s;
+/* ---- Ari's vector traces (refs/), cut out by traced/port.cjs into ports/*.json in her units ---- */
+const PORT = (n) => JSON.parse(require("fs").readFileSync(require("path").join(__dirname, "ports", n + ".json"), "utf8"));
+const RACK = PORT("rack"), JOURNALS = PORT("journals"), TRIO = PORT("bottles-trio"), DECANTER = PORT("bottles-decanter");
+/* reusing a port twice needs its own ids */
+const reid = (svg, sfx) => svg.replace(/id="([^"]+)"/g, 'id="$1' + sfx + '"').replace(/url\(#([^)]+)\)/g, "url(#$1" + sfx + ")");
+/* her eclairs on her cooling rack, between the box and the notebook. Her crop shows two whole eclairs and a cut third, so the
+   third is her middle one again (E3 = E2 moved along by STEP) and her rack is carried on under it. Under the eclairs, where her
+   rack is hidden, a wire patch in her colours, so a taken eclair leaves rack. The rack is drawn once; eclair i shows while
+   fewer than i+1 are taken (data-var "ecl-0|1.."), its crumbs after. Taken from the left. */
+const STEP = 148, RACK_FIT = { x: 182, y: 362, k: .19 };   /* her front rim (x 0, y 224) -> the kitchen counter */
+function rack() {
+  const id = "rk" + (++uid), W = 400 + STEP - 78, rp = (q) => q.map((p) => p.join(" ")).join(" ");
+  const shape = [[0, 70], [W, 70], [W, 169], [W - 43, 226], [43, 226], [0, 169]];
+  let s = '<clipPath id="' + id + '"><polygon points="' + rp(shape) + '"/></clipPath><g clip-path="url(#' + id + ')"><rect x="0" y="60" width="' + W + '" height="170" fill="#C59D7B"/>';
+  for (let y = 84; y < 226; y += 13) s += '<path d="M0 ' + y + "H" + W + '" stroke="#6E4A30" stroke-width="2.2"/>';
+  for (let x = -120; x < W + 40; x += 36) s += '<path d="M' + x + " 70 L" + (x + 110) + ' 226" stroke="#3B2314" stroke-width="7" stroke-linecap="round"/><path d="M' + x + " 70 L" + (x + 110) + ' 226" stroke="#D9CFC8" stroke-width="3"/>';
+  s += '</g><g id="' + id + 'k">' + reid(RACK.parts.rack, id) + "</g>";   /* her rack, then the same carried on to the right under E3 and turned at the corner */
+  s += '<clipPath id="' + id + 'r"><polygon points="' + rp([[399, 60], [W, 60], [W, 169], [W - 43, 226], [399, 226]]) + '"/></clipPath><g clip-path="url(#' + id + 'r)"><use href="#' + id + 'k" transform="translate(' + STEP + ' 0)"/></g>';
+  const rim = "M" + (W - 1) + " 169 L" + (W - 43) + " 224.5 L398 224.5";
+  s += '<path d="' + rim + '" fill="none" stroke="#3B2314" stroke-width="8" stroke-linejoin="round"/><path d="' + rim + '" fill="none" stroke="#C9BEB9" stroke-width="3.4" stroke-linejoin="round"/>';
+  const crumbs = (cx, cy) => [[-30, 4, 3.4], [-8, -6, 2.6], [12, 8, 3], [34, -2, 2.2], [0, 14, 2.4], [-48, 12, 2]].map(([dx, dy, r]) => '<circle cx="' + (cx + dx) + '" cy="' + (cy + dy) + '" r="' + r + '" fill="' + (r > 2.5 ? "#D5A357" : "#4A2517") + '" stroke="#3B2314" stroke-width=".8"/>').join("");
+  const eclairs = [reid(RACK.parts.e1, id), '<g id="' + id + 'e2">' + reid(RACK.parts.e2, id) + "</g>", '<use href="#' + id + 'e2" transform="translate(' + STEP + ' 2)"/>'];
+  const spots = [[90, 160], [238, 160], [386, 162]];
+  eclairs.forEach((e, i) => { const r = (a, b) => [0, 1, 2, 3].filter((v) => v >= a && v <= b).join("|"); s += V("ecl-" + r(i + 1, 3), crumbs(...spots[i])) + V("ecl-" + r(0, i), e); });
+  return '<g transform="translate(' + RACK_FIT.x + " " + RACK_FIT.y + ") scale(" + RACK_FIT.k + ') translate(0 -224)">' + s + "</g>";
+}
+
+/* ---- the sill: Ari's vector bottles (ports/), her sill at y 300. B1 her trio; B2 her decanter with the trio's amber bottle
+        beside it. [title, svg, scale, her cluster centre x] ---- */
+const BOTTLES = {
+  1: ["Your trio: seafoam, cobalt and amber", () => reid(TRIO.parts.glass + TRIO.parts.amber, "s1"), .62, 168],
+  2: ["Your fluted decanter, with the amber bottle from the trio", () => '<g transform="translate(26 0)">' + reid(TRIO.parts.amber, "s2") + "</g>" + reid(DECANTER.parts.glass, "s2"), .62, 180],
+};
+const atSill = (svg, k, cx) => '<g transform="translate(768 246.5) scale(' + k + ") translate(" + (-cx) + ' -300)">' + svg + "</g>";
+
+/* her two stacked composition journals, in front of the whiteboard, with a flat shadow on the counter */
+const JOURNAL_FIT = { x: 452, y: 316, k: .23 };   /* her stack's top-left (24, 32) -> here */
+function stackFront() {
+  return '<ellipse cx="500" cy="361" rx="44" ry="5" style="fill:#B17A4B"/><g transform="translate(' + JOURNAL_FIT.x + " " + JOURNAL_FIT.y + ") scale(" + JOURNAL_FIT.k + ') translate(-24 -32)">' + reid(JOURNALS.parts.stack, "j" + (++uid)) + "</g>";
 }
 
 /* ---- the window: a bushy basil on the sill, a crystal mobile in the glass, rainbow beams across the wall ---- */
@@ -111,34 +135,7 @@ function basilLeaf(x, y, len, wid, a, c) {
   const d = "M0 0 Q" + f1(wid) + " " + f1(-len * .45) + " 0 " + f1(-len) + " Q" + f1(-wid) + " " + f1(-len * .45) + " 0 0Z";
   return '<g transform="translate(' + f1(x) + " " + f1(y) + ") rotate(" + a + ')"><path d="' + d + '" style="fill:' + c + ";stroke:" + INK + ';stroke-width:1.1;stroke-linejoin:round"/><path d="M0 -1 Q' + f1(wid * .15) + " " + f1(-len * .5) + " 0 " + f1(-len * .85) + '" style="fill:none;stroke:#3E6328;stroke-width:.6"/></g>';
 }
-/* ---- the sill: Ari's glass studies (her 800 x 600 units, sill at y 524), redrawn in the trace's look: flat colour, thick
-        outline, a darker right side, a white highlight, a flat tint where the light comes through ---- */
-function glass(d, fill, dark, hl, sx) {   /* sx: the x where the darker side starts (study units) */
-  const id = "gl" + (++uid);
-  return '<clipPath id="' + id + '"><path d="' + d + '"/></clipPath>' +
-    '<path d="' + d + '" fill="' + fill + '"/><rect x="' + sx + '" y="300" width="80" height="240" fill="' + dark + '" clip-path="url(#' + id + ')"/>' +
-    (hl ? '<path d="' + hl + '" fill="none" stroke="#fff" stroke-width="3.4" stroke-linecap="round" opacity=".8"/>' : "") +
-    '<path d="' + d + '" fill="none" stroke="' + INK + '" stroke-width="4.4" stroke-linejoin="round"/>';
-}
-const part = (d, fill) => '<path d="' + d + '" fill="' + fill + '" stroke="' + INK + '" stroke-width="3.6" stroke-linejoin="round"/>';
-const pool = (cx, rx, c) => '<ellipse cx="' + cx + '" cy="522" rx="' + rx + '" ry="6" fill="' + c + '" opacity=".55"/>';
-const studies = {
-  1: ["Trio: seafoam, cobalt and amber apothecary bottles", () =>
-    pool(296, 70, "#BFE3D3") +
-    glass("M274,524 L274,424 Q274,412 284,406 L284,382 L302,382 L302,406 Q312,412 312,424 L312,524 Z", "#3F5F9D", "#2F4A7E", "M281,426 L281,514", 300) + part("M280,378 h26 v6 h-26 Z", "#4D72B8") + '<circle cx="293" cy="366" r="10" fill="#4D72B8" stroke="' + INK + '" stroke-width="3.6"/>' +
-    glass("M238,526 L238,462 Q238,452 248,448 L248,430 L264,430 L264,448 Q274,452 274,462 L274,526 Z", "#9ACBB0", "#7AAE93", "M244,464 L244,516", 262) + part("M245,426 h22 v5 h-22 Z", "#B2DBC4") + '<circle cx="256" cy="416" r="8.5" fill="#B2DBC4" stroke="' + INK + '" stroke-width="3.6"/>' +
-    glass("M310,526 L310,446 Q310,434 322,428 L322,408 L340,408 L340,428 Q352,434 352,446 L352,526 Z", "#C97E34", "#A8641F", "M317,448 L317,516", 338) + part("M318,404 h26 v6 h-26 Z", "#DE984E") + part("M321,394 h20 v10 h-20 Z", "#DE984E")],
-  2: ["The fluted emerald decanter, with the amber bottle beside it", () =>
-    pool(320, 80, "#B9E3C3") +
-    '<g transform="translate(44 0)">' + glass("M310,526 L310,446 Q310,434 322,428 L322,408 L340,408 L340,428 Q352,434 352,446 L352,526 Z", "#C97E34", "#A8641F", "M317,448 L317,516", 338) + part("M318,404 h26 v6 h-26 Z", "#DE984E") + part("M321,394 h20 v10 h-20 Z", "#DE984E") + "</g>" +
-    glass("M270,524 Q260,468 264,448 Q266,434 286,418 L288,376 L312,376 L314,418 Q334,434 336,448 Q340,468 330,524 Z", "#369663", "#2A7A50", "M273,448 Q269,480 274,512", 314) +
-    '<path d="M290,424 Q288,470 291,523 M310,424 Q312,470 309,523" fill="none" stroke="' + INK + '" stroke-width="2.2"/>' +
-    part("M284,370 h32 v7 h-32 Z", "#4DB37C") + part("M300,322 L316,338 L310,362 L290,362 L284,338 Z", "#4DB37C") + part("M300,322 L310,338 L300,354 L290,338 Z", "#7AD4A2") + part("M292,362 h16 v8 h-16 Z", "#369663")],
-};
-/* her studies' sill is at y 524; ours is at y 246, the bottles go in the left pane (x ~768). [scale, her cluster centre] */
-const SILL_FIT = { 1: [.56, 296], 2: [.5, 320] };
-const atSill = (svg, k, cx) => '<g transform="translate(768 246.5) scale(' + k + ") translate(" + (-cx) + ' -524)">' + svg + "</g>";
-const SILL = {}; Object.keys(studies).forEach((k) => { SILL[k] = [studies[k][0], () => atSill(studies[k][1](), ...SILL_FIT[k])]; });
+const SILL = {}; Object.keys(BOTTLES).forEach((k) => { const [t, f, sc, cx] = BOTTLES[k]; SILL[k] = [t, () => atSill(f(), sc, cx)]; });
 
 /* crystals and mobile, after Ari's vector studies (their 800 x 600 units, scaled in): hexagonal prisms with a white top facet,
    a pale blue bottom facet and two facet lines, on a brass ring */
@@ -216,12 +213,6 @@ function flatQuad(cx, cy, w, d, ang, k) {
   const a = ang * Math.PI / 180; k = k || .27; const P2 = (x, y) => [cx + x * Math.cos(a) - y * Math.sin(a), cy + (x * Math.sin(a) + y * Math.cos(a)) * k];
   return [P2(-w / 2, d / 2), P2(w / 2, d / 2), P2(w / 2, -d / 2), P2(-w / 2, -d / 2)];
 }
-/* two composition books stacked in front of the whiteboard, the top one labelled */
-function stackFront() {
-  return '<ellipse cx="499" cy="354" rx="46" ry="7" style="fill:#B17A4B"/>' +
-    compBook(flatQuad(497, 342, 82, 60, 2, .36)) + compBook(flatQuad(494, 333, 80, 58, -4, .36), true);
-}
-
 /* ---- the open notebook, more lived in: sticky tabs off the right page, a ribbon, a taped photo, a pencil doodle ---- */
 function nbExtras() {
   const A = [404, 315], B = [439, 354], len = Math.hypot(B[0] - A[0], B[1] - A[1]), d = [(B[0] - A[0]) / len, (B[1] - A[1]) / len], n = [d[1], -d[0]];
@@ -309,7 +300,7 @@ function interior(v) {
   s += "</g>" + P(wob([[x0, DOOR.yt - 6], [x1, DOOR.yt - 6], [x1, y1], [x0, y1]], .3), "none", 2.4);
   return s;
 }
-const LOG_TITLE = "Baking log";
+const LOG_TITLE = "Kitchen log";
 /* clipboard: a real one is about 9 x 12.5 in; here 66 wide, 92 tall on the door */
 function clipboard() {
   const uL = .2, uR = uL + 66 / DOOR.W, vT = .36, vB = vT + 92 / H_DOOR, q = (pts, n) => pts.map((p) => on(p[0], p[1], n));
@@ -347,7 +338,7 @@ module.exports = {
       { obj: "room", svg: V("tidy-1", tidyPatch(v)), top: true },
       { obj: "notebook", svg: stackFront() + nbExtras(), top: true },
       { obj: "box", svg: boxWear() + boxLabel(), top: true },
-      { obj: "eclair", svg: [0, 1, 2, 3].map((n) => V("ecl-" + n, rack(n))).join(""), top: true },
+      { obj: "eclair", svg: rack(), top: true },
       { obj: "window", svg: Object.keys(SUN).map((k) => V("sun-" + k, beams(v, k))).join("") + mobile() + Object.keys(SILL).map((k) => V("sill-" + k, SILL[k][1]())).join(""), top: true },
       { obj: "dusk", svg: V("sun-eve", '<rect x="0" y="-60" width="868" height="560" style="fill:#2B2A4A;opacity:.2;mix-blend-mode:multiply"/>'), top: true },
       { obj: "cup-open", svg: cupOpen(v), top: true }, { obj: "clip", svg: clipboard(), top: true }] };
@@ -357,9 +348,9 @@ module.exports = {
     seed = 11;
     return [
       ...Object.keys(SILL).map((k) => ({ key: "sill" + k, title: "B" + k + " · " + SILL[k][0], vb: "716 20 150 236", svg: beams(v + "z" + k, "am") + mobile() + SILL[k][1]() })),
-      ...[0, 1, 2, 3].map((n) => ({ key: "rack" + n, title: ["Three eclairs cooling on the rack", "Click: one taken", "Click: two taken", "Click: all gone until the page reloads"][n], vb: "174 326 104 44", svg: rack(n) })),
-      { key: "nb2", title: "Composition books in front of the whiteboard", vb: "436 300 120 66", svg: stackFront() },
-      { key: "clip", title: "The clipboard: “Baking log” at the top of the sheet", vb: "40 -39 120 145", svg: cupOpen(v + "z") + clipboard() },
+      { key: "rack", title: "Your eclairs on your cooling rack (click the rack in the kitchen to take one)", vb: "174 326 104 44", svg: '<use href="#a-all"/>' },
+      { key: "nb2", title: "Your composition journals in front of the whiteboard", vb: "436 300 120 66", svg: '<use href="#a-all"/>' },
+      { key: "clip", title: "The clipboard: “" + LOG_TITLE + "” at the top of the sheet", vb: "40 -39 120 145", svg: cupOpen(v + "z") + clipboard() },
       { key: "box", title: "Recipe box with RECIPES, worn paint, tab letters", vb: "26 200 170 170", svg: boxWear() + boxLabel() },
       { key: "ideas", title: "“Ideas” on the big note", vb: "190 128 140 90", svg: ideasNote() },
     ];

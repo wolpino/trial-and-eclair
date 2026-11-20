@@ -1,11 +1,11 @@
 <section id="tk" class="trim-on" style="--trim:#7A4E2D" aria-labelledby="tk-h">
-  <span class="label" id="tk-h">00b · v10 · Your traced kitchen</span>
+  <span class="label" id="tk-h">00b · v11 · Your traced kitchen</span>
   <div class="sec-body">
-    <h3>Eclairs cooling on a rack, the bottles, the composition books</h3>
-    <p class="note">Still your SVG, cleaned by <code>traced/clean.cjs</code>; the new pieces are drawn on top by <code>traced/add.cjs</code>. Point at or Tab to the box, notebook, cork board, whiteboard, the book shelf, or the clipboard (recipe log). The colours below are for trying out; stem green is the default.</p>
+    <h3>Your rack, your journals, your bottles</h3>
+    <p class="note">Still your SVG, cleaned by <code>traced/clean.cjs</code>; the new pieces are drawn on top by <code>traced/add.cjs</code>, and your rack, journals and bottles are cut out of your traces by <code>traced/port.cjs</code>. Point at or Tab to the box, notebook, cork board, whiteboard, the book shelf, or the clipboard (recipe log). The colours below are for trying out; stem green is the default.</p>
     <div class="recol" id="tk-ctl">
       <div class="choice"><span class="cap">Bottles</span><div class="seg" data-pick="sill">
-        <button data-v="1" aria-pressed="true">B1 trio, bigger</button><button data-v="2">B2 decanter and amber bottle</button>
+        <button data-v="1" aria-pressed="true">B1 your trio</button><button data-v="2">B2 your decanter and the amber bottle</button>
       </div></div>
       <div class="choice"><span class="cap">Time of day</span><div class="seg" data-pick="sun">
         <button data-v="am" aria-pressed="true">morning</button><button data-v="noon">midday</button><button data-v="pm">afternoon</button><button data-v="eve">evening</button>
@@ -52,11 +52,11 @@
 
     <h3>What changed this round</h3>
     <ul class="ans">
-      <li><b>Eclairs</b> cool on a wire rack between the box and the notebook, three of them. Each click takes one (crumbs stay); after three the rack is empty until the page reloads. Nothing is saved.</li>
-      <li><b>Bottles:</b> B1, your trio, about a third bigger; B2, the fluted decanter with the amber bottle from the trio beside it. Both in the kitchen's look. B3 and B4 are gone.</li>
-      <li><b>Composition books</b> redrawn from your picture: black covers overhanging a thick white page block, black spine tape wrapping the left side, dense white marbling, a label with a double border. Seen a little more from above, like the picture.</li>
-      <li>Still here from v9: rainbows by time of day, RECIPES, "Baking log", "Ideas", tabs on the open notebook, and the flour and pin toggle.</li>
-    </ul>
+      <li><b>Eclairs and rack</b> are your trace now. Each eclair is cut out of it along its outline, the wall above them goes, and the rack keeps your wires and rim. Your crop cut off the third eclair, so the third is your middle one again, and the rack carries on under it with a corner like your left one. Still one taken per click, crumbs stay, back on reload.</li>
+      <li><b>Journals</b> are your trace: covers, marble, label and page edges kept; the desk, pencil, mug and the halftone shadow left out. Your dark underlay makes their outline.</li>
+      <li><b>Bottles</b> are your vectors: only the glass is kept (your window, mobile and rainbows are already in the kitchen). B2 is your decanter with the amber bottle from your trio.</li>
+      <li><b>Clipboard</b> says "Kitchen log" (was "Baking log").</li>
+</ul>
   </div>
 </section>
 <script>
@@ -79,7 +79,7 @@
   function apply() {
     sec.classList.toggle("dusk", pick.sun === "eve"); k.classList.toggle("tidy", pick.tidy === "1");
     k.querySelectorAll("[data-var]").forEach(function (g) {
-      var on = g.dataset.var.split(" ").every(function (t) { var i = t.indexOf("-"); return pick[t.slice(0, i)] === t.slice(i + 1); });
+      var on = g.dataset.var.split(" ").every(function (t) { var i = t.indexOf("-"); return t.slice(i + 1).split("|").indexOf(pick[t.slice(0, i)]) >= 0; });
       g.style.display = on ? "" : "none";
     });
     sec.querySelectorAll("#tk-ctl [data-pick] button").forEach(function (b) { b.setAttribute("aria-pressed", String(pick[b.parentNode.dataset.pick] === b.dataset.v)); });
