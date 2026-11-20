@@ -18,7 +18,7 @@ const cab = (pct, to) => "color-mix(in srgb,var(--cab) " + pct + "%," + (to || "
 
 /* ---- options on the page: each is a <g data-var="key-value ..."> shown only when every key matches the page's choice.
         DEF = what shows first (Claude's picks). ---- */
-const DEF = { nb: "n1", nbx: "1", box: "2" };
+const DEF = { nb: "n1", nbx: "1", box: "2", ecl: "0", sill: "1" };
 function V(tokens, svg) {
   const on = tokens.split(" ").every((t) => { const i = t.indexOf("-"); return DEF[t.slice(0, i)] === t.slice(i + 1); });
   return '<g data-var="' + tokens + '"' + (on ? "" : ' style="display:none"') + ">" + svg + "</g>";
@@ -72,8 +72,8 @@ function eclairBody(cx, base, L, H, o) {
     '<path d="M' + f1(x0 + .6) + " " + f1(base - H * .62) + " q1.2 1.6 0 3.4" + '" style="fill:none;stroke:#E2C985;stroke-width:.9"/>';
   /* a bite out of the right end: the body is cut by a mask, cream shows inside */
   if (o.bite) {
-    const bx = x0 + L, by = y0 + H * .5, id = "bite" + (++biteN);
-    const cut = "M" + f1(bx + 3) + " " + f1(y0 - 3) + " L" + f1(bx - 7) + " " + f1(y0 - 3) + " Q" + f1(bx - 10.5) + " " + f1(y0 + 2) + " " + f1(bx - 8.5) + " " + f1(y0 + 5) + " Q" + f1(bx - 12) + " " + f1(by) + " " + f1(bx - 8.8) + " " + f1(by + 3.5) + " Q" + f1(bx - 11.5) + " " + f1(base - 3) + " " + f1(bx - 6.5) + " " + f1(base + 3) + " L" + f1(bx + 3) + " " + f1(base + 3) + "Z";
+    const R = x0 + L + 3, bx = x0 + L - (o.bite - 1) * 14, by = y0 + H * .5, id = "bite" + (++biteN);
+    const cut = "M" + f1(R) + " " + f1(y0 - 3) + " L" + f1(bx - 7) + " " + f1(y0 - 3) + " Q" + f1(bx - 10.5) + " " + f1(y0 + 2) + " " + f1(bx - 8.5) + " " + f1(y0 + 5) + " Q" + f1(bx - 12) + " " + f1(by) + " " + f1(bx - 8.8) + " " + f1(by + 3.5) + " Q" + f1(bx - 11.5) + " " + f1(base - 3) + " " + f1(bx - 6.5) + " " + f1(base + 3) + " L" + f1(R) + " " + f1(base + 3) + "Z";
     s = '<mask id="' + id + '" maskUnits="userSpaceOnUse" x="' + f1(x0 - 10) + '" y="' + f1(y0 - 10) + '" width="' + f1(L + 20) + '" height="' + f1(H + 20) + '"><rect x="' + f1(x0 - 10) + '" y="' + f1(y0 - 10) + '" width="' + f1(L + 20) + '" height="' + f1(H + 20) + '" fill="#fff"/><path d="' + cut + '" fill="#000"/></mask><g mask="url(#' + id + ')">' + s + "</g>";
     s += P(wob([[bx - 6.6, y0 + .5], [bx - 9.4, y0 + 4.6], [bx - 10.8, by], [bx - 8.6, by + 3.4], [bx - 9.8, base - 3.6], [bx - 6.6, base + .4], [bx - 4.6, by + 1], [bx - 4.8, y0 + 3.6]], .3), CREAM, 1.4);
     s += '<path d="M' + f1(bx - 7.6) + " " + f1(y0 + 6) + " q-1.6 3 0 6" + '" style="fill:none;stroke:#E2C985;stroke-width:.9"/>';
@@ -81,12 +81,14 @@ function eclairBody(cx, base, L, H, o) {
   return s;
 }
 let biteN = 0;
-const ECL = { L: 60, H: 19, o: { ridges: 1, stitch: 1, bite: 1 } };
-function eclair() {
+const ECL = { L: 60, H: 19, o: { ridges: 1, stitch: 1 } };
+/* n = bites taken: 0 whole, 1, 2, 3 gone (plate and crumbs). The page takes a bite per click; a reload brings it back */
+function eclair(n) {
   const cx = 222, cy = 362, base = cy - 1.2;
   let s = plate(cx, cy, 1, "plain");
-  for (const c of [[-24, 1.5], [-18, 3.4], [20, 2.6], [27, .6], [-6, 4.2], [31, -1.4]]) s += '<circle cx="' + f1(cx + c[0]) + '" cy="' + f1(cy + c[1] - 2) + '" r=".9" style="fill:' + CHOUX_D + '"/>';
-  return s + '<g transform="rotate(-4 ' + cx + " " + f1(base) + ')">' + eclairBody(cx, base, ECL.L, ECL.H, ECL.o) + "</g>";
+  if (n) for (const c of [[-24, 1.5], [-18, 3.4], [20, 2.6], [27, .6], [-6, 4.2], [31, -1.4], [8, 3], [-30, -.4]].slice(0, 3 + n * 2)) s += '<circle cx="' + f1(cx + c[0]) + '" cy="' + f1(cy + c[1] - 2) + '" r=".9" style="fill:' + CHOUX_D + '"/>';
+  if (n === 3) return s;
+  return s + '<g transform="rotate(-4 ' + cx + " " + f1(base) + ')">' + eclairBody(cx, base, ECL.L, ECL.H, Object.assign({}, ECL.o, n ? { bite: n } : {})) + "</g>";
 }
 
 /* ---- the window: a bushy basil on the sill, a crystal mobile in the glass, rainbow beams across the wall ---- */
@@ -101,16 +103,58 @@ function basilLeaf(x, y, len, wid, a, c) {
   const d = "M0 0 Q" + f1(wid) + " " + f1(-len * .45) + " 0 " + f1(-len) + " Q" + f1(-wid) + " " + f1(-len * .45) + " 0 0Z";
   return '<g transform="translate(' + f1(x) + " " + f1(y) + ") rotate(" + a + ')"><path d="' + d + '" style="fill:' + c + ";stroke:" + INK + ';stroke-width:1.1;stroke-linejoin:round"/><path d="M0 -1 Q' + f1(wid * .15) + " " + f1(-len * .5) + " 0 " + f1(-len * .85) + '" style="fill:none;stroke:#3E6328;stroke-width:.6"/></g>';
 }
-function basil() {
-  const x = 786, b = 246, B = "#6FA347", BD = "#4E7F31", BL = "#8DBB5E";
-  let s = "";
-  for (const st of [[796, 224, 786, 194], [803, 224, 802, 180], [810, 224, 820, 192], [800, 224, 792, 206], [806, 224, 813, 204]]) s += '<path d="M' + st[0] + " " + st[1] + " Q" + f1((st[0] + st[2]) / 2) + " " + f1((st[1] + st[3]) / 2) + " " + st[2] + " " + st[3] + '" style="fill:none;stroke:#4E7F31;stroke-width:1.5"/>';
-  const L = [[790, 224, 16, 10, -82, BD], [816, 224, 16, 10, 82, BD], [783, 214, 17, 11, -64, B], [823, 215, 17, 11, 64, B], [795, 217, 15, 9.5, -32, BD], [811, 217, 15, 9.5, 32, BD],
-    [779, 202, 16, 10, -48, BL], [827, 203, 16, 10, 48, BL], [790, 204, 15, 9.5, -14, B], [816, 205, 15, 9.5, 16, B], [803, 210, 16, 10, -4, BD],
-    [784, 190, 15, 9.5, -30, B], [822, 191, 15, 9.5, 30, B], [796, 193, 15, 9.5, -42, BL], [810, 193, 15, 9.5, 42, BL], [801, 184, 14, 9, -14, B], [806, 183, 14, 9, 20, BD], [803, 176, 13, 8.5, 0, BL]];
-  L.forEach((l) => { s += basilLeaf(l[0], l[1], l[2], l[3], l[4], l[5]); });
-  return '<g transform="translate(803 246) scale(1.3) translate(-803 -246)">' + s + pot(x, b, 34, 24, "#C66A3D", "#A35330") + "</g>";
+/* ---- the sill: three options that bring light in, drawn in the trace's look ---- */
+const SILLC = 803, SILLB = 246;
+const atSill = (svg) => '<g transform="translate(' + SILLC + " " + SILLB + ") scale(1.3) translate(" + (-SILLC) + " " + (-SILLB) + ')">' + svg + "</g>";
+/* 1: coloured glass bottles, light through them pooling on the sill, one holding a single flower */
+function bottle(x, w, h, nh, col, lt, dk) {
+  const b = SILLB, nw = w * .34, cx = x + w / 2, sh = b - h;
+  const body = "M" + f1(x + 1.5) + " " + b + " Q" + x + " " + b + " " + x + " " + f1(b - 2) + " V" + f1(sh + 5) + " Q" + x + " " + sh + " " + f1(cx - nw) + " " + f1(sh - 2) + " V" + f1(sh - nh) + " H" + f1(cx + nw) + " V" + f1(sh - 2) + " Q" + f1(x + w) + " " + sh + " " + f1(x + w) + " " + f1(sh + 5) + " V" + f1(b - 2) + " Q" + f1(x + w) + " " + b + " " + f1(x + w - 1.5) + " " + b + "Z";
+  return '<ellipse cx="' + f1(cx + 2) + '" cy="' + (b + 1.2) + '" rx="' + f1(w * .75) + '" ry="1.6" style="fill:' + lt + ';opacity:.8"/>' +
+    P(body, col, 1.7) +
+    P("M" + f1(x + w * .62) + " " + f1(sh + 4) + " Q" + f1(x + w - 1) + " " + f1(sh + 4) + " " + f1(x + w - 1) + " " + f1(sh + 8) + " V" + f1(b - 2.5) + " H" + f1(x + w * .66) + "Z", dk) +
+    '<path d="M' + f1(x + w * .26) + " " + f1(sh + 6) + " V" + f1(b - 5) + '" style="stroke:' + lt + ';stroke-width:2.2;stroke-linecap:round"/>' +
+    P(wob([[cx - nw - .8, sh - nh - 2.4], [cx + nw + .8, sh - nh - 2.4], [cx + nw + .8, sh - nh], [cx - nw - .8, sh - nh]], .1), col, 1.3);
 }
+function sillBottles() {
+  let s = "";
+  /* a single flower in the tall bottle */
+  s += '<path d="M806 206 Q804 196 808 186" style="fill:none;stroke:' + INK + ';stroke-width:2.6;stroke-linecap:round"/><path d="M806 206 Q804 196 808 186" style="fill:none;stroke:#6E9A45;stroke-width:1.2;stroke-linecap:round"/>';
+  s += P(wob([[805, 197], [799, 192], [801, 190], [806, 194]], .1), "#6E9A45", 1.1);
+  for (let i = 0; i < 5; i++) { const a = i * 72 * Math.PI / 180; s += '<ellipse cx="' + f1(808 + Math.sin(a) * 3.6) + '" cy="' + f1(185 - Math.cos(a) * 3.6) + '" rx="2.6" ry="3.6" transform="rotate(' + (i * 72) + " " + f1(808 + Math.sin(a) * 3.6) + " " + f1(185 - Math.cos(a) * 3.6) + ')" style="fill:#C8473A;stroke:' + INK + ';stroke-width:1"/>'; }
+  s += '<circle cx="808" cy="185" r="2" style="fill:#F2C230;stroke:' + INK + ';stroke-width:.9"/>';
+  s += bottle(783, 14, 22, 7, "#E9A23B", "#F7D58E", "#C9822A") + bottle(799, 13, 30, 10, "#8DB38A", "#C8E0C2", "#6E9670") + bottle(815, 15, 18, 5, "#7EA6C8", "#C3D9EA", "#5F87AA");
+  return atSill(s);
+}
+/* 2: a bowl of lemons */
+function sillLemons() {
+  let s = "";
+  const lemon = (x, y, rx, ry, a) => '<g transform="rotate(' + a + " " + x + " " + y + ')"><ellipse cx="' + x + '" cy="' + y + '" rx="' + rx + '" ry="' + ry + '" style="fill:#F2D24A;stroke:' + INK + ';stroke-width:1.4"/>' +
+    '<path d="M' + f1(x + rx - .5) + " " + f1(y - 1.2) + " l2.2 1.2 l-2.2 1.2" + '" style="fill:#F2D24A;stroke:' + INK + ';stroke-width:1;stroke-linejoin:round"/>' +
+    '<path d="M' + f1(x + rx * .2) + " " + f1(y + ry * .2) + " Q" + f1(x + rx * .7) + " " + f1(y + ry * .1) + " " + f1(x + rx * .8) + " " + f1(y - ry * .5) + " L" + f1(x + rx * .9) + " " + f1(y + ry * .5) + " Q" + f1(x + rx * .3) + " " + f1(y + ry * .9) + " " + f1(x - rx * .2) + " " + f1(y + ry * .7) + 'Z" style="fill:#D9B23A"/>' +
+    '<path d="M' + f1(x - rx * .55) + " " + f1(y - ry * .35) + " q" + f1(rx * .3) + " " + f1(-ry * .3) + " " + f1(rx * .6) + " " + f1(-ry * .3) + '" style="fill:none;stroke:#FBEFA8;stroke-width:1.3;stroke-linecap:round"/></g>';
+  s += lemon(796, 225, 8, 6, -20) + lemon(812, 224, 8, 6, 15) + P(wob([[803, 218], [811, 211], [815, 214], [807, 220]], .2), "#6E9A45", 1.2) + lemon(804, 228, 8.4, 6.2, 5);
+  s += P("M783 232 H825 Q824 246 812 246 H796 Q784 246 783 232Z", "#F3EEDF", 1.8) + P("M808 233 H824.5 Q823 245 812 245.5 H808Z", "#DCD4BE") +
+    '<path d="M784.5 237 H823.5" style="stroke:#7EA6C8;stroke-width:2.2"/><ellipse cx="804" cy="232" rx="21" ry="2.2" style="fill:none;stroke:' + INK + ';stroke-width:1.6"/>';
+  return atSill(s);
+}
+/* 3: a glass jar of daisies and buttercups, chunky, flat colours */
+function sillJar() {
+  let s = "";
+  const stem = (x1, y1, x2, y2) => '<path d="M' + x1 + " " + y1 + " Q" + f1((x1 + x2) / 2 + 1.5) + " " + f1((y1 + y2) / 2) + " " + x2 + " " + y2 + '" style="fill:none;stroke:' + INK + ';stroke-width:2.8;stroke-linecap:round"/><path d="M' + x1 + " " + y1 + " Q" + f1((x1 + x2) / 2 + 1.5) + " " + f1((y1 + y2) / 2) + " " + x2 + " " + y2 + '" style="fill:none;stroke:#6E9A45;stroke-width:1.3;stroke-linecap:round"/>';
+  const flower = (cx, cy, r, pet, petD, mid, n) => { let t = ""; for (let i = 0; i < n; i++) { const a = i * 360 / n; t += '<ellipse cx="' + cx + '" cy="' + f1(cy - r * .6) + '" rx="' + f1(r * .36) + '" ry="' + f1(r * .55) + '" transform="rotate(' + a + " " + cx + " " + cy + ')" style="fill:' + (i % 2 ? petD : pet) + ";stroke:" + INK + ';stroke-width:1.1"/>'; } return t + '<circle cx="' + cx + '" cy="' + cy + '" r="' + f1(r * .34) + '" style="fill:' + mid + ";stroke:" + INK + ';stroke-width:1.1"/>'; };
+  s += stem(799, 224, 791, 196) + stem(804, 224, 805, 186) + stem(809, 224, 818, 195) + stem(802, 224, 798, 206) + stem(807, 224, 812, 205);
+  s += P(wob([[796, 213], [787, 209], [789, 206], [797, 210]], .2), "#6E9A45", 1.1) + P(wob([[811, 212], [820, 207], [821, 210], [812, 214]], .2), "#4F7A33", 1.1);
+  s += flower(791, 195, 9, "#FFFBEF", "#EFE8D6", "#F2C230", 6) + flower(805, 185, 9.5, "#FFFBEF", "#EFE8D6", "#F2C230", 6) + flower(818, 194, 8.5, "#FFFBEF", "#EFE8D6", "#F2C230", 6) +
+    flower(798, 205, 6.5, "#F2C230", "#E0AE28", "#C9822A", 5) + flower(812, 204, 6.5, "#F2C230", "#E0AE28", "#C9822A", 5);
+  /* clear jar: pale glass, stems through the water, a light edge */
+  s += P(wob([[790, 222], [818, 222], [819, 244], [816, 246], [792, 246], [789, 244]], .3), "#DCEBEE", 1.8);
+  s += P("M790.5 232 H818.5 V244 Q818 245.6 816 245.6 H792 Q790.4 245.6 790.4 244Z", "#C6DEE4");
+  s += '<path d="M799 232 L800 245 M804 232 V245 M809 232 L808 245" style="stroke:#6E9A45;stroke-width:1.2"/><path d="M793 225 V243" style="stroke:#fff;stroke-width:1.8;stroke-linecap:round"/>';
+  s += P(wob([[789, 220], [819, 220], [819, 223.5], [789, 223.5]], .1), "#DCEBEE", 1.4);
+  return atSill(s);
+}
+const SILL = { 1: ["Coloured glass bottles, one flower", sillBottles], 2: ["A bowl of lemons", sillLemons], 3: ["A glass jar of daisies and buttercups", sillJar] };
 function crystal(x, y, h) {   /* a long hexagonal prism, point down */
   const w = h * .2;
   return '<path d="M' + x + " " + f1(y - 1.5) + " V" + y + '" style="stroke:#6b5a48;stroke-width:.6"/>' +
@@ -139,8 +183,8 @@ function beams(v) {
   };
   return band(790, 120, 600, 214, 1.6) + band(800, 150, 640, 262, 1.4) + band(814, 98, 862, 70, 1.3);
 }
-/* window frame and sill in sage instead of cream: the kitchen.svg's <style> maps each traced frame colour to a sage shade */
-const TRIM = { "#F6E9CB": "#A3B8A0", "#DDD3BB": "#8CA389", "#DAD4C2": "#8CA389", "#C5BEB0": "#7A9278", "#B5AA92": "#6B8369", "#E8DCB0": "#B4C6AF", "#D4A36F": "#6F8A70", "#9D6F45": "#5A735C" };
+/* window frame in any colour: on .trim-on, each traced frame shade becomes var(--trim) mixed lighter or darker by the same step */
+const TRIM = { "#F6E9CB": [100, "#fff"], "#E8DCB0": [80, "#fff"], "#DDD3BB": [84, "#1f1d1a"], "#DAD4C2": [84, "#1f1d1a"], "#C5BEB0": [72, "#1f1d1a"], "#B5AA92": [64, "#1f1d1a"], "#D4A36F": [74, "#1f1d1a"], "#9D6F45": [56, "#1f1d1a"] };
 
 /* ---- composition notebooks: black marbled cover, a white label, black spine tape, cream page edges ---- */
 /* ---- notebooks: a closed one is a quad on the counter with its front edge (pages) showing ---- */
@@ -292,16 +336,16 @@ module.exports = {
     return { end: [{ obj: "whiteboard", svg: marker() },
       { obj: "notebook", svg: V("nb-n1", stackUnder(v)) + V("nb-n2", stackFront()) + V("nbx-1", nbExtras()), top: true },
       { obj: "box", svg: V("box-2", boxWear()) + V("box-3", boxWear() + boxLabel()), top: true },
-      { obj: "eclair", svg: eclair(), top: true },
-      { obj: "window", svg: beams(v) + mobile() + basil(), top: true },
+      { obj: "eclair", svg: [0, 1, 2, 3].map((n) => V("ecl-" + n, eclair(n))).join(""), top: true },
+      { obj: "window", svg: beams(v) + mobile() + Object.keys(SILL).map((k) => V("sill-" + k, SILL[k][1]())).join(""), top: true },
       { obj: "cup-open", svg: cupOpen(v), top: true }, { obj: "clip", svg: clipboard(), top: true }] };
   },
   /* close-ups for the page, drawn over a <use> of the kitchen scene */
   closeups(v) {
     seed = 11;
     return [
-      { key: "ecl", title: "Eclair E1, bitten, between the box and the notebook", vb: "172 326 100 48", svg: eclair() },
-      { key: "win", title: "Basil, crystal mobile, rainbow beams (frame in sage)", vb: "690 10 172 262", svg: beams(v + "z") + mobile() + basil(), cls: "trim-sage" },
+      ...[0, 1, 2, 3].map((n) => ({ key: "ecl" + n, title: ["Eclair E1, whole", "Click: one bite", "Click: two bites", "Click: gone until the page reloads"][n], vb: "172 326 100 48", svg: eclair(n) })),
+      ...Object.keys(SILL).map((k) => ({ key: "sill" + k, title: "L" + k + " · " + SILL[k][0], vb: "730 120 142 140", svg: beams(v + "z" + k) + mobile() + SILL[k][1]() })),
       { key: "nb", title: "Open notebook with tabs, ribbon, photo and doodle; composition books under it", vb: "232 300 240 92", svg: stackUnder(v) + nbExtras() },
       { key: "nb2", title: "Or: composition books stacked in front of the whiteboard", vb: "430 296 130 70", svg: stackFront() },
       { key: "box", title: "Recipe box: worn paint, letters on the tabs, RECIPES (option 3)", vb: "26 200 170 170", svg: boxWear() + boxLabel() },

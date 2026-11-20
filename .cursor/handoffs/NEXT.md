@@ -1,4 +1,4 @@
-# NEXT — 2026-11-19 (Plate XII v7 published: window, composition books, box details; waiting on Ari)
+# NEXT — 2026-11-19 (Plate XII v8 published: eclair bites, frame colour, sill; waiting on Ari)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,14 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII, after Ari answers v7) — START HERE
+## Prompt for the next agent (Plate XII, after Ari answers v8) — START HERE
+> Plate XII v8: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Build as before. Options in `add.cjs` (DEF = picks): nb, nbx, box, sill (L1–L3), ecl 0–3 (driven by clicks, not a choice). Window frame colour: `.trim-on` + `--trim` on #tk (walnut default), shades in `TRIM`.
+>
+> **Questions (page top):** frame colour (pick walnut), sill (pick L1 bottles), books spot (pick under), notebook extras enough, RECIPES (pick no), Library name (pick Library).
+>
+> **After answers:** set DEF and the default `--trim` to the picks, remove losing options and their buttons. Then evening, phone crop, size; product list into the PRD at sign-off.
+
+## Prompt for the next agent (Plate XII, after Ari answers v7) — done (v8)
 > Plate XII v7: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Build as before. `add.cjs` options (`<g data-var>`, DEF = Claude's picks): nb n1/n2/0, nbx 1/0, box 1/2/3; sage window frame via `.trim-sage` on #tk (colours in `TRIM`). Fixed: E1 bitten at P1, basil + crystal mobile + rainbow beams.
 >
 > **Questions (page top):** composition books under the open notebook (pick) or in front of the whiteboard; sage frame (pick); RECIPES on the box (pick no, Ari dropped box lettering before); notebook extras enough; Library name (pick Library).

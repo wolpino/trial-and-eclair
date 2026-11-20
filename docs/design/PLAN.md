@@ -196,7 +196,9 @@ Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop
 - [x] v6 (2026-11-19, same URL): clipboard shadow and edge; eclairs E1–E5; spots P1 (by the box), P2 (two notebooks under the open one), P3 (eclair on closed notebooks); sills S1 basil, S2 flowers, S3 sun catcher with rainbows; picks switchable on the page, close-ups clickable
 - [x] **Decided (Ari, on v6):** eclair E1 with a bite, at P1 (between the box and the notebook); window like her reference (basil, crystal mobile, rainbow beams) but keep four panes; composition notebooks wanted somewhere; open notebook needs something more; bring the reference box's details over
 - [x] v7 (2026-11-19, same URL): bitten E1 at P1; bushy basil, four-crystal mobile, rainbow beams; frame sage or cream; composition books under the open notebook or in front of the whiteboard; notebook tabs, ribbon, photo, doodle; box wear, tab letters, optional RECIPES
-- [ ] Ari (v7 questions): composition books spot (pick under); frame sage (pick sage); box RECIPES (pick no); notebook extras enough?; Library name (pick Library)
+- [x] **Decided (Ari, on v7):** window frame coloured, but not that sage; no basil (something that brings light; florals in the trace's style are OK); eclair is E1 whole, and clicking takes a bite, a second bite, then it is gone until the page reloads (as in an earlier version)
+- [x] v8 (2026-11-19, same URL): frame in any colour (walnut default; oak, cabinet green, deep green, buttercup, tomato, Blue 3); sill L1 glass bottles, L2 lemons, L3 jar of flowers; eclair eaten in three clicks
+- [ ] Ari (v8 questions): frame colour (pick walnut); sill (pick L1); composition books spot (pick under); notebook extras enough?; RECIPES (pick no); Library name (pick Library)
 
 ### Product changes from the plates (apply in one pass)
 Changes to the product that come out of the drawings. Kept here as they come up and applied together to `docs/PRD.md`, the README and the Task issues when Plate XII is signed off (before Task issues), so the plan is edited once and stays consistent.
@@ -204,6 +206,7 @@ Changes to the product that come out of the drawings. Kept here as they come up 
 - [ ] **Saved cookbooks** (Ari 2026-11-19, later version): a cook can save other users' published cookbooks; they sit on the same shelf as their own cookbooks. Needs a saved-cookbook model and a phase in the PRD; the Library view leaves room for them
 - [ ] **Recipe log on a clipboard** in the open wall cupboard, not the drawer stack
 - [ ] **No fridge, no Recently list** (Plate XII v3)
+- [ ] **Eclair easter egg**: clicking the kitchen eclair takes a bite, a second bite, then it is gone until the page reloads; nothing saved
 - If picked, this replaces the Plate XI kitchen drawing (views and phone follow), so settle it before the test piece
 
 ## Before Task issues: things that could disrupt the build

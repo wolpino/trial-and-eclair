@@ -10,6 +10,39 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-19 · Plate XII v8: eclair bites, frame colour, sill light (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v8) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v8 published; questions to Ari; no app code) |
+
+### Intent
+Ari on v7: colour the window frame but not that sage (brown?); no basil, something that brings light (florals OK in the trace's style); "bitten" meant the old click-to-bite eclair: whole E1, a bite per click, gone on the third until reload.
+
+### Summary
+- `TRIM` is now [mix %, toward]: on `.trim-on`, every traced frame shade = color-mix(var(--trim), ...); page swatches set `--trim` (walnut default)
+- Sill options L1 bottles / L2 lemons / L3 jar of flowers (`SILL`, drawn at 1.3x via atSill); crystal mobile and beams kept
+- Eclair: `eclair(n)`, n = 0..3 as `ecl-N` options; bite depth grows with n; page button takes a bite per click and removes itself at 3 (tested: states advance, no errors)
+- PLAN.md product list: eclair easter egg
+
+### Decisions
+- Ari: frame coloured (not sage); no basil; eclair whole, eaten by clicks
+
+### Open threads
+- Ari: frame colour (pick walnut), sill (pick L1), books spot, notebook extras, RECIPES, Library name
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v8, eclair bites, window frame colour, sill bottles
+**Files:** design/plate-xii/traced/ (clean.cjs, add.cjs, kitchen.svg, closeups.html), sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v8 as drawn (tweak only); the ink split; taller frame
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v8 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Plate XII v7: window, composition books, box details (published)
 
 | Field | Value |
