@@ -1,6 +1,17 @@
-# NEXT — 2026-11-20 (Plate XII v14 published; v15 notes collected; low-usage workflow decided — see below before starting v15)
+# NEXT — 2026-11-20 (Plate XII v15 published, waiting on Ari; low-usage workflow)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
+
+## Prompt for the next agent (Plate XII, after Ari answers v15) — START HERE
+> **Workflow (Ari, 2026-11-20, `workflow-lower-usage` memory):** real visual choices asked in chat first; no subagents; confirm before a build/publish run.
+>
+> Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (live = v15, artifact version 16). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session.
+>
+> **New in v15:** pointing options are CSS on `#tk[data-pt]` (base/xii.css: v14, b2 shadow, b3 sticker = filter `a-halo-st` from clean.cjs `halos()`, c1 rise = `translate` on `.lit`, c2 press = `.press`, pick = honey glow + c1 + c2). Crystals `CRYSTALS` 1–5 in add.cjs (`cr` key; `.cr-spin` scaled by the page's `turn()`). Rainbows `rainbows(v)`: main `SUN` beams, `PART` (r2), `scatter()` (r1, seeded per time), `THINGS` (r3, hand placed: mixer dome, bowl, whiteboard edge, counter edge, eclair, shelf); looks on `#tk[data-rs]` (s1 blur `a-rbblur`, s2 crisp, s3 dot mask `a-rbdots`). Cupboard `interior()` with `jar()` and `at(Z)`; `hinges()`. Fixes: `BOOK_BLUE` and `pop()` for spines, `RECOLOR` single shapes, `windowFix()`, `lidTab()`.
+>
+> **Questions (page top), Claude's picks:** pointing = honey + C1 + C2; crystal K2; look S1; all three rainbow kinds; pantry right; "space above the box lid" (nub fixed, asked whether she meant the empty wall); window and spines OK.
+>
+> **After answers:** set the picks as defaults (`data-pt`/`data-rs` on #tk, DEF cr/r1–r3), delete the losing options and their controls and close-ups; then the full clean-up pass and sign-off (PLAN.md, memory, Do not redo; product list into PRD/README/Task issues in one pass; phone crop and size). For later: night bird and shooting star, day moon and sun/clouds.
 
 ## Goal
 The block layout is final (round 10). Draw the kitchen and every view in the plate style, sign the plates off, then the phone layout.
@@ -10,7 +21,7 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII v15) — START HERE, but read this first
+## Prompt for the next agent (Plate XII v15) — done (v15 published 2026-11-20)
 > **Workflow decided (Ari, 2026-11-20 — see the `workflow-lower-usage` memory for the full policy):** ask in chat first for anything with a real visual choice and wait for a text answer before building; skip the question for plain fixes with no real trade-off and just confirm intent. **No subagents** for this round — make the edits directly in the main session; subagents are only for something genuinely large. **Confirm before a bigger run** (build/screenshot/publish) rather than assuming a short or ambiguous message is a go-ahead — Ari has sometimes sent a message before she meant to.
 >
 > Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (live = v14, rack confirmed good). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session.

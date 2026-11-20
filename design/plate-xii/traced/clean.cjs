@@ -46,6 +46,15 @@ function inPoly(x, y, P) { let c = false; for (let i = 0, j = P.length - 1; i < 
 function hsl(h) { const r = parseInt(h.slice(1, 3), 16) / 255, g = parseInt(h.slice(3, 5), 16) / 255, b = parseInt(h.slice(5, 7), 16) / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn;
   let hu = 0, s = 0; if (d) { s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); hu = mx === r ? ((g - b) / d + (g < b ? 6 : 0)) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; hu /= 6; } return [hu, s, l]; }
 const isBlue = (h) => { const [hu, s, l] = hsl(h); return hu > .48 && hu < .62 && s > .12 && l > .12 && l < .82; };
+function hex(hu, s, l) { const f = (n) => { const k = (n + hu * 12) % 12, a = s * Math.min(l, 1 - l); return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)))).toString(16).padStart(2, "0"); }; return "#" + f(0) + f(8) + f(4); }
+/* v15 book spines: the traced blues are books, not cabinets (they had followed --cab, so the blue books went green);
+   and every spine's colour is pushed a little so they pop */
+const BOOK_BLUE = "#3E64A6";
+const isSpine = (q) => q.h > 6 && q.h > q.w * 1.3;
+function pop(h) { const [hu, s, l] = hsl(h); return s < .2 ? h : hex(hu, Math.min(.88, s * 1.35), l > .6 ? l : l * 1.04); }
+/* single traced shapes recoloured: the cork board frame's left side face (was a pale grey sliver); pale bits under the sill's left end */
+const SILL_END = "var(--trim-9D6F45,#9D6F45)";
+const RECOLOR = { 1094: "#9D6F45", 260: SILL_END, 261: SILL_END, 263: SILL_END };
 const MAIN = hsl("#6D8C97")[2];
 function shade(v, h) { const l = hsl(h)[2]; return l >= MAIN ? "color-mix(in srgb," + v + " " + Math.round(100 - (l - MAIN) / (1 - MAIN) * 100) + "%,#fff)" : "color-mix(in srgb," + v + " " + Math.round(100 - (MAIN - l) / MAIN * 100) + "%,#1f1d1a)"; }
 const r1 = (d) => d.replace(/-?\d*\.\d+/g, (n) => (+(+n).toFixed(1)).toString());
@@ -88,7 +97,12 @@ function halos(id, parts, SH) {
     '<feGaussianBlur in="d" stdDeviation="4" result="s0"/><feComponentTransfer in="s0" result="s"><feFuncA type="linear" slope="1.6"/></feComponentTransfer>' +
     '<feFlood class="halo2"/><feComposite in2="s" operator="in" result="soft"/>' +
     '<feMerge><feMergeNode in="soft"/><feMergeNode in="mid"/><feMergeNode in="rim"/></feMerge><feComposite in2="SourceAlpha" operator="out"/></filter>' +
-    '<filter id="' + id("halo-k") + '"><feFlood flood-color="#000"/><feComposite in2="SourceAlpha" operator="in"/></filter>';
+    '<filter id="' + id("halo-k") + '"><feFlood flood-color="#000"/><feComposite in2="SourceAlpha" operator="in"/></filter>' +
+    /* v15 B3 sticker: a crisp cream band round the outline with a thin ink edge, like a die-cut sticker (the page swaps it in by CSS) */
+    '<filter id="' + id("halo-st") + '" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">' +
+    '<feMorphology in="SourceAlpha" operator="dilate" radius="2.6" result="c"/><feMorphology in="SourceAlpha" operator="dilate" radius="3.5" result="e"/>' +
+    '<feFlood flood-color="#0D0C0B"/><feComposite in2="e" operator="in" result="ink"/><feFlood flood-color="#FFFDF4"/><feComposite in2="c" operator="in" result="cream"/>' +
+    '<feMerge><feMergeNode in="ink"/><feMergeNode in="cream"/></feMerge><feComposite in2="SourceAlpha" operator="out"/></filter>';
   Object.keys(HALO_CLIP).forEach((o) => { s += '<clipPath id="' + id("halo-c-" + o) + '"><polygon points="' + HALO_CLIP[o].map((p) => p.join(" ")).join(" ") + '"/></clipPath>'; });
   Object.keys(HALO_CUT).forEach((o) => { s += '<mask id="' + id("halo-m-" + o) + '" ' + REG + '><rect x="-100" y="-100" width="1100" height="700" fill="#fff"/><g filter="url(#' + id("halo-k") + ')">' + HALO_CUT[o].map(uses).join("") + "</g></mask>"; });
   s += '</defs><g class="halos">';
@@ -126,6 +140,8 @@ function halos(id, parts, SH) {
   const objs = OBJ.map((o) => o[0]);
   const ATTRS = (q) => (q.op ? ' fill-opacity="' + q.op + '"' : "") + (q.rule ? ' fill-rule="' + q.rule + '"' : "");
   function fillOf(it) { const q = it.q, T = ADD.TRIM[q.fill.toUpperCase()];
+    if (RECOLOR[q.i]) return RECOLOR[q.i];
+    if (it.obj === "cookbooks" || it.obj === "references") { if (isBlue(q.fill)) return shade(BOOK_BLUE, q.fill); if (isSpine(q)) return pop(q.fill); return q.fill; }
     if (it.obj === "window" && T) return "var(--trim-" + q.fill.slice(1).toUpperCase() + "," + q.fill + ")";   /* window frame: any colour on .trim-on */
     if (it.obj === "window" && ADD.GLASS[q.fill.toUpperCase()]) return "var(--glass-" + q.fill.slice(1).toUpperCase() + "," + q.fill + ")";   /* glass: dusk on .dusk */
     if (!isBlue(q.fill)) return q.fill; return it.obj === "box" ? shade("var(--blue)", q.fill) : (it.obj === "ideas" ? q.fill : shade("var(--cab)", q.fill)); }
@@ -177,7 +193,7 @@ function halos(id, parts, SH) {
   const A = build("a", plain ? { top: false } : ADD.opts("a"));
   fs.writeFileSync(path.join(D, "kitchen.svg"), A);
   if (!plain) {   /* close-ups for the page: each option drawn over a <use> of the kitchen scene */
-    const C = ADD.closeups("a").map((c) => '<figure class="' + (c.cls || "") + '"><svg viewBox="' + c.vb + '" role="img" aria-label="' + c.title + '"><use href="#a-scene"/>' + c.svg + "</svg><figcaption>" + c.title + "</figcaption></figure>");
+    const C = ADD.closeups("a").map((c) => '<figure class="' + (c.cls || "") + '"' + (c.pick ? ' data-pick-to="' + c.pick + '" tabindex="0" role="button"' : "") + '><svg viewBox="' + c.vb + '" role="img" aria-label="' + c.title + '"><use href="#a-scene"/>' + c.svg + "</svg><figcaption>" + c.title + "</figcaption></figure>");
     fs.writeFileSync(path.join(D, "closeups.html"), C.join("\n"));
   }
   fs.writeFileSync(path.join(D, "report.json"), JSON.stringify(rep, null, 1));

@@ -18,7 +18,7 @@ const cab = (pct, to) => "color-mix(in srgb,var(--cab) " + pct + "%," + (to || "
 
 /* ---- options on the page: each is a <g data-var="key-value ..."> shown only when every key matches the page's choice.
         DEF = what shows first (Claude's picks). ---- */
-const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19) */
+const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1", cr: "2", r1: "1", r2: "1", r3: "1" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19); v15: crystal K2, all three kinds of rainbow on */
 function V(tokens, svg) {
   const on = tokens.split(" ").every((t) => { const i = t.indexOf("-"); return t.slice(i + 1).split("|").includes(DEF[t.slice(0, i)]); });   /* "ecl-0|1" = ecl is 0 or 1 */
   return '<g data-var="' + tokens + '"' + (on ? "" : ' style="display:none"') + ">" + svg + "</g>";
@@ -248,22 +248,154 @@ function mobile() {
   s += prism(400, 215, 9, 42) + prism(376, 275, 9, 46) + prism(424, 269, 9, 46) + prism(400, 328, 11, 54);
   return s + "</g>";
 }
+/* ---- v15 crystals: each hangs on a line from the window's top at x 822, its body about y 100-145, so the rainbows leave
+        from the same spot whichever is picked. Glass: ink outline, pale facets lit from the upper left, a few tinted facets
+        where the light splits. cr-1..5; .cr-spin is turned by the page when clicked ---- */
+const GL = { w: "#FFFFFF", a: "#F4FAFF", b: "#EDF6FF", c: "#D6E8FA", d: "#C2D7EF", pink: "#F7DCEF", yel: "#FFF1BF", mint: "#D9F4E6", lil: "#E4DCFA" };
+const CX = 822;
+const poly = (pts, fill, sw) => '<polygon points="' + pts.map((p) => f1(p[0]) + "," + f1(p[1])).join(" ") + '" style="fill:' + fill + (sw ? ";stroke:" + INK + ";stroke-width:" + sw + ";stroke-linejoin:round" : "") + '"/>';
+const string = (y0, y1) => '<path d="M' + CX + " " + y0 + " V" + y1 + '" style="stroke:' + INK + ';stroke-width:.9"/>';
+function oct(cx, cy, r, inner) {
+  const P8 = (rr, o) => [0, 1, 2, 3, 4, 5, 6, 7].map((k) => [cx + rr * Math.cos((k * 45 + o) * Math.PI / 180), cy + rr * Math.sin((k * 45 + o) * Math.PI / 180)]);
+  const O = P8(r, 22.5), I = P8(r * .5, 22.5);
+  let s = poly(O, GL.b, 1.1);
+  if (inner) { s += poly(I, GL.w, .5); O.forEach((p, k) => { s += '<path d="M' + f1(p[0]) + " " + f1(p[1]) + " L" + f1(I[k][0]) + " " + f1(I[k][1]) + '" style="stroke:' + INK + ';stroke-width:.4"/>'; }); }
+  return s;
+}
+/* a teardrop (pendeloque): narrow top at (CX, t), round bottom at t + h, w wide */
+function drop(t, h, w) {
+  const id = "cr" + (++uid), hw = w / 2, g = t + h * .62, b = t + h, x0 = CX - hw, x1 = CX + hw;
+  const out = "M" + CX + " " + t + " C" + f1(CX + hw * .55) + " " + f1(t + h * .12) + " " + f1(x1) + " " + f1(t + h * .38) + " " + f1(x1) + " " + f1(g) + " C" + f1(x1) + " " + f1(t + h * .86) + " " + f1(CX + hw * .55) + " " + f1(b) + " " + CX + " " + f1(b) +
+    " C" + f1(CX - hw * .55) + " " + f1(b) + " " + f1(x0) + " " + f1(t + h * .86) + " " + f1(x0) + " " + f1(g) + " C" + f1(x0) + " " + f1(t + h * .38) + " " + f1(CX - hw * .55) + " " + f1(t + h * .12) + " " + CX + " " + t + "Z";
+  const L = [CX - hw * .42, g - h * .04], R = [CX + hw * .42, g - h * .04], M = [CX, g + h * .08], T = [CX, t], Bt = [CX, b];
+  let s = '<clipPath id="' + id + '"><path d="' + out + '"/></clipPath><path d="' + out + '" style="fill:' + GL.b + '"/><g clip-path="url(#' + id + ')">' +
+    poly([T, [x0 - 1, g], L], GL.w) + poly([T, [x1 + 1, g], R], GL.c) + poly([T, L, M, R], GL.a) +
+    poly([[x0 - 1, g], L, M, Bt, [x0 - 1, b]], "#E3EEFB") + poly([[x1 + 1, g], R, M, Bt, [x1 + 1, b]], GL.d) +
+    poly([[CX - hw * .7, g + h * .1], [CX - hw * .25, g + h * .06], [CX - hw * .32, g + h * .27]], GL.yel) + poly([[CX + hw * .3, g + h * .09], [CX + hw * .72, g + h * .08], [CX + hw * .3, g + h * .28]], GL.pink) +
+    '<path d="M' + [T, L, M, R, T].map((p) => f1(p[0]) + " " + f1(p[1])).join(" L") + " M" + f1(x0) + " " + f1(g) + " L" + f1(L[0]) + " " + f1(L[1]) + " M" + f1(x1) + " " + f1(g) + " L" + f1(R[0]) + " " + f1(R[1]) + " M" + f1(M[0]) + " " + f1(M[1]) + " L" + f1(Bt[0]) + " " + f1(Bt[1]) + '" style="fill:none;stroke:' + INK + ';stroke-width:.6"/></g>';
+  return s + '<path d="' + out + '" style="fill:none;stroke:' + INK + ';stroke-width:1.4;stroke-linejoin:round"/>';
+}
+/* a faceted ball: a table octagon up-left of centre, star and girdle facets round it, each shaded by which way it faces */
+function ball(cy, r) {
+  const c = [CX, cy], tc = [CX - r * .14, cy - r * .14], A = (k, o) => (k * 45 + o) * Math.PI / 180, at = (p, rr, a) => [p[0] + rr * Math.cos(a), p[1] + rr * Math.sin(a)];
+  const I = [], M = [], O = [];
+  for (let k = 0; k < 9; k++) { I.push(at(tc, r * .42, A(k, 22.5))); M.push(at(c, r * .78, A(k, 45))); O.push(at(c, r * 1.02, A(k, 22.5))); }
+  const tint = { 1: GL.pink, 4: GL.yel, 6: GL.mint, 2: GL.lil };
+  let s = '<circle cx="' + CX + '" cy="' + cy + '" r="' + r + '" style="fill:' + GL.b + '"/>';
+  for (let k = 0; k < 8; k++) {
+    const lit = Math.cos(A(k, 45) - 225 * Math.PI / 180), col = lit > .55 ? GL.w : lit > .05 ? GL.a : lit > -.45 ? GL.c : GL.d;
+    s += poly([I[k], M[k], I[k + 1]], lit > .2 ? GL.w : GL.a, .45) + poly([I[k], O[k], M[k]], col, .45) + poly([I[k + 1], M[k], O[k + 1]], tint[k] || col, .45);
+  }
+  s += poly(I.slice(0, 8), "#F8FCFF", .5) + '<ellipse cx="' + f1(CX - r * .4) + '" cy="' + f1(cy - r * .45) + '" rx="' + f1(r * .2) + '" ry="' + f1(r * .12) + '" transform="rotate(-35 ' + f1(CX - r * .4) + " " + f1(cy - r * .45) + ')" style="fill:#fff"/>';
+  return s + '<circle cx="' + CX + '" cy="' + cy + '" r="' + r + '" style="fill:none;stroke:' + INK + ';stroke-width:1.5"/>';
+}
+/* a quartz point: a six-sided crystal seen face on (three faces show), pointed at the bottom, wire-wrapped at the top */
+function quartz(t, h, w) {
+  const hw = w / 2, x0 = CX - hw, x1 = CX + hw, m0 = CX - hw * .4, m1 = CX + hw * .4, b = t + h * .66, tip = [CX - .6, t + h];
+  let s = poly([[x0, t + 1], [m0, t], [m0, b + 1.4], [x0, b]], GL.c) + poly([[m0, t], [m1, t], [m1, b + 1.4], [m0, b + 1.4]], GL.a) + poly([[m1, t], [x1, t + 1], [x1, b], [m1, b + 1.4]], GL.d) +
+    poly([[x0, b], [m0, b + 1.4], tip], "#E3EEFB") + poly([[m0, b + 1.4], [m1, b + 1.4], tip], GL.w) + poly([[m1, b + 1.4], [x1, b], tip], GL.lil) +
+    poly([[m1 + .4, b + 3], [x1 - .6, b + 2], [CX + .8, b + 8]], GL.pink) +
+    '<path d="M' + f1(CX - 1) + " " + f1(t + 6) + " q1.4 6 -.4 12 M" + f1(CX + 1.2) + " " + f1(t + 10) + ' q.8 4 0 7" style="fill:none;stroke:#fff;stroke-width:.9;stroke-linecap:round"/>' +
+    '<path d="M' + f1(m0) + " " + f1(t) + " V" + f1(b + 1.4) + " M" + f1(m1) + " " + f1(t) + " V" + f1(b + 1.4) + " M" + f1(x0) + " " + f1(b) + " L" + f1(m0) + " " + f1(b + 1.4) + " L" + f1(m1) + " " + f1(b + 1.4) + " L" + f1(x1) + " " + f1(b) + '" style="fill:none;stroke:' + INK + ';stroke-width:.6"/>';
+  s += poly([[x0, t + 1], [m0, t], [m1, t], [x1, t + 1], [x1, b], tip, [x0, b]], "none", 1.4);
+  /* brass wire wrapped round the top */
+  const wy = (i) => t - 4 + i * 2.6;
+  s += '<path d="M' + CX + " " + (t - 7) + " V" + (t - 4) + [0, 1, 2].map((i) => " M" + f1(x0 - .6) + " " + f1(wy(i) + 1.6) + " Q" + CX + " " + f1(wy(i) - .6) + " " + f1(x1 + .6) + " " + f1(wy(i) + 2)).join("") + '" style="fill:none;stroke:' + INK + ';stroke-width:2.2;stroke-linecap:round"/>' +
+    '<path d="M' + [0, 1, 2].map((i) => f1(x0 - .6) + " " + f1(wy(i) + 1.6) + " Q" + CX + " " + f1(wy(i) - .6) + " " + f1(x1 + .6) + " " + f1(wy(i) + 2)).join(" M") + '" style="fill:none;stroke:#C9A24A;stroke-width:1.1;stroke-linecap:round"/>' +
+    '<circle cx="' + CX + '" cy="' + (t - 7.5) + '" r="1.4" style="fill:none;stroke:#C9A24A;stroke-width:1"/>';
+  return s;
+}
+const CRYSTALS = {
+  1: ["Teardrop prism", () => string(30, 97) + oct(CX, 99.4, 2.5) + drop(102.2, 38, 17)],
+  2: ["Faceted ball", () => string(30, 103) + oct(CX, 105.4, 2.3) + '<rect x="' + (CX - 1.6) + '" y="107.4" width="3.2" height="2.2" rx=".6" style="fill:#C9A24A;stroke:' + INK + ';stroke-width:.7"/>' + ball(121, 11.5)],
+  3: ["Octagon chain", () => string(30, 61) + [64.5, 74.5, 84.5, 94.5].map((y, i) => (i ? '<circle cx="' + CX + '" cy="' + f1(y - 5) + '" r="1" style="fill:none;stroke:#C9A24A;stroke-width:.8"/>' : "") + oct(CX, y, 3.8, true)).join("") + '<circle cx="' + CX + '" cy="99.6" r="1" style="fill:none;stroke:#C9A24A;stroke-width:.8"/>' + drop(101, 27, 12)],
+  4: ["Quartz point", () => string(30, 89) + quartz(97, 46, 11)],
+  5: ["Mobile (the one you have now)", () => mobile()],
+};
+const crystals = () => Object.keys(CRYSTALS).map((k) => V("cr-" + k, '<g class="cr-spin">' + CRYSTALS[k][1]() + "</g>")).join("");
+
+/* ---- v15 rainbows. All of them sit in .rb > .rb-turn (the page turns that round the crystal when it is clicked), one set per
+        time of day: the two main beams; R2 partial beams (shorter, thinner, fading early); R1 small scattered spots; R3 spots
+        that bend over things (an edge or a curve). A spot is a short band of light, its colours running along its length.
+        Looks (data-rs on #tk, base/xii.css): S1 soft (blurred), S2 printed (crisp, as now), S3 halftone (a dot mask). ---- */
+const RB = ["#EE2A35", "#FF8A1C", "#FFD91A", "#2FBF4A", "#2A72E8", "#8C3FD6"];
+/* pts: straight [a, b], bent at an edge [a, k, b] (bend: true), or curved over a round thing [a, ctrl, b] */
+function spot(pts, w, bend) {
+  /* six stripes side by side along the path, like a short piece of a rainbow; the outer ones shorter, so it ends round */
+  const nrm = (a, b) => { const l = Math.hypot(b[0] - a[0], b[1] - a[1]) || 1; return [-(b[1] - a[1]) / l, (b[0] - a[0]) / l]; };
+  const [a, m, b] = pts.length === 3 ? pts : [pts[0], lerp(pts[0], pts[1], .5), pts[1]];
+  const n0 = bend ? nrm(a, m) : nrm(a, b), n2 = bend ? nrm(m, b) : nrm(a, b), n1 = bend ? [(n0[0] + n2[0]) / 2, (n0[1] + n2[1]) / 2] : nrm(a, b), sw = w / 6;
+  const off = (p, n, o) => [p[0] + n[0] * o, p[1] + n[1] * o], q = (p) => f1(p[0]) + " " + f1(p[1]);
+  return RB.map((c, i) => {
+    const o = (i - 2.5) * sw, tr = .28 * Math.abs(i - 2.5) / 2.5, A = off(lerp(a, m, tr), n0, o), M = off(m, n1, o), Bq = off(lerp(b, m, tr), n2, o);
+    return '<path d="M' + q(A) + (bend ? " L" + q(M) + " L" : " Q" + q(M) + " ") + q(Bq) + '" style="fill:none;stroke:' + c + ";stroke-width:" + f1(sw * 1.2) + ';stroke-linecap:round;stroke-linejoin:round"/>';
+  }).join("");
+}
+/* R1: spots strewn over a region, all leaning about the same way (the crystal throws them in one direction), none on the glass */
+const SCATTER = { am: [[468, 30, 706, 300], -16, 101], noon: [[560, 296, 862, 436], 64, 202], pm: [[540, -36, 706, 176, 706, -36, 866, 40], 16, 303] };
+function scatter(k) {
+  const [R, ang, sd] = SCATTER[k]; let s0 = sd; const r = () => ((s0 = (s0 * 16807) % 2147483647) / 2147483647);
+  const boxes = []; for (let i = 0; i < R.length; i += 4) boxes.push(R.slice(i, i + 4));
+  const out = [], put = [];
+  for (let tries = 0; out.length < 11 && tries < 400; tries++) {
+    const bx = boxes[Math.floor(r() * boxes.length)], x = bx[0] + r() * (bx[2] - bx[0]), y = bx[1] + r() * (bx[3] - bx[1]);
+    if (x > 709 && x < 868 && y > 38 && y < 246) continue;
+    if (put.some((q) => Math.hypot(q[0] - x, q[1] - y) < 34)) continue;
+    const L = 15 + r() * 17, w = 4.6 + r() * 3, a = (ang + (r() - .5) * 26) * Math.PI / 180, cu = (r() - .5) * 2.4, dx = Math.cos(a) * L / 2, dy = Math.sin(a) * L / 2;
+    put.push([x, y]); out.push(spot([[x - dx, y - dy], [x - Math.sin(a) * cu, y + Math.cos(a) * cu], [x + dx, y + dy]], w));
+  }
+  return out.join("");
+}
+/* R3: spots on things, bent where they cross an edge or curved over a round surface (kitchen units, measured off the trace) */
+const THINGS = {
+  am: [[[[588, 203], [602, 197.4], [618, 198]], 5], [[[574, 176], [587.6, 178.5], [591.5, 186]], 4.6, 1], [[[540, 268], [556, 286], [578, 291]], 5], [[[656, 230], [664, 244], [668, 262]], 5]],
+  noon: [[[[748, 356], [760, 368.6], [762, 382]], 4.6, 1], [[[786, 330], [796, 324], [808, 327]], 5], [[[640, 352], [652, 368.6], [654, 380]], 4.6, 1], [[[818, 392], [832, 398], [846, 396]], 5]],
+  pm: [[[[606, 24], [616, 26], [628, 23]], 5], [[[650, 60], [661.5, 62], [664.5, 70]], 4.6, 1], [[[742, 14], [762, 9], [784, 11]], 5], [[[566, 64], [578, 68], [590, 66]], 5]],
+};
+const things = (k) => THINGS[k].map(([pts, w, b]) => spot(pts, w, b)).join("");
+/* partial beams: [from x, y, to x, y, stripe width] */
+const PART = {
+  am: [[822, 118, 642, 128, .85], [822, 122, 664, 262, .75], [822, 116, 708, 66, .65]],
+  noon: [[822, 122, 690, 300, .85], [822, 124, 846, 374, .75], [822, 124, 640, 346, .65]],
+  pm: [[822, 116, 760, 16, .85], [822, 118, 642, 96, .75], [822, 114, 706, -24, .65]],
+};
+function rainbows(v) {
+  const defs = '<defs><filter id="' + v + '-rbblur" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation=".75"/></filter>' +
+    '<pattern id="' + v + '-rbdot" width="2.3" height="2.3" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><circle cx="1.15" cy="1.15" r="1.02" fill="#fff"/></pattern>' +
+    '<mask id="' + v + '-rbdots" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1100" height="700"><rect x="-100" y="-100" width="1100" height="700" fill="url(#' + v + '-rbdot)"/></mask></defs>';
+  return defs + '<g class="rb"><g class="rb-turn">' + Object.keys(SUN).map((k) =>
+    V("sun-" + k, beams(v, k) + V("r2-1", beams(v, k, PART[k], true)) + V("r1-1", '<g class="rb-spots">' + scatter(k) + "</g>") + V("r3-1", '<g class="rb-spots">' + things(k) + "</g>"))).join("") + "</g></g>";
+}
 /* rainbow beams from the crystals; they move with the time of day (sun-am, sun-noon, sun-pm), none in the evening */
 const SUN = {
   am: [[812, 108, 560, 168, 1.6], [818, 136, 590, 222, 1.4]],
   noon: [[816, 128, 720, 330, 1.5], [830, 140, 776, 338, 1.3]],
   pm: [[812, 110, 690, 52, 1.5], [828, 100, 862, 58, 1.3], [818, 130, 680, 150, 1.3]],
 };
-function beams(v, sun) {
-  const C = ["#EE2A35", "#FF8A1C", "#FFD91A", "#2FBF4A", "#2A72E8", "#8C3FD6"], id = v + "-bm" + (++uid);
+function beams(v, sun, list, part) {
+  const C = RB, id = v + "-bm" + (++uid), st = part ? [[0, 0], [.2, .8], [.5, .45], [1, 0]] : [[0, 0], [.25, .9], [.8, .6], [1, 0]];
   const band = (x1, y1, x2, y2, w) => {
     const len = Math.hypot(x2 - x1, y2 - y1), nx = -(y2 - y1) / len, ny = (x2 - x1) / len, g = id + "g" + (++uid);
-    let t = '<linearGradient id="' + g + '" gradientUnits="userSpaceOnUse" x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".25" stop-color="#fff" stop-opacity=".9"/><stop offset=".8" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>' +
+    let t = '<linearGradient id="' + g + '" gradientUnits="userSpaceOnUse" x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '">' + st.map(([o, a]) => '<stop offset="' + o + '" stop-color="#fff" stop-opacity="' + a + '"/>').join("") + "</linearGradient>" +
       '<mask id="' + g + 'm" maskUnits="userSpaceOnUse" x="0" y="-60" width="868" height="560"><rect x="0" y="-60" width="868" height="560" fill="url(#' + g + ')"/></mask><g mask="url(#' + g + 'm)" opacity=".75">';
     C.forEach((c, i) => { const o = (i - 2.5) * w; t += '<path d="M' + f1(x1 + nx * o) + " " + f1(y1 + ny * o) + " L" + f1(x2 + nx * o * 1.6) + " " + f1(y2 + ny * o * 1.6) + '" style="stroke:' + c + ";stroke-width:" + f1(w * 1.3) + '"/>'; });
     return t + "</g>";
   };
-  return (SUN[sun] || []).map((b) => band(...b)).join("");
+  return (list || SUN[sun] || []).map((b) => band(...b)).join("");
+}
+/* v15 window fixes: the frame's left side face was a faded strip with notches (traced highlights), redrawn as one walnut
+   face with its ink line; under the sill the traced apron had no outline and a grey streak, so wall goes over it and a
+   clean apron board sits under the sill */
+function windowFix() {
+  const side = "var(--trim-F6E9CB,#F6E9CB)", dark = "var(--trim-9D6F45,#9D6F45)";
+  return '<rect x="702.9" y="80" width="7" height="161.5" style="fill:' + side + '"/>' +
+    '<rect x="706.2" y="80" width=".8" height="161.5" style="fill:' + INK + '"/><rect x="709.6" y="80" width="1.2" height="161.5" style="fill:' + INK + '"/>' +
+    '<rect x="699" y="254.4" width="165.4" height="14" style="fill:var(--wall)"/>' +
+    P("M713 253.6 H864.6 V261.4 H717.6 Q713.4 261.4 713 257.4Z", dark, 1.5) + '<path d="M716.5 255.4 H864" style="stroke:' + side + ';stroke-width:.9"/>';
+}
+/* v15: the lid's front edge (at the top now it is open) had a shapeless brown nub: it is the latch tab, in brass */
+function lidTab() {
+  return P(wob([[88.6, 215.2], [90.2, 210.6], [103, 210.1], [104.6, 214.6]], .1), "#C9A24A", 1.2) + '<path d="M91.4 211.8 H101.8" style="stroke:#E6C878;stroke-width:.8"/><rect x="94.6" y="211.9" width="3.6" height="1.6" rx=".6" style="fill:#5A4520"/>';
 }
 /* evening: the window glass goes to dusk (see GLASS) and the room dims a little */
 const GLASS = { "#FAF8E8": "#4B5578", "#FEF5D5": "#56618A", "#FEF2D2": "#5E6A92" };
@@ -400,23 +532,67 @@ const DOOR = { x0: 132.7, W: 132.7, yt: -48, yb: 102.5 }, VP = [434, 240], F = 9
 function proj(X, Y, Z) { const s = F / (F - Z); return [VP[0] + (X - VP[0]) * s, VP[1] + (Y - VP[1]) * s]; }
 /* a point on the door at (u across from the hinge, v down), n = offset off the inside face */
 function on(u, v, n) { const t = TH * Math.PI / 180; n = n || 0; return proj(DOOR.x0 + u * DOOR.W * Math.cos(t) + n * Math.sin(t), DOOR.yt + v * H_DOOR, u * DOOR.W * Math.sin(t) - n * Math.cos(t)); }
-function interior(v) {
-  const x0 = DOOR.x0, x1 = x0 + DOOR.W, y1 = DOOR.yb, dep = 60, bk = (X, Y) => proj(X, Y, -dep), cid = v + "-op";
-  let s = '<clipPath id="' + cid + '"><rect x="' + x0 + '" y="' + (DOOR.yt - 10) + '" width="' + DOOR.W + '" height="' + (y1 - DOOR.yt + 10) + '"/></clipPath><g clip-path="url(#' + cid + ')">';
-  s += P(wob([[x0, DOOR.yt - 6], [x1, DOOR.yt - 6], [x1, y1 + 4], [x0, y1 + 4]], .3), cab(30));   /* back wall */
-  const b0 = bk(x0, DOOR.yt), b1 = bk(x0, y1);
-  s += P("M" + x0 + " " + (DOOR.yt - 6) + " L" + f1(b0[0]) + " " + (DOOR.yt - 6) + " L" + f1(b1[0]) + " " + f1(b1[1]) + " L" + x0 + " " + y1 + "Z", cab(44));   /* left side wall */
-  const jar = (x, w, t, bot, lid, glass) => P(wob([[x, t + 3], [x + w, t + 3], [x + w, bot], [x, bot]], .25), glass, 1.3) + P(wob([[x - 0.8, t], [x + w + 0.8, t], [x + w + 0.8, t + 3.6], [x - 0.8, t + 3.6]], .15), lid, 1.1);
-  const shelf = (sy) => { const u0 = bk(x0, sy + 3.5), u1 = bk(x1, sy + 3.5); return P("M" + x0 + " " + (sy + 3.5) + " L" + x1 + " " + (sy + 3.5) + " L" + f1(u1[0]) + " " + f1(u1[1]) + " L" + f1(u0[0]) + " " + f1(u0[1]) + "Z", cab(52)); };
-  const edge = (sy) => P("M" + x0 + " " + sy + " H" + x1 + " V" + (sy + 3.5) + " H" + x0 + "Z", cab(66), 1.3);
-  /* top shelf (y 3): tins and a stack of bowls (back, Ari 11/19); middle shelf (y 52): jars; floor: flour tin, sugar jar, a box of cases */
-  s += shelf(3) + jar(146, 22, -30, 3, "#9C9892", "#D8C9A4") + jar(174, 14, -18, 3, "#C8473A", "#EFE6CF") +
-    P(wob([[200, -6], [240, -6], [236, 3], [204, 3]], .3), "#EFE6CF", 1.3) + P(wob([[203, -13], [237, -13], [233, -6], [207, -6]], .3), "#8BA07A", 1.3) + P(wob([[206, -20], [234, -20], [230, -13], [210, -13]], .3), "#F0C86A", 1.3) +
-    jar(246, 14, -22, 3, "#B17A4B", "#E9DDBE") + edge(3);
-  s += shelf(52) + jar(150, 17, 20, 52, "#C8473A", "#E9DDBE") + jar(172, 13, 28, 52, "#B17A4B", "#EFE6CF") + jar(214, 22, 16, 52, "#9C9892", "#D8C9A4") + jar(242, 13, 26, 52, "#8BA07A", "#EFE6CF") + edge(52);
-  s += jar(158, 30, 70, y1 + 2, "#E0B450", "#F0C86A") + jar(206, 15, 64, y1 + 2, "#B17A4B", "#E9DDBE") + jar(226, 26, 80, y1 + 2, "#9C9892", "#CFC8B8");
-  s += "</g>" + P(wob([[x0, DOOR.yt - 6], [x1, DOOR.yt - 6], [x1, y1], [x0, y1]], .3), "none", 2.4);
+/* v15: the inside, after Ari's pantry picture: warm wood, two shelves, glass jars with handwritten labels (no dishes).
+   Same one-point projection as the door: we look up into it (it is above eye level), so we see the ceiling's and the shelves'
+   undersides and the left side wall; jars sit back from the shelf fronts, so the boards hide their bottoms. */
+const WD = { back: "#A86C3D", backD: "#8E5832", seam: "#7E4D2B", side: "#7C4C29", sideD: "#683F21", ceil: "#5B381F", lip: "#C98D56", lipL: "#E2AC72", under: "#875530" };
+/* the stuff inside a jar: colour, and a speck colour for its texture */
+const FILL = { flour: ["#F3EEE1", "#D9D1BE"], sugar: ["#FBFAF5", "#E4E1D6"], cocoa: ["#5A3323", "#7E5038"], oats: ["#E2C78E", "#B99659"], pecans: ["#9E6435", "#6E3F1E"], salt: ["#FFFFFF", "#DCDCD6"],
+  paprika: ["#B6442F", "#8A2E1F"], herbs: ["#6E7F44", "#4F5E2E"], cinnamon: ["#93552A", "#6E3C1C"], pepper: ["#3B342C", "#6B6156"], turmeric: ["#D99A2B", "#B37A18"], vanilla: ["#3A2418", "#5E3E2A"] };
+const LIDS = { steel: ["#A9A79E", "#CFCDC4"], blue: ["#5E7FA6", "#89A3C2"], red: ["#B8473A", "#D9766A"], brass: ["#C9A24A", "#E6C878"], black: ["#2E2B28", "#5A554F"], cream: ["#E9DDBE", "#F6EEDB"] };
+/* one jar standing at its front plane; at(Z) moves it back. cx = middle, b = where it stands, w x h, fill kind, level 0..1, lid, label */
+function jar(cx, b, w, h, kind, lvl, lid, label) {
+  const id = "jr" + (++uid), x0 = cx - w / 2, x1 = cx + w / 2, lh = Math.max(2.8, h * .12), t = b - h, tb = t + lh, r = Math.min(3, w * .18);
+  const body = "M" + f1(x0) + " " + f1(tb + 2) + " Q" + f1(x0) + " " + f1(tb) + " " + f1(x0 + 2) + " " + f1(tb) + " H" + f1(x1 - 2) + " Q" + f1(x1) + " " + f1(tb) + " " + f1(x1) + " " + f1(tb + 2) +
+    " V" + f1(b - r) + " Q" + f1(x1) + " " + f1(b) + " " + f1(x1 - r) + " " + f1(b) + " Q" + f1(cx) + " " + f1(b + w * .06) + " " + f1(x0 + r) + " " + f1(b) + " Q" + f1(x0) + " " + f1(b) + " " + f1(x0) + " " + f1(b - r) + "Z";
+  const [c, sp] = FILL[kind], lv = b - (b - tb) * lvl;
+  let s = '<clipPath id="' + id + '"><path d="' + body + '"/></clipPath>' + '<path d="' + body + '" style="fill:#E7EFEA;opacity:.5"/><g clip-path="url(#' + id + ')">' +
+    '<path d="M' + f1(x0 - 1) + " " + f1(lv) + " Q" + f1(cx) + " " + f1(lv + w * .05) + " " + f1(x1 + 1) + " " + f1(lv) + " V" + f1(b + 3) + " H" + f1(x0 - 1) + 'Z" style="fill:' + c + '"/>';
+  for (let i = 0; i < w * (b - lv) / 9; i++) s += '<circle cx="' + f1(x0 + rnd() * w) + '" cy="' + f1(lv + 1 + rnd() * (b - lv)) + '" r="' + f1(.25 + rnd() * .35) + '" style="fill:' + sp + '"/>';
+  s += '<path d="M' + f1(x0 + w * .16) + " " + f1(tb + 2.5) + " V" + f1(b - 3) + '" style="stroke:#fff;stroke-width:' + f1(Math.max(1, w * .07)) + ';stroke-linecap:round;opacity:.75"/>' +
+    '<path d="M' + f1(x1 - w * .13) + " " + f1(tb + 3) + " V" + f1(tb + 3 + h * .22) + '" style="stroke:#fff;stroke-width:.8;stroke-linecap:round;opacity:.6"/></g>';
+  s += '<path d="' + body + '" style="fill:none;stroke:' + INK + ';stroke-width:1.2;stroke-linejoin:round"/>';
+  const [lc, ll] = LIDS[lid], lx0 = cx - w * .44, lx1 = cx + w * .44;
+  s += P("M" + f1(lx0) + " " + f1(t + .6) + " Q" + f1(lx0) + " " + f1(t) + " " + f1(lx0 + .6) + " " + f1(t) + " H" + f1(lx1 - .6) + " Q" + f1(lx1) + " " + f1(t) + " " + f1(lx1) + " " + f1(t + .6) + " V" + f1(tb) + " Q" + f1(cx) + " " + f1(tb + w * .04) + " " + f1(lx0) + " " + f1(tb) + "Z", lc, 1.1) +
+    '<path d="M' + f1(lx0 + .8) + " " + f1(t + .9) + " H" + f1(lx1 - .8) + '" style="stroke:' + ll + ';stroke-width:.8"/>';
+  if (label) {
+    const lw = w * .7, lhh = Math.min(h * .3, w * .36), ly = b - h * .42, fs = lhh * .82;
+    s += P(wob([[cx - lw / 2, ly - lhh / 2], [cx + lw / 2, ly - lhh / 2 - .3], [cx + lw / 2, ly + lhh / 2], [cx - lw / 2, ly + lhh / 2 + .2]], .25), "#EFE3C4", .8) +
+      '<text x="' + f1(cx) + '" y="' + f1(ly + fs * .34) + '" text-anchor="middle" textLength="' + f1(Math.min(lw * .84, label.length * fs * .44)) + '" lengthAdjust="spacingAndGlyphs" style="font:700 ' + f1(fs) + 'px Caveat,\'Segoe Script\',cursive;fill:#2a2622">' + label + "</text>";
+  }
   return s;
+}
+/* set something back by Z (negative) into the cupboard: the projection's scale about the vanishing point */
+const at = (Z, svg) => '<g transform="translate(' + VP[0] + " " + VP[1] + ") scale(" + (F / (F - Z)).toFixed(4) + ") translate(" + (-VP[0]) + " " + (-VP[1]) + ')">' + svg + "</g>";
+function interior(v) {
+  const x0 = DOOR.x0, x1 = x0 + DOOR.W, y0 = DOOR.yt, y1 = DOOR.yb, dep = 60, B = (X, Y) => proj(X, Y, -dep), cid = v + "-op";
+  const poly = (a, fill, sw) => P("M" + a.map((p) => f1(p[0]) + " " + f1(p[1])).join(" L") + "Z", fill, sw), line = (a, b, c, w) => '<path d="M' + f1(a[0]) + " " + f1(a[1]) + " L" + f1(b[0]) + " " + f1(b[1]) + '" style="stroke:' + c + ";stroke-width:" + w + '"/>';
+  let s = '<clipPath id="' + cid + '"><rect x="' + x0 + '" y="' + (y0 - 10) + '" width="' + DOOR.W + '" height="' + (y1 - y0 + 10) + '"/></clipPath><g clip-path="url(#' + cid + ')">';
+  /* back wall: planks, and the shade each shelf casts on it */
+  s += poly([B(x0, y0), B(x1 + 40, y0), B(x1 + 40, y1), B(x0, y1)], WD.back);
+  [x0 + 44, x0 + 88].forEach((X) => { s += line(B(X, y0), B(X, y1), WD.seam, .8); });
+  [y0, 3, 52].forEach((sy) => { const y = sy === y0 ? y0 : sy + 3.5; s += poly([B(x0, y), B(x1 + 40, y), B(x1 + 40, y + 9), B(x0, y + 9)], WD.backD); });
+  /* left side wall, darker under each shelf; the ceiling */
+  s += poly([[x0, y0], B(x0, y0), B(x0, y1), [x0, y1]], WD.side);
+  [3, 52].forEach((sy) => { s += poly([[x0, sy + 3.5], B(x0, sy + 3.5), B(x0, sy + 12), [x0, sy + 9]], WD.sideD); });
+  s += poly([[x0, y0], [x1, y0], B(x1, y0), B(x0, y0)], WD.ceil) + line(B(x0, y0), B(x0, y1), INK, .9) + line(B(x0, y0), B(x1 + 40, y0), INK, .9);
+  /* jars, back to front. Top shelf: spices and a tin; middle: flour, sugar, cocoa (a vanilla jar behind); floor: oats, pecans, salt */
+  s += at(-30, jar(157, 3, 10, 14, "herbs", .78, "black") + jar(170, 3, 10, 16, "paprika", .7, "red") + jar(183, 3, 10, 15, "cinnamon", .74, "brass") + jar(196, 3, 9, 17, "pepper", .8, "steel") +
+    jar(214, 3, 17, 23, "turmeric", .64, "cream") + jar(235, 3, 14, 19, "herbs", .55, "steel") + jar(254, 3, 14, 18, "paprika", .66, "black"));
+  s += at(-44, jar(222, 52, 12, 22, "vanilla", .5, "black"));
+  s += at(-18, jar(167, 52, 28, 35, "flour", .74, "steel", "Flour") + jar(204, 52, 25, 32, "sugar", .7, "red", "Sugar") + jar(257, 52, 19, 27, "cocoa", .66, "brass", "Cocoa"));
+  s += at(-18, jar(169, y1, 30, 36, "oats", .72, "brass", "Oats") + jar(210, y1, 22, 30, "pecans", .6, "steel", "Pecans") + jar(250, y1, 19, 24, "salt", .62, "red", "Salt"));
+  /* the shelves over the jars: underside first, then the front edge with light on its top */
+  [3, 52].forEach((sy) => {
+    s += poly([[x0, sy + 3.5], [x1, sy + 3.5], B(x1, sy + 3.5), B(x0, sy + 3.5)], WD.under) +
+      P(wob([[x0, sy], [x1, sy], [x1, sy + 3.5], [x0, sy + 3.5]], .15), WD.lip, 1.2) + line([x0 + 1, sy + .9], [x1 - 1, sy + .9], WD.lipL, .9);
+  });
+  s += "</g>" + P(wob([[x0, y0 - 6], [x1, y0 - 6], [x1, y1], [x0, y1]], .3), "none", 2.4);
+  return s;
+}
+/* v15: the door's two hinges, on the frame at the hinge side */
+function hinges() {
+  return [.1, .86].map((v) => { const y = DOOR.yt + v * H_DOOR; return P(wob([[130.4, y], [135, y], [135, y + 9.5], [130.4, y + 9.5]], .1), "#4A463F", 1.1) + '<path d="M131.6 ' + f1(y + 1.4) + " V" + f1(y + 8) + '" style="stroke:#8C877C;stroke-width:.8"/><path d="M130.4 ' + f1(y + 4.75) + ' H135" style="stroke:' + INK + ';stroke-width:.6"/>'; }).join("");
 }
 const LOG_TITLE = "Kitchen log";
 /* clipboard: a real one is about 9 x 12.5 in; here 66 wide, 92 tall on the door */
@@ -446,7 +622,7 @@ function cupOpen(v) {
   door += P(wob([c(0, 0), c(1, 0), c(1, 1), c(0, 1)], .5), cab(84), 2.2);
   door += P(wob([c(.66, .01), c(.99, .01), c(.99, .99), c(.66, .99)], .2), cab(91, "#fff"));   /* light on the outer part */
   door += P(wob([c(.07, .05), c(.93, .05), c(.93, .95), c(.07, .95)], .3), "none", .9);
-  return door;
+  return door + hinges();
 }
 
 /* the open notebook moves left, half way to the recipe box (Ari 11/19); clean.cjs moves its traced groups */
@@ -498,9 +674,9 @@ module.exports = {
     return { end: [{ obj: "whiteboard", svg: marker() }, { obj: "ideas", svg: ideasNote() },
       { obj: "room", svg: V("tidy-1", tidyPatch(v)), top: true },
       { obj: "notebook", svg: nbExtras(), top: true, shift: true }, { obj: "notebook", svg: stackFront(), top: true },
-      { obj: "box", svg: boxWear() + boxLabel(), top: true },
+      { obj: "box", svg: boxWear() + boxLabel() + lidTab(), top: true },
       { obj: "eclair", svg: rack(), top: true },
-      { obj: "window", svg: Object.keys(SUN).map((k) => V("sun-" + k, beams(v, k))).join("") + mobile() + Object.keys(SILL).map((k) => V("sill-" + k, SILL[k][1]())).join(""), top: true },
+      { obj: "window", svg: windowFix() + rainbows(v) + crystals() + Object.keys(SILL).map((k) => V("sill-" + k, SILL[k][1]())).join(""), top: true },
       { obj: "cookbooks", svg: shelfPlaques(), top: true }, { obj: "whiteboard", svg: wbHead(), top: true },   /* v13 text: under the dusk wash */
       { obj: "dusk", svg: V("sun-eve", duskWash(v)), top: true },
       { obj: "lt", svg: underLight(v), top: true },
@@ -509,8 +685,14 @@ module.exports = {
   /* close-ups for the page, drawn over a <use> of the kitchen scene */
   closeups(v) {
     seed = 11;
+    const am = (z) => beams(v + z, "am") + beams(v + z, "am", PART.am, true) + scatter("am") + things("am");
     return [
-      ...Object.keys(SILL).map((k) => ({ key: "sill" + k, title: "B" + k + " · " + SILL[k][0], vb: "716 20 150 236", svg: beams(v + "z" + k, "am") + mobile() + SILL[k][1]() })),
+      ...Object.keys(CRYSTALS).map((k) => ({ key: "cr" + k, pick: "cr-" + k, title: "K" + k + " · " + CRYSTALS[k][0] + " (click to hang it in the kitchen)", vb: "766 22 112 162", svg: CRYSTALS[k][1]() })),
+      { key: "rs1", pick: "rs-s1", title: "S1 · Soft: the light blurred a little at its edges", vb: "520 120 190 150", svg: '<g filter="url(#a-rbblur)">' + am("r1") + "</g>" },
+      { key: "rs2", pick: "rs-s2", title: "S2 · Printed: crisp flat stripes, like the beams in v14", vb: "520 120 190 150", svg: am("r2") },
+      { key: "rs3", pick: "rs-s3", title: "S3 · Halftone: the same light in printed dots", vb: "520 120 190 150", svg: '<g mask="url(#a-rbdots)">' + am("r3") + "</g>" },
+      { key: "cup", title: "The open cupboard after your pantry picture: wood inside, jars with real labels, hinges, the Kitchen log where it was", vb: "0 -40 290 150", svg: cupOpen(v + "z2") + clipboard() },
+      ...Object.keys(SILL).map((k) => ({ key: "sill" + k, title: "B" + k + " · " + SILL[k][0], vb: "716 20 150 236", svg: beams(v + "z" + k, "am") + CRYSTALS[DEF.cr][1]() + SILL[k][1]() })),
       { key: "rack", title: "Your eclairs on your cooling rack (click the rack in the kitchen: two taken, two bites out of the last, then gone)", vb: "684 300 182 70", svg: '<use href="#a-all"/>' },
       { key: "nb2", title: "Your composition journals, square to the counter, “Trials” on the top label", vb: "210 286 340 90", svg: '<use href="#a-all"/>' },
       { key: "clip", title: "The clipboard: “" + LOG_TITLE + "” at the top of the sheet", vb: "40 -26 84 72", svg: cupOpen(v + "z") + clipboard() },

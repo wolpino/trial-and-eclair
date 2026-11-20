@@ -38,3 +38,19 @@
 .tk-zooms figure.on { outline: 3px solid var(--orange); outline-offset: 2px; }
 .tk-zooms figure:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
 .tidy [data-obj="flour"], .tidy [data-obj="pin"] { display: none; }
+/* v15 pointing options, data-pt on #tk: v14 = warm white halo as before; B2 a soft shadow behind instead of light;
+   B3 a die-cut sticker outline; C1 the object rises slowly; C2 it presses down on click; pick = honey halo + C1 + C2 */
+.tk-art g[data-obj], .tk-art [data-halo] { transition: translate .35s cubic-bezier(.25,.7,.3,1), opacity .18s ease-out; }
+#tk[data-pt="b2"] { --glow1: rgba(74,44,22,.3); --glow2: rgba(74,44,22,.42); }
+#tk[data-pt="b2"] .tk-art [data-halo] { translate: 1.4px 2px; }
+#tk[data-pt="b3"] .tk-art [data-halo] > g { filter: url(#a-halo-st); }
+#tk[data-pt="pick"] { --glow1: #FFE3B0; --glow2: #E99A48; }
+#tk[data-pt="c1"] .tk-art .lit, #tk[data-pt="pick"] .tk-art .lit { translate: 0 -2.5px; }
+#tk[data-pt="c2"] .tk-art .lit.press, #tk[data-pt="pick"] .tk-art .lit.press { translate: 0 1.2px; transition-duration: .07s; }
+@media (prefers-reduced-motion: reduce) { .tk-art g[data-obj], .tk-art [data-halo] { transition: none; } }
+/* v15 rainbow looks, data-rs on #tk: S1 soft, S2 printed (crisp, as before), S3 halftone */
+#tk[data-rs="s1"] .tk-art .rb { filter: url(#a-rbblur); }
+#tk[data-rs="s3"] .tk-art .rb { mask: url(#a-rbdots); }
+.tk-hit [data-turn] { cursor: pointer; }
+.tk-zooms figure[data-pick-to] { cursor: pointer; }
+.recol .cap small { font-weight: 400; color: var(--ink-soft); }

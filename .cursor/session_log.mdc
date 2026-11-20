@@ -10,6 +10,36 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-20 · Plate XII v15: pointing options, crystals, rainbows, pantry cupboard (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20` (v15) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents; switched to Opus mid-session) |
+| **Outcome** | success (Plate XII version 16 published; questions to Ari; no app code) |
+
+### Intent
+First round under the low-usage workflow: options settled in chat, then one build. Ari asked for pointing options B2, B3, C1, C2 plus Claude's pick; the open cupboard redrawn from her pantry picture (real words on the jars, perspective kept, clipboard where it fits); crystal options with a turn on click; many small rainbows and partial beams in several looks.
+
+### Summary
+- `add.cjs`: `interior()` rewritten (wood, shelves seen from below, `jar()` + `at(Z)` set back by the projection), `hinges()`; `CRYSTALS` K1–K5 (`drop()`, `ball()`, `oct()`, `quartz()`, `.cr-spin`); `rainbows()` (main beams + `PART` + `scatter()` + `THINGS`, one `.rb > .rb-turn` group, `spot()` = six stripes side by side); `windowFix()`, `lidTab()`; DEF cr 2, r1–r3 on
+- `clean.cjs`: book blues no longer follow `--cab` (`BOOK_BLUE`, `pop()` on spines); `RECOLOR` for single shapes; sticker filter `halo-st`
+- Page: Pointing (`data-pt`), Crystal, Rainbow look (`data-rs`), R1–R3, time, cabinets, wall; crystal button turns it (JS, damped); close-ups click to pick
+- Checked: each pointing mode on hover, press, the turn, rainbow looks, evening hides rainbows, no console errors; page 2.5 MB
+
+### Open threads
+- Ari: the seven v15 questions (page top). "Space above the box lid" may mean the empty wall, not the nub: asked
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v15, pointing options, crystals, rainbows, pantry cupboard, blue spines
+**Files:** design/plate-xii/traced/add.cjs, traced/clean.cjs, sections/00-questions.html, sections/005-traced.html, base/xii.css, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v15 as drawn (tweak only); Ari's v13/v14 picks
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v15 waiting on Ari (low-usage workflow)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-20 · Plate XII v14 feedback recorded; workflow change requested (no drawing)
 
 | Field | Value |
