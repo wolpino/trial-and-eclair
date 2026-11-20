@@ -81,7 +81,9 @@ function extend(id) {
   });
   const objs = OBJ.map((o) => o[0]);
   const ATTRS = (q) => (q.op ? ' fill-opacity="' + q.op + '"' : "") + (q.rule ? ' fill-rule="' + q.rule + '"' : "");
-  function fillOf(it) { const q = it.q; if (!isBlue(q.fill)) return q.fill; return it.obj === "box" ? shade("var(--blue)", q.fill) : (it.obj === "ideas" ? q.fill : shade("var(--cab)", q.fill)); }
+  function fillOf(it) { const q = it.q, T = ADD.TRIM[q.fill.toUpperCase()];
+    if (it.obj === "window" && T) return "var(--trim-" + q.fill.slice(1).toUpperCase() + "," + q.fill + ")";   /* window frame: sage on .trim-sage */
+    if (!isBlue(q.fill)) return q.fill; return it.obj === "box" ? shade("var(--blue)", q.fill) : (it.obj === "ideas" ? q.fill : shade("var(--cab)", q.fill)); }
 
   function build(v, opts) {
     const id = (s) => v + "-" + s;   /* ids differ per version: both sit on one page */
@@ -93,7 +95,7 @@ function extend(id) {
     const MASK = 'maskUnits="userSpaceOnUse" x="-600" y="-50" width="2100" height="600"';
     objs.forEach((o) => { defs += '<mask id="' + id("ink-" + o) + '" ' + MASK + '><use href="#' + id("mk-" + o) + '" fill="#fff" stroke="#fff"' + GROW + '/></mask>'; });
     defs += '<mask id="' + id("ink-room") + '" ' + MASK + '><rect x="-600" y="-50" width="2100" height="600" fill="#fff"/>' + objs.map((o) => '<use href="#' + id("mk-" + o) + '" fill="#000" stroke="#000"' + GROW_ROOM + '/>').join("") + "</mask>";
-    defs += (opts.defs || "") + "</defs>";
+    defs += (opts.defs || "") + "</defs><style>.trim-sage{" + Object.keys(ADD.TRIM).map((h) => "--trim-" + h.slice(1) + ":" + ADD.TRIM[h]).join(";") + "}</style>";
     /* the flat list of [obj, element] in paint order */
     const out = [];
     items.forEach((it) => {
@@ -118,7 +120,7 @@ function extend(id) {
   const A = build("a", plain ? { top: false } : ADD.opts("a"));
   fs.writeFileSync(path.join(D, "kitchen.svg"), A);
   if (!plain) {   /* close-ups for the page: each option drawn over a <use> of the kitchen scene */
-    const C = ADD.closeups().map((c) => '<figure data-pick="' + c.group + "-" + c.key + '"><svg viewBox="' + c.vb + '" role="img" aria-label="' + c.title + '"><use href="#a-scene"/>' + c.svg + "</svg><figcaption>" + c.title + "</figcaption></figure>");
+    const C = ADD.closeups("a").map((c) => '<figure class="' + (c.cls || "") + '"><svg viewBox="' + c.vb + '" role="img" aria-label="' + c.title + '"><use href="#a-scene"/>' + c.svg + "</svg><figcaption>" + c.title + "</figcaption></figure>");
     fs.writeFileSync(path.join(D, "closeups.html"), C.join("\n"));
   }
   fs.writeFileSync(path.join(D, "report.json"), JSON.stringify(rep, null, 1));

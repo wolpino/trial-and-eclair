@@ -1,4 +1,4 @@
-# NEXT — 2026-11-19 (Plate XII v6 published: eclairs, spots, sills; waiting on Ari)
+# NEXT — 2026-11-19 (Plate XII v7 published: window, composition books, box details; waiting on Ari)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,14 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII, after Ari answers v6) — START HERE
+## Prompt for the next agent (Plate XII, after Ari answers v7) — START HERE
+> Plate XII v7: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Build as before. `add.cjs` options (`<g data-var>`, DEF = Claude's picks): nb n1/n2/0, nbx 1/0, box 1/2/3; sage window frame via `.trim-sage` on #tk (colours in `TRIM`). Fixed: E1 bitten at P1, basil + crystal mobile + rainbow beams.
+>
+> **Questions (page top):** composition books under the open notebook (pick) or in front of the whiteboard; sage frame (pick); RECIPES on the box (pick no, Ari dropped box lettering before); notebook extras enough; Library name (pick Library).
+>
+> **After answers:** set DEF to the picks, remove the losing options and page buttons. Then evening, phone crop, size. Product list in PLAN.md goes into the PRD in one pass at sign-off.
+
+## Prompt for the next agent (Plate XII, after Ari answers v6) — done (v7)
 > Plate XII v6: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Build as below; `clean.cjs` also writes `traced/closeups.html` (build puts it at `<!--CLOSEUPS-->`). In `add.cjs`, options are `<g data-var>` groups (DEF = shown first): eclair ECL 1–5 × SPOT p1/p2/p3, the notebook stacks (p2 under the open notebook via a mask, p3 in front of the whiteboard), SILL 1–3. Page buttons and close-ups switch them.
 >
 > **Questions (page top):** eclair (pick E1), spot (pick P2), sill (pick S3), Library name (pick Library).

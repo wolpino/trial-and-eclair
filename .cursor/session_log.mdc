@@ -10,6 +10,38 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-19 · Plate XII v7: window, composition books, box details (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v7) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v7 published; five questions to Ari; no app code) |
+
+### Intent
+Ari on v6: E1 but eaten, at P1; her reference window (basil, crystal mobile, rainbows) without six-over-six panes; composition notebooks stacked somewhere; the open notebook feels like it misses something; bring over details of the reference recipe box.
+
+### Summary
+- `add.cjs` options now: nb (n1 under the open notebook / n2 in front of the whiteboard / 0), nbx (extras), box (1 as traced / 2 worn + tab letters / 3 + RECIPES). Eclair fixed: E1 + bite + crumbs at (222, 362). Window: basil(), mobile() (four prisms on a ring), beams() (gradient-masked rainbow bands)
+- Sage frame: window fills use `var(--trim-HEX, HEX)`; kitchen.svg carries `.trim-sage{...}`; page toggles the class on #tk
+- compBook(): black cover, curly white marble strokes, spine tape, optional label; nbExtras(): tabs, ribbon, taped photo, pencil doodle; boxWear()/boxLabel() on the front face via matrix(1 -0.136 0 1 93 307)
+
+### Decisions
+- Ari: E1 bitten at P1; basil + mobile + rainbows; four panes
+
+### Open threads
+- Ari: composition books spot, sage frame, RECIPES, notebook extras, Library name
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v7, sun catcher, basil, composition notebook, recipe box wear
+**Files:** design/plate-xii/traced/ (clean.cjs, add.cjs, kitchen.svg, closeups.html), sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v7 as drawn (tweak only); the ink split; taller frame
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v7 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Plate XII v6: eclairs, spots, sills (published)
 
 | Field | Value |

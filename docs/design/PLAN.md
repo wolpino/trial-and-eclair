@@ -194,7 +194,9 @@ Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop
 - [x] v5 (2026-11-19, same URL): frame ends at the middle drawer's bottom, that height added on top (wall cupboards stretched, cubby gets a second book row); open cupboard with two shelves and a clipboard in true proportion; eclair pencil-length and plump; spoon jar twice the size; close-ups; shelf labels off; the book shelf is one button
 - [x] Ari (on v5, 11/19): taller frame and cupboard approved; clipboard needs depth; spoon jar replaced by plants/flowers or a sun catcher; eclair redone in the trace's style, tried in other spots
 - [x] v6 (2026-11-19, same URL): clipboard shadow and edge; eclairs E1–E5; spots P1 (by the box), P2 (two notebooks under the open one), P3 (eclair on closed notebooks); sills S1 basil, S2 flowers, S3 sun catcher with rainbows; picks switchable on the page, close-ups clickable
-- [ ] Ari (v6 questions): eclair E1–E5 (pick E1); spot (pick P2); sill (pick S3); Library name (pick Library)
+- [x] **Decided (Ari, on v6):** eclair E1 with a bite, at P1 (between the box and the notebook); window like her reference (basil, crystal mobile, rainbow beams) but keep four panes; composition notebooks wanted somewhere; open notebook needs something more; bring the reference box's details over
+- [x] v7 (2026-11-19, same URL): bitten E1 at P1; bushy basil, four-crystal mobile, rainbow beams; frame sage or cream; composition books under the open notebook or in front of the whiteboard; notebook tabs, ribbon, photo, doodle; box wear, tab letters, optional RECIPES
+- [ ] Ari (v7 questions): composition books spot (pick under); frame sage (pick sage); box RECIPES (pick no); notebook extras enough?; Library name (pick Library)
 
 ### Product changes from the plates (apply in one pass)
 Changes to the product that come out of the drawings. Kept here as they come up and applied together to `docs/PRD.md`, the README and the Task issues when Plate XII is signed off (before Task issues), so the plan is edited once and stays consistent.

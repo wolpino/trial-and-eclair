@@ -1,17 +1,20 @@
-<section id="tk" aria-labelledby="tk-h">
-  <span class="label" id="tk-h">00b · v6 · Your traced kitchen</span>
+<section id="tk" class="trim-sage" aria-labelledby="tk-h">
+  <span class="label" id="tk-h">00b · v7 · Your traced kitchen</span>
   <div class="sec-body">
-    <h3>Eclair, its spot, and the window sill: pick below</h3>
+    <h3>Window, notebooks, recipe box: try the options below</h3>
     <p class="note">Still your SVG, cleaned by <code>traced/clean.cjs</code>; the new pieces are drawn on top by <code>traced/add.cjs</code>. Point at or Tab to the box, notebook, cork board, whiteboard, the book shelf, or the clipboard (recipe log). The colours below are for trying out; stem green is the default.</p>
     <div class="recol" id="tk-ctl">
-      <div class="choice"><span class="cap">Eclair</span><div class="seg" data-pick="ecl">
-        <button data-v="1" aria-pressed="true">E1</button><button data-v="2">E2</button><button data-v="3">E3</button><button data-v="4">E4</button><button data-v="5">E5</button>
+      <div class="choice"><span class="cap">Window frame</span><div class="seg" data-cls="trim-sage">
+        <button data-v="1" aria-pressed="true"><span class="dot" style="background:#A3B8A0"></span>sage</button><button data-v=""><span class="dot" style="background:#F6E9CB"></span>as traced</button>
       </div></div>
-      <div class="choice"><span class="cap">Eclair spot</span><div class="seg" data-pick="spot">
-        <button data-v="p1">P1 by the box</button><button data-v="p2" aria-pressed="true">P2 notebooks under</button><button data-v="p3">P3 on notebooks</button>
+      <div class="choice"><span class="cap">Composition books</span><div class="seg" data-pick="nb">
+        <button data-v="n1" aria-pressed="true">under the open one</button><button data-v="n2">in front of the whiteboard</button><button data-v="0">none</button>
       </div></div>
-      <div class="choice"><span class="cap">Sill</span><div class="seg" data-pick="sill">
-        <button data-v="1" aria-pressed="true">S1 basil</button><button data-v="2">S2 flowers</button><button data-v="3">S3 sun catcher</button>
+      <div class="choice"><span class="cap">Open notebook</span><div class="seg" data-pick="nbx">
+        <button data-v="1" aria-pressed="true">tabs, ribbon, photo</button><button data-v="0">as traced</button>
+      </div></div>
+      <div class="choice"><span class="cap">Recipe box</span><div class="seg" data-pick="box">
+        <button data-v="1">as traced</button><button data-v="2" aria-pressed="true">worn, tab letters</button><button data-v="3">+ RECIPES</button>
       </div></div>
       <div class="choice"><span class="cap">Cabinets</span><div class="seg" data-set="--cab">
         <button data-v="#5e8c3a" aria-pressed="true"><span class="dot" style="background:#5e8c3a"></span>stem green</button>
@@ -40,22 +43,22 @@
           <g role="button" tabindex="0" aria-label="Open the recipe log" data-for="clip"><rect x="46" y="-34" width="66" height="131" rx="5"/></g>
         </svg>
       </div>
-      <figcaption><b>Kitchen.</b> Use the Eclair, Eclair spot and Sill buttons above, or click a close-up below.</figcaption>
+      <figcaption><b>Kitchen.</b> E1 with a bite, between the box and the notebook; basil, crystal mobile and rainbows in the window.</figcaption>
     </figure>
     <p class="tk-say" id="tk-say" aria-live="polite">Nothing open.</p>
 
-    <h3 id="tk-close">Close up: five eclairs, three sills</h3>
-    <p class="note">Click one to put it in the kitchen above.</p>
+    <h3 id="tk-close">Close up</h3>
     <div class="tk-zooms" id="tk-zooms">
 <!--CLOSEUPS-->
     </div>
 
     <h3>What changed this round</h3>
     <ul class="ans">
-      <li><b>Clipboard:</b> a shadow on the door and the board's edge, so it stands off the door.</li>
-      <li><b>Eclairs:</b> five versions in the trace's look (thick outline, flat colours, a gloss streak, a shadow on the counter). Plates have a rim, a well and a highlight; E2 floral, E3 gold line, E4 sage.</li>
-      <li><b>Spots:</b> P1 between the box and the notebook; P2 two closed notebooks peeking out under the open one, eclair in front of the whiteboard; P3 the closed notebooks in front of the whiteboard with the eclair on top.</li>
-      <li><b>Sill:</b> the spoon jar is gone. S1 basil, S2 a jug of flowers, S3 a sun catcher crystal in the window with little rainbows on the wall, and a succulent.</li>
+      <li><b>Eclair:</b> E1 (glossy, like the logo) with a bite out of it and crumbs, between the box and the notebook (P1). The other versions and spots are gone.</li>
+      <li><b>Window, from your picture:</b> a bushy basil in a terracotta pot, a ring of four crystals hanging in the glass, and soft rainbow beams across the wall. Our four panes stay (six over six would be busy). The frame can be sage like the picture, or cream as traced.</li>
+      <li><b>Composition books</b> (black marbled, black spine tape, white label): two under the open notebook, or stacked in front of the whiteboard now that the eclair moved.</li>
+      <li><b>Open notebook:</b> three sticky tabs off the right page, a red ribbon from the spiral, a small photo taped on the left page, and a pencil doodle of an eclair.</li>
+      <li><b>Recipe box, from your picture:</b> worn paint at the corners and edges, and letters on the tabs (A–F, G–M, N–S, T–Z). Option 3 adds RECIPES on the front.</li>
     </ul>
   </div>
 </section>
@@ -70,22 +73,23 @@
     function go() { say.textContent = "Would open " + name + " (its own web address, Back returns to the kitchen)."; }
     b.addEventListener("click", go); b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
   });
-  var pick = { ecl: "1", spot: "p2", sill: "1" };
+  var pick = { nb: "n1", nbx: "1", box: "2" };
   function apply() {
     k.querySelectorAll("[data-var]").forEach(function (g) {
-      var on = g.dataset.var.split(" ").every(function (t) { var p = t.split("-"); return pick[p[0]] === p[1]; });
+      var on = g.dataset.var.split(" ").every(function (t) { var i = t.indexOf("-"); return pick[t.slice(0, i)] === t.slice(i + 1); });
       g.style.display = on ? "" : "none";
     });
     sec.querySelectorAll("#tk-ctl [data-pick] button").forEach(function (b) { b.setAttribute("aria-pressed", String(pick[b.parentNode.dataset.pick] === b.dataset.v)); });
-    sec.querySelectorAll("#tk-zooms figure").forEach(function (f) { var p = f.dataset.pick.split("-"); f.classList.toggle("on", pick[p[0]] === p[1]); });
   }
   sec.querySelectorAll("#tk-ctl [data-pick]").forEach(function (seg) {
     seg.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; pick[seg.dataset.pick] = b.dataset.v; apply(); });
   });
-  sec.querySelectorAll("#tk-zooms figure").forEach(function (f) {
-    f.tabIndex = 0; f.setAttribute("role", "button");
-    function go() { var p = f.dataset.pick.split("-"); pick[p[0]] = p[1]; apply(); }
-    f.addEventListener("click", go); f.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+  sec.querySelectorAll("#tk-ctl [data-cls]").forEach(function (seg) {
+    seg.addEventListener("click", function (e) {
+      var b = e.target.closest("button"); if (!b) return;
+      seg.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
+      sec.classList.toggle(seg.dataset.cls, !!b.dataset.v);
+    });
   });
   apply();
   sec.querySelectorAll("#tk-ctl [data-set]").forEach(function (seg) {

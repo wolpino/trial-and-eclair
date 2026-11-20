@@ -16,16 +16,19 @@ function wob(pts, amp) {
 const P = (d, fill, sw) => '<path d="' + d + '" style="fill:' + fill + (sw ? ";stroke:" + INK + ";stroke-width:" + sw + ";stroke-linejoin:round" : "") + '"/>';
 const cab = (pct, to) => "color-mix(in srgb,var(--cab) " + pct + "%," + (to || "#1f1d1a") + ")";
 
-/* ---- variants on the page: each is a <g data-var="key-value ..."> shown only when every key matches the page's choice.
-        DEF = what shows first. ---- */
-const DEF = { ecl: "1", spot: "p2", sill: "1" };
+/* ---- options on the page: each is a <g data-var="key-value ..."> shown only when every key matches the page's choice.
+        DEF = what shows first (Claude's picks). ---- */
+const DEF = { nb: "n1", nbx: "1", box: "2" };
 function V(tokens, svg) {
-  const on = tokens.split(" ").every((t) => { const [k, v] = t.split("-"); return DEF[k] === v; });
+  const on = tokens.split(" ").every((t) => { const i = t.indexOf("-"); return DEF[t.slice(0, i)] === t.slice(i + 1); });
   return '<g data-var="' + tokens + '"' + (on ? "" : ' style="display:none"') + ">" + svg + "</g>";
 }
+let uid = 0;
+const lerp = (a, b, t) => [a[0] + (b[0] - a[0]) * t, a[1] + (b[1] - a[1]) * t];
+/* a point on a quad [bl, br, tr, tl]: u across, v down from the top edge */
+const onQuad = (q, u, v) => lerp(lerp(q[3], q[2], u), lerp(q[0], q[1], u), v);
 
-/* ---- eclairs on plates, five versions, in the trace's look: thick outline, flat colours, a lighter and a darker tone,
-        a cast shadow on the counter. (cx, cy) = centre of the plate; k = scale ---- */
+/* ---- the eclair: E1 (glossy, like the logo) with a bite out of it, on a plain plate between the box and the notebook ---- */
 const CHOUX = "#E3A866", CHOUX_D = "#C98A4B", CHOUX_L = "#F0C78E", CHOC = "#4A2A1C", CHOC_L = "#7A4A30", CREAM = "#F7E9BE";
 function plate(cx, cy, k, deco) {
   const rx = 42 * k, ry = 10.2 * k;
@@ -78,24 +81,68 @@ function eclairBody(cx, base, L, H, o) {
   return s;
 }
 let biteN = 0;
-const ECL = {
-  1: { name: "Glossy, like the logo", plate: "plain", L: 60, H: 19, o: { ridges: 1, stitch: 1 } },
-  2: { name: "Cream at the end, floral plate", plate: "floral", L: 62, H: 20, o: { creamEnd: 1, drips: 1, glazeTo: .5 } },
-  3: { name: "Plump, gold-rimmed plate", plate: "gold", L: 58, H: 23, o: { glazeTo: .56, ridges: 1, choc: "#3E2216", gloss: "#A97A5C" } },
-  4: { name: "Mark G: drizzle, sage plate", plate: "sage", L: 62, H: 19, o: { drizzle: 1, drips: 1, choux: "#F5A23A", chouxD: "#D9822A", choc: "#5E3218" } },
-  5: { name: "Bitten, with crumbs", plate: "plain", L: 60, H: 20, o: { bite: 1, stitch: 1 } },
-};
-function eclairOn(v, cx, cy, k) {
-  const e = ECL[v], base = cy - 1.2 * k;
-  let s = plate(cx, cy, k, e.plate);
-  if (v === "5") for (const c of [[-24, 1.5], [-18, 3.4], [20, 2.6], [27, .6], [-6, 4.2]]) s += '<circle cx="' + f1(cx + c[0] * k) + '" cy="' + f1(cy + (c[1] - 2) * k) + '" r="' + f1(.9 * k) + '" style="fill:' + CHOUX_D + '"/>';
-  s += '<g transform="rotate(-4 ' + cx + " " + f1(base) + ") translate(" + f1(cx) + " " + f1(base) + ") scale(" + k + ") translate(" + f1(-cx) + " " + f1(-base) + ')">' + eclairBody(cx, base, e.L, e.H, e.o) + "</g>";
+const ECL = { L: 60, H: 19, o: { ridges: 1, stitch: 1, bite: 1 } };
+function eclair() {
+  const cx = 222, cy = 362, base = cy - 1.2;
+  let s = plate(cx, cy, 1, "plain");
+  for (const c of [[-24, 1.5], [-18, 3.4], [20, 2.6], [27, .6], [-6, 4.2], [31, -1.4]]) s += '<circle cx="' + f1(cx + c[0]) + '" cy="' + f1(cy + c[1] - 2) + '" r=".9" style="fill:' + CHOUX_D + '"/>';
+  return s + '<g transform="rotate(-4 ' + cx + " " + f1(base) + ')">' + eclairBody(cx, base, ECL.L, ECL.H, ECL.o) + "</g>";
+}
+
+/* ---- the window: a bushy basil on the sill, a crystal mobile in the glass, rainbow beams across the wall ---- */
+const LEAF = "#6E9A45", LEAF_D = "#4F7A33";
+function pot(x, b, w, h, col, colD) {
+  return P(wob([[x - 1.5, b - h], [x + w + 1.5, b - h], [x + w - 2, b], [x + 2, b]], .3), col, 1.8) +
+    P("M" + f1(x + w * .64) + " " + f1(b - h + 4.6) + " L" + f1(x + w + .2) + " " + f1(b - h + 4.6) + " L" + f1(x + w - 2.6) + " " + f1(b - 1) + " L" + f1(x + w * .68) + " " + f1(b - 1) + "Z", colD) +
+    P(wob([[x - 2.6, b - h - 1], [x + w + 2.6, b - h - 1], [x + w + 2.6, b - h + 4.6], [x - 2.6, b - h + 4.6]], .2), col, 1.6);
+}
+const leaf = (x, y, rx, ry, a, c) => '<ellipse cx="' + f1(x) + '" cy="' + f1(y) + '" rx="' + rx + '" ry="' + ry + '" transform="rotate(' + a + " " + f1(x) + " " + f1(y) + ')" style="fill:' + (c || LEAF) + ";stroke:" + INK + ';stroke-width:1.2"/>';
+function basilLeaf(x, y, len, wid, a, c) {
+  const d = "M0 0 Q" + f1(wid) + " " + f1(-len * .45) + " 0 " + f1(-len) + " Q" + f1(-wid) + " " + f1(-len * .45) + " 0 0Z";
+  return '<g transform="translate(' + f1(x) + " " + f1(y) + ") rotate(" + a + ')"><path d="' + d + '" style="fill:' + c + ";stroke:" + INK + ';stroke-width:1.1;stroke-linejoin:round"/><path d="M0 -1 Q' + f1(wid * .15) + " " + f1(-len * .5) + " 0 " + f1(-len * .85) + '" style="fill:none;stroke:#3E6328;stroke-width:.6"/></g>';
+}
+function basil() {
+  const x = 786, b = 246, B = "#6FA347", BD = "#4E7F31", BL = "#8DBB5E";
+  let s = "";
+  for (const st of [[796, 224, 786, 194], [803, 224, 802, 180], [810, 224, 820, 192], [800, 224, 792, 206], [806, 224, 813, 204]]) s += '<path d="M' + st[0] + " " + st[1] + " Q" + f1((st[0] + st[2]) / 2) + " " + f1((st[1] + st[3]) / 2) + " " + st[2] + " " + st[3] + '" style="fill:none;stroke:#4E7F31;stroke-width:1.5"/>';
+  const L = [[790, 224, 16, 10, -82, BD], [816, 224, 16, 10, 82, BD], [783, 214, 17, 11, -64, B], [823, 215, 17, 11, 64, B], [795, 217, 15, 9.5, -32, BD], [811, 217, 15, 9.5, 32, BD],
+    [779, 202, 16, 10, -48, BL], [827, 203, 16, 10, 48, BL], [790, 204, 15, 9.5, -14, B], [816, 205, 15, 9.5, 16, B], [803, 210, 16, 10, -4, BD],
+    [784, 190, 15, 9.5, -30, B], [822, 191, 15, 9.5, 30, B], [796, 193, 15, 9.5, -42, BL], [810, 193, 15, 9.5, 42, BL], [801, 184, 14, 9, -14, B], [806, 183, 14, 9, 20, BD], [803, 176, 13, 8.5, 0, BL]];
+  L.forEach((l) => { s += basilLeaf(l[0], l[1], l[2], l[3], l[4], l[5]); });
+  return '<g transform="translate(803 246) scale(1.3) translate(-803 -246)">' + s + pot(x, b, 34, 24, "#C66A3D", "#A35330") + "</g>";
+}
+function crystal(x, y, h) {   /* a long hexagonal prism, point down */
+  const w = h * .2;
+  return '<path d="M' + x + " " + f1(y - 1.5) + " V" + y + '" style="stroke:#6b5a48;stroke-width:.6"/>' +
+    P("M" + x + " " + y + " L" + f1(x + w) + " " + f1(y + h * .22) + " L" + f1(x + w) + " " + f1(y + h * .72) + " L" + x + " " + f1(y + h) + " L" + f1(x - w) + " " + f1(y + h * .72) + " L" + f1(x - w) + " " + f1(y + h * .22) + "Z", "#E2EEF3", 1.2) +
+    P("M" + x + " " + y + " L" + f1(x + w) + " " + f1(y + h * .22) + " L" + f1(x + w) + " " + f1(y + h * .72) + " L" + x + " " + f1(y + h) + "Z", "#BFD6E2") +
+    '<path d="M' + f1(x - w * .35) + " " + f1(y + h * .25) + " V" + f1(y + h * .66) + '" style="stroke:#fff;stroke-width:1.1;stroke-linecap:round"/>' +
+    '<path d="M' + x + " " + y + " L" + f1(x + w) + " " + f1(y + h * .22) + " L" + f1(x + w) + " " + f1(y + h * .72) + " L" + x + " " + f1(y + h) + " L" + f1(x - w) + " " + f1(y + h * .72) + " L" + f1(x - w) + " " + f1(y + h * .22) + 'Z" style="fill:none;stroke:' + INK + ';stroke-width:1.1;stroke-linejoin:round"/>';
+}
+function mobile() {
+  const hx = 800, hy = 30, ry = 72;
+  let s = '<path d="M' + hx + " " + hy + " L" + (hx - 15) + " " + ry + " M" + hx + " " + hy + " L" + (hx + 15) + " " + ry + " M" + hx + " " + hy + " L" + hx + " " + (ry - 2.5) + '" style="stroke:#6b5a48;stroke-width:.7"/>' +
+    '<circle cx="' + hx + '" cy="' + hy + '" r="1.6" style="fill:#C9A24A;stroke:' + INK + ';stroke-width:.7"/>';
+  s += '<ellipse cx="' + hx + '" cy="' + ry + '" rx="15" ry="3" style="fill:none;stroke:' + INK + ';stroke-width:2.2"/><ellipse cx="' + hx + '" cy="' + ry + '" rx="15" ry="3" style="fill:none;stroke:#C9A24A;stroke-width:1"/>';
+  for (const c of [[hx - 14, ry, 14, 24], [hx, ry - 3, 8, 22], [hx + 14, ry, 22, 24], [hx, ry + 3, 34, 26]]) s += '<path d="M' + c[0] + " " + c[1] + " V" + (c[1] + c[2]) + '" style="stroke:#6b5a48;stroke-width:.6"/>' + crystal(c[0], c[1] + c[2], c[3]);
   return s;
 }
-/* where the plate sits for each spot: p1 between the box and the notebook; p2 in front of the whiteboard (as v5);
-   p3 on a stack of two closed notebooks in front of the whiteboard */
-const SPOT = { p1: [222, 362, 1], p2: [494, 361, 1], p3: [490, 333, .86] };
+function beams(v) {
+  /* long soft rainbow bands from the crystals: down-left across the wall and whiteboard, and a short one up-right */
+  const C = ["#E05A4F", "#F2A33A", "#F2D24A", "#7FB069", "#5B8FD1", "#9C7BC9"], id = v + "-bm" + (++uid);
+  const band = (x1, y1, x2, y2, w) => {
+    const len = Math.hypot(x2 - x1, y2 - y1), nx = -(y2 - y1) / len, ny = (x2 - x1) / len, g = id + "g" + (++uid);
+    let t = '<linearGradient id="' + g + '" gradientUnits="userSpaceOnUse" x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".25" stop-color="#fff" stop-opacity=".9"/><stop offset=".8" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>' +
+      '<mask id="' + g + 'm" maskUnits="userSpaceOnUse" x="0" y="-60" width="868" height="560"><rect x="0" y="-60" width="868" height="560" fill="url(#' + g + ')"/></mask><g mask="url(#' + g + 'm)" opacity=".45">';
+    C.forEach((c, i) => { const o = (i - 2.5) * w; t += '<path d="M' + f1(x1 + nx * o) + " " + f1(y1 + ny * o) + " L" + f1(x2 + nx * o * 1.6) + " " + f1(y2 + ny * o * 1.6) + '" style="stroke:' + c + ";stroke-width:" + f1(w * 1.3) + '"/>'; });
+    return t + "</g>";
+  };
+  return band(790, 120, 600, 214, 1.6) + band(800, 150, 640, 262, 1.4) + band(814, 98, 862, 70, 1.3);
+}
+/* window frame and sill in sage instead of cream: the kitchen.svg's <style> maps each traced frame colour to a sage shade */
+const TRIM = { "#F6E9CB": "#A3B8A0", "#DDD3BB": "#8CA389", "#DAD4C2": "#8CA389", "#C5BEB0": "#7A9278", "#B5AA92": "#6B8369", "#E8DCB0": "#B4C6AF", "#D4A36F": "#6F8A70", "#9D6F45": "#5A735C" };
 
+/* ---- composition notebooks: black marbled cover, a white label, black spine tape, cream page edges ---- */
 /* ---- notebooks: a closed one is a quad on the counter with its front edge (pages) showing ---- */
 function closedBook(pts, cover, edge) {
   const [bl, br, tr, tl] = pts, t = 3.6;
@@ -105,87 +152,78 @@ function closedBook(pts, cover, edge) {
 }
 /* the open notebook's outline on the counter (BL, BR, TR, TL) */
 const NB = [[272, 371], [442, 360], [425, 314], [260, 327]];
-/* p2: two notebooks under the open one, showing only outside it (the notebook's own shape masks them) */
+function compBook(q, label) {
+  const [bl, br, tr, tl] = q, t = 4, id = "cb" + (++uid);
+  let s = P(wob([bl, br, [br[0], br[1] + t], [bl[0], bl[1] + t]], .2), "#F1EAD6", 1.4) +
+    '<path d="M' + f1(bl[0] + 2) + " " + f1(bl[1] + t * .5) + " L" + f1(br[0] - 2) + " " + f1(br[1] + t * .5) + '" style="stroke:#CFC6AE;stroke-width:.7"/>';
+  s += '<clipPath id="' + id + '"><path d="M' + q.map((p) => f1(p[0]) + " " + f1(p[1])).join(" L") + 'Z"/></clipPath>';
+  s += P(wob(q, .3), "#1E1C1A", 1.8) + '<g clip-path="url(#' + id + ')">';
+  const xs = q.map((p) => p[0]), ys = q.map((p) => p[1]), X0 = Math.min(...xs), X1 = Math.max(...xs), Y0 = Math.min(...ys), Y1 = Math.max(...ys);
+  for (let i = 0; i < (X1 - X0) * (Y1 - Y0) / 30; i++) {   /* the marble: short curly white strokes */
+    const x = X0 + rnd() * (X1 - X0), y = Y0 + rnd() * (Y1 - Y0), r = .8 + rnd() * 1.6, a = rnd() * 6.28;
+    s += '<path d="M' + f1(x) + " " + f1(y) + " q" + f1(Math.cos(a) * r) + " " + f1(Math.sin(a) * r - r * .6) + " " + f1(Math.cos(a) * r * 2) + " " + f1(Math.sin(a) * r * 2) + '" style="fill:none;stroke:#EDE8DC;stroke-width:.6;stroke-linecap:round"/>';
+  }
+  s += P("M" + [onQuad(q, 0, 0), onQuad(q, .1, 0), onQuad(q, .1, 1), onQuad(q, 0, 1)].map((p) => f1(p[0]) + " " + f1(p[1])).join(" L") + "Z", "#111") + "</g>";
+  if (label) {
+    const L = [onQuad(q, .36, .62), onQuad(q, .78, .62), onQuad(q, .78, .3), onQuad(q, .36, .3)];
+    s += P(wob(L, .15), "#FAF8E8", 1.2);
+    for (const v of [.55, .7]) { const a = onQuad(L, .14, v), b = onQuad(L, .86, v); s += '<path d="M' + f1(a[0]) + " " + f1(a[1]) + " L" + f1(b[0]) + " " + f1(b[1]) + '" style="stroke:#9C9892;stroke-width:.7"/>'; }
+  }
+  return s;
+}
+/* n1: two composition books under the open notebook, showing only outside it (the notebook's own shape masks them) */
 function stackUnder(v) {
   const m = v + "-nonb";
   return '<mask id="' + m + '" maskUnits="userSpaceOnUse" x="0" y="0" width="868" height="489"><rect width="868" height="489" fill="#fff"/><use href="#' + v + '-mk-notebook" fill="#000" stroke="#000" stroke-width="6" stroke-linejoin="round"/></mask>' +
-    '<g mask="url(#' + m + ')">' +
-    closedBook(NB.map((p) => [p[0] + 13, p[1] + 6]), "#B5794A") +
-    closedBook(NB.map((p) => [p[0] - 9, p[1] - 2]), "#8BA07A") + "</g>";
+    '<g mask="url(#' + m + ')">' + compBook(NB.map((p) => [p[0] + 13, p[1] + 6])) + compBook(NB.map((p) => [p[0] - 9, p[1] - 2])) + "</g>";
 }
-/* p3: two closed notebooks in front of the whiteboard, the plate on top */
+/* n2: two composition books stacked in front of the whiteboard, the top one labelled */
 function stackFront() {
-  return '<ellipse cx="494" cy="352" rx="44" ry="5" style="fill:#B17A4B"/>' +
-    closedBook([[454, 349], [536, 346], [528, 326], [458, 328]], "#B5794A") +
-    closedBook([[452, 342], [532, 339], [524, 319], [456, 321]], "#8BA07A");
+  return '<ellipse cx="496" cy="353" rx="46" ry="5" style="fill:#B17A4B"/>' +
+    compBook([[454, 350], [538, 346], [529, 324], [459, 327]]) + compBook([[451, 342], [533, 340], [526, 317], [455, 319]], true);
 }
 
-/* ---- the window sill (top y ~244): three options ---- */
-const LEAF = "#6E9A45", LEAF_D = "#4F7A33";
-function pot(x, b, w, h, col, colD) {
-  return P(wob([[x - 1.5, b - h], [x + w + 1.5, b - h], [x + w - 2, b], [x + 2, b]], .3), col, 1.8) +
-    P("M" + f1(x + w * .64) + " " + f1(b - h + 4.6) + " L" + f1(x + w + .2) + " " + f1(b - h + 4.6) + " L" + f1(x + w - 2.6) + " " + f1(b - 1) + " L" + f1(x + w * .68) + " " + f1(b - 1) + "Z", colD) +
-    P(wob([[x - 2.6, b - h - 1], [x + w + 2.6, b - h - 1], [x + w + 2.6, b - h + 4.6], [x - 2.6, b - h + 4.6]], .2), col, 1.6);
-}
-const leaf = (x, y, rx, ry, a, c) => '<ellipse cx="' + f1(x) + '" cy="' + f1(y) + '" rx="' + rx + '" ry="' + ry + '" transform="rotate(' + a + " " + f1(x) + " " + f1(y) + ')" style="fill:' + (c || LEAF) + ";stroke:" + INK + ';stroke-width:1.2"/>';
-/* 1: a pot of basil: stems, broad pointed leaves in pairs, a vein down each */
-function basilLeaf(x, y, len, wid, a, c) {
-  const d = "M0 0 Q" + f1(wid) + " " + f1(-len * .45) + " 0 " + f1(-len) + " Q" + f1(-wid) + " " + f1(-len * .45) + " 0 0Z";
-  return '<g transform="translate(' + f1(x) + " " + f1(y) + ") rotate(" + a + ')"><path d="' + d + '" style="fill:' + c + ";stroke:" + INK + ';stroke-width:1.1;stroke-linejoin:round"/><path d="M0 -1 Q' + f1(wid * .15) + " " + f1(-len * .5) + " 0 " + f1(-len * .85) + '" style="fill:none;stroke:#3E6328;stroke-width:.6"/></g>';
-}
-function sillBasil() {
-  const x = 786, b = 246, B = "#6FA347", BD = "#4E7F31";
+/* ---- the open notebook, more lived in: sticky tabs off the right page, a ribbon, a taped photo, a pencil doodle ---- */
+function nbExtras() {
+  const A = [404, 315], B = [439, 354], len = Math.hypot(B[0] - A[0], B[1] - A[1]), d = [(B[0] - A[0]) / len, (B[1] - A[1]) / len], n = [d[1], -d[0]];
   let s = "";
-  for (const st of [[796, 224, 790, 196], [803, 224, 803, 186], [810, 224, 817, 198]]) s += '<path d="M' + st[0] + " " + st[1] + " Q" + f1((st[0] + st[2]) / 2) + " " + f1((st[1] + st[3]) / 2) + " " + st[2] + " " + st[3] + '" style="fill:none;stroke:#4E7F31;stroke-width:1.4"/>';
-  const L = [[796, 222, 11, 6.5, -70, BD], [810, 222, 11, 6.5, 70, BD], [792, 212, 12, 7, -55, B], [814, 213, 12, 7, 55, B], [790, 202, 11, 6.5, -35, BD], [817, 203, 11, 6.5, 35, BD],
-    [803, 210, 10, 6, -18, B], [803, 210, 10, 6, 22, B], [790, 196, 10, 6, -8, B], [817, 198, 10, 6, 12, B], [803, 194, 10, 6, -28, BD], [803, 194, 10, 6, 28, BD], [803, 188, 10, 6, 0, B]];
-  L.forEach((l) => { s += basilLeaf(l[0], l[1], l[2], l[3], l[4], l[5]); });
-  return s + pot(x, b, 34, 24, "#C66A3D", "#A35330");
-}
-/* 2: a cream jug of flowers */
-function sillFlowers() {
-  const x = 790, b = 246;
-  let s = "";
-  const stem = (x1, y1, x2, y2) => '<path d="M' + x1 + " " + y1 + " Q" + f1((x1 + x2) / 2 + 2) + " " + f1((y1 + y2) / 2) + " " + x2 + " " + y2 + '" style="fill:none;stroke:' + INK + ';stroke-width:2.6;stroke-linecap:round"/><path d="M' + x1 + " " + y1 + " Q" + f1((x1 + x2) / 2 + 2) + " " + f1((y1 + y2) / 2) + " " + x2 + " " + y2 + '" style="fill:none;stroke:' + LEAF + ';stroke-width:1.2;stroke-linecap:round"/>';
-  const daisy = (cx, cy, r, pet, mid) => { let t = ""; for (let i = 0; i < 8; i++) { const a = i * 45; t += '<ellipse cx="' + f1(cx) + '" cy="' + f1(cy - r * .62) + '" rx="' + f1(r * .3) + '" ry="' + f1(r * .55) + '" transform="rotate(' + a + " " + cx + " " + cy + ')" style="fill:' + pet + ";stroke:" + INK + ';stroke-width:.9"/>'; } return t + '<circle cx="' + cx + '" cy="' + cy + '" r="' + f1(r * .32) + '" style="fill:' + mid + ";stroke:" + INK + ';stroke-width:.9"/>'; };
-  const tulip = (cx, cy, c) => P(wob([[cx - 4.5, cy - 4], [cx - 2, cy - 7.5], [cx, cy - 4.5], [cx + 2, cy - 7.5], [cx + 4.5, cy - 4], [cx + 3.6, cy + 3], [cx - 3.6, cy + 3]], .2), c, 1.2);
-  s += stem(800, 224, 794, 192) + stem(806, 224, 808, 184) + stem(812, 224, 822, 196) + stem(803, 224, 799, 205);
-  s += leaf(793, 214, 3, 8, -35) + leaf(818, 213, 3, 8, 35);
-  s += daisy(794, 190, 9, "#FFFBEF", "#F2C230") + tulip(808, 184, "#C8473A") + daisy(822, 195, 7.5, "#F2C230", "#B5794A") + tulip(799, 204, "#E3A9AE");
-  s += P(wob([[x + 4, 246], [x + 26, 246], [x + 28, 236], [x + 25, 226], [x + 22, 222], [x + 8, 222], [x + 5, 226], [x + 2, 236]], .3), "#EFE6CF", 1.8);
-  s += P(wob([[x + 6, 222], [x + 24, 222], [x + 24.5, 225.5], [x + 5.5, 225.5]], .2), "#EFE6CF", 1.4);
-  s += P(wob([[x + 26, 228], [x + 32, 230], [x + 31, 238], [x + 26.5, 239]], .3), "none", 1.6);
-  s += '<path d="M' + (x + 17) + " 228 L" + (x + 25) + " 240" + '" style="stroke:#DCCFAF;stroke-width:4;stroke-linecap:round"/><rect x="' + (x + 3) + '" y="233" width="24" height="3.4" style="fill:#8BA07A"/>';
+  [[.22, "#C8473A"], [.42, "#F2C230"], [.62, "#8BA07A"]].forEach(([t, c]) => {
+    const c0 = [A[0] + d[0] * len * t, A[1] + d[1] * len * t], h = 3.6, o = 6;
+    const pts = [[c0[0] - d[0] * h - n[0] * 1.5, c0[1] - d[1] * h - n[1] * 1.5], [c0[0] + d[0] * h - n[0] * 1.5, c0[1] + d[1] * h - n[1] * 1.5], [c0[0] + d[0] * h + n[0] * o, c0[1] + d[1] * h + n[1] * o], [c0[0] - d[0] * h + n[0] * o, c0[1] - d[1] * h + n[1] * o]];
+    s += P(wob(pts, .1), c, 1.1);
+  });
+  /* ribbon from the spiral down onto the counter */
+  s += '<path d="M362 362 Q360 372 354 379 L351 384 L355 382 L357 386 L359 378 Q364 371 365 362Z" style="fill:#C8473A;stroke:' + INK + ';stroke-width:1;stroke-linejoin:round"/>';
+  /* a small photo taped to the left page */
+  s += '<g transform="rotate(-8 290 333)">' + P(wob([[280, 324], [301, 324], [301, 345], [280, 345]], .2), "#FAF8E8", 1.1) +
+    P(wob([[282.5, 326.5], [298.5, 326.5], [298.5, 340], [282.5, 340]], .1), "#D9B98E") +
+    '<rect x="284" y="331" width="13" height="5" rx="2.5" style="fill:#E3A866;stroke:' + INK + ';stroke-width:.7"/><rect x="284" y="331" width="13" height="2.6" rx="1.3" style="fill:#4A2A1C"/>' +
+    '<rect x="286" y="321.5" width="9" height="4.4" style="fill:#F3EBCF;opacity:.85"/></g>';
+  /* pencil doodle on the right page: an eclair cross-section with an arrow and notes */
+  const pen = "fill:none;stroke:#8C8780;stroke-width:.7;stroke-linecap:round";
+  s += '<g transform="rotate(-9 372 326)"><rect x="360" y="321" width="24" height="7.5" rx="3.7" style="' + pen + '"/><path d="M361 324.5 q3 2 6 0 t6 0 t6 0 t5 0" style="' + pen + '"/>' +
+    '<path d="M387 324 l7 -2 m-2 -1.4 l2 1.4 l-1.5 1.8" style="' + pen + '"/><path d="M396 321 h7 M396 324 h5 M362 332 h18 M362 335 h12" style="' + pen + '"/></g>';
   return s;
 }
-/* 3: a sun catcher crystal in the window, rainbows on the wall, a small succulent on the sill */
-function sillCrystal() {
-  const x = 812, top = 34, cy = 150, K = 1.7;
-  const ct = cy - 15 * K;
-  let s = '<path d="M' + x + " " + top + " L" + x + " " + f1(ct - 1) + '" style="stroke:#6b5a48;stroke-width:.8"/>';
-  s += '<circle cx="' + x + '" cy="' + f1(ct - 2.6) + '" r="2.6" style="fill:none;stroke:#C9A24A;stroke-width:1.4"/>';
-  for (const b of [[x, ct - 16, 4], [x, ct - 30, 3.2]]) s += '<circle cx="' + b[0] + '" cy="' + f1(b[1]) + '" r="' + b[2] + '" style="fill:#E7F1F4;stroke:' + INK + ';stroke-width:1.1"/><circle cx="' + f1(b[0] - b[2] * .35) + '" cy="' + f1(b[1] - b[2] * .35) + '" r="' + f1(b[2] * .3) + '" style="fill:#fff"/>';
-  /* faceted teardrop, drawn at 1.7x about its centre */
-  s += '<g transform="translate(' + x + " " + cy + ") scale(" + K + ") translate(" + (-x) + " " + (-cy) + ')">';
-  const T = [[x, cy - 15], [x + 7, cy - 6], [x + 8, cy + 4], [x, cy + 20], [x - 8, cy + 4], [x - 7, cy - 6]];
-  s += P(wob(T, .1), "#DDEEF2", 1.6);
-  s += P("M" + x + " " + (cy - 15) + " L" + (x + 7) + " " + (cy - 6) + " L" + x + " " + (cy - 2) + "Z", "#FFFFFF");
-  s += P("M" + x + " " + (cy - 2) + " L" + (x + 8) + " " + (cy + 4) + " L" + x + " " + (cy + 20) + "Z", "#B9D4E2");
-  s += P("M" + x + " " + (cy - 2) + " L" + (x - 8) + " " + (cy + 4) + " L" + x + " " + (cy + 20) + "Z", "#CFC3E6");
-  s += '<path d="M' + (x - 7) + " " + (cy - 6) + " L" + x + " " + (cy - 2) + " L" + (x + 7) + " " + (cy - 6) + " M" + (x - 8) + " " + (cy + 4) + " L" + (x + 8) + " " + (cy + 4) + " M" + x + " " + (cy - 2) + " V" + (cy + 20) + '" style="fill:none;stroke:#6E8EA0;stroke-width:.7"/>';
-  s += "</g>";
-  /* little rainbows on the wall, whiteboard and counter */
-  const bow = (bx, by, r, a) => { const C = ["#E05A4F", "#F2C230", "#7FB069", "#5B8FD1", "#9C7BC9"]; let t = '<g transform="rotate(' + a + " " + bx + " " + by + ')" opacity=".75">'; C.forEach((c, i) => { t += '<path d="M' + f1(bx - r + i * 1.8) + " " + by + " A" + f1(r - i * 1.8) + " " + f1((r - i * 1.8) * .55) + " 0 0 1 " + f1(bx + r - i * 1.8) + " " + by + '" style="fill:none;stroke:' + c + ';stroke-width:1.8"/>'; }); return t + "</g>"; };
-  s += bow(668, 175, 14, -15) + bow(630, 222, 11, 10) + bow(548, 175, 12, -5) + bow(712, 298, 12, 0);
-  /* succulent in a small pot */
-  const sx = 794, b = 246;
-  let r = "";
-  for (const l of [[sx + 13, 222, 4, 9, 0], [sx + 6, 226, 3.6, 8, -48], [sx + 20, 226, 3.6, 8, 48], [sx + 9, 220, 3.2, 7, -20], [sx + 17, 220, 3.2, 7, 20]]) r += leaf(l[0], l[1], l[2], l[3], l[4], "#8FB08A");
-  return s + '<g transform="translate(807 246) scale(1.25) translate(-807 -246)">' + r + pot(sx, b, 26, 17, "#C66A3D", "#A35330") + "</g>";
+
+/* ---- the recipe box, more like the reference: worn paint, letters on the tabs, and (option 3) RECIPES on the front ---- */
+function boxWear() {
+  const F = "matrix(1 -0.136 0 1 93 307)";   /* the box's front face: u across from its top-left corner, v down */
+  const scuff = (pts, c) => P(wob(pts, .2), c);
+  let s = '<g transform="' + F + '">' +
+    scuff([[1.5, 1.5], [9, 1.2], [7, 3.6], [1.6, 4.4]], "#8FA3CF") + scuff([[82, 1], [91, 1], [91, 5], [86, 3.4]], "#8FA3CF") +
+    scuff([[3, 2.2], [6, 2], [5, 3.2]], "#B5794A") + scuff([[87, 1.6], [90, 1.6], [89.6, 3]], "#B5794A") +
+    scuff([[1.2, 46], [5, 49], [7, 52.6], [1.2, 52.8]], "#8FA3CF") + scuff([[30, 51.5], [44, 50.6], [41, 52.8], [31, 53]], "#8FA3CF") +
+    scuff([[88, 44], [91.3, 41], [91.3, 51.5], [87, 51]], "#8FA3CF") + scuff([[60, 20], [64, 19], [62, 21.4]], "#8FA3CF") + "</g>";
+  s += scuff([[50, 216.6], [62, 216], [58, 218.2]], "#8FA3CF") + scuff([[118, 214], [133, 213.2], [128, 215.4]], "#8FA3CF") + scuff([[38.5, 224], [40.5, 232], [38.8, 236]], "#8FA3CF");
+  const tab = (x, y, t) => '<text x="' + x + '" y="' + y + '" text-anchor="middle" transform="rotate(-6 ' + x + " " + y + ')" style="font:700 4.6px \'Archivo Narrow\',\'Arial Narrow\',sans-serif;fill:#3a2a14">' + t + "</text>";
+  s += tab(86, 276.4, "A–F") + tab(110, 272.6, "G–M") + tab(133.4, 275.4, "N–S") + tab(93.2, 283.4, "T–Z");
+  return s;
 }
-/* sill pieces drawn a quarter bigger, standing on the sill (crystal and rainbows stay where they are) */
-const sillAt = (k) => k === "3" ? SILL[k][1]() : '<g transform="translate(803 246) scale(1.25) translate(-803 -246)">' + SILL[k][1]() + "</g>";
-const SILL = { 1: ["A pot of basil", sillBasil], 2: ["A jug of flowers", sillFlowers], 3: ["Sun catcher crystal and a succulent", sillCrystal] };
+function boxLabel() {
+  return '<g transform="matrix(1 -0.136 0 1 93 307)"><text x="46.5" y="33" text-anchor="middle" style="font:700 12.5px \'Archivo Narrow\',\'Arial Narrow\',sans-serif;letter-spacing:1.2px;fill:#1E2B48">RECIPES</text></g>';
+}
+
 /* ---- whiteboard marker on the bottom tray: cream barrel, tomato cap and band ---- */
 function marker() {
   const x = 470, y = 288.6;
@@ -248,23 +286,25 @@ function cupOpen(v) {
 }
 
 module.exports = {
-  DEF, ECL, SILL, SPOT,
+  DEF, TRIM,
   opts(v) {
     seed = 7;
-    let ecl = "";
-    for (const sp of Object.keys(SPOT)) for (const e of Object.keys(ECL)) ecl += V("ecl-" + e + " spot-" + sp, eclairOn(e, SPOT[sp][0], SPOT[sp][1], SPOT[sp][2]));
     return { end: [{ obj: "whiteboard", svg: marker() },
-      { obj: "notebook", svg: V("spot-p2", stackUnder(v)) + V("spot-p3", stackFront()), top: true },
-      { obj: "eclair", svg: ecl, top: true },
-      { obj: "sill", svg: Object.keys(SILL).map((k) => V("sill-" + k, sillAt(k))).join(""), top: true },
+      { obj: "notebook", svg: V("nb-n1", stackUnder(v)) + V("nb-n2", stackFront()) + V("nbx-1", nbExtras()), top: true },
+      { obj: "box", svg: V("box-2", boxWear()) + V("box-3", boxWear() + boxLabel()), top: true },
+      { obj: "eclair", svg: eclair(), top: true },
+      { obj: "window", svg: beams(v) + mobile() + basil(), top: true },
       { obj: "cup-open", svg: cupOpen(v), top: true }, { obj: "clip", svg: clipboard(), top: true }] };
   },
-  /* close-ups for the page: each eclair at spot p2, each sill option; drawn over a <use> of the scene */
-  closeups() {
+  /* close-ups for the page, drawn over a <use> of the kitchen scene */
+  closeups(v) {
     seed = 11;
-    const out = [];
-    for (const e of Object.keys(ECL)) out.push({ group: "ecl", key: e, title: "E" + e + " · " + ECL[e].name, vb: "440 326 108 47", svg: eclairOn(e, SPOT.p2[0], SPOT.p2[1], 1) });
-    for (const k of Object.keys(SILL)) out.push({ group: "sill", key: k, title: "S" + k + " · " + SILL[k][0], vb: k === "3" ? "620 20 242 250" : "730 130 142 124", svg: sillAt(k) });
-    return out;
+    return [
+      { key: "ecl", title: "Eclair E1, bitten, between the box and the notebook", vb: "172 326 100 48", svg: eclair() },
+      { key: "win", title: "Basil, crystal mobile, rainbow beams (frame in sage)", vb: "690 10 172 262", svg: beams(v + "z") + mobile() + basil(), cls: "trim-sage" },
+      { key: "nb", title: "Open notebook with tabs, ribbon, photo and doodle; composition books under it", vb: "232 300 240 92", svg: stackUnder(v) + nbExtras() },
+      { key: "nb2", title: "Or: composition books stacked in front of the whiteboard", vb: "430 296 130 70", svg: stackFront() },
+      { key: "box", title: "Recipe box: worn paint, letters on the tabs, RECIPES (option 3)", vb: "26 200 170 170", svg: boxWear() + boxLabel() },
+    ];
   },
 };
