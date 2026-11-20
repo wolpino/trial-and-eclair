@@ -1,4 +1,4 @@
-# NEXT — 2026-11-19 (Plate XII v10 published: cooling rack, bottles, books; waiting on Ari)
+# NEXT — 2026-11-19 (Plate XII v10 published; Ari sent vector traces of the rack and journals; next chat ports them)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,22 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII, after Ari answers v10) — START HERE
+## Prompt for the next agent (Plate XII v11: port Ari's rack and journal vectors) — START HERE
+> Plate XII v10: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (the live page is v10). Load the `plate-round` and `kitchen-plate-style` skills. Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session, then publish to the same URL.
+>
+> **Ari's answers after v10 (11/19):** the shelf view is **Library**. "Baking log" is wrong because not every recipe is baking: change `LOG_TITLE` in `traced/add.cjs` and offer a few (Claude's pick "Kitchen log"; also "Recipe log", "Log").
+>
+> **New this round:** Ari made vector traces in Kittl, now in `design/plate-xii/refs/`:
+> - `eclair-rack.svg`: eclairs on a cooling rack (400 x 266, ~650 paths)
+> - `comp-journals.svg`: the stacked composition journals (400 x 266, ~1000 paths)
+>
+> Both have a dark `#1E1E1E` rect and a `#FAF6EE` rounded card behind the art. Port them the way her glass studies went in: strip the card and background (and any background shapes that are just paper), keep her shapes, recolour only if they clash, scale and place them. The rack replaces `rack(n)` at the box/notebook spot (still three states taken by clicks: group each eclair's paths so one can be hidden per click). The journals replace `stackFront()` in front of the whiteboard. A small cleaner like `clean.cjs` may help (sort paths by position into eclair 1/2/3, rack, shadow). Check her trace's halftone/texture against the kitchen's flat look; keep it if it reads, say so if not.
+>
+> **Bottles:** Ari said she sent new bottle SVGs, but only the two files above were attached. Ask for them; until then B1 (trio at .56) and B2 (decanter + amber) stay.
+>
+> **Still open (page top):** B1 or B2; taken vs bites; flour and pin keep or remove; clipboard title; times of day. Product list in PLAN.md (Library, saved cookbooks, clipboard log, rainbows by clock, eclair easter egg, no fridge/Recently) goes into the PRD in one pass at sign-off.
+
+## Prompt for the next agent (Plate XII, after Ari answers v10) — superseded by the v11 prompt above
 > Plate XII v10: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Build as before. Options in `add.cjs` (DEF): sill 1–2 (SILL_FIT scales), sun am/noon/pm/eve, tidy 0/1; `ecl-0..3` = eclairs taken from the rack by clicks (rack(n)). Fixed: compBook books in front of the whiteboard, tabs/ribbon/doodle, RECIPES, "Baking log", "Ideas", walnut frame, crystals.
 >
 > **Questions (page top):** B1 (pick) or B2; one taken per click (pick) or bites; books close enough or Ari makes a vector; flour and pin; clipboard title (pick Baking log); times of day; Library name (pick Library).

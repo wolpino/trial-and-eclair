@@ -41,6 +41,38 @@ Ari: there will be many kitchen versions; collect every full-kitchen shot (old a
 
 ---
 
+## 2026-11-19 · Plate XII: Ari's answers after v10, vector traces filed (no new version)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (wrap-up) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop) |
+| **Outcome** | success (answers recorded, traces filed, handoff written; Ari moving to a new chat) |
+
+### Intent
+Ari: yes to Library; "Baking log" doesn't fit (not all recipes are baking); sent vector traces of the eclair rack and the composition journals (and meant to send bottles); asked to save everything before a new chat.
+
+### Summary
+- Copied the traces to `design/plate-xii/refs/eclair-rack.svg` and `refs/comp-journals.svg`
+- PLAN.md, NEXT.md (new START HERE for v11), kitchen-layout memory updated
+- Bottle SVGs were not attached; next chat asks for them
+
+### Decisions
+- Ari: the book shelf view is Library; the clipboard title must not say baking
+
+### Open threads
+- Port the two traces (v11); pick a log title; bottles SVGs; B1/B2, taken vs bites, flour and pin, times of day
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII, Library, vector traces, eclair rack, composition journals
+**Files:** design/plate-xii/refs/, traced/add.cjs (LOG_TITLE, rack, stackFront), docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v10 as drawn (tweak only); the ink split; taller frame
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt (Plate XII v11)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Plate XII v10: cooling rack, bottles, composition books (published)
 
 | Field | Value |
