@@ -1,4 +1,4 @@
-# NEXT — 2026-11-20 (Plate XII v14 published; waiting on Ari)
+# NEXT — 2026-11-20 (Plate XII v14 published; v15 notes collected, workflow decision pending — do not start drawing v15 until that's settled)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,18 +10,25 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII, after Ari answers v14) — START HERE
-> Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (live = v14). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session.
+## Prompt for the next agent (Plate XII v15) — START HERE, but read this first
+> **Do not spin up several subagents and start drawing options yet.** Ari asked (2026-11-20) to move to a lower-usage workflow before the next round — her idea: settle open questions in chat first, then build only the picked option once, rather than drawing several options per note. A session reads her reply, checks the `workflow-lower-usage` memory for what she picked, and builds accordingly (likely: fewer/no subagents for small fixes, done directly in the main session; questions settled in text first for anything with real choices).
 >
-> **Ari's v13 answers (11/20), now set:** J2, T1, 2700K, P1 "The Library", "Next up", wall as traced. All option code and controls for jr/tr/lt/pl/wb/glow/extra walls are gone (DEF = ecl, sill, sun, tidy).
+> Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (live = v14, rack confirmed good). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session.
 >
-> **New in v14:** glow = one halo per object from the union of its groups (`halos()` in clean.cjs, groups have ids `a-o-<obj>-n`, filter cuts the object's own silhouette, `.lit` toggles `[data-halo]`; hand-tuned box clip, shelf fillers, mixer cut `HALO_CUT`); wire rack `rackGrid()` in add.cjs continues her grid (`RACK_H`, `RACK_D`, `RACK_IN`) under and, once eclairs go, over her rack; wall clean-up in clean.cjs (`DROP` specks by source index, room shapes #F6E9CB -> var(--wall), `WB_BACK` behind the whiteboard surface 266, clear of the mixer); `duskWash()` leaves the bookshelf (x 410.5–661.5, y < 115.5) out of the evening dim.
+> **v14, now set:** glow = one halo per object from behind (`halos()` in clean.cjs); wire rack `rackGrid()` continues her grid as eclairs go (confirmed good by Ari); wall clean-up in clean.cjs (`DROP` specks, room shapes follow `--wall`, `WB_BACK`); `duskWash()` leaves the bookshelf out of the evening dim.
 >
-> **Questions (page top):** glow from behind right; rack whole; wall clean enough; evening Library; ready for the full clean-up pass and sign-off (all picks yes).
+> **v15 notes from Ari (2026-11-20, in `docs/design/PLAN.md` "v15 notes from Ari" and the `kitchen-layout` memory), not yet drawn:**
+> - Glow too subtle against the wall — consider a subtle wallpaper, or change/strengthen the glow colour (some of these may be a text discussion, not a drawn option, per the workflow decision)
+> - Window: issues on the left side and below the sill
+> - Space above the recipe box lid looks off
+> - Open-cupboard dishes look out of place — show it emptied vs. adding more realism (realism can wait); the cupboard itself looks a little off too
+> - Book spines: bring back a few blue ones, spine colours need to pop more
+> - A few small suncatcher-style rainbows scattered around the kitchen (not full beams), in addition to the two main ones
+> - **For later (not this round):** evening's night sky — bring back the bird and shooting star; day sky — moon and sun/clouds
 >
-> **After answers:** the full clean-up pass of stray lines and specks (Ari), then sign-off: PLAN.md, memory, Do not redo; product list into PRD/README/Task issues in one pass; then phone crop and size.
+> **After v15 is drawn and answered:** the full clean-up pass of stray lines and specks (Ari), then sign-off: PLAN.md, memory, Do not redo; product list into PRD/README/Task issues in one pass; then phone crop and size.
 >
-> **Known nits:** halos draw over neighbours (only the mixer is cut); state 3 bite rim has a short straight cut, state 4 a small dark stub (`bitten()` clip); grid between wires uses her darker counter tones.
+> **Known nits carried from v14:** halos draw over neighbours (only the mixer is cut); state 3 bite rim has a short straight cut, state 4 a small dark stub (`bitten()` clip); grid between wires uses her darker counter tones.
 
 ## Prompt for the next agent (Plate XII, after Ari answers v13) — done (v14)
 > Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (live = v13). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session.

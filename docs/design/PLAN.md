@@ -210,7 +210,16 @@ Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop
 - [x] **Decided (Ari, 2026-11-19, on v12):** B3 bottles; the "plate with the eclair" was the old counter eclair (already gone), so put the cupboard bowl stack back; rack size good; journals size good but they don't follow the kitchen's perspective; Kitchen log stays
 - [x] **v13 drawn and published 2026-11-19 (Ari's notes on v12):** journals square to the counter (affine fit, front edge level; options J1 now / J2 square / J3 slightly turned); eclairs: first two taken whole, the last bitten twice then gone (Ari asked the cost: small, five click states); rainbows brighter and more saturated; evening under-cabinet / shelf light on the counter, warmth options (2200K, 2700K pick, 3000K, 4000K); "Kitchen log" and "Ideas" larger and legible; shelf plaques (P1 one "The Library", P2 "The Library" left + "Reference Library" right, P3 top/bottom rows); whiteboard heading options (Next up pick, Upcoming, Today, To do); "Trials" label options (T1 on the top journal's label, T2 on the open notebook page, T0 none); glow colour options instead of yellow; white and cream wall options (thumbnails with --wall on a `<use>` of the kitchen)
 - [x] **v13 answered (Ari 2026-11-20):** J2, T1, 2700K, P1 "The Library", "Next up", glow warm white from behind only, wall as traced cleaned at the edges, Library bright in the evening, fix the wire rack. v14 published 2026-11-20
-- [ ] **v14 questions (waiting on Ari):** glow from behind right; rack reads as one rack; wall clean enough; evening Library; ready for the clean-up pass and sign-off
+- [x] **v14 answered (Ari 2026-11-20):** rack good. Everything else below is a v15 note, **not yet drawn** — a workflow change (more questions before building) is being decided first; see NEXT.md
+- [ ] **v15 notes from Ari (2026-11-20, not yet drawn):**
+  - Glow blends into the wall colour, too subtle to notice. Ari hasn't liked another wall colour better but keeps thinking about a (subtle) wallpaper — might help the glow read. Or: change the glow colour, or make it glow more.
+  - Window still has issues on the left side and the bottom below the sill
+  - The space above the recipe box lid looks off
+  - Dishes in the open cupboard look out of place. Alternative: show it empty (Claude to render both so Ari can compare) vs. adding more realism — realism can come in a later round either way
+  - The open cupboard itself looks a little off (separate from the dishes)
+  - Evening looks good. **Note for later:** bring back the bird and shooting star at night, and the moon and sun/clouds during the day
+  - Book spines used to include a few blue books; bring that colour back, spine colours don't pop enough now
+  - New: a few more small rainbows scattered across the kitchen, suncatcher-style (small, not full-length beams), not just the two main beams
 - [ ] **At sign-off:** a full clean-up pass of stray lines and specks (B3 bottles and elsewhere), per Ari
 
 ### Product changes from the plates (apply in one pass)

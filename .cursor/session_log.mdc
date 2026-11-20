@@ -10,6 +10,36 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-20 · Plate XII v14 feedback recorded; workflow change requested (no drawing)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20` (v14 feedback) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, no drawing, no subagents) |
+| **Outcome** | success (feedback filed; workflow decision pending; no app code, no new artifact) |
+
+### Intent
+Ari answered v14 (rack good) and gave several more notes. She also asked to move to a lower-usage workflow before the next round and asked for a plan with options rather than picking one herself.
+
+### Summary
+- Filed Ari's v14 notes as "v15 notes from Ari" in `docs/design/PLAN.md` and the `kitchen-layout` memory: glow too subtle against the wall (maybe wallpaper, maybe a stronger/different glow), window issues (left side, below the sill), the space above the recipe box lid, open-cupboard dishes looking out of place (empty vs. more realism) and the cupboard itself, blue book spines to bring back, a few small suncatcher-style rainbows. Filed separately as "for later": night bird/shooting star, day moon/sun-clouds
+- New `workflow-lower-usage` memory: her request to settle questions in chat before drawing, and do small fixes directly instead of one subagent per fix, until she picks an approach
+- `.cursor/handoffs/NEXT.md` retitled to say v15 drawing should wait on the workflow decision
+- Nothing drawn or published this session
+
+### Open threads
+- Ari to pick a workflow option (plan given in chat, not written to a file); v15 notes wait on that pick
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** v15 notes, workflow lower usage, no drawing this session
+**Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, kitchen-layout memory, workflow-lower-usage memory
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v14 as drawn (tweak only); Ari's v13/v14 picks
+**Resume with:** wait for Ari's workflow pick, then `.cursor/handoffs/NEXT.md` top prompt for v15
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-20 · Plate XII v14: picks set, glow from behind, rack whole, wall cleaned (published)
 
 | Field | Value |
