@@ -10,6 +10,37 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-20 · Plate XII v15 notes filed (notes mode); plate-round skill updated
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20` (v15, continued) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, notes mode, no drawing) |
+| **Outcome** | success (v16 notes filed; no new artifact; no app code) |
+
+### Intent
+Ari reviewed v15 and sent notes in chat to save for a fresh session, the first use of "notes mode".
+
+### Summary
+- Pointing: no movement at all (rise "delayed and jerky", press "cartoonish"); next show B3 sticker aligned and a glow in a new colour (green from the glass bottle, or tied to the rainbows). New memory `no-pointing-movement`; PLAN.md brand hold "build uses G1" changed to no movement
+- Rainbows: three reference pictures (room wash + flecks, fanned flecks + sunbeam, long beams); new examples first, look mostly soft, crystal waits on them
+- Cupboard: lines must match the trace's thick wobbly ink
+- Refs saved: `design/plate-xii/refs/v16-*.webp` (pantry, three rainbow refs); `shots/v15/`
+- `plate-round` skill: "How we work" (ask first, no subagents, confirm before builds, no movement, one round per chat) and "Notes mode"
+
+### Open threads
+- Still open from v15: pantry right, "space above the lid" (nub or empty wall), window and spines, which rainbow kinds stay
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v16 notes, notes mode, no pointing movement, rainbow references
+**Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, .claude/skills/plate-round/SKILL.md, design/plate-xii/refs/v16-*.webp
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v15 as drawn (tweak only); Ari's v13/v14 picks; pointing movement (dropped)
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt (Plate XII v16)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-20 · Plate XII v15: pointing options, crystals, rainbows, pantry cupboard (published)
 
 | Field | Value |

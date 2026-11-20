@@ -12,8 +12,30 @@ description: >-
 # Plate round
 
 Design work lives in `design/<plate>/` and is published as one artifact page
-per plate. Each round is: **read → draw → build → check → publish → ask → record → commit.**
+per plate. Each round is: **read → ask → draw → build → check → publish → ask → record → commit.**
 No app code in a design round.
+
+## How we work (Ari, 2026-11-20, to keep usage down)
+
+- **Ask before drawing.** For anything with a real visual choice, put the options to Ari in chat and wait for a text answer. Plain fixes with no trade-off need no question.
+- **No subagents.** Make the edits in the main session. Subagents are only for something really large.
+- **Confirm before a bigger run** (build, screenshots, publish). A short or unclear message may have been sent early, so don't treat it as a go-ahead.
+- **No pointing movement.** Objects never rise, lift or press. Pointing is a glow or an outline only (memory `no-pointing-movement`).
+- **One round per chat.** After a round is published, Ari reviews it in **notes mode** (below), then starts a fresh chat from NEXT.md. A long chat makes every message cost more.
+
+## Notes mode (between rounds)
+
+When Ari says she'll send notes ("collect notes", "I'll dump my comments"):
+
+- Reply to each note in a line or two: what you understood, and any history that bears on it (e.g. "you turned that down in Plate IX"). Ask only when a note really needs it. **Don't draw or build.**
+- Notes that are lasting preferences ("remind me I don't like…") go into memory right away.
+- When she says **"done"**:
+  1. Copy every picture she attached into `design/<plate>/refs/` with a descriptive name (`vN-what-it-shows.webp`). The next chat can't see this chat's images.
+  2. In PLAN.md, add "vN notes from Ari" under the plate: each note, the references, and the questions still open from the last round.
+  3. Add the notes, with the date, to the `kitchen-layout` memory.
+  4. Write a new START HERE prompt in NEXT.md that points at those notes and the refs, and says what to ask Ari first.
+  5. Save the last round's screenshots if they're missing, add a session log entry, and commit.
+  6. Tell her to start a fresh chat with "Read .cursor/handoffs/NEXT.md and follow the top prompt."
 
 ## 1. Read before drawing
 
@@ -43,6 +65,7 @@ design/<plate>/
 
 ## 3. Draw
 
+- Only draw options Ari asked to see, or that she agreed to in chat first.
 - Draw choices as **named options** (A/B/C, E1–E5, L1–L3, P1–P3) so Ari can answer with a letter. Put your pick first and say why in one line.
 - Option toggles go in page controls, and close-ups go next to the full view (see Plate XII `traced/closeups.html`).
 - Change only what the notes asked for. Keep a signed-off thing exactly as it was.
@@ -89,5 +112,5 @@ When Ari answers (this round or the next):
 
 ## Ending the round
 
-- End with the questions. Don't start the next version until Ari answers.
+- End with the questions. Don't start the next version until Ari answers. Her answers usually come as notes mode in the same chat, and the next version gets a fresh chat.
 - A plate is done when Ari says so ("signed off"). Then write the sign-off into PLAN.md, the memory and Do not redo, and apply the product change list.

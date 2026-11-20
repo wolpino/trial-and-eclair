@@ -1,8 +1,21 @@
-# NEXT — 2026-11-20 (Plate XII v15 published, waiting on Ari; low-usage workflow)
+# NEXT — 2026-11-20 (Plate XII v15 published; v16 notes filed; next: rainbow examples + pointing options)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
-## Prompt for the next agent (Plate XII, after Ari answers v15) — START HERE
+## Prompt for the next agent (Plate XII v16) — START HERE
+> **Workflow (`plate-round` skill, `workflow-lower-usage` memory):** real visual choices asked in chat first, wait for a text answer; no subagents; confirm before a build/publish run. **No pointing movement** (`no-pointing-movement` memory): never offer rise, lift or press; remind Ari if she asks for it.
+>
+> Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (live = v15, artifact version 16). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session. Code map for v15 is in the prompt below (pointing CSS on `#tk[data-pt]`, `CRYSTALS`, `rainbows()`, `interior()`/`jar()`).
+>
+> **The brief is PLAN.md "v16 notes from Ari"**, with Ari's pictures in `design/plate-xii/refs/v16-*.webp` (look at them first: pantry cupboard; rainbow ref 1 room wash + flecks; ref 2 fanned flecks + sunbeam; ref 3 long room-crossing beams). In short:
+> 1. **Pointing, two options, no movement:** B3 sticker aligned tight to the outline (fix the v15 gaps), and a glow in a new colour (green from the glass bottle, or tied to the rainbows). Remove C1/C2/the honey pick and the movement CSS.
+> 2. **Rainbow examples from her references:** fanned soft flecks (radial from the crystal, bigger farther away, light blend), sparkles, room light wash per time of day (evening keeps its light change), sunbeam as a toggle, sheen on a few curved things, long see-through beams across the room with a window bloom. Start with a small test (right half, morning and afternoon) and show Ari before building the rest. Rainbow look: mostly soft, maybe printed at some times; crystal waits on the rainbows.
+> 3. **Cupboard lines:** match the trace's thick wobbly ink.
+> 4. **Ask again (still open from v15):** pantry right? "space above the lid" = nub or empty wall? window and blue spines right? which rainbow kinds stay?
+>
+> First message of the session: put any real choices in this brief to Ari in chat (e.g. which reference leads the rainbows: flecks, long beams, or both), then confirm before building.
+
+## Prompt for the next agent (Plate XII, after Ari answers v15) — done (answers became the v16 notes)
 > **Workflow (Ari, 2026-11-20, `workflow-lower-usage` memory):** real visual choices asked in chat first; no subagents; confirm before a build/publish run.
 >
 > Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (live = v15, artifact version 16). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session.
