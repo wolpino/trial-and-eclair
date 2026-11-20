@@ -61,7 +61,7 @@
 <script>
 (function () {
   var sec = document.getElementById("tk"), say = document.getElementById("tk-say"), k = sec.querySelector(".tk");
-  function lit(objs, on) { objs.split(" ").forEach(function (o) { k.querySelectorAll('.tk-art g[data-obj="' + o + '"]').forEach(function (g) { g.classList.toggle("lit", on); }); }); }
+  function lit(objs, on) { objs.split(" ").forEach(function (o) { k.querySelectorAll('.tk-art g[data-obj="' + o + '"], .tk-art g[data-halo~="' + o + '"]').forEach(function (g) { g.classList.toggle("lit", on); }); }); }
   k.querySelectorAll("[data-for]").forEach(function (b) {
     var obj = b.dataset.for, name = b.getAttribute("aria-label").replace("Open ", "");
     ["mouseenter", "focus"].forEach(function (e) { b.addEventListener(e, function () { lit(obj, true); }); });
