@@ -29,13 +29,13 @@ Ari: there will be many kitchen versions; collect every full-kitchen shot (old a
 - 62 of 142 picked by default (one or two per tray)
 
 ### Open threads
-- Ari picks; then make the GIF from `picks/main` (PIL, same order and speed)
+- Done 2026-11-19: Ari picked 47; `make_gif.py` + `picks.json` -> `kitchen-progression.gif` (960 px, 1.5 s a shot, 7.6 MB). Re-pick: copy `picks/main` into picks.json and rerun
 
 <!-- AGENT_CONTEXT_START -->
 **Keywords:** kitchen progression, gallery, reel, GIF
 **Files:** design/progression/ (build.py, items.json, img/, index.html)
 **Do not redo:** the renders and dedupe (142 items); Plate XII v1-v9 as drawn
-**Resume with:** read `picks/main` from https://claude.ai/artifact/E4xdK2o9H9iYMPpM8M7Juw, build the GIF; Plate XII still waiting on Ari
+**Resume with:** new kitchen versions: add to build.py, republish https://claude.ai/artifact/E4xdK2o9H9iYMPpM8M7Juw, rerun make_gif.py; Plate XII still waiting on Ari
 <!-- AGENT_CONTEXT_END -->
 
 ---
