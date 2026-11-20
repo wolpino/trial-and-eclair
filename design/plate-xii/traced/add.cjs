@@ -18,7 +18,7 @@ const cab = (pct, to) => "color-mix(in srgb,var(--cab) " + pct + "%," + (to || "
 
 /* ---- options on the page: each is a <g data-var="key-value ..."> shown only when every key matches the page's choice.
         DEF = what shows first (Claude's picks). ---- */
-const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19) */
+const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1", jr: "2", tr: "1" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19) */
 function V(tokens, svg) {
   const on = tokens.split(" ").every((t) => { const i = t.indexOf("-"); return t.slice(i + 1).split("|").includes(DEF[t.slice(0, i)]); });   /* "ecl-0|1" = ecl is 0 or 1 */
   return '<g data-var="' + tokens + '"' + (on ? "" : ' style="display:none"') + ">" + svg + "</g>";
@@ -111,10 +111,65 @@ const BOTTLES = {
 };
 const atSill = (svg, k, cx, sy) => '<g transform="translate(768 246.5) scale(' + k + ") translate(" + (-cx) + " " + (-sy) + ')">' + svg + "</g>";
 
-/* her two stacked composition journals, in front of the whiteboard, each the size of the notebook closed */
-const JOURNAL_FIT = { x: 410, y: 300, k: .31 };   /* her stack's top-left (24, 32) -> here */
+/* her two stacked composition journals, in front of the whiteboard, each the size of the notebook closed.
+   jr-1 = as v12 (her drawing scaled); jr-2 = square to the counter (front edge level); jr-3 = turned a few degrees, between.
+   For 2 and 3 her drawing is cut into faces (top cover, page edges, spine) and each face is fitted on its own (affine from three
+   corners), so the cover lies flat and the page edges stand upright; the page edges go in strips, since her face is taller at the right. */
+const JOURNAL_FIT = { x: 410, y: 300, k: .31 };   /* jr-1: her stack's top-left (24, 32) -> here */
+/* her units: cover corners, the page-edge face's bottom corners, the spine face's bottom-left */
+const JS = { bl: [27, 70], br: [232, 34], r: [387, 134], f: [165, 177], rb: [390, 208], fb: [166, 226], blb: [27, 131] };
+const JX0 = 430, JTOP = 349, JH = 13;   /* jr-2: front-left corner x, cover's front edge y, stack height (bottom at y 362, on the shadow) */
+/* the 2x3 matrix taking three points s to three points d */
+function fit3(s, d) {
+  const [[x0, y0], [x1, y1], [x2, y2]] = s, det = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
+  const row = (k) => { const v0 = d[0][k], v1 = d[1][k] - v0, v2 = d[2][k] - v0, a = (v1 * (y2 - y0) - v2 * (y1 - y0)) / det, c = (v2 * (x1 - x0) - v1 * (x2 - x0)) / det; return [a, c, v0 - a * x0 - c * y0]; };
+  const X = row(0), Y = row(1); return [X[0], Y[0], X[1], Y[1], X[2], Y[2]].map((n) => +n.toFixed(5));
+}
+const mtx = (m) => "matrix(" + m.join(" ") + ")";
+const ptsS = (a) => a.map((p) => f1(p[0]) + " " + f1(p[1])).join(" ");
+/* "Trials" on the top journal's white label, in the label's own plane: a cream patch over her scribble, then the word.
+   Label frame (her units): TL (125, 75), TR (226, 58), BL (151, 101) */
+const TRIALS = "Trials";
+function jLabel() {
+  const m = fit3([[0, 0], [100, 0], [0, 26]], [[125, 75], [226, 58], [151, 101]]);
+  return '<polygon points="131.5 78 224 61.5 253 80 153 98.5" style="fill:#EEE5D2"/>' +
+    '<text transform="' + mtx(m) + '" x="49" y="21" text-anchor="middle" style="font:700 26px Caveat,\'Segoe Script\',cursive;fill:#2a2622">' + TRIALS + "</text>";
+}
+function jPages() {
+  const H = JH, pg = (y0, y1, dx) => P(wob([[1.6 + dx, y0], [99.2 + dx, y0 - .1], [99.4 + dx, y1], [1.8 + dx, y1 + .1]], .12), "#EEE5D2") +
+    [.33, .62].map((t) => { const y = y0 + (y1 - y0) * t; return '<path d="M' + f1(5 + dx) + " " + f1(y) + " Q" + f1(40 + dx) + " " + f1(y - .25) + " " + f1(70 + dx) + " " + f1(y + .1) + " T" + f1(97 + dx) + " " + f1(y - .1) + '" style="fill:none;stroke:#A8A89C;stroke-width:.35"/>'; }).join("");
+  return P(wob([[0, -.2], [100, -.2], [100.6, H], [-.2, H]], .15), "#2A2826") + pg(1.1, 5.2, 0) + pg(7.6, 11.7, .4) +
+    '<path d="M0 6.4 H100.4" style="stroke:' + INK + ';stroke-width:.5"/>' + P(wob([[0, -.2], [100, -.2], [100.6, H], [-.2, H]], .15), "none", .9);
+}
+/* the screen corners of the top cover for each option: [bl, br, r, f] */
+function jCover(k) {
+  const two = [[JX0 + 3, JTOP - 44], [JX0 + 80, JTOP - 43], [JX0 + 85, JTOP], [JX0, JTOP]];
+  if (k === "2") return two;
+  const one = [JS.bl, JS.br, JS.r, JS.f].map((p) => [JOURNAL_FIT.x + (p[0] - 24) * JOURNAL_FIT.k, JOURNAL_FIT.y + (p[1] - 32) * JOURNAL_FIT.k]);
+  const c = (q) => q.reduce((a, p) => [a[0] + p[0] / 4, a[1] + p[1] / 4], [0, 0]), c1 = c(one), c2 = c(two);
+  return two.map((p, i) => [c2[0] + ((one[i][0] - c1[0]) + (p[0] - c2[0])) / 2, c2[1] + ((one[i][1] - c1[1]) + (p[1] - c2[1])) / 2]);   /* half way */
+}
+function stackFace(k, src) {
+  const id = src + "-" + k, [bl, br, r, f] = jCover(k), dn = (p) => [p[0], p[1] + JH], use = '<use href="#' + src + '"/>';
+  const piece = (src, dst, poly, n) => '<clipPath id="' + id + n + '"><polygon points="' + ptsS(poly) + '"/></clipPath><g transform="' + mtx(fit3(src, dst)) + '"><g clip-path="url(#' + id + n + ')">' + use + "</g></g>";
+  let s = "";
+  /* spine face, only when it turns toward us */
+  if (bl[0] < f[0] - 1) s += piece([JS.bl, JS.f, JS.blb], [bl, f, dn(bl)], [[20, 66], JS.bl, JS.f, [168, 180], [168, 230], JS.fb, JS.blb, [20, 131]], "s");
+  /* page edges: her face can't be laid level in one piece (it is taller at the right), so they are drawn in her colours:
+     two journals, each a dark cover edge, a cream block of pages, a dark back cover; laid on the face [f, r, r+h, f+h] */
+  s += '<g transform="' + mtx(fit3([[0, 0], [100, 0], [0, JH]], [f, r, dn(f)])) + '">' + jPages() + "</g>";
+  /* the top cover, last; its clip stops at the front edge and the spine */
+  const m = fit3([JS.bl, JS.r, JS.f], [bl, r, f]);
+  s += '<clipPath id="' + id + 'c"><polygon points="' + ptsS([[20, 66], [231, 29.5], [235, 33], [389.5, 133], JS.r, JS.f, JS.bl]) + '"/></clipPath><g transform="' + mtx(m) + '"><g clip-path="url(#' + id + 'c)">' + use + "</g>" + V("tr-1", jLabel()) + "</g>";
+  return s;
+}
 function stackFront() {
-  return '<ellipse cx="470" cy="363" rx="58" ry="5" style="fill:#B17A4B"/><g transform="translate(' + JOURNAL_FIT.x + " " + JOURNAL_FIT.y + ") scale(" + JOURNAL_FIT.k + ') translate(-24 -32)">' + reid(JOURNALS.parts.stack, "j" + (++uid)) + "</g>";
+  const id = "j" + (++uid), sh = (cx, rx) => '<ellipse cx="' + f1(cx) + '" cy="363" rx="' + f1(rx) + '" ry="5" style="fill:#B17A4B"/>';
+  const at1 = "translate(" + JOURNAL_FIT.x + " " + JOURNAL_FIT.y + ") scale(" + JOURNAL_FIT.k + ") translate(-24 -32)";
+  let s = '<defs><g id="' + id + '">' + reid(JOURNALS.parts.stack, id) + "</g></defs>";
+  s += V("jr-1", sh(470, 58) + '<g transform="' + at1 + '"><use href="#' + id + '"/>' + V("tr-1", jLabel()) + "</g>");
+  ["2", "3"].forEach((k) => { const q = jCover(k), cx = (q[2][0] + q[3][0]) / 2; s += V("jr-" + k, sh(cx + 4, (q[2][0] - q[3][0]) / 2 + 10) + stackFace(k, id)); });
+  return s;
 }
 
 /* ---- the window: a bushy basil on the sill, a crystal mobile in the glass, rainbow beams across the wall ---- */
@@ -223,6 +278,14 @@ function nbExtras() {
   s += '<g transform="rotate(-9 372 326)"><rect x="360" y="321" width="24" height="7.5" rx="3.7" style="' + pen + '"/><path d="M361 324.5 q3 2 6 0 t6 0 t6 0 t5 0" style="' + pen + '"/>' +
     '<path d="M387 324 l7 -2 m-2 -1.4 l2 1.4 l-1.5 1.8" style="' + pen + '"/><path d="M396 321 h7 M396 324 h5 M362 332 h18 M362 335 h12" style="' + pen + '"/></g>';
   return s;
+}
+
+/* "Trials" at the top of the open notebook's left page (tr-2), in the page's plane; notebook units before SHIFT (it moves with it).
+   Left page corners: top-left (264, 326), top-right (332, 318), bottom-left (279, 366) */
+function nbTitle() {
+  const m = fit3([[0, 0], [68, 0], [0, 40]], [[264, 326], [332, 318], [279, 366]]);
+  return '<g transform="' + mtx(m) + '"><text x="33" y="12" text-anchor="middle" style="font:700 12px Caveat,\'Segoe Script\',cursive;fill:#2a2622">' + TRIALS + "</text>" +
+    '<path d="M21 14.2 q12 -.8 24 -.2" style="fill:none;stroke:#2a2622;stroke-width:.7;stroke-linecap:round"/></g>';
 }
 
 /* ---- the recipe box, more like the reference: worn paint, letters on the tabs, and (option 3) RECIPES on the front ---- */
@@ -343,7 +406,7 @@ module.exports = {
     seed = 7;
     return { end: [{ obj: "whiteboard", svg: marker() }, { obj: "ideas", svg: ideasNote() },
       { obj: "room", svg: V("tidy-1", tidyPatch(v)), top: true },
-      { obj: "notebook", svg: nbExtras(), top: true, shift: true }, { obj: "notebook", svg: stackFront(), top: true },
+      { obj: "notebook", svg: nbExtras() + V("tr-2", nbTitle()), top: true, shift: true }, { obj: "notebook", svg: stackFront(), top: true },
       { obj: "box", svg: boxWear() + boxLabel(), top: true },
       { obj: "eclair", svg: rack(), top: true },
       { obj: "window", svg: Object.keys(SUN).map((k) => V("sun-" + k, beams(v, k))).join("") + mobile() + Object.keys(SILL).map((k) => V("sill-" + k, SILL[k][1]())).join(""), top: true },
@@ -356,7 +419,7 @@ module.exports = {
     return [
       ...Object.keys(SILL).map((k) => ({ key: "sill" + k, title: "B" + k + " · " + SILL[k][0], vb: "716 20 150 236", svg: beams(v + "z" + k, "am") + mobile() + SILL[k][1]() })),
       { key: "rack", title: "Your eclairs on your cooling rack (click the rack in the kitchen to take one)", vb: "684 300 182 70", svg: '<use href="#a-all"/>' },
-      { key: "nb2", title: "Your composition journals, the size of the notebook closed", vb: "210 292 330 80", svg: '<use href="#a-all"/>' },
+      { key: "nb2", title: "Your composition journals: J2 square to the counter, J1 as before, J3 turned a little; “Trials” on the top label (T1) or the notebook page (T2)", vb: "210 286 340 90", svg: '<use href="#a-all"/>' },
       { key: "clip", title: "The clipboard: “" + LOG_TITLE + "” at the top of the sheet", vb: "40 -39 120 145", svg: cupOpen(v + "z") + clipboard() },
       { key: "box", title: "Recipe box with RECIPES, worn paint, tab letters", vb: "26 200 170 170", svg: boxWear() + boxLabel() },
       { key: "ideas", title: "“Ideas” on the big note", vb: "190 128 140 90", svg: ideasNote() },

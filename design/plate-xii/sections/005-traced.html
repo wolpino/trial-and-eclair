@@ -7,6 +7,12 @@
       <div class="choice"><span class="cap">Time of day</span><div class="seg" data-pick="sun">
         <button data-v="am" aria-pressed="true">morning</button><button data-v="noon">midday</button><button data-v="pm">afternoon</button><button data-v="eve">evening</button>
       </div></div>
+      <div class="choice"><span class="cap">Journals</span><div class="seg" data-pick="jr">
+        <button data-v="2" aria-pressed="true">J2 square</button><button data-v="1">J1 as now</button><button data-v="3">J3 slightly turned</button>
+      </div></div>
+      <div class="choice"><span class="cap">Trials label</span><div class="seg" data-pick="tr">
+        <button data-v="1" aria-pressed="true">T1 on the journal</button><button data-v="2">T2 on the notebook page</button><button data-v="0">T0 none</button>
+      </div></div>
       <div class="choice"><span class="cap">Cabinets</span><div class="seg" data-set="--cab">
         <button data-v="#5e8c3a" aria-pressed="true"><span class="dot" style="background:#5e8c3a"></span>stem green</button>
         <button data-v="#6D8C97"><span class="dot" style="background:#6D8C97"></span>as traced</button>
@@ -72,7 +78,7 @@
     };
     b.addEventListener("click", go); b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
   });
-  var pick = { ecl: "0", sill: "3", sun: "am", tidy: "1" };
+  var pick = { ecl: "0", sill: "3", sun: "am", tidy: "1", jr: "2", tr: "1" };
   function apply() {
     sec.classList.toggle("dusk", pick.sun === "eve"); k.classList.toggle("tidy", pick.tidy === "1");
     k.querySelectorAll("[data-var]").forEach(function (g) {
