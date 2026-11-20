@@ -19,7 +19,13 @@
 .tk-hit rect { fill: transparent; stroke: transparent; stroke-width: 1.6; stroke-dasharray: 6 4; }
 .tk-hit [role="button"] { cursor: pointer; outline: none; }
 .tk-hit [role="button"]:focus-visible rect { stroke: var(--ink); }
-.tk-art g.lit { filter: drop-shadow(0 0 1.5px var(--glow1, #f2c230)) drop-shadow(0 0 1.5px var(--glow1, #f2c230)) drop-shadow(0 0 8px var(--glow2, #f5a23a)); }
+/* v14: the glow comes from behind, one halo per object (traced/clean.cjs halos()), only outside its outline */
+.tk-art .halos { pointer-events: none; }
+.tk-art [data-halo] { opacity: 0; transition: opacity .18s ease-out; }
+.tk-art [data-halo].lit { opacity: 1; }
+.tk-art .halo1 { flood-color: var(--glow1, #f2c230); }
+.tk-art .halo2 { flood-color: var(--glow2, #f5a23a); }
+@media (prefers-reduced-motion: reduce) { .tk-art [data-halo] { transition: none; } }
 #tk { --glow1: #FFFFFF; --glow2: #EDC48C; }   /* v13 glow: G1 warm white is the default */
 /* v13: wall colour thumbnails, each a <use> of the kitchen with its own --wall */
 .tk-say { font-size: .9rem; color: var(--ink-soft); min-height: 1.6em; }
