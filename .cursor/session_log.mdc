@@ -10,6 +10,39 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-19 · Plate XII v13: journals square, bites, evening light, labels, glow and wall options (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v13) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, four subagents in worktrees) |
+| **Outcome** | success (Plate XII v13 published; questions to Ari; no app code) |
+
+### Intent
+Ari: follow the NEXT.md top prompt (v13 list from her notes on v12) and use subagents to work efficiently.
+
+### Summary
+- Main session: sill B3 only (B1/B2, their ports and control removed), cupboard bowl stack back
+- Four subagents, each in its own worktree branch, merged here (conflicts only on the DEF and pick lines): journals J1–J3 + "Trials" T0–T2; eclair bites (states 0–5) + brighter rainbows; evening under-cabinet light L2200–L4000, glow colours G1–G4 via CSS vars, white/cream walls + thumbnails; bigger Kitchen log and Ideas, shelf plaques P1–P3, whiteboard heading
+- Checked merged page: no console errors, bites and evening light render, close-ups and wall thumbnails; page 2.2 MB
+
+### Decisions
+- Subagent worktrees started from main (no design/), each reset to 085e717; brief future agents to start from the docs branch
+- Questions picks: J2, T1, L2700, P1, Next up, G1, W2
+
+### Open threads
+- Ari: the seven v13 questions; known nits listed in NEXT.md
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v13, journals affine, eclair bites, evening light, plaques, glow vars, wall thumbnails
+**Files:** design/plate-xii/traced/add.cjs, sections/00-questions.html, sections/005-traced.html, base/xii.css, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v13 as drawn (tweak only); the ink split; taller frame; the ports
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v13 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Plate XII v12: rack under the window, notebook moved, flour and pin gone (published)
 
 | Field | Value |

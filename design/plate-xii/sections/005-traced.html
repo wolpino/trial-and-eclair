@@ -1,7 +1,7 @@
 <section id="tk" class="trim-on" style="--trim:#7A4E2D" aria-labelledby="tk-h">
-  <span class="label" id="tk-h">00b · v12 · Your traced kitchen</span>
+  <span class="label" id="tk-h">00b · v13 · Your traced kitchen</span>
   <div class="sec-body">
-    <h3>The rack under the window, the notebook moved, the journals the size of the notebook</h3>
+    <h3>Journals square, bites, brighter rainbows, evening light, labels you can read</h3>
     <p class="note">Still your SVG, cleaned by <code>traced/clean.cjs</code>; the new pieces are drawn on top by <code>traced/add.cjs</code>, and your rack, journals and bottles are cut out of your traces by <code>traced/port.cjs</code>. Point at or Tab to the box, notebook, cork board, whiteboard, the book shelf, or the clipboard (recipe log). The colours below are for trying out; stem green is the default.</p>
     <div class="recol" id="tk-ctl">
       <div class="choice"><span class="cap">Time of day</span><div class="seg" data-pick="sun">
@@ -12,6 +12,12 @@
       </div></div>
       <div class="choice"><span class="cap">Whiteboard heading</span><div class="seg" data-pick="wb">
         <button data-v="next" aria-pressed="true">Next up</button><button data-v="up">Upcoming</button><button data-v="today">Today</button><button data-v="todo">To do</button>
+      </div></div>
+      <div class="choice"><span class="cap">Journals</span><div class="seg" data-pick="jr">
+        <button data-v="2" aria-pressed="true">J2 square</button><button data-v="1">J1 as now</button><button data-v="3">J3 slightly turned</button>
+      </div></div>
+      <div class="choice"><span class="cap">Trials label</span><div class="seg" data-pick="tr">
+        <button data-v="1" aria-pressed="true">T1 on the journal</button><button data-v="2">T2 on the notebook page</button><button data-v="0">T0 none</button>
       </div></div>
       <div class="choice"><span class="cap">Cabinets</span><div class="seg" data-set="--cab">
         <button data-v="#5e8c3a" aria-pressed="true"><span class="dot" style="background:#5e8c3a"></span>stem green</button>
@@ -75,13 +81,14 @@
 
     <h3>What changed this round</h3>
     <ul class="ans">
-      <li><b>Rack</b> is your new full trace, three whole eclairs, on the counter under the window where the flour and rolling pin were. Still one taken per click, crumbs stay, back on reload.</li>
-      <li><b>Flour and rolling pin</b> are gone.</li>
-      <li><b>Open notebook</b> moved left, half way to the recipe box.</li>
-      <li><b>Journals</b> are bigger: each one about the size of the notebook closed.</li>
-      <li><b>Open cupboard:</b> the stack of bowls on the top shelf (it read as a plate with an eclair) is gone.</li>
-      <li><b>Bottles:</b> B3 is your newest set, the decanter in the left pane and the amber and cobalt bottles in the right, spaced like your window. B1 and B2 are still there to compare.</li>
-      <li><b>Clipboard</b> stays "Kitchen log".</li>
+      <li><b>Journals</b> sit square to the counter, front edge level (J2). J1 is v12, J3 is turned a little. "Trials" is on the top journal's label (T1); T2 puts it on the open notebook's page.</li>
+      <li><b>Eclairs:</b> the first two clicks take one whole each, the next two take bites out of the last one (cream showing), the fifth finishes it.</li>
+      <li><b>Rainbows</b> are brighter and purer.</li>
+      <li><b>Evening:</b> warm light from under the cupboards and the shelf falls on the wall and counter. Pick a warmth under "Light (evening)"; it switches to evening for you.</li>
+      <li><b>"Kitchen log"</b> and <b>"Ideas"</b> are bigger. New: a plaque on the shelf (P1–P3) and a heading on the whiteboard (Next up, Upcoming, Today, To do).</li>
+      <li><b>Glow</b> has four colours to try (G1 warm white is new); the old yellow is G4.</li>
+      <li><b>Wall:</b> three whites and creams added, with the whole kitchen in each just below the kitchen.</li>
+      <li><b>Bottles:</b> B3 only. <b>Open cupboard:</b> the stack of bowls is back.</li>
 </ul>
   </div>
 </section>
@@ -101,7 +108,7 @@
     };
     b.addEventListener("click", go); b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
   });
-  var pick = { ecl: "0", sill: "3", sun: "am", tidy: "1", pl: "1", wb: "next", lt: "2700" };
+  var pick = { ecl: "0", sill: "3", sun: "am", tidy: "1", pl: "1", wb: "next", lt: "2700", jr: "2", tr: "1" };
   function apply() {
     sec.classList.toggle("dusk", pick.sun === "eve"); k.classList.toggle("tidy", pick.tidy === "1");
     k.querySelectorAll("[data-var]").forEach(function (g) {
