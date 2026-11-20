@@ -18,7 +18,7 @@ const cab = (pct, to) => "color-mix(in srgb,var(--cab) " + pct + "%," + (to || "
 
 /* ---- options on the page: each is a <g data-var="key-value ..."> shown only when every key matches the page's choice.
         DEF = what shows first (Claude's picks). ---- */
-const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19) */
+const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1", lt: "2700" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19) */
 function V(tokens, svg) {
   const on = tokens.split(" ").every((t) => { const i = t.indexOf("-"); return t.slice(i + 1).split("|").includes(DEF[t.slice(0, i)]); });   /* "ecl-0|1" = ecl is 0 or 1 */
   return '<g data-var="' + tokens + '"' + (on ? "" : ' style="display:none"') + ">" + svg + "</g>";
@@ -337,6 +337,31 @@ function patch(v, o) {
     '<rect x="330" y="315.4" width="134" height="1.8" style="fill:' + INK + '"/>' +
     '<path d="M300 336 Q340 334.6 380 336 Q340 337 300 336Z M360 352 Q400 350.4 440 352 Q400 353.2 360 352Z" style="fill:#A87548"/>';
 }
+/* ---- evening under-cabinet and shelf light (v13): a light bar under the cabinet and bookshelf bottoms (y ~118, x 6..664),
+        a soft pool down the wall onto the counter (back edge y 316.4, front ~370). Screen blend lifts the dusk layer,
+        a soft-light pass adds the warmth. lt = colour temperature; only with sun-eve. ---- */
+const LT = { "2700": "#FFA957", "2200": "#FF932C", "3000": "#FFB46B", "4000": "#FFD1A3" };   /* blackbody approximations, sRGB */
+function underLight(v) {
+  return Object.keys(LT).map((k) => {
+    const c = LT[k], id = v + "-lt" + k, X0 = 6, X1 = 664, Y0 = 118.5, FR = 370, W = X1 + 60 - X0;
+    const stop = (o, a) => '<stop offset="' + o + '" stop-color="' + c + '" stop-opacity="' + a + '"/>';
+    const m = ' mask="url(#' + id + 'm)"', R = (y0, y1, fill) => '<rect x="' + X0 + '" y="' + y0 + '" width="' + W + '" height="' + f1(y1 - y0) + '" fill="' + fill + '"/>';
+    const svg = '<defs>' +
+      '<linearGradient id="' + id + 'w" x1="0" y1="0" x2="0" y2="1">' + stop(0, .75) + stop(.08, .4) + stop(.36, .16) + stop(.74, .12) + stop(.84, .3) + stop(1, .03) + "</linearGradient>" +
+      '<linearGradient id="' + id + 's" x1="0" y1="0" x2="0" y2="1">' + stop(0, .9) + stop(.35, .55) + stop(1, .35) + "</linearGradient>" +
+      '<linearGradient id="' + id + 'h" x1="0" y1="0" x2="1" y2="0"><stop offset="0" stop-color="#fff"/><stop offset=".76" stop-color="#fff"/><stop offset="1" stop-color="#000"/></linearGradient>' +
+      '<mask id="' + id + 'm" maskUnits="userSpaceOnUse" x="' + X0 + '" y="100" width="' + W + '" height="300"><rect x="' + X0 + '" y="100" width="' + W + '" height="300" fill="url(#' + id + 'h)"/>' +
+        '<rect x="34" y="208" width="152" height="156" rx="14" filter="url(#' + id + 'k)" style="fill:#4d4d4d"/></mask>' +   /* the box (brand blue) takes less light, so it stays blue */
+      '<filter id="' + id + 'k" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="5"/></filter>' +
+      '<filter id="' + id + 'b" x="-5%" y="-300%" width="110%" height="700%"><feGaussianBlur stdDeviation="2.2"/></filter></defs>' +
+      /* each blended layer carries its own mask: a masked parent would isolate the blend */
+      '<g' + m + ' style="mix-blend-mode:soft-light;pointer-events:none">' + R(Y0, FR, "url(#" + id + "s)") + "</g>" +
+      '<g' + m + ' style="mix-blend-mode:screen;pointer-events:none">' + R(Y0, FR, "url(#" + id + "w)") + "</g>" +
+      '<g style="pointer-events:none"><rect x="' + X0 + '" y="' + (Y0 - 1) + '" width="' + (X1 - X0) + '" height="3" filter="url(#' + id + 'b)" style="fill:' + c + ';opacity:.85"/>' +
+      '<rect x="' + X0 + '" y="' + Y0 + '" width="' + (X1 - X0) + '" height="1.1" style="fill:color-mix(in srgb,' + c + ' 35%,#fff)"/></g>';
+    return V("sun-eve lt-" + k, svg);
+  }).join("");
+}
 module.exports = {
   DEF, SHIFT, HULL, patch, TRIM, GLASS,
   opts(v) {
@@ -348,6 +373,7 @@ module.exports = {
       { obj: "eclair", svg: rack(), top: true },
       { obj: "window", svg: Object.keys(SUN).map((k) => V("sun-" + k, beams(v, k))).join("") + mobile() + Object.keys(SILL).map((k) => V("sill-" + k, SILL[k][1]())).join(""), top: true },
       { obj: "dusk", svg: V("sun-eve", '<rect x="0" y="-60" width="868" height="560" style="fill:#2B2A4A;opacity:.2;mix-blend-mode:multiply"/>'), top: true },
+      { obj: "lt", svg: underLight(v), top: true },
       { obj: "cup-open", svg: cupOpen(v), top: true }, { obj: "clip", svg: clipboard(), top: true }] };
   },
   /* close-ups for the page, drawn over a <use> of the kitchen scene */
