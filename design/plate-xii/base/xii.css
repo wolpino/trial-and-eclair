@@ -22,10 +22,6 @@
 .tk-art g.lit { filter: drop-shadow(0 0 1.5px var(--glow1, #f2c230)) drop-shadow(0 0 1.5px var(--glow1, #f2c230)) drop-shadow(0 0 8px var(--glow2, #f5a23a)); }
 #tk { --glow1: #FFFFFF; --glow2: #EDC48C; }   /* v13 glow: G1 warm white is the default */
 /* v13: wall colour thumbnails, each a <use> of the kitchen with its own --wall */
-.tk-walls { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 14px; }
-.tk-walls figure { margin: 0; border: 1.5px solid var(--ink); background: var(--wall); }
-.tk-walls svg { display: block; width: 100%; height: auto; }
-.tk-walls figcaption { font-size: .84rem; color: var(--ink-soft); padding: 6px 10px; border-top: 1px solid var(--rule); background: var(--card); }
 .tk-say { font-size: .9rem; color: var(--ink-soft); min-height: 1.6em; }
 /* v5: close-ups reuse the kitchen drawing */
 #tk .k-fig { margin: 0; }

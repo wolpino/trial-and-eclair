@@ -18,7 +18,7 @@ const cab = (pct, to) => "color-mix(in srgb,var(--cab) " + pct + "%," + (to || "
 
 /* ---- options on the page: each is a <g data-var="key-value ..."> shown only when every key matches the page's choice.
         DEF = what shows first (Claude's picks). ---- */
-const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1", pl: "1", wb: "next", lt: "2700", jr: "2", tr: "1" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19) */
+const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19) */
 function V(tokens, svg) {
   const on = tokens.split(" ").every((t) => { const i = t.indexOf("-"); return t.slice(i + 1).split("|").includes(DEF[t.slice(0, i)]); });   /* "ecl-0|1" = ecl is 0 or 1 */
   return '<g data-var="' + tokens + '"' + (on ? "" : ' style="display:none"') + ">" + svg + "</g>";
@@ -134,13 +134,11 @@ const BOTTLES = {
 const atSill = (svg, k, cx, sy) => '<g transform="translate(768 246.5) scale(' + k + ") translate(" + (-cx) + " " + (-sy) + ')">' + svg + "</g>";
 
 /* her two stacked composition journals, in front of the whiteboard, each the size of the notebook closed.
-   jr-1 = as v12 (her drawing scaled); jr-2 = square to the counter (front edge level); jr-3 = turned a few degrees, between.
-   For 2 and 3 her drawing is cut into faces (top cover, page edges, spine) and each face is fitted on its own (affine from three
+   Square to the counter, front edge level (J2, Ari 11/20). Her drawing is cut into faces (top cover, page edges, spine) and each face is fitted on its own (affine from three
    corners), so the cover lies flat and the page edges stand upright; the page edges go in strips, since her face is taller at the right. */
-const JOURNAL_FIT = { x: 410, y: 300, k: .31 };   /* jr-1: her stack's top-left (24, 32) -> here */
 /* her units: cover corners, the page-edge face's bottom corners, the spine face's bottom-left */
 const JS = { bl: [27, 70], br: [232, 34], r: [387, 134], f: [165, 177], rb: [390, 208], fb: [166, 226], blb: [27, 131] };
-const JX0 = 430, JTOP = 349, JH = 13;   /* jr-2: front-left corner x, cover's front edge y, stack height (bottom at y 362, on the shadow) */
+const JX0 = 430, JTOP = 349, JH = 13;   /* front-left corner x, cover's front edge y, stack height (bottom at y 362, on the shadow) */
 /* the 2x3 matrix taking three points s to three points d */
 function fit3(s, d) {
   const [[x0, y0], [x1, y1], [x2, y2]] = s, det = (x1 - x0) * (y2 - y0) - (x2 - x0) * (y1 - y0);
@@ -163,16 +161,12 @@ function jPages() {
   return P(wob([[0, -.2], [100, -.2], [100.6, H], [-.2, H]], .15), "#2A2826") + pg(1.1, 5.2, 0) + pg(7.6, 11.7, .4) +
     '<path d="M0 6.4 H100.4" style="stroke:' + INK + ';stroke-width:.5"/>' + P(wob([[0, -.2], [100, -.2], [100.6, H], [-.2, H]], .15), "none", .9);
 }
-/* the screen corners of the top cover for each option: [bl, br, r, f] */
-function jCover(k) {
-  const two = [[JX0 + 3, JTOP - 44], [JX0 + 80, JTOP - 43], [JX0 + 85, JTOP], [JX0, JTOP]];
-  if (k === "2") return two;
-  const one = [JS.bl, JS.br, JS.r, JS.f].map((p) => [JOURNAL_FIT.x + (p[0] - 24) * JOURNAL_FIT.k, JOURNAL_FIT.y + (p[1] - 32) * JOURNAL_FIT.k]);
-  const c = (q) => q.reduce((a, p) => [a[0] + p[0] / 4, a[1] + p[1] / 4], [0, 0]), c1 = c(one), c2 = c(two);
-  return two.map((p, i) => [c2[0] + ((one[i][0] - c1[0]) + (p[0] - c2[0])) / 2, c2[1] + ((one[i][1] - c1[1]) + (p[1] - c2[1])) / 2]);   /* half way */
+/* the screen corners of the top cover: [bl, br, r, f] */
+function jCover() {
+  return [[JX0 + 3, JTOP - 44], [JX0 + 80, JTOP - 43], [JX0 + 85, JTOP], [JX0, JTOP]];
 }
 function stackFace(k, src) {
-  const id = src + "-" + k, [bl, br, r, f] = jCover(k), dn = (p) => [p[0], p[1] + JH], use = '<use href="#' + src + '"/>';
+  const id = src + "-" + k, [bl, br, r, f] = jCover(), dn = (p) => [p[0], p[1] + JH], use = '<use href="#' + src + '"/>';
   const piece = (src, dst, poly, n) => '<clipPath id="' + id + n + '"><polygon points="' + ptsS(poly) + '"/></clipPath><g transform="' + mtx(fit3(src, dst)) + '"><g clip-path="url(#' + id + n + ')">' + use + "</g></g>";
   let s = "";
   /* spine face, only when it turns toward us */
@@ -182,15 +176,14 @@ function stackFace(k, src) {
   s += '<g transform="' + mtx(fit3([[0, 0], [100, 0], [0, JH]], [f, r, dn(f)])) + '">' + jPages() + "</g>";
   /* the top cover, last; its clip stops at the front edge and the spine */
   const m = fit3([JS.bl, JS.r, JS.f], [bl, r, f]);
-  s += '<clipPath id="' + id + 'c"><polygon points="' + ptsS([[20, 66], [231, 29.5], [235, 33], [389.5, 133], JS.r, JS.f, JS.bl]) + '"/></clipPath><g transform="' + mtx(m) + '"><g clip-path="url(#' + id + 'c)">' + use + "</g>" + V("tr-1", jLabel()) + "</g>";
+  s += '<clipPath id="' + id + 'c"><polygon points="' + ptsS([[20, 66], [231, 29.5], [235, 33], [389.5, 133], JS.r, JS.f, JS.bl]) + '"/></clipPath><g transform="' + mtx(m) + '"><g clip-path="url(#' + id + 'c)">' + use + "</g>" + jLabel() + "</g>";
   return s;
 }
 function stackFront() {
   const id = "j" + (++uid), sh = (cx, rx) => '<ellipse cx="' + f1(cx) + '" cy="363" rx="' + f1(rx) + '" ry="5" style="fill:#B17A4B"/>';
-  const at1 = "translate(" + JOURNAL_FIT.x + " " + JOURNAL_FIT.y + ") scale(" + JOURNAL_FIT.k + ") translate(-24 -32)";
   let s = '<defs><g id="' + id + '">' + reid(JOURNALS.parts.stack, id) + "</g></defs>";
-  s += V("jr-1", sh(470, 58) + '<g transform="' + at1 + '"><use href="#' + id + '"/>' + V("tr-1", jLabel()) + "</g>");
-  ["2", "3"].forEach((k) => { const q = jCover(k), cx = (q[2][0] + q[3][0]) / 2; s += V("jr-" + k, sh(cx + 4, (q[2][0] - q[3][0]) / 2 + 10) + stackFace(k, id)); });
+  const q = jCover(), cx = (q[2][0] + q[3][0]) / 2;
+  s += sh(cx + 4, (q[2][0] - q[3][0]) / 2 + 10) + stackFace("2", id);
   return s;
 }
 
@@ -302,14 +295,6 @@ function nbExtras() {
   return s;
 }
 
-/* "Trials" at the top of the open notebook's left page (tr-2), in the page's plane; notebook units before SHIFT (it moves with it).
-   Left page corners: top-left (264, 326), top-right (332, 318), bottom-left (279, 366) */
-function nbTitle() {
-  const m = fit3([[0, 0], [68, 0], [0, 40]], [[264, 326], [332, 318], [279, 366]]);
-  return '<g transform="' + mtx(m) + '"><text x="33" y="12" text-anchor="middle" style="font:700 12px Caveat,\'Segoe Script\',cursive;fill:#2a2622">' + TRIALS + "</text>" +
-    '<path d="M21 14.2 q12 -.8 24 -.2" style="fill:none;stroke:#2a2622;stroke-width:.7;stroke-linecap:round"/></g>';
-}
-
 /* ---- the recipe box, more like the reference: worn paint, letters on the tabs, and (option 3) RECIPES on the front ---- */
 function boxWear() {
   const F = "matrix(1 -0.136 0 1 93 307)";   /* the box's front face: u across from its top-left corner, v down */
@@ -337,8 +322,7 @@ function ideasNote() {
 
 /* ---- v13 shelf plaques: brass label holders with a cream card, screwed to the board fronts (they overhang the thin boards a
         little, as real ones do). Boards: middle front y ~10-16, bottom front y ~106-112.5; cookbooks x 410-560, references 560-664.
-        pl-1 "The Library" centred on the bottom board; pl-2 "The Library" left half + "Reference Library" right half;
-        pl-3 "Cookbooks" on the middle board, "References" on the bottom board ---- */
+        One plaque, "The Library", centred on the bottom board ---- */
 const SHELF = { mid: 13, bot: 109.3 };
 function plaque(cx, cy, label, fs) {
   fs = fs || 7.6; const tw = label.length * (fs * .56 + .7), w = tw + 15, h = fs + 6.4, x0 = cx - w / 2, y0 = cy - h / 2;   /* tw: the caps' width, fixed by textLength */
@@ -350,21 +334,15 @@ function plaque(cx, cy, label, fs) {
     [x0 + 2.2, x0 + w - 2.2].map((x) => '<circle cx="' + f1(x) + '" cy="' + f1(cy) + '" r=".9" style="fill:#8A6A28"/>').join("") +
     '<text x="' + f1(cx) + '" y="' + f1(cy + fs * .36) + '" text-anchor="middle" textLength="' + f1(tw - .7) + '" lengthAdjust="spacingAndGlyphs" style="font:700 ' + fs + 'px \'Archivo Narrow\',\'Arial Narrow\',sans-serif;letter-spacing:.7px;fill:' + INK + '">' + label.toUpperCase() + "</text></g>";
 }
-const PLAQUES = {
-  1: () => plaque(537, SHELF.bot, "The Library", 8.2),
-  2: () => plaque(485, SHELF.bot, "The Library") + plaque(603, SHELF.bot, "Reference Library", 6.8),
-  3: () => plaque(537, SHELF.mid, "Cookbooks") + plaque(537, SHELF.bot, "References"),
-};
-const shelfPlaques = () => Object.keys(PLAQUES).map((k) => V("pl-" + k, PLAQUES[k]())).join("");
+const shelfPlaques = () => plaque(537, SHELF.bot, "The Library", 8.2);   /* P1 (Ari 11/20) */
 
 /* ---- v13 whiteboard heading in the marker's own red, top left of the board, underlined like the Ideas note ---- */
-const WB = { next: "Next up", up: "Upcoming", today: "Today", todo: "To do" }, WB_INK = "#B8392E";
-function wbHead(k) {
+const WB_HEAD = "Next up", WB_INK = "#B8392E";
+function wbHead() {
   const t = ' transform="rotate(-2 472 166)"';
-  return '<text x="472" y="166"' + t + ' style="font:700 21px Caveat,\'Segoe Script\',cursive;fill:' + WB_INK + ';stroke:' + WB_INK + ';stroke-width:.35;stroke-linejoin:round">' + WB[k] + "</text>" +
-    '<path d="M471 170.4 q' + f1(WB[k].length * 4.4) + " -1.2 " + f1(WB[k].length * 8.8) + ' -.6"' + t + ' style="fill:none;stroke:' + WB_INK + ';stroke-width:1.5;stroke-linecap:round;opacity:.9"/>';
+  return '<text x="472" y="166"' + t + ' style="font:700 21px Caveat,\'Segoe Script\',cursive;fill:' + WB_INK + ';stroke:' + WB_INK + ';stroke-width:.35;stroke-linejoin:round">' + WB_HEAD + "</text>" +
+    '<path d="M471 170.4 q' + f1(WB_HEAD.length * 4.4) + " -1.2 " + f1(WB_HEAD.length * 8.8) + ' -.6"' + t + ' style="fill:none;stroke:' + WB_INK + ';stroke-width:1.5;stroke-linecap:round;opacity:.9"/>';
 }
-const wbHeads = () => Object.keys(WB).map((k) => V("wb-" + k, wbHead(k))).join("");
 
 /* ---- without the flour and rolling pin (tidy-1): wall and counter filled where they stood ---- */
 function tidyPatch(v) {
@@ -457,8 +435,8 @@ function patch(v, o) {
 }
 /* ---- evening under-cabinet and shelf light (v13): a light bar under the cabinet and bookshelf bottoms (y ~118, x 6..664),
         a soft pool down the wall onto the counter (back edge y 316.4, front ~370). Screen blend lifts the dusk layer,
-        a soft-light pass adds the warmth. lt = colour temperature; only with sun-eve. ---- */
-const LT = { "2700": "#FFA957", "2200": "#FF932C", "3000": "#FFB46B", "4000": "#FFD1A3" };   /* blackbody approximations, sRGB */
+        a soft-light pass adds the warmth. Only with sun-eve. ---- */
+const LT = { "2700": "#FFA957" };   /* 2700K (Ari 11/20), blackbody approximation, sRGB */
 function underLight(v) {
   return Object.keys(LT).map((k) => {
     const c = LT[k], id = v + "-lt" + k, X0 = 6, X1 = 664, Y0 = 118.5, FR = 370, W = X1 + 60 - X0;
@@ -477,7 +455,7 @@ function underLight(v) {
       '<g' + m + ' style="mix-blend-mode:screen;pointer-events:none">' + R(Y0, FR, "url(#" + id + "w)") + "</g>" +
       '<g style="pointer-events:none"><rect x="' + X0 + '" y="' + (Y0 - 1) + '" width="' + (X1 - X0) + '" height="3" filter="url(#' + id + 'b)" style="fill:' + c + ';opacity:.85"/>' +
       '<rect x="' + X0 + '" y="' + Y0 + '" width="' + (X1 - X0) + '" height="1.1" style="fill:color-mix(in srgb,' + c + ' 35%,#fff)"/></g>';
-    return V("sun-eve lt-" + k, svg);
+    return V("sun-eve", svg);
   }).join("");
 }
 module.exports = {
@@ -486,11 +464,11 @@ module.exports = {
     seed = 7;
     return { end: [{ obj: "whiteboard", svg: marker() }, { obj: "ideas", svg: ideasNote() },
       { obj: "room", svg: V("tidy-1", tidyPatch(v)), top: true },
-      { obj: "notebook", svg: nbExtras() + V("tr-2", nbTitle()), top: true, shift: true }, { obj: "notebook", svg: stackFront(), top: true },
+      { obj: "notebook", svg: nbExtras(), top: true, shift: true }, { obj: "notebook", svg: stackFront(), top: true },
       { obj: "box", svg: boxWear() + boxLabel(), top: true },
       { obj: "eclair", svg: rack(), top: true },
       { obj: "window", svg: Object.keys(SUN).map((k) => V("sun-" + k, beams(v, k))).join("") + mobile() + Object.keys(SILL).map((k) => V("sill-" + k, SILL[k][1]())).join(""), top: true },
-      { obj: "cookbooks", svg: shelfPlaques(), top: true }, { obj: "whiteboard", svg: wbHeads(), top: true },   /* v13 text: under the dusk wash */
+      { obj: "cookbooks", svg: shelfPlaques(), top: true }, { obj: "whiteboard", svg: wbHead(), top: true },   /* v13 text: under the dusk wash */
       { obj: "dusk", svg: V("sun-eve", '<rect x="0" y="-60" width="868" height="560" style="fill:#2B2A4A;opacity:.2;mix-blend-mode:multiply"/>'), top: true },
       { obj: "lt", svg: underLight(v), top: true },
       { obj: "cup-open", svg: cupOpen(v), top: true }, { obj: "clip", svg: clipboard(), top: true }] };
@@ -501,12 +479,12 @@ module.exports = {
     return [
       ...Object.keys(SILL).map((k) => ({ key: "sill" + k, title: "B" + k + " · " + SILL[k][0], vb: "716 20 150 236", svg: beams(v + "z" + k, "am") + mobile() + SILL[k][1]() })),
       { key: "rack", title: "Your eclairs on your cooling rack (click the rack in the kitchen: two taken, two bites out of the last, then gone)", vb: "684 300 182 70", svg: '<use href="#a-all"/>' },
-      { key: "nb2", title: "Your composition journals: J2 square to the counter, J1 as before, J3 turned a little; “Trials” on the top label (T1) or the notebook page (T2)", vb: "210 286 340 90", svg: '<use href="#a-all"/>' },
+      { key: "nb2", title: "Your composition journals, square to the counter, “Trials” on the top label", vb: "210 286 340 90", svg: '<use href="#a-all"/>' },
       { key: "clip", title: "The clipboard: “" + LOG_TITLE + "” at the top of the sheet", vb: "40 -26 84 72", svg: cupOpen(v + "z") + clipboard() },
       { key: "box", title: "Recipe box with RECIPES, worn paint, tab letters", vb: "26 200 170 170", svg: boxWear() + boxLabel() },
       { key: "ideas", title: "“Ideas” on the big note", vb: "200 140 90 54", svg: ideasNote() },
-      ...Object.keys(PLAQUES).map((k) => ({ key: "pl" + k, title: "P" + k + " · " + ["", "“The Library” on the bottom shelf", "“The Library” and “Reference Library”, one per half", "“Cookbooks” on the middle shelf, “References” on the bottom"][k], vb: "404 0 268 124", svg: PLAQUES[k]() })),
-      { key: "wb", title: "Whiteboard heading (follows the Whiteboard heading choice above)", vb: "452 130 142 70", svg: '<use href="#a-all"/>' },
+      { key: "pl", title: "“The Library” on the bottom shelf", vb: "404 0 268 124", svg: shelfPlaques() },
+      { key: "wb", title: "“Next up” on the whiteboard", vb: "452 130 142 70", svg: '<use href="#a-all"/>' },
     ];
   },
 };
