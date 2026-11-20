@@ -84,7 +84,7 @@ let biteN = 0;
 const ECL = { L: 23, H: 9.5, o: { ridges: 1 } };
 /* ---- Ari's vector traces (refs/), cut out by traced/port.cjs into ports/*.json in her units ---- */
 const PORT = (n) => JSON.parse(require("fs").readFileSync(require("path").join(__dirname, "ports", n + ".json"), "utf8"));
-const RACK2 = PORT("rack2"), JOURNALS = PORT("journals"), TRIO = PORT("bottles-trio"), DECANTER = PORT("bottles-decanter"), W2L = PORT("bottles-w2-left"), W2R = PORT("bottles-w2-right");
+const RACK2 = PORT("rack2"), JOURNALS = PORT("journals"), W2L = PORT("bottles-w2-left"), W2R = PORT("bottles-w2-right");
 /* reusing a port twice needs its own ids */
 const reid = (svg, sfx) => svg.replace(/id="([^"]+)"/g, 'id="$1' + sfx + '"').replace(/url\(#([^)]+)\)/g, "url(#$1" + sfx + ")");
 /* her full cooling rack with three eclairs (refs/eclair-rack2.svg), on the counter under the window where the flour and rolling
@@ -104,12 +104,10 @@ function rack() {
   return '<g transform="translate(' + RACK_FIT.x + " " + RACK_FIT.y + ") scale(" + RACK_FIT.k + ') translate(-41 -284)">' + s + "</g>";
 }
 
-/* ---- the sill: Ari's vector bottles (ports/). B1 her trio; B2 her decanter with the trio's amber bottle; B3 her newest set
+/* ---- the sill: Ari's vector bottles (ports/), her newest set B3 (Ari 11/19)
         (decanter in the left pane, amber and cobalt in the right). [title, svg, scale, her x that lands at the sill's x 768, her sill y] ---- */
 const BOTTLES = {
   3: ["Your newest set: decanter, then the amber and cobalt bottles", () => reid(W2L.parts.glass + W2R.parts.glass, "s3"), .5, 275, 416],
-  1: ["Your trio: seafoam, cobalt and amber", () => reid(TRIO.parts.glass + TRIO.parts.amber, "s1"), .62, 168, 300],
-  2: ["Your fluted decanter, with the amber bottle from the trio", () => '<g transform="translate(26 0)">' + reid(TRIO.parts.amber, "s2") + "</g>" + reid(DECANTER.parts.glass, "s2"), .62, 180, 300],
 };
 const atSill = (svg, k, cx, sy) => '<g transform="translate(768 246.5) scale(' + k + ") translate(" + (-cx) + " " + (-sy) + ')">' + svg + "</g>";
 
@@ -287,8 +285,9 @@ function interior(v) {
   const jar = (x, w, t, bot, lid, glass) => P(wob([[x, t + 3], [x + w, t + 3], [x + w, bot], [x, bot]], .25), glass, 1.3) + P(wob([[x - 0.8, t], [x + w + 0.8, t], [x + w + 0.8, t + 3.6], [x - 0.8, t + 3.6]], .15), lid, 1.1);
   const shelf = (sy) => { const u0 = bk(x0, sy + 3.5), u1 = bk(x1, sy + 3.5); return P("M" + x0 + " " + (sy + 3.5) + " L" + x1 + " " + (sy + 3.5) + " L" + f1(u1[0]) + " " + f1(u1[1]) + " L" + f1(u0[0]) + " " + f1(u0[1]) + "Z", cab(52)); };
   const edge = (sy) => P("M" + x0 + " " + sy + " H" + x1 + " V" + (sy + 3.5) + " H" + x0 + "Z", cab(66), 1.3);
-  /* top shelf (y 3): tins (the stack of bowls read as a plate with an eclair, removed 11/19); middle shelf (y 52): jars; floor: flour tin, sugar jar, a box of cases */
+  /* top shelf (y 3): tins and a stack of bowls (back, Ari 11/19); middle shelf (y 52): jars; floor: flour tin, sugar jar, a box of cases */
   s += shelf(3) + jar(146, 22, -30, 3, "#9C9892", "#D8C9A4") + jar(174, 14, -18, 3, "#C8473A", "#EFE6CF") +
+    P(wob([[200, -6], [240, -6], [236, 3], [204, 3]], .3), "#EFE6CF", 1.3) + P(wob([[203, -13], [237, -13], [233, -6], [207, -6]], .3), "#8BA07A", 1.3) + P(wob([[206, -20], [234, -20], [230, -13], [210, -13]], .3), "#F0C86A", 1.3) +
     jar(246, 14, -22, 3, "#B17A4B", "#E9DDBE") + edge(3);
   s += shelf(52) + jar(150, 17, 20, 52, "#C8473A", "#E9DDBE") + jar(172, 13, 28, 52, "#B17A4B", "#EFE6CF") + jar(214, 22, 16, 52, "#9C9892", "#D8C9A4") + jar(242, 13, 26, 52, "#8BA07A", "#EFE6CF") + edge(52);
   s += jar(158, 30, 70, y1 + 2, "#E0B450", "#F0C86A") + jar(206, 15, 64, y1 + 2, "#B17A4B", "#E9DDBE") + jar(226, 26, 80, y1 + 2, "#9C9892", "#CFC8B8");

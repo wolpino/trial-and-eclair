@@ -15,9 +15,6 @@ const WINDOW = ["#839986", "#8B897D", "#978E71", "#909C8F", "#949792", "#718175"
 const WINDOW2 = ["#839682", "#86A085", "#F8E0B1", "#FBEBCB", "#AD8D5F", "#BDBC94", "#CAB07E", "#E0D89D", "#A6CF8E", "#E0F1A9", "#B0A47B", "#A7A29E", "#A3A99C", "#59543B", "#CCC8B9", "#B5AD7E", "#B8C8AA", "#9A9E7F", "#A3AE83", "#CBD58B", "#868577", "#6E7770", "#91A2A7"];
 const PIECES = {
   /* the glass only: her window, mobile, beams and sill are already in the kitchen */
-  "bottles-trio": { ref: "bottles-trio.svg", keep: [132, 200, 204, 300.5], drop: WINDOW, parts: { amber: [178.5, 0, 999, 999], glass: null } },
-  "bottles-decanter": { ref: "bottles-decanter.svg", keep: [144, 178, 194, 300.5], drop: WINDOW, dropIdx: [68, 158, 206, 207], parts: { glass: null } },
-  "bottles-pair": { ref: "bottles-pair.svg", keep: [119, 200, 206, 301], drop: WINDOW, dropIdx: [42], parts: { glass: null } },
   /* her full rack (2026-11-19): three whole eclairs, so no copy. top.dark: cut above the first dark (outline) pixel per column */
   "rack2": { ref: "eclair-rack2.svg", top: { dark: 90, y: [100, 200] }, clip: {
     e1: [[117, 160], [118, 128], [145, 123], [172, 126], [198, 145], [230, 168], [264, 192], [281, 212], [281, 240], [270, 262], [247, 270], [220, 268], [187, 248], [153, 231], [125, 211], [113, 187]],
