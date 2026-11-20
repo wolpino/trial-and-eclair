@@ -28,14 +28,17 @@ Ari answered v14 (rack good) and gave several more notes. She also asked to move
 - `.cursor/handoffs/NEXT.md` retitled to say v15 drawing should wait on the workflow decision
 - Nothing drawn or published this session
 
+### Decisions
+- Ari picked (2026-11-20): questions first in chat for real choices, no subagents, confirm before a bigger run (she's sometimes sent a message before meaning to), batch notes where reasonable. Written to the `workflow-lower-usage` memory and into NEXT.md's v15 prompt
+
 ### Open threads
-- Ari to pick a workflow option (plan given in chat, not written to a file); v15 notes wait on that pick
+- v15 notes wait on the next session, which should follow the decided workflow above
 
 <!-- AGENT_CONTEXT_START -->
-**Keywords:** v15 notes, workflow lower usage, no drawing this session
+**Keywords:** v15 notes, workflow lower usage decided, no drawing this session
 **Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, kitchen-layout memory, workflow-lower-usage memory
 **Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v14 as drawn (tweak only); Ari's v13/v14 picks
-**Resume with:** wait for Ari's workflow pick, then `.cursor/handoffs/NEXT.md` top prompt for v15
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt for v15 (follow the decided workflow: questions first, no subagents, confirm before building)
 <!-- AGENT_CONTEXT_END -->
 
 ---

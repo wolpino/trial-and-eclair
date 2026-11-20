@@ -1,4 +1,4 @@
-# NEXT — 2026-11-20 (Plate XII v14 published; v15 notes collected, workflow decision pending — do not start drawing v15 until that's settled)
+# NEXT — 2026-11-20 (Plate XII v14 published; v15 notes collected; low-usage workflow decided — see below before starting v15)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -11,7 +11,7 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 ```
 
 ## Prompt for the next agent (Plate XII v15) — START HERE, but read this first
-> **Do not spin up several subagents and start drawing options yet.** Ari asked (2026-11-20) to move to a lower-usage workflow before the next round — her idea: settle open questions in chat first, then build only the picked option once, rather than drawing several options per note. A session reads her reply, checks the `workflow-lower-usage` memory for what she picked, and builds accordingly (likely: fewer/no subagents for small fixes, done directly in the main session; questions settled in text first for anything with real choices).
+> **Workflow decided (Ari, 2026-11-20 — see the `workflow-lower-usage` memory for the full policy):** ask in chat first for anything with a real visual choice and wait for a text answer before building; skip the question for plain fixes with no real trade-off and just confirm intent. **No subagents** for this round — make the edits directly in the main session; subagents are only for something genuinely large. **Confirm before a bigger run** (build/screenshot/publish) rather than assuming a short or ambiguous message is a go-ahead — Ari has sometimes sent a message before she meant to.
 >
 > Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (live = v14, rack confirmed good). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session.
 >
