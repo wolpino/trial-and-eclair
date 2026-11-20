@@ -10,6 +10,36 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-19 · Kitchen Progression gallery (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (progression) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, one subagent) |
+| **Outcome** | success (gallery published; picks waiting on Ari; no app code) |
+
+### Intent
+Ari: there will be many kitchen versions; collect every full-kitchen shot (old and current) as a GIF or a gallery showing the progression, grouping look-alikes and erring on including them, so she can pick which to use.
+
+### Summary
+- 142 full-kitchen shots, oldest first: October app kitchen, style pair, tuning corner, Plate I, mark sketch, kitchen starter, Rounds 1-10, Plates II-VIII (re-rendered from their artifacts by a subagent), Plate IX shots, Plates X/XI/XII and Brand Sheet rendered at every git commit with unchanged renders dropped
+- `design/progression/`: `build.py` (item list, groups, default picks; needs the scratchpad renders to rebuild), `items.json`, `img/`, `index.html`
+- Page: look-alike trays, Use toggles, picked strip, Play reel (speed 0.6-4 s); picks save to the artifact db at `picks/main` {picked, speed}
+- 62 of 142 picked by default (one or two per tray)
+
+### Open threads
+- Ari picks; then make the GIF from `picks/main` (PIL, same order and speed)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** kitchen progression, gallery, reel, GIF
+**Files:** design/progression/ (build.py, items.json, img/, index.html)
+**Do not redo:** the renders and dedupe (142 items); Plate XII v1-v9 as drawn
+**Resume with:** read `picks/main` from https://claude.ai/artifact/E4xdK2o9H9iYMPpM8M7Juw, build the GIF; Plate XII still waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Plate XII v9: glass studies, rainbows by time, words (published)
 
 | Field | Value |
