@@ -40,6 +40,37 @@ Ari: there will be many kitchen versions; collect every full-kitchen shot (old a
 
 ---
 
+## 2026-11-19 · Plate XII v10: cooling rack, bottles, composition books (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v10) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v10 published; questions to Ari; no app code) |
+
+### Intent
+Ari: "B4 carafe and flask" was a misclick (an uncommitted B4-only change was discarded with git checkout). Likes B1 but small, B2 with another bottle; books like her reference picture; eclairs cooling on a rack, gone by clicks.
+
+### Summary
+- `add.cjs`: studies 1 and 2 only, SILL_FIT scale per study (B1 .56; B2 .5 with the trio's amber bottle beside the decanter); rack(n) (flatQuad wire rack, three eclairBody at 26 degrees, n taken leave crumbs) replaces eclair(n); compBook redrawn (back cover, two-layer page block with lines, spine wrap, dense marble, double label); flatQuad takes k (.36 for books and rack)
+- Page: B1/B2 buttons, rack is the click target (tested: three clicks, then button gone; no errors)
+
+### Decisions
+- Ari: eclairs on a cooling rack, gone by clicks; bottles B1 or B2 only
+
+### Open threads
+- Ari: B1 or B2, take vs bite, books (vector?), flour and pin, clipboard title, times of day, Library name
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v10, cooling rack, composition books, glass bottles
+**Files:** design/plate-xii/traced/add.cjs, sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v10 as drawn (tweak only); the ink split; taller frame
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v10 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Plate XII v9: glass studies, rainbows by time, words (published)
 
 | Field | Value |

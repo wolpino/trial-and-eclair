@@ -81,14 +81,22 @@ function eclairBody(cx, base, L, H, o) {
   return s;
 }
 let biteN = 0;
-const ECL = { L: 60, H: 19, o: { ridges: 1, stitch: 1 } };
-/* n = bites taken: 0 whole, 1, 2, 3 gone (plate and crumbs). The page takes a bite per click; a reload brings it back */
-function eclair(n) {
-  const cx = 222, cy = 362, base = cy - 1.2;
-  let s = plate(cx, cy, 1, "plain");
-  if (n) for (const c of [[-24, 1.5], [-18, 3.4], [20, 2.6], [27, .6], [-6, 4.2], [31, -1.4], [8, 3], [-30, -.4]].slice(0, 3 + n * 2)) s += '<circle cx="' + f1(cx + c[0]) + '" cy="' + f1(cy + c[1] - 2) + '" r=".9" style="fill:' + CHOUX_D + '"/>';
-  if (n === 3) return s;
-  return s + '<g transform="rotate(-4 ' + cx + " " + f1(base) + ')">' + eclairBody(cx, base, ECL.L, ECL.H, Object.assign({}, ECL.o, n ? { bite: n } : {})) + "</g>";
+const ECL = { L: 23, H: 9.5, o: { ridges: 1 } };
+/* a wire cooling rack between the box and the notebook, three eclairs on it. n = how many have been taken (0..3);
+   the page takes one per click, a reload puts them back */
+function rack(n) {
+  const q = flatQuad(226, 351, 86, 62, 0, .36), wire = (a, b) => '<path d="M' + f1(a[0]) + " " + f1(a[1]) + " L" + f1(b[0]) + " " + f1(b[1]) + '" style="stroke:' + INK + ';stroke-width:1.5"/><path d="M' + f1(a[0]) + " " + f1(a[1]) + " L" + f1(b[0]) + " " + f1(b[1]) + '" style="stroke:#C5BEB0;stroke-width:.6"/>';
+  let s = P("M" + q.map((p) => f1(p[0] + 2) + " " + f1(p[1] + 3.4)).join(" L") + "Z", "#B17A4B");   /* shadow on the counter */
+  for (const c of q) s += '<path d="M' + f1(c[0]) + " " + f1(c[1]) + " v2.6" + '" style="stroke:' + INK + ';stroke-width:1.6;stroke-linecap:round"/>';
+  for (let i = 1; i < 10; i++) s += wire(onQuad(q, i / 10, 0), onQuad(q, i / 10, 1));
+  for (let i = 1; i < 4; i++) s += wire(onQuad(q, 0, i / 4), onQuad(q, 1, i / 4));
+  s += '<path d="M' + q.map((p) => f1(p[0]) + " " + f1(p[1])).join(" L") + 'Z" style="fill:none;stroke:' + INK + ';stroke-width:2.4;stroke-linejoin:round"/><path d="M' + q.map((p) => f1(p[0]) + " " + f1(p[1])).join(" L") + 'Z" style="fill:none;stroke:#D9D4C8;stroke-width:1;stroke-linejoin:round"/>';
+  const spots = [[204, 354], [227, 353], [250, 352]];
+  spots.forEach((p, i) => {
+    if (i < n) { for (const c of [[-6, -1], [3, 0.6], [7, -1.8], [-2, 1.2]]) s += '<circle cx="' + f1(p[0] + c[0]) + '" cy="' + f1(p[1] + c[1]) + '" r=".8" style="fill:' + CHOUX_D + '"/>'; return; }
+    s += '<g transform="rotate(26 ' + p[0] + " " + p[1] + ')">' + eclairBody(p[0], p[1], ECL.L, ECL.H, ECL.o) + "</g>";
+  });
+  return s;
 }
 
 /* ---- the window: a bushy basil on the sill, a crystal mobile in the glass, rainbow beams across the wall ---- */
@@ -120,26 +128,17 @@ const studies = {
     glass("M274,524 L274,424 Q274,412 284,406 L284,382 L302,382 L302,406 Q312,412 312,424 L312,524 Z", "#3F5F9D", "#2F4A7E", "M281,426 L281,514", 300) + part("M280,378 h26 v6 h-26 Z", "#4D72B8") + '<circle cx="293" cy="366" r="10" fill="#4D72B8" stroke="' + INK + '" stroke-width="3.6"/>' +
     glass("M238,526 L238,462 Q238,452 248,448 L248,430 L264,430 L264,448 Q274,452 274,462 L274,526 Z", "#9ACBB0", "#7AAE93", "M244,464 L244,516", 262) + part("M245,426 h22 v5 h-22 Z", "#B2DBC4") + '<circle cx="256" cy="416" r="8.5" fill="#B2DBC4" stroke="' + INK + '" stroke-width="3.6"/>' +
     glass("M310,526 L310,446 Q310,434 322,428 L322,408 L340,408 L340,428 Q352,434 352,446 L352,526 Z", "#C97E34", "#A8641F", "M317,448 L317,516", 338) + part("M318,404 h26 v6 h-26 Z", "#DE984E") + part("M321,394 h20 v10 h-20 Z", "#DE984E")],
-  2: ["One fluted emerald decanter", () =>
-    pool(300, 60, "#B9E3C3") +
+  2: ["The fluted emerald decanter, with the amber bottle beside it", () =>
+    pool(320, 80, "#B9E3C3") +
+    '<g transform="translate(44 0)">' + glass("M310,526 L310,446 Q310,434 322,428 L322,408 L340,408 L340,428 Q352,434 352,446 L352,526 Z", "#C97E34", "#A8641F", "M317,448 L317,516", 338) + part("M318,404 h26 v6 h-26 Z", "#DE984E") + part("M321,394 h20 v10 h-20 Z", "#DE984E") + "</g>" +
     glass("M270,524 Q260,468 264,448 Q266,434 286,418 L288,376 L312,376 L314,418 Q334,434 336,448 Q340,468 330,524 Z", "#369663", "#2A7A50", "M273,448 Q269,480 274,512", 314) +
     '<path d="M290,424 Q288,470 291,523 M310,424 Q312,470 309,523" fill="none" stroke="' + INK + '" stroke-width="2.2"/>' +
     part("M284,370 h32 v7 h-32 Z", "#4DB37C") + part("M300,322 L316,338 L310,362 L290,362 L284,338 Z", "#4DB37C") + part("M300,322 L310,338 L300,354 L290,338 Z", "#7AD4A2") + part("M292,362 h16 v8 h-16 Z", "#369663")],
-  3: ["Five small jars: rose, honey, mint, lavender, sky", () =>
-    pool(300, 95, "#F3D6C2") +
-    glass("M214,524 L214,486 L222,478 L244,478 L252,486 L252,524 Z", "#E3A9AE", "#C98A90", "M220,488 L220,516", 240) + part("M218,470 h30 v8 h-30 Z", "#C98A90") +
-    glass("M262,524 Q256,500 270,488 L272,472 L284,472 L286,488 Q300,500 294,524 Z", "#E9B44C", "#C9932E", "M266,500 Q264,510 268,518", 284) + part("M270,464 h16 v8 h-16 Z", "#B57D4B") +
-    glass("M304,524 L304,494 Q304,488 310,488 L336,488 Q342,488 342,494 L342,524 Z", "#A9D7BD", "#86B99C", "M310,496 L310,516", 330) + part("M302,480 h42 v9 h-42 Z", "#F3EEDF") +
-    glass("M352,524 L352,470 Q352,460 358,456 L358,420 L366,420 L366,456 Q372,460 372,470 L372,524 Z", "#B9A3D6", "#9A84BA", "M356,472 L356,514", 365) + part("M356,412 h12 v8 h-12 Z", "#9A84BA") +
-    glass("M380,524 L380,478 Q380,470 388,466 L388,450 L398,450 L398,466 Q406,470 406,478 L406,524 Z", "#8DB9DE", "#6E9BC2", "M385,480 L385,516", 397) + part("M386,442 h14 v8 h-14 Z", "#6E9BC2")],
-  4: ["Cranberry carafe and a corked golden flask", () =>
-    pool(292, 70, "#F0C2B4") +
-    glass("M294,524 L294,412 L310,398 L310,374 L334,374 L334,398 L350,412 L350,524 Z", "#D49B35", "#B57E22", "M300,418 L300,512", 336) + part("M310,356 L334,356 L331,372 L313,372 Z", "#E6C99E") + part("M307,370 h30 v5 h-30 Z", "#E3B354") +
-    glass("M242,526 C214,516 212,468 242,448 L242,402 L236,396 L268,396 L262,402 L262,448 C292,468 290,516 262,526 Z", "#B5384F", "#93283D", "M234,468 Q226,488 238,510", 262) + '<circle cx="268" cy="466" r="4" fill="#FFE4E9" opacity=".75"/>'],
 };
-/* her studies' sill is at y 524, cluster around x 295; ours is at y 246, the bottles go in the left pane (x ~768) */
-const atSill = (svg) => '<g transform="translate(768 246.5) scale(.42) translate(-300 -524)">' + svg + "</g>";
-const SILL = {}; Object.keys(studies).forEach((k) => { SILL[k] = [studies[k][0], () => atSill(studies[k][1]())]; });
+/* her studies' sill is at y 524; ours is at y 246, the bottles go in the left pane (x ~768). [scale, her cluster centre] */
+const SILL_FIT = { 1: [.56, 296], 2: [.5, 320] };
+const atSill = (svg, k, cx) => '<g transform="translate(768 246.5) scale(' + k + ") translate(" + (-cx) + ' -524)">' + svg + "</g>";
+const SILL = {}; Object.keys(studies).forEach((k) => { SILL[k] = [studies[k][0], () => atSill(studies[k][1](), ...SILL_FIT[k])]; });
 
 /* crystals and mobile, after Ari's vector studies (their 800 x 600 units, scaled in): hexagonal prisms with a white top facet,
    a pale blue bottom facet and two facet lines, on a brass ring */
@@ -192,33 +191,35 @@ function closedBook(pts, cover, edge) {
 /* the open notebook's outline on the counter (BL, BR, TR, TL) */
 const NB = [[272, 371], [442, 360], [425, 314], [260, 327]];
 function compBook(q, label) {
-  const [bl, br, tr, tl] = q, t = 4, id = "cb" + (++uid);
-  let s = P(wob([bl, br, tr, tl].map((p) => [p[0], p[1] + t]), .2), "#F1EAD6", 1.4) +
-    '<path d="M' + f1(bl[0] + 2) + " " + f1(bl[1] + t * .5) + " L" + f1(br[0] - 2) + " " + f1(br[1] + t * .5) + '" style="stroke:#CFC6AE;stroke-width:.7"/>';
+  const T = 7, dn = (d) => q.map((p) => [p[0], p[1] + d]), inset = (qq, a) => { const c = qq.reduce((m, p) => [m[0] + p[0] / 4, m[1] + p[1] / 4], [0, 0]); return qq.map((p) => [c[0] + (p[0] - c[0]) * a, c[1] + (p[1] - c[1]) * a]); }, id = "cb" + (++uid);
+  let s = P(wob(dn(T), .2), "#1E1C1A", 1.6);                                   /* back cover */
+  s += P(wob(inset(dn(T - 1.6), .975), .2), "#F6F1E4", 1.1) + P(wob(inset(dn(2), .975), .2), "#F6F1E4", 1.1);   /* page block */
+  { const a = inset(dn(3.4), .975), b = inset(dn(4.8), .975); s += '<path d="M' + f1(a[0][0] + 2) + " " + f1(a[0][1]) + " L" + f1(a[1][0] - 2) + " " + f1(a[1][1]) + " M" + f1(b[0][0] + 2) + " " + f1(b[0][1]) + " L" + f1(b[1][0] - 2) + " " + f1(b[1][1]) + '" style="stroke:#CFC6AE;stroke-width:.6"/>'; }
+  s += P("M" + [q[3], q[0], dn(T)[0], dn(T)[3]].map((p) => f1(p[0]) + " " + f1(p[1])).join(" L") + "Z", "#111", 1.2);   /* spine wrapping the left side */
   s += '<clipPath id="' + id + '"><path d="M' + q.map((p) => f1(p[0]) + " " + f1(p[1])).join(" L") + 'Z"/></clipPath>';
   s += P(wob(q, .3), "#1E1C1A", 1.8) + '<g clip-path="url(#' + id + ')">';
   const xs = q.map((p) => p[0]), ys = q.map((p) => p[1]), X0 = Math.min(...xs), X1 = Math.max(...xs), Y0 = Math.min(...ys), Y1 = Math.max(...ys);
-  for (let i = 0; i < (X1 - X0) * (Y1 - Y0) / 30; i++) {   /* the marble: short curly white strokes */
-    const x = X0 + rnd() * (X1 - X0), y = Y0 + rnd() * (Y1 - Y0), r = .8 + rnd() * 1.6, a = rnd() * 6.28;
-    s += '<path d="M' + f1(x) + " " + f1(y) + " q" + f1(Math.cos(a) * r) + " " + f1(Math.sin(a) * r - r * .6) + " " + f1(Math.cos(a) * r * 2) + " " + f1(Math.sin(a) * r * 2) + '" style="fill:none;stroke:#EDE8DC;stroke-width:.6;stroke-linecap:round"/>';
+  for (let i = 0; i < (X1 - X0) * (Y1 - Y0) / 7; i++) {   /* the marble: dense white flecks and curls */
+    const x = X0 + rnd() * (X1 - X0), y = Y0 + rnd() * (Y1 - Y0), r = .6 + rnd() * 1.4, a = rnd() * 6.28;
+    s += '<path d="M' + f1(x) + " " + f1(y) + " q" + f1(Math.cos(a) * r) + " " + f1(Math.sin(a) * r * .5 - r * .4) + " " + f1(Math.cos(a) * r * 2) + " " + f1(Math.sin(a) * r) + '" style="fill:none;stroke:#EDE8DC;stroke-width:' + f1(.5 + rnd() * .6) + ';stroke-linecap:round"/>';
   }
-  s += P("M" + [onQuad(q, 0, 0), onQuad(q, .1, 0), onQuad(q, .1, 1), onQuad(q, 0, 1)].map((p) => f1(p[0]) + " " + f1(p[1])).join(" L") + "Z", "#111") + "</g>";
+  s += P("M" + [onQuad(q, 0, 0), onQuad(q, .09, 0), onQuad(q, .09, 1), onQuad(q, 0, 1)].map((p) => f1(p[0]) + " " + f1(p[1])).join(" L") + "Z", "#111") + "</g>";
   if (label) {
-    const L = [onQuad(q, .36, .62), onQuad(q, .78, .62), onQuad(q, .78, .3), onQuad(q, .36, .3)];
-    s += P(wob(L, .15), "#FAF8E8", 1.2);
-    for (const v of [.55, .7]) { const a = onQuad(L, .14, v), b = onQuad(L, .86, v); s += '<path d="M' + f1(a[0]) + " " + f1(a[1]) + " L" + f1(b[0]) + " " + f1(b[1]) + '" style="stroke:#9C9892;stroke-width:.7"/>'; }
+    const L = [onQuad(q, .34, .64), onQuad(q, .8, .64), onQuad(q, .8, .24), onQuad(q, .34, .24)], Li = inset(L, .86);
+    s += P(wob(L, .1), "#FAF8E8", 1.2) + P(wob(Li, .05), "none", .5);
+    for (const v of [.5, .66, .8]) { const a = onQuad(Li, .12, v), b = onQuad(Li, .88, v); s += '<path d="M' + f1(a[0]) + " " + f1(a[1]) + " L" + f1(b[0]) + " " + f1(b[1]) + '" style="stroke:#9C9892;stroke-width:.5"/>'; }
   }
   return s;
 }
 /* a book lying flat: w wide, d deep (in the counter plane), turned ang degrees; seen from above at the plates' angle (depth x .27) */
-function flatQuad(cx, cy, w, d, ang) {
-  const a = ang * Math.PI / 180, k = .27, P2 = (x, y) => [cx + x * Math.cos(a) - y * Math.sin(a), cy + (x * Math.sin(a) + y * Math.cos(a)) * k];
+function flatQuad(cx, cy, w, d, ang, k) {
+  const a = ang * Math.PI / 180; k = k || .27; const P2 = (x, y) => [cx + x * Math.cos(a) - y * Math.sin(a), cy + (x * Math.sin(a) + y * Math.cos(a)) * k];
   return [P2(-w / 2, d / 2), P2(w / 2, d / 2), P2(w / 2, -d / 2), P2(-w / 2, -d / 2)];
 }
 /* two composition books stacked in front of the whiteboard, the top one labelled */
 function stackFront() {
-  return '<ellipse cx="497" cy="350" rx="44" ry="6" style="fill:#B17A4B"/>' +
-    compBook(flatQuad(496, 344, 80, 62, 3)) + compBook(flatQuad(493, 337.5, 78, 60, -4), true);
+  return '<ellipse cx="499" cy="354" rx="46" ry="7" style="fill:#B17A4B"/>' +
+    compBook(flatQuad(497, 342, 82, 60, 2, .36)) + compBook(flatQuad(494, 333, 80, 58, -4, .36), true);
 }
 
 /* ---- the open notebook, more lived in: sticky tabs off the right page, a ribbon, a taped photo, a pencil doodle ---- */
@@ -346,7 +347,7 @@ module.exports = {
       { obj: "room", svg: V("tidy-1", tidyPatch(v)), top: true },
       { obj: "notebook", svg: stackFront() + nbExtras(), top: true },
       { obj: "box", svg: boxWear() + boxLabel(), top: true },
-      { obj: "eclair", svg: [0, 1, 2, 3].map((n) => V("ecl-" + n, eclair(n))).join(""), top: true },
+      { obj: "eclair", svg: [0, 1, 2, 3].map((n) => V("ecl-" + n, rack(n))).join(""), top: true },
       { obj: "window", svg: Object.keys(SUN).map((k) => V("sun-" + k, beams(v, k))).join("") + mobile() + Object.keys(SILL).map((k) => V("sill-" + k, SILL[k][1]())).join(""), top: true },
       { obj: "dusk", svg: V("sun-eve", '<rect x="0" y="-60" width="868" height="560" style="fill:#2B2A4A;opacity:.2;mix-blend-mode:multiply"/>'), top: true },
       { obj: "cup-open", svg: cupOpen(v), top: true }, { obj: "clip", svg: clipboard(), top: true }] };
@@ -356,6 +357,7 @@ module.exports = {
     seed = 11;
     return [
       ...Object.keys(SILL).map((k) => ({ key: "sill" + k, title: "B" + k + " · " + SILL[k][0], vb: "716 20 150 236", svg: beams(v + "z" + k, "am") + mobile() + SILL[k][1]() })),
+      ...[0, 1, 2, 3].map((n) => ({ key: "rack" + n, title: ["Three eclairs cooling on the rack", "Click: one taken", "Click: two taken", "Click: all gone until the page reloads"][n], vb: "174 326 104 44", svg: rack(n) })),
       { key: "nb2", title: "Composition books in front of the whiteboard", vb: "436 300 120 66", svg: stackFront() },
       { key: "clip", title: "The clipboard: “Baking log” at the top of the sheet", vb: "40 -39 120 145", svg: cupOpen(v + "z") + clipboard() },
       { key: "box", title: "Recipe box with RECIPES, worn paint, tab letters", vb: "26 200 170 170", svg: boxWear() + boxLabel() },

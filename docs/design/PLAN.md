@@ -201,7 +201,9 @@ Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop
 - [x] **Window frame walnut** (Ari 2026-11-19); swatches removed, `--trim` #7A4E2D on #tk
 - [x] **Decided (Ari, on v8):** composition books in front of the whiteboard; tabs on the open notebook, no taped photo; RECIPES on the box; a title on the clipboard sheet; an "Ideas" paper on the board; bottles in the style of her glass studies (window not teal); rainbows move with the time of day instead of a sun patch, none in the evening
 - [x] v9 (2026-11-19, same URL): bottles B1–B4 from her studies redrawn in the trace's look; crystals as her hexagonal prisms; rainbows by time (morning, midday, afternoon, evening = dusk glass and a dim); books flat at the plates' angle; "Baking log", "Ideas", RECIPES; flour and pin can be taken away
-- [ ] Ari (v9 questions): bottles (pick B1); flour and pin keep or remove; clipboard title (pick Baking log); the four times of day; Library name (pick Library)
+- [x] **Decided (Ari, on v9):** B4 was a misclick: likes B1 (bigger) and B2 (with a second bottle); composition books should look like her reference picture (thick page block); eclairs cooling on a wire rack instead of a plate, still taken or eaten by clicks
+- [x] v10 (2026-11-19, same URL): rack with three eclairs, one taken per click; B1 trio at .56; B2 decanter + amber bottle; compBook redrawn (back cover, page block, spine wrap, dense marble, double-bordered label)
+- [ ] Ari (v10 questions): B1 or B2 (pick B1); one taken per click or bites (pick one per click); books close enough or she makes a vector; flour and pin; clipboard title (pick Baking log); times of day; Library name (pick Library)
 
 ### Product changes from the plates (apply in one pass)
 Changes to the product that come out of the drawings. Kept here as they come up and applied together to `docs/PRD.md`, the README and the Task issues when Plate XII is signed off (before Task issues), so the plan is edited once and stays consistent.
@@ -210,7 +212,7 @@ Changes to the product that come out of the drawings. Kept here as they come up 
 - [ ] **Recipe log on a clipboard** in the open wall cupboard, not the drawer stack
 - [ ] **No fridge, no Recently list** (Plate XII v3)
 - [ ] **Rainbows follow the cook's clock**: morning, midday, afternoon angles; evening has none, the window glass goes to dusk and the room dims
-- [ ] **Eclair easter egg**: clicking the kitchen eclair takes a bite, a second bite, then it is gone until the page reloads; nothing saved
+- [ ] **Eclair easter egg**: three eclairs cool on a rack in the kitchen; each click takes one, a reload puts them back; nothing saved
 - If picked, this replaces the Plate XI kitchen drawing (views and phone follow), so settle it before the test piece
 
 ## Before Task issues: things that could disrupt the build

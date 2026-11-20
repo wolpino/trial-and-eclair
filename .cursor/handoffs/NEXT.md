@@ -1,4 +1,4 @@
-# NEXT — 2026-11-19 (Plate XII v9 published: glass studies, rainbows by time; waiting on Ari)
+# NEXT — 2026-11-19 (Plate XII v10 published: cooling rack, bottles, books; waiting on Ari)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,14 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII, after Ari answers v9) — START HERE
+## Prompt for the next agent (Plate XII, after Ari answers v10) — START HERE
+> Plate XII v10: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Build as before. Options in `add.cjs` (DEF): sill 1–2 (SILL_FIT scales), sun am/noon/pm/eve, tidy 0/1; `ecl-0..3` = eclairs taken from the rack by clicks (rack(n)). Fixed: compBook books in front of the whiteboard, tabs/ribbon/doodle, RECIPES, "Baking log", "Ideas", walnut frame, crystals.
+>
+> **Questions (page top):** B1 (pick) or B2; one taken per click (pick) or bites; books close enough or Ari makes a vector; flour and pin; clipboard title (pick Baking log); times of day; Library name (pick Library).
+>
+> **After answers:** set DEF, drop the losing bottle and the tidy toggle; keep the time-of-day control. If Ari sends a notebook vector, port it like her glass studies (her units, scaled, restyled). Then phone crop and size; product list into the PRD at sign-off.
+
+## Prompt for the next agent (Plate XII, after Ari answers v9) — done (v10)
 > Plate XII v9: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Build as before. Options left in `add.cjs` (DEF): sill 1–4 (Ari's glass studies, restyled), sun am/noon/pm/eve (eve = `.dusk` on #tk + dim layer), tidy 0/1 (`.tidy` hides flour and pin, patch fills behind). Eclair `ecl-0..3` by clicks. Fixed: books in front of the whiteboard (flatQuad), tabs/ribbon/doodle, RECIPES, "Baking log" (LOG_TITLE), "Ideas", walnut frame.
 >
 > **Questions (page top):** bottles (pick B1), flour and pin, clipboard title (pick Baking log), the four times of day, Library name (pick Library).
