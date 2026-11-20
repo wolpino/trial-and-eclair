@@ -37,6 +37,7 @@ const MOVE_TO = [
   ["mixer", (q, cx, cy) => WOODY(q.fill) && cy > 300, "room"],   /* counter wood showing between the mixer's feet */
   ["mixer", (q, cx, cy) => cx < 546 && cy < 266, "whiteboard"],  /* whiteboard specks left of the mixer head */
 ];
+function inPoly(x, y, P) { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) if ((P[i][1] > y) !== (P[j][1] > y) && x < (P[j][0] - P[i][0]) * (y - P[i][1]) / (P[j][1] - P[i][1]) + P[i][0]) c = !c; return c; }
 function hsl(h) { const r = parseInt(h.slice(1, 3), 16) / 255, g = parseInt(h.slice(3, 5), 16) / 255, b = parseInt(h.slice(5, 7), 16) / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn;
   let hu = 0, s = 0; if (d) { s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); hu = mx === r ? ((g - b) / d + (g < b ? 6 : 0)) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; hu /= 6; } return [hu, s, l]; }
 const isBlue = (h) => { const [hu, s, l] = hsl(h); return hu > .48 && hu < .62 && s > .12 && l > .12 && l < .82; };
@@ -109,9 +110,16 @@ function extend(id) {
       }
       out.push([it.obj, '<path d="' + r1(q.d) + '" style="fill:' + fillOf(it) + '"' + ATTRS(q) + "/>"]);
     });
+    /* SHIFT moves a traced object: everything visible inside its HULL (its shapes, the dark underlay, the counter round it) is
+       copied, clipped to the hull and drawn moved; ADD.patch(v, obj) fills where it stood. Entries with shift: true move too. */
+    const SH = opts.top === false ? {} : (ADD.SHIFT || {});
+    const mv = (o) => (SH[o] ? ' transform="translate(' + SH[o].join(" ") + ')"' : "");
     const runs = (list) => { let s = "", cur = null; list.forEach((e) => { if (e[0] !== cur) { if (cur) s += "</g>"; s += '<g data-obj="' + e[0] + '">'; cur = e[0]; } s += e[1]; }); return s + (cur ? "</g>" : ""); };
-    const grp = (list) => list.map((a) => '<g data-obj="' + a.obj + '">' + a.svg + "</g>").join("");
-    let svg = '<g id="' + id("all") + '"><g id="' + id("scene") + '">' + runs(out) + grp((opts.end || []).filter((a) => !a.top)) + "</g>";
+    const grp = (list) => list.map((a) => '<g data-obj="' + a.obj + '"' + (a.shift ? mv(a.obj) : "") + ">" + a.svg + "</g>").join("");
+    const moved = Object.keys(SH).map((o) => { const hp = ADD.HULL[o].map((p) => p.join(" ")).join(" ");
+      return '<clipPath id="' + id("hull-" + o) + '"><polygon points="' + hp + '"/></clipPath>' + ADD.patch(v, o) +
+        '<g data-obj="' + o + '"' + mv(o) + '><g clip-path="url(#' + id("hull-" + o) + ')"><use href="#' + id("base") + '"/></g></g>'; }).join("");
+    let svg = '<g id="' + id("all") + '"><g id="' + id("scene") + '"><g id="' + id("base") + '">' + runs(out) + "</g>" + moved + grp((opts.end || []).filter((a) => !a.top)) + "</g>";
     if (opts.top !== false) svg += extend(id);
     svg += grp((opts.end || []).filter((a) => a.top)) + "</g>";   /* "all" is reused by the close-ups on the page */
     const vb = opts.top === false ? "6 5 856 479" : "6 " + (5 - TOP) + " 856 479";

@@ -18,7 +18,7 @@ const cab = (pct, to) => "color-mix(in srgb,var(--cab) " + pct + "%," + (to || "
 
 /* ---- options on the page: each is a <g data-var="key-value ..."> shown only when every key matches the page's choice.
         DEF = what shows first (Claude's picks). ---- */
-const DEF = { ecl: "0", sill: "1", sun: "am", tidy: "0" };
+const DEF = { ecl: "0", sill: "3", sun: "am", tidy: "1" };   /* tidy: the flour and rolling pin are gone for good (Ari 11/19) */
 function V(tokens, svg) {
   const on = tokens.split(" ").every((t) => { const i = t.indexOf("-"); return t.slice(i + 1).split("|").includes(DEF[t.slice(0, i)]); });   /* "ecl-0|1" = ecl is 0 or 1 */
   return '<g data-var="' + tokens + '"' + (on ? "" : ' style="display:none"') + ">" + svg + "</g>";
@@ -84,43 +84,39 @@ let biteN = 0;
 const ECL = { L: 23, H: 9.5, o: { ridges: 1 } };
 /* ---- Ari's vector traces (refs/), cut out by traced/port.cjs into ports/*.json in her units ---- */
 const PORT = (n) => JSON.parse(require("fs").readFileSync(require("path").join(__dirname, "ports", n + ".json"), "utf8"));
-const RACK = PORT("rack"), JOURNALS = PORT("journals"), TRIO = PORT("bottles-trio"), DECANTER = PORT("bottles-decanter");
+const RACK2 = PORT("rack2"), JOURNALS = PORT("journals"), TRIO = PORT("bottles-trio"), DECANTER = PORT("bottles-decanter"), W2L = PORT("bottles-w2-left"), W2R = PORT("bottles-w2-right");
 /* reusing a port twice needs its own ids */
 const reid = (svg, sfx) => svg.replace(/id="([^"]+)"/g, 'id="$1' + sfx + '"').replace(/url\(#([^)]+)\)/g, "url(#$1" + sfx + ")");
-/* her eclairs on her cooling rack, between the box and the notebook. Her crop shows two whole eclairs and a cut third, so the
-   third is her middle one again (E3 = E2 moved along by STEP) and her rack is carried on under it. Under the eclairs, where her
-   rack is hidden, a wire patch in her colours, so a taken eclair leaves rack. The rack is drawn once; eclair i shows while
-   fewer than i+1 are taken (data-var "ecl-0|1.."), its crumbs after. Taken from the left. */
-const STEP = 148, RACK_FIT = { x: 182, y: 362, k: .19 };   /* her front rim (x 0, y 224) -> the kitchen counter */
+/* her full cooling rack with three eclairs (refs/eclair-rack2.svg), on the counter under the window where the flour and rolling
+   pin were. Under the eclairs, where her rack is hidden, a wire patch in her colours, so a taken eclair leaves rack. The rack is
+   drawn once; eclair i shows while fewer than i+1 are taken (data-var "ecl-0|1.."), its crumbs after. Taken from the left. */
+const RACK_FIT = { x: 692, y: 362, k: .27 };   /* her rack's left (x 41) and front rim (y 284) -> the kitchen counter */
 function rack() {
-  const id = "rk" + (++uid), W = 400 + STEP - 78, rp = (q) => q.map((p) => p.join(" ")).join(" ");
-  const shape = [[0, 70], [W, 70], [W, 169], [W - 43, 226], [43, 226], [0, 169]];
-  let s = '<clipPath id="' + id + '"><polygon points="' + rp(shape) + '"/></clipPath><g clip-path="url(#' + id + ')"><rect x="0" y="60" width="' + W + '" height="170" fill="#C59D7B"/>';
-  for (let y = 84; y < 226; y += 13) s += '<path d="M0 ' + y + "H" + W + '" stroke="#6E4A30" stroke-width="2.2"/>';
-  for (let x = -120; x < W + 40; x += 36) s += '<path d="M' + x + " 70 L" + (x + 110) + ' 226" stroke="#3B2314" stroke-width="7" stroke-linecap="round"/><path d="M' + x + " 70 L" + (x + 110) + ' 226" stroke="#D9CFC8" stroke-width="3"/>';
-  s += '</g><g id="' + id + 'k">' + reid(RACK.parts.rack, id) + "</g>";   /* her rack, then the same carried on to the right under E3 and turned at the corner */
-  s += '<clipPath id="' + id + 'r"><polygon points="' + rp([[399, 60], [W, 60], [W, 169], [W - 43, 226], [399, 226]]) + '"/></clipPath><g clip-path="url(#' + id + 'r)"><use href="#' + id + 'k" transform="translate(' + STEP + ' 0)"/></g>';
-  const rim = "M" + (W - 1) + " 169 L" + (W - 43) + " 224.5 L398 224.5";
-  s += '<path d="' + rim + '" fill="none" stroke="#3B2314" stroke-width="8" stroke-linejoin="round"/><path d="' + rim + '" fill="none" stroke="#C9BEB9" stroke-width="3.4" stroke-linejoin="round"/>';
-  const crumbs = (cx, cy) => [[-30, 4, 3.4], [-8, -6, 2.6], [12, 8, 3], [34, -2, 2.2], [0, 14, 2.4], [-48, 12, 2]].map(([dx, dy, r]) => '<circle cx="' + (cx + dx) + '" cy="' + (cy + dy) + '" r="' + r + '" fill="' + (r > 2.5 ? "#D5A357" : "#4A2517") + '" stroke="#3B2314" stroke-width=".8"/>').join("");
-  const eclairs = [reid(RACK.parts.e1, id), '<g id="' + id + 'e2">' + reid(RACK.parts.e2, id) + "</g>", '<use href="#' + id + 'e2" transform="translate(' + STEP + ' 2)"/>'];
-  const spots = [[90, 160], [238, 160], [386, 162]];
-  eclairs.forEach((e, i) => { const r = (a, b) => [0, 1, 2, 3].filter((v) => v >= a && v <= b).join("|"); s += V("ecl-" + r(i + 1, 3), crumbs(...spots[i])) + V("ecl-" + r(0, i), e); });
-  return '<g transform="translate(' + RACK_FIT.x + " " + RACK_FIT.y + ") scale(" + RACK_FIT.k + ') translate(0 -224)">' + s + "</g>";
+  const id = "rk" + (++uid), q = RACK2.clip.rack, rp = (a) => a.map((p) => p.join(" ")).join(" ");
+  const wire = (d) => '<path d="' + d + '" stroke="#2B160F" stroke-width="3.4" stroke-linecap="round"/><path d="' + d + '" stroke="#D8CCC4" stroke-width="1.5"/>';
+  let s = '<clipPath id="' + id + '"><polygon points="' + rp(q) + '"/></clipPath><g clip-path="url(#' + id + ')"><rect x="40" y="155" width="600" height="135" fill="#C9A284"/>';
+  for (let y = 170; y < 284; y += 9) s += wire("M40 " + y + "H640");
+  for (let t = 0; t <= 1; t += 1 / 18) s += wire("M" + (46 + t * 495) + " 160 L" + (143 + t * 480) + " 284");
+  s += "</g>" + reid(RACK2.parts.rack, id);
+  const crumbs = (cx, cy) => [[-40, 6, 5], [-12, -8, 3.8], [16, 10, 4.4], [46, -2, 3.2], [0, 20, 3.4], [-62, 16, 3]].map(([dx, dy, r]) => '<circle cx="' + (cx + dx) + '" cy="' + (cy + dy) + '" r="' + r + '" fill="' + (r > 3.6 ? "#E5B866" : "#4A2517") + '" stroke="#2B160F" stroke-width="1.1"/>').join("");
+  const spots = [[200, 210], [343, 210], [477, 210]];
+  ["e1", "e2", "e3"].forEach((k, i) => { const r = (a, b) => [0, 1, 2, 3].filter((v) => v >= a && v <= b).join("|"); s += V("ecl-" + r(i + 1, 3), crumbs(...spots[i])) + V("ecl-" + r(0, i), reid(RACK2.parts[k], id)); });
+  return '<g transform="translate(' + RACK_FIT.x + " " + RACK_FIT.y + ") scale(" + RACK_FIT.k + ') translate(-41 -284)">' + s + "</g>";
 }
 
-/* ---- the sill: Ari's vector bottles (ports/), her sill at y 300. B1 her trio; B2 her decanter with the trio's amber bottle
-        beside it. [title, svg, scale, her cluster centre x] ---- */
+/* ---- the sill: Ari's vector bottles (ports/). B1 her trio; B2 her decanter with the trio's amber bottle; B3 her newest set
+        (decanter in the left pane, amber and cobalt in the right). [title, svg, scale, her x that lands at the sill's x 768, her sill y] ---- */
 const BOTTLES = {
-  1: ["Your trio: seafoam, cobalt and amber", () => reid(TRIO.parts.glass + TRIO.parts.amber, "s1"), .62, 168],
-  2: ["Your fluted decanter, with the amber bottle from the trio", () => '<g transform="translate(26 0)">' + reid(TRIO.parts.amber, "s2") + "</g>" + reid(DECANTER.parts.glass, "s2"), .62, 180],
+  3: ["Your newest set: decanter, then the amber and cobalt bottles", () => reid(W2L.parts.glass + W2R.parts.glass, "s3"), .5, 275, 416],
+  1: ["Your trio: seafoam, cobalt and amber", () => reid(TRIO.parts.glass + TRIO.parts.amber, "s1"), .62, 168, 300],
+  2: ["Your fluted decanter, with the amber bottle from the trio", () => '<g transform="translate(26 0)">' + reid(TRIO.parts.amber, "s2") + "</g>" + reid(DECANTER.parts.glass, "s2"), .62, 180, 300],
 };
-const atSill = (svg, k, cx) => '<g transform="translate(768 246.5) scale(' + k + ") translate(" + (-cx) + ' -300)">' + svg + "</g>";
+const atSill = (svg, k, cx, sy) => '<g transform="translate(768 246.5) scale(' + k + ") translate(" + (-cx) + " " + (-sy) + ')">' + svg + "</g>";
 
-/* her two stacked composition journals, in front of the whiteboard, with a flat shadow on the counter */
-const JOURNAL_FIT = { x: 452, y: 316, k: .23 };   /* her stack's top-left (24, 32) -> here */
+/* her two stacked composition journals, in front of the whiteboard, each the size of the notebook closed */
+const JOURNAL_FIT = { x: 410, y: 300, k: .31 };   /* her stack's top-left (24, 32) -> here */
 function stackFront() {
-  return '<ellipse cx="500" cy="361" rx="44" ry="5" style="fill:#B17A4B"/><g transform="translate(' + JOURNAL_FIT.x + " " + JOURNAL_FIT.y + ") scale(" + JOURNAL_FIT.k + ') translate(-24 -32)">' + reid(JOURNALS.parts.stack, "j" + (++uid)) + "</g>";
+  return '<ellipse cx="470" cy="363" rx="58" ry="5" style="fill:#B17A4B"/><g transform="translate(' + JOURNAL_FIT.x + " " + JOURNAL_FIT.y + ") scale(" + JOURNAL_FIT.k + ') translate(-24 -32)">' + reid(JOURNALS.parts.stack, "j" + (++uid)) + "</g>";
 }
 
 /* ---- the window: a bushy basil on the sill, a crystal mobile in the glass, rainbow beams across the wall ---- */
@@ -135,7 +131,7 @@ function basilLeaf(x, y, len, wid, a, c) {
   const d = "M0 0 Q" + f1(wid) + " " + f1(-len * .45) + " 0 " + f1(-len) + " Q" + f1(-wid) + " " + f1(-len * .45) + " 0 0Z";
   return '<g transform="translate(' + f1(x) + " " + f1(y) + ") rotate(" + a + ')"><path d="' + d + '" style="fill:' + c + ";stroke:" + INK + ';stroke-width:1.1;stroke-linejoin:round"/><path d="M0 -1 Q' + f1(wid * .15) + " " + f1(-len * .5) + " 0 " + f1(-len * .85) + '" style="fill:none;stroke:#3E6328;stroke-width:.6"/></g>';
 }
-const SILL = {}; Object.keys(BOTTLES).forEach((k) => { const [t, f, sc, cx] = BOTTLES[k]; SILL[k] = [t, () => atSill(f(), sc, cx)]; });
+const SILL = {}; Object.keys(BOTTLES).forEach((k) => { const [t, f, sc, cx, sy] = BOTTLES[k]; SILL[k] = [t, () => atSill(f(), sc, cx, sy)]; });
 
 /* crystals and mobile, after Ari's vector studies (their 800 x 600 units, scaled in): hexagonal prisms with a white top facet,
    a pale blue bottom facet and two facet lines, on a brass ring */
@@ -291,9 +287,8 @@ function interior(v) {
   const jar = (x, w, t, bot, lid, glass) => P(wob([[x, t + 3], [x + w, t + 3], [x + w, bot], [x, bot]], .25), glass, 1.3) + P(wob([[x - 0.8, t], [x + w + 0.8, t], [x + w + 0.8, t + 3.6], [x - 0.8, t + 3.6]], .15), lid, 1.1);
   const shelf = (sy) => { const u0 = bk(x0, sy + 3.5), u1 = bk(x1, sy + 3.5); return P("M" + x0 + " " + (sy + 3.5) + " L" + x1 + " " + (sy + 3.5) + " L" + f1(u1[0]) + " " + f1(u1[1]) + " L" + f1(u0[0]) + " " + f1(u0[1]) + "Z", cab(52)); };
   const edge = (sy) => P("M" + x0 + " " + sy + " H" + x1 + " V" + (sy + 3.5) + " H" + x0 + "Z", cab(66), 1.3);
-  /* top shelf (y 3): tins and a stack of bowls; middle shelf (y 52): jars; floor: flour tin, sugar jar, a box of cases */
+  /* top shelf (y 3): tins (the stack of bowls read as a plate with an eclair, removed 11/19); middle shelf (y 52): jars; floor: flour tin, sugar jar, a box of cases */
   s += shelf(3) + jar(146, 22, -30, 3, "#9C9892", "#D8C9A4") + jar(174, 14, -18, 3, "#C8473A", "#EFE6CF") +
-    P(wob([[200, -6], [240, -6], [236, 3], [204, 3]], .3), "#EFE6CF", 1.3) + P(wob([[203, -13], [237, -13], [233, -6], [207, -6]], .3), "#8BA07A", 1.3) + P(wob([[206, -20], [234, -20], [230, -13], [210, -13]], .3), "#F0C86A", 1.3) +
     jar(246, 14, -22, 3, "#B17A4B", "#E9DDBE") + edge(3);
   s += shelf(52) + jar(150, 17, 20, 52, "#C8473A", "#E9DDBE") + jar(172, 13, 28, 52, "#B17A4B", "#EFE6CF") + jar(214, 22, 16, 52, "#9C9892", "#D8C9A4") + jar(242, 13, 26, 52, "#8BA07A", "#EFE6CF") + edge(52);
   s += jar(158, 30, 70, y1 + 2, "#E0B450", "#F0C86A") + jar(206, 15, 64, y1 + 2, "#B17A4B", "#E9DDBE") + jar(226, 26, 80, y1 + 2, "#9C9892", "#CFC8B8");
@@ -330,13 +325,26 @@ function cupOpen(v) {
   return door;
 }
 
+/* the open notebook moves left, half way to the recipe box (Ari 11/19); clean.cjs moves its traced groups */
+const SHIFT = { notebook: [-34, 0] };
+/* the notebook's outline where it was traced (with its shadow); clean.cjs copies what is inside it */
+const HULL = { notebook: [[259.5, 326.5], [263.5, 322.8], [334, 316.8], [403, 315], [426, 317], [447, 338], [456.5, 352], [454, 358.5], [441.5, 361.5], [362, 368], [280, 373.5], [261, 340]] };
+/* where a moved object stood: wall above the counter's back edge (y 316.4), counter below, the edge line and some grain */
+function patch(v, o) {
+  const id = (s) => v + "-" + s + "-" + o, hp = HULL[o].map((p) => p.join(" ")).join(" ");
+  return '<clipPath id="' + id("pu") + '"><rect x="0" y="0" width="868" height="316.4"/></clipPath><clipPath id="' + id("pl") + '"><rect x="0" y="316.4" width="868" height="200"/></clipPath>' +
+    '<polygon points="' + hp + '" clip-path="url(#' + id("pu") + ')" style="fill:var(--wall);stroke:var(--wall);stroke-width:3"/>' +
+    '<polygon points="' + hp + '" clip-path="url(#' + id("pl") + ')" style="fill:#D4A36F;stroke:#D4A36F;stroke-width:3"/>' +
+    '<rect x="330" y="315.4" width="134" height="1.8" style="fill:' + INK + '"/>' +
+    '<path d="M300 336 Q340 334.6 380 336 Q340 337 300 336Z M360 352 Q400 350.4 440 352 Q400 353.2 360 352Z" style="fill:#A87548"/>';
+}
 module.exports = {
-  DEF, TRIM, GLASS,
+  DEF, SHIFT, HULL, patch, TRIM, GLASS,
   opts(v) {
     seed = 7;
     return { end: [{ obj: "whiteboard", svg: marker() }, { obj: "ideas", svg: ideasNote() },
       { obj: "room", svg: V("tidy-1", tidyPatch(v)), top: true },
-      { obj: "notebook", svg: stackFront() + nbExtras(), top: true },
+      { obj: "notebook", svg: nbExtras(), top: true, shift: true }, { obj: "notebook", svg: stackFront(), top: true },
       { obj: "box", svg: boxWear() + boxLabel(), top: true },
       { obj: "eclair", svg: rack(), top: true },
       { obj: "window", svg: Object.keys(SUN).map((k) => V("sun-" + k, beams(v, k))).join("") + mobile() + Object.keys(SILL).map((k) => V("sill-" + k, SILL[k][1]())).join(""), top: true },
@@ -348,8 +356,8 @@ module.exports = {
     seed = 11;
     return [
       ...Object.keys(SILL).map((k) => ({ key: "sill" + k, title: "B" + k + " · " + SILL[k][0], vb: "716 20 150 236", svg: beams(v + "z" + k, "am") + mobile() + SILL[k][1]() })),
-      { key: "rack", title: "Your eclairs on your cooling rack (click the rack in the kitchen to take one)", vb: "174 326 104 44", svg: '<use href="#a-all"/>' },
-      { key: "nb2", title: "Your composition journals in front of the whiteboard", vb: "436 300 120 66", svg: '<use href="#a-all"/>' },
+      { key: "rack", title: "Your eclairs on your cooling rack (click the rack in the kitchen to take one)", vb: "684 300 182 70", svg: '<use href="#a-all"/>' },
+      { key: "nb2", title: "Your composition journals, the size of the notebook closed", vb: "210 292 330 80", svg: '<use href="#a-all"/>' },
       { key: "clip", title: "The clipboard: “" + LOG_TITLE + "” at the top of the sheet", vb: "40 -39 120 145", svg: cupOpen(v + "z") + clipboard() },
       { key: "box", title: "Recipe box with RECIPES, worn paint, tab letters", vb: "26 200 170 170", svg: boxWear() + boxLabel() },
       { key: "ideas", title: "“Ideas” on the big note", vb: "190 128 140 90", svg: ideasNote() },

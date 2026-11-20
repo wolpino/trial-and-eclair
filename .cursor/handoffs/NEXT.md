@@ -1,4 +1,4 @@
-# NEXT — 2026-11-19 (Plate XII v11 published: Ari's rack, journals and bottles ported; waiting on Ari)
+# NEXT — 2026-11-19 (Plate XII v12 published: rack under the window, notebook moved, flour and pin gone; waiting on Ari)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,16 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII, after Ari answers v11) — START HERE
+## Prompt for the next agent (Plate XII, after Ari answers v12) — START HERE
+> Plate XII v12: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (the live page is v12). Build and ports as in the v11 prompt below. Read the live artifact before the first publish of a new session.
+>
+> **New in v12:** `port.cjs` pieces `rack2` (her full rack, e1–e3 + rack; top cut at her first dark outline pixel, `top.dark`) and `bottles-w2-left/right` (her newest set). `add.cjs`: `rack()` uses RACK2 under the window (`RACK_FIT` x 692, k .27); `BOTTLES` 3 = newest (default), 1, 2 (5th value = her sill y); `JOURNAL_FIT` k .31; `SHIFT` notebook [-34, 0] with `HULL` (its outline) and `patch()`: `clean.cjs` copies everything inside the hull (`<use>` of `#a-base` clipped) and draws it moved, the patch fills where it stood; `nbExtras` moves with `shift: true`. DEF tidy "1" (flour and pin gone; the toggle is off the page). Cupboard bowl stack removed. Page 2.6 MB (her rack is ~830 KB; trim rack shapes or round coordinates further if size matters).
+>
+> **Questions (page top), Claude's picks:** B3 (pick), B1 or B2; was the cupboard bowl stack the "plate with the eclair"; rack size (pick as is); journals size (pick as is); taken vs bites (pick taken); times of day.
+>
+> **After answers:** set DEF, drop losing bottles (and their ports), remove the tidy code if flour/pin stay gone; then phone crop and size; product list into the PRD at sign-off.
+
+## Prompt for the next agent (Plate XII, after Ari answers v11) — done (v12)
 > Plate XII v11: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (the live page is v11). Load the `plate-round` and `kitchen-plate-style` skills. Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session, then publish to the same URL.
 >
 > **New in v11:** `traced/port.cjs` cuts pieces out of Ari's Kittl traces in `refs/` and writes `traced/ports/*.json` (her units; committed, so rerun only when a ref or PIECES changes: `node traced/port.cjs [piece] [--check dir]`). Two modes: **keep** (bottles: her shapes inside a box minus WINDOW colours/dropIdx, each part takes the dark underlay under its own shapes through a mask) and **clip** (rack, journals: her whole drawing clipped to outline polygons, because glaze and marble are the same dark underlay as the outlines; rack's top edge comes from her picture's pixels, `top`). In `add.cjs`: `rack()` = drawn wire patch + her rack (+ a `<use>` copy carried right, rim corner drawn) + E1, E2, E3 (= `<use>` of E2 moved by STEP 148); eclair i shows with data-var `ecl-0|..|i` (the `|` = any of, in V() and the page's apply()), crumbs after. `RACK_FIT`, `JOURNAL_FIT`, `BOTTLES` (scale .62, her sill y 300) place them. `LOG_TITLE` = "Kitchen log". Page 1.7 MB.

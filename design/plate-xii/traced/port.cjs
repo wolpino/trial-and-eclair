@@ -12,11 +12,22 @@ const isInk = (f) => f && f[0] === "#" && lum(f) < 56;
 
 /* window frame, pane and sill colours in her bottle studies: never part of the glass */
 const WINDOW = ["#839986", "#8B897D", "#978E71", "#909C8F", "#949792", "#718175", "#8C8973", "#829885", "#8A9389", "#3C403D", "#585F58", "#9B9A7B", "#738272", "#A9A97F", "#D2C7AD", "#D2C9B2", "#F8EAC8", "#FAEAC9", "#F8E8C8"];
+const WINDOW2 = ["#839682", "#86A085", "#F8E0B1", "#FBEBCB", "#AD8D5F", "#BDBC94", "#CAB07E", "#E0D89D", "#A6CF8E", "#E0F1A9", "#B0A47B", "#A7A29E", "#A3A99C", "#59543B", "#CCC8B9", "#B5AD7E", "#B8C8AA", "#9A9E7F", "#A3AE83", "#CBD58B", "#868577", "#6E7770", "#91A2A7"];
 const PIECES = {
   /* the glass only: her window, mobile, beams and sill are already in the kitchen */
   "bottles-trio": { ref: "bottles-trio.svg", keep: [132, 200, 204, 300.5], drop: WINDOW, parts: { amber: [178.5, 0, 999, 999], glass: null } },
   "bottles-decanter": { ref: "bottles-decanter.svg", keep: [144, 178, 194, 300.5], drop: WINDOW, dropIdx: [68, 158, 206, 207], parts: { glass: null } },
   "bottles-pair": { ref: "bottles-pair.svg", keep: [119, 200, 206, 301], drop: WINDOW, dropIdx: [42], parts: { glass: null } },
+  /* her full rack (2026-11-19): three whole eclairs, so no copy. top.dark: cut above the first dark (outline) pixel per column */
+  "rack2": { ref: "eclair-rack2.svg", top: { dark: 90, y: [100, 200] }, clip: {
+    e1: [[117, 160], [118, 128], [145, 123], [172, 126], [198, 145], [230, 168], [264, 192], [281, 212], [281, 240], [270, 262], [247, 270], [220, 268], [187, 248], [153, 231], [125, 211], [113, 187]],
+    e2: [[260, 160], [261, 128], [288, 123], [315, 126], [341, 145], [373, 168], [407, 192], [424, 212], [424, 240], [413, 262], [390, 270], [363, 268], [330, 248], [296, 231], [268, 211], [256, 187]],
+    e3: [[394, 160], [395, 128], [422, 123], [449, 126], [475, 145], [507, 168], [541, 192], [558, 212], [558, 240], [547, 262], [524, 270], [497, 268], [464, 248], [430, 231], [402, 211], [390, 187]],
+    rack: [[46, 160], [541, 160], [575, 183], [608, 209], [631, 245], [633, 268], [623, 281], [597, 283], [596, 301], [585, 301], [583, 284], [233, 285], [231, 301], [221, 301], [219, 285], [146, 285], [138, 280], [46, 166]],
+  }, minus: { rack: ["e1", "e2", "e3"] } },
+  /* her window with the decanter, amber and cobalt bottles: the glass in two groups (the mobile hangs between them) */
+  "bottles-w2-left": { ref: "bottles-window2.svg", keep: [198, 248, 272, 420], drop: WINDOW2, dropIdx: [208, 227, 228, 229, 456, 709], parts: { glass: null } },
+  "bottles-w2-right": { ref: "bottles-window2.svg", keep: [345, 290, 438, 420], drop: WINDOW2, dropIdx: [515, 409, 410], parts: { glass: null } },
   /* clip pieces: the glaze and the marble are the same dark underlay as the outlines, so these are cut out of her whole
      drawing by outline polygons instead (her units). minus: polygons cut out of a part (the rack under the eclairs). */
   /* top: everything above the first non-wall pixel in each column is cut (the wall shows round the eclair tops) */
@@ -46,17 +57,17 @@ const pts = (q) => q.map((p) => p.join(" ")).join(" ");
       .map(([e, i]) => { const r = e.getBBox(); const c = e.cloneNode(); c.removeAttribute("id"); return { i, x: r.x, y: r.y, w: r.width, h: r.height, fill: e.getAttribute("fill"), html: c.outerHTML }; }));
     if (P.clip) {   /* each part: her shapes that touch the polygon's box, clipped to the polygon (minus any cut-outs) */
       const drop = new Set((P.drop || []).map((c) => c.toUpperCase())), out = { parts: {} };
-      let topQ = null;
+      let topQ = null; const [, VW, VH] = fs.readFileSync(path.join(REFS, P.ref), "utf8").match(/viewBox="0 0 ([\d.]+) ([\d.]+)"/).map(Number);
       if (P.top) {   /* the top contour, from her picture's pixels at 4 px a unit */
-        const ys = await p.evaluate(async ([svg, wall, yr]) => {
+        const ys = await p.evaluate(async ([svg, wall, yr, vw, vh]) => {
           const img = new Image(); img.src = "data:image/svg+xml;base64," + btoa(unescape(encodeURIComponent(svg))); await img.decode();
-          const W = 1600, H = 1064, c = document.createElement("canvas"); c.width = W; c.height = H; const g = c.getContext("2d"); g.drawImage(img, 0, 0, W, H);
+          const W = vw * 4, H = vh * 4, c = document.createElement("canvas"); c.width = W; c.height = H; const g = c.getContext("2d"); g.drawImage(img, 0, 0, W, H);
           const d = g.getImageData(0, 0, W, H).data, out = [];
-          for (let x = 0; x <= 400; x += 2) { const px = Math.min(W - 1, x * 4); let y = yr[0];
-            for (; y < yr[1]; y += .25) { const i = (Math.round(y * 4) * W + px) * 4; if (Math.abs(d[i] - wall[0]) + Math.abs(d[i + 1] - wall[1]) + Math.abs(d[i + 2] - wall[2]) > 40) break; }
+          for (let x = 0; x <= vw; x += 2) { const px = Math.min(W - 1, x * 4); let y = yr[0];
+            for (; y < yr[1]; y += .25) { const i = (Math.round(y * 4) * W + px) * 4; if (wall.dark ? 0.3 * d[i] + 0.59 * d[i + 1] + 0.11 * d[i + 2] < wall.dark : Math.abs(d[i] - wall[0]) + Math.abs(d[i + 1] - wall[1]) + Math.abs(d[i + 2] - wall[2]) > 40) break; }
             out.push([x, +(y + .4).toFixed(1)]); }
-          return out; }, [fs.readFileSync(path.join(REFS, P.ref), "utf8"), P.top.wall, P.top.y]);
-        topQ = [[0, 300], ...ys, [400, 300]];
+          return out; }, [fs.readFileSync(path.join(REFS, P.ref), "utf8"), P.top.wall || { dark: P.top.dark }, P.top.y, VW, VH]);
+        topQ = [[0, VH], ...ys, [VW, VH]];
         out.top = ys;
       }
       for (const [k, q] of Object.entries(P.clip)) {
@@ -73,7 +84,7 @@ const pts = (q) => q.map((p) => p.join(" ")).join(" ");
       fs.writeFileSync(path.join(OUT, name + ".json"), JSON.stringify(out));
       console.log(name, Object.entries(out.parts).map(([k, v]) => k + " " + Math.round(v.length / 1024) + " KB").join(", "));
       if (check) {
-        await p.setContent('<body style="margin:0;background:#9ad"><svg viewBox="0 0 400 266" width="1200">' + Object.values(out.parts).join("") + "</svg></body>");
+        await p.setContent('<body style="margin:0;background:#9ad"><svg viewBox="0 0 ' + VW + " " + VH + '" width="1200">' + Object.values(out.parts).join("") + "</svg></body>");
         await (await p.$("svg")).screenshot({ path: path.join(check, name + ".png") });
       }
       continue;

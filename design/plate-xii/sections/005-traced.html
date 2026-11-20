@@ -1,17 +1,14 @@
 <section id="tk" class="trim-on" style="--trim:#7A4E2D" aria-labelledby="tk-h">
-  <span class="label" id="tk-h">00b · v11 · Your traced kitchen</span>
+  <span class="label" id="tk-h">00b · v12 · Your traced kitchen</span>
   <div class="sec-body">
-    <h3>Your rack, your journals, your bottles</h3>
+    <h3>The rack under the window, the notebook moved, the journals the size of the notebook</h3>
     <p class="note">Still your SVG, cleaned by <code>traced/clean.cjs</code>; the new pieces are drawn on top by <code>traced/add.cjs</code>, and your rack, journals and bottles are cut out of your traces by <code>traced/port.cjs</code>. Point at or Tab to the box, notebook, cork board, whiteboard, the book shelf, or the clipboard (recipe log). The colours below are for trying out; stem green is the default.</p>
     <div class="recol" id="tk-ctl">
       <div class="choice"><span class="cap">Bottles</span><div class="seg" data-pick="sill">
-        <button data-v="1" aria-pressed="true">B1 your trio</button><button data-v="2">B2 your decanter and the amber bottle</button>
+        <button data-v="3" aria-pressed="true">B3 your newest set</button><button data-v="1">B1 your trio</button><button data-v="2">B2 your decanter and the amber bottle</button>
       </div></div>
       <div class="choice"><span class="cap">Time of day</span><div class="seg" data-pick="sun">
         <button data-v="am" aria-pressed="true">morning</button><button data-v="noon">midday</button><button data-v="pm">afternoon</button><button data-v="eve">evening</button>
-      </div></div>
-      <div class="choice"><span class="cap">Flour and rolling pin</span><div class="seg" data-pick="tidy">
-        <button data-v="0" aria-pressed="true">keep</button><button data-v="1">take away</button>
       </div></div>
       <div class="choice"><span class="cap">Cabinets</span><div class="seg" data-set="--cab">
         <button data-v="#5e8c3a" aria-pressed="true"><span class="dot" style="background:#5e8c3a"></span>stem green</button>
@@ -33,11 +30,11 @@
         <!--TRACED-->
         <svg class="tk-hit" viewBox="6 -39 856 479" aria-label="Kitchen objects">
           <g role="button" tabindex="0" aria-label="Open the recipe box" data-for="box"><rect x="30" y="205" width="160" height="160" rx="8"/></g>
-          <g role="button" tabindex="0" aria-label="Open the notebook" data-for="notebook"><rect x="255" y="308" width="203" height="68" rx="8"/></g>
+          <g role="button" tabindex="0" aria-label="Open the notebook" data-for="notebook"><rect x="221" y="308" width="203" height="68" rx="8"/></g>
           <g role="button" tabindex="0" aria-label="Open the idea board" data-for="ideas"><rect x="188" y="130" width="258" height="174" rx="6"/></g>
           <g role="button" tabindex="0" aria-label="Open the whiteboard" data-for="whiteboard"><rect x="452" y="130" width="140" height="170" rx="6"/></g>
           <g role="button" tabindex="0" aria-label="Open the library (cookbooks and references)" data-for="cookbooks references"><rect x="410" y="-39" width="256" height="159" rx="6"/></g>
-          <g role="button" tabindex="0" aria-label="Take an eclair off the rack" data-for="eclair" data-bite><rect x="180" y="332" width="92" height="40" rx="8"/></g>
+          <g role="button" tabindex="0" aria-label="Take an eclair off the rack" data-for="eclair" data-bite><rect x="694" y="312" width="166" height="56" rx="8"/></g>
           <g role="button" tabindex="0" aria-label="Open the recipe log" data-for="clip"><rect x="46" y="-34" width="66" height="131" rx="5"/></g>
         </svg>
       </div>
@@ -52,10 +49,13 @@
 
     <h3>What changed this round</h3>
     <ul class="ans">
-      <li><b>Eclairs and rack</b> are your trace now. Each eclair is cut out of it along its outline, the wall above them goes, and the rack keeps your wires and rim. Your crop cut off the third eclair, so the third is your middle one again, and the rack carries on under it with a corner like your left one. Still one taken per click, crumbs stay, back on reload.</li>
-      <li><b>Journals</b> are your trace: covers, marble, label and page edges kept; the desk, pencil, mug and the halftone shadow left out. Your dark underlay makes their outline.</li>
-      <li><b>Bottles</b> are your vectors: only the glass is kept (your window, mobile and rainbows are already in the kitchen). B2 is your decanter with the amber bottle from your trio.</li>
-      <li><b>Clipboard</b> says "Kitchen log" (was "Baking log").</li>
+      <li><b>Rack</b> is your new full trace, three whole eclairs, on the counter under the window where the flour and rolling pin were. Still one taken per click, crumbs stay, back on reload.</li>
+      <li><b>Flour and rolling pin</b> are gone.</li>
+      <li><b>Open notebook</b> moved left, half way to the recipe box.</li>
+      <li><b>Journals</b> are bigger: each one about the size of the notebook closed.</li>
+      <li><b>Open cupboard:</b> the stack of bowls on the top shelf (it read as a plate with an eclair) is gone.</li>
+      <li><b>Bottles:</b> B3 is your newest set, the decanter in the left pane and the amber and cobalt bottles in the right, spaced like your window. B1 and B2 are still there to compare.</li>
+      <li><b>Clipboard</b> stays "Kitchen log".</li>
 </ul>
   </div>
 </section>
@@ -75,7 +75,7 @@
     };
     b.addEventListener("click", go); b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
   });
-  var pick = { ecl: "0", sill: "1", sun: "am", tidy: "0" };
+  var pick = { ecl: "0", sill: "3", sun: "am", tidy: "1" };
   function apply() {
     sec.classList.toggle("dusk", pick.sun === "eve"); k.classList.toggle("tidy", pick.tidy === "1");
     k.querySelectorAll("[data-var]").forEach(function (g) {

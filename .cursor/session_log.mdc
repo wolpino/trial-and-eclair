@@ -10,6 +10,39 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-19 · Plate XII v12: rack under the window, notebook moved, flour and pin gone (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v12) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v12 published; questions to Ari; no app code) |
+
+### Intent
+Ari on v11: move the open notebook left half way to the recipe box; journal stack the size of the notebook closed; remove flour and rolling pin, put the eclair rack there under the window; remove the plate with the eclair; Kitchen log is good; sent a full rack trace and another bottle set.
+
+### Summary
+- refs/eclair-rack2.svg and refs/bottles-window2.svg ported (`port.cjs` pieces rack2, bottles-w2-left/right; top cut by dark-pixel scan; viewBox read from the file)
+- `add.cjs`: rack() from RACK2 under the window; B3 newest bottles (default); journals k .31; SHIFT/HULL/patch move the traced notebook (clean.cjs copies the base inside the hull, moved, patch under); tidy on for good; cupboard bowl stack removed
+- Tested: three clicks empty the rack, notebook glows in its new spot, no console errors; page 2.6 MB
+
+### Decisions
+- Moving traced shapes one by one broke the notebook (its cover is the shared underlay), so the notebook is copied as seen inside its outline instead
+- Took the cupboard bowl stack to be the "plate with the eclair"; asked to confirm
+
+### Open threads
+- Ari: B3/B1/B2; bowl stack = plate?; rack size; journals size; taken vs bites; times of day. Page size 2.6 MB
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v12, rack under window, notebook shift, hull, B3 bottles
+**Files:** design/plate-xii/traced/port.cjs, traced/ports/, traced/add.cjs, traced/clean.cjs, sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v12 as drawn (tweak only); the ink split; taller frame; the ports (rerun port.cjs only if a ref changes)
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v12 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Plate XII v11: Ari's rack, journals and bottles ported (published)
 
 | Field | Value |
