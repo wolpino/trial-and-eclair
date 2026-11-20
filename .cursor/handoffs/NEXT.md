@@ -1,4 +1,4 @@
-# NEXT — 2026-11-19 (Plate XII v13 published; waiting on Ari)
+# NEXT — 2026-11-20 (Plate XII v14 published; waiting on Ari)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,20 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII, after Ari answers v13) — START HERE
+## Prompt for the next agent (Plate XII, after Ari answers v14) — START HERE
+> Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (live = v14). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session.
+>
+> **Ari's v13 answers (11/20), now set:** J2, T1, 2700K, P1 "The Library", "Next up", wall as traced. All option code and controls for jr/tr/lt/pl/wb/glow/extra walls are gone (DEF = ecl, sill, sun, tidy).
+>
+> **New in v14:** glow = one halo per object from the union of its groups (`halos()` in clean.cjs, groups have ids `a-o-<obj>-n`, filter cuts the object's own silhouette, `.lit` toggles `[data-halo]`; hand-tuned box clip, shelf fillers, mixer cut `HALO_CUT`); wire rack `rackGrid()` in add.cjs continues her grid (`RACK_H`, `RACK_D`, `RACK_IN`) under and, once eclairs go, over her rack; wall clean-up in clean.cjs (`DROP` specks by source index, room shapes #F6E9CB -> var(--wall), `WB_BACK` behind the whiteboard surface 266, clear of the mixer); `duskWash()` leaves the bookshelf (x 410.5–661.5, y < 115.5) out of the evening dim.
+>
+> **Questions (page top):** glow from behind right; rack whole; wall clean enough; evening Library; ready for the full clean-up pass and sign-off (all picks yes).
+>
+> **After answers:** the full clean-up pass of stray lines and specks (Ari), then sign-off: PLAN.md, memory, Do not redo; product list into PRD/README/Task issues in one pass; then phone crop and size.
+>
+> **Known nits:** halos draw over neighbours (only the mixer is cut); state 3 bite rim has a short straight cut, state 4 a small dark stub (`bitten()` clip); grid between wires uses her darker counter tones.
+
+## Prompt for the next agent (Plate XII, after Ari answers v13) — done (v14)
 > Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (live = v13). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session.
 >
 > **New in v13 (add.cjs, DEF and the page `pick` hold the same keys):** `jr` 2/1/3 journals (J2 = 3-point affine fit `fit3()` of her cover, page edges redrawn in her colours; J3 halfway, spine face from her art); `tr` 1/2/0 "Trials" (T1 on the top journal label, T2 `nbTitle()` on the notebook's left page); `ecl` 0–5 (e1, e2 taken; `BITES` masks e3 at 3 and 4 with a cream rim; page JS `Math.min(5…)`); `beams()` opacity .75, purer colours; `lt` 2700/2200/3000/4000 `underLight(v)` + `LT` table, shown with `sun-eve` only, the control also switches to evening; `pl` 1/2/3 shelf plaques (brass holder, Archivo Narrow); `wb` next/up/today/todo whiteboard heading (`WB_INK` marker red); glow is `--glow1/--glow2` on #tk (control `data-glow`, G1 warm white default); wall control has W1 #FBF8F1, W2 #F6EEDB, W3 #F4F2EC and `#tk-walls` thumbnails (`<use href="#a-all">` with `--wall`). B1/B2 and their ports are gone; bowl stack back. Page 2.2 MB.

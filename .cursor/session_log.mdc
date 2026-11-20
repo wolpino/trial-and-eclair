@@ -10,6 +10,36 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-20 · Plate XII v14: picks set, glow from behind, rack whole, wall cleaned (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20` (v14) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, two subagents in worktrees) |
+| **Outcome** | success (Plate XII v14 published; questions to Ari; no app code) |
+
+### Intent
+Ari answered v13: J2, T1, 2700K, P1, Next up; glow warm white but only from behind objects; wall as traced, cleaned at the edges; Library as bright as the cupboard in the evening; fix the wire rack under the eclairs.
+
+### Summary
+- Main session: picks set, losing options, controls, thumbnails and handlers removed; wall clean-up in clean.cjs (specks dropped, wall-coloured room shapes follow --wall, whiteboard backing); duskWash() leaves the bookshelf out
+- Subagent 1: one halo per object behind its outline (halos() in clean.cjs, `<use>` of the object's groups, silhouette cut out)
+- Subagent 2: rackGrid() continues her rack's wires under and over her rack as eclairs go
+- Checked: magenta-wall render, hover on box and shelf, rack states 0–5, evening; no console errors; page 2.2 MB
+
+### Open threads
+- Ari: v14 questions; then the full clean-up pass and sign-off
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v14, halos, rackGrid, wall clean-up, duskWash
+**Files:** design/plate-xii/traced/clean.cjs, traced/add.cjs, sections/00-questions.html, sections/005-traced.html, base/xii.css, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v14 as drawn (tweak only); the ink split; taller frame; the ports; Ari's v13 picks
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v14 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-20 · Kitchen Progression: Story view (published)
 
 | Field | Value |
