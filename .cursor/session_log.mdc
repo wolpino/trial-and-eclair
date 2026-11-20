@@ -10,6 +10,38 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-19 · Plate XII v9: glass studies, rainbows by time, words (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v9) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v9 published; questions to Ari; no app code) |
+
+### Intent
+Ari on v8: books in front of the whiteboard (fix perspective), tabs yes, photo no; bottles like her vector glass studies (`~/Downloads/code.html`, studies 1, 2, 4 + an image of 3) but in the kitchen's style, window not teal; crystals nearly there; RECIPES yes; clipboard sheet title; "Ideas" paper; show without flour and pin; rainbows move through the day, then dark.
+
+### Summary
+- `add.cjs`: studies 1–4 as SILL (her paths in her 800x600 units, scaled .42 into the left pane; restyled: flat fill, 4.4 outline, darker side via clip, highlight); prism()/mobile() after her crystals; SUN beams am/noon/pm, `sun-eve` dim + `.dusk` glass vars (`GLASS`); flatQuad() books at the plates' .27 depth; clipboard title by affine fit (reversed: the door face runs right to left); ideasNote(); tidyPatch() fills wall and counter behind flour and pin (`.tidy` hides them)
+- Options left: sill, sun, tidy (ecl by clicks). Decided ones fixed (books n2, extras without photo, box label)
+- Checked: evening + tidy and midday screenshots, no page errors
+
+### Decisions
+- Ari: books in front of the whiteboard; tabs, no photo; RECIPES; titles on clipboard and board; bottles in her study style; rainbows by time of day
+
+### Open threads
+- Ari: bottles (pick B1), flour and pin, clipboard title, times of day, Library name
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v9, glass bottles, rainbows time of day, dusk, Baking log, Ideas
+**Files:** design/plate-xii/traced/ (clean.cjs, add.cjs, kitchen.svg, closeups.html), sections/00-questions.html, sections/005-traced.html, base/xii.css, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v9 as drawn (tweak only); the ink split; taller frame
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v9 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Plate XII v8: eclair bites, frame colour, sill light (published)
 
 | Field | Value |

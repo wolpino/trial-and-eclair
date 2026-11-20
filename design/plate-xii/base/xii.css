@@ -29,3 +29,4 @@
 .tk-zooms figcaption { font-size: .84rem; color: var(--ink-soft); padding: 6px 10px; border-top: 1px solid var(--rule); background: var(--card); }
 .tk-zooms figure.on { outline: 3px solid var(--orange); outline-offset: 2px; }
 .tk-zooms figure:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.tidy [data-obj="flour"], .tidy [data-obj="pin"] { display: none; }

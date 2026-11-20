@@ -1,20 +1,17 @@
 <section id="tk" class="trim-on" style="--trim:#7A4E2D" aria-labelledby="tk-h">
-  <span class="label" id="tk-h">00b · v8 · Your traced kitchen</span>
+  <span class="label" id="tk-h">00b · v9 · Your traced kitchen</span>
   <div class="sec-body">
-    <h3>Walnut window frame, the sill, and an eclair you can eat</h3>
+    <h3>Bottles from your studies, rainbows through the day, a tidier corner</h3>
     <p class="note">Still your SVG, cleaned by <code>traced/clean.cjs</code>; the new pieces are drawn on top by <code>traced/add.cjs</code>. Point at or Tab to the box, notebook, cork board, whiteboard, the book shelf, or the clipboard (recipe log). The colours below are for trying out; stem green is the default.</p>
     <div class="recol" id="tk-ctl">
-      <div class="choice"><span class="cap">Sill</span><div class="seg" data-pick="sill">
-        <button data-v="1" aria-pressed="true">L1 glass bottles</button><button data-v="2">L2 lemons</button><button data-v="3">L3 jar of flowers</button>
+      <div class="choice"><span class="cap">Bottles</span><div class="seg" data-pick="sill">
+        <button data-v="1" aria-pressed="true">B1 trio</button><button data-v="2">B2 decanter</button><button data-v="3">B3 five jars</button><button data-v="4">B4 carafe and flask</button>
       </div></div>
-      <div class="choice"><span class="cap">Composition books</span><div class="seg" data-pick="nb">
-        <button data-v="n1" aria-pressed="true">under the open one</button><button data-v="n2">in front of the whiteboard</button><button data-v="0">none</button>
+      <div class="choice"><span class="cap">Time of day</span><div class="seg" data-pick="sun">
+        <button data-v="am" aria-pressed="true">morning</button><button data-v="noon">midday</button><button data-v="pm">afternoon</button><button data-v="eve">evening</button>
       </div></div>
-      <div class="choice"><span class="cap">Open notebook</span><div class="seg" data-pick="nbx">
-        <button data-v="1" aria-pressed="true">tabs, ribbon, photo</button><button data-v="0">as traced</button>
-      </div></div>
-      <div class="choice"><span class="cap">Recipe box</span><div class="seg" data-pick="box">
-        <button data-v="1">as traced</button><button data-v="2" aria-pressed="true">worn, tab letters</button><button data-v="3">+ RECIPES</button>
+      <div class="choice"><span class="cap">Flour and rolling pin</span><div class="seg" data-pick="tidy">
+        <button data-v="0" aria-pressed="true">keep</button><button data-v="1">take away</button>
       </div></div>
       <div class="choice"><span class="cap">Cabinets</span><div class="seg" data-set="--cab">
         <button data-v="#5e8c3a" aria-pressed="true"><span class="dot" style="background:#5e8c3a"></span>stem green</button>
@@ -44,7 +41,7 @@
           <g role="button" tabindex="0" aria-label="Open the recipe log" data-for="clip"><rect x="46" y="-34" width="66" height="131" rx="5"/></g>
         </svg>
       </div>
-      <figcaption><b>Kitchen.</b> Click the eclair: a bite, another bite, then it's gone until the page reloads. The window frame is walnut.</figcaption>
+      <figcaption><b>Kitchen.</b> Click the eclair to eat it. Try the time of day: the rainbows move, and in the evening they're gone and the window goes to dusk.</figcaption>
     </figure>
     <p class="tk-say" id="tk-say" aria-live="polite">Nothing open.</p>
 
@@ -55,9 +52,12 @@
 
     <h3>What changed this round</h3>
     <ul class="ans">
-      <li><b>Eclair</b> is E1, whole. Each click takes a bite (cream shows at the cut, crumbs on the plate); the third click finishes it, and it comes back when the page reloads. Nothing is saved.</li>
-      <li><b>Window frame</b> is walnut (Ari's pick), to go with the shelf and the cork board frame. The traced frame's light and dark shades all follow one colour (<code>--trim</code>), so it can change later.</li>
-      <li><b>Sill:</b> the basil is gone. Three ways to bring light in, in the trace's look: L1 coloured glass bottles with light pooling on the sill (one holds a single flower), L2 a bowl of lemons, L3 a clear jar of daisies and buttercups. The crystal mobile and rainbows stay.</li>
+      <li><b>Bottles from your studies</b> (B1 trio, B2 decanter, B3 five jars, B4 carafe and flask), redrawn in the kitchen's look: flat colour, the thick dark outline, a darker side and a white highlight, a soft tint where light comes through. The window stays walnut.</li>
+      <li><b>Crystals</b> from your studies too: hexagonal prisms with a white top facet and a pale blue bottom, on the brass ring.</li>
+      <li><b>Rainbows follow the time of day</b> instead of a sun patch: long and low across the wall in the morning, steep onto the counter at midday, up the wall in the afternoon, none in the evening, when the glass goes to dusk and the room dims a little.</li>
+      <li><b>Composition books</b> in front of the whiteboard, now lying flat at the same angle as the plates. The photo is off the notebook page (tabs, ribbon and doodle stay).</li>
+      <li><b>Words:</b> RECIPES on the box, "Baking log" at the top of the clipboard sheet, "Ideas" on the big note on the cork board.</li>
+      <li><b>Flour and rolling pin</b> can come away; the wall and counter are filled in behind them.</li>
     </ul>
   </div>
 </section>
@@ -77,8 +77,9 @@
     };
     b.addEventListener("click", go); b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
   });
-  var pick = { nb: "n1", nbx: "1", box: "2", ecl: "0", sill: "1" };
+  var pick = { ecl: "0", sill: "1", sun: "am", tidy: "0" };
   function apply() {
+    sec.classList.toggle("dusk", pick.sun === "eve"); k.classList.toggle("tidy", pick.tidy === "1");
     k.querySelectorAll("[data-var]").forEach(function (g) {
       var on = g.dataset.var.split(" ").every(function (t) { var i = t.indexOf("-"); return pick[t.slice(0, i)] === t.slice(i + 1); });
       g.style.display = on ? "" : "none";

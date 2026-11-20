@@ -83,6 +83,7 @@ function extend(id) {
   const ATTRS = (q) => (q.op ? ' fill-opacity="' + q.op + '"' : "") + (q.rule ? ' fill-rule="' + q.rule + '"' : "");
   function fillOf(it) { const q = it.q, T = ADD.TRIM[q.fill.toUpperCase()];
     if (it.obj === "window" && T) return "var(--trim-" + q.fill.slice(1).toUpperCase() + "," + q.fill + ")";   /* window frame: any colour on .trim-on */
+    if (it.obj === "window" && ADD.GLASS[q.fill.toUpperCase()]) return "var(--glass-" + q.fill.slice(1).toUpperCase() + "," + q.fill + ")";   /* glass: dusk on .dusk */
     if (!isBlue(q.fill)) return q.fill; return it.obj === "box" ? shade("var(--blue)", q.fill) : (it.obj === "ideas" ? q.fill : shade("var(--cab)", q.fill)); }
 
   function build(v, opts) {
@@ -95,7 +96,7 @@ function extend(id) {
     const MASK = 'maskUnits="userSpaceOnUse" x="-600" y="-50" width="2100" height="600"';
     objs.forEach((o) => { defs += '<mask id="' + id("ink-" + o) + '" ' + MASK + '><use href="#' + id("mk-" + o) + '" fill="#fff" stroke="#fff"' + GROW + '/></mask>'; });
     defs += '<mask id="' + id("ink-room") + '" ' + MASK + '><rect x="-600" y="-50" width="2100" height="600" fill="#fff"/>' + objs.map((o) => '<use href="#' + id("mk-" + o) + '" fill="#000" stroke="#000"' + GROW_ROOM + '/>').join("") + "</mask>";
-    defs += (opts.defs || "") + "</defs><style>.trim-on{" + Object.keys(ADD.TRIM).map((h) => "--trim-" + h.slice(1) + ":color-mix(in srgb,var(--trim) " + ADD.TRIM[h][0] + "%," + ADD.TRIM[h][1] + ")").join(";") + "}</style>";
+    defs += (opts.defs || "") + "</defs><style>.trim-on{" + Object.keys(ADD.TRIM).map((h) => "--trim-" + h.slice(1) + ":color-mix(in srgb,var(--trim) " + ADD.TRIM[h][0] + "%," + ADD.TRIM[h][1] + ")").join(";") + "}.dusk{" + Object.keys(ADD.GLASS).map((h) => "--glass-" + h.slice(1) + ":" + ADD.GLASS[h]).join(";") + "}</style>";
     /* the flat list of [obj, element] in paint order */
     const out = [];
     items.forEach((it) => {

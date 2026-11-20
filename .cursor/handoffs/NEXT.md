@@ -1,4 +1,4 @@
-# NEXT — 2026-11-19 (Plate XII v8 published: eclair bites, frame colour, sill; waiting on Ari)
+# NEXT — 2026-11-19 (Plate XII v9 published: glass studies, rainbows by time; waiting on Ari)
 
 > **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
 
@@ -10,7 +10,14 @@ The block layout is final (round 10). Draw the kitchen and every view in the pla
 style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues ⏳ → build
 ```
 
-## Prompt for the next agent (Plate XII, after Ari answers v8) — START HERE
+## Prompt for the next agent (Plate XII, after Ari answers v9) — START HERE
+> Plate XII v9: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Build as before. Options left in `add.cjs` (DEF): sill 1–4 (Ari's glass studies, restyled), sun am/noon/pm/eve (eve = `.dusk` on #tk + dim layer), tidy 0/1 (`.tidy` hides flour and pin, patch fills behind). Eclair `ecl-0..3` by clicks. Fixed: books in front of the whiteboard (flatQuad), tabs/ribbon/doodle, RECIPES, "Baking log" (LOG_TITLE), "Ideas", walnut frame.
+>
+> **Questions (page top):** bottles (pick B1), flour and pin, clipboard title (pick Baking log), the four times of day, Library name (pick Library).
+>
+> **After answers:** set DEF to the picks, drop losing bottle options and the tidy toggle; keep the time-of-day control (it is a feature: rainbows follow the clock). Then phone crop and size; product list into the PRD at sign-off.
+
+## Prompt for the next agent (Plate XII, after Ari answers v8) — done (v9)
 > Plate XII v8: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Build as before. Options in `add.cjs` (DEF = picks): nb, nbx, box, sill (L1–L3), ecl 0–3 (driven by clicks, not a choice). Window frame colour: `.trim-on` + `--trim` on #tk (walnut default), shades in `TRIM`.
 >
 > **Decided:** window frame walnut (`--trim:#7A4E2D` on #tk, swatches removed).
