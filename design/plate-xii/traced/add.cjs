@@ -99,9 +99,31 @@ function rack() {
   for (let t = 0; t <= 1; t += 1 / 18) s += wire("M" + (46 + t * 495) + " 160 L" + (143 + t * 480) + " 284");
   s += "</g>" + reid(RACK2.parts.rack, id);
   const crumbs = (cx, cy) => [[-40, 6, 5], [-12, -8, 3.8], [16, 10, 4.4], [46, -2, 3.2], [0, 20, 3.4], [-62, 16, 3]].map(([dx, dy, r]) => '<circle cx="' + (cx + dx) + '" cy="' + (cy + dy) + '" r="' + r + '" fill="' + (r > 3.6 ? "#E5B866" : "#4A2517") + '" stroke="#2B160F" stroke-width="1.1"/>').join("");
-  const spots = [[200, 210], [343, 210], [477, 210]];
-  ["e1", "e2", "e3"].forEach((k, i) => { const r = (a, b) => [0, 1, 2, 3].filter((v) => v >= a && v <= b).join("|"); s += V("ecl-" + r(i + 1, 3), crumbs(...spots[i])) + V("ecl-" + r(0, i), reid(RACK2.parts[k], id)); });
+  const spots = [[200, 210], [343, 210], [477, 210]], r = (a, b) => [0, 1, 2, 3, 4, 5].filter((v) => v >= a && v <= b).join("|");
+  /* ecl 0..5: e1 taken at 1, e2 at 2, then two bites out of e3 (3, 4), all gone at 5 */
+  ["e1", "e2"].forEach((k, i) => { s += V("ecl-" + r(i + 1, 5), crumbs(...spots[i])) + V("ecl-" + r(0, i), reid(RACK2.parts[k], id)); });
+  s += V("ecl-5", crumbs(...spots[2])) + V("ecl-" + r(0, 4), bitten(reid(RACK2.parts.e3, id), id));
   return '<g transform="translate(' + RACK_FIT.x + " " + RACK_FIT.y + ") scale(" + RACK_FIT.k + ') translate(-41 -284)">' + s + "</g>";
+}
+
+/* the last eclair (e3), bitten from its right end: a mask of overlapping circles cuts the choux away (the rack patch shows
+   through), and along the cut a cream band with an ink edge and a thin shell line, so it reads as a bite into choux and cream.
+   ecl-3 = one bite, ecl-4 = the second bite takes more. Units are her rack's (scaled by RACK_FIT.k = .27, so ink 1 ~ 3.7). */
+const BITE_T = [553, 251], BITE_U = [.77, .64], BITE_N = [-.64, .77];   /* the end's tip, along the eclair, across it */
+const BITES = {
+  3: [[-2, -21, 18], [-9, 0, 19], [-1, 20, 17]],
+  4: [[-2, -21, 18], [-9, 0, 19], [-1, 20, 17], [-30, -22, 20], [-38, 1, 22], [-30, 22, 19], [-20, -32, 12]],
+};
+function bitten(e3, id) {
+  const m = "bt" + id, at = (a, b) => [BITE_T[0] + BITE_U[0] * a + BITE_N[0] * b, BITE_T[1] + BITE_U[1] * a + BITE_N[1] * b];
+  const circ = (n, style) => BITES[n].map(([a, b, rr]) => { const c = at(a, b); return '<circle cx="' + f1(c[0]) + '" cy="' + f1(c[1]) + '" r="' + rr + '" ' + style + "/>"; }).join("");
+  const both = (style) => V("ecl-3", circ(3, style)) + V("ecl-4", circ(4, style));
+  let s = '<mask id="' + m + '" maskUnits="userSpaceOnUse" x="360" y="100" width="240" height="200"><rect x="360" y="100" width="240" height="200" fill="#fff"/>' + both('fill="#000"') + "</mask>";
+  s += '<g mask="url(#' + m + ')">' + e3 + '<g clip-path="url(#pc-rack2-e3' + id + ')" fill="none">' +
+    both('stroke="#C98A4B" stroke-width="25"') + both('stroke="#F7E9BE" stroke-width="20"') + both('stroke="#E9D59A" stroke-width="7" stroke-dasharray="3 9"') + both('stroke="#2B160F" stroke-width="5"') + "</g></g>";
+  /* a few crumbs off the bites */
+  s += V("ecl-3|4", [[574, 268, 4], [586, 252, 3], [560, 282, 3.4], [598, 274, 2.6]].map(([x, y, rr], i) => '<circle cx="' + x + '" cy="' + y + '" r="' + rr + '" fill="' + (i % 2 ? "#4A2517" : "#E5B866") + '" stroke="#2B160F" stroke-width="1.1"/>').join(""));
+  return s;
 }
 
 /* ---- the sill: Ari's vector bottles (ports/), her newest set B3 (Ari 11/19)
@@ -156,11 +178,11 @@ const SUN = {
   pm: [[812, 110, 690, 52, 1.5], [828, 100, 862, 58, 1.3], [818, 130, 680, 150, 1.3]],
 };
 function beams(v, sun) {
-  const C = ["#E05A4F", "#F2A33A", "#F2D24A", "#7FB069", "#5B8FD1", "#9C7BC9"], id = v + "-bm" + (++uid);
+  const C = ["#EE2A35", "#FF8A1C", "#FFD91A", "#2FBF4A", "#2A72E8", "#8C3FD6"], id = v + "-bm" + (++uid);
   const band = (x1, y1, x2, y2, w) => {
     const len = Math.hypot(x2 - x1, y2 - y1), nx = -(y2 - y1) / len, ny = (x2 - x1) / len, g = id + "g" + (++uid);
     let t = '<linearGradient id="' + g + '" gradientUnits="userSpaceOnUse" x1="' + x1 + '" y1="' + y1 + '" x2="' + x2 + '" y2="' + y2 + '"><stop offset="0" stop-color="#fff" stop-opacity="0"/><stop offset=".25" stop-color="#fff" stop-opacity=".9"/><stop offset=".8" stop-color="#fff" stop-opacity=".6"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>' +
-      '<mask id="' + g + 'm" maskUnits="userSpaceOnUse" x="0" y="-60" width="868" height="560"><rect x="0" y="-60" width="868" height="560" fill="url(#' + g + ')"/></mask><g mask="url(#' + g + 'm)" opacity=".45">';
+      '<mask id="' + g + 'm" maskUnits="userSpaceOnUse" x="0" y="-60" width="868" height="560"><rect x="0" y="-60" width="868" height="560" fill="url(#' + g + ')"/></mask><g mask="url(#' + g + 'm)" opacity=".75">';
     C.forEach((c, i) => { const o = (i - 2.5) * w; t += '<path d="M' + f1(x1 + nx * o) + " " + f1(y1 + ny * o) + " L" + f1(x2 + nx * o * 1.6) + " " + f1(y2 + ny * o * 1.6) + '" style="stroke:' + c + ";stroke-width:" + f1(w * 1.3) + '"/>'; });
     return t + "</g>";
   };
@@ -355,7 +377,7 @@ module.exports = {
     seed = 11;
     return [
       ...Object.keys(SILL).map((k) => ({ key: "sill" + k, title: "B" + k + " · " + SILL[k][0], vb: "716 20 150 236", svg: beams(v + "z" + k, "am") + mobile() + SILL[k][1]() })),
-      { key: "rack", title: "Your eclairs on your cooling rack (click the rack in the kitchen to take one)", vb: "684 300 182 70", svg: '<use href="#a-all"/>' },
+      { key: "rack", title: "Your eclairs on your cooling rack (click the rack in the kitchen: two taken, two bites out of the last, then gone)", vb: "684 300 182 70", svg: '<use href="#a-all"/>' },
       { key: "nb2", title: "Your composition journals, the size of the notebook closed", vb: "210 292 330 80", svg: '<use href="#a-all"/>' },
       { key: "clip", title: "The clipboard: “" + LOG_TITLE + "” at the top of the sheet", vb: "40 -39 120 145", svg: cupOpen(v + "z") + clipboard() },
       { key: "box", title: "Recipe box with RECIPES, worn paint, tab letters", vb: "26 200 170 170", svg: boxWear() + boxLabel() },

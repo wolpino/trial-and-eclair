@@ -35,7 +35,7 @@
           <g role="button" tabindex="0" aria-label="Open the recipe log" data-for="clip"><rect x="46" y="-34" width="66" height="131" rx="5"/></g>
         </svg>
       </div>
-      <figcaption><b>Kitchen.</b> Click the rack to take an eclair, one per click. Try the time of day: the rainbows move, and in the evening they're gone and the window goes to dusk.</figcaption>
+      <figcaption><b>Kitchen.</b> Click the rack: the first two clicks take an eclair each, the next two take bites out of the last one, and the fifth finishes it. Try the time of day: the rainbows move, and in the evening they're gone and the window goes to dusk.</figcaption>
     </figure>
     <p class="tk-say" id="tk-say" aria-live="polite">Nothing open.</p>
 
@@ -66,9 +66,9 @@
     ["mouseleave", "blur"].forEach(function (e) { b.addEventListener(e, function () { lit(obj, false); }); });
     var go = function () { say.textContent = "Would open " + name + " (its own web address, Back returns to the kitchen)."; };
     if (b.hasAttribute("data-bite")) go = function () {
-      var n = Math.min(3, +pick.ecl + 1); pick.ecl = String(n); apply();
-      say.textContent = ["", "One eclair taken.", "Two taken.", "All gone. They come back when the page reloads."][n];
-      if (n === 3) { lit(obj, false); b.remove(); }
+      var n = Math.min(5, +pick.ecl + 1); pick.ecl = String(n); apply();
+      say.textContent = ["", "One eclair taken.", "Two taken.", "A bite out of the last one.", "Another bite.", "All gone. They come back when the page reloads."][n];
+      if (n === 5) { lit(obj, false); b.remove(); }
     };
     b.addEventListener("click", go); b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
   });
