@@ -1,19 +1,9 @@
 <section id="tk" class="trim-on" style="--trim:#7A4E2D" aria-labelledby="tk-h">
   <span class="label" id="tk-h">00b · v8 · Your traced kitchen</span>
   <div class="sec-body">
-    <h3>Window frame colour, the sill, and an eclair you can eat</h3>
+    <h3>Walnut window frame, the sill, and an eclair you can eat</h3>
     <p class="note">Still your SVG, cleaned by <code>traced/clean.cjs</code>; the new pieces are drawn on top by <code>traced/add.cjs</code>. Point at or Tab to the box, notebook, cork board, whiteboard, the book shelf, or the clipboard (recipe log). The colours below are for trying out; stem green is the default.</p>
     <div class="recol" id="tk-ctl">
-      <div class="choice"><span class="cap">Window frame</span><div class="seg" data-trim>
-        <button data-v="#7A4E2D" aria-pressed="true"><span class="dot" style="background:#7A4E2D"></span>walnut</button>
-        <button data-v="#B9844F"><span class="dot" style="background:#B9844F"></span>oak</button>
-        <button data-v="var(--cab)"><span class="dot" style="background:#5e8c3a"></span>cabinet green</button>
-        <button data-v="#36573A"><span class="dot" style="background:#36573A"></span>deep green</button>
-        <button data-v="#E2B84A"><span class="dot" style="background:#E2B84A"></span>buttercup</button>
-        <button data-v="#B8452F"><span class="dot" style="background:#B8452F"></span>tomato</button>
-        <button data-v="#3F5F9D"><span class="dot" style="background:#3F5F9D"></span>Blue 3</button>
-        <button data-v=""><span class="dot" style="background:#F6E9CB"></span>as traced</button>
-      </div></div>
       <div class="choice"><span class="cap">Sill</span><div class="seg" data-pick="sill">
         <button data-v="1" aria-pressed="true">L1 glass bottles</button><button data-v="2">L2 lemons</button><button data-v="3">L3 jar of flowers</button>
       </div></div>
@@ -54,7 +44,7 @@
           <g role="button" tabindex="0" aria-label="Open the recipe log" data-for="clip"><rect x="46" y="-34" width="66" height="131" rx="5"/></g>
         </svg>
       </div>
-      <figcaption><b>Kitchen.</b> Click the eclair: a bite, another bite, then it's gone until the page reloads. The window frame takes any colour.</figcaption>
+      <figcaption><b>Kitchen.</b> Click the eclair: a bite, another bite, then it's gone until the page reloads. The window frame is walnut.</figcaption>
     </figure>
     <p class="tk-say" id="tk-say" aria-live="polite">Nothing open.</p>
 
@@ -66,7 +56,7 @@
     <h3>What changed this round</h3>
     <ul class="ans">
       <li><b>Eclair</b> is E1, whole. Each click takes a bite (cream shows at the cut, crumbs on the plate); the third click finishes it, and it comes back when the page reloads. Nothing is saved.</li>
-      <li><b>Window frame</b> takes any colour: the traced frame's light and dark shades all follow one colour. Swatches above, including walnut and oak to go with the shelf, the cork board frame and the counter.</li>
+      <li><b>Window frame</b> is walnut (Ari's pick), to go with the shelf and the cork board frame. The traced frame's light and dark shades all follow one colour (<code>--trim</code>), so it can change later.</li>
       <li><b>Sill:</b> the basil is gone. Three ways to bring light in, in the trace's look: L1 coloured glass bottles with light pooling on the sill (one holds a single flower), L2 a bowl of lemons, L3 a clear jar of daisies and buttercups. The crystal mobile and rainbows stay.</li>
     </ul>
   </div>
@@ -97,13 +87,6 @@
   }
   sec.querySelectorAll("#tk-ctl [data-pick]").forEach(function (seg) {
     seg.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; pick[seg.dataset.pick] = b.dataset.v; apply(); });
-  });
-  sec.querySelectorAll("#tk-ctl [data-trim]").forEach(function (seg) {
-    seg.addEventListener("click", function (e) {
-      var b = e.target.closest("button"); if (!b) return;
-      seg.querySelectorAll("button").forEach(function (x) { x.setAttribute("aria-pressed", String(x === b)); });
-      sec.classList.toggle("trim-on", !!b.dataset.v); if (b.dataset.v) sec.style.setProperty("--trim", b.dataset.v);
-    });
   });
   apply();
   sec.querySelectorAll("#tk-ctl [data-set]").forEach(function (seg) {

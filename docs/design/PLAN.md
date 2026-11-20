@@ -198,7 +198,8 @@ Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop
 - [x] v7 (2026-11-19, same URL): bitten E1 at P1; bushy basil, four-crystal mobile, rainbow beams; frame sage or cream; composition books under the open notebook or in front of the whiteboard; notebook tabs, ribbon, photo, doodle; box wear, tab letters, optional RECIPES
 - [x] **Decided (Ari, on v7):** window frame coloured, but not that sage; no basil (something that brings light; florals in the trace's style are OK); eclair is E1 whole, and clicking takes a bite, a second bite, then it is gone until the page reloads (as in an earlier version)
 - [x] v8 (2026-11-19, same URL): frame in any colour (walnut default; oak, cabinet green, deep green, buttercup, tomato, Blue 3); sill L1 glass bottles, L2 lemons, L3 jar of flowers; eclair eaten in three clicks
-- [ ] Ari (v8 questions): frame colour (pick walnut); sill (pick L1); composition books spot (pick under); notebook extras enough?; RECIPES (pick no); Library name (pick Library)
+- [x] **Window frame walnut** (Ari 2026-11-19); swatches removed, `--trim` #7A4E2D on #tk
+- [ ] Ari (v8 questions): sill (pick L1); composition books spot (pick under); notebook extras enough?; RECIPES (pick no); Library name (pick Library)
 
 ### Product changes from the plates (apply in one pass)
 Changes to the product that come out of the drawings. Kept here as they come up and applied together to `docs/PRD.md`, the README and the Task issues when Plate XII is signed off (before Task issues), so the plan is edited once and stays consistent.

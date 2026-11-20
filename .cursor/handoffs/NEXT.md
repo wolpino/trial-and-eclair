@@ -13,7 +13,9 @@ style ✅ → colours ✅ → kitchen layout ✅ (round 10) → plate drawing �
 ## Prompt for the next agent (Plate XII, after Ari answers v8) — START HERE
 > Plate XII v8: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj. Build as before. Options in `add.cjs` (DEF = picks): nb, nbx, box, sill (L1–L3), ecl 0–3 (driven by clicks, not a choice). Window frame colour: `.trim-on` + `--trim` on #tk (walnut default), shades in `TRIM`.
 >
-> **Questions (page top):** frame colour (pick walnut), sill (pick L1 bottles), books spot (pick under), notebook extras enough, RECIPES (pick no), Library name (pick Library).
+> **Decided:** window frame walnut (`--trim:#7A4E2D` on #tk, swatches removed).
+>
+> **Questions (page top):** sill (pick L1 bottles), books spot (pick under), notebook extras enough, RECIPES (pick no), Library name (pick Library).
 >
 > **After answers:** set DEF and the default `--trim` to the picks, remove losing options and their buttons. Then evening, phone crop, size; product list into the PRD at sign-off.
 
