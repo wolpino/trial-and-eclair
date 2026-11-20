@@ -4,6 +4,8 @@ python3 design/progression/build.py <scratchpad>
   <scratchpad>/old/       renders of Rounds 1-10, Plates I-VIII (from the published artifacts)
   <scratchpad>/archive/   images from the "Every kitchen so far" archive artifact
   <scratchpad>/pxshots/   Plates X, XI, XII and the Brand Sheet rendered at each git commit
+  <scratchpad>/vis/       Ari's own studies (Desktop/trial-and-eclair- visuals/thekitchens: AI and Kittl
+                          images, the kitchens drawn on its saved study pages, her Kittl trace)
 Writes design/progression/img/<id>.jpg (1200 px wide) and items.json.
 Each item: id, stage, date, caption, group (items in one group look alike), on (in the default set).
 """
@@ -104,10 +106,27 @@ add(f"{P}/plate-xi-04-cf13a5f-eve-k.png", "Plate XI", "17 Nov", "Plate XI, eveni
 add(f"{P}/brand-03-4b8c348-br6-day.png", "Brand Sheet", "17 Nov", "Brand Sheet kitchen reference, day", "brand", False)
 add(f"{P}/brand-03-4b8c348-br6-eve.png", "Brand Sheet", "17 Nov", "Brand Sheet kitchen reference, evening", "brand", False)
 
+# Ari's studies, slotted in by file time between the plates they fed
+VS = f"{S}/vis"
+add(f"{VS}/study-green-1.png", "Your studies", "18 Nov", "Flat-vector desktop study", "green", False)
+add(f"{VS}/study-green-2.jpg", "Your studies", "18 Nov", "Study: open cupboard, sun through the window", "green", True)
+add(f"{VS}/study-green-3.jpg", "Your studies", "18 Nov", "Study: desktop visual direction", "green", False)
+add(f"{VS}/study-green-4.jpg", "Your studies", "18 Nov", "Study: alternate desktop", "green", False)
+add(f"{VS}/study-green-ari-edit.jpg", "Your studies", "18 Nov", "Your edit: Next up, Ideas and the labels on the study", "green", True)
+add(f"{VS}/study-green-desktop3.png", "Your studies", "18 Nov", "Kitchen 3 from your desktop", "green", False)
+add(f"{VS}/study-h0-0.png", "Your Kittl studies", "19 Nov", "Counter plate, portrait", None, False)
+add(f"{VS}/study-h3-0.png", "Your Kittl studies", "19 Nov", "Showcase plate, wide: island with Trials, eclair and box", None, True)
 add(f"{P}/plate-xii-00-d10bf43-xa_fig_svg.png", "Plate XII v1", "19 Nov", "A: desktop 1 seen straight on", "x1", True)
 add(f"{P}/plate-xii-00-d10bf43-xb_fig_svg.png", "Plate XII v1", "19 Nov", "B: desktop 2 tidied", "x1", True)
+add(f"{VS}/study-h1-0.png", "Your Kittl studies", "19 Nov", "Recipe board, one point: corner kitchen", "kittl-rb", True)
+add(f"{VS}/study-h1-1.png", "Your Kittl studies", "19 Nov", "Recipe board, one point: closer", "kittl-rb", False)
+add(f"{VS}/study-h2-0.png", "Your Kittl studies", "19 Nov", "Recipe board A, straight on (the one you traced)", "kittl-rb2", True)
+add(f"{VS}/study-h2-1.png", "Your Kittl studies", "19 Nov", "Recipe board B, blue corner", "kittl-rb2", False)
 add(f"{P}/plate-xii-01-a9659ae-xa_fig_svg.png", "Plate XII v2", "19 Nov", "One-point kitchen A from the Kittl studies", "x2", True)
 add(f"{P}/plate-xii-01-a9659ae-xb_fig_svg.png", "Plate XII v2", "19 Nov", "One-point kitchen B", "x2", True)
+add(f"{VS}/study-h4-0.png", "Your Kittl studies", "19 Nov", "Vector kitchen, one point: blue, close", "kittl-vec", True)
+add(f"{VS}/study-h4-1.png", "Your Kittl studies", "19 Nov", "Vector kitchen, one point: wide, checker floor", "kittl-vec", False)
+add(f"{VS}/kittl-trace.png", "Your Kittl trace", "19 Nov", "Your vector trace of recipe board A")
 add(f"{P}/plate-xii-02-b82eff6-tk_k.png", "Plate XII v3", "19 Nov", "Your traced Kittl kitchen, cleaned and wired up")
 add(f"{P}/plate-xii-03-8e28fc4-tk_a_tk.png", "Plate XII v4", "19 Nov", "Stem green, split ink, cupboard and clipboard", "x4", True)
 add(f"{P}/plate-xii-03-8e28fc4-tk_b_tk.png", "Plate XII v4", "19 Nov", "Box and mixer swapped", "x4", False)
@@ -116,7 +135,8 @@ for c, v, cap, on in [("04-02efd3b", 5, "Taller frame, open cupboard, clipboard 
                       ("06-3e4832d", 7, "Bitten eclair, basil, crystal and rainbows, composition books", True),
                       ("07-283625c", 8, "Click-to-eat eclair, sill bottles, frame colour", False),
                       ("08-61b193d", 8, "Walnut window frame", True),
-                      ("09-c6859d3", 9, "Glass study bottles, rainbows by time of day, labels", True)]:
+                      ("09-c6859d3", 9, "Glass study bottles, rainbows by time of day, labels", True),
+                      ("10-ba8975e", 10, "Eclairs on a cooling rack, bottles, composition books", True)]:
     add(f"{P}/plate-xii-{c}-tk_a_tk.png", f"Plate XII v{v}", "19 Nov", cap, "x8" if v == 8 else None, on)
 
 os.makedirs(f"{D}/img", exist_ok=True)
@@ -127,6 +147,7 @@ for i, (src, stage, date, cap, group, on) in enumerate(ITEMS):
     k = os.path.splitext(os.path.basename(src))[0].replace("_", "-")
     assert k not in seen, k; seen.add(k)
     f = f"img/{k}.jpg"; im.save(f"{D}/{f}", quality=80, optimize=True, progressive=True)
-    out.append({"id": k, "src": f, "w": im.width, "h": im.height, "stage": stage, "date": date, "caption": cap, "group": group, "on": bool(on)})
+    out.append({"id": k, "src": f, "w": im.width, "h": im.height, "stage": stage, "date": date, "caption": cap, "group": group, "on": bool(on),
+                "new": stage.startswith("Your") or stage == "Plate XII v10"})  # added after Ari's first picks (2026-11-19)
 json.dump(out, open(f"{D}/items.json", "w"), indent=0)
 print(len(out), "items,", sum(x["on"] for x in out), "on")

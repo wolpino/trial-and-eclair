@@ -83,14 +83,21 @@ dialog::backdrop { background: var(--shade); }
 .pl-bar { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; align-items: center; }
 .pl-bar button, .pl-bar select { background: #f0e8d8; color: #22201c; border-color: #f0e8d8; }
 .pl-bar label { font-size: 0.85rem; color: #b5a993; display: inline-flex; gap: 6px; align-items: center; }
+.new { position: absolute; top: 6px; left: 6px; line-height: 1; padding: 4px 8px; font: 600 0.72rem var(--body); letter-spacing: 0.06em; text-transform: uppercase; background: var(--walnut); color: var(--paper); border-radius: 999px; }
+.jump { color: var(--blue); font-weight: 600; }
+.eclairs { padding-block: 40px 8px; display: grid; gap: 14px; border-top: 1px solid var(--rule); margin-top: 32px; scroll-margin-top: 140px; }
+.eclairs h2 { font-size: clamp(1.6rem, 4vw, 2.3rem); }
+.eclairs .lede { margin: 0; max-width: 68ch; color: var(--muted); }
+.eclairs .grid { grid-template-columns: repeat(auto-fill, minmax(min(100%, 210px), 1fr)); gap: 16px 12px; }
+.ecl-date { display: block; font: 600 1rem var(--hand); color: var(--walnut); }
 @media (prefers-reduced-motion: reduce) { .stage img, .frame img { transition: none; } }
 </style>
 
 <div class="wrap top">
   <p class="eyebrow">Trial &amp; Eclair · design archive</p>
   <h1>Kitchen Progression</h1>
-  <p class="intro">Every full-kitchen drawing from the first app kitchen to Plate XII v9, oldest first. Shots that look alike sit together in a dashed tray. Tap <b>Use</b> to put a shot in or out of the reel, then press <b>Play reel</b> to watch the picks in order. Your picks save to this page, so Claude can turn them into a GIF.</p>
-  <p class="note">I started you with one or two from each tray; change anything.</p>
+  <p class="intro">Every full-kitchen drawing from the first app kitchen to Plate XII v9, oldest first, with your own AI and Kittl studies in between where they came in. Shots that look alike sit together in a dashed tray. Tap <b>Use</b> to put a shot in or out of the reel, then press <b>Play reel</b> to watch the picks in order. Your picks save to this page, so Claude can turn them into a GIF.</p>
+  <p class="note">Shots marked New were added after your first picks and start out of the reel. <a class="jump" href="#eclairs">Every eclair is at the bottom.</a></p>
 </div>
 
 <div class="bar"><div class="wrap">
@@ -109,7 +116,12 @@ dialog::backdrop { background: var(--shade); }
 </div></div>
 
 <main class="wrap" id="main"><p class="intro">Loading the kitchens…</p></main>
-<footer class="wrap">Sources: the round and plate pages (rendered again from their published versions), Plates X–XII and the Brand Sheet rendered at each saved version in <code>design/</code>, and the kitchen archive page. Rebuild with <code>design/progression/build.py</code>.</footer>
+<section class="wrap eclairs" id="eclairs" aria-labelledby="ecl-h">
+  <header class="ch-head"><h2 id="ecl-h">Every eclair</h2><span class="ch-n" id="ecl-n"></span></header>
+  <p class="lede">Each eclair on its own, oldest first: the block placeholder, the plate-style eclairs, your references, the marks, and the Plate XII options and bites. Click one to step through them large. These aren't part of the kitchen reel.</p>
+  <div class="grid" id="ecl-grid"></div>
+</section>
+<footer class="wrap">Sources: the round and plate pages (rendered again from their published versions), Plates X–XII and the Brand Sheet rendered at each saved version in <code>design/</code>, and the kitchen archive page. Your studies come from your <code>trial-and-eclair- visuals/thekitchens</code> folder. Rebuild with <code>design/progression/build.py</code> and <code>eclairs.py</code>.</footer>
 
 <dialog id="player" aria-label="Kitchen reel">
   <div class="pl">
@@ -132,7 +144,7 @@ dialog::backdrop { background: var(--shade); }
 <script>
 (() => {
   const $ = (id) => document.getElementById(id);
-  let items = [], byId = {}, picked = new Set(), defaults = new Set(), speed = 1500;
+  let items = [], byId = {}, picked = new Set(), defaults = new Set(), speed = 1500, eclairs = [];
   let db = null, docRef = null, dirty = false, writing = false, saveTimer = 0;
   const LS = "kitchen-progression-picks";
 
@@ -199,13 +211,29 @@ dialog::backdrop { background: var(--shade); }
     f.querySelector(".open").addEventListener("click", () => openPlayer(x.id, false));
     f.querySelector(".pick").addEventListener("click", () => toggle(x.id));
     f.querySelector("figcaption").textContent = x.caption;
+    if (x.new) { const n = document.createElement("span"); n.className = "new"; n.textContent = "New"; f.querySelector(".frame").append(n); }
     return f;
+  }
+
+  function renderEclairs(list) {
+    eclairs = list; const g = $("ecl-grid"); g.textContent = "";
+    $("ecl-n").textContent = list.length + " eclairs";
+    list.forEach((x) => {
+      const f = document.createElement("figure"); f.className = "shot";
+      f.innerHTML = '<div class="frame"><button type="button" class="open"><img loading="lazy" decoding="async"></button></div><figcaption><span class="ecl-date"></span><span class="ecl-cap"></span></figcaption>';
+      const img = f.querySelector("img"); img.src = x.src; img.alt = x.stage + ": " + x.caption; img.width = x.w; img.height = x.h;
+      f.querySelector(".open").setAttribute("aria-label", "View large: " + x.stage + ", " + x.caption);
+      f.querySelector(".open").addEventListener("click", () => openList(eclairs, x.id));
+      f.querySelector(".ecl-date").textContent = x.date + " \u00b7 " + x.stage;
+      f.querySelector(".ecl-cap").textContent = x.caption;
+      g.append(f);
+    });
   }
 
   function toggle(id) { if (picked.has(id)) picked.delete(id); else picked.add(id); refresh(); queueSave(); }
 
   function refresh() {
-    document.querySelectorAll(".shot").forEach((f) => {
+    document.querySelectorAll("#main .shot").forEach((f) => {
       const on = picked.has(f.dataset.id); f.classList.toggle("off", !on);
       const b = f.querySelector(".pick"); b.setAttribute("aria-pressed", on); b.textContent = on ? "\u2713 Use" : "Use";
       b.setAttribute("aria-label", (on ? "In the reel: " : "Left out: ") + byId[f.dataset.id].caption);
@@ -237,16 +265,18 @@ dialog::backdrop { background: var(--shade); }
     bi.src = x.src; bi.alt = x.stage + ": " + x.caption;
     $("pl-st").textContent = x.stage; $("pl-dt").textContent = x.date; $("pl-cap").textContent = x.caption;
     $("pl-ct").textContent = (at + 1) + " / " + seq.length;
+    $("pl-pickout").hidden = !byId[x.id] || byId[x.id] !== x;
     $("pl-pickout").textContent = picked.has(x.id) ? "Leave this one out" : "Use this one";
     const n = seq[(at + 1) % seq.length]; if (n) { const pre = new Image(); pre.src = n.src; }
   }
   function tick() { clearTimeout(timer); if (playing) timer = setTimeout(() => { show(at + 1); tick(); }, speed); }
   function setPlaying(p) { playing = p; $("pl-toggle").textContent = p ? "Pause" : "Play"; tick(); }
-  function openPlayer(id, play) {
-    seq = play || !picked.has(id) ? (play ? order() : items) : order();
+  function openPlayer(id, play) { openList(play || picked.has(id) ? order() : items, id, play); }
+  function openList(list, id, play) {
+    seq = list;
     if (!seq.length) return;
     $("pl-a").style.opacity = "1"; $("pl-b").style.opacity = "0"; front = "pl-a"; $("pl-a").src = "";
-    $("player").showModal(); show(Math.max(0, seq.findIndex((x) => x.id === id))); setPlaying(play);
+    $("player").showModal(); show(Math.max(0, seq.findIndex((x) => x.id === id))); setPlaying(!!play);
   }
   $("play").addEventListener("click", () => { const o = order(); if (o.length) openPlayer(o[0].id, true); });
   $("pl-prev").addEventListener("click", () => { show(at - 1); tick(); });
@@ -265,6 +295,7 @@ dialog::backdrop { background: var(--shade); }
   $("show-picked").addEventListener("click", () => { document.body.classList.add("picked-only"); $("show-all").setAttribute("aria-pressed", "false"); $("show-picked").setAttribute("aria-pressed", "true"); });
   $("reset").addEventListener("click", () => { picked = new Set(defaults); refresh(); queueSave(); });
 
+  fetch("eclairs.json").then((r) => r.json()).then(renderEclairs).catch(() => { $("ecl-grid").textContent = "The eclairs did not load. Reload the page to try again."; });
   fetch("items.json").then((r) => r.json()).then((list) => {
     items = list; list.forEach((x) => { byId[x.id] = x; if (x.on) defaults.add(x.id); });
     picked = new Set(defaults); applyState(lsLoad()); render();
@@ -276,6 +307,6 @@ dialog::backdrop { background: var(--shade); }
       try { const s = await docRef.get(); clearTimeout(fallback); if (s.exists) { applyState(s.data()); refresh(); } setSave("Saved"); }
       catch (e) { clearTimeout(fallback); docRef = null; setSave("Saved in this browser only"); }
     }).catch(() => { clearTimeout(fallback); setSave("Saved in this browser only"); });
-  }).catch(() => { $("main").innerHTML = '<p class="intro">The kitchen list did not load. Reload the page to try again.</p>'; });
+  }).catch((e) => { $("main").innerHTML = '<p class="intro">The kitchen list did not load. Reload the page to try again.</p>'; });
 })();
 </script>

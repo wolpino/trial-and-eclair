@@ -29,6 +29,7 @@ Ari: there will be many kitchen versions; collect every full-kitchen shot (old a
 - 62 of 142 picked by default (one or two per tray)
 
 ### Open threads
+- Added 2026-11-19: Ari's studies (15, from Desktop/trial-and-eclair- visuals/thekitchens, slotted in by file time between Plate XII v1-v3, marked New and out of her reel), Plate XII v10, and an Every eclair section (51: kitchen crops via `eclairs.py`, pasted refs, mark/brand/Plate VIII/XII close-ups from a subagent). Only 9 images were pasted in chat in 3 days, none a whole kitchen
 - Done 2026-11-19: Ari picked 47; `make_gif.py` + `picks.json` -> `kitchen-progression.gif` (960 px, 1.5 s a shot, 7.6 MB). Re-pick: copy `picks/main` into picks.json and rerun
 
 <!-- AGENT_CONTEXT_START -->
