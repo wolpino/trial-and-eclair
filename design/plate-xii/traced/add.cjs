@@ -458,6 +458,10 @@ function underLight(v) {
     return V("sun-eve", svg);
   }).join("");
 }
+/* evening dims the room, but not the bookshelf (the Library): it stays as bright as the open cupboard (Ari 11/20) */
+function duskWash(v) {
+  return '<path d="M0 -60 H868 V500 H0Z M410.5 -60 V115.5 H661.5 V-60Z" fill-rule="evenodd" style="fill:#2B2A4A;opacity:.2;mix-blend-mode:multiply"/>';
+}
 module.exports = {
   DEF, SHIFT, HULL, patch, TRIM, GLASS,
   opts(v) {
@@ -469,7 +473,7 @@ module.exports = {
       { obj: "eclair", svg: rack(), top: true },
       { obj: "window", svg: Object.keys(SUN).map((k) => V("sun-" + k, beams(v, k))).join("") + mobile() + Object.keys(SILL).map((k) => V("sill-" + k, SILL[k][1]())).join(""), top: true },
       { obj: "cookbooks", svg: shelfPlaques(), top: true }, { obj: "whiteboard", svg: wbHead(), top: true },   /* v13 text: under the dusk wash */
-      { obj: "dusk", svg: V("sun-eve", '<rect x="0" y="-60" width="868" height="560" style="fill:#2B2A4A;opacity:.2;mix-blend-mode:multiply"/>'), top: true },
+      { obj: "dusk", svg: V("sun-eve", duskWash(v)), top: true },
       { obj: "lt", svg: underLight(v), top: true },
       { obj: "cup-open", svg: cupOpen(v), top: true }, { obj: "clip", svg: clipboard(), top: true }] };
   },

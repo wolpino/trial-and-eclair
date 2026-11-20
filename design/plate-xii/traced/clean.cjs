@@ -29,6 +29,11 @@ const SCRIB = [
   [62, 262, 178, 300, 9, .72, "box"],     /* letters on the box tabs */
   [418, 18, 660, 108, 9, .72, "cookbooks references"],     /* titles on the book spines */
 ];
+/* the wall, clean (Ari 11/20, "as traced, but clean up around the edges"): stray specks on the wall go, wall-coloured
+   pieces outside any object follow --wall, and the whiteboard gets a backing (clear of the mixer) so the holes left by its deleted writing
+   don't show the wall through */
+const DROP = [1362, 1363, 1364, 299, 317, 385, 432];   /* specks on the wall left of the window; grey marks beside the mixer head */
+const WALL_FILL = "#F6E9CB", WB_SURFACE = 266, WB_BACK = '<path d="M466 143 H579 V194 H545 V245 H522 V287 H466Z" style="fill:#FAF8E8"/>';
 const INK_GROW = 6;   /* stroke width that grows an object's shapes into its ink mask (3 units each side) */
 const TOP = 44;   /* units moved from the bottom of the frame to the top (bottom = middle drawer's bottom, y 440) */
 /* shapes inside an object's box that belong elsewhere: [object, test(shape, cx, cy, hue), new object] */
@@ -70,6 +75,8 @@ function extend(id) {
   /* pass 1: which object each shape belongs to, and which go */
   const items = [];
   ps.forEach((q, i) => {
+    q.i = i;
+    if (DROP.includes(i)) { rep.dropped++; return; }
     if (i === 0) { items.push({ obj: "wall", q, wall: true }); return; }
     if (hsl(q.fill)[2] < .16 && q.w > 300) { items.push({ obj: "ink", q, ink: true }); rep.ink.push([i, q.fill, Math.round(q.w), Math.round(q.h)]); return; }
     const cx = q.x + q.w / 2, cy = q.y + q.h / 2, L = hsl(q.fill)[2];
@@ -108,7 +115,9 @@ function extend(id) {
         objs.concat("room").forEach((o) => out.push([o === "room" ? "room" : o, '<path d="' + d + '" fill="' + q.fill + '" mask="url(#' + id("ink-" + o) + ')"/>']));
         return;
       }
-      out.push([it.obj, '<path d="' + r1(q.d) + '" style="fill:' + fillOf(it) + '"' + ATTRS(q) + "/>"]);
+      if (q.i === WB_SURFACE) out.push(["whiteboard", WB_BACK]);   /* right under the board's surface, so it stays behind the mixer */
+      const fill = it.obj === "room" && q.fill.toUpperCase() === WALL_FILL ? "var(--wall)" : fillOf(it);
+      out.push([it.obj, '<path d="' + r1(q.d) + '" style="fill:' + fill + '"' + ATTRS(q) + "/>"]);
     });
     /* SHIFT moves a traced object: everything visible inside its HULL (its shapes, the dark underlay, the counter round it) is
        copied, clipped to the hull and drawn moved; ADD.patch(v, obj) fills where it stood. Entries with shift: true move too. */
