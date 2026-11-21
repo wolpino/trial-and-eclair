@@ -157,7 +157,7 @@ Layout (Ari, 2026-11-16). One page, new artifact, sources in `design/plate-xi/` 
 ## 3. Phone layout
 Phone Plate v1 (2026-11-17): https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, sources `design/phone/`
 - [x] Stacked phone kitchen, jot button bottom right (drawn: day, evening, find list, jot sheet)
-- [x] **Phone kitchen redrawn from the traced kitchen (Ari 2026-11-20, step 2, pick 2a):** drawn in phone plate v5 (2026-11-20, https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy). Window with crystal + rainbow, cork board, whiteboard, clipboard "Kitchen log" on the left wall (pick A), recipe box on stacked journals, eclair rack, one Library shelf. No fridge, no Recently. Waiting on Ari's sign-off
+- [x] **Phone kitchen redrawn from the traced kitchen (Ari 2026-11-20, step 2, pick 2a):** drawn in phone plate v5 (2026-11-20, https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy). Window with crystal + rainbow, cork board, whiteboard, clipboard "Kitchen log" on the left wall (pick A), recipe box on stacked journals, eclair rack, one Library shelf. No fridge, no Recently. **Signed off (Ari, 2026-11-21)**
 - [x] **Open views (Ari 2026-11-20, pick 1a):** carried into the build as drawn in Plate XI; no redraw. Build notes only: the recipe log opens from the cupboard clipboard; no Recently parts
 - [x] **Library layout (Ari 2026-11-20, pick 3a):** one page, two shelves: cookbook spines on top, references shelf below, saved cookbooks later on the cookbook shelf. Drawn as one Plate XI-style page with the phone kitchen round
 - [x] Phone recipe card: any way you hold it, plus a button to keep it sideways (Ari, 2026-11-17; flexible, can revisit)
@@ -283,6 +283,7 @@ Parked. Not drawn, not built until moved up.
 - Public recipe (`/r`) and cookbook (`/c`) pages: fine for now, revisit
 - Equipment spots and anniversary equipment (1 month, 6 months, 1 year, yearly)
 - Upgrade to the paid plan page
+- **Notebook: trial versioning display (Ari, 2026-11-20).** Multiple trials of the same recipe shown together — layered or stacked, each bake in a different colour. This is distinct from "compare two side by side": it's the core multi-version view for the notebook. Needs a visual design pass before the build (colours per bake, how layers overlap or stack, what shows at a glance vs. on tap). Don't build the notebook view without this decided
 - Notebook Compare (two trials side by side)
 - Cookbook "Use the newest version" of a recipe
 - Cookbook Share (removed from the cover, Ari 2026-11-13)

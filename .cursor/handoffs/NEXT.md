@@ -3,13 +3,11 @@
 > **Start here: this prompt, then `docs/design/PLAN.md`.** Everything below the first prompt is history; do not act on it.
 
 ## Prompt for the next agent (step 3: test piece) — START HERE
-> **Where things stand:** Phone Plate v5 is published (https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, artifact version 5, 2026-11-20). Kitchen redrawn from the traced Plate XII: window + crystal + rainbow, cork board, whiteboard, clipboard "Kitchen log" on the left wall (Ari's pick A), recipe box on stacked journals, eclair rack, single Library shelf. Library view added (cookbook spines row + references cards). No fridge, no Recently. Build: `cd design/phone && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/phone-plate.html`. Read the live artifact before the first publish of a new session.
+> **Where things stand:** Phone Plate v5 signed off (Ari, 2026-11-21, https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy). Kitchen from traced Plate XII: window + crystal + rainbow, cork board, whiteboard, clipboard "Kitchen log" on the left wall, recipe box on stacked journals, eclair rack, Library shelf. Library view: cookbook spines row + references cards. No fridge, no Recently. The full design path is complete (Plate XII → product changes → phone v5).
 >
-> **Waiting on Ari:** sign off v5 (two open questions: kitchen feel OK? Library layout OK?). After sign-off, tick PLAN.md 3 (phone layout) and update the session log and memory.
+> **Next: step 3 — React test piece.** Build the kitchen + one open view in React, using the Plate XII traced kitchen (`design/plate-xii/`) and Plate XI open views (`design/plate-xi/`) as the reference. Ari reviews the test piece before anything is committed. See PLAN.md "Before Task issues: Test piece". Branch from `staging-render`. Open a Task issue first (`.github/ISSUE_TEMPLATE/task.md`: Goal, Owned paths, Tests to write first, Done when).
 >
-> **After sign-off, next is step 3:** the React test piece — kitchen + one open view in React, Ari reviews before anything is committed. See PLAN.md "Before Task issues: Test piece". Start a new chat from this NEXT.md after Ari signs off.
->
-> **Rules (Ari, 2026-11-20):** questions first in chat, no subagents, confirm before bigger runs. No pointing movement. Each plate page shows the previous version and a change list.
+> **Rules (Ari, 2026-11-20):** questions first in chat, no subagents, confirm before bigger runs. No pointing movement. No app code without a Task issue.
 
 ## Prompt for the next agent (step 2: views and phone follow the new kitchen) — done 2026-11-20
 > **Where things stand:** Plate XII v17 is signed off (https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj, artifact version 18). The product changes from the plates were applied on 2026-11-20 in one pass: PRD v1.6 (§2–5, §7 Library, §10, §12, Appendix A "Kitchen home"), decision 005 amended (`/library`, `/library/cookbooks/<name>`), decision 004 marked partly superseded, README phase rows, PLAN.md ticks and Build list. No API tables changed. Decided with Ari: a saved cookbook is a link to the live cookbook (gone if unpublished), any signed-in cook can save.
