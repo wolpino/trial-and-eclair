@@ -1,13 +1,13 @@
-# NEXT — 2026-11-20 (Plate XII v17 final-ish published; waiting on Ari's sign-off)
+# NEXT — 2026-11-20 (Plate XII SIGNED OFF at v17; next: product changes into the PRD)
 
 > **Start here: this prompt, then `docs/design/PLAN.md`.** Everything below the first prompt is history; do not act on it.
 
-## Prompt for the next agent (after Plate XII v17) — START HERE
-> **Where things stand:** Plate XII v17 (https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj, artifact version 18) is the final-ish kitchen: picks only, no option buttons. Ari decided on 2026-11-20 to stop polishing and move forward. The only open question is **sign-off**.
+## Prompt for the next agent (after Plate XII sign-off) — START HERE
+> **Where things stand:** Ari **signed off Plate XII v17** on 2026-11-20 (https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj, artifact version 18). The traced kitchen replaces the Plate XI kitchen. **Next is step 1 below.** Before editing, list the planned PRD/README/decision edits for Ari in chat and wait for her go.
 >
 > **Rules for this stretch (Ari, 2026-11-20):** stay on the path; a new idea goes on PLAN.md's Later list unless Ari says "this round". No more rounds on rainbows, crystals, the glow colour, the window outline, the box lid or the cupboard lines: they are on the Later list or accepted as they are. Questions first in chat, no subagents, confirm before a build (`workflow-lower-usage`). No pointing movement (`no-pointing-movement`). Each plate page shows the previous version's screenshot and a running change list at the top (`PREV` in `design/plate-xii/build.cjs`, list in `sections/00-questions.html`).
 >
-> **If Ari signs off Plate XII, the path is:**
+> **The path from here:**
 > 1. Apply the "Product changes from the plates" list in PLAN.md to `docs/PRD.md`, the README and decision 005 in one pass.
 > 2. Decide with Ari how the open views (Plate XI) and the phone kitchen follow the new traced kitchen: redraw only what the new kitchen breaks, or carry them as they are into the build. Ask before drawing anything.
 > 3. The React test piece (kitchen + one open view; Ari reviews before anything is committed).

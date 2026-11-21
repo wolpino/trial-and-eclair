@@ -11,7 +11,7 @@ Written 2026-11-13. This is the one list of everything left before the build. If
 ## The path
 ```
 Plate X ✅ → Plate XI ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Plate XII (new kitchen) → product changes → views/phone follow → test piece → Task issues → build
-                                                                                  ⏳ sign-off (v17)
+                                                                      ✅ (v17, 11/20)  ⏳ next
 ```
 Plate XII was added on 2026-11-19 (Ari's traced kitchen replaces the Plate XI kitchen). It ran 17 versions in two days; on 2026-11-20 Ari stopped polishing and v17 is final-ish. See section 5b.
 1. **Plate X**: draw Ari's Plate IX notes and the three missing views. Options are still allowed here.
@@ -232,7 +232,7 @@ Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop
   - Book spines used to include a few blue books; bring that colour back, spine colours don't pop enough now
   - New: a few more small rainbows scattered across the kitchen, suncatcher-style (small, not full-length beams), not just the two main beams
 - [x] **At sign-off:** a clean-up pass of stray lines and specks: one short pass done in v17 (Ari 11/20: no more polish)
-- [ ] **Ari signs off Plate XII (v17)**
+- [x] **Ari signed off Plate XII (v17), 2026-11-20.** It replaces the Plate XI kitchen. Next: the product changes below, in one pass
 
 ### Product changes from the plates (apply in one pass)
 Changes to the product that come out of the drawings. Kept here as they come up and applied together to `docs/PRD.md`, the README and the Task issues when Plate XII is signed off (before Task issues), so the plan is edited once and stays consistent.

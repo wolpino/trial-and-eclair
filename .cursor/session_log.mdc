@@ -33,13 +33,13 @@ Ari couldn't find earlier plates, felt the last rounds hadn't made progress, and
 - **Every plate shows the previous version and a change list** — memory `plate-focus`
 
 ### Open threads
-- Ari: sign off Plate XII v17
+- Ari **signed off Plate XII v17** (2026-11-20). Next: product changes into the PRD, README and decision 005 in one pass (list the edits for Ari first)
 
 <!-- AGENT_CONTEXT_START -->
-**Keywords:** Plate XII v17 final-ish, handoff audit, stop polishing, previous screenshot, change list
+**Keywords:** Plate XII v17 signed off, handoff audit, stop polishing, previous screenshot, change list
 **Files:** design/plate-xii/traced/add.cjs, base/xii.css, build.cjs, sections/00-questions.html, sections/005-traced.html, sections/old/, docs/design/PLAN.md, .cursor/handoffs/NEXT.md
 **Do not redo:** Plate XII v1–v17 as drawn; rainbow/crystal/glow polish (Later list); window, box lid, cupboard lines (accepted as is); pointing movement
-**Resume with:** NEXT.md top prompt (sign-off, then product changes into the PRD)
+**Resume with:** NEXT.md top prompt (product changes into the PRD; list the edits for Ari first)
 <!-- AGENT_CONTEXT_END -->
 
 ---
