@@ -1,0 +1,109 @@
+<section aria-labelledby="h-lib" id="lib-sec">
+  <span class="label" id="h-lib">06 · Library (cookbooks + references)</span>
+  <div class="sec-body">
+    <div class="phones">
+      <div><h3>Library</h3><figure id="lib-main"></figure><p class="addr">/library</p>
+        <p class="note"><b>One page, two parts.</b> Cookbook spines scrolling row on top (tap a spine to open), references card list below. Old /cookbooks and /references redirect here.</p></div>
+      <div><h3>A cookbook open</h3><figure id="lib-cb"></figure><p class="addr">/library/cookbooks/weekend-bakes</p>
+        <p class="note"><b>Cookbook page.</b> Spine colour, title, author. Recipe index as a list.</p></div>
+    </div>
+  </div>
+</section>
+<script>
+(function () {
+  /* ── Library main: two parts ── */
+  function libMain() {
+    var s = '';
+    /* background */
+    s += '<rect width="390" height="844" style="fill:var(--page)"/>';
+    s += phTop('Library');
+
+    /* == COOKBOOK SHELF (y 108–300) == */
+    var shY = 108, shH = 192;
+    s += '<rect x="0" y="' + shY + '" width="390" height="' + shH + '" style="fill:var(--cab)"/>';
+    /* section label */
+    s += T(20, shY + 26, 'COOKBOOKS', 'font:700 13px var(--font-body);letter-spacing:2px;fill:var(--ink-soft)');
+    /* shelf floor */
+    s += reg('rect', 'x="0" y="' + (shY + shH - 20) + '" width="390" height="20"', 'color-mix(in srgb,var(--cab) 50%,#1f1d1a)', 2);
+    /* spines row — scrollable area, show 5 visible */
+    var spY = shY + 38, spH = 130;
+    var cookbooks = [
+      { w: 48, c: 'var(--blue)', title: 'The\nFlour\nBook', author: 'Rose L.' },
+      { w: 36, c: '#b03020', title: 'Weekend\nBakes', author: 'J. Oliver' },
+      { w: 54, c: 'var(--stem)', title: 'Bouchon\nBakery', author: 'T. Keller' },
+      { w: 32, c: 'var(--amber)', title: 'Salt\nFat', author: 'S. Nosrat' },
+      { w: 44, c: '#5A3D22', title: 'Tartine', author: 'C. Robertson' },
+      { w: 36, c: 'var(--orange)', title: 'Simple', author: 'O. Ottolenghi' }
+    ];
+    var bx = 16;
+    cookbooks.forEach(function (b) {
+      /* spine block */
+      s += reg('rect', 'x="' + bx + '" y="' + spY + '" width="' + b.w + '" height="' + spH + '"', b.c, 2);
+      /* spine highlight */
+      s += '<rect x="' + (bx + b.w * 0.14) + '" y="' + (spY + 2) + '" width="' + (b.w * 0.16) + '" height="' + (spH - 4) + '" style="fill:#fff;opacity:.12"/>';
+      /* spine text (vertical) */
+      var lines = b.title.split('\n');
+      lines.forEach(function (ln, li) {
+        s += '<text x="' + (bx + b.w / 2) + '" y="' + (spY + 24 + li * 15) + '" transform="rotate(90 ' + (bx + b.w / 2) + ' ' + (spY + 24 + li * 15) + ')" style="font:700 10px var(--font-body);fill:#fff;opacity:.9;text-anchor:middle">' + ln + '</text>';
+      });
+      bx += b.w + 6;
+    });
+    /* scroll hint arrow */
+    s += T(372, spY + spH / 2 + 6, '›', 'font:700 24px var(--font-body);fill:var(--ink-soft)', 'text-anchor="middle"');
+
+    /* == REFERENCES SECTION (y 308–760) == */
+    var refY = 308;
+    s += line('M0 ' + refY + ' H390', 1.6, 0.6);
+    s += T(20, refY + 26, 'REFERENCES', 'font:700 13px var(--font-body);letter-spacing:2px;fill:var(--ink-soft)');
+
+    var refs = [
+      { title: 'Flavour wheel', sub: 'Pairing guide' },
+      { title: 'Bread temperatures', sub: 'Quick reference' },
+      { title: 'Substitution chart', sub: 'Ingredients' },
+      { title: 'Baking conversions', sub: 'Weights & measures' }
+    ];
+    refs.forEach(function (r, i) {
+      var ry = refY + 48 + i * 100;
+      s += hatch(16, ry + 2, 358, 86, 0.3);
+      s += reg('rect', 'x="16" y="' + ry + '" width="358" height="86" rx="8"', 'var(--card)', 2);
+      s += T(32, ry + 36, r.title, 'font:700 22px var(--font-hand);fill:var(--ink)');
+      s += T(32, ry + 58, r.sub, 'font:500 17px var(--font-hand);fill:var(--ink-soft)');
+      /* right arrow */
+      s += T(360, ry + 48, '›', 'font:400 26px var(--font-body);fill:var(--ink-soft)', 'text-anchor="end"');
+    });
+
+    s += phJot(336, 776);
+    return s;
+  }
+
+  /* ── Cookbook page ── */
+  function libCookbook() {
+    var s = '';
+    s += '<rect width="390" height="844" style="fill:var(--page)"/>';
+    /* header with spine colour */
+    s += '<rect x="0" y="0" width="390" height="110" style="fill:#b03020"/>';
+    s += T(20, 70, '‹ Library', 'font:700 22px var(--font-hand);fill:#fff');
+    s += T(374, 70, 'Weekend Bakes', 'font:700 24px var(--font-hand);fill:#fff', 'text-anchor="end"');
+    s += line('M0 110 H390', 2, 0.6);
+    s += T(24, 144, 'Weekend Bakes', 'font:700 32px var(--font-hand);fill:var(--ink)');
+    s += T(24, 170, 'Jamie Oliver', 'font:500 20px var(--font-hand);fill:var(--ink-soft)');
+    s += line('M24 184 H366', 1.4, 0.4);
+
+    var recipes = ['Saturday Focaccia', 'Jam Doughnuts', 'Brown Butter Blondies', 'Cardamom Knots', 'Rough Puff Tart'];
+    s += T(24, 216, 'RECIPES', 'font:700 13px var(--font-body);letter-spacing:2px;fill:var(--ink-soft)');
+    recipes.forEach(function (r, i) {
+      var ry = 232 + i * 60;
+      s += line('M24 ' + ry + ' H366', 1, 0.3);
+      s += T(32, ry + 36, r, 'font:600 22px var(--font-hand);fill:var(--ink)');
+      s += T(360, ry + 36, '›', 'font:400 24px var(--font-body);fill:var(--ink-soft)', 'text-anchor="end"');
+    });
+    return s;
+  }
+
+  PLATE.add(function () {
+    var put = function (id, inner, label, opt) { document.getElementById(id).innerHTML = phone(inner, label, opt); };
+    put('lib-main', libMain(), 'Library: cookbooks and references');
+    put('lib-cb', libCookbook(), 'Weekend Bakes cookbook page');
+  });
+})();
+</script>

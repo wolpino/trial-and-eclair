@@ -1,94 +1,274 @@
 <section aria-labelledby="h-pk" id="pk-sec">
-  <span class="label" id="h-pk">01 · The kitchen on a phone</span>
+  <span class="label" id="h-pk">01 · The kitchen on a phone (v5 — traced kitchen)</span>
   <div class="sec-body">
     <div class="phones">
       <div><h3>The kitchen by day</h3><figure id="pk-day"></figure><p class="addr">/kitchen</p>
-        <p class="note"><b>One screen, no scrolling.</b> The yellow plus bottom right is Quick add. The wall board sits on top, the counter below it (notebook, eclair, and the recipe box, the largest), then the open shelf. The fridge and window are left out; the shelf tiers keep their tape labels, and every object is well over 44 points.</p></div>
+        <p class="note"><b>From the traced kitchen.</b> Window with crystal mobile and rainbow arc, cork board upper-left, whiteboard, clipboard "Kitchen log" on the left wall, recipe box on stacked journals, eclair rack, Library shelf. No fridge, no Recently.</p></div>
       <div><h3>The kitchen in the evening</h3><figure id="pk-eve"></figure><p class="addr">/kitchen</p>
-        <p class="note"><b>Same kitchen, dusk wash.</b> Only the kitchen turns evening; every open view stays in the day look.</p></div>
+        <p class="note"><b>Evening wash.</b> No rainbows in the evening (same as the traced kitchen). Dusk gradient at the top.</p></div>
       <div><h3>Find bar tapped, nothing typed</h3><figure id="pk-recent"></figure><p class="addr">/kitchen</p>
-        <p class="note"><b>Recently, as chips.</b> Three small chips that scroll sideways, and nothing else.</p></div>
+        <p class="note"><b>Find bar open, no Recent row</b> (Recently removed). Keyboard up, waiting to type.</p></div>
       <div><h3>Find bar, "croi" typed</h3><figure id="pk-find"></figure><p class="addr">/kitchen</p>
-        <p class="note"><b>Three rows.</b> One add row with four chips that scroll sideways, then the matching recipe and notebook entry. Cancel puts the bar back.</p></div>
+        <p class="note"><b>Three rows.</b> Add row with four chips, then matching recipe and notebook entry.</p></div>
       <div><h3>Quick add (plus) tapped</h3><figure id="pk-jot"></figure><p class="addr">/kitchen</p>
-        <p class="note"><b>Quick add is a bottom sheet over the kitchen.</b> Type, pick one of four, tap Add. Recipe and Trial open their own forms after you pick them; dragging the sheet down or tapping the dim kitchen closes it.</p></div>
+        <p class="note"><b>Quick add sheet.</b> Bottom sheet over the kitchen: type, pick one of four, tap Add.</p></div>
     </div>
   </div>
 </section>
 <script>
 (function () {
-  /* place wide-kitchen drawing (starting at wide point sx0,sy0) at phone point tx,ty, scaled s */
-  function at(sx0, sy0, s, tx, ty, inner) { return '<g transform="translate(' + (tx - sx0 * s).toFixed(2) + " " + (ty - sy0 * s).toFixed(2) + ") scale(" + s + ')">' + inner + "</g>"; }
-  var YB_ = 500;   /* phone y of the counter top, where the objects stand */
-  function kitchen(eve) {
-    var oo = opts(), L = lay(VP, oo), s = ""; O = oo; EVE = !!eve;
-    s += '<rect width="390" height="844" style="fill:var(--plaster)"/><rect y="250" width="390" height="230" style="fill:url(#tile9)"/>' + line("M0 250 H390", 1.8, 0.7);
-    /* wall board: whiteboard left, cork right */
-    s += at(580, 115, 0.6, 3, 112, board(L));
-    /* the open shelf under the counter, with the counter's front edge above it (the wide kitchen, cropped and scaled up) */
-    s += at(612, 440, 0.975, 0, YB_ - 29, clipTo(612, 440, 1012, 764, counterAndShelf(L, oo)));
-    var fy = YB_ - 29 + 324 * 0.975 - 40, k2; for (k2 = 0; k2 < 14; k2++) { s += '<rect x="' + (k2 * 30 - 15) + '" y="' + fy + '" width="30" height="30" style="fill:' + (k2 % 2 ? '#f6efdc' : '#2a2724') + '"/><rect x="' + (k2 * 30 - 15 + (k2 % 2 ? -0 : 0)) + '" y="' + (fy + 30) + '" width="30" height="60" style="fill:' + (k2 % 2 ? '#2a2724' : '#f6efdc') + '"/>'; }
-    /* the counter top between wall and shelf */
-    var ct = '<rect x="0" y="440" width="390" height="' + (YB_ - 440 + 9) + '" style="fill:none"/>';
-    s += reg("rect", 'x="-4" y="' + (YB_ - 34) + '" width="398" height="40" ', "var(--wood-hi)", 2.2) + grain(0, YB_ - 30, 390, 32, 11) + hatch(0, YB_ - 34 - 10, 390, 9, 0.5);
-    /* objects stand on the counter */
-    s += at(LAB, 470, 1.05, 84, YB_ - 2, lab(oo)) + at(BOX, 470, 1.2, 284, YB_ - 2, closedBox(BOX, oo));
-    s += at((LAB + 60 + BOX - 75) / 2, 470, 0.66, 187, YB_ + 6, eclair((LAB + 60 + BOX - 75) / 2));
-    EVE = false; if (eve) s += '<rect width="390" height="844" style="fill:url(#evewash);mix-blend-mode:multiply;pointer-events:none"/>';
+  /* Place a wide-kitchen drawing (centered at sx0,sy0) at phone point tx,ty, scaled s */
+  function at(sx0, sy0, s, tx, ty, inner) {
+    return '<g transform="translate(' + (tx - sx0 * s).toFixed(2) + ' ' + (ty - sy0 * s).toFixed(2) + ') scale(' + s + ')">' + inner + '</g>';
+  }
+
+  /* ── Helper: simple bottle (cx, bottom_y, fill, bw, bh) ── */
+  function bottle(cx, by, fill, bw, bh) {
+    var nx = cx - bw / 2, nw = bw * 0.44, nX = cx - nw / 2, neck = bh * 0.38, body = bh - neck;
+    var s = reg('rect', 'x="' + nx + '" y="' + (by - bh) + '" width="' + bw + '" height="' + body + '" rx="' + (bw * 0.28) + '"', fill, 1.8);
+    s += reg('rect', 'x="' + nX + '" y="' + (by - bh - neck) + '" width="' + nw + '" height="' + (neck + 2) + '" rx="' + (nw * 0.3) + '"', fill, 1.6);
+    s += reg('rect', 'x="' + (nX - 1) + '" y="' + (by - bh - neck - 5) + '" width="' + (nw + 2) + '" height="6" rx="2"', 'var(--wood)', 1.4);
+    s += '<rect x="' + (nx + bw * 0.15) + '" y="' + (by - bh + 4) + '" width="' + (bw * 0.18) + '" height="' + (body * 0.4) + '" rx="1" style="fill:#fff;opacity:.18"/>';
     return s;
   }
+
+  /* ── Helper: crystal K2 faceted ball ── */
+  function pkCrystal(cx, cy) {
+    var r = 11, s = '';
+    s += '<circle cx="' + cx + '" cy="' + cy + '" r="' + r + '" style="fill:var(--card);stroke:var(--ink);stroke-width:1.6"/>';
+    s += '<path d="M' + (cx - r * 0.5) + ' ' + (cy - r * 0.4) + ' L' + cx + ' ' + (cy + r * 0.7) + ' L' + (cx + r * 0.6) + ' ' + (cy - r * 0.3) + ' Z" style="fill:none;stroke:var(--ink);stroke-width:0.9;opacity:.6"/>';
+    s += '<path d="M' + (cx - r * 0.5) + ' ' + (cy - r * 0.4) + ' L' + (cx + r * 0.6) + ' ' + (cy - r * 0.3) + '" style="fill:none;stroke:var(--ink);stroke-width:0.9;opacity:.6"/>';
+    s += '<circle cx="' + (cx - r * 0.3) + '" cy="' + (cy - r * 0.3) + '" r="2.2" style="fill:#fff;opacity:.7"/>';
+    return s;
+  }
+
+  /* ── Helper: rainbow arc from crystal going lower-left ── */
+  function pkRainbow(crx, cry, eve) {
+    if (eve) return '';
+    var id = 'rb' + (uidN++);
+    var cols = ['#FF7060', '#FFB040', '#EEE050', '#70CC50', '#50A8E0', '#9060C8'];
+    var s = '<defs><filter id="rbf' + id + '" x="-40%" y="-40%" width="180%" height="180%"><feGaussianBlur stdDeviation="2.8"/></filter></defs>';
+    s += '<g filter="url(#rbf' + id + ')" opacity="0.32">';
+    cols.forEach(function (col, i) {
+      var r = 48 + i * 14;
+      s += '<path d="M' + crx + ' ' + cry + ' C' + (crx - r * 0.4) + ' ' + (cry + r * 0.8) + ' ' + (crx - r * 0.9) + ' ' + (cry + r * 0.55) + ' ' + (crx - r * 1.15) + ' ' + (cry + r * 0.25) + '" style="fill:none;stroke:' + col + ';stroke-width:8;stroke-linecap:round"/>';
+    });
+    s += '</g>';
+    return s;
+  }
+
+  /* ── Helper: small eclair on a rack wire ── */
+  function pkSmallEclair(cx, cy) {
+    var Lg = 32, Tk = 11;
+    var s = reg('path', 'd="M' + (cx - Lg/2) + ' ' + (cy + Tk*0.1) + ' Q' + cx + ' ' + (cy - Tk*0.5) + ' ' + (cx + Lg/2) + ' ' + (cy + Tk*0.1) + ' Q' + cx + ' ' + (cy + Tk*0.9) + ' ' + (cx - Lg/2) + ' ' + (cy + Tk*0.1) + ' Z"', 'var(--amber)', 1.6);
+    s += reg('path', 'd="M' + (cx - Lg/2 + 3) + ' ' + cy + ' Q' + cx + ' ' + (cy - Tk*0.4) + ' ' + (cx + Lg/2 - 3) + ' ' + cy + '"', 'var(--cinnamon)', 1.4);
+    return s;
+  }
+
+  /* ── Main kitchen drawing ── */
+  function kitchen2(eve) {
+    var s = '';
+    /* background wall */
+    s += '<rect width="390" height="844" style="fill:var(--plaster)"/>';
+
+    /* == WINDOW (x 90-382, y 86-322) == */
+    var wx0 = 90, wx1 = 382, wy0 = 86, wy1 = 322, wmx = (wx0 + wx1) / 2, wmy = (wy0 + wy1) / 2;
+    var TRIM = '#7A4E2D';
+    /* sky behind window */
+    s += '<rect x="' + wx0 + '" y="' + wy0 + '" width="' + (wx1 - wx0) + '" height="' + (wy1 - wy0) + '" style="fill:' + (eve ? '#2a2742' : '#cce0ee') + '"/>';
+    /* 4 panes */
+    [[wx0 + 8, wy0 + 8, wmx - wx0 - 12, wmy - wy0 - 10],
+     [wmx + 4, wy0 + 8, wx1 - wmx - 10, wmy - wy0 - 10],
+     [wx0 + 8, wmy + 4, wmx - wx0 - 12, wy1 - wmy - 10],
+     [wmx + 4, wmy + 4, wx1 - wmx - 10, wy1 - wmy - 10]
+    ].forEach(function (p) {
+      s += '<rect x="' + p[0] + '" y="' + p[1] + '" width="' + p[2] + '" height="' + p[3] + '" style="fill:' + (eve ? '#1e2038' : '#d8eaf4') + ';stroke:none"/>';
+    });
+    /* muntin bars */
+    s += line('M' + wmx + ' ' + wy0 + ' V' + wy1, 7, 1, TRIM);
+    s += line('M' + wx0 + ' ' + wmy + ' H' + wx1, 7, 1, TRIM);
+    /* outer frame */
+    s += '<rect x="' + wx0 + '" y="' + wy0 + '" width="' + (wx1 - wx0) + '" height="' + (wy1 - wy0) + '" style="fill:none;stroke:' + TRIM + ';stroke-width:7"/>';
+    /* window sill */
+    s += reg('rect', 'x="' + wx0 + '" y="' + (wy1 - 5) + '" width="' + (wx1 - wx0) + '" height="17"', TRIM, 1.8);
+    /* bottles on sill */
+    s += bottle(258, wy1 + 11, '#7A9A5A', 16, 42);
+    s += bottle(292, wy1 + 11, '#C47828', 12, 30);
+    s += bottle(316, wy1 + 11, '#3A5888', 10, 26);
+
+    /* crystal mobile hanging from window top */
+    var crx = 230, crTopY = wy0 + 10;
+    s += line('M' + crx + ' ' + crTopY + ' V' + (crTopY + 28), 1.2, 0.55, '#3A2808');
+    s += pkCrystal(crx, crTopY + 39);
+    /* rainbow */
+    s += pkRainbow(crx, crTopY + 39, eve);
+
+    /* == CORK BOARD (x 0–118, y 86–280) == */
+    s += reg('rect', 'x="0" y="86" width="118" height="194"', 'url(#corkp)', 2.6);
+    s += '<rect x="0" y="86" width="118" height="194" style="fill:none;stroke:' + TRIM + ';stroke-width:5"/>';
+    /* ideas card */
+    s += '<g transform="rotate(-2 54 148)">';
+    s += reg('rect', 'x="10" y="120" width="78" height="52"', 'var(--card)', 1.8);
+    s += T(49, 152, 'Ideas', 'font:700 24px var(--font-hand);fill:var(--ink)', 'text-anchor="middle"');
+    s += '</g>';
+    s += '<circle cx="49" cy="124" r="6.5" style="fill:var(--orange);stroke:var(--ink);stroke-width:1.6"/>';
+    /* sticky notes */
+    s += '<g transform="rotate(-3 26 192)">' + reg('rect', 'x="8" y="178" width="40" height="38"', 'var(--yellow)', 1.8) + T(28, 198, 'Miso', 'font:600 15px var(--font-hand);fill:var(--ink)', 'text-anchor="middle"') + T(28, 212, 'caramel', 'font:600 15px var(--font-hand);fill:var(--ink)', 'text-anchor="middle"') + '</g>';
+    s += '<g transform="rotate(2 72 183)">' + reg('rect', 'x="56" y="176" width="44" height="36"', 'var(--card)', 1.8) + T(78, 196, 'Cardamom', 'font:600 13px var(--font-hand);fill:var(--ink)', 'text-anchor="middle"') + T(78, 208, 'knots', 'font:600 13px var(--font-hand);fill:var(--ink)', 'text-anchor="middle"') + '</g>';
+
+    /* == WHITEBOARD (x 0–148, y 280–400) == */
+    var wbx = 0, wby = 280, wbw = 148, wbh = 120;
+    s += reg('rect', 'x="' + wbx + '" y="' + wby + '" width="' + wbw + '" height="' + wbh + '"', 'var(--wood)', 2);
+    s += grain(wbx + 8, wby, wbw - 16, 10, 7);
+    s += reg('rect', 'x="' + (wbx + 7) + '" y="' + (wby + 8) + '" width="' + (wbw - 14) + '" height="' + (wbh - 16) + '"', 'var(--wb)', 2.2);
+    s += T(wbx + 20, wby + 36, 'Next up', 'font:700 24px var(--font-hand);fill:var(--blue)');
+    s += line('M' + (wbx + 20) + ' ' + (wby + 44) + ' q48 5 90 -2', 2.4, 1, 'var(--blue)');
+    [['Croissants · t.4', 0], ['Rough puff pastry', 0]].forEach(function (it, i) {
+      var iy = wby + 68 + i * 30;
+      s += reg('rect', 'x="' + (wbx + 18) + '" y="' + (iy - 13) + '" width="11" height="11" rx="2"', 'var(--wb)', 1.5);
+      s += T(wbx + 36, iy, it[0], 'font:600 16px var(--font-hand);fill:var(--ink)');
+    });
+
+    /* == CLIPBOARD "Kitchen log" (x 4–102, y 395–492) == */
+    var clx = 4, cly = 395, clw = 92, clh = 97;
+    s += reg('rect', 'x="' + (clx + 2) + '" y="' + (cly + 3) + '" width="' + clw + '" height="' + clh + '" rx="3"', '#1a1512', 0);
+    s += reg('rect', 'x="' + clx + '" y="' + cly + '" width="' + clw + '" height="' + clh + '" rx="3"', TRIM, 2.4);
+    var cclX = clx + clw / 2 - 15, cclW = 30;
+    s += reg('rect', 'x="' + cclX + '" y="' + (cly - 7) + '" width="' + cclW + '" height="18" rx="3"', '#5A3820', 1.8);
+    s += reg('rect', 'x="' + (cclX + 4) + '" y="' + (cly - 5) + '" width="' + (cclW - 8) + '" height="10" rx="4"', 'var(--card)', 1.2);
+    var px = clx + 5, py = cly + 11, pw = clw - 10, ph = clh - 18;
+    s += reg('rect', 'x="' + px + '" y="' + py + '" width="' + pw + '" height="' + ph + '"', 'var(--card)', 2);
+    s += line('M' + (px + 20) + ' ' + py + ' V' + (py + ph), 1.6, 0.9, '#c9442a');
+    for (var l = 0; l < 3; l++) {
+      var ly = py + 20 + l * 20;
+      if (ly < py + ph - 4) s += line('M' + (px + 2) + ' ' + ly + ' H' + (px + pw - 2), 1, 0.65, '#c3d2ec');
+    }
+    s += T(px + pw / 2 + 6, py + 14, 'Kitchen log', 'font:600 11px var(--font-hand);fill:var(--ink);letter-spacing:.3px', 'text-anchor="middle"');
+    s += T(px + 22, py + 36, '11/20 Croissants', 'font:500 10px var(--font-hand);fill:var(--ink)');
+    s += T(px + 22, py + 54, '11/08 Blondies', 'font:500 10px var(--font-hand);fill:var(--ink)');
+    s += '<circle cx="' + (clx + clw / 2) + '" cy="' + cly + '" r="5" style="fill:var(--blue);stroke:var(--ink);stroke-width:1.4"/>';
+
+    /* == COUNTER (y 492–532) == */
+    var CTR_Y = 492;
+    s += reg('rect', 'x="-4" y="' + CTR_Y + '" width="398" height="40"', 'var(--wood-hi)', 2.2);
+    s += grain(0, CTR_Y + 2, 390, 32, 11);
+    s += hatch(0, CTR_Y - 8, 390, 9, 0.5);
+    s += line('M0 ' + (CTR_Y + 40) + ' H390', 2.4);
+
+    /* == JOURNAL STACK (x 148–280, bottom at CTR_Y) == */
+    /* 3 composition books lying flat, stacked */
+    var jx = 148, jW = 132;
+    s += compCover(jx,     CTR_Y - 16, jW,     16, { cover: 'black', name: '' },     1.8);
+    s += compCover(jx + 2, CTR_Y - 30, jW - 4, 14, { cover: 'black', name: '' },     1.8);
+    s += compCover(jx + 4, CTR_Y - 44, jW - 8, 14, { cover: 'black', name: 'TRIALS' }, 2.2);
+    var jTopY = CTR_Y - 44;
+
+    /* == RECIPE BOX (sitting on journals) == */
+    s += at(BOX, 420, 0.75, 215, jTopY + 38, closedBox(BOX, {}));
+
+    /* == ECLAIR RACK (right side, x 285–382, counter) == */
+    var rkx = 285, rkW = 90, rkH = 36, rky0 = CTR_Y - rkH;
+    for (var wi = 0; wi < 5; wi++) s += line('M' + rkx + ' ' + (rky0 + wi * (rkH / 4)) + ' H' + (rkx + rkW), 1.3, 0.65, '#6B4A3A');
+    for (var wj = 0; wj < 6; wj++) s += line('M' + (rkx + wj * 18) + ' ' + rky0 + ' V' + CTR_Y, 1.3, 0.65, '#6B4A3A');
+    s += reg('rect', 'x="' + rkx + '" y="' + rky0 + '" width="' + rkW + '" height="' + rkH + '"', 'none', 2.4);
+    s += pkSmallEclair(rkx + 24, CTR_Y - 24);
+    s += pkSmallEclair(rkx + 60, CTR_Y - 24);
+
+    /* == LIBRARY SHELF (y 536–682) == */
+    var shY = 536;
+    s += reg('rect', 'x="-2" y="' + shY + '" width="394" height="146"', 'var(--cab)', 2.4);
+    s += reg('rect', 'x="-2" y="' + (shY + 130) + '" width="394" height="18"', 'color-mix(in srgb,var(--cab) 60%,#1f1d1a)', 2);
+    var bx2 = 14, spines = [
+      { w: 20, c: 'var(--blue)' }, { w: 14, c: '#b03020' }, { w: 24, c: 'var(--stem)' },
+      { w: 16, c: 'var(--amber)' }, { w: 13, c: '#5A3D22' }, { w: 22, c: 'var(--orange)' },
+      { w: 16, c: 'var(--blue)' }, { w: 14, c: 'var(--stem)' }, { w: 20, c: '#b03020' },
+      { w: 18, c: 'var(--amber)' }, { w: 15, c: 'var(--orange)' }
+    ];
+    spines.forEach(function (b) {
+      s += reg('rect', 'x="' + bx2 + '" y="' + (shY + 10) + '" width="' + b.w + '" height="118"', b.c, 1.6);
+      s += '<rect x="' + (bx2 + b.w * 0.15) + '" y="' + (shY + 11) + '" width="' + (b.w * 0.18) + '" height="116" style="fill:#fff;opacity:.12"/>';
+      bx2 += b.w + 3;
+    });
+    s += tapeLabel(195, shY + 14, 'LIBRARY', 0, 'lbl');
+
+    /* == FLOOR (checkerboard y 682–762) == */
+    var flY = 682, flH = 80;
+    s += hatch(0, flY - 6, 390, 7, 0.6);
+    s += line('M0 ' + flY + ' H390', 2.4);
+    s += clipTo(-2, flY, 392, flY + flH,
+      (function () {
+        var fl = '';
+        for (var fi = 0; fi < 14; fi++) {
+          fl += '<rect x="' + (fi * 30 - 10) + '" y="' + flY + '" width="30" height="' + (flH * 0.45) + '" style="fill:' + (fi % 2 ? '#f6efdc' : '#2a2724') + '"/>';
+          fl += '<rect x="' + (fi * 30 - 10) + '" y="' + (flY + flH * 0.45) + '" width="30" height="' + (flH * 0.55) + '" style="fill:' + (fi % 2 ? '#2a2724' : '#f6efdc') + '"/>';
+        }
+        return fl;
+      })()
+    );
+
+    /* evening wash */
+    if (eve) {
+      s += '<defs><linearGradient id="pkdusk2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f2a45"/><stop offset="1" stop-color="#2f2a45" stop-opacity="0"/></linearGradient></defs>';
+      s += '<rect width="390" height="150" style="fill:url(#pkdusk2)"/>';
+    }
+    return s;
+  }
+
   function findBar(text, cancel) {
     var w = cancel ? 250 : 270;
-    return reg("rect", 'x="16" y="58" width="' + w + '" height="44" rx="22"', "var(--card)", 2.4) +
+    return reg('rect', 'x="16" y="58" width="' + w + '" height="44" rx="22"', 'var(--card)', 2.4) +
       '<circle cx="42" cy="79" r="9" style="fill:none;stroke:var(--ink);stroke-width:2.4"/><path d="M49 86 L57 94" style="stroke:var(--ink);stroke-width:2.6;stroke-linecap:round"/>' +
-      (text ? T(66, 89, text, "font:600 24px var(--font-hand);fill:var(--ink)") : T(66, 89, "Find or add…", "font:500 24px var(--font-hand);fill:var(--ink-soft)")) +
-      (cancel ? T(306, 90, "Cancel", "font:700 22px var(--font-hand);fill:var(--blue)") : '<circle cx="352" cy="80" r="22" style="fill:var(--orange);stroke:var(--ink);stroke-width:2.4"/>' + T(352, 86, "A", "font:700 20px var(--font-hand);fill:var(--card)", 'text-anchor="middle"'));
+      (text ? T(66, 89, text, 'font:600 24px var(--font-hand);fill:var(--ink)') : T(66, 89, 'Find or add…', 'font:500 24px var(--font-hand);fill:var(--ink-soft)')) +
+      (cancel ? T(306, 90, 'Cancel', 'font:700 22px var(--font-hand);fill:var(--blue)') :
+        '<circle cx="352" cy="80" r="22" style="fill:var(--orange);stroke:var(--ink);stroke-width:2.4"/>' + T(352, 86, 'A', 'font:700 20px var(--font-hand);fill:var(--card)', 'text-anchor="middle"'));
   }
   function dim(a) { return '<rect width="390" height="844" style="fill:#1f1d1a;opacity:' + a + '"/>'; }
   function keyboard() {
-    var s = '<rect y="520" width="390" height="324" style="fill:#d3d5db"/>', rows = ["qwertyuiop", "asdfghjkl", "zxcvbnm"], y = 532;
-    rows.forEach(function (r, i) { var kw = 33, g = 6, x0 = (390 - (r.length * kw + (r.length - 1) * g)) / 2 + (i === 2 ? 0 : 0);
-      for (var k = 0; k < r.length; k++) s += reg("rect", 'x="' + (x0 + k * (kw + g)) + '" y="' + (y + i * 54) + '" width="' + kw + '" height="46" rx="6"', "#fff", 1.2) + T(x0 + k * (kw + g) + kw / 2, y + i * 54 + 31, r[k], "font:400 22px var(--font-body);fill:var(--ink)", 'text-anchor="middle"'); });
-    s += reg("rect", 'x="16" y="640" width="44" height="46" rx="6"', "#aeb1ba", 1.2) + T(38, 670, "⇧", "font:400 22px var(--font-body);fill:var(--ink)", 'text-anchor="middle"') +
-      reg("rect", 'x="330" y="640" width="44" height="46" rx="6"', "#aeb1ba", 1.2) + T(352, 670, "⌫", "font:400 22px var(--font-body);fill:var(--ink)", 'text-anchor="middle"');
-    return s + reg("rect", 'x="16" y="694" width="64" height="46" rx="6"', "#aeb1ba", 1.2) + T(48, 724, "123", "font:400 18px var(--font-body);fill:var(--ink)", 'text-anchor="middle"') +
-      reg("rect", 'x="88" y="694" width="214" height="46" rx="6"', "#fff", 1.2) + T(195, 724, "space", "font:400 17px var(--font-body);fill:var(--ink-soft)", 'text-anchor="middle"') +
-      reg("rect", 'x="310" y="694" width="64" height="46" rx="6"', "#aeb1ba", 1.2) + T(342, 724, "return", "font:400 17px var(--font-body);fill:var(--ink)", 'text-anchor="middle"');
+    var s = '<rect y="520" width="390" height="324" style="fill:#d3d5db"/>', rows = ['qwertyuiop', 'asdfghjkl', 'zxcvbnm'], y = 532;
+    rows.forEach(function (r, i) {
+      var kw = 33, g = 6, x0 = (390 - (r.length * kw + (r.length - 1) * g)) / 2;
+      for (var k = 0; k < r.length; k++) s += reg('rect', 'x="' + (x0 + k * (kw + g)) + '" y="' + (y + i * 54) + '" width="' + kw + '" height="46" rx="6"', '#fff', 1.2) + T(x0 + k * (kw + g) + kw / 2, y + i * 54 + 31, r[k], 'font:400 22px var(--font-body);fill:var(--ink)', 'text-anchor="middle"');
+    });
+    s += reg('rect', 'x="16" y="640" width="44" height="46" rx="6"', '#aeb1ba', 1.2) + T(38, 670, '⇧', 'font:400 22px var(--font-body);fill:var(--ink)', 'text-anchor="middle"') +
+      reg('rect', 'x="330" y="640" width="44" height="46" rx="6"', '#aeb1ba', 1.2) + T(352, 670, '⌫', 'font:400 22px var(--font-body);fill:var(--ink)', 'text-anchor="middle"');
+    return s + reg('rect', 'x="16" y="694" width="64" height="46" rx="6"', '#aeb1ba', 1.2) + T(48, 724, '123', 'font:400 18px var(--font-body);fill:var(--ink)', 'text-anchor="middle"') +
+      reg('rect', 'x="88" y="694" width="214" height="46" rx="6"', '#fff', 1.2) + T(195, 724, 'space', 'font:400 17px var(--font-body);fill:var(--ink-soft)', 'text-anchor="middle"') +
+      reg('rect', 'x="310" y="694" width="64" height="46" rx="6"', '#aeb1ba', 1.2) + T(342, 724, 'return', 'font:400 17px var(--font-body);fill:var(--ink)', 'text-anchor="middle"');
   }
-  function chip(x, y, w, t, on) { return reg("rect", 'x="' + x + '" y="' + y + '" width="' + w + '" height="44" rx="22"', on ? "var(--custard)" : "var(--card)", 2) + T(x + w / 2, y + 30, t, "font:600 21px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"'); }
-  function card(h, inner) { return hatch(22, 116, 358, h, 0.5) + reg("rect", 'x="16" y="110" width="358" height="' + h + '" rx="10"', "var(--card)", 2.4) + inner; }
-  function recentList() {
-    var s = T(32, 140, "RECENTLY", "font:600 13px var(--font-body);letter-spacing:2px;fill:var(--ink-soft)");
-    s += clipTo(18, 148, 372, 208, chip(32, 154, 124, "Croissants") + chip(164, 154, 156, "Weekend Bakes") + chip(328, 154, 100, "Trial 4"));
-    return card(110, s);
+  function chip(x, y, w, t, on) { return reg('rect', 'x="' + x + '" y="' + y + '" width="' + w + '" height="44" rx="22"', on ? 'var(--custard)' : 'var(--card)', 2) + T(x + w / 2, y + 30, t, 'font:600 21px var(--font-hand);fill:var(--ink)', 'text-anchor="middle"'); }
+  function card(h, inner) { return hatch(22, 116, 358, h, 0.5) + reg('rect', 'x="16" y="110" width="358" height="' + h + '" rx="10"', 'var(--card)', 2.4) + inner; }
+  function findEmpty() {
+    return card(60, T(32, 150, 'Start typing to search…', 'font:500 22px var(--font-hand);fill:var(--ink-soft)'));
   }
   function findList() {
-    var s = "", row = 56, y = 116;
-    function corkI(ix, iy) { return '<rect x="' + ix + '" y="' + iy + '" width="22" height="22" style="fill:url(#corkp);stroke:var(--ink);stroke-width:1.5"/>'; }
-    function cardI(ix, iy) { return reg("rect", 'x="' + ix + '" y="' + (iy + 3) + '" width="24" height="17" rx="1"', "var(--card)", 1.5) + line("M" + (ix + 2) + " " + (iy + 9) + " h20", 1.1, 1, "#c9442a"); }
-    function bookI(ix, iy) { return reg("rect", 'x="' + (ix + 2) + '" y="' + iy + '" width="18" height="23" rx="1.5"', "url(#mblack)", 1.5) + '<rect x="' + (ix + 2) + '" y="' + iy + '" width="4" height="23" style="fill:#1a1917"/>'; }
-    s += T(30, y + 36, "Add “croi” →", "font:700 23px var(--font-hand);fill:var(--ink)") + clipTo(160, y, 372, y + row, chip(168, y + 6, 66, "Idea", true) + chip(240, y + 6, 92, "Next up") + chip(338, y + 6, 90, "Recipe") + chip(434, y + 6, 80, "Trial"));
-    s += line("M30 " + (y + row) + " H360", 1, 0.4);
-    s += cardI(30, y + row + 12) + T(66, y + row + 36, "Croissants", "font:600 22px var(--font-hand);fill:var(--ink)") + T(360, y + row + 34, "Recipe", "15px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"');
-    s += bookI(30, y + 2 * row + 10) + T(66, y + 2 * row + 36, "Croissants · Trial 4", "font:600 22px var(--font-hand);fill:var(--ink)") + T(360, y + 2 * row + 34, "Notebook", "15px var(--font-body);fill:var(--ink-soft)", 'text-anchor="end"');
+    var s = '', row = 56, y = 116;
+    function cardI(ix, iy) { return reg('rect', 'x="' + ix + '" y="' + (iy + 3) + '" width="24" height="17" rx="1"', 'var(--card)', 1.5) + line('M' + (ix + 2) + ' ' + (iy + 9) + ' h20', 1.1, 1, '#c9442a'); }
+    function bookI(ix, iy) { return reg('rect', 'x="' + (ix + 2) + '" y="' + iy + '" width="18" height="23" rx="1.5"', 'url(#mblack)', 1.5) + '<rect x="' + (ix + 2) + '" y="' + iy + '" width="4" height="23" style="fill:#1a1917"/>'; }
+    s += T(30, y + 36, 'Add "croi" →', 'font:700 23px var(--font-hand);fill:var(--ink)') + clipTo(160, y, 372, y + row, chip(168, y + 6, 66, 'Idea', true) + chip(240, y + 6, 92, 'Next up') + chip(338, y + 6, 90, 'Recipe') + chip(434, y + 6, 80, 'Trial'));
+    s += line('M30 ' + (y + row) + ' H360', 1, 0.4);
+    s += cardI(30, y + row + 12) + T(66, y + row + 36, 'Croissants', 'font:600 22px var(--font-hand);fill:var(--ink)') + T(360, y + row + 34, 'Recipe', '15px var(--font-body);fill:var(--ink-soft)', 'text-anchor="end"');
+    s += bookI(30, y + 2 * row + 10) + T(66, y + 2 * row + 36, 'Croissants · Trial 4', 'font:600 22px var(--font-hand);fill:var(--ink)') + T(360, y + 2 * row + 34, 'Notebook', '15px var(--font-body);fill:var(--ink-soft)', 'text-anchor="end"');
     return card(3 * row + 12, s);
   }
   function jotSheet() {
-    var y = 430, s = dim(0.5) + hatch(8, y + 6, 390, 400, 0.4) + reg("rect", 'x="0" y="' + y + '" width="390" height="420" rx="22"', "var(--card)", 2.4);
-    s += reg("rect", 'x="165" y="' + (y + 10) + '" width="60" height="6" rx="3"', "var(--rule)", 1.2) + T(24, y + 54, "Quick add", "font:700 30px var(--font-hand);fill:var(--ink)");
-    s += reg("rect", 'x="20" y="' + (y + 68) + '" width="350" height="84" rx="10"', "var(--paper)", 2) + line("M34 " + (y + 84) + " V" + (y + 108), 2.2) + T(42, y + 104, "What’s new?", "font:500 24px var(--font-hand);fill:var(--ink-soft)");
-    [["Idea", 0, 0, 1], ["Next up", 1, 0], ["Recipe", 0, 1], ["Trial", 1, 1]].forEach(function (c) { var px = 20 + c[1] * 180, py = y + 168 + c[2] * 58;
-      s += reg("rect", 'x="' + px + '" y="' + py + '" width="170" height="48" rx="24"', c[3] ? "var(--custard)" : "var(--card)", c[3] ? 2.4 : 2) + T(px + 85, py + 32, c[0], "font:" + (c[3] ? 700 : 600) + " 23px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"'); });
-    s += reg("rect", 'x="20" y="' + (y + 296) + '" width="350" height="52" rx="26"', "var(--yellow)", 2.6) + T(195, y + 331, "Add", "font:700 26px var(--font-hand);fill:var(--ink)", 'text-anchor="middle"');
+    var y = 430, s = dim(0.5) + hatch(8, y + 6, 390, 400, 0.4) + reg('rect', 'x="0" y="' + y + '" width="390" height="420" rx="22"', 'var(--card)', 2.4);
+    s += reg('rect', 'x="165" y="' + (y + 10) + '" width="60" height="6" rx="3"', 'var(--rule)', 1.2) + T(24, y + 54, 'Quick add', 'font:700 30px var(--font-hand);fill:var(--ink)');
+    s += reg('rect', 'x="20" y="' + (y + 68) + '" width="350" height="84" rx="10"', 'var(--paper)', 2) + line('M34 ' + (y + 84) + ' V' + (y + 108), 2.2) + T(42, y + 104, 'What\'s new?', 'font:500 24px var(--font-hand);fill:var(--ink-soft)');
+    [['Idea', 0, 0, 1], ['Next up', 1, 0], ['Recipe', 0, 1], ['Trial', 1, 1]].forEach(function (c) {
+      var px = 20 + c[1] * 180, py = y + 168 + c[2] * 58;
+      s += reg('rect', 'x="' + px + '" y="' + py + '" width="170" height="48" rx="24"', c[3] ? 'var(--custard)' : 'var(--card)', c[3] ? 2.4 : 2) + T(px + 85, py + 32, c[0], 'font:' + (c[3] ? 700 : 600) + ' 23px var(--font-hand);fill:var(--ink)', 'text-anchor="middle"');
+    });
+    s += reg('rect', 'x="20" y="' + (y + 296) + '" width="350" height="52" rx="26"', 'var(--yellow)', 2.6) + T(195, y + 331, 'Add', 'font:700 26px var(--font-hand);fill:var(--ink)', 'text-anchor="middle"');
     return s;
   }
+
   PLATE.add(function () {
     var put = function (id, inner, label, opt) { document.getElementById(id).innerHTML = phone(inner, label, opt); };
-    put("pk-day", kitchen(false) + findBar() + phJot(336, 776), "The kitchen on a phone by day");
-    put("pk-eve", kitchen(true) + '<defs><linearGradient id="pkdusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#2f2a45"/><stop offset="1" stop-color="#2f2a45" stop-opacity="0"/></linearGradient></defs><rect width="390" height="130" style="fill:url(#pkdusk)"/>' + findBar() + phJot(336, 776), "The kitchen on a phone in the evening", { dark: true });
-    put("pk-recent", kitchen(false) + dim(0.45) + recentList() + keyboard() + findBar("|", true), "The find bar tapped with nothing typed: a row of Recently chips");
-    put("pk-find", kitchen(false) + dim(0.45) + findList() + keyboard() + findBar("croi|", true), "The find bar tapped with croi typed, the keyboard up and one list under the bar");
-    put("pk-jot", kitchen(false) + findBar() + jotSheet(), "Quick add tapped: a bottom sheet with a text box, four choices and an Add button");
+    put('pk-day', kitchen2(false) + findBar() + phJot(336, 776), 'The kitchen on a phone by day (v5)');
+    put('pk-eve', kitchen2(true) + findBar() + phJot(336, 776), 'The kitchen on a phone in the evening (v5)', { dark: true });
+    put('pk-recent', kitchen2(false) + dim(0.45) + findEmpty() + keyboard() + findBar('|', true), 'Find bar open, nothing typed');
+    put('pk-find', kitchen2(false) + dim(0.45) + findList() + keyboard() + findBar('croi|', true), 'Find bar: croi typed');
+    put('pk-jot', kitchen2(false) + findBar() + jotSheet(), 'Quick add sheet');
   });
 })();
 </script>

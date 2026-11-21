@@ -10,6 +10,48 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-20 · Phone Plate v5: kitchen from traced kitchen + Library view
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20T23:59:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | completed (v5 published; waiting on Ari's sign-off) |
+
+### Intent
+Redraw the phone kitchen from the traced Plate XII kitchen, add a Library view (one page, two parts), remove the Recently row, and publish as Phone Plate v5.
+
+### Summary
+Kitchen redrawn in `sections/01-kitchen.html` with the Plate XII elements: window + crystal + rainbow, cork board, whiteboard, clipboard "Kitchen log" on the left wall (pick A, Ari confirmed in session), recipe box on stacked journals, eclair rack, single Library shelf. `findEmpty()` replaces the old `recentList()`. New `sections/06-library.html` adds Library main (cookbook spines scrolling row + references cards) and a cookbook page. PREV screenshot mechanism added to `build.cjs` (injects `shots/01/pk_day.png` as base64). Built and published to https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy (artifact version 5). Publish required reading the live artifact first; several rounds of refusal resolved by calling `Artifact(action: "read")`.
+
+### Decisions
+- **Clipboard on the left wall at counter height (pick A)** — Ari confirmed in session (2026-11-20)
+- **Library = one page, two parts** — cookbook spines scrolling row on top, references cards below (Ari's pick 3a)
+- **No fridge, no Recently** — Plate XII product change, carried to phone
+
+### Changes
+- `design/phone/sections/00-questions.html` — v5 header, previous screenshot, two open questions
+- `design/phone/sections/01-kitchen.html` — full redraw: Plate XII kitchen stacked, clipboard pick A
+- `design/phone/sections/06-library.html` — new: Library main + cookbook page
+- `design/phone/build.cjs` — PREV screenshot injection
+- `design/phone/shots/v5/` — screenshots pk_day, pk_eve, lib_main
+- `docs/design/PLAN.md` — phone kitchen item ticked
+- `.cursor/handoffs/NEXT.md` — step 2 prompt marked done; new step 3 prompt added
+
+### Open threads
+- **Ari's sign-off on v5** — two questions: kitchen feel OK? Library layout OK?
+- After sign-off: tick PLAN.md "phone layout" section done, then start the React test piece (step 3)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phone plate v5, kitchen from traced kitchen, Library view, clipboard Kitchen log, pick A, no Recently, no fridge
+**Files:** design/phone/sections/01-kitchen.html, design/phone/sections/06-library.html, design/phone/build.cjs, design/phone/shots/v5/, docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** Phone Plate v1–v4 (signed off); Plate XII v1–v17 (signed off); pointing movement (glow only)
+**Resume with:** wait for Ari's v5 sign-off; after yes, tick PLAN.md phone section and start the React test piece
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-20 · Product changes from the plates applied (PRD, README, decisions 004/005, PLAN.md)
 
 | Field | Value |
