@@ -206,7 +206,7 @@ Open http://localhost:5173/r/your-recipe-slug or `/c/your-cookbook-slug` after p
 |---------|-----------|
 | **Lab** | Composition notebook spread; ingredients left / steps right; version margin; journal, compare, publish as overlays. **New recipe** without an idea. |
 | **Recipe box** | Wooden box + A–Z index cards; **in-place edit** on the card (no separate editor page). **Add card** without an idea. |
-| **Cookbooks / references** | Binder + shelf metaphors |
+| **Cookbooks / references** | Binder + shelf metaphors. Becoming one **Library** view with the kitchen home (PRD section 7) |
 | **Cork board** | Pinned notes grid (last); optional promote-to-lab |
 | **Theming** | User-selectable color theme + font via CSS tokens |
 
@@ -444,6 +444,8 @@ recipes/      Original notes, sheets links, docx recipes
 | **UI polish** | Sun & floral theme, on-paper forms, index cards, dot-grid lab, cork cabinet | Complete |
 | **4** | URL/scan import, fork buttons | Complete |
 | **2.0 frame** | Recipe-card login, in-frame navigation, phone list and one notebook page, local walkthrough fixtures, short Playwright pass | Milestones 1–3 on `staging-render` — [docs/milestone-1-2-technical-plan.md](docs/milestone-1-2-technical-plan.md) |
+| **Kitchen home** | One kitchen scene as the signed-in home; Library view; addresses in [decision 005](docs/decisions/005-web-addresses.md) | Designed (Plates XI and XII signed off), not built. See PRD Appendix A |
+| **Saved cookbooks** | Save other users' published cookbooks onto the Library shelf | Planned, after the kitchen build |
 | **5** | PWA offline depth, AI tools, challenges/glossaries | Planned |
 | **UI+** | Freeform cork-board canvas (drag layout) | Planned |
 

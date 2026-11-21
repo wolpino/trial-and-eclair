@@ -1,6 +1,6 @@
 # 004: The kitchen scene home
 
-Date: 2026-10-19. Status: decided.
+Date: 2026-10-19. Status: decided. **Partly superseded 2026-11-20:** the Objects list, the Lovable reference image, "a simple drawing stands in" and the Sunlight section are replaced by Plates XI and XII (Ari's traced kitchen; rules in PRD Appendix A, "Kitchen home"). The rest stands: views open over the kitchen, one "back to kitchen" control, an address for each view, locked objects open read-only, the simpler tall phone kitchen, reduced motion.
 
 ## Context
 

@@ -10,8 +10,8 @@ Written 2026-11-13. This is the one list of everything left before the build. If
 
 ## The path
 ```
-Plate X ✅ → Plate XI ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Plate XII (new kitchen) → product changes → views/phone follow → test piece → Task issues → build
-                                                                      ✅ (v17, 11/20)  ⏳ next
+Plate X ✅ → Plate XI ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Plate XII (new kitchen) ✅ → product changes ✅ → views/phone follow ⏳ → test piece → Task issues → build
+                                                                      (v17, 11/20)       (11/20)           next: ask Ari
 ```
 Plate XII was added on 2026-11-19 (Ari's traced kitchen replaces the Plate XI kitchen). It ran 17 versions in two days; on 2026-11-20 Ari stopped polishing and v17 is final-ish. See section 5b.
 1. **Plate X**: draw Ari's Plate IX notes and the three missing views. Options are still allowed here.
@@ -41,8 +41,8 @@ One view at a time, reviewed as it lands, not all at the end.
 | 3 | Whiteboard | 02-whiteboard | done (Ari 11/13) |
 | 4 | Trials notebook | 06-notebook | done (Ari 11/13) |
 | 5 | Idea board | 03-ideas | done (Ari 11/13) |
-| 6 | Cookbooks | 04-cookbooks | done (Ari 11/13, v20) |
-| 7 | References | 05-references | done (Ari 11/16) |
+| 6 | Cookbooks | 04-cookbooks | done (Ari 11/13, v20); now part of the Library view (2026-11-20) |
+| 7 | References | 05-references | done (Ari 11/16); now part of the Library view (2026-11-20) |
 | 8 | Sign in and sign up | 09-start | done (Ari 11/16; card centred, nothing in front; headings A Ingredients + Method) |
 | 9 | Account menu and settings | 11-account | done (Ari 11/16) |
 | 10 | Front page and not-found | 12-front | done (Ari 11/16; not found = B, cookbook with a page ripped out) |
@@ -163,7 +163,7 @@ Phone Plate v1 (2026-11-17): https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy, 
 - [x] Draw: Quick add sheet with four choices, Card View keep-sideways button (v4)
 - [x] Phone notebook with the camera button (drawn)
 - [x] Every other view and page on a phone (drawn)
-- [x] "Recently" on a phone: one chip row at the top of the find list (Ari, 2026-11-17)
+- [x] "Recently" on a phone: one chip row at the top of the find list (Ari, 2026-11-17). **Removed 2026-11-20 with the Recently list** (no fridge, no Recently, Plate XII)
 - [x] Ari signs off (2026-11-17, v4)
 
 ## 4. Mark
@@ -236,13 +236,13 @@ Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop
 
 ### Product changes from the plates (apply in one pass)
 Changes to the product that come out of the drawings. Kept here as they come up and applied together to `docs/PRD.md`, the README and the Task issues when Plate XII is signed off (before Task issues), so the plan is edited once and stays consistent.
-- [ ] **Library** (Ari 2026-11-19; name **Library** picked 11/19): the book shelf opens one view holding both the cook's cookbooks (their published collections) and references (research shelf). Touches PRD sections 2, 5 and 7, the Phase UI tables, Plate XI's two views and their web addresses (decision 005)
-- [ ] **Saved cookbooks** (Ari 2026-11-19, later version): a cook can save other users' published cookbooks; they sit on the same shelf as their own cookbooks. Needs a saved-cookbook model and a phase in the PRD; the Library view leaves room for them
-- [ ] **Recipe log on a clipboard** in the open wall cupboard, not the drawer stack
-- [ ] **No fridge, no Recently list** (Plate XII v3)
-- [ ] **Rainbows follow the cook's clock**: morning, midday, afternoon angles; evening has none, the window glass goes to dusk and the room dims
-- [ ] **Eclair easter egg**: three eclairs cool on a rack in the kitchen; each click takes one, a reload puts them back; nothing saved
-- If picked, this replaces the Plate XI kitchen drawing (views and phone follow), so settle it before the test piece
+- [x] **Library** (Ari 2026-11-19; name **Library** picked 11/19): the book shelf opens one view holding both the cook's cookbooks (their published collections) and references (research shelf). Applied 2026-11-20: PRD §2, §3, §4, §7; README Phase UI row; decision 005 (`/library`, `/library/cookbooks/<name>`, old addresses redirect). How the two parts sit in one view is drawn in step 2
+- [x] **Saved cookbooks** (Ari 2026-11-19, later version): a cook can save other users' published cookbooks; they sit on the same shelf as their own cookbooks. Applied 2026-11-20: PRD §4, §5 (`SavedCookbook`, later), §7, §10 (phase "Saved cookbooks", planned after the kitchen build), §12. Ari's pick: a save is a link to the live cookbook and leaves the shelf if the author unpublishes it; any signed-in cook can save
+- [x] **Recipe log on a clipboard** in the open wall cupboard, not the drawer stack. Applied: PRD Appendix A "Kitchen home"; Build list below
+- [x] **No fridge, no Recently list** (Plate XII v3). Applied: PRD Appendix A; the phone's "Recently" chip row (Phone section) is dropped with it
+- [x] **Rainbows follow the cook's clock**: morning, midday, afternoon angles; evening has none, the window glass goes to dusk and the room dims. Applied: PRD Appendix A and §12 (device clock; time zone stays open)
+- [x] **Eclair easter egg**: three eclairs cool on a rack in the kitchen; each click takes one, a reload puts them back; nothing saved. Applied: PRD Appendix A
+- Plate XII replaces the Plate XI kitchen drawing (signed off 2026-11-20). All six lines above were applied to the PRD, README and decisions 004/005 on 2026-11-20. The views and phone follow it: settle that (step 2) before the test piece
 
 ## Before Task issues: things that could disrupt the build
 Raised 2026-11-16. Ari's answers (2026-11-16) are in each line. "Claude's pick" means Ari asked for a recommendation; it stands unless Ari says otherwise.
@@ -261,10 +261,11 @@ Changes the app needs that came out of the plates. Each becomes one Task issue.
 - Starter references are kept when samples are removed. Signed-in cooks can edit and delete a starter like their own; guests can only hide one (Ari, 2026-11-14). Editing a starter makes the cook's own copy (Ari, 2026-11-16)
 - Reference shelf scrolls sideways with round arrows; no kind filters
 - Sign-up asks about sample data (on by default); remove all samples in one go from Account
-- Recipe log (issue #161): lives on a clipboard inside the double cabinet under the counter
+- Recipe log (issue #161): lives on a clipboard inside the open wall cupboard (Plate XII), not the drawers
 - Whiteboard: a list the cook writes (no automatic items, no pins, no recipe-card link); tick puts a line through until the next day; a small red x after a ticked item's name removes it (Ari, 2026-11-13)
-- Cookbooks: only developers make them; the developer sets the recipe order; home cooks read (save and browse later)
-- Kitchen home as drawn (port Plate XI to React components)
+- Library view: the book shelf opens one view at `/library` holding cookbooks and references (PRD §7, decision 005). Cookbooks: only developers make them; the developer sets the recipe order; home cooks read the sample
+- Saved cookbooks (later phase, after the kitchen build): `SavedCookbook` model and endpoints, save and unsave on a published cookbook, saved ones on the Library shelf; a link to the live cookbook, gone if unpublished
+- Kitchen home as drawn (port the Plate XII traced kitchen to React components): no fridge or Recently list; recipe log clipboard in the open wall cupboard; glow pointing only; rainbows and evening dusk follow the device clock; eclair easter egg (three eclairs on a rack, clicks take them, reload restores, nothing saved)
 - Every open view as drawn
 - Sign in and sign up as drawn; Account menu; front page; not-found page
 - Auth review: change username and password from Settings (drawn in Plate X, Ari 2026-11-14), plus password reset and session rules

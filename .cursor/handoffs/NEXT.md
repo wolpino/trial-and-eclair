@@ -1,8 +1,18 @@
-# NEXT — 2026-11-20 (Plate XII SIGNED OFF at v17; next: product changes into the PRD)
+# NEXT — 2026-11-20 (Plate XII signed off; product changes applied; next: how the views and phone follow the new kitchen)
 
 > **Start here: this prompt, then `docs/design/PLAN.md`.** Everything below the first prompt is history; do not act on it.
 
-## Prompt for the next agent (after Plate XII sign-off) — START HERE
+## Prompt for the next agent (step 2: views and phone follow the new kitchen) — START HERE
+> **Where things stand:** Plate XII v17 is signed off (https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj, artifact version 18). The product changes from the plates were applied on 2026-11-20 in one pass: PRD v1.6 (§2–5, §7 Library, §10, §12, Appendix A "Kitchen home"), decision 005 amended (`/library`, `/library/cookbooks/<name>`), decision 004 marked partly superseded, README phase rows, PLAN.md ticks and Build list. No API tables changed. Decided with Ari: a saved cookbook is a link to the live cookbook (gone if unpublished), any signed-in cook can save.
+>
+> **Do now (step 2):** ask Ari in chat how the open views (Plate XI) and the phone kitchen follow the new traced kitchen. Options to put to her: (a) redraw only what the new kitchen breaks, (b) carry the views and phone as they are into the build. Also ask how the **Library** (cookbooks + references in one view, room for saved cookbooks later) is laid out, since Plate XI drew them as two views. **Ask before drawing anything.** Keep it to a short list of questions; wait for her text answer.
+>
+> **Rules (Ari, 2026-11-20):** stay on the path; a new idea goes on PLAN.md's Later list unless she says "this round". No more rounds on rainbows, crystals, glow colour, window, box lid or cupboard lines. Questions first in chat, no subagents, confirm before a build (`workflow-lower-usage`). No pointing movement. Each plate page shows the previous version and a change list.
+>
+> **The path after this:** 3. React test piece (kitchen + one open view; Ari reviews before anything is committed). 4. Task issues from PLAN.md's Build list, then the build.
+
+## Prompt for the next agent (step 1: product changes into the plan) — done 2026-11-20
+> **Applied (below is the old prompt, kept as history):**
 > **Where things stand:** Ari **signed off Plate XII v17** on 2026-11-20 (https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj, artifact version 18). The traced kitchen replaces the Plate XI kitchen. **Next is step 1 below.** Before editing, list the planned PRD/README/decision edits for Ari in chat and wait for her go.
 >
 > **Rules for this stretch (Ari, 2026-11-20):** stay on the path; a new idea goes on PLAN.md's Later list unless Ari says "this round". No more rounds on rainbows, crystals, the glow colour, the window outline, the box lid or the cupboard lines: they are on the Later list or accepted as they are. Questions first in chat, no subagents, confirm before a build (`workflow-lower-usage`). No pointing movement (`no-pointing-movement`). Each plate page shows the previous version's screenshot and a running change list at the top (`PREV` in `design/plate-xii/build.cjs`, list in `sections/00-questions.html`).

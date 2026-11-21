@@ -10,6 +10,40 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-20 · Product changes from the plates applied (PRD, README, decisions 004/005, PLAN.md)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20T23:59:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, docs only, no subagents) |
+| **Outcome** | completed (one pass; edits listed for Ari first and applied on her "go"; no app code) |
+
+### Intent
+Apply PLAN.md "Product changes from the plates" to the docs in one pass, then hand step 2 to Ari.
+
+### Summary
+- Ari's answers: Library addresses `/library` and `/library/cookbooks/<name>`; a saved cookbook is a link to the live cookbook and leaves the shelf if unpublished; research shelf renamed References inside the Library; 004 kept under its name with a "partly superseded" line (renaming would break links)
+- PRD v1.6: tiers table, stories, locked decisions, `SavedCookbook` (later), §7 Library, phase rows (Kitchen home designed, Saved cookbooks planned), open items, Appendix A "Kitchen home" (no fridge or Recently, recipe log clipboard in the open wall cupboard, glow only, rainbows by device clock and none in the evening, eclair egg)
+- Decision 005 amended; README phase rows only (no API table change); PLAN.md six product lines ticked, Build list and status rows updated, phone "Recently" chip row marked removed
+- NEXT.md top prompt moved to step 2
+
+### Decisions
+- **Saved cookbooks are links, not copies** (Ari)
+- **Library addresses** `/library`, `/library/cookbooks/<name>`; old `/cookbooks`, `/references` redirect
+
+### Open threads
+- Step 2: ask Ari how the open views and phone follow the new kitchen, and how the Library lays out its two parts. Ask before drawing
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** product changes applied, Library, saved cookbooks, PRD 1.6, decision 005 amended, step 2
+**Files:** docs/PRD.md, README.md, docs/decisions/004-kitchen-home.md, docs/decisions/005-web-addresses.md, docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** the product-changes pass; Plate XII v1–v17; rainbow/crystal/glow polish; pointing movement
+**Resume with:** NEXT.md top prompt (step 2: ask Ari how views and phone follow the new kitchen; ask before drawing)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-20 · Plate XII audit, then v17 final-ish (published)
 
 | Field | Value |
