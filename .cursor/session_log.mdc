@@ -10,6 +10,40 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-21 · Why the test piece kept regressing; v17 pushed; one reference doc; docs archived
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-21` (regression audit and cleanup) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop), Opus |
+| **Outcome** | success (cause found, v17 pushed as PR #181, REFERENCE.md written, history archived; test piece not rebuilt yet) |
+
+### Intent
+Ari: the React test-piece chat kept producing versions thrown out plates ago, and yesterday's fix made it worse. Find out why, and make the design truth clean, current and short, so cheaper models can do simple tasks safely.
+
+### Summary
+- **Cause:** Plate XII v11–v17, the product changes and phone v5 were 30 commits on `docs/plate-x-cookbooks` that were never pushed or merged. `staging-render` stopped at v10/v11, the v17 handoff said "branch from staging-render", and the issue #180 test piece was built on the v10 kitchen. A session on 2026-11-21 then re-made v11/v12 decisions on top of it ("eclair trace embedded, flour/pin removed"). That work is **wrong for v17** and is archived on the local branch `archive/issue-180-v10-attempt`.
+- Pushed `docs/plate-x-cookbooks` and opened PR #181 into `staging-render`. Rebuilding with `node traced/clean.cjs` reproduces the committed v17 `kitchen.svg` exactly.
+- New `docs/design/REFERENCE.md`: the one source of truth, with pictures of the day kitchen, evening (new `shots/v17/tk_eve.png`), close-ups and hit areas (new `shots/v17/tk_hit.png`), plus a per-object table of looks, pointing, click and hit area.
+- `NEXT.md` cut to one prompt; old prompts moved to `.cursor/handoffs/archive/NEXT-2026-11-21-plates.md`. `PLAN.md` cut from 308 to about 80 lines, with build notes kept; the old plan moved to `docs/design/archive/PLAN-2026-11-21-plates.md`.
+- CLAUDE.md: REFERENCE.md added to "Read first"; new rule to push before a session ends and to check the base has the final design.
+- Memory: `kitchen-layout` (318 lines) and `visual-direction` cut to pointers, old text archived; `one-main-session` aligned with no-subagents; new `clean-before-next-step`.
+
+### Open threads
+- Ari merges PR #181, then the test piece is rebuilt on v17 (NEXT.md prompt).
+- REFERENCE.md open questions: should the Trials journals open the notebook; trim the whiteboard hit area off the mixer head.
+- Leftovers in the v17 source (flour/pin paths under a patch, one-value toggles, unused bottle and crystal options) are listed in REFERENCE.md. Remove them only if Ari wants, checked by a pixel diff.
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** regression cause, unpushed branch, REFERENCE.md, archive, PR #181, issue #180
+**Files:** docs/design/REFERENCE.md, docs/design/PLAN.md, .cursor/handoffs/NEXT.md, CLAUDE.md, design/plate-xii/shots/v17/
+**Do not redo:** anything from the 2026-11-21 v10-based test piece (eclair trace embedding, flour/pin tidyPatch, comp-journals port, LOG_TITLE): v17 already has all of it
+**Resume with:** `.cursor/handoffs/NEXT.md` (check PR #181 is merged first)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-20 · Phone Plate v5: kitchen from traced kitchen + Library view
 
 | Field | Value |
