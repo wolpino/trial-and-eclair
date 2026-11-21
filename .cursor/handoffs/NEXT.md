@@ -1,8 +1,21 @@
-# NEXT — 2026-11-20 (Plate XII v15 published; v16 notes filed; next: rainbow examples + pointing options)
+# NEXT — 2026-11-20 (Plate XII v17 final-ish published; waiting on Ari's sign-off)
 
-> **Start here: `docs/design/PLAN.md`.** It is the one list of what is left, the status of each Plate X view, and the rule for new ideas (they go on its Later list unless Ari says "this round"). All of Ari's answers are in the `kitchen-layout` memory. The sections below are kept as history.
+> **Start here: this prompt, then `docs/design/PLAN.md`.** Everything below the first prompt is history; do not act on it.
 
-## Prompt for the next agent (Plate XII v16) — START HERE
+## Prompt for the next agent (after Plate XII v17) — START HERE
+> **Where things stand:** Plate XII v17 (https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj, artifact version 18) is the final-ish kitchen: picks only, no option buttons. Ari decided on 2026-11-20 to stop polishing and move forward. The only open question is **sign-off**.
+>
+> **Rules for this stretch (Ari, 2026-11-20):** stay on the path; a new idea goes on PLAN.md's Later list unless Ari says "this round". No more rounds on rainbows, crystals, the glow colour, the window outline, the box lid or the cupboard lines: they are on the Later list or accepted as they are. Questions first in chat, no subagents, confirm before a build (`workflow-lower-usage`). No pointing movement (`no-pointing-movement`). Each plate page shows the previous version's screenshot and a running change list at the top (`PREV` in `design/plate-xii/build.cjs`, list in `sections/00-questions.html`).
+>
+> **If Ari signs off Plate XII, the path is:**
+> 1. Apply the "Product changes from the plates" list in PLAN.md to `docs/PRD.md`, the README and decision 005 in one pass.
+> 2. Decide with Ari how the open views (Plate XI) and the phone kitchen follow the new traced kitchen: redraw only what the new kitchen breaks, or carry them as they are into the build. Ask before drawing anything.
+> 3. The React test piece (kitchen + one open view; Ari reviews before anything is committed).
+> 4. Task issues from PLAN.md's Build list, then the build.
+>
+> **Known and left as is in v17:** a faint seam line across the closed wall cupboard door (where the stretched top meets the picture, `extend()` in `traced/clean.cjs`); a dark edge on the window's left side (from the trace). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session.
+
+## Prompt for the next agent (Plate XII v16) — done (v16 drawn 2026-11-20, then v17 final-ish)
 > **Workflow (`plate-round` skill, `workflow-lower-usage` memory):** real visual choices asked in chat first, wait for a text answer; no subagents; confirm before a build/publish run. **No pointing movement** (`no-pointing-movement` memory): never offer rise, lift or press; remind Ari if she asks for it.
 >
 > Plate XII: https://claude.ai/artifact/JpRfR1F4DZCy9ctDCezeZj (live = v15, artifact version 16). Build: `cd design/plate-xii && node traced/clean.cjs && node build.cjs && tail -n +2 dist/index.html | sed '$d' > dist/plate-xii.html`; read the live artifact before the first publish of a new session. Code map for v15 is in the prompt below (pointing CSS on `#tk[data-pt]`, `CRYSTALS`, `rainbows()`, `interior()`/`jar()`).

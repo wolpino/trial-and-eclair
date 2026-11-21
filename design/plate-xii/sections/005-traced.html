@@ -1,15 +1,9 @@
-<section id="tk" class="trim-on" style="--trim:#7A4E2D" data-pt="g2" data-rs="s1" aria-labelledby="tk-h">
-  <span class="label" id="tk-h">00b · v16 · Your traced kitchen</span>
+<section id="tk" class="trim-on" style="--trim:#7A4E2D" aria-labelledby="tk-h">
+  <span class="label" id="tk-h">00b · v17 · Your traced kitchen</span>
   <div class="sec-body">
-    <h3>Rainbows by time of day, new glow colours, cupboard and window fixes</h3>
-    <p class="note">Still your SVG, cleaned by <code>traced/clean.cjs</code>; the new pieces are drawn on top by <code>traced/add.cjs</code>. Point at or Tab to the box, notebook, cork board, whiteboard, the book shelf, the clipboard (recipe log) or the rack; click to feel the press. Click the crystal in the window to turn it.</p>
+    <h3>The kitchen, picks only</h3>
+    <p class="note">Point at or Tab to the box, notebook, cork board, whiteboard, the book shelf, the clipboard (recipe log) or the rack: each glows amber from behind. Click the crystal in the window to turn it. The time of day and the colours below are things a cook will have, not choices for you.</p>
     <div class="recol" id="tk-ctl">
-      <div class="choice"><span class="cap">Pointing</span><div class="seg" data-attr="pt">
-        <button data-v="v14">warm white</button><button data-v="b2">B2 shadow</button><button data-v="b3">B3 sticker</button><button data-v="g1">G1 green</button><button data-v="g2" aria-pressed="true">G2 amber</button>
-      </div></div>
-      <div class="choice"><span class="cap">Crystal <small>(click it in the window to turn it)</small></span><div class="seg" data-pick="cr">
-        <button data-v="1">K1 teardrop</button><button data-v="2" aria-pressed="true">K2 faceted ball</button><button data-v="3">K3 octagon chain</button><button data-v="4">K4 quartz point</button><button data-v="5">K5 mobile (now)</button>
-      </div></div>
       <div class="choice"><span class="cap">Time of day</span><div class="seg" data-pick="sun">
         <button data-v="am" aria-pressed="true">morning</button><button data-v="noon">midday</button><button data-v="pm">afternoon</button><button data-v="eve">evening</button>
       </div></div>
@@ -42,25 +36,14 @@
           <g role="button" tabindex="0" aria-label="Turn the crystal" data-turn><rect x="806" y="28" width="32" height="124" rx="6"/></g>
         </svg>
       </div>
-      <figcaption><b>Kitchen.</b> Click the crystal: it turns and the rainbows sweep round the room and settle. Try the time of day: in the morning and afternoon there is a warm golden wash; at midday it is crisper; in the evening the rainbows are gone. The rack still takes two eclairs, two bites, then it's empty.</figcaption>
+      <figcaption><b>Kitchen.</b> Click the crystal: it turns and the rainbows sweep round the room and settle. The rainbows move with the time of day and are gone in the evening. The rack takes two eclairs, two bites, then it's empty until the page reloads.</figcaption>
     </figure>
     <p class="tk-say" id="tk-say" aria-live="polite">Nothing open.</p>
 
-
     <h3 id="tk-close">Close up</h3>
-    <p class="note">Click a crystal or a rainbow look to put it in the kitchen above.</p>
     <div class="tk-zooms" id="tk-zooms">
 <!--CLOSEUPS-->
     </div>
-
-    <h3>What changed this round</h3>
-    <ul class="ans">
-      <li><b>Pointing — no movement:</b> C1 rise and C2 press are gone. Two new options alongside B3 sticker: <b>G1 green</b> a soft refracted light in the colour of the green glass bottle; <b>G2 amber</b> the same warmth as the morning room wash. B3 sticker now has the cream band flush tight to the ink outline (the gaps from v15 are fixed).</li>
-      <li><b>Rainbows — by time of day:</b> all three kinds (beams, scattered flecks, spots on curved surfaces) are always on; what changes is the light itself. Morning and afternoon bring a dramatic warm golden wash from the crystal across the whole room; midday is crisper without the wash; evening has no rainbows. The R1/R2/R3 and look controls are gone.</li>
-      <li><b>Open cupboard interior:</b> the jar outlines, lid edges, shelf boards, back-wall seams and door outline are now redrawn in the trace's thick wobbly ink style, to match the rest of the kitchen.</li>
-      <li><b>Window frame:</b> the top, right and inner-left frame edges are overlaid with clean even strokes so the outline weight matches the other items.</li>
-      <li><b>Above the box lid:</b> the wall just above the open lid is patched with wall colour, covering any stray marks.</li>
-    </ul>
   </div>
 </section>
 <script>
@@ -103,7 +86,7 @@
   }
   var tb = k.querySelector("[data-turn]");
   tb.addEventListener("click", turn); tb.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); turn(); } });
-  var pick = { ecl: "0", sill: "3", sun: "am", tidy: "1", cr: "2", r1: "1", r2: "1", r3: "1" };
+  var pick = { ecl: "0", sill: "3", sun: "am", tidy: "1" };
   function apply() {
     sec.classList.toggle("dusk", pick.sun === "eve"); k.classList.toggle("tidy", pick.tidy === "1");
     k.querySelectorAll("[data-var]").forEach(function (g) {

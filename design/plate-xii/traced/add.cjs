@@ -312,7 +312,8 @@ const CRYSTALS = {
   4: ["Quartz point", () => string(30, 89) + quartz(97, 46, 11)],
   5: ["Mobile (the one you have now)", () => mobile()],
 };
-const crystals = () => Object.keys(CRYSTALS).map((k) => V("cr-" + k, '<g class="cr-spin">' + CRYSTALS[k][1]() + "</g>")).join("");
+/* v17: K2 only (Ari 11/20); the other crystals wait on the Later list */
+const crystals = () => '<g class="cr-spin">' + CRYSTALS[DEF.cr][1]() + "</g>";
 
 /* ---- v15 rainbows. All of them sit in .rb > .rb-turn (the page turns that round the crystal when it is clicked), one set per
         time of day: the two main beams; R2 partial beams (shorter, thinner, fading early); R1 small scattered spots; R3 spots
@@ -359,25 +360,11 @@ const PART = {
   noon: [[822, 122, 690, 300, .85], [822, 124, 846, 374, .75], [822, 124, 640, 346, .65]],
   pm: [[822, 116, 760, 16, .85], [822, 118, 642, 96, .75], [822, 114, 706, -24, .65]],
 };
-/* v16 room wash: a warm golden screen-blend overlay from the crystal/window, dramatic in the morning and afternoon */
-function roomWash(v) {
-  const id = v + "-wash" + (++uid);
-  return '<defs><radialGradient id="' + id + '" cx="822" cy="100" r="750" gradientUnits="userSpaceOnUse">' +
-    '<stop offset="0" stop-color="#FFD88A" stop-opacity=".46"/>' +
-    '<stop offset=".45" stop-color="#FFBE5A" stop-opacity=".22"/>' +
-    '<stop offset="1" stop-color="#FFB840" stop-opacity="0"/>' +
-    '</radialGradient></defs>' +
-    '<rect x="-10" y="-60" width="900" height="560" fill="url(#' + id + ')" style="mix-blend-mode:screen;pointer-events:none"/>';
-}
 function rainbows(v) {
-  const defs = '<defs><filter id="' + v + '-rbblur" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation=".75"/></filter>' +
-    '<pattern id="' + v + '-rbdot" width="2.3" height="2.3" patternUnits="userSpaceOnUse" patternTransform="rotate(30)"><circle cx="1.15" cy="1.15" r="1.02" fill="#fff"/></pattern>' +
-    '<mask id="' + v + '-rbdots" maskUnits="userSpaceOnUse" x="-100" y="-100" width="1100" height="700"><rect x="-100" y="-100" width="1100" height="700" fill="url(#' + v + '-rbdot)"/></mask></defs>';
-  /* v16: no R1/R2/R3 controls — all types always on, varied by time of day.
-     am + pm: dramatic room wash + all three kinds; noon: beams + flecks only (no wash); eve: nothing */
+  const defs = '<defs><filter id="' + v + '-rbblur" x="-10%" y="-10%" width="120%" height="120%"><feGaussianBlur stdDeviation=".75"/></filter></defs>';
+  /* v17: beams, partial beams and flecks by time of day, soft look; no room wash (it faded the wood). Evening: none */
   return defs + '<g class="rb"><g class="rb-turn">' + Object.keys(SUN).map((k) =>
     V("sun-" + k,
-      (k !== "noon" ? roomWash(v) : "") +
       beams(v, k) + beams(v, k, PART[k], true) +
       '<g class="rb-spots">' + scatter(k) + things(k) + "</g>"
     )).join("") + "</g></g>";
@@ -409,7 +396,7 @@ function windowFix() {
     '<rect x="699" y="254.4" width="165.4" height="14" style="fill:var(--wall)"/>' +
     P("M713 253.6 H864.6 V261.4 H717.6 Q713.4 261.4 713 257.4Z", dark, 1.5) + '<path d="M716.5 255.4 H864" style="stroke:' + side + ';stroke-width:.9"/>' +
     /* v16: even up frame outline — overlay clean INK strokes on top/right/left-inner edges at consistent weight */
-    '<path d="M710.4 31.4 H864 M864 31.4 V241.2 M710.4 31.4 V80" style="fill:none;stroke:' + INK + ';stroke-width:1.6;stroke-linecap:round"/>';
+    '<path d="M710.4 31.4 H864 M864 31.4 V241.2" style="fill:none;stroke:' + INK + ';stroke-width:1.6;stroke-linecap:round"/>';
 }
 /* v15: the lid's front edge (at the top now it is open) had a shapeless brown nub: it is the latch tab, in brass */
 function lidTab() {
@@ -705,10 +692,10 @@ module.exports = {
     seed = 11;
     const amAll = (z) => beams(v + z, "am") + beams(v + z, "am", PART.am, true) + '<g class="rb-spots">' + scatter("am") + things("am") + "</g>";
     return [
-      ...Object.keys(CRYSTALS).map((k) => ({ key: "cr" + k, pick: "cr-" + k, title: "K" + k + " · " + CRYSTALS[k][0] + " (click to hang it in the kitchen)", vb: "766 22 112 162", svg: CRYSTALS[k][1]() })),
-      { key: "rb-am", title: "Morning rainbows: beams, scattered flecks, spots on curved surfaces (the room wash shows in the full kitchen)", vb: "520 120 190 150", svg: '<g filter="url(#a-rbblur)">' + amAll("rb") + "</g>" },
+      { key: "cr", title: "The crystal: a faceted ball (click it in the kitchen to turn it)", vb: "766 22 112 162", svg: crystals() },
+      { key: "rb-am", title: "Morning rainbows: beams, scattered flecks, spots on curved things", vb: "520 120 190 150", svg: '<g filter="url(#a-rbblur)">' + amAll("rb") + "</g>" },
       { key: "cup", title: "The open cupboard after your pantry picture: wood inside, jars with real labels, hinges, the Kitchen log where it was", vb: "0 -40 290 150", svg: cupOpen(v + "z2") + clipboard() },
-      ...Object.keys(SILL).map((k) => ({ key: "sill" + k, title: "B" + k + " · " + SILL[k][0], vb: "716 20 150 236", svg: beams(v + "z" + k, "am") + CRYSTALS[DEF.cr][1]() + SILL[k][1]() })),
+      { key: "sill", title: "The window sill: " + SILL[DEF.sill][0].charAt(0).toLowerCase() + SILL[DEF.sill][0].slice(1), vb: "716 20 150 236", svg: beams(v + "zs", "am") + crystals() + SILL[DEF.sill][1]() },
       { key: "rack", title: "Your eclairs on your cooling rack (click the rack in the kitchen: two taken, two bites out of the last, then gone)", vb: "684 300 182 70", svg: '<use href="#a-all"/>' },
       { key: "nb2", title: "Your composition journals, square to the counter, “Trials” on the top label", vb: "210 286 340 90", svg: '<use href="#a-all"/>' },
       { key: "clip", title: "The clipboard: “" + LOG_TITLE + "” at the top of the sheet", vb: "40 -26 84 72", svg: cupOpen(v + "z") + clipboard() },

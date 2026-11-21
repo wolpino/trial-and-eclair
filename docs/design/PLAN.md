@@ -10,9 +10,10 @@ Written 2026-11-13. This is the one list of everything left before the build. If
 
 ## The path
 ```
-Plate X ✅ → Plate XI ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Task issues → build
-                                  ⏳ next
+Plate X ✅ → Plate XI ✅ → phone layout ✅ → mark ✅ → brand sheet ✅ → Plate XII (new kitchen) → product changes → views/phone follow → test piece → Task issues → build
+                                                                                  ⏳ sign-off (v17)
 ```
+Plate XII was added on 2026-11-19 (Ari's traced kitchen replaces the Plate XI kitchen). It ran 17 versions in two days; on 2026-11-20 Ari stopped polishing and v17 is final-ish. See section 5b.
 1. **Plate X**: draw Ari's Plate IX notes and the three missing views. Options are still allowed here.
 2. **Plate XI, the final**: no options. Ari's picks from Plate X, drawn once. The kitchen comes in day and evening; the open views are day only.
 3. **Phone layout**: the stacked phone kitchen and phone views.
@@ -212,14 +213,16 @@ Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop
 - [x] **v13 answered (Ari 2026-11-20):** J2, T1, 2700K, P1 "The Library", "Next up", glow warm white from behind only, wall as traced cleaned at the edges, Library bright in the evening, fix the wire rack. v14 published 2026-11-20
 - [x] **v14 answered (Ari 2026-11-20):** rack good. Everything else below is a v15 note, **not yet drawn** — a workflow change (more questions before building) is being decided first; see NEXT.md
 - [x] **v15 drawn and published 2026-11-20 (Plate XII version 16):** Ari's answers in chat first: pointing options B2 shadow, B3 sticker, C1 rise, C2 press and Claude's pick (honey glow + C1 + C2); the cupboard redrawn from her pantry picture (`refs` not saved: a raster; jars Flour, Sugar, Cocoa, Oats, Pecans, Salt, spices; dishes gone; clipboard left where it was); crystals K1 teardrop, K2 faceted ball, K3 octagon chain, K4 quartz point, K5 mobile, turning on a click; rainbows R1 spots, R2 partial beams, R3 bent over things in looks S1 soft, S2 printed, S3 halftone. Fixes: blue spines back (traced blues had followed `--cab`), spines stronger, window left side and apron, latch tab on the lid, cork edge. Questions at the page top; Claude's picks: honey + rise + press, K2, S1, all three rainbow kinds
-- [ ] **v16 notes from Ari (2026-11-20, collected in chat after v15, not yet drawn; references in `design/plate-xii/refs/v16-*.webp`):**
+- [x] **v17 final-ish published 2026-11-20 (artifact version 18):** Ari's picks: pointing G2 amber glow from behind (no movement); crystal K2; rainbows kept simple (v15 beams and flecks by time of day, soft, none in the evening; the v16 golden wash removed because it faded the wood); no more polish on the window, box lid or cupboard lines. Option buttons, crystal and sill pickers and the old v1/v2 kitchens are off the page (sections moved to `sections/old/`). The page top shows the v16 screenshot and every version in one line each. Known and left: faint seam on the closed cupboard door, dark edge on the window's left side. **Waiting on Ari: sign-off.**
+- [x] **v16 drawn 2026-11-20 (artifact version 17):** no movement; G1 green and G2 amber glows; B3 sticker band fixed; golden room wash in the morning and afternoon (later removed); thicker cupboard lines; window overlay; wall patch above the box lid. The rainbow references below were NOT built (only the wash); they moved to the Later list in v17
+- [x] **v16 notes from Ari (2026-11-20, collected in chat after v15; references in `design/plate-xii/refs/v16-*.webp`):**
   - **Pointing: no movement at all.** C1 rise reads "delayed and jerky", C2 press "cartoonish". Remind Ari if movement comes up again (memory `no-pointing-movement`). Draw two options: (1) **B3 sticker, aligned**: the cream band must sit tight on the object's outline, v15 showed gaps between the outline and the white (likely where the ink outline belongs to the room layer, not the object); (2) **a glow in a new colour**: a green from the green glass bottle, or a colour that ties in with the rainbows
   - **Rainbows, new examples first** (Ari asked whether her references can be done in vector: yes, mostly). From `v16-rainbow-ref1-room-wash-flecks.webp` and `v16-rainbow-ref2-fanned-flecks-beam.webp`: soft lens-shaped flecks, rainbow across each, light blend, **fanned outward from the crystal**, bigger farther away; white sparkles; a **room light wash per time of day** (golden afternoon, darker away from the window; evening keeps its light change); a sunbeam shaft from the window as a toggle (history: the Plate IX sun patch was removed, drawn light hadn't worked before, so let Ari judge); rainbow sheen on a few curved things (bowl, whiteboard arc, eclair glaze). From `v16-rainbow-ref3-long-beams.webp`: long main beams that cross the whole room to the box, widening, soft and see-through, warm bloom round the window, dust sparkles near the glass, no flecks. Watch phone cost (blur + blend) and the crystal turn's smoothness
   - **Rainbow look:** mostly soft (S1), maybe printed (S2) at some times of day; decide after the new examples
   - **Crystal:** waits on the rainbows
   - **Open cupboard line weight:** the redrawn cupboard's lines are thin and clean; match the trace's thick wobbly ink (door, shelves, jars, labels, hinges)
   - **Still open from v15 (ask again):** does the pantry cupboard read right (picture `v16-pantry-cupboard.webp`)? "space above the box lid": the nub (now a latch tab) or the empty wall above the box? window and blue spines right now? which rainbow kinds stay (R1 spots, R2 partial beams, R3 bent over things)?
-- [ ] **v15 notes from Ari (2026-11-20), all drawn in v15 above:**
+- [x] **v15 notes from Ari (2026-11-20), all drawn in v15 above:**
   - Glow blends into the wall colour, too subtle to notice. Ari hasn't liked another wall colour better but keeps thinking about a (subtle) wallpaper — might help the glow read. Or: change the glow colour, or make it glow more.
   - Window still has issues on the left side and the bottom below the sill
   - The space above the recipe box lid looks off
@@ -228,7 +231,8 @@ Ari made two Kittl kitchens (desktop 1: corner view, blue cabinets, sun; desktop
   - Evening looks good. **Note for later:** bring back the bird and shooting star at night, and the moon and sun/clouds during the day
   - Book spines used to include a few blue books; bring that colour back, spine colours don't pop enough now
   - New: a few more small rainbows scattered across the kitchen, suncatcher-style (small, not full-length beams), not just the two main beams
-- [ ] **At sign-off:** a full clean-up pass of stray lines and specks (B3 bottles and elsewhere), per Ari
+- [x] **At sign-off:** a clean-up pass of stray lines and specks: one short pass done in v17 (Ari 11/20: no more polish)
+- [ ] **Ari signs off Plate XII (v17)**
 
 ### Product changes from the plates (apply in one pass)
 Changes to the product that come out of the drawings. Kept here as they come up and applied together to `docs/PRD.md`, the README and the Task issues when Plate XII is signed off (before Task issues), so the plan is edited once and stays consistent.
@@ -270,6 +274,7 @@ Changes the app needs that came out of the plates. Each becomes one Task issue.
 ## Later list
 - **Brand holds (Ari, 2026-11-17):** exact swatch sets and the custom wheel; pointing movement G1–G4 (**dropped 2026-11-20: no movement at all, no rise and no press; pointing is a glow or outline only**, see Plate XII v16 notes) and evening glow E1/E2; home-screen name and "Trial & Eclair" round the icon's edge; body font. Safe to hold only if the build names every colour (fridge and backsplash included), gives the whiteboard marker its own blue, and writes pointing in one place
 Parked. Not drawn, not built until moved up.
+- **Kitchen light, after the build (Ari, 2026-11-20, moved from Plate XII v16/v17):** rainbows from Ari's three references (`design/plate-xii/refs/v16-*.webp`: room light wash per time of day, fanned soft flecks, sparkles, sunbeam toggle, sheen on curved things, long beams with a window bloom); the other crystals (K1 teardrop, K3 octagon chain, K4 quartz point, K5 mobile, kept in `CRYSTALS` in `traced/add.cjs`); tuning the amber glow on real screens (B3 sticker and G1 green are the alternatives); a subtle wallpaper so the glow reads; the night bird and shooting star, the day moon and sun/clouds
 - Accessibility pass on every view (keyboard, screen readers, contrast, reduced motion). Must happen before the build is called done. Includes the whiteboard's "recipe card" link, which shows only on hover: touch screens and keyboards need another way (tap or focus shows it)
 - Public recipe (`/r`) and cookbook (`/c`) pages: fine for now, revisit
 - Equipment spots and anniversary equipment (1 month, 6 months, 1 year, yearly)

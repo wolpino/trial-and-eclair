@@ -26,7 +26,7 @@
 .tk-art .halo1 { flood-color: var(--glow1, #f2c230); }
 .tk-art .halo2 { flood-color: var(--glow2, #f5a23a); }
 @media (prefers-reduced-motion: reduce) { .tk-art [data-halo] { transition: none; } }
-#tk { --glow1: #FFFFFF; --glow2: #EDC48C; }   /* v13 glow: G1 warm white is the default */
+#tk { --glow1: #FFE3B0; --glow2: #E99A48; }   /* v17 pointing: G2 amber glow from behind, no movement (Ari 11/20) */
 /* v13: wall colour thumbnails, each a <use> of the kitchen with its own --wall */
 .tk-say { font-size: .9rem; color: var(--ink-soft); min-height: 1.6em; }
 /* v5: close-ups reuse the kitchen drawing */
@@ -35,20 +35,13 @@
 .tk-zooms figure { margin: 0; border: 1.5px solid var(--ink); background: var(--wall); }
 .tk-zooms svg { display: block; width: 100%; height: auto; aspect-ratio: auto; }
 .tk-zooms figcaption { font-size: .84rem; color: var(--ink-soft); padding: 6px 10px; border-top: 1px solid var(--rule); background: var(--card); }
-.tk-zooms figure.on { outline: 3px solid var(--orange); outline-offset: 2px; }
-.tk-zooms figure:focus-visible { outline: 3px solid var(--ink); outline-offset: 2px; }
+.tk-prev { display: grid; grid-template-columns: minmax(0, 340px) 1fr; gap: 16px; align-items: start; }
+.tk-prev img { width: 100%; border: 1.5px solid var(--ink); display: block; }
+.tk-prev figure { margin: 0; }
+.tk-prev figcaption { font-size: .84rem; color: var(--ink-soft); padding-top: 4px; }
+@media (max-width: 640px) { .tk-prev { grid-template-columns: 1fr; } }
+.tk-log { margin: 0; padding-left: 1.4em; font-size: .9rem; display: grid; gap: 3px; max-width: 90ch; }
 .tidy [data-obj="flour"], .tidy [data-obj="pin"] { display: none; }
-/* v16 pointing options, data-pt on #tk: no movement (Ari 11/20).
-   v14 = warm white halo (default); b2 = soft shadow; b3 = die-cut sticker (flush cream band);
-   g1 = green glow (from the green glass bottle); g2 = amber glow */
-#tk[data-pt="b2"] { --glow1: rgba(74,44,22,.3); --glow2: rgba(74,44,22,.42); }
-#tk[data-pt="b2"] .tk-art [data-halo] { translate: 1.4px 2px; }
-#tk[data-pt="b3"] .tk-art [data-halo] > g { filter: url(#a-halo-st); }
-#tk[data-pt="g1"] { --glow1: #C4E49A; --glow2: #7CB555; }
-#tk[data-pt="g2"] { --glow1: #FFE3B0; --glow2: #E99A48; }
-/* v15 rainbow looks, data-rs on #tk: S1 soft, S2 printed (crisp, as before), S3 halftone */
-#tk[data-rs="s1"] .tk-art .rb { filter: url(#a-rbblur); }
-#tk[data-rs="s3"] .tk-art .rb { mask: url(#a-rbdots); }
+#tk .tk-art .rb { filter: url(#a-rbblur); }   /* rainbows: soft look */
 .tk-hit [data-turn] { cursor: pointer; }
-.tk-zooms figure[data-pick-to] { cursor: pointer; }
 .recol .cap small { font-weight: 400; color: var(--ink-soft); }

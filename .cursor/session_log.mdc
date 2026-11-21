@@ -10,6 +10,40 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-20 · Plate XII audit, then v17 final-ish (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20T23:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | completed (v17 published as artifact version 18; waiting on sign-off) |
+
+### Intent
+Ari couldn't find earlier plates, felt the last rounds hadn't made progress, and asked for a handoff audit and catch-up, then a final-ish Plate XII.
+
+### Summary
+- Compared v15 and v16 (`shots/v16/compare-v15-v16.png`): the v16 wash faded the window; the rainbow references weren't built; other changes were small
+- Audit: handoffs v11–v15 worked; v16's PLAN.md/NEXT.md/memory were left stale (would have redone v16); window, box lid, cupboard and pointing each looped 3+ rounds; Plate XII (17 versions in two days) was never on PLAN.md's path; the same artifact link hides old versions
+- Ari's picks: G2 amber, K2, rainbows simple, no more polish. v17: options and old v1/v2 sections removed (`sections/old/`), no wash, page top shows the v16 screenshot (`PREV` in build.cjs) and every version in one line
+- Clean-up: removed my v16 window stub line; tried to fix the cupboard-door seam, couldn't, reverted and left it
+
+### Decisions
+- **Stop polishing Plate XII** — rainbow references, other crystals and glow tuning on the Later list
+- **Every plate shows the previous version and a change list** — memory `plate-focus`
+
+### Open threads
+- Ari: sign off Plate XII v17
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v17 final-ish, handoff audit, stop polishing, previous screenshot, change list
+**Files:** design/plate-xii/traced/add.cjs, base/xii.css, build.cjs, sections/00-questions.html, sections/005-traced.html, sections/old/, docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** Plate XII v1–v17 as drawn; rainbow/crystal/glow polish (Later list); window, box lid, cupboard lines (accepted as is); pointing movement
+**Resume with:** NEXT.md top prompt (sign-off, then product changes into the PRD)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-20 · Plate XII v16: rainbows by time of day, glow options, cupboard and window fixes (published)
 
 | Field | Value |
