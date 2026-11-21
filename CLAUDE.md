@@ -11,6 +11,7 @@ One app, one `frontend/`:
 
 - `README.md` — setup, staging on Render, seed users
 - `docs/PRD.md` — product, data model, phase status
+- `docs/design/REFERENCE.md` — the one source of truth for how the kitchen and views look and behave (pictures included); it wins over older plates, handoffs and archives
 - `docs/recipe-box/README.md` — the mobile front end plan and which docs still apply
 - `.cursor/session_log.mdc` — top 3 entries only; honor **Do not redo** and **Resume with**
 
@@ -46,6 +47,7 @@ cd frontend && npm run test:e2e     # Playwright
 - Every piece of work is a Task issue first (`.github/ISSUE_TEMPLATE/task.md`: Goal, Owned paths, Tests to write first, Done when). Stay inside its Owned paths.
 - One task per session. Done means tests pass and the task's "done when" is met.
 - Plan before code on anything non-trivial; ask when unsure.
+- Push your branch before a session ends; unpushed commits are invisible to the next session. Before building on a "final" design, check the base branch actually contains it.
 - Branch from `staging-render` and open PRs into it. Don't merge `staging-render` into `main` unless the owner asks.
 - Keep the PWA same-origin with the API (session cookies). No separate frontend host.
 - Never run `load_recipe_seed --force` against a shared URL. `load_starter_recipes` is safe anywhere.

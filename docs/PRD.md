@@ -1,8 +1,8 @@
 # Trial and Eclair — Product Requirements Document
 
-**Version:** 1.5  
-**Status:** Approved — Phases 0–4 complete; **Phase UI complete**; **UI polish complete**; **2.0 frame milestones 1–3 built on `staging-render`**  
-**Last updated:** October 2026
+**Version:** 1.6  
+**Status:** Approved — Phases 0–4 complete; **Phase UI complete**; **UI polish complete**; **2.0 frame milestones 1–3 built on `staging-render`**; **kitchen home designed (Plates XI and XII signed off), not built**  
+**Last updated:** November 2026
 
 > **Doc maintenance:** At the end of each phase, update this file and [README.md](../README.md): phase status table, shipped scope, API/frontend notes, and open items.
 
@@ -44,7 +44,7 @@ Three personas. **Home Cook** and **Recipe Developer** are **separate roles** wi
 | **Recipes** | Manual entry, import | Versioning, test sessions | Read only |
 | **Publish** | No | Recipes + cookbooks + story/photo | — |
 | **Fork others' recipes** | → recipe box | → development track | — |
-| **Reference library** | Yes (account required) | Yes | — |
+| **Library** (references; cookbooks you save) | Yes (account required) | Yes, plus the cookbooks you publish | — |
 
 ### Auth model
 
@@ -80,8 +80,8 @@ Two layers:
 2. Add recipes manually, from URL, photo, or PDF
 3. View recipes as **index-card** aesthetic in A–Z order
 4. **Fork** a published recipe — editable copy, linked to original
-5. Browse **reference library** (cookbooks owned, blogs, chefs, tools)
-6. No categories, cookbooks, versioning, or publishing
+5. Browse the **Library**: the references shelf (cookbooks owned, blogs, chefs, tools); later, saved cookbooks from developers
+6. No categories, cookbooks of their own, versioning, or publishing
 
 ### Viewer (no account)
 
@@ -103,7 +103,8 @@ Two layers:
 | Cookbook snapshots | Each entry is a copy of the recipe made at add time and owned by the cookbook; editing, unpublishing or deleting the Lab recipe does not change a cookbook |
 | Fork visibility | Lineage on public pages; author can hide via `show_forks` |
 | Story | Recipe-attached only on published version |
-| Reference library | Both tiers; account required; metaphor shelf UI in Phase UI |
+| Library | The book shelf in the kitchen opens one view, the **Library**, holding a developer's own cookbooks and the references shelf; later also saved cookbooks (see §7). Both tiers; account required |
+| Saved cookbooks (later) | Any signed-in cook can save another user's published cookbook. A save is a link to the live published cookbook, not a copy: it leaves the shelf if its author unpublishes or deletes it |
 | Recipe journal | Private; editable; deletable; not shareable |
 | Public recipe layout | Ingredients in left column ([kraut-kopf style](http://www.kraut-kopf.de/recipe/shepherds-pie/?lang=en)) |
 | Ingredients | Global canonical + per-user aliases |
@@ -160,6 +161,7 @@ users (role + plan tier)
 | `RecipeFork` | Lineage when forking published recipes |
 | `CollectionRecipe` / `RecipeBoxItem` | Home cook single-version recipes; A–Z box |
 | `Reference` / `ReferenceLink` | Research shelf |
+| `SavedCookbook` (later) | A user's save of another user's published cookbook: `user`, `cookbook`, `saved_at`; unique per pair. A link, not a copy. Not built; no migration yet |
 | `UrlRecipeImport` | Deduped read-only URL cache |
 | `SourceDocument` | Photo/PDF import provenance |
 
@@ -193,9 +195,19 @@ Original never modified. UI: “Based on [Title] by [Author]”.
 
 ---
 
-## 7. Reference library
+## 7. Library
 
-Personal **research shelf** — not recipes, not cookbooks,
+The **Library** is the view the kitchen's book shelf opens (Ari, 2026-11-19; name picked 11/19). One view, two parts on the same shelf:
+
+- **Cookbooks:** the developer's own published collections (section 4, "Cookbook snapshots"). Home cooks and guests see the read-only sample.
+- **References:** the personal research shelf below.
+- **Saved cookbooks (later):** other users' published cookbooks that a cook has saved. They sit on the cookbook part of the shelf beside the cook's own. A save links to the live cookbook and drops off if the author unpublishes or deletes it (`SavedCookbook`, section 5). The first Library leaves room for them; they are not built with it.
+
+Its address is `/library` ([decision 005](decisions/005-web-addresses.md)). The cookbook and reference views drawn in Plate XI stay as the parts inside it. How the two parts sit in one view is drawn with the open views (PLAN.md step 2).
+
+### References
+
+Personal **research shelf** — not recipes, not cookbooks.
 
 Examples: cookbooks you own, blogs you follow, pastry chefs, articles/tools (Kitchn Baking School, etc.).
 
@@ -247,7 +259,8 @@ Phase 5+: Python sidecar with tools like `get_version_diff`, `scale_recipe`, `su
 | **UI+** | Freeform cork-board canvas (drag layout, optional string links) | Planned (post–Phase UI) |
 | **2.0 frame** | Recipe-card login, in-frame navigation, phone list and one notebook page, local walkthrough fixtures, short Playwright pass | **Milestones 1–3** — [milestone plan](milestone-1-2-technical-plan.md) |
 | **Recipe Box** | Phone recipe box (lid, A–Z tabs, fan, Card View), guest mode, starter cards, throttles. Plan: [docs/recipe-box/](recipe-box/README.md) | In progress: #41–#45, the phone box design pass (#63), ingredient text (#65) and Card View (#64) shipped; guest and starter-card UI on the phone (#56) in review |
-| **Kitchen home** | One kitchen scene as the signed-in home, views open over it, "back to kitchen" ([decision 004](decisions/004-kitchen-home.md)) | Decided; not built yet |
+| **Kitchen home** | One kitchen scene as the signed-in home, views open over it, "back to kitchen" ([decision 004](decisions/004-kitchen-home.md), addresses in [005](decisions/005-web-addresses.md)). Drawn as Ari's traced kitchen (Plate XII, signed off 2026-11-20); rules in Appendix A | Designed; not built yet |
+| **Saved cookbooks** | Save other users' published cookbooks onto the Library shelf (section 7) | Planned, after the kitchen build |
 
 **MVP (first shippable product):** Phases 0 + 1 + 2 — **complete**. A developer can iterate, publish, and share; a viewer can read published recipes at `/r/{slug}`. Home cook tier and cookbooks are Phase 3+.
 
@@ -334,7 +347,9 @@ Export command: `python manage.py export_recipe_seed` → `seed/data/`
 | Additional color/font presets | After Phase UI C1 token architecture |
 | Cookbook re-release (point an entry at a newer version) | Later. Entries stay frozen. Sort order is the only edit today |
 | `User.updated_at` | Later. `date_joined` and `last_login` exist |
-| Kitchen illustration as the signed-in home | Decided in [decision 004](decisions/004-kitchen-home.md); not built yet |
+| Kitchen illustration as the signed-in home | Decided in [decision 004](decisions/004-kitchen-home.md), drawn as Plate XII; not built yet |
+| Saved cookbooks: who can save, and a limit | Any signed-in cook, link to the live cookbook (decided). Open: whether a cook sees who published it, whether the author is told, and a cap on saves. Decide before the Saved cookbooks phase |
+| Kitchen light by place | The light and rainbows follow the device clock. Time zone or location (decision 004 Q16) stays open |
 | Second Render service for production (`main`) | When there is a public URL. `staging` uses the current service |
 | Voice / dictation | Roadmap |
 
@@ -353,7 +368,20 @@ Visual references: `recipes/` screenshots and photographs — cork board, recipe
 
 Lab never uses index-card dimensions. Recipe box never uses notebook spread layout.
 
-On a phone, the lab shows **one notebook page at a time** (ingredients, or steps). The two-page spread is the wide-screen layout. The signed-in home is becoming one kitchen scene ([decision 004](decisions/004-kitchen-home.md)); on a phone it is a simpler, tall kitchen whose recipe box opens the Recipe Box. The recipe box is a title list, then one card filling the screen; the Recipe Box view (#45) replaces this phone layout. Wide screens keep the existing box, cork, binder, and shelf pictures. Login and signup are one recipe card for every persona. A developer’s title-only note is an idea on the cork board. A home-cook box card needs a title and at least one ingredient or step. Implementation: [milestone-1-2-technical-plan.md](milestone-1-2-technical-plan.md).
+On a phone, the lab shows **one notebook page at a time** (ingredients, or steps). The two-page spread is the wide-screen layout. The signed-in home is becoming one kitchen scene ([decision 004](decisions/004-kitchen-home.md)); on a phone it is a simpler, tall kitchen whose recipe box opens the Recipe Box. The recipe box is a title list, then one card filling the screen; the Recipe Box view (#45) replaces this phone layout. Wide screens keep the existing box, cork, binder, and shelf pictures until the kitchen home is built; see "Kitchen home" below. Login and signup are one recipe card for every persona. A developer’s title-only note is an idea on the cork board. A home-cook box card needs a title and at least one ingredient or step. Implementation: [milestone-1-2-technical-plan.md](milestone-1-2-technical-plan.md).
+
+### Kitchen home (Plate XII, signed off 2026-11-20)
+
+The kitchen is Ari's traced drawing and replaces the Plate XI kitchen. Rules that came out of the plates:
+
+- **Library:** the book shelf is one button and opens the Library (section 7), not separate cookbook and reference views.
+- **Recipe log:** a clipboard inside the open wall cupboard opens it, not the drawer stack. The drawers are plain.
+- **No fridge and no Recently list.** The phone's find list has no Recently chip row either.
+- **Pointing is a glow from behind the object only.** No rise, press or other movement.
+- **Light follows the cook's clock** (the device clock): rainbows from the window crystal at morning, midday and afternoon angles. In the evening there are none; the window glass goes to dusk and the room dims. Open views always use the day look.
+- **Eclair easter egg:** three eclairs cool on a wire rack. Each click takes one and the last is bitten before it goes. A reload puts all three back. Nothing is saved.
+- **Colours:** cooks recolour cabinets, wall and backsplash; the box colour is the brand colour and stays fixed.
+- **Every object is a real button or link** over the drawing, with a keyboard focus state.
 
 ### Lab margin tools
 

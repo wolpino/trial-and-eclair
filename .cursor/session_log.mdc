@@ -10,6 +10,450 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-21 · Why the test piece kept regressing; v17 pushed; one reference doc; docs archived
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-21` (regression audit and cleanup) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop), Opus |
+| **Outcome** | success (cause found, v17 pushed as PR #181, REFERENCE.md written, history archived; test piece not rebuilt yet) |
+
+### Intent
+Ari: the React test-piece chat kept producing versions thrown out plates ago, and yesterday's fix made it worse. Find out why, and make the design truth clean, current and short, so cheaper models can do simple tasks safely.
+
+### Summary
+- **Cause:** Plate XII v11–v17, the product changes and phone v5 were 30 commits on `docs/plate-x-cookbooks` that were never pushed or merged. `staging-render` stopped at v10/v11, the v17 handoff said "branch from staging-render", and the issue #180 test piece was built on the v10 kitchen. A session on 2026-11-21 then re-made v11/v12 decisions on top of it ("eclair trace embedded, flour/pin removed"). That work is **wrong for v17** and is archived on the local branch `archive/issue-180-v10-attempt`.
+- Pushed `docs/plate-x-cookbooks` and opened PR #181 into `staging-render`. Rebuilding with `node traced/clean.cjs` reproduces the committed v17 `kitchen.svg` exactly.
+- New `docs/design/REFERENCE.md`: the one source of truth, with pictures of the day kitchen, evening (new `shots/v17/tk_eve.png`), close-ups and hit areas (new `shots/v17/tk_hit.png`), plus a per-object table of looks, pointing, click and hit area.
+- `NEXT.md` cut to one prompt; old prompts moved to `.cursor/handoffs/archive/NEXT-2026-11-21-plates.md`. `PLAN.md` cut from 308 to about 80 lines, with build notes kept; the old plan moved to `docs/design/archive/PLAN-2026-11-21-plates.md`.
+- CLAUDE.md: REFERENCE.md added to "Read first"; new rule to push before a session ends and to check the base has the final design.
+- Memory: `kitchen-layout` (318 lines) and `visual-direction` cut to pointers, old text archived; `one-main-session` aligned with no-subagents; new `clean-before-next-step`.
+
+### Open threads
+- Ari merges PR #181, then the test piece is rebuilt on v17 (NEXT.md prompt).
+- REFERENCE.md open questions: should the Trials journals open the notebook; trim the whiteboard hit area off the mixer head.
+- Leftovers in the v17 source (flour/pin paths under a patch, one-value toggles, unused bottle and crystal options) are listed in REFERENCE.md. Remove them only if Ari wants, checked by a pixel diff.
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** regression cause, unpushed branch, REFERENCE.md, archive, PR #181, issue #180
+**Files:** docs/design/REFERENCE.md, docs/design/PLAN.md, .cursor/handoffs/NEXT.md, CLAUDE.md, design/plate-xii/shots/v17/
+**Do not redo:** anything from the 2026-11-21 v10-based test piece (eclair trace embedding, flour/pin tidyPatch, comp-journals port, LOG_TITLE): v17 already has all of it
+**Resume with:** `.cursor/handoffs/NEXT.md` (check PR #181 is merged first)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-20 · Phone Plate v5: kitchen from traced kitchen + Library view
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20T23:59:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | completed (v5 published; waiting on Ari's sign-off) |
+
+### Intent
+Redraw the phone kitchen from the traced Plate XII kitchen, add a Library view (one page, two parts), remove the Recently row, and publish as Phone Plate v5.
+
+### Summary
+Kitchen redrawn in `sections/01-kitchen.html` with the Plate XII elements: window + crystal + rainbow, cork board, whiteboard, clipboard "Kitchen log" on the left wall (pick A, Ari confirmed in session), recipe box on stacked journals, eclair rack, single Library shelf. `findEmpty()` replaces the old `recentList()`. New `sections/06-library.html` adds Library main (cookbook spines scrolling row + references cards) and a cookbook page. PREV screenshot mechanism added to `build.cjs` (injects `shots/01/pk_day.png` as base64). Built and published to https://claude.ai/artifact/8tvBLbfxEsEL48AzuMNeGy (artifact version 5). Publish required reading the live artifact first; several rounds of refusal resolved by calling `Artifact(action: "read")`.
+
+### Decisions
+- **Clipboard on the left wall at counter height (pick A)** — Ari confirmed in session (2026-11-20)
+- **Library = one page, two parts** — cookbook spines scrolling row on top, references cards below (Ari's pick 3a)
+- **No fridge, no Recently** — Plate XII product change, carried to phone
+
+### Changes
+- `design/phone/sections/00-questions.html` — v5 header, previous screenshot, two open questions
+- `design/phone/sections/01-kitchen.html` — full redraw: Plate XII kitchen stacked, clipboard pick A
+- `design/phone/sections/06-library.html` — new: Library main + cookbook page
+- `design/phone/build.cjs` — PREV screenshot injection
+- `design/phone/shots/v5/` — screenshots pk_day, pk_eve, lib_main
+- `docs/design/PLAN.md` — phone kitchen item ticked
+- `.cursor/handoffs/NEXT.md` — step 2 prompt marked done; new step 3 prompt added
+
+### Open threads
+- **Ari's sign-off on v5** — two questions: kitchen feel OK? Library layout OK?
+- After sign-off: tick PLAN.md "phone layout" section done, then start the React test piece (step 3)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** phone plate v5, kitchen from traced kitchen, Library view, clipboard Kitchen log, pick A, no Recently, no fridge
+**Files:** design/phone/sections/01-kitchen.html, design/phone/sections/06-library.html, design/phone/build.cjs, design/phone/shots/v5/, docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** Phone Plate v1–v4 (signed off); Plate XII v1–v17 (signed off); pointing movement (glow only)
+**Resume with:** wait for Ari's v5 sign-off; after yes, tick PLAN.md phone section and start the React test piece
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-20 · Product changes from the plates applied (PRD, README, decisions 004/005, PLAN.md)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20T23:59:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, docs only, no subagents) |
+| **Outcome** | completed (one pass; edits listed for Ari first and applied on her "go"; no app code) |
+
+### Intent
+Apply PLAN.md "Product changes from the plates" to the docs in one pass, then hand step 2 to Ari.
+
+### Summary
+- Ari's answers: Library addresses `/library` and `/library/cookbooks/<name>`; a saved cookbook is a link to the live cookbook and leaves the shelf if unpublished; research shelf renamed References inside the Library; 004 kept under its name with a "partly superseded" line (renaming would break links)
+- PRD v1.6: tiers table, stories, locked decisions, `SavedCookbook` (later), §7 Library, phase rows (Kitchen home designed, Saved cookbooks planned), open items, Appendix A "Kitchen home" (no fridge or Recently, recipe log clipboard in the open wall cupboard, glow only, rainbows by device clock and none in the evening, eclair egg)
+- Decision 005 amended; README phase rows only (no API table change); PLAN.md six product lines ticked, Build list and status rows updated, phone "Recently" chip row marked removed
+- NEXT.md top prompt moved to step 2
+
+### Decisions
+- **Saved cookbooks are links, not copies** (Ari)
+- **Library addresses** `/library`, `/library/cookbooks/<name>`; old `/cookbooks`, `/references` redirect
+
+### Open threads
+- Step 2: ask Ari how the open views and phone follow the new kitchen, and how the Library lays out its two parts. Ask before drawing
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** product changes applied, Library, saved cookbooks, PRD 1.6, decision 005 amended, step 2
+**Files:** docs/PRD.md, README.md, docs/decisions/004-kitchen-home.md, docs/decisions/005-web-addresses.md, docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** the product-changes pass; Plate XII v1–v17; rainbow/crystal/glow polish; pointing movement
+**Resume with:** NEXT.md top prompt (step 2: ask Ari how views and phone follow the new kitchen; ask before drawing)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-20 · Plate XII audit, then v17 final-ish (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20T23:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | completed (v17 published as artifact version 18; waiting on sign-off) |
+
+### Intent
+Ari couldn't find earlier plates, felt the last rounds hadn't made progress, and asked for a handoff audit and catch-up, then a final-ish Plate XII.
+
+### Summary
+- Compared v15 and v16 (`shots/v16/compare-v15-v16.png`): the v16 wash faded the window; the rainbow references weren't built; other changes were small
+- Audit: handoffs v11–v15 worked; v16's PLAN.md/NEXT.md/memory were left stale (would have redone v16); window, box lid, cupboard and pointing each looped 3+ rounds; Plate XII (17 versions in two days) was never on PLAN.md's path; the same artifact link hides old versions
+- Ari's picks: G2 amber, K2, rainbows simple, no more polish. v17: options and old v1/v2 sections removed (`sections/old/`), no wash, page top shows the v16 screenshot (`PREV` in build.cjs) and every version in one line
+- Clean-up: removed my v16 window stub line; tried to fix the cupboard-door seam, couldn't, reverted and left it
+
+### Decisions
+- **Stop polishing Plate XII** — rainbow references, other crystals and glow tuning on the Later list
+- **Every plate shows the previous version and a change list** — memory `plate-focus`
+
+### Open threads
+- Ari **signed off Plate XII v17** (2026-11-20). Next: product changes into the PRD, README and decision 005 in one pass (list the edits for Ari first)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v17 signed off, handoff audit, stop polishing, previous screenshot, change list
+**Files:** design/plate-xii/traced/add.cjs, base/xii.css, build.cjs, sections/00-questions.html, sections/005-traced.html, sections/old/, docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** Plate XII v1–v17 as drawn; rainbow/crystal/glow polish (Later list); window, box lid, cupboard lines (accepted as is); pointing movement
+**Resume with:** NEXT.md top prompt (product changes into the PRD; list the edits for Ari first)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-20 · Plate XII v16: rainbows by time of day, glow options, cupboard and window fixes (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20T00:00:00Z` |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts; continued from compacted session) |
+| **Outcome** | completed (Plate XII v16 published; questions to Ari; no app code) |
+
+### Intent
+Draw Plate XII v16 from Ari's v15 notes: no pointing movement, time-of-day rainbows, cupboard interior in trace ink style, window and stray marks fixed, glow options in new colours.
+
+### Summary
+- Pointing: removed C1/C2 movement rules entirely; added G1 green and G2 amber glow vars; default is G2 amber; B3 sticker dilate radii fixed (5.0/6.4) to close the cream-band gap from v15
+- Rainbows: full rewrite — R1/R2/R3 controls gone; all three types (beams, partial beams, scattered flecks + curved spots) always on; am/pm add a warm golden room wash (screen blend from crystal position); noon is crisper without wash; eve has no rainbows
+- Cupboard interior: stroke widths and wob amplitudes raised throughout `interior()` and `jar()` to match the trace's thick wobbly ink style
+- Window: overlay strokes added in `windowFix()` for even line weight on top, right and inner-left frame edges
+- Above box lid: wall-colour rect patched in `opts()` before the box decoration to cover stray traced marks
+- Published to artifact JpRfR1F4DZCy9ctDCezeZj (v17, 2.4 MB); two questions open: pointing pick (G2 amber recommended) and crystal pick (K2 recommended)
+
+### Decisions
+- **No pointing movement** — Ari confirmed (v15 notes); C1/C2 dropped permanently
+- **Time-of-day rainbows** — R1/R2/R3 wrappers replaced by one renderer per time of day; room wash only for am/pm
+- **B3 dilate 5.0/6.4** — matches INK_GROW=6 so cream band is flush to ink outline
+
+### Changes
+- `design/plate-xii/traced/add.cjs` — rainbow rewrite, roomWash(), glow vars, cupboard line weights, window overlay, wall patch above box lid; DEF removes r1/r2/r3
+- `design/plate-xii/traced/clean.cjs` — halo-st filter dilate radii 5.0/6.4
+- `design/plate-xii/base/xii.css` — C1/C2/pick rules removed; g1/g2 glow vars added
+- `design/plate-xii/sections/005-traced.html` — data-pt="g2", new controls, v16 changelog
+- `design/plate-xii/sections/00-questions.html` — two questions (pointing, crystal)
+- `design/plate-xii/traced/closeups.html` — rb-am closeup replaces rs1/rs2/rs3
+- `design/plate-xii/traced/kitchen.svg` — rebuilt by clean.cjs
+
+### Open threads
+- Ari's two questions: pointing (B3/G1/G2) and crystal (K1–K5)
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v16, rainbows by time of day, room wash, glow pointing, B3 sticker fixed, cupboard ink style, window even weight
+**Files:** design/plate-xii/traced/add.cjs, design/plate-xii/traced/clean.cjs, design/plate-xii/base/xii.css, design/plate-xii/sections/005-traced.html, design/plate-xii/sections/00-questions.html
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v16 as drawn; pointing movement (dropped); R1/R2/R3 controls (replaced by time-of-day)
+**Resume with:** Ari's answers to v16 questions (pointing + crystal); then next round or task issues
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-20 · Plate XII v15 notes filed (notes mode); plate-round skill updated
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20` (v15, continued) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, notes mode, no drawing) |
+| **Outcome** | success (v16 notes filed; no new artifact; no app code) |
+
+### Intent
+Ari reviewed v15 and sent notes in chat to save for a fresh session, the first use of "notes mode".
+
+### Summary
+- Pointing: no movement at all (rise "delayed and jerky", press "cartoonish"); next show B3 sticker aligned and a glow in a new colour (green from the glass bottle, or tied to the rainbows). New memory `no-pointing-movement`; PLAN.md brand hold "build uses G1" changed to no movement
+- Rainbows: three reference pictures (room wash + flecks, fanned flecks + sunbeam, long beams); new examples first, look mostly soft, crystal waits on them
+- Cupboard: lines must match the trace's thick wobbly ink
+- Refs saved: `design/plate-xii/refs/v16-*.webp` (pantry, three rainbow refs); `shots/v15/`
+- `plate-round` skill: "How we work" (ask first, no subagents, confirm before builds, no movement, one round per chat) and "Notes mode"
+
+### Open threads
+- Still open from v15: pantry right, "space above the lid" (nub or empty wall), window and spines, which rainbow kinds stay
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v16 notes, notes mode, no pointing movement, rainbow references
+**Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, .claude/skills/plate-round/SKILL.md, design/plate-xii/refs/v16-*.webp
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v15 as drawn (tweak only); Ari's v13/v14 picks; pointing movement (dropped)
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt (Plate XII v16)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-20 · Plate XII v15: pointing options, crystals, rainbows, pantry cupboard (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20` (v15) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents; switched to Opus mid-session) |
+| **Outcome** | success (Plate XII version 16 published; questions to Ari; no app code) |
+
+### Intent
+First round under the low-usage workflow: options settled in chat, then one build. Ari asked for pointing options B2, B3, C1, C2 plus Claude's pick; the open cupboard redrawn from her pantry picture (real words on the jars, perspective kept, clipboard where it fits); crystal options with a turn on click; many small rainbows and partial beams in several looks.
+
+### Summary
+- `add.cjs`: `interior()` rewritten (wood, shelves seen from below, `jar()` + `at(Z)` set back by the projection), `hinges()`; `CRYSTALS` K1–K5 (`drop()`, `ball()`, `oct()`, `quartz()`, `.cr-spin`); `rainbows()` (main beams + `PART` + `scatter()` + `THINGS`, one `.rb > .rb-turn` group, `spot()` = six stripes side by side); `windowFix()`, `lidTab()`; DEF cr 2, r1–r3 on
+- `clean.cjs`: book blues no longer follow `--cab` (`BOOK_BLUE`, `pop()` on spines); `RECOLOR` for single shapes; sticker filter `halo-st`
+- Page: Pointing (`data-pt`), Crystal, Rainbow look (`data-rs`), R1–R3, time, cabinets, wall; crystal button turns it (JS, damped); close-ups click to pick
+- Checked: each pointing mode on hover, press, the turn, rainbow looks, evening hides rainbows, no console errors; page 2.5 MB
+
+### Open threads
+- Ari: the seven v15 questions (page top). "Space above the box lid" may mean the empty wall, not the nub: asked
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v15, pointing options, crystals, rainbows, pantry cupboard, blue spines
+**Files:** design/plate-xii/traced/add.cjs, traced/clean.cjs, sections/00-questions.html, sections/005-traced.html, base/xii.css, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v15 as drawn (tweak only); Ari's v13/v14 picks
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v15 waiting on Ari (low-usage workflow)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-20 · Plate XII v14 feedback recorded; workflow change requested (no drawing)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20` (v14 feedback) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, no drawing, no subagents) |
+| **Outcome** | success (feedback filed; workflow decision pending; no app code, no new artifact) |
+
+### Intent
+Ari answered v14 (rack good) and gave several more notes. She also asked to move to a lower-usage workflow before the next round and asked for a plan with options rather than picking one herself.
+
+### Summary
+- Filed Ari's v14 notes as "v15 notes from Ari" in `docs/design/PLAN.md` and the `kitchen-layout` memory: glow too subtle against the wall (maybe wallpaper, maybe a stronger/different glow), window issues (left side, below the sill), the space above the recipe box lid, open-cupboard dishes looking out of place (empty vs. more realism) and the cupboard itself, blue book spines to bring back, a few small suncatcher-style rainbows. Filed separately as "for later": night bird/shooting star, day moon/sun-clouds
+- New `workflow-lower-usage` memory: her request to settle questions in chat before drawing, and do small fixes directly instead of one subagent per fix, until she picks an approach
+- `.cursor/handoffs/NEXT.md` retitled to say v15 drawing should wait on the workflow decision
+- Nothing drawn or published this session
+
+### Decisions
+- Ari picked (2026-11-20): questions first in chat for real choices, no subagents, confirm before a bigger run (she's sometimes sent a message before meaning to), batch notes where reasonable. Written to the `workflow-lower-usage` memory and into NEXT.md's v15 prompt
+
+### Open threads
+- v15 notes wait on the next session, which should follow the decided workflow above
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** v15 notes, workflow lower usage decided, no drawing this session
+**Files:** docs/design/PLAN.md, .cursor/handoffs/NEXT.md, kitchen-layout memory, workflow-lower-usage memory
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v14 as drawn (tweak only); Ari's v13/v14 picks
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt for v15 (follow the decided workflow: questions first, no subagents, confirm before building)
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-20 · Plate XII v14: picks set, glow from behind, rack whole, wall cleaned (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20` (v14) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, two subagents in worktrees) |
+| **Outcome** | success (Plate XII v14 published; questions to Ari; no app code) |
+
+### Intent
+Ari answered v13: J2, T1, 2700K, P1, Next up; glow warm white but only from behind objects; wall as traced, cleaned at the edges; Library as bright as the cupboard in the evening; fix the wire rack under the eclairs.
+
+### Summary
+- Main session: picks set, losing options, controls, thumbnails and handlers removed; wall clean-up in clean.cjs (specks dropped, wall-coloured room shapes follow --wall, whiteboard backing); duskWash() leaves the bookshelf out
+- Subagent 1: one halo per object behind its outline (halos() in clean.cjs, `<use>` of the object's groups, silhouette cut out)
+- Subagent 2: rackGrid() continues her rack's wires under and over her rack as eclairs go
+- Checked: magenta-wall render, hover on box and shelf, rack states 0–5, evening; no console errors; page 2.2 MB
+
+### Open threads
+- Ari: v14 questions; then the full clean-up pass and sign-off
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v14, halos, rackGrid, wall clean-up, duskWash
+**Files:** design/plate-xii/traced/clean.cjs, traced/add.cjs, sections/00-questions.html, sections/005-traced.html, base/xii.css, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v14 as drawn (tweak only); the ink split; taller frame; the ports; Ari's v13 picks
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v14 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-20 · Kitchen Progression: Story view (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-20` (progression story) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts) |
+| **Outcome** | success (Story view published; lines waiting on Ari's corrections; no app code) |
+
+### Intent
+Ari wanted a change log starting from her current picks and the eclairs, unsure it was the right thing. Agreed: not a change log (that is for shipped releases) but a design story built from her picks, no backfill.
+
+### Summary
+- `design/progression/story.json`: one line per kitchen (what changed since the last pick, drafted from the session log and round notes) and a 30-step eclair strand, each step anchored to a gallery item
+- Page: All shots / Story switch (`#story`). Story lists picks live from `picks/main` (43 now), a "Not in your picks" note where stages were skipped, eclair steps under the kitchen they came with (or the next pick after)
+- Ari's picks now 43 (Plates X, XI, Brand Sheet dropped; studies added); the GIF still shows the old 47
+
+### Open threads
+- Ari to correct any line; Plate XII v11-v13 are not in the gallery yet
+- Each new round: add its kitchen to build.py, a line to story.json when Ari picks it
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** kitchen progression, story, design history, eclair strand
+**Files:** design/progression/ (story.json, index.html, build.py, eclairs.py)
+**Do not redo:** the renders and dedupe; the story lines unless Ari corrects them
+**Resume with:** add Plate XII v11-v13 to build.py and story.json, republish https://claude.ai/artifact/E4xdK2o9H9iYMPpM8M7Juw; remake the GIF from picks/main if Ari asks
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-19 · Plate XII v13: journals square, bites, evening light, labels, glow and wall options (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v13) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, four subagents in worktrees) |
+| **Outcome** | success (Plate XII v13 published; questions to Ari; no app code) |
+
+### Intent
+Ari: follow the NEXT.md top prompt (v13 list from her notes on v12) and use subagents to work efficiently.
+
+### Summary
+- Main session: sill B3 only (B1/B2, their ports and control removed), cupboard bowl stack back
+- Four subagents, each in its own worktree branch, merged here (conflicts only on the DEF and pick lines): journals J1–J3 + "Trials" T0–T2; eclair bites (states 0–5) + brighter rainbows; evening under-cabinet light L2200–L4000, glow colours G1–G4 via CSS vars, white/cream walls + thumbnails; bigger Kitchen log and Ideas, shelf plaques P1–P3, whiteboard heading
+- Checked merged page: no console errors, bites and evening light render, close-ups and wall thumbnails; page 2.2 MB
+
+### Decisions
+- Subagent worktrees started from main (no design/), each reset to 085e717; brief future agents to start from the docs branch
+- Questions picks: J2, T1, L2700, P1, Next up, G1, W2
+
+### Open threads
+- Ari: the seven v13 questions; known nits listed in NEXT.md
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v13, journals affine, eclair bites, evening light, plaques, glow vars, wall thumbnails
+**Files:** design/plate-xii/traced/add.cjs, sections/00-questions.html, sections/005-traced.html, base/xii.css, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v13 as drawn (tweak only); the ink split; taller frame; the ports
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v13 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-19 · Plate XII v12: rack under the window, notebook moved, flour and pin gone (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v12) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v12 published; questions to Ari; no app code) |
+
+### Intent
+Ari on v11: move the open notebook left half way to the recipe box; journal stack the size of the notebook closed; remove flour and rolling pin, put the eclair rack there under the window; remove the plate with the eclair; Kitchen log is good; sent a full rack trace and another bottle set.
+
+### Summary
+- refs/eclair-rack2.svg and refs/bottles-window2.svg ported (`port.cjs` pieces rack2, bottles-w2-left/right; top cut by dark-pixel scan; viewBox read from the file)
+- `add.cjs`: rack() from RACK2 under the window; B3 newest bottles (default); journals k .31; SHIFT/HULL/patch move the traced notebook (clean.cjs copies the base inside the hull, moved, patch under); tidy on for good; cupboard bowl stack removed
+- Tested: three clicks empty the rack, notebook glows in its new spot, no console errors; page 2.6 MB
+
+### Decisions
+- Moving traced shapes one by one broke the notebook (its cover is the shared underlay), so the notebook is copied as seen inside its outline instead
+- Took the cupboard bowl stack to be the "plate with the eclair"; asked to confirm
+
+### Open threads
+- Ari: B3/B1/B2; bowl stack = plate?; rack size; journals size; taken vs bites; times of day. Page size 2.6 MB
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v12, rack under window, notebook shift, hull, B3 bottles
+**Files:** design/plate-xii/traced/port.cjs, traced/ports/, traced/add.cjs, traced/clean.cjs, sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v12 as drawn (tweak only); the ink split; taller frame; the ports (rerun port.cjs only if a ref changes)
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v12 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
+## 2026-11-19 · Plate XII v11: Ari's rack, journals and bottles ported (published)
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-19` (v11) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (Plate XII v11 published; questions to Ari; no app code) |
+
+### Intent
+Ari: follow the NEXT.md top prompt (port her eclair-rack and composition-journal traces) and use the three bottle SVGs attached this time (trio, fluted decanter, carafe + flask).
+
+### Summary
+- Bottle SVGs filed as `design/plate-xii/refs/bottles-{trio,decanter,pair}.svg`
+- New `traced/port.cjs` -> `traced/ports/*.json`: keep mode for bottles (window colours dropped, ink by mask), clip mode for rack and journals (outline polygons; rack top from pixels; desk colours dropped so her underlay outlines the journals)
+- `add.cjs`: rack() uses her eclairs and rack (E3 = her E2 again, drawn wire patch under them, data-var `a|b` alternatives also in the page's apply()); stackFront() is her journals; sill B1 her trio, B2 her decanter + the trio's amber; LOG_TITLE "Kitchen log"; old glass/compBook-stack code for these removed (compBook helpers left)
+- Tested: three clicks take the eclairs, button gone, no console errors; day and evening checked; page 1.7 MB
+
+### Decisions
+- Carafe and flask (old B4) filed, not shown (Ari called B4 a misclick); asked
+- Her halftone shadow under the journals left out (it was on the desk); flat shadow instead
+
+### Open threads
+- Ari: B1 or B2; B3 carafe; rack and journals OK; taken vs bites; flour and pin; log title; times of day
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Plate XII v11, port.cjs, vector traces, eclair rack, journals, bottles
+**Files:** design/plate-xii/traced/port.cjs, traced/ports/, traced/add.cjs, refs/, sections/00-questions.html, sections/005-traced.html, docs/design/PLAN.md
+**Do not redo:** layout rounds 1–10; Plates II–XI; Phone Plate; Mark Plate; Brand Sheet; Plate XII v1–v11 as drawn (tweak only); the ink split; taller frame; the ports (rerun port.cjs only if a ref changes)
+**Resume with:** `.cursor/handoffs/NEXT.md` top prompt; Plate XII v11 waiting on Ari
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-19 · Kitchen Progression gallery (published)
 
 | Field | Value |

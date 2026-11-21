@@ -29,6 +29,11 @@ const SCRIB = [
   [62, 262, 178, 300, 9, .72, "box"],     /* letters on the box tabs */
   [418, 18, 660, 108, 9, .72, "cookbooks references"],     /* titles on the book spines */
 ];
+/* the wall, clean (Ari 11/20, "as traced, but clean up around the edges"): stray specks on the wall go, wall-coloured
+   pieces outside any object follow --wall, and the whiteboard gets a backing (clear of the mixer) so the holes left by its deleted writing
+   don't show the wall through */
+const DROP = [1362, 1363, 1364, 299, 317, 385, 432];   /* specks on the wall left of the window; grey marks beside the mixer head */
+const WALL_FILL = "#F6E9CB", WB_SURFACE = 266, WB_BACK = '<path d="M466 143 H579 V194 H545 V245 H522 V287 H466Z" style="fill:#FAF8E8"/>';
 const INK_GROW = 6;   /* stroke width that grows an object's shapes into its ink mask (3 units each side) */
 const TOP = 44;   /* units moved from the bottom of the frame to the top (bottom = middle drawer's bottom, y 440) */
 /* shapes inside an object's box that belong elsewhere: [object, test(shape, cx, cy, hue), new object] */
@@ -37,9 +42,19 @@ const MOVE_TO = [
   ["mixer", (q, cx, cy) => WOODY(q.fill) && cy > 300, "room"],   /* counter wood showing between the mixer's feet */
   ["mixer", (q, cx, cy) => cx < 546 && cy < 266, "whiteboard"],  /* whiteboard specks left of the mixer head */
 ];
+function inPoly(x, y, P) { let c = false; for (let i = 0, j = P.length - 1; i < P.length; j = i++) if ((P[i][1] > y) !== (P[j][1] > y) && x < (P[j][0] - P[i][0]) * (y - P[i][1]) / (P[j][1] - P[i][1]) + P[i][0]) c = !c; return c; }
 function hsl(h) { const r = parseInt(h.slice(1, 3), 16) / 255, g = parseInt(h.slice(3, 5), 16) / 255, b = parseInt(h.slice(5, 7), 16) / 255, mx = Math.max(r, g, b), mn = Math.min(r, g, b), l = (mx + mn) / 2, d = mx - mn;
   let hu = 0, s = 0; if (d) { s = l > .5 ? d / (2 - mx - mn) : d / (mx + mn); hu = mx === r ? ((g - b) / d + (g < b ? 6 : 0)) : mx === g ? (b - r) / d + 2 : (r - g) / d + 4; hu /= 6; } return [hu, s, l]; }
 const isBlue = (h) => { const [hu, s, l] = hsl(h); return hu > .48 && hu < .62 && s > .12 && l > .12 && l < .82; };
+function hex(hu, s, l) { const f = (n) => { const k = (n + hu * 12) % 12, a = s * Math.min(l, 1 - l); return Math.round(255 * (l - a * Math.max(-1, Math.min(k - 3, 9 - k, 1)))).toString(16).padStart(2, "0"); }; return "#" + f(0) + f(8) + f(4); }
+/* v15 book spines: the traced blues are books, not cabinets (they had followed --cab, so the blue books went green);
+   and every spine's colour is pushed a little so they pop */
+const BOOK_BLUE = "#3E64A6";
+const isSpine = (q) => q.h > 6 && q.h > q.w * 1.3;
+function pop(h) { const [hu, s, l] = hsl(h); return s < .2 ? h : hex(hu, Math.min(.88, s * 1.35), l > .6 ? l : l * 1.04); }
+/* single traced shapes recoloured: the cork board frame's left side face (was a pale grey sliver); pale bits under the sill's left end */
+const SILL_END = "var(--trim-9D6F45,#9D6F45)";
+const RECOLOR = { 1094: "#9D6F45", 260: SILL_END, 261: SILL_END, 263: SILL_END };
 const MAIN = hsl("#6D8C97")[2];
 function shade(v, h) { const l = hsl(h)[2]; return l >= MAIN ? "color-mix(in srgb," + v + " " + Math.round(100 - (l - MAIN) / (1 - MAIN) * 100) + "%,#fff)" : "color-mix(in srgb," + v + " " + Math.round(100 - (MAIN - l) / MAIN * 100) + "%,#1f1d1a)"; }
 const r1 = (d) => d.replace(/-?\d*\.\d+/g, (n) => (+(+n).toFixed(1)).toString());
@@ -59,6 +74,48 @@ function extend(id) {
     '<g clip-path="url(#' + id("x-cub") + ')">' + use + ' transform="translate(0 ' + (-CUB_PITCH) + ')"/></g>' +
     '<g clip-path="url(#' + id("x-cubi") + ')">' + use + ' transform="translate(' + (2 * cx) + " " + (-CUB_PITCH) + ') scale(-1 1)"/></g>';
 }
+/* v14 glow, from behind: one halo per hit area, made from the union of all that object's groups (<use> copies, no path data),
+   shown only outside the object's outline: a crisp rim (--glow1) and a soft glow (--glow2), cut out by the object's own alpha,
+   so cards, tabs and single books never glow. Drawn on top of the kitchen, hidden until .lit (005-traced.html lit()).
+   A shifted object (notebook) uses its traced groups moved, not the hull copy (that is a whole patch of the scene).
+   Only the outline counts, so a few shapes fill it out: the bookshelf's back (its books would get a halo each) and the
+   cubby added on top (extend). HALO_CLIP leaves out specks the tracing gave an object (wood grain beside the box);
+   HALO_CUT keeps a halo behind what stands in front of the object (the mixer in front of the whiteboard). */
+const HALO = [["box"], ["notebook"], ["ideas"], ["whiteboard"], ["cookbooks", "references"], ["eclair"], ["clip"]];
+const HALO_EXTRA = { cookbooks: '<rect x="410.9" y="-45" width="251.3" height="56"/><rect x="420" y="-45" width="235" height="158"/>' };
+const HALO_CLIP = { box: [[28, 200], [186.5, 200], [186.5, 300], [193, 300], [193, 374], [58, 374], [50, 340], [28, 340]] };
+const HALO_CUT = { whiteboard: ["mixer"] };
+function halos(id, parts, SH) {
+  const f = id("halo"), REG = 'maskUnits="userSpaceOnUse" x="-100" y="-100" width="1100" height="700"';
+  const uses = (o) => (parts[o] || []).filter((p) => p.k !== "hull").map((p) => '<use href="#' + p.n + '"' + (SH[o] && p.k === "base" ? ' transform="translate(' + SH[o].join(" ") + ')"' : "") + "/>").join("");
+  let s = '<defs><filter id="' + f + '" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">' +
+    '<feMorphology in="SourceAlpha" operator="dilate" radius=".6" result="d"/>' +
+    '<feGaussianBlur in="d" stdDeviation=".6" result="r0"/><feComponentTransfer in="r0" result="r"><feFuncA type="linear" slope="2"/></feComponentTransfer>' +
+    '<feFlood class="halo1"/><feComposite in2="r" operator="in" result="rim"/>' +
+    '<feGaussianBlur in="d" stdDeviation="1.6" result="m0"/><feComponentTransfer in="m0" result="m"><feFuncA type="linear" slope=".9"/></feComponentTransfer>' +
+    '<feFlood class="halo1"/><feComposite in2="m" operator="in" result="mid"/>' +
+    '<feGaussianBlur in="d" stdDeviation="4" result="s0"/><feComponentTransfer in="s0" result="s"><feFuncA type="linear" slope="1.6"/></feComponentTransfer>' +
+    '<feFlood class="halo2"/><feComposite in2="s" operator="in" result="soft"/>' +
+    '<feMerge><feMergeNode in="soft"/><feMergeNode in="mid"/><feMergeNode in="rim"/></feMerge><feComposite in2="SourceAlpha" operator="out"/></filter>' +
+    '<filter id="' + id("halo-k") + '"><feFlood flood-color="#000"/><feComposite in2="SourceAlpha" operator="in"/></filter>' +
+    /* v15 B3 sticker: a crisp cream band round the outline with a thin ink edge, like a die-cut sticker (the page swaps it in by CSS) */
+    '<filter id="' + id("halo-st") + '" x="-30%" y="-30%" width="160%" height="160%" color-interpolation-filters="sRGB">' +
+    /* v16: radii tuned to INK_GROW=6 so cream sits flush against the traced ink outline with no visible gap */
+    '<feMorphology in="SourceAlpha" operator="dilate" radius="5.0" result="c"/><feMorphology in="SourceAlpha" operator="dilate" radius="6.4" result="e"/>' +
+    '<feFlood flood-color="#0D0C0B"/><feComposite in2="e" operator="in" result="ink"/><feFlood flood-color="#FFFDF4"/><feComposite in2="c" operator="in" result="cream"/>' +
+    '<feMerge><feMergeNode in="ink"/><feMergeNode in="cream"/></feMerge><feComposite in2="SourceAlpha" operator="out"/></filter>';
+  Object.keys(HALO_CLIP).forEach((o) => { s += '<clipPath id="' + id("halo-c-" + o) + '"><polygon points="' + HALO_CLIP[o].map((p) => p.join(" ")).join(" ") + '"/></clipPath>'; });
+  Object.keys(HALO_CUT).forEach((o) => { s += '<mask id="' + id("halo-m-" + o) + '" ' + REG + '><rect x="-100" y="-100" width="1100" height="700" fill="#fff"/><g filter="url(#' + id("halo-k") + ')">' + HALO_CUT[o].map(uses).join("") + "</g></mask>"; });
+  s += '</defs><g class="halos">';
+  HALO.forEach((objs) => {
+    const o = objs[0];
+    let u = objs.map(uses).join("") + (HALO_EXTRA[o] || "");
+    if (HALO_CLIP[o]) u = '<g clip-path="url(#' + id("halo-c-" + o) + ')">' + u + "</g>";
+    u = '<g filter="url(#' + f + ')">' + u + "</g>";
+    s += '<g data-halo="' + objs.join(" ") + '"' + (HALO_CUT[o] ? ' mask="url(#' + id("halo-m-" + o) + ')"' : "") + ">" + u + "</g>";
+  });
+  return s + "</g>";
+}
 (async () => {
   const src = fs.readFileSync(path.join(D, "source.svg"), "utf8");
   const b = await chromium.launch(), p = await b.newPage();
@@ -69,6 +126,8 @@ function extend(id) {
   /* pass 1: which object each shape belongs to, and which go */
   const items = [];
   ps.forEach((q, i) => {
+    q.i = i;
+    if (DROP.includes(i)) { rep.dropped++; return; }
     if (i === 0) { items.push({ obj: "wall", q, wall: true }); return; }
     if (hsl(q.fill)[2] < .16 && q.w > 300) { items.push({ obj: "ink", q, ink: true }); rep.ink.push([i, q.fill, Math.round(q.w), Math.round(q.h)]); return; }
     const cx = q.x + q.w / 2, cy = q.y + q.h / 2, L = hsl(q.fill)[2];
@@ -82,6 +141,8 @@ function extend(id) {
   const objs = OBJ.map((o) => o[0]);
   const ATTRS = (q) => (q.op ? ' fill-opacity="' + q.op + '"' : "") + (q.rule ? ' fill-rule="' + q.rule + '"' : "");
   function fillOf(it) { const q = it.q, T = ADD.TRIM[q.fill.toUpperCase()];
+    if (RECOLOR[q.i]) return RECOLOR[q.i];
+    if (it.obj === "cookbooks" || it.obj === "references") { if (isBlue(q.fill)) return shade(BOOK_BLUE, q.fill); if (isSpine(q)) return pop(q.fill); return q.fill; }
     if (it.obj === "window" && T) return "var(--trim-" + q.fill.slice(1).toUpperCase() + "," + q.fill + ")";   /* window frame: any colour on .trim-on */
     if (it.obj === "window" && ADD.GLASS[q.fill.toUpperCase()]) return "var(--glass-" + q.fill.slice(1).toUpperCase() + "," + q.fill + ")";   /* glass: dusk on .dusk */
     if (!isBlue(q.fill)) return q.fill; return it.obj === "box" ? shade("var(--blue)", q.fill) : (it.obj === "ideas" ? q.fill : shade("var(--cab)", q.fill)); }
@@ -107,13 +168,25 @@ function extend(id) {
         objs.concat("room").forEach((o) => out.push([o === "room" ? "room" : o, '<path d="' + d + '" fill="' + q.fill + '" mask="url(#' + id("ink-" + o) + ')"/>']));
         return;
       }
-      out.push([it.obj, '<path d="' + r1(q.d) + '" style="fill:' + fillOf(it) + '"' + ATTRS(q) + "/>"]);
+      if (q.i === WB_SURFACE) out.push(["whiteboard", WB_BACK]);   /* right under the board's surface, so it stays behind the mixer */
+      const fill = it.obj === "room" && q.fill.toUpperCase() === WALL_FILL ? "var(--wall)" : fillOf(it);
+      out.push([it.obj, '<path d="' + r1(q.d) + '" style="fill:' + fill + '"' + ATTRS(q) + "/>"]);
     });
-    const runs = (list) => { let s = "", cur = null; list.forEach((e) => { if (e[0] !== cur) { if (cur) s += "</g>"; s += '<g data-obj="' + e[0] + '">'; cur = e[0]; } s += e[1]; }); return s + (cur ? "</g>" : ""); };
-    const grp = (list) => list.map((a) => '<g data-obj="' + a.obj + '">' + a.svg + "</g>").join("");
-    let svg = '<g id="' + id("all") + '"><g id="' + id("scene") + '">' + runs(out) + grp((opts.end || []).filter((a) => !a.top)) + "</g>";
+    /* SHIFT moves a traced object: everything visible inside its HULL (its shapes, the dark underlay, the counter round it) is
+       copied, clipped to the hull and drawn moved; ADD.patch(v, obj) fills where it stood. Entries with shift: true move too. */
+    const SH = opts.top === false ? {} : (ADD.SHIFT || {});
+    const mv = (o) => (SH[o] ? ' transform="translate(' + SH[o].join(" ") + ')"' : "");
+    /* every object group gets an id (o-<obj>-<n>) and is listed in parts, so the halo layer can <use> it */
+    const parts = {}, gid = (o, k) => { const n = id("o-" + o + "-" + (parts[o] = parts[o] || []).length); parts[o].push({ n, k }); return n; };
+    const runs = (list) => { let s = "", cur = null; list.forEach((e) => { if (e[0] !== cur) { if (cur) s += "</g>"; s += '<g id="' + gid(e[0], "base") + '" data-obj="' + e[0] + '">'; cur = e[0]; } s += e[1]; }); return s + (cur ? "</g>" : ""); };
+    const grp = (list) => list.map((a) => '<g id="' + gid(a.obj, "end") + '" data-obj="' + a.obj + '"' + (a.shift ? mv(a.obj) : "") + ">" + a.svg + "</g>").join("");
+    const moved = Object.keys(SH).map((o) => { const hp = ADD.HULL[o].map((p) => p.join(" ")).join(" ");
+      return '<clipPath id="' + id("hull-" + o) + '"><polygon points="' + hp + '"/></clipPath>' + ADD.patch(v, o) +
+        '<g id="' + gid(o, "hull") + '" data-obj="' + o + '"' + mv(o) + '><g clip-path="url(#' + id("hull-" + o) + ')"><use href="#' + id("base") + '"/></g></g>'; }).join("");
+    let svg = '<g id="' + id("all") + '"><g id="' + id("scene") + '"><g id="' + id("base") + '">' + runs(out) + "</g>" + moved + grp((opts.end || []).filter((a) => !a.top)) + "</g>";
     if (opts.top !== false) svg += extend(id);
     svg += grp((opts.end || []).filter((a) => a.top)) + "</g>";   /* "all" is reused by the close-ups on the page */
+    if (opts.top !== false) svg += halos(id, parts, SH);
     const vb = opts.top === false ? "6 5 856 479" : "6 " + (5 - TOP) + " 856 479";
     return '<svg xmlns="http://www.w3.org/2000/svg" viewBox="' + vb + '" class="tk-art" aria-hidden="true">' + defs + svg + "</svg>";
   }
@@ -121,7 +194,7 @@ function extend(id) {
   const A = build("a", plain ? { top: false } : ADD.opts("a"));
   fs.writeFileSync(path.join(D, "kitchen.svg"), A);
   if (!plain) {   /* close-ups for the page: each option drawn over a <use> of the kitchen scene */
-    const C = ADD.closeups("a").map((c) => '<figure class="' + (c.cls || "") + '"><svg viewBox="' + c.vb + '" role="img" aria-label="' + c.title + '"><use href="#a-scene"/>' + c.svg + "</svg><figcaption>" + c.title + "</figcaption></figure>");
+    const C = ADD.closeups("a").map((c) => '<figure class="' + (c.cls || "") + '"' + (c.pick ? ' data-pick-to="' + c.pick + '" tabindex="0" role="button"' : "") + '><svg viewBox="' + c.vb + '" role="img" aria-label="' + c.title + '"><use href="#a-scene"/>' + c.svg + "</svg><figcaption>" + c.title + "</figcaption></figure>");
     fs.writeFileSync(path.join(D, "closeups.html"), C.join("\n"));
   }
   fs.writeFileSync(path.join(D, "report.json"), JSON.stringify(rep, null, 1));

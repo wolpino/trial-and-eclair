@@ -1,17 +1,11 @@
 <section id="tk" class="trim-on" style="--trim:#7A4E2D" aria-labelledby="tk-h">
-  <span class="label" id="tk-h">00b · v10 · Your traced kitchen</span>
+  <span class="label" id="tk-h">00b · v17 · Your traced kitchen</span>
   <div class="sec-body">
-    <h3>Eclairs cooling on a rack, the bottles, the composition books</h3>
-    <p class="note">Still your SVG, cleaned by <code>traced/clean.cjs</code>; the new pieces are drawn on top by <code>traced/add.cjs</code>. Point at or Tab to the box, notebook, cork board, whiteboard, the book shelf, or the clipboard (recipe log). The colours below are for trying out; stem green is the default.</p>
+    <h3>The kitchen, picks only</h3>
+    <p class="note">Point at or Tab to the box, notebook, cork board, whiteboard, the book shelf, the clipboard (recipe log) or the rack: each glows amber from behind. Click the crystal in the window to turn it. The time of day and the colours below are things a cook will have, not choices for you.</p>
     <div class="recol" id="tk-ctl">
-      <div class="choice"><span class="cap">Bottles</span><div class="seg" data-pick="sill">
-        <button data-v="1" aria-pressed="true">B1 trio, bigger</button><button data-v="2">B2 decanter and amber bottle</button>
-      </div></div>
       <div class="choice"><span class="cap">Time of day</span><div class="seg" data-pick="sun">
         <button data-v="am" aria-pressed="true">morning</button><button data-v="noon">midday</button><button data-v="pm">afternoon</button><button data-v="eve">evening</button>
-      </div></div>
-      <div class="choice"><span class="cap">Flour and rolling pin</span><div class="seg" data-pick="tidy">
-        <button data-v="0" aria-pressed="true">keep</button><button data-v="1">take away</button>
       </div></div>
       <div class="choice"><span class="cap">Cabinets</span><div class="seg" data-set="--cab">
         <button data-v="#5e8c3a" aria-pressed="true"><span class="dot" style="background:#5e8c3a"></span>stem green</button>
@@ -33,15 +27,16 @@
         <!--TRACED-->
         <svg class="tk-hit" viewBox="6 -39 856 479" aria-label="Kitchen objects">
           <g role="button" tabindex="0" aria-label="Open the recipe box" data-for="box"><rect x="30" y="205" width="160" height="160" rx="8"/></g>
-          <g role="button" tabindex="0" aria-label="Open the notebook" data-for="notebook"><rect x="255" y="308" width="203" height="68" rx="8"/></g>
+          <g role="button" tabindex="0" aria-label="Open the notebook" data-for="notebook"><rect x="221" y="308" width="203" height="68" rx="8"/></g>
           <g role="button" tabindex="0" aria-label="Open the idea board" data-for="ideas"><rect x="188" y="130" width="258" height="174" rx="6"/></g>
           <g role="button" tabindex="0" aria-label="Open the whiteboard" data-for="whiteboard"><rect x="452" y="130" width="140" height="170" rx="6"/></g>
           <g role="button" tabindex="0" aria-label="Open the library (cookbooks and references)" data-for="cookbooks references"><rect x="410" y="-39" width="256" height="159" rx="6"/></g>
-          <g role="button" tabindex="0" aria-label="Take an eclair off the rack" data-for="eclair" data-bite><rect x="180" y="332" width="92" height="40" rx="8"/></g>
+          <g role="button" tabindex="0" aria-label="Take an eclair off the rack" data-for="eclair" data-bite><rect x="694" y="312" width="166" height="56" rx="8"/></g>
           <g role="button" tabindex="0" aria-label="Open the recipe log" data-for="clip"><rect x="46" y="-34" width="66" height="131" rx="5"/></g>
+          <g role="button" tabindex="0" aria-label="Turn the crystal" data-turn><rect x="806" y="28" width="32" height="124" rx="6"/></g>
         </svg>
       </div>
-      <figcaption><b>Kitchen.</b> Click the rack to take an eclair, one per click. Try the time of day: the rainbows move, and in the evening they're gone and the window goes to dusk.</figcaption>
+      <figcaption><b>Kitchen.</b> Click the crystal: it turns and the rainbows sweep round the room and settle. The rainbows move with the time of day and are gone in the evening. The rack takes two eclairs, two bites, then it's empty until the page reloads.</figcaption>
     </figure>
     <p class="tk-say" id="tk-say" aria-live="polite">Nothing open.</p>
 
@@ -49,43 +44,66 @@
     <div class="tk-zooms" id="tk-zooms">
 <!--CLOSEUPS-->
     </div>
-
-    <h3>What changed this round</h3>
-    <ul class="ans">
-      <li><b>Eclairs</b> cool on a wire rack between the box and the notebook, three of them. Each click takes one (crumbs stay); after three the rack is empty until the page reloads. Nothing is saved.</li>
-      <li><b>Bottles:</b> B1, your trio, about a third bigger; B2, the fluted decanter with the amber bottle from the trio beside it. Both in the kitchen's look. B3 and B4 are gone.</li>
-      <li><b>Composition books</b> redrawn from your picture: black covers overhanging a thick white page block, black spine tape wrapping the left side, dense white marbling, a label with a double border. Seen a little more from above, like the picture.</li>
-      <li>Still here from v9: rainbows by time of day, RECIPES, "Baking log", "Ideas", tabs on the open notebook, and the flour and pin toggle.</li>
-    </ul>
   </div>
 </section>
 <script>
 (function () {
   var sec = document.getElementById("tk"), say = document.getElementById("tk-say"), k = sec.querySelector(".tk");
-  function lit(objs, on) { objs.split(" ").forEach(function (o) { k.querySelectorAll('.tk-art g[data-obj="' + o + '"]').forEach(function (g) { g.classList.toggle("lit", on); }); }); }
+  function cls(objs, name, on) { objs.split(" ").forEach(function (o) { k.querySelectorAll('.tk-art g[data-obj="' + o + '"], .tk-art g[data-halo~="' + o + '"]').forEach(function (g) { g.classList.toggle(name, on); }); }); }
+  function lit(objs, on) { cls(objs, "lit", on); if (!on) cls(objs, "press", false); }
   k.querySelectorAll("[data-for]").forEach(function (b) {
     var obj = b.dataset.for, name = b.getAttribute("aria-label").replace("Open ", "");
     ["mouseenter", "focus"].forEach(function (e) { b.addEventListener(e, function () { lit(obj, true); }); });
     ["mouseleave", "blur"].forEach(function (e) { b.addEventListener(e, function () { lit(obj, false); }); });
+    b.addEventListener("pointerdown", function () { cls(obj, "press", true); });
+    b.addEventListener("pointerup", function () { cls(obj, "press", false); });
     var go = function () { say.textContent = "Would open " + name + " (its own web address, Back returns to the kitchen)."; };
     if (b.hasAttribute("data-bite")) go = function () {
-      var n = Math.min(3, +pick.ecl + 1); pick.ecl = String(n); apply();
-      say.textContent = ["", "One eclair taken.", "Two taken.", "All gone. They come back when the page reloads."][n];
-      if (n === 3) { lit(obj, false); b.remove(); }
+      var n = Math.min(5, +pick.ecl + 1); pick.ecl = String(n); apply();
+      say.textContent = ["", "One eclair taken.", "Two taken.", "A bite out of the last one.", "Another bite.", "All gone. They come back when the page reloads."][n];
+      if (n === 5) { lit(obj, false); b.remove(); }
     };
-    b.addEventListener("click", go); b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
+    b.addEventListener("click", go);
+    b.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); cls(obj, "press", true); setTimeout(function () { cls(obj, "press", false); }, 140); go(); } });
   });
-  var pick = { ecl: "0", sill: "1", sun: "am", tidy: "0" };
+  /* the crystal turns two full turns, slowing; the rainbows swing round it and settle, flickering as the facets pass */
+  var turning = 0, still = window.matchMedia && matchMedia("(prefers-reduced-motion: reduce)").matches;
+  function turn() {
+    if (turning) return; turning = 1;
+    var rb = k.querySelector(".tk-art .rb-turn"), cr = k.querySelectorAll(".tk-art .cr-spin"), t0 = performance.now(), D = 3000;
+    say.textContent = "The crystal turns.";
+    function f(now) {
+      var t = Math.min(1, (now - t0) / D), e = 1 - Math.pow(1 - t, 3), phi = 4 * Math.PI * e, sx = Math.cos(phi);
+      if (Math.abs(sx) < .12) sx = sx < 0 ? -.12 : .12;
+      var a = still ? 0 : 34 * Math.sin(3 * Math.PI * t) * Math.exp(-3 * t);
+      cr.forEach(function (g) { g.setAttribute("transform", "translate(822 0) scale(" + sx.toFixed(3) + " 1) translate(-822 0)"); });
+      if (rb) { rb.setAttribute("transform", "rotate(" + a.toFixed(2) + " 822 118)"); rb.style.opacity = (.5 + .5 * Math.abs(Math.cos(phi))).toFixed(2); }
+      if (t < 1) return requestAnimationFrame(f);
+      cr.forEach(function (g) { g.removeAttribute("transform"); }); if (rb) { rb.removeAttribute("transform"); rb.style.opacity = ""; }
+      turning = 0;
+    }
+    requestAnimationFrame(f);
+  }
+  var tb = k.querySelector("[data-turn]");
+  tb.addEventListener("click", turn); tb.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); turn(); } });
+  var pick = { ecl: "0", sill: "3", sun: "am", tidy: "1" };
   function apply() {
     sec.classList.toggle("dusk", pick.sun === "eve"); k.classList.toggle("tidy", pick.tidy === "1");
     k.querySelectorAll("[data-var]").forEach(function (g) {
-      var on = g.dataset.var.split(" ").every(function (t) { var i = t.indexOf("-"); return pick[t.slice(0, i)] === t.slice(i + 1); });
+      var on = g.dataset.var.split(" ").every(function (t) { var i = t.indexOf("-"); return t.slice(i + 1).split("|").indexOf(pick[t.slice(0, i)]) >= 0; });
       g.style.display = on ? "" : "none";
     });
     sec.querySelectorAll("#tk-ctl [data-pick] button").forEach(function (b) { b.setAttribute("aria-pressed", String(pick[b.parentNode.dataset.pick] === b.dataset.v)); });
+    sec.querySelectorAll("#tk-ctl [data-attr] button").forEach(function (b) { b.setAttribute("aria-pressed", String(sec.dataset[b.parentNode.dataset.attr] === b.dataset.v)); });
+    sec.querySelectorAll("#tk-zooms [data-pick-to]").forEach(function (f) { var p = f.dataset.pickTo, i = p.indexOf("-"), key = p.slice(0, i), v = p.slice(i + 1); f.classList.toggle("on", (pick[key] !== undefined ? pick[key] : sec.dataset[key]) === v); });
   }
-  sec.querySelectorAll("#tk-ctl [data-pick]").forEach(function (seg) {
-    seg.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; pick[seg.dataset.pick] = b.dataset.v; apply(); });
+  function set(key, v) { if (pick[key] !== undefined) pick[key] = v; else sec.dataset[key] = v; apply(); }
+  sec.querySelectorAll("#tk-ctl [data-pick], #tk-ctl [data-attr]").forEach(function (seg) {
+    seg.addEventListener("click", function (e) { var b = e.target.closest("button"); if (!b) return; set(seg.dataset.pick || seg.dataset.attr, b.dataset.v); });
+  });
+  sec.querySelectorAll("#tk-zooms [data-pick-to]").forEach(function (f) {
+    var go = function () { var p = f.dataset.pickTo, i = p.indexOf("-"); set(p.slice(0, i), p.slice(i + 1)); document.getElementById("tk-a").scrollIntoView({ behavior: still ? "auto" : "smooth", block: "center" }); };
+    f.addEventListener("click", go); f.addEventListener("keydown", function (e) { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); go(); } });
   });
   apply();
   sec.querySelectorAll("#tk-ctl [data-set]").forEach(function (seg) {

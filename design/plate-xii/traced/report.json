@@ -1,17 +1,17 @@
 {
  "total": 1365,
- "dropped": 484,
+ "dropped": 491,
  "byObj": {
   "box": 48,
-  "room": 224,
+  "room": 222,
   "log": 24,
   "knee": 35,
-  "window": 48,
+  "window": 47,
   "pin": 64,
   "notebook": 27,
   "flour": 50,
   "whiteboard": 11,
-  "mixer": 92,
+  "mixer": 88,
   "references": 32,
   "cookbooks": 78,
   "ideas": 140
