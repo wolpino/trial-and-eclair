@@ -54,7 +54,15 @@
     "plate-xii-06-3e4832d-tk-a-tk": "v7: eclair E1, bitten, by the box. Basil, a crystal mobile and rainbows in the window; composition books in front of the whiteboard.",
     "plate-xii-08-61b193d-tk-a-tk": "v8: a walnut window frame, and the eclair is eaten one click at a time.",
     "plate-xii-09-c6859d3-tk-a-tk": "v9: glass study bottles on the sill, rainbows that move with the time of day, RECIPES on the box.",
-    "plate-xii-10-ba8975e-tk-a-tk": "v10: three eclairs cool on a rack, one gone per click; new bottles and journals."
+    "plate-xii-10-ba8975e-tk-a-tk": "v10: three eclairs cool on a rack, one gone per click; new bottles and journals.",
+    "plate-xii-11-bf2e47b-tk-a-tk": "v11: your own traces come in: the eclair rack, the composition journals and the bottles. The clipboard becomes the Kitchen log.",
+    "plate-xii-12-0b66bce-tk-a-tk": "v12: flour and rolling pin gone; the rack moves under the window, and the open notebook slides toward the box.",
+    "plate-xii-13-aea2caa-tk-a-tk": "v13: words in the kitchen: Kitchen log, Ideas, Next up, a THE LIBRARY plaque. The journals go square, and the eclairs take bites.",
+    "plate-xii-14-ec956d3-tk-a-tk": "v14: your picks set, the losing options removed, glow from behind, the wall cleaned at the edges.",
+    "plate-xii-15-ba99eab-tk-a-tk": "v15: the open cupboard becomes a pantry of labelled jars; one crystal on a string throws rainbows across the room.",
+    "plate-xii-16-20ef05d-tk-a-tk": "v16: the rainbows follow the time of day. This one was drawn in afternoon light.",
+    "plate-xii-17-227ebed-tk-a-tk": "v17, signed off: the kitchen the app is built from. The crystal turns when clicked and the rack takes two eclairs and two bites.",
+    "plate-xii-17-227ebed-eve": "v17 in the evening: the rainbows are gone and the window goes dark."
   },
   "eclairs": [
     {"id": "k-05-3c-eclair", "after": "05-3c-eclair", "line": "Round 5: just a block that says eclair on a plate."},

@@ -1894,5 +1894,101 @@
 "group": null,
 "on": true,
 "new": true
+},
+{
+"id": "plate-xii-11-bf2e47b-tk-a-tk",
+"src": "img/plate-xii-11-bf2e47b-tk-a-tk.jpg",
+"w": 1200,
+"h": 674,
+"stage": "Plate XII v11",
+"date": "19 Nov",
+"caption": "Your rack, journals and bottles traced in",
+"group": null,
+"on": true,
+"new": true
+},
+{
+"id": "plate-xii-12-0b66bce-tk-a-tk",
+"src": "img/plate-xii-12-0b66bce-tk-a-tk.jpg",
+"w": 1200,
+"h": 674,
+"stage": "Plate XII v12",
+"date": "19 Nov",
+"caption": "Rack under the window, notebook moved, flour and pin gone",
+"group": null,
+"on": true,
+"new": true
+},
+{
+"id": "plate-xii-13-aea2caa-tk-a-tk",
+"src": "img/plate-xii-13-aea2caa-tk-a-tk.jpg",
+"w": 1200,
+"h": 674,
+"stage": "Plate XII v13",
+"date": "19 Nov",
+"caption": "Kitchen log, Ideas, Next up and The Library labels; square journals",
+"group": null,
+"on": true,
+"new": true
+},
+{
+"id": "plate-xii-14-ec956d3-tk-a-tk",
+"src": "img/plate-xii-14-ec956d3-tk-a-tk.jpg",
+"w": 1200,
+"h": 673,
+"stage": "Plate XII v14",
+"date": "20 Nov",
+"caption": "Picks set, glow from behind, wall cleaned",
+"group": null,
+"on": true,
+"new": true
+},
+{
+"id": "plate-xii-15-ba99eab-tk-a-tk",
+"src": "img/plate-xii-15-ba99eab-tk-a-tk.jpg",
+"w": 1200,
+"h": 674,
+"stage": "Plate XII v15",
+"date": "20 Nov",
+"caption": "Pantry cupboard, one crystal, rainbows across the room",
+"group": null,
+"on": true,
+"new": true
+},
+{
+"id": "plate-xii-16-20ef05d-tk-a-tk",
+"src": "img/plate-xii-16-20ef05d-tk-a-tk.jpg",
+"w": 1200,
+"h": 674,
+"stage": "Plate XII v16",
+"date": "20 Nov",
+"caption": "Rainbows by time of day (drawn here in afternoon light)",
+"group": null,
+"on": true,
+"new": true
+},
+{
+"id": "plate-xii-17-227ebed-tk-a-tk",
+"src": "img/plate-xii-17-227ebed-tk-a-tk.jpg",
+"w": 1200,
+"h": 674,
+"stage": "Plate XII v17",
+"date": "20 Nov",
+"caption": "Plate XII v17, signed off",
+"group": null,
+"on": true,
+"new": true
+},
+{
+"id": "plate-xii-17-227ebed-eve",
+"src": "img/plate-xii-17-227ebed-eve.jpg",
+"w": 1200,
+"h": 671,
+"stage": "Plate XII v17",
+"date": "20 Nov",
+"caption": "v17 in the evening: rainbows gone, lamp glow under the cupboards",
+"group": null,
+"on": true,
+"new": true
 }
 ]

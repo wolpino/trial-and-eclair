@@ -9,7 +9,7 @@ python3 design/progression/build.py <scratchpad>
 Writes design/progression/img/<id>.jpg (1200 px wide) and items.json.
 Each item: id, stage, date, caption, group (items in one group look alike), on (in the default set).
 """
-import json, os, sys
+import json, os, re, sys
 from PIL import Image
 
 S = sys.argv[1]
@@ -136,8 +136,22 @@ for c, v, cap, on in [("04-02efd3b", 5, "Taller frame, open cupboard, clipboard 
                       ("07-283625c", 8, "Click-to-eat eclair, sill bottles, frame colour", False),
                       ("08-61b193d", 8, "Walnut window frame", True),
                       ("09-c6859d3", 9, "Glass study bottles, rainbows by time of day, labels", True),
-                      ("10-ba8975e", 10, "Eclairs on a cooling rack, bottles, composition books", True)]:
-    add(f"{P}/plate-xii-{c}-tk_a_tk.png", f"Plate XII v{v}", "19 Nov", cap, "x8" if v == 8 else None, on)
+                      ("10-ba8975e", 10, "Eclairs on a cooling rack, bottles, composition books", True),
+                      ("11-bf2e47b", 11, "Your rack, journals and bottles traced in", True),
+                      ("12-0b66bce", 12, "Rack under the window, notebook moved, flour and pin gone", True),
+                      ("13-aea2caa", 13, "Kitchen log, Ideas, Next up and The Library labels; square journals", True),
+                      ("14-ec956d3", 14, "Picks set, glow from behind, wall cleaned", True),
+                      ("15-ba99eab", 15, "Pantry cupboard, one crystal, rainbows across the room", True),
+                      ("16-20ef05d", 16, "Rainbows by time of day (drawn here in afternoon light)", True),
+                      ("17-227ebed", 17, "Plate XII v17, signed off", True)]:
+    date = "19 Nov" if v <= 13 else "20 Nov"
+    add(f"{P}/plate-xii-{c}-tk_a_tk.png", f"Plate XII v{v}", date, cap, "x8" if v == 8 else None, on)
+add(f"{P}/plate-xii-17-227ebed-eve.png", "Plate XII v17", "20 Nov", "v17 in the evening: rainbows gone, lamp glow under the cupboards", None, True)
+
+def is_new(stage):
+    """Added after Ari's first picks (2026-11-19): her studies and Plate XII v10 on. Shown with a New badge, out of the reel."""
+    m = re.match(r"Plate XII v(\d+)$", stage)
+    return stage.startswith("Your") or bool(m and int(m.group(1)) >= 10)
 
 os.makedirs(f"{D}/img", exist_ok=True)
 out = []; seen = set()
@@ -148,6 +162,6 @@ for i, (src, stage, date, cap, group, on) in enumerate(ITEMS):
     assert k not in seen, k; seen.add(k)
     f = f"img/{k}.jpg"; im.save(f"{D}/{f}", quality=80, optimize=True, progressive=True)
     out.append({"id": k, "src": f, "w": im.width, "h": im.height, "stage": stage, "date": date, "caption": cap, "group": group, "on": bool(on),
-                "new": stage.startswith("Your") or stage == "Plate XII v10"})  # added after Ari's first picks (2026-11-19)
+                "new": is_new(stage)})
 json.dump(out, open(f"{D}/items.json", "w"), indent=0)
 print(len(out), "items,", sum(x["on"] for x in out), "on")

@@ -10,6 +10,35 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-21 · Kitchen Progression: Plate XII v11-v17 added
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-21` (progression) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop, artifacts, no subagents) |
+| **Outcome** | success (gallery v4 published; picks updated; no app code) |
+
+### Intent
+Ari: add Plate XII v11-v13 to the gallery and Story. By now Plate XII was at v17 (signed off), so v11-v17 went in.
+
+### Summary
+- Rendered the traced kitchen at each version's commit (bf2e47b, 0b66bce, aea2caa, ec956d3, ba99eab, 20ef05d, 227ebed) plus the v17 evening from `design/plate-xii/shots/v17/tk_eve.png`; `build.py` lists them (v14-v17 dated 20 Nov), `is_new()` badges Plate XII v10 on
+- `story.json`: a line for each; added the 8 to Ari's picks in `picks/main` (51 now) so they show in the Story
+- v16 renders in afternoon light because its rainbows follow the clock
+
+### Open threads
+- The GIF still shows the old 47 picks; no eclair crops from v11-v17 yet
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** kitchen progression, Plate XII v17, story
+**Files:** design/progression/ (build.py, items.json, story.json, img/)
+**Do not redo:** the renders; v11-v17 lines unless Ari corrects them
+**Resume with:** the newest entry above this one for the app work; for the gallery, remake the GIF from picks/main if Ari asks
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-21 · Why the test piece kept regressing; v17 pushed; one reference doc; docs archived
 
 | Field | Value |
