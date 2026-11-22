@@ -8,7 +8,7 @@ Rewritten 2026-11-21. The design is finished; what it looks like and does is in 
 
 ## The path
 ```
-plates ✅ → Plate XII v17 ✅ → product changes ✅ → phone v5 ✅ → Wave 1 drawing adopted ✅ → prep script ⏳ (issue #182) → test piece (issue #180) → Task issues → build
+plates ✅ → Plate XII v17 ✅ → product changes ✅ → phone v5 ✅ → Wave 1 drawing adopted ✅ → Figma finish ⏳ (`design/kitchen-w1/FIGMA-PLAN.md`) → prep script ⏳ (issue #182) → test piece (issue #180) → Task issues → build
 ```
 1. **Prep script** (issue #182): turn Ari's Wave 1 trace into a kitchen with one named group per object (steps in REFERENCE.md).
 2. **Test piece** (issue #180): the Wave 1 kitchen plus the recipe box in React at `/kitchen-v2`, to check scaling (960 to 1680 px) and speed. Ari reviews it before anything is committed.

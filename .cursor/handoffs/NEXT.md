@@ -2,7 +2,11 @@
 
 Read, in this order: **`docs/design/REFERENCE.md`** (what everything looks like and does: the one source of truth), `docs/design/PLAN.md` (what is left), then the issue for the step you're on. Don't read the archives to decide anything.
 
-## Step 1 — prep script, issue #182 — START HERE
+## Step 0 — finish the drawing in Figma — START HERE
+
+> Follow `design/kitchen-w1/FIGMA-PLAN.md` (status table at the top; update it after every step). The prep script waits for its step 8 export.
+
+## Step 1 — prep script, issue #182
 
 > **First, check the base has the drawing.** `git fetch origin && git ls-tree origin/staging-render design/kitchen-w1/source.svg`. If that prints nothing, stop and tell Ari the `docs/kitchen-wave1` PR isn't merged yet.
 >
