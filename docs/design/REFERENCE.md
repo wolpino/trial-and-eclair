@@ -24,7 +24,9 @@ Where Plate XI or the phone plate shows the **kitchen itself**, the Wave 1 drawi
 
 Same room, objects and places as v17, redrawn by Ari in one style. `source.svg` is 868 × 485, about 500 KB, 1,284 paths, with no filters, images or transforms. Each object is a named layer: `box`, `notebook`, `journals` (with `Trial`), `ideas` (with `Ideas`), `whiteboard` (with `Next up`), `library` (with `THE LIBRARY`), `clipboard` (with `Kitchen log`), `cupboard`, `jar labels`, `RECIPES`, `mixer`, `crystal`, `rack`, `window`, `cabinets`, `counter`, `wall`. Eclair pieces are named `eclair 1`, `eclair 2` and `eclair 3`.
 
-Changes from v17's look: one "Trial" composition book (not a "Trials" stack), a sunbeam from the window across the wall, a hanging crystal mobile (see open questions), no rainbows drawn (code adds them).
+Changes from v17's look: one "Trial" composition book (not a "Trials" stack), a sunbeam from the window across the wall, a hanging crystal mobile (kept, Ari 2026-11-21), no rainbows drawn (code adds them).
+
+**Ari is doing one more Figma pass (2026-11-21).** When the new export arrives, replace `source.svg` and `source.png`. Any prep step below that the export already handles drops out of `prep.cjs`.
 
 **Not finished in Figma, so a prep script must do it** (`design/kitchen-w1/prep.cjs`, to write; output `kitchen.svg`). Check its output against `source.png` with a pixel diff; only the intended changes may differ:
 1. Move the 25 "Wave 2 … fragments" groups and 36 loose paths into their object's layer by the name before " — " or " / " (for example `eclair 2 / path 5` goes to eclair 2, `window — residual` to window). The stacking order must not change the picture.
@@ -71,8 +73,8 @@ The hit-area numbers below are **v17 coordinates only** (`viewBox="6 -39 856 479
 | Library shelf | two rows of books (some blue spines), "THE LIBRARY" plaque | amber glow on the whole shelf | opens the Library, `/library` | 410, -39, 256, 159 |
 | Clipboard | "Kitchen log" sheet on the inside of the open cupboard door | amber glow | opens the recipe log, `/log` | 46, -34, 66, 131 |
 | Eclair rack | three chocolate eclairs on a wire rack, under the window | amber glow | each click: one taken, two taken, a bite, another bite, gone. A reload puts them back. Nothing is saved | 694, 312, 166, 56 |
-| Crystal | faceted ball on a thread in the window | (no glow) | turns for 3 s; the rainbows swing round and settle. With reduced motion it turns without the swing | 806, 28, 32, 124 |
-| Rainbows | soft beams and small flecks from the crystal | not clickable | follow the device clock: morning, midday and afternoon positions; **none in the evening** | none |
+| Crystal mobile | Wave 1: four crystals hanging from one hook in the window (v17: one faceted ball) | (no glow) | the whole mobile sways and settles in about 3 s, each crystal spinning a little out of step; the rainbows swing with it. With reduced motion the crystals spin and nothing swings | v17: 806, 28, 32, 124 |
+| Rainbows and sunbeam | Wave 1: drawn layers per time of day (`sunbeam-*`, `rainbows-*`); v17 code rainbows until drawn | not clickable | cross-fade with the device clock: morning, midday, afternoon; **none in the evening** | none |
 | Evening | window glass goes dusk blue, room dims, warm 2700K light under the wall cupboards | | starts from the device clock | none |
 | Open pantry cupboard | wood inside, labelled jars: Flour, Sugar, Cocoa, Oats, Pecans, Salt | not clickable | none | none |
 | "Trial" journal | one composition book beside the notebook, "Trial" label (Wave 1; v17 had a "Trials" stack) | not clickable (open question below) | none | none |
@@ -86,7 +88,7 @@ The hit-area numbers below are **v17 coordinates only** (`viewBox="6 -39 856 479
 - The drawing is Ari's trace. New pieces must match its thick, wobbly dark outline and flat two-tone colour.
 
 ### Gone for good (if you see one of these, it came from an old file)
-"Baking log" · flour bag and rolling pin · an eclair on a plate, or eclairs anywhere but the rack under the window · the four-crystal mobile · bottle trio B1, decanter pair B2 · fridge and "Recently" · box and mixer swapped · lifting or pressing objects on point.
+"Baking log" · flour bag and rolling pin · an eclair on a plate, or eclairs anywhere but the rack under the window · bottle trio B1, decanter pair B2 · fridge and "Recently" · box and mixer swapped · lifting or pressing objects on point.
 
 ### Leftovers in the v17 source (not part of the design; moot once Wave 1 replaces it)
 These are still inside `traced/add.cjs` and `kitchen.svg` but never shown. They don't change the picture; they are just weight and confusion.
@@ -97,9 +99,12 @@ These are still inside `traced/add.cjs` and `kitchen.svg` but never shown. They 
 ### Open questions for Ari
 1. Should the "Trials" journals open the notebook too? (Today only the open notebook does.)
 2. The whiteboard's hit area overlaps the mixer's head a little, so pointing at the mixer head lights the whiteboard. Fine, or trim it? (With Wave 1 hit areas taken from shapes, the mixer can sit on top and win.)
-3. Wave 1 has a hanging mobile of four crystals; "the four-crystal mobile" was on the gone-for-good list for v17. Keep the mobile now (and does the whole mobile turn on click), or go back to one crystal?
-4. Should the sunbeam fade out in the evening and move with the time of day, the way the rainbows do?
-5. The jar labels and the "Trial" label are rough after tracing. Redraw them in the drawing, or set them in code?
+### Answered 2026-11-21
+- **Crystal mobile: keep it.** The Wave 1 mobile replaces v17's single crystal; the rainbows still come from it.
+- **Clicking the mobile (2026-11-22): the whole mobile sways as one piece.** One button covers the whole mobile ("Turn the crystal mobile"). The `crystal` layer swings a little from its hook and settles within about 3 s. Each crystal (its own sublayer) does v17's spin, slightly out of step with the others, so it reads as a mobile, not a pendulum. Keep the swing small so it isn't busy. With reduced motion, the crystals spin and nothing swings.
+- **Rainbows (2026-11-22): drawn by Ari as layers, one set per time of day**: `rainbows-am`, `rainbows-noon`, `rainbows-pm`, each matching its sunbeam. They are flat, see-through colour bands and a few flecks, with no blur, on the wall behind the objects. Code cross-fades them with the sunbeams, hides them in the evening, and swings the whole set when the mobile turns. Until they're drawn, v17's code rainbows are the fallback.
+- **Sunbeam: yes, it changes with the time of day**, as long as it looks right. Ari draws one beam layer each for morning, midday and afternoon (`sunbeam-am`, `sunbeam-noon`, `sunbeam-pm`) on the wall, behind every object. Code only cross-fades between them and hides them all in the evening; it never moves or bends a beam. If the drawn beams don't look right, keep one beam and only fade it at night.
+- **Rough labels (jars, "Trial"): Ari redraws them in Figma.**
 
 ## How the v17 kitchen was built (reference until Wave 1's `prep.cjs` exists)
 ```bash
