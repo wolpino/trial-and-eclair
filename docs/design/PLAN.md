@@ -8,11 +8,12 @@ Rewritten 2026-11-21. The design is finished; what it looks like and does is in 
 
 ## The path
 ```
-plates ✅ → Plate XII v17 ✅ → product changes ✅ → phone v5 ✅ → test piece ⏳ (issue #180) → Task issues → build
+plates ✅ → Plate XII v17 ✅ → product changes ✅ → phone v5 ✅ → Wave 1 drawing adopted ✅ → prep script ⏳ (issue #182) → test piece (issue #180) → Task issues → build
 ```
-1. **Test piece** (issue #180): the v17 kitchen plus the recipe box in React at `/kitchen-v2`, to check scaling (960 to 1680 px) and speed. Ari reviews it before anything is committed.
-2. **Task issues**: one per line of the Build list below.
-3. **Build**: React components, one Task issue at a time.
+1. **Prep script** (issue #182): turn Ari's Wave 1 trace into a kitchen with one named group per object (steps in REFERENCE.md).
+2. **Test piece** (issue #180): the Wave 1 kitchen plus the recipe box in React at `/kitchen-v2`, to check scaling (960 to 1680 px) and speed. Ari reviews it before anything is committed.
+3. **Task issues**: one per line of the Build list below.
+4. **Build**: React components, one Task issue at a time.
 
 ## Build notes from the plates
 - The recipe log opens from the clipboard in the open cupboard; there are no "Recently" parts anywhere.
@@ -26,7 +27,8 @@ Raised 2026-11-16. Ari's answers (2026-11-16) are in each line. "Claude's pick" 
 - [x] **Phone layout**: next after Plate XI (Ari: next, or after the brand work. Claude's pick: straight after Plate XI, before the mark, because it shapes how the kitchen is built and the brand work does not). Square it with the Recipe Box phone work (`docs/recipe-box/`)
 - [x] **Keyboard and screen readers**: every kitchen object is a real button or link over the drawing, from the first component. The full accessibility pass stays on the Later list and must happen before the build is called done
 - [x] **Web addresses** (confirmed by Ari 2026-11-17, as drawn in Plate XI): every open view, recipe, trial and cookbook gets its own address, and Back closes the open view and returns to the kitchen. Why: refresh keeps your place, links can be saved and shared, and the phone's Back button works. Cheap to do from the start, hard to add later. Written: `docs/decisions/005-web-addresses.md`
-- [ ] **Test piece** (issue #180): build the v17 kitchen plus one open view in React to check scaling (960 to 1680 px) and speed. Ari reviews it BEFORE anything is committed. A first attempt on 2026-11-21 was built on the v10 kitchen by mistake and archived
+- [ ] **Prep script** (issue #182) for the Wave 1 drawing, adopted 2026-11-21 in place of the v17 drawing
+- [ ] **Test piece** (issue #180): build the Wave 1 kitchen plus one open view in React to check scaling (960 to 1680 px) and speed. Ari reviews it BEFORE anything is committed. A first attempt on 2026-11-21 was built on the v10 kitchen by mistake and archived
 - [x] **Evening**: the kitchen only. Open views always use the day look, so nothing in use is hard to read (Ari)
 - [x] **Loading, error and offline states** (drawn in Plate XI section 05): Claude decides, in the plate style, and draws them in Plate XI (Ari). Start from: loading = the view opens at once with faint ruled lines where words will be; error = a small printed card "That didn't load. Try again"; offline = a thin printed strip under the find bar "Offline. Showing what was saved."
 - [x] **"Paid plan" tag** (confirmed by Ari 2026-11-17, card as drawn in Plate XI section 05): no payments now. Clicking the tag opens a small card naming what the Developer plan adds, with one button "Switch to Developer" that upgrades a home cook at once, free. A guest sees "Sign up" first. Draw the card in Plate XI. Real payments stay on the Later list

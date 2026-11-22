@@ -1,19 +1,23 @@
-# NEXT — 2026-11-21 (design final; test piece next)
+# NEXT — 2026-11-21 (new kitchen drawing adopted; prep script next, then the test piece)
 
-Read, in this order: **`docs/design/REFERENCE.md`** (what everything looks like and does: the one source of truth), `docs/design/PLAN.md` (what is left), GitHub issue #180 (the task). Don't read the archives to decide anything.
+Read, in this order: **`docs/design/REFERENCE.md`** (what everything looks like and does: the one source of truth), `docs/design/PLAN.md` (what is left), then the issue for the step you're on. Don't read the archives to decide anything.
 
-## Prompt for the next agent (test piece, issue #180) — START HERE
+## Step 1 — prep script, issue #182 — START HERE
 
-> **First, check the base has the final design.** PR #181 (Plate XII v11 to v17, phone v5, this cleanup) must be merged into `staging-render`. Check: `git fetch origin && git ls-tree origin/staging-render docs/design/REFERENCE.md`. If that prints nothing, stop and tell Ari #181 isn't merged yet. Do not build on a base without it: that is how the 2026-11-21 attempt ended up on the v10 kitchen.
+> **First, check the base has the drawing.** `git fetch origin && git ls-tree origin/staging-render design/kitchen-w1/source.svg`. If that prints nothing, stop and tell Ari the `docs/kitchen-wave1` PR isn't merged yet.
 >
-> **Branch:** `feat/issue-180-kitchen-test-piece`, reset to `origin/staging-render` (it has no commits of its own). Stay inside issue #180's owned paths; `design/plate-xii/` is not one of them, so the drawing is used as it is.
+> **Branch** from `origin/staging-render`. Stay inside #182's owned paths (`design/kitchen-w1/`, `docs/design/REFERENCE.md`).
 >
-> **Build:** `cd design/plate-xii && node traced/clean.cjs`, then copy `traced/kitchen.svg` to `frontend/src/assets/kitchen-traced.svg`. Render it and compare with `design/plate-xii/shots/v17/tk_a.png` before writing any React: they must match.
+> **Job:** REFERENCE.md "The kitchen drawing (Wave 1 trace)" lists the 7 prep steps. Write `check.cjs` first (the tests in #182), then `prep.cjs`. Everything is found by layer and path **names** in `source.svg`, never by hand-typed positions. Never edit `source.svg`.
 >
-> **What the React piece does:** everything in REFERENCE.md's object table, nothing more. Hit areas, data-var keys (`ecl-0`..`ecl-5`, `sun-am|noon|pm|eve`), the crystal turn and the amber glow are all in `design/plate-xii/sections/005-traced.html`; port that script, don't reinvent it. No `press` class, no movement on point.
+> **Check by picture:** render `kitchen.svg` and diff it against `source.png`. Show Ari the shots before calling it done.
 >
-> **Old attempt:** local branch `archive/issue-180-v10-attempt` has a React wrapper built on the v10 kitchen. Its hit areas, SVG and `add.cjs` edits are wrong for v17; don't copy them.
+> **Ask Ari, don't decide:** REFERENCE.md open questions 3–5 (crystal mobile, sunbeam at night, rough labels). They don't block the prep script; leave hooks (separate groups) so either answer works.
+
+## Step 2 — test piece, issue #180 (after #182 is merged)
+
+> Build on `design/kitchen-w1/kitchen.svg`. Find objects by `data-obj` and take hit areas from each group's bounding box. Behaviour is REFERENCE.md's object table, nothing more: the v17 page script `design/plate-xii/sections/005-traced.html` is the working example of glow, eclair states, crystal turn and evening, but its coordinates are v17's and don't apply. No `press` class, no movement on point. Don't copy from the local branch `archive/issue-180-v10-attempt`.
 >
-> **Ask Ari first** (REFERENCE.md "Open questions"): should the Trials journals open the notebook; trim the whiteboard hit area off the mixer head?
->
-> **Rules:** questions first in chat, no subagents, confirm before a bigger build run, no pointing movement. **Push the branch before the session ends**, then add a session log entry.
+> Ask Ari REFERENCE.md open questions 1–2 first.
+
+**Rules:** questions first in chat, no subagents, confirm before a bigger run. **Push the branch before the session ends**, then add a session log entry.

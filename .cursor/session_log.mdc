@@ -10,6 +10,33 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-21 · Wave 1 kitchen trace adopted; prep script is next
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-21` (regression audit, continued) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop), Opus |
+| **Outcome** | success (drawing in repo, REFERENCE.md updated, issue #182 opened; no prep script or app code) |
+
+### Intent
+Ari redrew the whole kitchen in Figma as one organised trace with named layers, to make a future swap easy. Ari asked whether it would work, then adopted it.
+
+### Summary
+- `design/kitchen-w1/source.svg`: Ari's file as exported (868 × 485, about 500 KB, 1,284 paths, a named layer per object, no filters or transforms). `source.png` is a 2× render.
+- Ari's last Figma pass wasn't done: 25 "Wave 2 fragments" groups and 36 loose paths sit outside their layers (all named by object), 5 outlines are shared by two objects, window glass is in 4 pieces, and the sunbeam shares a path with the mixer background. REFERENCE.md lists 7 prep steps for a script.
+- REFERENCE.md: the Wave 1 drawing is now final for looks, and v17 stays the reference for behaviour. Hit areas will come from group bounding boxes (the v17 numbers are v17-only). Added rules for swappable redraws and open questions 3–5 (the crystal mobile conflicts with the old "gone" list; sunbeam at night; rough labels).
+- Issue #182 (prep script) opened; #180 commented: it now depends on #182 and finds objects by name.
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Wave 1 trace, kitchen-w1, prep.cjs, issue #182, swappable kitchen
+**Files:** design/kitchen-w1/, docs/design/REFERENCE.md, docs/design/PLAN.md, .cursor/handoffs/NEXT.md
+**Do not redo:** don't build the test piece on the v17 drawing; don't edit source.svg
+**Resume with:** `.cursor/handoffs/NEXT.md` step 1 (issue #182) once the docs/kitchen-wave1 PR is merged
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-21 · Why the test piece kept regressing; v17 pushed; one reference doc; docs archived
 
 | Field | Value |
