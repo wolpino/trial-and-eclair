@@ -12,7 +12,7 @@ Read, in this order: **`docs/design/REFERENCE.md`** (what everything looks like 
 >
 > **Check by picture:** render `kitchen.svg` and diff it against `source.png`. Show Ari the shots before calling it done.
 >
-> **Ask Ari, don't decide:** REFERENCE.md open questions 3–5 (crystal mobile, sunbeam at night, rough labels). They don't block the prep script; leave hooks (separate groups) so either answer works.
+> **Ari is doing one more Figma pass.** Use the newest `source.svg`; skip any prep step its layers already handle. Sunbeam: three drawn layers cross-faded by code, never bent or moved (REFERENCE.md "Answered 2026-11-21").
 
 ## Step 2 — test piece, issue #180 (after #182 is merged)
 
