@@ -8,7 +8,7 @@ The live plan for finishing the Wave 1 drawing in Figma. **Update this file afte
 |---|---|---|
 | 1 | Sort fragments into object layers | ✅ done (Figma agent; checked 2026-11-22 from export `trace 1(1).svg`) |
 | 2 | Cut shared outlines, one per object | ✅ done (same check) |
-| 3 | Finish the underlying artwork | 🔶 base done; Ari's change list below **waiting for Ari's approval to start** |
+| 3 | Finish the underlying artwork | 🔶 approved 2026-11-22; items 1–2 done, **Ari to look in Figma before items 3–7** |
 | 4 | Separate controllable artwork (eclairs, bites, glass, crystals) | ⏳ |
 | 5 | Sunbeams, plus evening under-cupboard light | ⏳ |
 | 6 | Rainbows (wall only) | ⏳ |
@@ -32,10 +32,12 @@ The aim is that almost nothing big ever enters the chat: edits go out as small s
 **Once per session**
 1. Ari gives the Figma file link (file key + the kitchen frame's node id).
 2. Claude loads the `figma-use` skill once and starts one Figma session (`create_session`).
-3. One small script lists only the 21 object layers with their node ids and bounding boxes (about 1 KB back). This is saved to `scratchpad` so it is not asked for again.
+3. One small script lists only the 18 object layers with their node ids and bounding boxes (about 1 KB back). This is saved to `scratchpad` so it is not asked for again.
+
+**Layer ids** (stable; the drawing is the group `1:2`, the scene `1:5`): wall `1:6`, counter `1:16`, cabinets `1:71`, cupboard `1:179`, library `1:361`, clipboard `1:552`, ideas `1:589`, whiteboard `1:732`, rack `1:789`, notebook `1:821`, journals `1:877`, box `1:984`, mixer `1:1071`, eclair 1–3 `1:1134` `1:1152` `1:1169`, window `1:1182`, crystal `1:1297`.
 
 **Per step**
-1. **Save a named Figma version** ("before step 3", etc.) from the script, so Ari can compare or roll back.
+1. **Make a rollback point.** The connector can't save a named version (`saveVersionHistoryAsync` is not supported), so the script copies the drawing to its own page, `backup before step N`. Ari can also save a named version by hand (⌥⌘S).
 2. **One edit script per object** (`use_figma`): it makes the change and returns a short JSON summary (what was added, removed, renamed, and the object's new box). No node dumps.
 3. **Look at that object only**: `get_screenshot` of that one node, saved to disk with curl (not embedded in the chat), then Claude views a small crop. Skip the picture for purely structural changes (renames, regrouping).
 4. **Repeat** for the next object.
@@ -44,6 +46,10 @@ The aim is that almost nothing big ever enters the chat: edits go out as small s
 7. **Ari reviews in Figma itself**, then exports the SVG with "Include id attribute" on and drops it in `~/Downloads`. Claude checks it locally with a script (layer tree, positions, hidden-object views). Only the result numbers and one or two crops come into the chat.
 
 **Bringing back v17 parts** (the v17 drawing lines up with Wave 1): a local script cuts the paths out of `design/plate-xii/traced/kitchen.svg`, moves them to Wave 1 coordinates and recolours them; the snippet is pasted with `figma.createNodeFromSvg`. Keep snippets small (one object per call).
+
+**Checks that worked (2026-11-22):** hide one layer, screenshot the whole drawing at 1×, pixel-diff locally against the starting picture. "Changed pixels: 0" proves a clean-up didn't change the normal view. Take the screenshot in its own call after the edit returns; when it runs alongside the edit it can show the old state.
+
+**Connector quirks:** `figma.flatten()` or `union()` on clones sometimes drops the result at the drawing's top-left corner; always return the new box and move it back if it's wrong. A boolean result takes the fill of a helper rectangle, so set its fill again.
 
 **Never use** (each costs tens of thousands of tokens): `get_design_context`, `get_metadata` on the whole frame, exporting SVG through the connector, or embedding full-size screenshots.
 
@@ -68,6 +74,28 @@ The aim is that almost nothing big ever enters the chat: edits go out as small s
 7. **Notebook**: bring back v17's spiral in place of the thick black middle; thin the outer edges to match other objects.
 
 Checkpoint: Ari reviews in Figma and exports; Claude checks the export; Ari approves before step 4.
+
+### Step 3 progress (2026-11-22)
+
+Rollback: page `backup before step 3` in the Figma file holds the drawing as it was.
+
+**1. Defects: done.** The normal view is unchanged (pixel diff against the starting picture: 4 pixels at the box's left edge).
+- `1:9` (the brown patch, only seen when the window is hidden) is now wall colour, renamed `wall patch under window`. The grey under the window sill that stays is the window's own shading (`1:1183`, in `window`). It hides with the window, and step 5 deals with it.
+- New `counter top fill` (`#c4905e`, full width, y 338–394) just above the counter base, so the counter is whole under every object.
+- `existing wall fill …` renamed `wall fill`.
+- Slivers. The four shared-outline paths were checked one by one by hiding each and diffing:
+  - window frame top (`1:14`) drew nothing visible, so it's deleted.
+  - mixer right edge (`1:10`): trimmed to the mixer's area minus the sunbeam, and moved to the back of `mixer`.
+  - box left edge and lid (`1:67`, `1:12`): the box parts moved to the back of `box`; the counter back-edge parts stayed where they were.
+  - The library right edge needed no separate fix: with every object hidden, no sliver is left there.
+- Also: the notebook's red ribbon (`1:37`, `1:38`) moved from `counter` to `notebook`.
+- **Question for Ari:** with objects hidden, their shadows stay on the counter: box, notebook, journals footprint, mixer, rack. Move each shadow into its object (so hiding an object takes its shadow), or leave them on the counter?
+
+**2. Rack: done, waiting for Ari's look.**
+- The dense dark-brown wire mesh (`1:790`, now `rack wires`) is restyled as thin light wires: `#d7cab4` at 60%, 0.4 px. That gives a light rack with wires everywhere, under the eclairs too.
+- Each eclair group has a new soft shadow at its back (`eclair 1 shadow`, …): a flat copy of the eclair's outline shape in `#55311d` at 32%, moved 3 px down-left. Taking an eclair takes its shadow, and the empty rack shows only wires.
+
+**3–7: not started.**
 
 ## Steps 4–8 (revised 2026-11-22)
 
@@ -99,4 +127,5 @@ Checkpoint: Ari reviews in Figma and exports; Claude checks the export; Ari appr
 
 ## Log
 
+- 2026-11-22 (later): step 3 approved. Figma access confirmed (`whoami`: Full seat, Pro team). Items 1 (defects) and 2 (rack) done in Figma; see "Step 3 progress". Stopped for Ari to look before items 3–7.
 - 2026-11-22: steps 1–3 base checked from `trace 1(1).svg` (same picture as the export before, now with ids). Ari's step 3 change list and answers recorded. Waiting for approval and the Figma link.
