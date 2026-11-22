@@ -73,8 +73,8 @@ The hit-area numbers below are **v17 coordinates only** (`viewBox="6 -39 856 479
 | Library shelf | two rows of books (some blue spines), "THE LIBRARY" plaque | amber glow on the whole shelf | opens the Library, `/library` | 410, -39, 256, 159 |
 | Clipboard | "Kitchen log" sheet on the inside of the open cupboard door | amber glow | opens the recipe log, `/log` | 46, -34, 66, 131 |
 | Eclair rack | three chocolate eclairs on a wire rack, under the window | amber glow | each click: one taken, two taken, a bite, another bite, gone. A reload puts them back. Nothing is saved | 694, 312, 166, 56 |
-| Crystal | faceted ball on a thread in the window | (no glow) | turns for 3 s; the rainbows swing round and settle. With reduced motion it turns without the swing | 806, 28, 32, 124 |
-| Rainbows | soft beams and small flecks from the crystal | not clickable | follow the device clock: morning, midday and afternoon positions; **none in the evening** | none |
+| Crystal mobile | Wave 1: four crystals hanging from one hook in the window (v17: one faceted ball) | (no glow) | the whole mobile sways and settles in about 3 s, each crystal spinning a little out of step; the rainbows swing with it. With reduced motion the crystals spin and nothing swings | v17: 806, 28, 32, 124 |
+| Rainbows and sunbeam | Wave 1: drawn layers per time of day (`sunbeam-*`, `rainbows-*`); v17 code rainbows until drawn | not clickable | cross-fade with the device clock: morning, midday, afternoon; **none in the evening** | none |
 | Evening | window glass goes dusk blue, room dims, warm 2700K light under the wall cupboards | | starts from the device clock | none |
 | Open pantry cupboard | wood inside, labelled jars: Flour, Sugar, Cocoa, Oats, Pecans, Salt | not clickable | none | none |
 | "Trial" journal | one composition book beside the notebook, "Trial" label (Wave 1; v17 had a "Trials" stack) | not clickable (open question below) | none | none |
@@ -99,10 +99,10 @@ These are still inside `traced/add.cjs` and `kitchen.svg` but never shown. They 
 ### Open questions for Ari
 1. Should the "Trials" journals open the notebook too? (Today only the open notebook does.)
 2. The whiteboard's hit area overlaps the mixer's head a little, so pointing at the mixer head lights the whiteboard. Fine, or trim it? (With Wave 1 hit areas taken from shapes, the mixer can sit on top and win.)
-3. On click, does the whole crystal mobile turn and sway, or one crystal?
-
 ### Answered 2026-11-21
 - **Crystal mobile: keep it.** The Wave 1 mobile replaces v17's single crystal; the rainbows still come from it.
+- **Clicking the mobile (2026-11-22): the whole mobile sways as one piece.** One button covers the whole mobile ("Turn the crystal mobile"). The `crystal` layer swings a little from its hook and settles within about 3 s. Each crystal (its own sublayer) does v17's spin, slightly out of step with the others, so it reads as a mobile, not a pendulum. Keep the swing small so it isn't busy. With reduced motion, the crystals spin and nothing swings.
+- **Rainbows (2026-11-22): drawn by Ari as layers, one set per time of day**: `rainbows-am`, `rainbows-noon`, `rainbows-pm`, each matching its sunbeam. They are flat, see-through colour bands and a few flecks, with no blur, on the wall behind the objects. Code cross-fades them with the sunbeams, hides them in the evening, and swings the whole set when the mobile turns. Until they're drawn, v17's code rainbows are the fallback.
 - **Sunbeam: yes, it changes with the time of day**, as long as it looks right. Ari draws one beam layer each for morning, midday and afternoon (`sunbeam-am`, `sunbeam-noon`, `sunbeam-pm`) on the wall, behind every object. Code only cross-fades between them and hides them all in the evening; it never moves or bends a beam. If the drawn beams don't look right, keep one beam and only fade it at night.
 - **Rough labels (jars, "Trial"): Ari redraws them in Figma.**
 
