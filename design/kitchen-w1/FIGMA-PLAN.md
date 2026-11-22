@@ -89,7 +89,8 @@ Rollback: page `backup before step 3` in the Figma file holds the drawing as it 
   - box left edge and lid (`1:67`, `1:12`): the box parts moved to the back of `box`; the counter back-edge parts stayed where they were.
   - The library right edge needed no separate fix: with every object hidden, no sliver is left there.
 - Also: the notebook's red ribbon (`1:37`, `1:38`) moved from `counter` to `notebook`.
-- **Question for Ari:** with objects hidden, their shadows stay on the counter: box, notebook, journals footprint, mixer, rack. Move each shadow into its object (so hiding an object takes its shadow), or leave them on the counter?
+- **Object shadows moved into their objects** (Ari: yes, 2026-11-22). Each sits at the back of its group: `box shadow` (with the box's highlight patches and the far-left piece of the back edge), `journals shadow`, `mixer shadow`, `rack shadow`. The ribbon's outline was cut out of the counter's front edge line into `notebook`. The notebook leaves no shadow of its own on the counter. The normal view is unchanged (pixel diff 0).
+- With every object hidden, the counter keeps only its own colours. That includes the light patch from the journals across to the window (`counter light …`), which may be sun on the counter (step 5). The front edge line has a 24 px gap where the ribbon crosses it, the same as before.
 
 **2. Rack: done, waiting for Ari's look.**
 - The dense dark-brown wire mesh (`1:790`, now `rack wires`) is restyled as thin light wires: `#d7cab4` at 60%, 0.4 px. That gives a light rack with wires everywhere, under the eclairs too.
@@ -128,4 +129,5 @@ Rollback: page `backup before step 3` in the Figma file holds the drawing as it 
 ## Log
 
 - 2026-11-22 (later): step 3 approved. Figma access confirmed (`whoami`: Full seat, Pro team). Items 1 (defects) and 2 (rack) done in Figma; see "Step 3 progress". Stopped for Ari to look before items 3–7.
+- 2026-11-22 (later): object shadows moved off the counter into box, journals, mixer, rack (Ari said yes). Normal view unchanged.
 - 2026-11-22: steps 1–3 base checked from `trace 1(1).svg` (same picture as the export before, now with ids). Ari's step 3 change list and answers recorded. Waiting for approval and the Figma link.

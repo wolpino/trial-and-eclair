@@ -26,13 +26,14 @@ Ari approved step 3 of `design/kitchen-w1/FIGMA-PLAN.md`: confirm Figma access, 
 - `whoami`: Full seat on a Pro team. Editing works. Named versions can't be saved through the connector, so the drawing was copied to the page `backup before step 3`.
 - Item 1 (defects): wall patch recoloured; `counter top fill` added; `wall fill` renamed. Wall slivers fixed by deleting `1:14` and moving the box and mixer parts of shared outlines into `box` and `mixer`. The notebook ribbon moved into `notebook`. Each fix was checked by pixel diff: the normal view is unchanged.
 - Item 2 (rack): dark mesh restyled as thin light wires; a soft shadow inside each eclair group.
-- FIGMA-PLAN.md: layer ids, the rollback method, connector quirks, step 3 progress, and one question (move object shadows off the counter?).
+- Object shadows moved off the counter into box, journals, mixer and rack (Ari said yes); normal view unchanged.
+- FIGMA-PLAN.md: layer ids, the rollback method, connector quirks, step 3 progress.
 
 <!-- AGENT_CONTEXT_START -->
 **Keywords:** Figma step 3, kitchen-w1, use_figma, backup page, rack wires, eclair shadows
 **Files:** design/kitchen-w1/FIGMA-PLAN.md
 **Do not redo:** step 3 items 1–2 (done and diff-checked); don't try saveVersionHistoryAsync (unsupported)
-**Resume with:** Ari's look at items 1–2 and the shadow question, then step 3 item 3 (labels) in FIGMA-PLAN.md
+**Resume with:** Ari's look at items 1–2 and then step 3 item 3 (labels) in FIGMA-PLAN.md
 <!-- AGENT_CONTEXT_END -->
 
 ---
