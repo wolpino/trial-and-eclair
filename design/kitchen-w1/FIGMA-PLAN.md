@@ -15,7 +15,7 @@ The live plan for finishing the Wave 1 drawing in Figma. **Update this file afte
 | 7 | Golden hour overlay | ⏳ |
 | 8 | Final checks and SVG export | ⏳ |
 
-Who: Claude in Claude Code, through the Figma connector (`use_figma`), working in Ari's file. The Figma agent's original plan is replaced by this one.
+Who: Claude in Claude Code, through the Figma connector (`use_figma`), working in Ari's file: https://www.figma.com/design/rLs6mufI8lyTcrEvitPSMx/kitchen (file key `rLs6mufI8lyTcrEvitPSMx`). The Figma agent's original plan is replaced by this one.
 
 ## Rules for every step
 
