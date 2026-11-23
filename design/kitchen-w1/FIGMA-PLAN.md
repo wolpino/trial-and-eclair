@@ -203,6 +203,12 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 
 ## Log
 
+- 2026-11-22 (later): labels enlarged (Ari: THE LIBRARY and TRIALS, not the jars).
+  - **THE LIBRARY:** the plaque and lettering are 25% larger, anchored at the plaque's bottom centre. Its traced border had come from the library's underlay showing around it, which the bigger pieces covered, so there's a clean new plaque under the lettering: `library plaque frame` (`#c4905e`, 0.9 px ink outline) and `library plaque face` (`#f5e5c4`, 0.55 px ink outline). The old plaque pieces (`1:472`–`1:476`) sit underneath, covered (cleanup in step 8).
+  - **Journal label:** the face `1:884` and rim `1:880` are 25% larger about the label's centre.
+  - **TRIALS:** the outlined copy `99:4` is about 1.26× larger, filling the label with even margins. The hidden editable text has the matching size.
+  - Only the library sign and the journal label changed.
+
 - 2026-11-22 (later): TRIALS flattened onto the journal cover (Ari: it was off the perspective). Figma won't squash or slant live text, so the visible label is an outlined copy, `label Trials (outlined, in perspective)` (`99:4`). It's 68% height, and its uprights lean toward the vanishing point by 0.157 per unit, the slope from the label to (447, 187); both are applied to the path points directly. The editable text stays underneath as `label Trials (editable, hidden)` (`23:14`), for rewording. **Step 8:** delete it once the wording is final. Only the label changed.
 
 - 2026-11-22 (later): journal label is now `label Trials`, "TRIALS" in Archivo Narrow Bold 8.4 (the caps face of THE LIBRARY and RECIPES), letter spacing fitted to the label, in ink `#2b2420`. The label plate is lighter for the sunbeam: `1:884` is `#f1e7d0` and its rim `1:880` is `#cdc3b3`. Only the journal changed. Ari also reported a missing horizontal line under the cabinet shelves. She meant the open cupboard: the top compartment has a dark ceiling (`#613e25`) that meets the back wall in a 1 px ink line, and the two shelves had neither. Added `top shelf underside and back line` and `lower shelf underside and back line` (in `cupboard`): the dark underside runs from each shelf's lower edge back to where the shelf meets the back wall, set by the vanishing point (447, 187) with the back wall at 0.95 depth (y 45.6→52.7 and 92.1→96.8). Each ends in a 1 px `#2d1a0e` line parallel to the top one, and its left end meets the inner side wall at the perspective angle. Only the cupboard interior changed.
