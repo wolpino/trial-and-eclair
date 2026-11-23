@@ -145,7 +145,7 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
   - `glass lower left edge fix` lines up the lower-left pane's left edge above the green bottle with the rest of the pane.
   - `frame gap fill top` closes a hairline gap in the top frame.
 - Whole-scene diff: changes only in the door and window.
-- Rack (open): the wires `#ae8f75` have almost the same lightness as the counter `#c4905e` (149 against 154), and the eclairs have no dark outline (v17 had one). The rack reads as too light overall, rather than its shadows being too light. Waiting on Ari's pick.
+- Rack: the wires `#ae8f75` had almost the same lightness as the counter `#c4905e` (149 against 154), and the eclairs had no dark outline (v17 had one), so the rack read as too light overall; the shadows weren't the problem. Ari chose both fixes: `rack wires` are now `#86634a` at 0.45 px, and each eclair group has an `eclair N outline` at the top: a copy of its `pastry — continuous trace` shape with no fill and a 0.9 px `#2e1a0e` stroke. The outline goes with its eclair. The rack's edge and legs (`1:32`, `#ae8f75`) are unchanged and still pale. Diff: only the rack changed.
 
 
 ## Steps 4–8 (revised 2026-11-22)
@@ -177,6 +177,8 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 **8. Final checks and export**: as in the Figma agent's plan (sizes, independent toggles, empty rack, one `glass`, crystal sublayers, labels outlined, exact names, no leftovers), exported with ids on. Claude lists the real exported ids. Then `source.svg` / `source.png` are replaced and #182 (prep script) picks up from there.
 
 ## Log
+
+- 2026-11-22 (later): rack wires darkened to `#86634a`, eclair outlines added (Ari: both). Waiting on Ari's look and her notes for the books pass.
 
 - 2026-11-22 (later): Ari's look: door outline gap under the clipboard fixed; window glass fixed (upper-right staircase, drip by the crystal, left edge above the green bottle, top frame gap). Rack diagnosed as too light overall; books pass raised.
 
