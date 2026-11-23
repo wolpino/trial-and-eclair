@@ -203,6 +203,11 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 
 ## Log
 
+- 2026-11-22 (later): Ari's notes, with a sketch of the open door.
+  - **Open door:** new group `open door inner face` in `cupboard`. `open door face` is one clean `#729758` shape covering the rough traced inner surface, inside the left edge line (x 12.8) and above the bottom edge line, which follows y = 117.6 + 0.157 × (x − 16). The panel is a double line like the closed doors (`#3d4f2e`, 0.7 px): verticals at x 22/25 on the left and 121.5/118.5 on the right, so they show beside the clipboard. The bottom lines run parallel to the door's bottom edge (2 and 4.2 px above it), so they show below the clipboard at the door's angle. `door hinge shadow` stays on top. The earlier patches `54:2` and `57:2` are deleted.
+  - **Clipboard:** `clipboard outline` is 1.3 px (was 0.9). New `clip outline` (0.8 px ink, traced from the clip shape `1:557`); the "Kitchen log" text stays above it.
+  - **Journal:** new `journal label outline` (0.7 px ink, traced from the label face `1:884`), under the TRIALS lettering.
+
 - 2026-11-22 (later): labels enlarged (Ari: THE LIBRARY and TRIALS, not the jars).
   - **THE LIBRARY:** the plaque and lettering are 25% larger, anchored at the plaque's bottom centre. Its traced border had come from the library's underlay showing around it, which the bigger pieces covered, so there's a clean new plaque under the lettering: `library plaque frame` (`#c4905e`, 0.9 px ink outline) and `library plaque face` (`#f5e5c4`, 0.55 px ink outline). The old plaque pieces (`1:472`–`1:476`) sit underneath, covered (cleanup in step 8).
   - **Journal label:** the face `1:884` and rim `1:880` are 25% larger about the label's centre.
