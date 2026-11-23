@@ -101,7 +101,7 @@ Rollback: page `backup before step 3` in the Figma file holds the drawing as it 
 - Fonts are v17's: Caveat Bold for the handwritten labels (Kitchen log, Ideas, Next up, Trial, the jars) and Archivo Narrow Bold for THE LIBRARY and RECIPES. Each label keeps its Wave 1 ink colour, angle and width; the letter spacing was fitted to the old width.
 - Jars (in `jar labels`): Flour, Sugar, Cocoa (cut off by the door) on the top shelf; Oats, Pecans, Salt on the bottom. The small jar has no label.
 - Nothing outside the label areas changed (pixel diff 0).
-- The swoosh underlines under "Ideas" and "Next up" were part of the traced lettering and went with it; v17 has none. **Ask Ari** whether to draw them back as clean strokes.
+- The swoosh underlines under "Ideas" and "Next up" went with the traced lettering. Ari asked for them back, so they're redrawn as clean curved strokes in each label's ink, with round ends: `underline Ideas` 1.4 px, `underline Next up` 1.6 px.
 - Text stays editable for now; step 8 turns it into outlines.
 
 **4–7: not started.**
@@ -138,5 +138,5 @@ Rollback: page `backup before step 3` in the Figma file holds the drawing as it 
 
 - 2026-11-22 (later): step 3 approved. Figma access confirmed (`whoami`: Full seat, Pro team). Items 1 (defects) and 2 (rack) done in Figma; see "Step 3 progress". Stopped for Ari to look before items 3–7.
 - 2026-11-22 (later): object shadows moved off the counter into box, journals, mixer, rack (Ari said yes). Normal view unchanged.
-- 2026-11-22 (later): item 3 labels re-lettered as text (Caveat Bold, Archivo Narrow Bold). Underlines question open.
+- 2026-11-22 (later): item 3 labels re-lettered as text (Caveat Bold, Archivo Narrow Bold); underlines redrawn. Ari shared the original window design (green fluted decanter, square amber bottle with cork, small blue bottle) and asked what another pass at the bottles would take.
 - 2026-11-22: steps 1–3 base checked from `trace 1(1).svg` (same picture as the export before, now with ids). Ari's step 3 change list and answers recorded. Waiting for approval and the Figma link.
