@@ -49,6 +49,8 @@ The aim is that almost nothing big ever enters the chat: edits go out as small s
 
 **Checks that worked (2026-11-22):** hide one layer, screenshot the whole drawing at 1×, pixel-diff locally against the starting picture. "Changed pixels: 0" proves a clean-up didn't change the normal view. Take the screenshot in its own call after the edit returns; when it runs alongside the edit it can show the old state.
 
+**Size check:** before each step, confirm `1:2` is 868 × 484.5 at 0, 0. To undo a stretch, use `rescale` then `resize`, then put line widths and font sizes back (rescale scales them; a drag doesn't), and diff.
+
 **Connector quirks:** `figma.flatten()` or `union()` on clones sometimes drops the result at the drawing's top-left corner; always return the new box and move it back if it's wrong. A boolean result takes the fill of a helper rectangle, so set its fill again.
 
 **Never use** (each costs tens of thousands of tokens): `get_design_context`, `get_metadata` on the whole frame, exporting SVG through the connector, or embedding full-size screenshots.
@@ -152,5 +154,5 @@ Nothing outside the window changed (pixel diff 0).
 - 2026-11-22 (later): object shadows moved off the counter into box, journals, mixer, rack (Ari said yes). Normal view unchanged.
 - 2026-11-22 (later): item 3 labels re-lettered as text (Caveat Bold, Archivo Narrow Bold); underlines redrawn. Ari shared the original window design (green fluted decanter, square amber bottle with cork, small blue bottle) and asked what another pass at the bottles would take.
 - 2026-11-22 (later): item 5 bottles redrawn from Ari's original (blue under the lowest crystal, amber to its right); crystal mobile redrawn with step 4 sublayers. Nothing outside the window changed.
-- 2026-11-22 (later): rack wires set to the edge colour `#ae8f75`. **Size change found:** the drawing group `1:2` is now 1101 × 665 instead of 868 × 484. It was scaled up evenly by about 1.27 and moved, not by Claude, probably a drag in Figma during review. Ari to confirm, then scale it back to 868 wide at x 0, y 0 before more work.
+- 2026-11-22 (later): rack wires set to the edge colour `#ae8f75`. **Size change found and fixed:** the drawing group `1:2` had been stretched to 1101 × 665 (×1.27 wide, ×1.37 tall) and moved, probably by a drag in Figma. Ari said to scale it back. Claude restored it to 868 × 484.5 at x 0, y 0, then multiplied line widths, font sizes and letter spacing back by 1101/868, because `rescale` had shrunk them. A pixel diff against the last good picture shows changes only in the rack wires (the intended recolour).
 - 2026-11-22: steps 1–3 base checked from `trace 1(1).svg` (same picture as the export before, now with ids). Ari's step 3 change list and answers recorded. Waiting for approval and the Figma link.
