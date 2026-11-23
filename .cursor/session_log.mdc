@@ -28,12 +28,13 @@ Ari approved the bottles and crystal mobile and said go on with step 3 items 4, 
 - Item 6: door one green (`1:326`, `1:332` recoloured), thin hinge shadow, both green bumps deleted (`1:327`, `1:554`), hole behind the clipboard filled, clipboard moved up 10 px.
 - Item 7: `spiral` over the gutter; left cover edge thinned to about 1.75 px. The bottom edge is still thick: a grey try looked stepped and was removed.
 - Whole-scene pixel diff: changes only in the door and clipboard, the photos and the notebook.
+- After Ari's look: door panel outline carried on under the clipboard; window glass cleaned (upper-right pane, drip by the crystal, left edge above the green bottle, top frame gap). Rack: the wires are nearly the counter's lightness, so it reads too light overall.
 
 <!-- AGENT_CONTEXT_START -->
 **Keywords:** Figma step 3, kitchen-w1, notebook spiral, cupboard door, photo details
 **Files:** design/kitchen-w1/FIGMA-PLAN.md
 **Do not redo:** step 3 items 1–7 (drawn and diff-checked); node-id insertChild at one index reverses order, so append then group
-**Resume with:** Ari's look in Figma at items 4, 6, 7 and the notebook bottom edge; then Ari exports the SVG and Claude checks it before step 4
+**Resume with:** Ari's pick for the rack (darker wires, eclair outlines) and her notes for a books pass (part of step 3); then Ari exports the SVG and Claude checks it before step 4
 <!-- AGENT_CONTEXT_END -->
 
 ---

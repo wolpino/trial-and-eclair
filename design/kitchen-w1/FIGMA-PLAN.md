@@ -137,6 +137,17 @@ Rollback for items 4, 6, 7: page `backup before step 3 items 4-7` (drawing copy 
 
 Whole-scene pixel diff against the backup copy: changes only in the door and clipboard, the photos and the notebook (0 pixels elsewhere).
 
+**Fixes after Ari's look (2026-11-22).** Notebook: fine as it is (bottom edge stays).
+- Door: the panel's inner outline stopped where the old hole began, so a seam showed under the clipboard. `door behind clipboard` now covers the seam, and `door panel outline behind clipboard` (`#3d4f2e`, 0.9 px) carries the panel line on to a right-hand edge at x 119.5 that mirrors the left side.
+- Window, measured with the mobile hidden:
+  - `glass upper right clean` (x 794.05–849.4, y 86.35–164.2) covers the old crystal-thread staircase of glass patches and a sliver of frame art in the upper-right pane.
+  - `glass lower right fix` covers the brown drip under the crossbar, right of the centre post.
+  - `glass lower left edge fix` lines up the lower-left pane's left edge above the green bottle with the rest of the pane.
+  - `frame gap fill top` closes a hairline gap in the top frame.
+- Whole-scene diff: changes only in the door and window.
+- Rack (open): the wires `#ae8f75` have almost the same lightness as the counter `#c4905e` (149 against 154), and the eclairs have no dark outline (v17 had one). The rack reads as too light overall, rather than its shadows being too light. Waiting on Ari's pick.
+
+
 ## Steps 4–8 (revised 2026-11-22)
 
 **4. Separate controllable artwork**
@@ -166,6 +177,8 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 **8. Final checks and export**: as in the Figma agent's plan (sizes, independent toggles, empty rack, one `glass`, crystal sublayers, labels outlined, exact names, no leftovers), exported with ids on. Claude lists the real exported ids. Then `source.svg` / `source.png` are replaced and #182 (prep script) picks up from there.
 
 ## Log
+
+- 2026-11-22 (later): Ari's look: door outline gap under the clipboard fixed; window glass fixed (upper-right staircase, drip by the crystal, left edge above the green bottle, top frame gap). Rack diagnosed as too light overall; books pass raised.
 
 - 2026-11-22 (later): step 3 items 4, 6, 7 done in Figma (notebook page writing, photo details, door one green with hinge shadow, clipboard up 10 px, notebook spiral, left cover edge thinned). The notebook's bottom edge is left for Ari. Backup page `backup before step 3 items 4-7`.
 
