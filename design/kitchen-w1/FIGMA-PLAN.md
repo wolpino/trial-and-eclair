@@ -104,15 +104,27 @@ Rollback: page `backup before step 3` in the Figma file holds the drawing as it 
 - The swoosh underlines under "Ideas" and "Next up" went with the traced lettering. Ari asked for them back, so they're redrawn as clean curved strokes in each label's ink, with round ends: `underline Ideas` 1.4 px, `underline Next up` 1.6 px.
 - Text stays editable for now; step 8 turns it into outlines.
 
-**4–7: not started.**
+**5. Bottles: done (redrawn from Ari's original window design, not v17).** Ari 2026-11-22: blue bottle under the lowest crystal, amber bottle to its right.
+- Three groups in `window`: `bottle green` (fluted decanter with faceted stopper and collar, x 717–746), `bottle blue` (ball stopper, x 795.5–810.5, centred under crystal 4), `bottle amber` (square bottle with cork, x 812–838). Each has dark-colour outlines (`#23402a`, `#1c2a55`, `#5a3712`), flat fills, lit streaks, a soft glow and a flat shadow on the sill. Flat shapes only.
+- The old bottles were cut into the window drawing, so removing them left holes. `window patch behind bottles and mobile` fills them with flat rectangles in the exact colours of the glass, rail and sill around them, read row by row from the picture. It also fills the crossbar gap behind the mobile, and adds glass strips where old crystal pieces used to paint over the window post.
+- The coloured light on the sill from Ari's picture belongs with step 6.
+
+**Crystal mobile: redrawn too (Ari asked, 2026-11-22).** The `crystal` group keeps its id (`1:1297`) and now has the step 4 structure:
+- `hook and threads`: hook, hoop and threads
+- `crystal 1` (top, under the hoop), `crystal 2` (left), `crystal 3` (right) and `crystal 4` (bottom, centre, x ≈ 803). Each is a double-pointed hexagonal crystal with two shaded faces, a sparkle line and an outline.
+- The layout follows the original: threads from the hook to the hoop, the top crystal hanging from the hoop's centre, the bottom crystal hanging below it, and the side crystals hanging from the hoop's sides.
+
+Nothing outside the window changed (pixel diff 0).
+
+**4, 6, 7: not started.**
 
 ## Steps 4–8 (revised 2026-11-22)
 
 **4. Separate controllable artwork**
 - `eclair 1`, `eclair 2`, `eclair 3`, each with its own shadow. Clicks take eclair 1, then eclair 2, then bite eclair 3 twice, then it's gone (REFERENCE.md).
 - `eclair 3 bite 1`, `eclair 3 bite 2`: same spot, bigger bites, each with its shadow, hidden by default; only one eclair 3 state shows at a time.
-- Gather the 4 window glass pieces into one `glass` layer, ready for one-colour recolouring (dusk blue).
-- `crystal` parent with one sublayer per crystal (`crystal 1`–`crystal 4`, top to bottom) and the hook and thread separate. The whole mobile sways; each crystal spins.
+- Gather the 4 window glass pieces into one `glass` layer, ready for one-colour recolouring (dusk blue). Include the glass-coloured rectangles in `window patch behind bottles and mobile`.
+- `crystal` sublayers: done in step 3 (`hook and threads`, `crystal 1`–`crystal 4`). The whole mobile sways; each crystal spins.
 - Labels are done in step 3.
 - Checkpoint: normal, both bites, empty rack.
 
@@ -139,4 +151,5 @@ Rollback: page `backup before step 3` in the Figma file holds the drawing as it 
 - 2026-11-22 (later): step 3 approved. Figma access confirmed (`whoami`: Full seat, Pro team). Items 1 (defects) and 2 (rack) done in Figma; see "Step 3 progress". Stopped for Ari to look before items 3–7.
 - 2026-11-22 (later): object shadows moved off the counter into box, journals, mixer, rack (Ari said yes). Normal view unchanged.
 - 2026-11-22 (later): item 3 labels re-lettered as text (Caveat Bold, Archivo Narrow Bold); underlines redrawn. Ari shared the original window design (green fluted decanter, square amber bottle with cork, small blue bottle) and asked what another pass at the bottles would take.
+- 2026-11-22 (later): item 5 bottles redrawn from Ari's original (blue under the lowest crystal, amber to its right); crystal mobile redrawn with step 4 sublayers. Nothing outside the window changed.
 - 2026-11-22: steps 1–3 base checked from `trace 1(1).svg` (same picture as the export before, now with ids). Ari's step 3 change list and answers recorded. Waiting for approval and the Figma link.
