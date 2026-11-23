@@ -147,6 +147,21 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 - Whole-scene diff: changes only in the door and window.
 - Rack: the wires `#ae8f75` had almost the same lightness as the counter `#c4905e` (149 against 154), and the eclairs had no dark outline (v17 had one), so the rack read as too light overall; the shadows weren't the problem. Ari chose both fixes: `rack wires` are now `#86634a` at 0.45 px, and each eclair group has an `eclair N outline` at the top: a copy of its `pastry — continuous trace` shape with no fill and a 0.9 px `#2e1a0e` stroke. The outline goes with its eclair. Then Ari said yes to the edge and legs too: `rack edge and legs` (`1:32`) is now `#86634a`, the same as the wires. Diff: only the rack changed.
 
+**Books, eclairs and rack pass (2026-11-22).** The decision: Claude does a first pass, then Ari adds what's left.
+- Library and journals: no clear defects found at 3–4×. The green "fragment" is the green book's rounded spine, and the yellow "tab" is a spine label. Taste questions for Ari: the dark lumpy spine marks (v17 has them too), the faint spine bands (v17's are clearer), and no titles on the spines.
+- Eclairs: the eclair art had holes (where the old dark underlay used to show) and slits, so the first outline curled into the glaze. Each eclair now has:
+  - `eclair N base`: a closed silhouette in glaze `#55311d`, at the back of the group, which fills the holes.
+  - `eclair N outline`: the same silhouette with a 0.9 px `#2e1a0e` stroke, on top.
+  - `eclair N shadow`: rebuilt from the same silhouette, 3 px down-left, at 32% as before.
+
+  Each silhouette is a smoothed convex hull of the eclair's own parts, measured from an 8× render.
+- Pieces that weren't eclair:
+  - `1:1149`–`1:1151` (in `eclair 1`) and `1:1166`, `1:1168` (in `eclair 2`) were rack or counter bits on the back rail and the mesh. All are deleted.
+  - 18 small leftover patches in `rack` (`1:792`–`1:799`, `1:811`–`1:820`), from the old eclair bottoms, sat above the wires and blotted out the mesh along the front and at the right end. They're deleted too.
+- `rack handle` (`1:791`) is now `#86634a` instead of cream, like the edge.
+- Whole-scene diff: changes only in the rack area (x 696–831).
+- Taste notes: eclair 1 has a tan streak across its glaze (original art); the light patches under the front rail are the counter's, and they're kept.
+
 
 ## Steps 4–8 (revised 2026-11-22)
 
@@ -177,6 +192,8 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 **8. Final checks and export**: as in the Figma agent's plan (sizes, independent toggles, empty rack, one `glass`, crystal sublayers, labels outlined, exact names, no leftovers), exported with ids on. Claude lists the real exported ids. Then `source.svg` / `source.png` are replaced and #182 (prep script) picks up from there.
 
 ## Log
+
+- 2026-11-22 (later): books first pass (no clear defects; taste list for Ari); eclairs rebuilt with base fill, outline and shadow from closed silhouettes; stray pieces and old patches removed so the rack mesh is whole; handle in rack colour.
 
 - 2026-11-22 (later): rack edge and legs in the wire colour (Ari: yes). Books pass next: Claude does a first pass, then Ari adds what's left.
 

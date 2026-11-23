@@ -29,12 +29,13 @@ Ari approved the bottles and crystal mobile and said go on with step 3 items 4, 
 - Item 7: `spiral` over the gutter; left cover edge thinned to about 1.75 px. The bottom edge is still thick: a grey try looked stepped and was removed.
 - Whole-scene pixel diff: changes only in the door and clipboard, the photos and the notebook.
 - After Ari's look: door panel outline carried on under the clipboard; window glass cleaned (upper-right pane, drip by the crystal, left edge above the green bottle, top frame gap). Rack: the wires are nearly the counter's lightness, so it reads too light overall. Ari chose both fixes: wires `#86634a` at 0.45 px, and an `eclair N outline` on each eclair; the edge and legs are now in the wire colour too.
+- Books first pass: no clear defects in the library or journals; three taste questions for Ari. Eclairs: base fill, outline and shadow rebuilt from closed silhouettes (hull of an 8x render); stray rack bits and 18 old patches deleted, so the mesh is whole; handle in rack colour.
 
 <!-- AGENT_CONTEXT_START -->
 **Keywords:** Figma step 3, kitchen-w1, notebook spiral, cupboard door, photo details
 **Files:** design/kitchen-w1/FIGMA-PLAN.md
-**Do not redo:** step 3 items 1–7 (drawn and diff-checked); node-id insertChild at one index reverses order, so append then group
-**Resume with:** the books pass (part of step 3): Claude's first pass on the library and journals, then Ari's notes; then Ari exports the SVG and Claude checks it before step 4
+**Do not redo:** step 3 items 1–7 (drawn and diff-checked); node-id insertChild at one index reverses order, so append then group; eclair outlines must come from closed silhouettes, not the pastry trace
+**Resume with:** Ari's answers on the books taste list (spine marks, spine bands, titles) and her look at the rack and eclairs; then Ari exports the SVG and Claude checks it before step 4; then Ari exports the SVG and Claude checks it before step 4
 <!-- AGENT_CONTEXT_END -->
 
 ---
