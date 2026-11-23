@@ -25,7 +25,8 @@ Ari approved step 3 of `design/kitchen-w1/FIGMA-PLAN.md`: confirm Figma access, 
 ### Summary
 - `whoami`: Full seat on a Pro team. Editing works. Named versions can't be saved through the connector, so the drawing was copied to the page `backup before step 3`.
 - Item 1 (defects): wall patch recoloured; `counter top fill` added; `wall fill` renamed. Wall slivers fixed by deleting `1:14` and moving the box and mixer parts of shared outlines into `box` and `mixer`. The notebook ribbon moved into `notebook`. Each fix was checked by pixel diff: the normal view is unchanged.
-- Item 2 (rack): dark mesh restyled as thin light wires; a soft shadow inside each eclair group.
+- Item 2 (rack): dark mesh restyled as thin wires in the edge colour `#ae8f75` (Ari's pick); a soft shadow inside each eclair group.
+- Found at the end: the drawing group `1:2` is now 1101 × 665, scaled up about 1.27 and moved, not by Claude. Ari to confirm before it's scaled back.
 - Object shadows moved off the counter into box, journals, mixer and rack (Ari said yes); normal view unchanged.
 - Item 3 (labels): real text in v17 fonts, Wave 1 colours and angles; underlines redrawn.
 - Item 5 (bottles) redrawn from Ari's original window design, with the blue bottle under the lowest crystal and the amber bottle to its right. Crystal mobile redrawn with `hook and threads` and `crystal 1`–`4`. A patch group fills the holes the old bottles left in the window.
@@ -35,7 +36,7 @@ Ari approved step 3 of `design/kitchen-w1/FIGMA-PLAN.md`: confirm Figma access, 
 **Keywords:** Figma step 3, kitchen-w1, use_figma, backup page, rack wires, eclair shadows
 **Files:** design/kitchen-w1/FIGMA-PLAN.md
 **Do not redo:** step 3 items 1–2 (done and diff-checked); don't try saveVersionHistoryAsync (unsupported)
-**Resume with:** Ari's look in Figma at step 3 items 1–3 and 5 (plus the crystal mobile), then step 3 items 4, 6, 7 (notebook page and photo detail; cupboard door; notebook spiral) in FIGMA-PLAN.md
+**Resume with:** first ask Ari about the drawing's size (1101 × 665 vs 868 × 484) and scale it back if it was an accident; then Ari's look at step 3 item 5 and the crystal mobile; then step 3 items 4, 6, 7 (notebook page and photo detail; cupboard door; notebook spiral) in FIGMA-PLAN.md
 <!-- AGENT_CONTEXT_END -->
 
 ---

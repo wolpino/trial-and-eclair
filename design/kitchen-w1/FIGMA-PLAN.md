@@ -92,11 +92,11 @@ Rollback: page `backup before step 3` in the Figma file holds the drawing as it 
 - **Object shadows moved into their objects** (Ari: yes, 2026-11-22). Each sits at the back of its group: `box shadow` (with the box's highlight patches and the far-left piece of the back edge), `journals shadow`, `mixer shadow`, `rack shadow`. The ribbon's outline was cut out of the counter's front edge line into `notebook`. The notebook leaves no shadow of its own on the counter. The normal view is unchanged (pixel diff 0).
 - With every object hidden, the counter keeps only its own colours. That includes the light patch from the journals across to the window (`counter light …`), which may be sun on the counter (step 5). The front edge line has a 24 px gap where the ribbon crosses it, the same as before.
 
-**2. Rack: done, waiting for Ari's look.**
-- The dense dark-brown wire mesh (`1:790`, now `rack wires`) is restyled as thin light wires: `#d7cab4` at 60%, 0.4 px. That gives a light rack with wires everywhere, under the eclairs too.
+**2. Rack: done (Ari approved after the wire colour change).**
+- The dense dark-brown wire mesh (`1:790`, now `rack wires`) is restyled as thin wires, 0.4 px. They now use the colour of the rack's outer edge and legs (`#ae8f75`, full opacity), as Ari asked on 2026-11-22; a first try with light `#d7cab4` was too pale. `1:32` is the edge and legs, renamed from the wrong `rack shadow` to `rack edge and legs`.
 - Each eclair group has a new soft shadow at its back (`eclair 1 shadow`, …): a flat copy of the eclair's outline shape in `#55311d` at 32%, moved 3 px down-left. Taking an eclair takes its shadow, and the empty rack shows only wires.
 
-**3. Labels: done, waiting for Ari's look.**
+**3. Labels: done (Ari: fine).**
 - The rough traced lettering was replaced with real text layers, each named `label <word>` and placed where the old lettering was in its group. The backup page keeps the old lettering.
 - Fonts are v17's: Caveat Bold for the handwritten labels (Kitchen log, Ideas, Next up, Trial, the jars) and Archivo Narrow Bold for THE LIBRARY and RECIPES. Each label keeps its Wave 1 ink colour, angle and width; the letter spacing was fitted to the old width.
 - Jars (in `jar labels`): Flour, Sugar, Cocoa (cut off by the door) on the top shelf; Oats, Pecans, Salt on the bottom. The small jar has no label.
@@ -152,4 +152,5 @@ Nothing outside the window changed (pixel diff 0).
 - 2026-11-22 (later): object shadows moved off the counter into box, journals, mixer, rack (Ari said yes). Normal view unchanged.
 - 2026-11-22 (later): item 3 labels re-lettered as text (Caveat Bold, Archivo Narrow Bold); underlines redrawn. Ari shared the original window design (green fluted decanter, square amber bottle with cork, small blue bottle) and asked what another pass at the bottles would take.
 - 2026-11-22 (later): item 5 bottles redrawn from Ari's original (blue under the lowest crystal, amber to its right); crystal mobile redrawn with step 4 sublayers. Nothing outside the window changed.
+- 2026-11-22 (later): rack wires set to the edge colour `#ae8f75`. **Size change found:** the drawing group `1:2` is now 1101 × 665 instead of 868 × 484. It was scaled up evenly by about 1.27 and moved, not by Claude, probably a drag in Figma during review. Ari to confirm, then scale it back to 868 wide at x 0, y 0 before more work.
 - 2026-11-22: steps 1–3 base checked from `trace 1(1).svg` (same picture as the export before, now with ids). Ari's step 3 change list and answers recorded. Waiting for approval and the Figma link.
