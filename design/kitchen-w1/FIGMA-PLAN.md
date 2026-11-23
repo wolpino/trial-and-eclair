@@ -8,7 +8,7 @@ The live plan for finishing the Wave 1 drawing in Figma. **Update this file afte
 |---|---|---|
 | 1 | Sort fragments into object layers | ✅ done (Figma agent; checked 2026-11-22 from export `trace 1(1).svg`) |
 | 2 | Cut shared outlines, one per object | ✅ done (same check) |
-| 3 | Finish the underlying artwork | 🔶 approved 2026-11-22; items 1–2 done, **Ari to look in Figma before items 3–7** |
+| 3 | Finish the underlying artwork | 🔶 all 7 items drawn (2026-11-22); **Ari to review in Figma and export** |
 | 4 | Separate controllable artwork (eclairs, bites, glass, crystals) | ⏳ |
 | 5 | Sunbeams, plus evening under-cupboard light | ⏳ |
 | 6 | Rainbows (wall only) | ⏳ |
@@ -118,7 +118,24 @@ Rollback: page `backup before step 3` in the Figma file holds the drawing as it 
 
 Nothing outside the window changed (pixel diff 0).
 
-**4, 6, 7: not started.**
+Rollback for items 4, 6, 7: page `backup before step 3 items 4-7` (drawing copy `48:3`). Size check before starting: `1:2` was 868 × 484.5 at 0, 0.
+
+**4. More detail: done.**
+- Notebook page (`page writing` in `notebook`, under the pencil): v17's eclair doodle (capsule outline with a wavy glaze), an arrow, a short note and two written lines, as thin round-ended strokes in `#9a8f84` / `#beac92`. The rough scribbles (`1:860`–`1:867`) are deleted; the backup page keeps them.
+- Cork-board photos (`photo details` at the top of `ideas`, one sub-group per photo): chocolate chips on the cookies; a cream filling along the lower rim of each macaron; a piped cream layer and sugar dots on the cream puff; sugar flecks and cream between the choux on the fourth photo. Drawn by hand: v17 had no more detail. If they don't look right, Ari re-traces the photos.
+
+**6. Open cupboard door: done.**
+- The darker block over the door's right half (`1:326`, `1:332`) is door green now, renamed `door right half` and `door hinge edge`. New `door hinge shadow`: a thin strip in `#53783d` (x 125.6–129.2) at the hinge edge.
+- Both green bumps are deleted: `1:327` (in `cupboard`) and `1:554` (in `clipboard`, above the clip).
+- The door wasn't complete behind the clipboard (a hole showed the dark underlay), so `door behind clipboard` fills it with door green.
+- `clipboard` moved up 10 px (y 22.3 → 12.3) and now sits inside the door.
+
+**7. Notebook: done, except the bottom edge.**
+- `spiral` (in `notebook`, above the old gutter shapes): a page-coloured band over the thick black gutter, a thin dark crease, 11 coils in `#2b2622` with a light shine. The old gutter shapes stay underneath.
+- `cover edge thinning`: the left cover was about 6 px of black. The page now covers its inner part (`page over left cover`), and below the corner the page-stack grey does the same (`page edges over left cover`). About 1.75 px of black is left, measured from a 4× picture.
+- The bottom cover edge is still thick (3–5 px). A first try with page-stack grey came out as a stepped strip and was removed. **Open for Ari:** thin it, and how.
+
+Whole-scene pixel diff against the backup copy: changes only in the door and clipboard, the photos and the notebook (0 pixels elsewhere).
 
 ## Steps 4–8 (revised 2026-11-22)
 
@@ -149,6 +166,8 @@ Nothing outside the window changed (pixel diff 0).
 **8. Final checks and export**: as in the Figma agent's plan (sizes, independent toggles, empty rack, one `glass`, crystal sublayers, labels outlined, exact names, no leftovers), exported with ids on. Claude lists the real exported ids. Then `source.svg` / `source.png` are replaced and #182 (prep script) picks up from there.
 
 ## Log
+
+- 2026-11-22 (later): step 3 items 4, 6, 7 done in Figma (notebook page writing, photo details, door one green with hinge shadow, clipboard up 10 px, notebook spiral, left cover edge thinned). The notebook's bottom edge is left for Ari. Backup page `backup before step 3 items 4-7`.
 
 - 2026-11-22 (later): step 3 approved. Figma access confirmed (`whoami`: Full seat, Pro team). Items 1 (defects) and 2 (rack) done in Figma; see "Step 3 progress". Stopped for Ari to look before items 3–7.
 - 2026-11-22 (later): object shadows moved off the counter into box, journals, mixer, rack (Ari said yes). Normal view unchanged.
