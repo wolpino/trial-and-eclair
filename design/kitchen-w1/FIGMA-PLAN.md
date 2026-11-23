@@ -162,16 +162,15 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 - Whole-scene diff: changes only in the rack area (x 696–831).
 - Taste notes: eclair 1 has a tan streak across its glaze (original art); the light patches under the front rail are the counter's, and they're kept.
 
-**Books redrawn (2026-11-22).** Ari: the books needn't stay as traced; bring them closer to the bottles and eclairs. Rollback page: `backup before books pass`.
-- How it was done: a 3× render of `library` was split into book, ink and wood by nearest palette colour, and the books were separated along the ink lines. Each book's spine is the simplified convex hull of its visible area.
-- New group `books (redrawn)` (`76:263`) at the top of `library`, with `book 1` to `book 32` (each visible side face counts as a book). Each book has:
-  - `spine`: a flat fill in the book's colour, with a 0.8 px outline in a dark shade of that colour, like the bottles.
-  - bands: thin darker lines near the bottom, and near the top when the top is visible.
-  - a lit streak down the left side.
-  - `label plate` on wider books: cream, with two short text lines, at varied heights; five books have none.
-- The old traced books stay underneath, covered (cleanup in step 8).
-- Old pieces that poked out are deleted: `1:527` (green bump) and `1:505`, `1:526` (tab on the end book). The dark underlay they had covered is patched with `back wall patch left of green book` and `side wall patch above end book`.
-- Diff: changes only in the library (x 416–639, y 0–140).
+**Books (2026-11-22).** A full redraw was tried first, and Ari didn't like it. It was undone: the `books (redrawn)` group and its patches were deleted, and the three removed pieces were restored from the page `backup before books pass` (the scene matched the earlier picture exactly). Then only the spots Ari circled were fixed, on the traced art:
+- Dark "title" marks in odd places, deleted: `1:369`, `1:370` (yellow, top shelf), `1:398` (green, top shelf), `1:471` (green, bottom shelf), `1:481`, `1:482` (yellow, bottom shelf), `1:500`, `1:501` (end book, bottom right).
+- Pale patches and smudges, deleted: `1:484` (cream book, bottom shelf), `1:491` (orange book tick), `1:403` and `1:404` (top-shelf loop), `1:533`.
+- The leaning tan book's cream cap (`1:529`) is now tan.
+- The end book's ragged top (bottom right) is covered by `end book top` with `end book top outline` (0.9 px ink).
+- Marks Ari likes (the round light spot on the top-shelf tan book, the plate on the bottom-shelf yellow book) are copied onto a few books in tints that suit them: `spot on red book`, `spot on green book`, `plate on green book`, `plate on red book`. Not every book.
+- The books' own horizontal bands are unchanged (they vary).
+- Grouping: the traced pieces are grouped by book, `book 1 brown` to `book 28 tan`, numbered by shelf from left to right. 43 shapes stay at library level: the dark underlay, the shelves, the posts, the plaque, the shadow, and shapes that span several books. A few groups were reordered so the stacking matches; the grouping diff is 0 pixels.
+- Whole-scene diff against before the books work: changes only in the library.
 
 
 ## Steps 4–8 (revised 2026-11-22)
@@ -204,7 +203,7 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 
 ## Log
 
-- 2026-11-22 (later): books redrawn in the bottles/eclairs style (flat spines, dark-shade outlines, bands, lit streaks, label plates), from a segmented render. Waiting on Ari's look.
+- 2026-11-22 (later): books redraw undone (Ari didn't like it); circled marks, patches and tops fixed on the traced art; a few liked marks copied; traced pieces grouped by book (0-pixel change).
 
 - 2026-11-22 (later): books first pass (no clear defects; taste list for Ari); eclairs rebuilt with base fill, outline and shadow from closed silhouettes; stray pieces and old patches removed so the rack mesh is whole; handle in rack colour.
 
