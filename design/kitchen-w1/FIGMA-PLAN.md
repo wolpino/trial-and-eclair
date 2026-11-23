@@ -203,6 +203,8 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 
 ## Log
 
+- 2026-11-22 (later): journal label is now `label Trials`, "TRIALS" in Archivo Narrow Bold 8.4 (the caps face of THE LIBRARY and RECIPES), letter spacing fitted to the label, in ink `#2b2420`. The label plate is lighter for the sunbeam: `1:884` is `#f1e7d0` and its rim `1:880` is `#cdc3b3`. Only the journal changed. Ari also reported a missing horizontal line under the cabinet shelves; the bottom of the upper cabinets and every shelf already have lines, so Claude asked her which one she means.
+
 - 2026-11-22 (later): Ari's notes: clipboard outline, mixer bowl, full check.
   - **Clipboard:** `clipboard outline` (`93:2`, 0.9 px ink, traced from the board shape `1:555`) now goes all the way round; before, only the right side had a dark edge.
   - **Door:** the line running past the clipboard's lower-right corner was `door panel outline behind clipboard` (`57:2`). It and `door behind clipboard` (`54:2`) had slipped 5 px left and 2 px up of where they were placed. Both are moved back; the door's right panel line now shows just right of the clipboard, mirroring the left one.
