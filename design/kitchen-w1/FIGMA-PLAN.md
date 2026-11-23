@@ -203,6 +203,8 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 
 ## Log
 
+- 2026-11-22 (later): TRIALS flattened onto the journal cover (Ari: it was off the perspective). Figma won't squash or slant live text, so the visible label is an outlined copy, `label Trials (outlined, in perspective)` (`99:4`). It's 68% height, and its uprights lean toward the vanishing point by 0.157 per unit, the slope from the label to (447, 187); both are applied to the path points directly. The editable text stays underneath as `label Trials (editable, hidden)` (`23:14`), for rewording. **Step 8:** delete it once the wording is final. Only the label changed.
+
 - 2026-11-22 (later): journal label is now `label Trials`, "TRIALS" in Archivo Narrow Bold 8.4 (the caps face of THE LIBRARY and RECIPES), letter spacing fitted to the label, in ink `#2b2420`. The label plate is lighter for the sunbeam: `1:884` is `#f1e7d0` and its rim `1:880` is `#cdc3b3`. Only the journal changed. Ari also reported a missing horizontal line under the cabinet shelves. She meant the open cupboard: the top compartment has a dark ceiling (`#613e25`) that meets the back wall in a 1 px ink line, and the two shelves had neither. Added `top shelf underside and back line` and `lower shelf underside and back line` (in `cupboard`): the dark underside runs from each shelf's lower edge back to where the shelf meets the back wall, set by the vanishing point (447, 187) with the back wall at 0.95 depth (y 45.6→52.7 and 92.1→96.8). Each ends in a 1 px `#2d1a0e` line parallel to the top one, and its left end meets the inner side wall at the perspective angle. Only the cupboard interior changed.
 
 - 2026-11-22 (later): Ari's notes: clipboard outline, mixer bowl, full check.
