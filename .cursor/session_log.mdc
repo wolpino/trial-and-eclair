@@ -35,7 +35,7 @@ Ari approved the bottles and crystal mobile and said go on with step 3 items 4, 
 **Keywords:** Figma step 3, kitchen-w1, notebook spiral, cupboard door, photo details
 **Files:** design/kitchen-w1/FIGMA-PLAN.md
 **Do not redo:** the full books redraw (Ari rejected it; keep the traced books); step 3 items 1–7 (drawn and diff-checked); node-id insertChild at one index reverses order, so append then group; eclair outlines must come from closed silhouettes, not the pastry trace
-**Resume with:** Ari's answer on the recipe box (mirror it so it shows its right side?) and the cork board's side thickness; then her look in Figma; then Ari exports the SVG and Claude checks it before step 4; then Ari exports the SVG and Claude checks it before step 4
+**Resume with:** Ari's look in Figma (the recipe box stays as drawn, Ari's call; the cork board side thickness is still open); then Ari exports the SVG and Claude checks it before step 4; then Ari exports the SVG and Claude checks it before step 4
 <!-- AGENT_CONTEXT_END -->
 
 ---
