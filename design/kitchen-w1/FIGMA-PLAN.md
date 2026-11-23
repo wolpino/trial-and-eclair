@@ -166,7 +166,7 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 - Dark "title" marks in odd places, deleted: `1:369`, `1:370` (yellow, top shelf), `1:398` (green, top shelf), `1:471` (green, bottom shelf), `1:481`, `1:482` (yellow, bottom shelf), `1:500`, `1:501` (end book, bottom right).
 - Pale patches and smudges, deleted: `1:484` (cream book, bottom shelf), `1:491` (orange book tick), `1:403` and `1:404` (top-shelf loop), `1:533`.
 - The leaning tan book's cream cap (`1:529`) is now tan.
-- The end book's ragged top (bottom right) is covered by `end book top`, a fill that follows the spine's own edges straight up to a flat top. `end book top outline` (0.9 px ink) runs the whole height of the book on those edges, so there's no step where it meets the old outline.
+- The end book's ragged top (bottom right) is covered by `end book top`, a fill that follows the spine's own edges straight up to a flat top. `end book top outline` (0.9 px ink) runs the whole height of the book on those edges, so there's no step where it meets the old outline. Its top is square to the spine: it slopes down to the right like the green book's top beside it (Ari: the first top was at the wrong angle). The old cap piece `79:2` is deleted.
 - Marks Ari likes (the round light spot on the top-shelf tan book, the plate on the bottom-shelf yellow book) are copied onto a few books in tints that suit them: `spot on red book`, `spot on green book`, `plate on green book`, `plate on red book`. Not every book. The two plates are scaled down (78% and 72%) and centred on their spines, so they don't run onto the cover or the next book.
 - The books' own horizontal bands are unchanged (they vary).
 - Grouping: the traced pieces are grouped by book, `book 1 brown` to `book 28 tan`, numbered by shelf from left to right. 43 shapes stay at library level: the dark underlay, the shelves, the posts, the plaque, the shadow, and shapes that span several books. A few groups were reordered so the stacking matches; the grouping diff is 0 pixels.
@@ -202,6 +202,8 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 **8. Final checks and export**: as in the Figma agent's plan (sizes, independent toggles, empty rack, one `glass`, crystal sublayers, labels outlined, exact names, no leftovers), exported with ids on. Claude lists the real exported ids. Then `source.svg` / `source.png` are replaced and #182 (prep script) picks up from there.
 
 ## Log
+
+- 2026-11-22 (later): end book top squared to its spine. **Move found and fixed:** the drawing `1:2` had moved to (−3, −42), and the `library` group had moved a further (+13.6, −2), probably by a drag in Figma. Put back: `1:2` at 0, 0 (`clip0_79_2` mask at 0, 0, scene `1:5` at 0, −2, as before), and `library` at x 405.4, y 0 in frame coordinates. The pixel diff against the last good picture shows only the end book top (plus a few antialiasing pixels). Note: `1:2` is a group clipped by the mask `1:3`, so the frame comes from the mask, not from the cupboard.
 
 - 2026-11-22 (later): plates fitted inside their spines; end book top redrawn along the spine edges.
 
