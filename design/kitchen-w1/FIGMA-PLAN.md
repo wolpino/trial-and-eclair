@@ -162,6 +162,17 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 - Whole-scene diff: changes only in the rack area (x 696–831).
 - Taste notes: eclair 1 has a tan streak across its glaze (original art); the light patches under the front rail are the counter's, and they're kept.
 
+**Books redrawn (2026-11-22).** Ari: the books needn't stay as traced; bring them closer to the bottles and eclairs. Rollback page: `backup before books pass`.
+- How it was done: a 3× render of `library` was split into book, ink and wood by nearest palette colour, and the books were separated along the ink lines. Each book's spine is the simplified convex hull of its visible area.
+- New group `books (redrawn)` (`76:263`) at the top of `library`, with `book 1` to `book 32` (each visible side face counts as a book). Each book has:
+  - `spine`: a flat fill in the book's colour, with a 0.8 px outline in a dark shade of that colour, like the bottles.
+  - bands: thin darker lines near the bottom, and near the top when the top is visible.
+  - a lit streak down the left side.
+  - `label plate` on wider books: cream, with two short text lines, at varied heights; five books have none.
+- The old traced books stay underneath, covered (cleanup in step 8).
+- Old pieces that poked out are deleted: `1:527` (green bump) and `1:505`, `1:526` (tab on the end book). The dark underlay they had covered is patched with `back wall patch left of green book` and `side wall patch above end book`.
+- Diff: changes only in the library (x 416–639, y 0–140).
+
 
 ## Steps 4–8 (revised 2026-11-22)
 
@@ -192,6 +203,8 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 **8. Final checks and export**: as in the Figma agent's plan (sizes, independent toggles, empty rack, one `glass`, crystal sublayers, labels outlined, exact names, no leftovers), exported with ids on. Claude lists the real exported ids. Then `source.svg` / `source.png` are replaced and #182 (prep script) picks up from there.
 
 ## Log
+
+- 2026-11-22 (later): books redrawn in the bottles/eclairs style (flat spines, dark-shade outlines, bands, lit streaks, label plates), from a segmented render. Waiting on Ari's look.
 
 - 2026-11-22 (later): books first pass (no clear defects; taste list for Ari); eclairs rebuilt with base fill, outline and shadow from closed silhouettes; stray pieces and old patches removed so the rack mesh is whole; handle in rack colour.
 
