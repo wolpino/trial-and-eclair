@@ -233,7 +233,7 @@ Rollback: page `backup before step 5` (`125:2`, drawing copy `125:3`). Size chec
   - `under-cabinet line` (`137:31`): x 40–640, y 159–164, `#ffe2b0` at 80%, Screen. Same width as the pool (Ari: the line must not go past the light).
 - Day view check: with `evening light` hidden, the scene matches the previous picture exactly (0 px).
 - Note: with every layer visible, Figma shows the night view (and the eclair bite layers); hide `evening light` to work on the day view, and turn it back on before exporting.
-- **Golden hour (step 7), decided from Ari's picture:** a warm overlay, a band of low light from the top right of the frame across the wall and cork board, warm shade outside the band, and long shadows falling down-left (mocks G1/G2). No beam from the window down across the whiteboard.
+- **Golden hour (step 7), decided from Ari's picture:** a warm overlay, a wedge of low light fanning out from the top of the window frame (about x 690, y 58; Ari: not the corner of the picture) across the wall and cork board, warm shade outside it, and long shadows falling down-left (mocks G1/G2). No beam from the window down across the whiteboard.
 - **Lights on at night:** Ari wants it; mocked only (on PLAN.md's Later list).
 
 **6. Rainbows: wall only** (Ari 2026-11-22)
