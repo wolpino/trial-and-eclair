@@ -9,7 +9,7 @@ The live plan for finishing the Wave 1 drawing in Figma. **Update this file afte
 | 1 | Sort fragments into object layers | ✅ done (Figma agent; checked 2026-11-22 from export `trace 1(1).svg`) |
 | 2 | Cut shared outlines, one per object | ✅ done (same check) |
 | 3 | Finish the underlying artwork | ✅ export checked 2026-11-23 (`Clip path group.svg`); Ari approved |
-| 4 | Separate controllable artwork (eclairs, bites, glass, crystals) | 🔶 drawn 2026-11-23; **Ari to review in Figma** (page `step 4 preview`) |
+| 4 | Separate controllable artwork (eclairs, bites, glass, crystals) | 🔶 drawn 2026-11-23; bites approved 2026-11-24; **Ari to export, Claude checks** |
 | 5 | Sunbeams, plus evening under-cupboard light | ⏳ |
 | 6 | Rainbows (wall only) | ⏳ |
 | 7 | Golden hour overlay | ⏳ |
@@ -221,6 +221,8 @@ Whole-scene diff: 53 px changed, all half-pixel frame edges. The fixes had sat o
 **8. Final checks and export**: as in the Figma agent's plan (sizes, independent toggles, empty rack, one `glass`, crystal sublayers, labels outlined, exact names, no leftovers), exported with ids on. Claude lists the real exported ids. Then `source.svg` / `source.png` are replaced and #182 (prep script) picks up from there.
 
 ## Log
+
+- 2026-11-24: Ari: bites look good. Next: Ari exports with ids on; Claude checks normal, both bites, empty rack and the `glass` layer.
 
 - 2026-11-23: step 3 approved (Ari). Step 4 drawn: one `glass` layer (5 panes plus 20 glass patches), `eclair 3 bite 1` and `bite 2` (hidden). See "Step 4 progress". Waiting for Ari's look before the export.
 
