@@ -8,7 +8,7 @@ The live plan for finishing the Wave 1 drawing in Figma. **Update this file afte
 |---|---|---|
 | 1 | Sort fragments into object layers | ✅ done (Figma agent; checked 2026-11-22 from export `trace 1(1).svg`) |
 | 2 | Cut shared outlines, one per object | ✅ done (same check) |
-| 3 | Finish the underlying artwork | 🔶 all 7 items drawn (2026-11-22); **Ari to review in Figma and export** |
+| 3 | Finish the underlying artwork | 🔶 drawn and exported; export checked 2026-11-23 (`Clip path group.svg`); **Ari to approve before step 4** |
 | 4 | Separate controllable artwork (eclairs, bites, glass, crystals) | ⏳ |
 | 5 | Sunbeams, plus evening under-cupboard light | ⏳ |
 | 6 | Rainbows (wall only) | ⏳ |
@@ -202,6 +202,13 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 **8. Final checks and export**: as in the Figma agent's plan (sizes, independent toggles, empty rack, one `glass`, crystal sublayers, labels outlined, exact names, no leftovers), exported with ids on. Claude lists the real exported ids. Then `source.svg` / `source.png` are replaced and #182 (prep script) picks up from there.
 
 ## Log
+
+- 2026-11-23: step 3 export checked (`~/Downloads/Clip path group.svg`, saved 2026-11-22 22:48; Ari exported the clip group around the drawing, which only adds a mask at 868 × 484.47). Compared with `trace 1(1).svg`, rendered at 2× in Chromium:
+  - **Layers:** all 18 object layers, same names and order. Ids on. Labels came out as paths; the hidden editable TRIALS isn't exported.
+  - **Positions:** 9 objects have the same box. The rest changed only for planned reasons: `counter` top 246 → 337.7 (shared pieces and shadows moved out), `box` and `journals` wider (their shadows moved in), `notebook` taller (ribbon), `clipboard` up 14 px and left 5 px, each eclair 3 px wider and taller (shadow), `crystal` redrawn. `cupboard` now reaches 1 px above the canvas (masked, harmless).
+  - **Pixels:** changes are inside object boxes, except 87 px at x 582–629, y 164–205: the thin dark line along the sunbeam's edge is gone (the trimmed mixer right edge, item 1).
+  - **Hidden views:** hiding each object one at a time, and all of them, leaves no transparent pixels and no dark holes. The only thing revealed is a few pixels of the counter's back edge under the notebook and journals (x 360–426, y 337–342). With everything hidden, the wall and counter are whole; the sunbeam's mixer-shaped cutout on the wall is step 5's job.
+  - Names still carry garbled em dashes (`Ã¢Â€Â”`); clean up in step 8 or the prep script.
 
 - 2026-11-22 (later): open door panel redone to match the closed doors (Ari: same distance from the inside edge as on the front). Measured from the closed door: the outer line is 17 px in from every inside edge, and the inner line 20 px in on the left and bottom (the bottom one in the darker `#435834`). On the right there's no inner line; a 2.5 px bevel strip in `#53783d` sits just inside the outer line instead. Open door edges used: left x 12.5, right (hinge) x 135, bottom y = 117.6 + 0.157 × (x − 16). New parts in `open door inner face`: `open door panel outer line`, `open door panel inner line left`, `open door panel inner line bottom` (0.6 px) and `open door panel bevel shade`. The clipboard moved 5 px left and 4 px up (now x 49.4, y 10.8), so the panel lines show on both sides and along the bottom. Only the door and clipboard changed.
 
