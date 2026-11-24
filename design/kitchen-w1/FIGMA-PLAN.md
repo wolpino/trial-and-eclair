@@ -218,6 +218,13 @@ Rollback: page `backup before step 5` (`125:2`, drawing copy `125:3`). Size chec
 - Ari: the beam still showed. Two pieces in `window` drew its edge, both fixed (diff: changes only in the window area, x 645–867, y 94–338):
   - The grey shading under the sill (`1:1183`, `#D3C4AD`) had a slanted left edge running down to the mixer. Deleted; replaced by `sill shadow` (`128:2`, same colour, at the back of `window`): a straight band under the sill, x 688–868, to y 297 (about 8 px below the sill), like the library shelf's shadow. The contact line under the sill (`1:1192`) stays.
   - The frame's left side was sunlit below a diagonal (tan `#B88355`/`#AB7E51`) and dark above it. `1:1229` is now `#68472c` (`window left side edge`) and `1:1228` `#835433` (`window left side face`), the colours above the old diagonal, so the side is one even brown.
+- Ari's second look: the frame side still differed below the corner, and the whiteboard border and the TRIALS journal still showed the beam. Fixed:
+  - **Window:** the lit side face reached 3 px further left than the frame above it, and the outline stopped at the old beam line. `window left side clean` (`131:5`, at the top of `window`) lays the corner's own strips straight down from y 96 to the sill (y 269), measured from a 4× render: wall `#f5e5c4` x 684.9–687.6, edge `#68472c` to 690.3, outline `#462e1d` to 693.3 and `#23160e` to 694.1, face `#835433` to 707.3, inner lines `#55311d` 707–708 and `#68472c` 708–708.5. `left side corner rebate patch` (`#966b44`, x 708.5–712.9, y 79–95.5) covers the diagonal line across the inner corner.
+  - **Whiteboard:** the right border above the mixer was wall colour (`1:741`, `#f5e5c4`, y 208.5–228), the beam mark. It's border grey `#c2b9ad` now, renamed `whiteboard right border lower`.
+  - **TRIALS journal:** the 23 brightest cover flecks (`#dbd2be`, and two small `#d7cab4`), mostly on the window side, are `#a1978e`, darker than the light grey `#c2b9ad` flecks. The page edges (`1:972`) and the base (`1:878`) keep their colours.
+  - **Journal cover darker (Ari: more black, not all black):** every cover grey (90 pieces, `1:879`–`1:975`) is multiplied by 0.7, so the marbling keeps its pattern and contrast but reads darker. Unchanged: the label (`1:884`, `1:880`, `99:4`), the page edges and the line between them (`1:972`, `1:878`, `1:977`), the near-black spine pieces (`#231c15`, `#16120e`), `1:914` and `journals shadow`. Undo: divide those fills by 0.7 (diff: changes only inside the journal, x 434–506, y 328–370).
+  - Whole-scene diff against the start of step 5: changes only around the old beam and the window (x 570–868, y 87–340) and on the journal; 0 px elsewhere.
+- Scratch page `step 5 zoom` holds a 4× copy for close checks; delete it in step 8.
 
 **Evening light: options mocked, waiting for Ari's pick** (with faked dusk glass and dimming): E1 under the green cupboard only; E2 under the cupboard and the library; E3 E2 plus a warm patch on the counter. Flat 2700K `#FFA957` at about 28%.
 
@@ -235,7 +242,7 @@ Rollback: page `backup before step 5` (`125:2`, drawing copy `125:3`). Size chec
 
 ## Log
 
-- 2026-11-24: step 5. Ari decided no sunbeam at all after seeing mocks of three beams; the baked beam (`1:11`) is deleted in Figma, diff clean; then the slanted sill shading and the sunlit frame side, which still showed the beam, are fixed. Evening light options mocked; waiting for Ari's pick.
+- 2026-11-24: step 5. Ari decided no sunbeam at all after seeing mocks of three beams; the baked beam (`1:11`) is deleted in Figma, diff clean; then the slanted sill shading, the sunlit frame side, the whiteboard border and the journal's brightest flecks, which still showed the beam, are fixed. Evening light options mocked; waiting for Ari's pick.
 
 - 2026-11-24: step 4 approved (Ari). Step 5 goes to a new session.
 
