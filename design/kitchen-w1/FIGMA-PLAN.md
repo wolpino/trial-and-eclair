@@ -10,7 +10,7 @@ The live plan for finishing the Wave 1 drawing in Figma. **Update this file afte
 | 2 | Cut shared outlines, one per object | ✅ done (same check) |
 | 3 | Finish the underlying artwork | ✅ export checked 2026-11-23 (`Clip path group.svg`); Ari approved |
 | 4 | Separate controllable artwork (eclairs, bites, glass, crystals) | ✅ export checked 2026-11-24 (`Clip path group(3).svg`); Ari approved |
-| 5 | Remove the sunbeam (none, Ari 2026-11-24), plus evening under-cupboard light | ✅ export checked 2026-11-24 (`~/Downloads/kitchen/Clip path group.svg`); waiting for Ari's approval |
+| 5 | Remove the sunbeam (none, Ari 2026-11-24), plus evening under-cupboard light | ✅ export checked 2026-11-24 (`~/Downloads/kitchen/Clip path group.svg`); Ari approved |
 | 6 | Rainbows (wall only) | ⏳ |
 | 7 | Golden hour overlay | ⏳ |
 | 8 | Final checks and SVG export | ⏳ |
@@ -254,6 +254,8 @@ Rollback: page `backup before step 5` (`125:2`, drawing copy `125:3`). Size chec
 **8. Final checks and export**: as in the Figma agent's plan (sizes, independent toggles, empty rack, one `glass`, crystal sublayers, labels outlined, exact names, no leftovers), exported with ids on. Claude lists the real exported ids. Then `source.svg` / `source.png` are replaced and #182 (prep script) picks up from there.
 
 ## Log
+
+- 2026-11-24: step 5 approved (Ari). Step 6 (rainbows, wall only) next, in a new session.
 
 - 2026-11-24: step 5 export checked (`~/Downloads/kitchen/Clip path group.svg`, 11:31, ids on; the `kitchen.svg` beside it has no ids and a grey background, so don't use it).
   - **Layers:** all 18 objects in order, then `eclair 3 bite 1`, `bite 2`, and `evening light` last in the scene. In `evening light`, bottom to top: `night pool` (Multiply), `night shade` (Multiply), `no cabinet shadow at night`, `under-cabinet line` (Screen); the blend modes export as `mix-blend-mode`. The plain-wall strip sits above the pool, so it reads as the brightest band right under the cabinets (as Ari saw it in Figma). `sill shadow`, `window left side clean` and `glass` are there.
