@@ -10,6 +10,33 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-23 · Wave 1 Figma step 4: glass layer and eclair bites
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-23` (Figma step 4) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop), Opus, Figma connector |
+| **Outcome** | partial (step 4 drawn; waiting for Ari's look, then her export) |
+
+### Intent
+Ari approved step 3 and said start step 4 of `design/kitchen-w1/FIGMA-PLAN.md`.
+
+### Summary
+- Rollback page `backup before step 4`; size check passed.
+- `glass` (`114:1375`) in `window`: 5 traced panes (the lower-left one was misnamed) and 20 glass patches, behind the frame. Diff: 53 half-pixel frame edges.
+- `eclair 3 bite 1` (`116:2`) and `bite 2` (`116:56`): hidden, cut copies of eclair 3 (boolean subtract), three round tooth marks, a cream face with an ink edge, shadow cut to match. Normal view unchanged.
+- Page `step 4 preview` shows the three states at 6× for Ari.
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Figma step 4, glass layer, eclair bites, kitchen-w1
+**Files:** design/kitchen-w1/FIGMA-PLAN.md
+**Do not redo:** step 4 glass and bites (drawn and diff-checked); flatten fails on these cuts, so keep them as booleans; a clone inserted into the scene lands 1 px low, so put its children back by absoluteTransform
+**Resume with:** Ari's look at the bites (page `step 4 preview`); then her export and Claude's check (normal, both bites, empty rack); then step 5
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-23 · Wave 1 Figma step 3: export checked
 
 | Field | Value |
@@ -31,7 +58,7 @@ Ari asked whether `~/Downloads/Clip path group.svg` was the right file for the n
 **Keywords:** Figma step 3, export check, kitchen-w1, Clip path group.svg
 **Files:** design/kitchen-w1/FIGMA-PLAN.md
 **Do not redo:** the step 3 export check (passed 2026-11-23); don't replace source.svg yet (that's step 8)
-**Resume with:** Ari's approval of step 3, then step 4 in FIGMA-PLAN.md (eclair bites, one `glass` layer); garbled em dashes in names wait for step 8 or the prep script
+**Resume with:** see the step 4 entry above
 <!-- AGENT_CONTEXT_END -->
 
 ---

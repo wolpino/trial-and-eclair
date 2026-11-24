@@ -8,8 +8,8 @@ The live plan for finishing the Wave 1 drawing in Figma. **Update this file afte
 |---|---|---|
 | 1 | Sort fragments into object layers | ✅ done (Figma agent; checked 2026-11-22 from export `trace 1(1).svg`) |
 | 2 | Cut shared outlines, one per object | ✅ done (same check) |
-| 3 | Finish the underlying artwork | 🔶 drawn and exported; export checked 2026-11-23 (`Clip path group.svg`); **Ari to approve before step 4** |
-| 4 | Separate controllable artwork (eclairs, bites, glass, crystals) | ⏳ |
+| 3 | Finish the underlying artwork | ✅ export checked 2026-11-23 (`Clip path group.svg`); Ari approved |
+| 4 | Separate controllable artwork (eclairs, bites, glass, crystals) | 🔶 drawn 2026-11-23; **Ari to review in Figma** (page `step 4 preview`) |
 | 5 | Sunbeams, plus evening under-cupboard light | ⏳ |
 | 6 | Rainbows (wall only) | ⏳ |
 | 7 | Golden hour overlay | ⏳ |
@@ -183,6 +183,25 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 - Labels are done in step 3.
 - Checkpoint: normal, both bites, empty rack.
 
+### Step 4 progress (2026-11-23)
+
+Rollback: page `backup before step 4` (drawing copy `114:3`). Size check: `1:2` was 868 × 484.5 at 0, 0.
+
+**Glass: done.** `glass` (`114:1375`) sits in `window` at index 12, behind every frame piece and the bottles. It holds 25 shapes, all flat `#f6f9ef` or `#effbfc`:
+- The 5 traced panes: `glass lower-left` (`1:1195`; it was a misnamed "residual", so there were 5 pieces, not 4), `glass upper-left`, `glass upper-right`, `glass crystal cutout`, `glass lower-right`.
+- From `window patch behind bottles and mobile`: `glass patch behind green bottle`, `glass patch behind blue and amber bottles`, and `glass strip behind mobile 1`–`15`. The patch group keeps only its frame, rail and sill pieces (36).
+- The three fixes from step 3: `glass lower left edge fix`, `glass lower right fix`, `glass upper right clean`.
+
+Whole-scene diff: 53 px changed, all half-pixel frame edges. The fixes had sat on top of the frame and overlapped it by a fraction; now the frame is on top of the glass. They're at the upper-right pane's right edge (x 844) and bottom (y 162), and a 5 px stretch at the lower-left pane's edge (x 714, y 245–249).
+
+**Eclair 3 bites: drawn.** `eclair 3 bite 1` (`116:2`) and `eclair 3 bite 2` (`116:56`) sit right after `eclair 3` in the scene, hidden by default. Each is a copy of `eclair 3`, with every piece, including its shadow, cut by the same bite shape (boolean subtract, so the cut stays editable). The shadow's cut is moved 3 px down-left, like the shadow itself.
+- Bite shape: across the eclair's near (lower-right) end, curving into the eclair, with three round tooth marks. Bite 1 takes about the last quarter; bite 2 about half.
+- `eclair 3 bite N face`: a 2.6 px cream band (`#efd59a`) along the cut, clipped to the eclair, edged in 0.8 px ink `#2e1a0e`.
+- The outline is cut the same way. Its stroke is now a filled band in ink, the same thickness as before.
+- Pieces wholly inside the bite are dropped: path 8 from bite 1; paths 2, 4, 8, 9, 11 from bite 2.
+- Normal view: 0 px changed by the bites.
+- Page `step 4 preview`: eclair 3, bite 1 and bite 2 side by side at 6×, for Ari's look. Delete it in step 8.
+
 **5. Sunbeams and evening light**
 - Remove the beam from the mixer's background without leaving a hole.
 - `sunbeam-am`, `sunbeam-noon`, `sunbeam-pm` inside `wall`, one or two flat light shapes each, above the wall fill and behind every object.
@@ -202,6 +221,8 @@ Whole-scene pixel diff against the backup copy: changes only in the door and cli
 **8. Final checks and export**: as in the Figma agent's plan (sizes, independent toggles, empty rack, one `glass`, crystal sublayers, labels outlined, exact names, no leftovers), exported with ids on. Claude lists the real exported ids. Then `source.svg` / `source.png` are replaced and #182 (prep script) picks up from there.
 
 ## Log
+
+- 2026-11-23: step 3 approved (Ari). Step 4 drawn: one `glass` layer (5 panes plus 20 glass patches), `eclair 3 bite 1` and `bite 2` (hidden). See "Step 4 progress". Waiting for Ari's look before the export.
 
 - 2026-11-23: step 3 export checked (`~/Downloads/Clip path group.svg`, saved 2026-11-22 22:48; Ari exported the clip group around the drawing, which only adds a mask at 868 × 484.47). Compared with `trace 1(1).svg`, rendered at 2× in Chromium:
   - **Layers:** all 18 object layers, same names and order. Ids on. Labels came out as paths; the hidden editable TRIALS isn't exported.
