@@ -10,7 +10,7 @@ The live plan for finishing the Wave 1 drawing in Figma. **Update this file afte
 | 2 | Cut shared outlines, one per object | ✅ done (same check) |
 | 3 | Finish the underlying artwork | ✅ export checked 2026-11-23 (`Clip path group.svg`); Ari approved |
 | 4 | Separate controllable artwork (eclairs, bites, glass, crystals) | ✅ export checked 2026-11-24 (`Clip path group(3).svg`); Ari approved |
-| 5 | Remove the sunbeam (none, Ari 2026-11-24), plus evening under-cupboard light | ⏳ beam removed; evening light waiting for Ari's pick |
+| 5 | Remove the sunbeam (none, Ari 2026-11-24), plus evening under-cupboard light | ⏳ drawn; waiting for Ari's look and export |
 | 6 | Rainbows (wall only) | ⏳ |
 | 7 | Golden hour overlay | ⏳ |
 | 8 | Final checks and SVG export | ⏳ |
@@ -226,7 +226,15 @@ Rollback: page `backup before step 5` (`125:2`, drawing copy `125:3`). Size chec
   - Whole-scene diff against the start of step 5: changes only around the old beam and the window (x 570–868, y 87–340) and on the journal; 0 px elsewhere.
 - Scratch page `step 5 zoom` holds a 4× copy for close checks; delete it in step 8.
 
-**Evening light: options mocked, waiting for Ari's pick** (with faked dusk glass and dimming): E1 under the green cupboard only; E2 under the cupboard and the library; E3 E2 plus a warm patch on the counter. Flat 2700K `#FFA957` at about 28%.
+**Evening light: drawn (option N1, Ari 2026-11-24).** Ari's own evening and golden-hour pictures set the look; night is from 8 pm, and the light comes from under the cabinets. Mocks with stacked see-through half-ovals showed rings, so the pool is one clean shape: the room is shaded and the pool is cut out of the shade.
+- `evening light` (`137:32`), the last child of the scene (above `crystal`), left visible so it exports; code shows it at night:
+  - `night shade` (`137:30`): the whole drawing minus the pool and minus copies of the 25 `glass` shapes (boolean subtract, kept as a boolean), `#6b7bb8`, Multiply. The glass stays unshaded so code can turn it pale night blue.
+  - `night pool` (`137:2`): from y 162 (x 40–640, under the cupboard and library) to the counter front (y 372, x 0–700), `#ffd9a8` at 55%, Multiply: the room's own colours, warmed.
+  - `under-cabinet line` (`137:31`): x 40–640, y 159–164, `#ffe2b0` at 80%, Screen. Same width as the pool (Ari: the line must not go past the light).
+- Day view check: with `evening light` hidden, the scene matches the previous picture exactly (0 px).
+- Note: with every layer visible, Figma shows the night view (and the eclair bite layers); hide `evening light` to work on the day view, and turn it back on before exporting.
+- **Golden hour (step 7), decided from Ari's picture:** a warm overlay, a band of low light from the top right of the frame across the wall and cork board, warm shade outside the band, and long shadows falling down-left (mocks G1/G2). No beam from the window down across the whiteboard.
+- **Lights on at night:** Ari wants it; mocked only (on PLAN.md's Later list).
 
 **6. Rainbows: wall only** (Ari 2026-11-22)
 - `rainbows-am`, `rainbows-noon`, `rainbows-pm` inside `wall`, above the wall fill, behind every object; placed differently for each time of day (no sunbeam, 2026-11-24). Flat see-through colour bands and a few flecks, no blur.
@@ -242,7 +250,7 @@ Rollback: page `backup before step 5` (`125:2`, drawing copy `125:3`). Size chec
 
 ## Log
 
-- 2026-11-24: step 5. Ari decided no sunbeam at all after seeing mocks of three beams; the baked beam (`1:11`) is deleted in Figma, diff clean; then the slanted sill shading, the sunlit frame side, the whiteboard border and the journal's brightest flecks, which still showed the beam, are fixed. Evening light options mocked; waiting for Ari's pick.
+- 2026-11-24: step 5. Ari decided no sunbeam at all after seeing mocks of three beams; the baked beam (`1:11`) is deleted in Figma, diff clean; then the slanted sill shading, the sunlit frame side, the whiteboard border and the journal's brightest flecks, which still showed the beam, are fixed. Evening light options mocked; then drawn as N1 (night shade with the pool cut out, under-cabinet line).
 
 - 2026-11-24: step 4 approved (Ari). Step 5 goes to a new session.
 
