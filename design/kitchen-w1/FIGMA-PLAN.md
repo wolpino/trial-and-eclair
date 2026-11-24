@@ -232,8 +232,13 @@ Rollback: page `backup before step 5` (`125:2`, drawing copy `125:3`). Size chec
   - `night pool` (`137:2`): from y 162 (x 40–640, under the cupboard and library) to the counter front (y 372, x 0–700), `#ffd9a8` at 55%, Multiply: the room's own colours, warmed.
   - `under-cabinet line` (`137:31`): x 40–640, y 159–164, `#ffe2b0` at 80%, Screen. Same width as the pool (Ari: the line must not go past the light).
 - Day view check: with `evening light` hidden, the scene matches the previous picture exactly (0 px).
+- Ari's look (2026-11-24): two fixes, both done. Rebuilt as `evening light` (`140:33`): `no cabinet shadow at night` (`140:31`), `night shade` (`140:30`), `night pool` (`140:2`), `under-cabinet line` (`140:32`).
+  - **Gap under the cabinets:** the cabinet bottoms are at y 153; the day shadow band under them (y 153–161) showed as a blue strip above the light. The pool and line now start at y 153 (line y 153–157), and `no cabinet shadow at night` (wall `#f5e5c4`, x 40–623, y 153–161.6, inside the pool) covers the day shadow at night only.
+  - **Right end:** the light stops at the library's bottom-right corner (x 623, Ari's pink dot), where the cabinet shadow ends; the pool's right side runs from there to x 683 at the counter front. Left end unchanged (x 40).
+  - Day view with `evening light` hidden: 0 px changed.
 - Note: with every layer visible, Figma shows the night view (and the eclair bite layers); hide `evening light` to work on the day view, and turn it back on before exporting.
 - **Golden hour (step 7), decided from Ari's picture:** a warm overlay, a wedge of low light fanning out from the top of the window frame (about x 690, y 58; Ari: not the corner of the picture) across the wall and cork board, warm shade outside it, and long shadows falling down-left (mocks G1/G2). No beam from the window down across the whiteboard.
+  - Ari's marks on her picture (2026-11-24): the band's two edges are right. The upper edge runs from the top right across the top of the bookshelf, then down-left across the cupboards to the left edge (about y 222); the lower edge runs from the top of the whiteboard down-left across the wall above the cork board (about y 266 at the left edge). Both lead back to the top of the window frame. Remove the sharper beam from the window down across the whiteboard and mixer (her cross-hatched marks).
 - **Lights on at night:** Ari wants it; mocked only (on PLAN.md's Later list).
 
 **6. Rainbows: wall only** (Ari 2026-11-22)
