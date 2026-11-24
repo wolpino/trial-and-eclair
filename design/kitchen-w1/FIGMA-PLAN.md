@@ -215,7 +215,9 @@ Rollback: page `backup before step 5` (`125:2`, drawing copy `125:3`). Size chec
 **No sunbeam (Ari).** Three time-of-day beams were mocked locally on the step 4 export (A morning: wide, past the whiteboard; B midday: today's beam with the mixer gap filled; C afternoon: a strip by the window). So little wall shows between the whiteboard, mixer and window that they barely differed, and a real beam would move much more. Ari: no beam at all. The rainbows (step 6) carry the time of day. REFERENCE.md is updated to match.
 
 **Beam removed.** `wall light and mixer background — shared; Wave 2` (`1:11`, flat `#FDF9DB`, x 577.6–687.9, y 111.4–321.2) is deleted; `wall fill` underneath is whole, so nothing shows through. Whole-scene diff: 10,051 px changed, all inside the old beam's box, now wall `#F5E5C4` plus object edges antialiased against it; 0 px elsewhere.
-- Kept: the window's grey shading under the sill (`1:1183`, in `window`). Its slanted top edge was drawn to meet the beam; it still reads as the window's shadow.
+- Ari: the beam still showed. Two pieces in `window` drew its edge, both fixed (diff: changes only in the window area, x 645–867, y 94–338):
+  - The grey shading under the sill (`1:1183`, `#D3C4AD`) had a slanted left edge running down to the mixer. Deleted; replaced by `sill shadow` (`128:2`, same colour, at the back of `window`): a straight band under the sill, x 688–868, to y 297 (about 8 px below the sill), like the library shelf's shadow. The contact line under the sill (`1:1192`) stays.
+  - The frame's left side was sunlit below a diagonal (tan `#B88355`/`#AB7E51`) and dark above it. `1:1229` is now `#68472c` (`window left side edge`) and `1:1228` `#835433` (`window left side face`), the colours above the old diagonal, so the side is one even brown.
 
 **Evening light: options mocked, waiting for Ari's pick** (with faked dusk glass and dimming): E1 under the green cupboard only; E2 under the cupboard and the library; E3 E2 plus a warm patch on the counter. Flat 2700K `#FFA957` at about 28%.
 
@@ -233,7 +235,7 @@ Rollback: page `backup before step 5` (`125:2`, drawing copy `125:3`). Size chec
 
 ## Log
 
-- 2026-11-24: step 5. Ari decided no sunbeam at all after seeing mocks of three beams; the baked beam (`1:11`) is deleted in Figma, diff clean. Evening light options mocked; waiting for Ari's pick.
+- 2026-11-24: step 5. Ari decided no sunbeam at all after seeing mocks of three beams; the baked beam (`1:11`) is deleted in Figma, diff clean; then the slanted sill shading and the sunlit frame side, which still showed the beam, are fixed. Evening light options mocked; waiting for Ari's pick.
 
 - 2026-11-24: step 4 approved (Ari). Step 5 goes to a new session.
 
