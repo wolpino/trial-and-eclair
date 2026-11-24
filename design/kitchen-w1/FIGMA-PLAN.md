@@ -222,6 +222,8 @@ Whole-scene diff: 53 px changed, all half-pixel frame edges. The fixes had sat o
 
 ## Log
 
+- 2026-11-24: Ari chose to keep the bite layers visible in the file. `eclair 3 bite 1` and `bite 2` are now visible, stacked on `eclair 3`; the prep script and the code show one eclair 3 state at a time. **Rule from here on:** every layer that should export stays visible in Figma (later: sunbeams, evening light, rainbows, golden hour); "hidden by default" lives in code. Waiting for Ari's re-export.
+
 - 2026-11-24: step 4 export checked (`~/Downloads/Clip path group(1).svg`, saved 08:49).
   - **Passes:** all 18 object layers as before. `glass` comes through as one group: index 12 in `window`, 25 shapes, only `#f6f9ef` and `#effbfc`. Normal view against the step 3 export: changes only in the window glass edges (x 714–844, y 84–250), as expected. Empty rack: wires and edge whole, no holes.
   - **Missing:** `eclair 3 bite 1` and `bite 2`. Figma leaves hidden layers out of SVG exports, so hidden-by-default layers have to be visible when exported; the prep script and the code hide them. (Claude had said they'd come through; that was wrong.)
