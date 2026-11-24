@@ -10,7 +10,7 @@ The live plan for finishing the Wave 1 drawing in Figma. **Update this file afte
 | 2 | Cut shared outlines, one per object | ✅ done (same check) |
 | 3 | Finish the underlying artwork | ✅ export checked 2026-11-23 (`Clip path group.svg`); Ari approved |
 | 4 | Separate controllable artwork (eclairs, bites, glass, crystals) | ✅ export checked 2026-11-24 (`Clip path group(3).svg`); Ari approved |
-| 5 | Sunbeams, plus evening under-cupboard light | ⏳ |
+| 5 | Remove the sunbeam (none, Ari 2026-11-24), plus evening under-cupboard light | ⏳ beam removed; evening light waiting for Ari's pick |
 | 6 | Rainbows (wall only) | ⏳ |
 | 7 | Golden hour overlay | ⏳ |
 | 8 | Final checks and SVG export | ⏳ |
@@ -21,7 +21,7 @@ Who: Claude in Claude Code, through the Figma connector (`use_figma`), working i
 
 - Stop for Ari's approval before each step and after it. Don't start the next step on your own.
 - Canvas stays 868 × 485. Don't move or resize existing artwork unless the step says so.
-- Keep layer names; new names have no em dashes (`glass`, `sunbeam-am`, `eclair 3 bite 1`).
+- Keep layer names; new names have no em dashes (`glass`, `evening light`, `eclair 3 bite 1`).
 - Flat vector shapes and transparency only: no images, blurs or filters.
 - Ask when ownership, shape or meaning is unclear.
 
@@ -202,16 +202,27 @@ Whole-scene diff: 53 px changed, all half-pixel frame edges. The fixes had sat o
 - Normal view: 0 px changed by the bites.
 - Page `step 4 preview`: eclair 3, bite 1 and bite 2 side by side at 6×, for Ari's look. Delete it in step 8.
 
-**5. Sunbeams and evening light**
+**5. Remove the sunbeam; evening light** (revised 2026-11-24: no sunbeam at all, Ari)
 - Remove the beam from the mixer's background without leaving a hole.
-- `sunbeam-am`, `sunbeam-noon`, `sunbeam-pm` inside `wall`, one or two flat light shapes each, above the wall fill and behind every object.
-- `evening light`: warm light under the wall cupboards (REFERENCE.md evening), one flat shape, hidden by default.
-- Checkpoint: each beam alone, and the evening light.
+- ~~`sunbeam-am`, `sunbeam-noon`, `sunbeam-pm`~~: dropped. See "Step 5 progress".
+- `evening light`: warm light under the wall cupboards (REFERENCE.md evening), one flat shape, left visible in Figma (code hides it by day).
+- Checkpoint: normal view without the beam, and the evening light.
+
+### Step 5 progress (2026-11-24)
+
+Rollback: page `backup before step 5` (`125:2`, drawing copy `125:3`). Size check: `1:2` was 868 × 484.5 at 0, 0.
+
+**No sunbeam (Ari).** Three time-of-day beams were mocked locally on the step 4 export (A morning: wide, past the whiteboard; B midday: today's beam with the mixer gap filled; C afternoon: a strip by the window). So little wall shows between the whiteboard, mixer and window that they barely differed, and a real beam would move much more. Ari: no beam at all. The rainbows (step 6) carry the time of day. REFERENCE.md is updated to match.
+
+**Beam removed.** `wall light and mixer background — shared; Wave 2` (`1:11`, flat `#FDF9DB`, x 577.6–687.9, y 111.4–321.2) is deleted; `wall fill` underneath is whole, so nothing shows through. Whole-scene diff: 10,051 px changed, all inside the old beam's box, now wall `#F5E5C4` plus object edges antialiased against it; 0 px elsewhere.
+- Kept: the window's grey shading under the sill (`1:1183`, in `window`). Its slanted top edge was drawn to meet the beam; it still reads as the window's shadow.
+
+**Evening light: options mocked, waiting for Ari's pick** (with faked dusk glass and dimming): E1 under the green cupboard only; E2 under the cupboard and the library; E3 E2 plus a warm patch on the counter. Flat 2700K `#FFA957` at about 28%.
 
 **6. Rainbows: wall only** (Ari 2026-11-22)
-- `rainbows-am`, `rainbows-noon`, `rainbows-pm` inside `wall`, above the beams, behind every object; matching each beam. Flat see-through colour bands and a few flecks, no blur.
+- `rainbows-am`, `rainbows-noon`, `rainbows-pm` inside `wall`, above the wall fill, behind every object; placed differently for each time of day (no sunbeam, 2026-11-24). Flat see-through colour bands and a few flecks, no blur.
 - Nothing on objects, so the whole set can swing with the mobile.
-- Checkpoint: each beam with its rainbows, and rainbows off.
+- Checkpoint: each rainbow set alone, and rainbows off.
 
 **7. Golden hour, from 4 pm local time** (Ari 2026-11-22)
 - `golden hour`: one separate, see-through warm overlay that can be switched on and off, no filters; outlines and rainbows stay readable.
@@ -221,6 +232,8 @@ Whole-scene diff: 53 px changed, all half-pixel frame edges. The fixes had sat o
 **8. Final checks and export**: as in the Figma agent's plan (sizes, independent toggles, empty rack, one `glass`, crystal sublayers, labels outlined, exact names, no leftovers), exported with ids on. Claude lists the real exported ids. Then `source.svg` / `source.png` are replaced and #182 (prep script) picks up from there.
 
 ## Log
+
+- 2026-11-24: step 5. Ari decided no sunbeam at all after seeing mocks of three beams; the baked beam (`1:11`) is deleted in Figma, diff clean. Evening light options mocked; waiting for Ari's pick.
 
 - 2026-11-24: step 4 approved (Ari). Step 5 goes to a new session.
 
