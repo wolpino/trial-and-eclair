@@ -32,7 +32,7 @@ Ari approved step 3 and said start step 4 of `design/kitchen-w1/FIGMA-PLAN.md`.
 **Keywords:** Figma step 4, glass layer, eclair bites, kitchen-w1
 **Files:** design/kitchen-w1/FIGMA-PLAN.md
 **Do not redo:** step 4 glass and bites (drawn and diff-checked); flatten fails on these cuts, so keep them as booleans; a clone inserted into the scene lands 1 px low, so put its children back by absoluteTransform
-**Resume with:** Ari's look at the bites (page `step 4 preview`); then her export and Claude's check (normal, both bites, empty rack); then step 5
+**Resume with:** step 4 approved 2026-11-24 (export `Clip path group(3).svg` passed). Step 5 (sunbeams, evening light) in FIGMA-PLAN.md, in a new session
 <!-- AGENT_CONTEXT_END -->
 
 ---
