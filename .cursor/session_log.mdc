@@ -10,6 +10,33 @@ For agents: read the top 1–3 entries at session start. Parse `AGENT_CONTEXT` H
 
 ---
 
+## 2026-11-24 · Wave 1 Figma step 5: no sunbeam, night light
+
+| Field | Value |
+|-------|-------|
+| **Session** | `2026-11-24` (Figma step 5) |
+| **Project** | trial-and-eclair |
+| **Mode** | Claude Code (desktop), Opus, Figma connector |
+| **Outcome** | success (drawn and export checked; waiting for Ari's approval) |
+
+### Intent
+Step 5 of `design/kitchen-w1/FIGMA-PLAN.md`: sunbeams and evening light.
+
+### Summary
+- Mocked three time-of-day beams; Ari: no sunbeam at all. Removed the baked beam (`1:11`) and its traces: the slanted sill shading (now a straight `sill shadow`), the sunlit window side (`window left side clean`), the wall-coloured whiteboard border piece, the beam-bright journal flecks; the journal cover is 30% darker (Ari).
+- Night from 8 pm (Ari's own picture): `evening light` at the top of the scene, a blue Multiply shade with the light pool and the glass cut out, a warm pool from the cabinet bottoms (y 153, x 40–623) to the counter, an under-cabinet line. No rings. Day view unchanged (0 px).
+- Golden hour (step 7) decided: a wedge of light from the top of the window frame across the wall and cork board, long shadows, no beam across the whiteboard. "Lights on" at night is on PLAN.md's Later list.
+- Export `~/Downloads/kitchen/Clip path group.svg` checked: passes.
+
+<!-- AGENT_CONTEXT_START -->
+**Keywords:** Figma step 5, no sunbeam, night light, evening light, golden hour, kitchen-w1
+**Files:** design/kitchen-w1/FIGMA-PLAN.md, docs/design/REFERENCE.md, docs/design/PLAN.md
+**Do not redo:** time-of-day sunbeams (Ari rejected them; no `sunbeam-*` layers); stacked see-through ovals for light (they show rings; cut the lit area out of a shade instead); keep `evening light` and the bite layers visible in Figma for export
+**Resume with:** Ari's approval of step 5, then step 6 (rainbows, wall only); golden hour notes for step 7 are in FIGMA-PLAN.md step 5 progress
+<!-- AGENT_CONTEXT_END -->
+
+---
+
 ## 2026-11-23 · Wave 1 Figma step 4: glass layer and eclair bites
 
 | Field | Value |
