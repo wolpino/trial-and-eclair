@@ -10,7 +10,7 @@ The live plan for finishing the Wave 1 drawing in Figma. **Update this file afte
 | 2 | Cut shared outlines, one per object | ✅ done (same check) |
 | 3 | Finish the underlying artwork | ✅ export checked 2026-11-23 (`Clip path group.svg`); Ari approved |
 | 4 | Separate controllable artwork (eclairs, bites, glass, crystals) | ✅ export checked 2026-11-24 (`Clip path group(3).svg`); Ari approved |
-| 5 | Sunbeams, plus evening under-cupboard light | ⏳ |
+| 5 | Remove the sunbeam (none, Ari 2026-11-24), plus evening under-cupboard light | ✅ export checked 2026-11-24 (`~/Downloads/kitchen/Clip path group.svg`); Ari approved |
 | 6 | Rainbows (wall only) | ⏳ |
 | 7 | Golden hour overlay | ⏳ |
 | 8 | Final checks and SVG export | ⏳ |
@@ -21,7 +21,7 @@ Who: Claude in Claude Code, through the Figma connector (`use_figma`), working i
 
 - Stop for Ari's approval before each step and after it. Don't start the next step on your own.
 - Canvas stays 868 × 485. Don't move or resize existing artwork unless the step says so.
-- Keep layer names; new names have no em dashes (`glass`, `sunbeam-am`, `eclair 3 bite 1`).
+- Keep layer names; new names have no em dashes (`glass`, `evening light`, `eclair 3 bite 1`).
 - Flat vector shapes and transparency only: no images, blurs or filters.
 - Ask when ownership, shape or meaning is unclear.
 
@@ -202,16 +202,49 @@ Whole-scene diff: 53 px changed, all half-pixel frame edges. The fixes had sat o
 - Normal view: 0 px changed by the bites.
 - Page `step 4 preview`: eclair 3, bite 1 and bite 2 side by side at 6×, for Ari's look. Delete it in step 8.
 
-**5. Sunbeams and evening light**
+**5. Remove the sunbeam; evening light** (revised 2026-11-24: no sunbeam at all, Ari)
 - Remove the beam from the mixer's background without leaving a hole.
-- `sunbeam-am`, `sunbeam-noon`, `sunbeam-pm` inside `wall`, one or two flat light shapes each, above the wall fill and behind every object.
-- `evening light`: warm light under the wall cupboards (REFERENCE.md evening), one flat shape, hidden by default.
-- Checkpoint: each beam alone, and the evening light.
+- ~~`sunbeam-am`, `sunbeam-noon`, `sunbeam-pm`~~: dropped. See "Step 5 progress".
+- `evening light`: warm light under the wall cupboards (REFERENCE.md evening), one flat shape, left visible in Figma (code hides it by day).
+- Checkpoint: normal view without the beam, and the evening light.
+
+### Step 5 progress (2026-11-24)
+
+Rollback: page `backup before step 5` (`125:2`, drawing copy `125:3`). Size check: `1:2` was 868 × 484.5 at 0, 0.
+
+**No sunbeam (Ari).** Three time-of-day beams were mocked locally on the step 4 export (A morning: wide, past the whiteboard; B midday: today's beam with the mixer gap filled; C afternoon: a strip by the window). So little wall shows between the whiteboard, mixer and window that they barely differed, and a real beam would move much more. Ari: no beam at all. The rainbows (step 6) carry the time of day. REFERENCE.md is updated to match.
+
+**Beam removed.** `wall light and mixer background — shared; Wave 2` (`1:11`, flat `#FDF9DB`, x 577.6–687.9, y 111.4–321.2) is deleted; `wall fill` underneath is whole, so nothing shows through. Whole-scene diff: 10,051 px changed, all inside the old beam's box, now wall `#F5E5C4` plus object edges antialiased against it; 0 px elsewhere.
+- Ari: the beam still showed. Two pieces in `window` drew its edge, both fixed (diff: changes only in the window area, x 645–867, y 94–338):
+  - The grey shading under the sill (`1:1183`, `#D3C4AD`) had a slanted left edge running down to the mixer. Deleted; replaced by `sill shadow` (`128:2`, same colour, at the back of `window`): a straight band under the sill, x 688–868, to y 297 (about 8 px below the sill), like the library shelf's shadow. The contact line under the sill (`1:1192`) stays.
+  - The frame's left side was sunlit below a diagonal (tan `#B88355`/`#AB7E51`) and dark above it. `1:1229` is now `#68472c` (`window left side edge`) and `1:1228` `#835433` (`window left side face`), the colours above the old diagonal, so the side is one even brown.
+- Ari's second look: the frame side still differed below the corner, and the whiteboard border and the TRIALS journal still showed the beam. Fixed:
+  - **Window:** the lit side face reached 3 px further left than the frame above it, and the outline stopped at the old beam line. `window left side clean` (`131:5`, at the top of `window`) lays the corner's own strips straight down from y 96 to the sill (y 269), measured from a 4× render: wall `#f5e5c4` x 684.9–687.6, edge `#68472c` to 690.3, outline `#462e1d` to 693.3 and `#23160e` to 694.1, face `#835433` to 707.3, inner lines `#55311d` 707–708 and `#68472c` 708–708.5. `left side corner rebate patch` (`#966b44`, x 708.5–712.9, y 79–95.5) covers the diagonal line across the inner corner.
+  - **Whiteboard:** the right border above the mixer was wall colour (`1:741`, `#f5e5c4`, y 208.5–228), the beam mark. It's border grey `#c2b9ad` now, renamed `whiteboard right border lower`.
+  - **TRIALS journal:** the 23 brightest cover flecks (`#dbd2be`, and two small `#d7cab4`), mostly on the window side, are `#a1978e`, darker than the light grey `#c2b9ad` flecks. The page edges (`1:972`) and the base (`1:878`) keep their colours.
+  - **Journal cover darker (Ari: more black, not all black):** every cover grey (90 pieces, `1:879`–`1:975`) is multiplied by 0.7, so the marbling keeps its pattern and contrast but reads darker. Unchanged: the label (`1:884`, `1:880`, `99:4`), the page edges and the line between them (`1:972`, `1:878`, `1:977`), the near-black spine pieces (`#231c15`, `#16120e`), `1:914` and `journals shadow`. Undo: divide those fills by 0.7 (diff: changes only inside the journal, x 434–506, y 328–370).
+  - Whole-scene diff against the start of step 5: changes only around the old beam and the window (x 570–868, y 87–340) and on the journal; 0 px elsewhere.
+- Scratch page `step 5 zoom` holds a 4× copy for close checks; delete it in step 8.
+
+**Evening light: drawn (option N1, Ari 2026-11-24).** Ari's own evening and golden-hour pictures set the look; night is from 8 pm, and the light comes from under the cabinets. Mocks with stacked see-through half-ovals showed rings, so the pool is one clean shape: the room is shaded and the pool is cut out of the shade.
+- `evening light` (`137:32`), the last child of the scene (above `crystal`), left visible so it exports; code shows it at night:
+  - `night shade` (`137:30`): the whole drawing minus the pool and minus copies of the 25 `glass` shapes (boolean subtract, kept as a boolean), `#6b7bb8`, Multiply. The glass stays unshaded so code can turn it pale night blue.
+  - `night pool` (`137:2`): from y 162 (x 40–640, under the cupboard and library) to the counter front (y 372, x 0–700), `#ffd9a8` at 55%, Multiply: the room's own colours, warmed.
+  - `under-cabinet line` (`137:31`): x 40–640, y 159–164, `#ffe2b0` at 80%, Screen. Same width as the pool (Ari: the line must not go past the light).
+- Day view check: with `evening light` hidden, the scene matches the previous picture exactly (0 px).
+- Ari's look (2026-11-24): two fixes, both done. Rebuilt as `evening light` (`140:33`): `no cabinet shadow at night` (`140:31`), `night shade` (`140:30`), `night pool` (`140:2`), `under-cabinet line` (`140:32`).
+  - **Gap under the cabinets:** the cabinet bottoms are at y 153; the day shadow band under them (y 153–161) showed as a blue strip above the light. The pool and line now start at y 153 (line y 153–157), and `no cabinet shadow at night` (wall `#f5e5c4`, x 40–623, y 153–161.6, inside the pool) covers the day shadow at night only.
+  - **Right end:** the light stops at the library's bottom-right corner (x 623, Ari's pink dot), where the cabinet shadow ends; the pool's right side runs from there to x 683 at the counter front. Left end unchanged (x 40).
+  - Day view with `evening light` hidden: 0 px changed.
+- Note: with every layer visible, Figma shows the night view (and the eclair bite layers); hide `evening light` to work on the day view, and turn it back on before exporting.
+- **Golden hour (step 7), decided from Ari's picture:** a warm overlay, a wedge of low light fanning out from the top of the window frame (about x 690, y 58; Ari: not the corner of the picture) across the wall and cork board, warm shade outside it, and long shadows falling down-left (mocks G1/G2). No beam from the window down across the whiteboard.
+  - Ari's marks on her picture (2026-11-24): the band's two edges are right. The upper edge runs from the top right across the top of the bookshelf, then down-left across the cupboards to the left edge (about y 222); the lower edge runs from the top of the whiteboard down-left across the wall above the cork board (about y 266 at the left edge). Both lead back to the top of the window frame. Remove the sharper beam from the window down across the whiteboard and mixer (her cross-hatched marks).
+- **Lights on at night:** Ari wants it; mocked only (on PLAN.md's Later list).
 
 **6. Rainbows: wall only** (Ari 2026-11-22)
-- `rainbows-am`, `rainbows-noon`, `rainbows-pm` inside `wall`, above the beams, behind every object; matching each beam. Flat see-through colour bands and a few flecks, no blur.
+- `rainbows-am`, `rainbows-noon`, `rainbows-pm` inside `wall`, above the wall fill, behind every object; placed differently for each time of day (no sunbeam, 2026-11-24). Flat see-through colour bands and a few flecks, no blur.
 - Nothing on objects, so the whole set can swing with the mobile.
-- Checkpoint: each beam with its rainbows, and rainbows off.
+- Checkpoint: each rainbow set alone, and rainbows off.
 
 **7. Golden hour, from 4 pm local time** (Ari 2026-11-22)
 - `golden hour`: one separate, see-through warm overlay that can be switched on and off, no filters; outlines and rainbows stay readable.
@@ -221,6 +254,16 @@ Whole-scene diff: 53 px changed, all half-pixel frame edges. The fixes had sat o
 **8. Final checks and export**: as in the Figma agent's plan (sizes, independent toggles, empty rack, one `glass`, crystal sublayers, labels outlined, exact names, no leftovers), exported with ids on. Claude lists the real exported ids. Then `source.svg` / `source.png` are replaced and #182 (prep script) picks up from there.
 
 ## Log
+
+- 2026-11-24: step 5 approved (Ari). Step 6 (rainbows, wall only) next, in a new session.
+
+- 2026-11-24: step 5 export checked (`~/Downloads/kitchen/Clip path group.svg`, 11:31, ids on; the `kitchen.svg` beside it has no ids and a grey background, so don't use it).
+  - **Layers:** all 18 objects in order, then `eclair 3 bite 1`, `bite 2`, and `evening light` last in the scene. In `evening light`, bottom to top: `night pool` (Multiply), `night shade` (Multiply), `no cabinet shadow at night`, `under-cabinet line` (Screen); the blend modes export as `mix-blend-mode`. The plain-wall strip sits above the pool, so it reads as the brightest band right under the cabinets (as Ari saw it in Figma). `sill shadow`, `window left side clean` and `glass` are there.
+  - **Day view** (evening light and bites hidden) against the step 4 export: changes only around the old beam and the window (x 570–868, y 79–340) and on the journal; 0 px elsewhere. Against Figma's day picture: only renderer edge noise and eclair 3's bites (shown in the Figma picture).
+  - **Night view** against Figma's night picture: the same, renderer noise only. No transparent pixels in either view.
+  - Step 5 checkpoint passes.
+
+- 2026-11-24: step 5. Ari decided no sunbeam at all after seeing mocks of three beams; the baked beam (`1:11`) is deleted in Figma, diff clean; then the slanted sill shading, the sunlit frame side, the whiteboard border and the journal's brightest flecks, which still showed the beam, are fixed. Evening light options mocked; then drawn as N1 (night shade with the pool cut out, under-cabinet line).
 
 - 2026-11-24: step 4 approved (Ari). Step 5 goes to a new session.
 

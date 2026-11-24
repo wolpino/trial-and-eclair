@@ -24,7 +24,7 @@ Where Plate XI or the phone plate shows the **kitchen itself**, the Wave 1 drawi
 
 Same room, objects and places as v17, redrawn by Ari in one style. `source.svg` is 868 × 485, about 500 KB, 1,284 paths, with no filters, images or transforms. Each object is a named layer: `box`, `notebook`, `journals` (with `Trial`), `ideas` (with `Ideas`), `whiteboard` (with `Next up`), `library` (with `THE LIBRARY`), `clipboard` (with `Kitchen log`), `cupboard`, `jar labels`, `RECIPES`, `mixer`, `crystal`, `rack`, `window`, `cabinets`, `counter`, `wall`. Eclair pieces are named `eclair 1`, `eclair 2` and `eclair 3`.
 
-Changes from v17's look: one "Trial" composition book (not a "Trials" stack), a sunbeam from the window across the wall, a hanging crystal mobile (kept, Ari 2026-11-21), no rainbows drawn (code adds them).
+Changes from v17's look: one "Trial" composition book (not a "Trials" stack), no sunbeam (removed 2026-11-24, see below), a hanging crystal mobile (kept, Ari 2026-11-21), no rainbows drawn (code adds them).
 
 **Ari is doing one more Figma pass (2026-11-21).** When the new export arrives, replace `source.svg` and `source.png`. Any prep step below that the export already handles drops out of `prep.cjs`.
 
@@ -34,7 +34,7 @@ Changes from v17's look: one "Trial" composition book (not a "Trials" stack), a 
 3. Gather the 4 `window glass …` pieces into one `glass` group for evening.
 4. Map the cabinet greens to `var(--cab)`, the wall to `var(--wall)`, the box blues to `var(--blue)` shades, the window frame to `var(--trim)`, with one colour table.
 5. Patch the counter and rack behind each eclair so an eaten one leaves an empty rack. The shared "counter and object shadows" path is the one to cut.
-6. Put the sunbeam (`wall light …` paths) in its own group. One piece shares a path with the mixer's background; cut it at the mixer outline.
+6. (Dropped 2026-11-24: the sunbeam is removed from the drawing in Figma step 5.)
 7. Group ids for code: `data-obj="<object>"` per object, as in v17. Hit areas come from each object group's bounding box, not from numbers typed by hand.
 
 ### Making the kitchen swappable (rules for any future redraw)
@@ -74,9 +74,9 @@ The hit-area numbers below are **v17 coordinates only** (`viewBox="6 -39 856 479
 | Clipboard | "Kitchen log" sheet on the inside of the open cupboard door | amber glow | opens the recipe log, `/log` | 46, -34, 66, 131 |
 | Eclair rack | three chocolate eclairs on a wire rack, under the window | amber glow | each click: one taken, two taken, a bite, another bite, gone. A reload puts them back. Nothing is saved | 694, 312, 166, 56 |
 | Crystal mobile | Wave 1: four crystals hanging from one hook in the window (v17: one faceted ball) | (no glow) | the whole mobile sways and settles in about 3 s, each crystal spinning a little out of step; the rainbows swing with it. With reduced motion the crystals spin and nothing swings | v17: 806, 28, 32, 124 |
-| Rainbows and sunbeam | Wave 1: drawn layers per time of day (`sunbeam-*`, `rainbows-*`); v17 code rainbows until drawn | not clickable | cross-fade with the device clock: morning, midday, afternoon; **none in the evening** | none |
-| Golden hour | a see-through warm overlay (`golden hour` layer), sunbeams and rainbows unchanged | | from 4 pm local time until evening | none |
-| Evening | window glass goes dusk blue, room dims, warm 2700K light under the wall cupboards | | starts from the device clock | none |
+| Rainbows | Wave 1: drawn layers per time of day (`rainbows-*`); v17 code rainbows until drawn. No sunbeam | not clickable | cross-fade with the device clock: morning, midday, afternoon; **none in the evening** | none |
+| Golden hour | drawn layers (`golden hour`): a warm see-through overlay, a wedge of low light fanning out from the top of the window frame (about x 690, y 58), cutting down-left across the wall and cork board, warm shade outside it, long shadows falling down-left; no beam from the window across the whiteboard (Ari, 2026-11-24) | | from 4 pm to 8 pm local time | none |
+| Night (evening) | drawn layer `evening light`: the room in blue shade except one clean pool of warm light from under the cupboard and library down to the counter (no rings), with a bright line under the cabinets the same width as the pool; code turns the window glass pale night blue (Ari, 2026-11-24) | | from 8 pm local time | none |
 | Open pantry cupboard | wood inside, labelled jars: Flour, Sugar, Cocoa, Oats, Pecans, Salt | not clickable | none | none |
 | "Trial" journal | one composition book beside the notebook, "Trial" label (Wave 1; v17 had a "Trials" stack) | not clickable (open question below) | none | none |
 | Mixer, bottles | buttercup stand mixer; sill bottles: green decanter, amber, cobalt | not clickable | none | none |
@@ -103,11 +103,12 @@ These are still inside `traced/add.cjs` and `kitchen.svg` but never shown. They 
 ### Answered 2026-11-21
 - **Crystal mobile: keep it.** The Wave 1 mobile replaces v17's single crystal; the rainbows still come from it.
 - **Clicking the mobile (2026-11-22): the whole mobile sways as one piece.** One button covers the whole mobile ("Turn the crystal mobile"). The `crystal` layer swings a little from its hook and settles within about 3 s. Each crystal (its own sublayer) does v17's spin, slightly out of step with the others, so it reads as a mobile, not a pendulum. Keep the swing small so it isn't busy. With reduced motion, the crystals spin and nothing swings.
-- **Rainbows (2026-11-22): drawn by Ari as layers, one set per time of day**: `rainbows-am`, `rainbows-noon`, `rainbows-pm`, each matching its sunbeam. They are flat, see-through colour bands and a few flecks, with no blur, **on the wall only** (Ari confirmed 2026-11-22: nothing on objects), behind the objects. Code cross-fades them with the sunbeams, hides them in the evening, and swings the whole set when the mobile turns. Until they're drawn, v17's code rainbows are the fallback.
-- **Sunbeam: yes, it changes with the time of day**, as long as it looks right. Ari draws one beam layer each for morning, midday and afternoon (`sunbeam-am`, `sunbeam-noon`, `sunbeam-pm`) on the wall, behind every object. Code only cross-fades between them and hides them all in the evening; it never moves or bends a beam. If the drawn beams don't look right, keep one beam and only fade it at night.
+- **Rainbows (2026-11-22): drawn by Ari as layers, one set per time of day**: `rainbows-am`, `rainbows-noon`, `rainbows-pm`, placed differently for each time of day. They are flat, see-through colour bands and a few flecks, with no blur, **on the wall only** (Ari confirmed 2026-11-22: nothing on objects), behind the objects. Code cross-fades them, hides them in the evening, and swings the whole set when the mobile turns. Until they're drawn, v17's code rainbows are the fallback.
+- **Sunbeam: none (Ari, 2026-11-24).** Three time-of-day beams were mocked up, but so little wall shows between the objects that they barely differed, and a beam would really move much more through the day. The beam that was baked into the wall art is removed, and there are no `sunbeam-*` layers. The rainbows carry the time of day; they come from the sun on the crystal, so they don't need a beam beside them (v17 had none). This replaces the 2026-11-22 answer (one beam per time of day).
 - **Rough labels (jars, "Trial"): Ari redraws them in Figma.**
 - **Labels, 2026-11-22: all of them get clean lettering** in v17's italic style: the six jars (Flour, Sugar, Cocoa; Oats, Pecans, Salt), "Trial", "Kitchen log", "Ideas", "Next up", "RECIPES", "THE LIBRARY".
-- **Golden hour (2026-11-22): starts at 4 pm local time** and runs until evening, as one warm overlay layer.
+- **Golden hour (2026-11-22): starts at 4 pm local time** and runs until night (8 pm). 2026-11-24 (Ari, from her own pictures): not just one overlay. It keeps the long shadows and a wedge of light from the top of the window frame across the wall and cork board, but not the beam from the window down across the whiteboard. Drawn in Figma step 7.
+- **Night (2026-11-24): from 8 pm local time.** The light comes from under the cabinets (option N1 of the mocks). The blue shade is drawn in Figma with the pool cut out, so the pool keeps the room's own colours, warmed; the bright under-cabinet line stops where the pool does. Ari also wants a **"lights on" option at night**, for working late: the room back to near-day colours, slightly warm, window still dark night blue (mocked, not drawn yet).
 - **Clipboard (2026-11-22): no nail and string;** it sits a little higher, inside the open door, so the door could close.
 - The Figma work and its progress are tracked in `design/kitchen-w1/FIGMA-PLAN.md`.
 
